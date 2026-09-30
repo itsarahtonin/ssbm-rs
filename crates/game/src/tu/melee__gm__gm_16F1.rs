@@ -2906,7 +2906,9 @@ pub fn fn_80173510<'a>(ctx: &'a Ctx) -> i32 {
                 'c2: {
                     if (((((i != 6_i32) && (i != 7_i32)) && (i != 8_i32)) && (i != 9_i32))
                         && (i != 10_i32))
-                        && (!((((temp_r31).get() as i64) & (shl_i64(1_i64, (i as u32)))) != 0))
+                        && (!((((temp_r31).get() as i64)
+                            & (fns::__shl2i(ctx, 1_i64 as i64, i) as i64))
+                            != 0))
                     {
                         var_r30 = 0_i32;
                         break 'l1;

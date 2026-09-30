@@ -1351,7 +1351,7 @@ pub fn AXSetVoiceSrcRatio<'a>(ctx: &'a Ctx, p: _AXVPB<'a>, ratio: f64) {
     let mut r: u32 = 0;
     let mut old: i32 = 0;
     old = fns::OSDisableInterrupts(ctx);
-    r = cvt_fp2unsigned(ctx, fp::fmuls(65536.0, ratio));
+    r = fns::__cvt_fp2unsigned(ctx, fp::fmuls(65536.0, ratio));
     if r > (0x40000_i32 as u32) {
         r = (0x40000_i32 as u32);
     }

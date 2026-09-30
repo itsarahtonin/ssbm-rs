@@ -175,7 +175,7 @@ pub fn it_80275640<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: f64) {
                     fns::it_80272460(
                         ctx,
                         hitcapsule,
-                        cvt_fp2unsigned(ctx, fp::fmuls((hitcapsule).damage(), arg1)),
+                        fns::__cvt_fp2unsigned(ctx, fp::fmuls((hitcapsule).damage(), arg1)),
                         item_gobj,
                     );
                 }

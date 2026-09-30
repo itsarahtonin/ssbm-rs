@@ -342,8 +342,10 @@ pub fn __EXIProbe<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
             (Handle::add((ptr::<Val<'a, i32>>(ctx, 0x800030c0_u32 as u32)), chan)).set(0_i32);
         }
         if ((cpr & (0x1000_i32 as u32)) != 0) {
-            t = (((div_i64(
-                (div_i64(
+            t = (((fns::__div2i(
+                ctx,
+                (fns::__div2i(
+                    ctx,
                     (fns::OSGetTime(ctx)),
                     ((div_u32(
                         (div_u32(

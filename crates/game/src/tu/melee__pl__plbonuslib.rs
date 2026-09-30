@@ -2535,7 +2535,7 @@ pub fn pl_80040B18<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn pl_80040B3C<'a>(ctx: &'a Ctx, arg0: i32) -> u32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    return cvt_fp2unsigned(
+    return fns::__cvt_fp2unsigned(
         ctx,
         (fns::Player_GetStaleMoveTableIndexPtr2(ctx, arg0))
             .x0_staleMoveTable()
@@ -2546,7 +2546,7 @@ pub fn pl_80040B3C<'a>(ctx: &'a Ctx, arg0: i32) -> u32 {
 pub fn pl_80040B64<'a>(ctx: &'a Ctx, arg0: i32) -> u32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    return cvt_fp2unsigned(
+    return fns::__cvt_fp2unsigned(
         ctx,
         (fns::Player_GetStaleMoveTableIndexPtr2(ctx, arg0))
             .x0_staleMoveTable()
@@ -2586,7 +2586,7 @@ pub fn pl_80040BD8<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn pl_80040BFC<'a>(ctx: &'a Ctx, arg0: i32) -> u32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    return cvt_fp2unsigned(
+    return fns::__cvt_fp2unsigned(
         ctx,
         (fns::Player_GetStaleMoveTableIndexPtr2(ctx, arg0))
             .x0_staleMoveTable()

@@ -134,7 +134,8 @@ pub fn un_8031F294<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
     fns::lbAudioAx_8002702C(
         ctx,
         (12_i32 as u32),
-        ((shl_u64((32_i32 as u64), (48_i32 as u32))) | fns::lbAudioAx_80026E84(ctx, arg0)),
+        ((fns::__shl2i(ctx, (32_i32 as u64) as i64, 48_i32) as u64)
+            | fns::lbAudioAx_80026E84(ctx, arg0)),
     );
     fns::lbAudioAx_80027168(ctx);
     fns::lbAudioAx_80027648(ctx);

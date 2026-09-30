@@ -26,6 +26,79 @@ use ssbm_types::tu as statics;
 
 use crate::support::*;
 
+pub fn lbRefract_80021CE8<'a>(ctx: &'a Ctx, cb: lbRefract_CallbackData<'a>, arg1: i32) {
+    let __frame = ctx.stack_frame(0xc0);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
+    let mut cb = cb;
+    let mut arg1 = arg1;
+    let mut param_idx: i32 = arg1.wrapping_mul(2_i32);
+    let mut x_step: f64 = fp::fdivs(
+        2.0,
+        fp::frsp(((cb).width().wrapping_sub((1_i32 as u32))) as f64),
+    );
+    let mut y_step: f64 = fp::fdivs(
+        2.0,
+        fp::frsp(((cb).height().wrapping_sub((1_i32 as u32))) as f64),
+    );
+    let mut row: i32 = 0;
+    let mut col: i32 = 0;
+    let mut y: f64 = fp::fneg(1.0);
+    let mut param0: f64 = 0.0;
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    {
+        row = 0_i32;
+        'l3: while (row as u32) < (cb).height() {
+            'c4: {
+                let mut x: f64 = fp::fneg(1.0);
+                let mut y_sq: f64 = fp::fmuls(y, y);
+                {
+                    col = 0_i32;
+                    'l5: while (col as u32) < (cb).width() {
+                        'c6: {
+                            let mut dist: f64 = inl_sqrtf(ctx, fp::fmadds(x, x, y_sq));
+                            if dist > 1.0 {
+                                dist = 1.0;
+                            }
+                            param0 = (Handle::add(
+                                (statics::melee__lb__lbrefract::refract_data(ctx).get()).x4(),
+                                param_idx,
+                            ))
+                            .get();
+                            if (param0 != 0.0) {
+                                param0 = fp::fmuls(dist, inl_my_fmodf(ctx, dist, param0));
+                            } else {
+                                param0 = dist;
+                            }
+                            param0 = fp::fmuls(
+                                param0,
+                                (Handle::add(
+                                    (statics::melee__lb__lbrefract::refract_data(ctx).get()).x4(),
+                                    param_idx.wrapping_add(1_i32),
+                                ))
+                                .get(),
+                            );
+                            if param0 > 1.0 {
+                                param0 = 1.0;
+                            }
+                            inl_lbRefract_WriteTexCoord(ctx, cb, col, (row as u32), y, x, param0);
+                            x = fp::fadds(x, x_step);
+                        }
+                        col = col.wrapping_add(1);
+                    }
+                }
+                y = fp::fadds(y, y_step);
+            }
+            row = row.wrapping_add(1);
+        }
+    }
+    fns::DCFlushRange(ctx, (cb).buffer(), ((cb).buffer_size() as u32));
+}
+
 pub fn lbRefract_WriteTexCoordIA4<'a>(
     ctx: &'a Ctx,
     data: lbRefract_CallbackData<'a>,
@@ -1055,8 +1128,59 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return x;
 }
 
+fn inl_my_fmodf<'a>(ctx: &'a Ctx, a: f64, b: f64) -> f64 {
+    let mut a = a;
+    let mut b = b;
+    let mut quotient: i64 = 0;
+    let mut fb: f64 = 0.0;
+    let mut fa: f64 = 0.0;
+    fa = fp::fabs(a);
+    fb = fp::fabs(b);
+    if fb > fa {
+        return a;
+    }
+    quotient = (fns::__cvt_dbl_usll(ctx, fp::fdivs(a, b)) as i64);
+    return fp::fnmsubs(b, fns::__cvt_sll_flt(ctx, quotient), a);
+}
+
+fn inl_lbRefract_WriteTexCoord<'a>(
+    ctx: &'a Ctx,
+    cb: lbRefract_CallbackData<'a>,
+    row: i32,
+    col: u32,
+    y: f64,
+    x: f64,
+    param0: f64,
+) {
+    let mut cb = cb;
+    let mut row = row;
+    let mut col = col;
+    let mut y = y;
+    let mut x = x;
+    let mut param0 = param0;
+    let mut y_tex: u32 =
+        fns::__cvt_fp2unsigned(ctx, fp::fmadds(127.0, (fp::fmuls(y, param0)), 128.0));
+    (Handle::cast::<FnPtr<'a>>((cb).callback0())).call::<_, ()>((
+        cb,
+        row,
+        (col as i32),
+        0_i32,
+        0_i32,
+        y_tex,
+        fns::__cvt_fp2unsigned(ctx, fp::fmadds(127.0, (fp::fmuls(x, param0)), 128.0)),
+    ));
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
+    ctx.register_port(
+        0x80021ce8,
+        |ctx| {
+            let (a0, a1): (lbRefract_CallbackData<'_>, i32) = Args::take_all(ctx);
+            Ret::put(lbRefract_80021CE8(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
     ctx.register_port(
         0x80021f34,
         |ctx| {

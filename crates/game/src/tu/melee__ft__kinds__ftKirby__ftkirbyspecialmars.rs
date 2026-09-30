@@ -582,7 +582,7 @@ pub fn ftKb_MsSpecialNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         'l3: loop {
             'c4: {
                 if (hit_fp).x914().get(0_i32).state() == (enums::HitCapsule_Enabled as i32) {
-                    dmg_ = cvt_fp2unsigned(
+                    dmg_ = fns::__cvt_fp2unsigned(
                         ctx,
                         fp::frsp(
                             (((ms_da).base_damage().wrapping_add(
@@ -636,7 +636,7 @@ pub fn ftKb_MsSpecialAirNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         'l3: loop {
             'c4: {
                 if (hit_fp).x914().get(0_i32).state() == (enums::HitCapsule_Enabled as i32) {
-                    dmg_ = cvt_fp2unsigned(
+                    dmg_ = fns::__cvt_fp2unsigned(
                         ctx,
                         fp::frsp(
                             (((ms_da).base_damage().wrapping_add(

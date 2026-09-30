@@ -125,6 +125,81 @@ pub fn HSD_AObjStopAnim<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>, obj: Addr<'a>, fun
     (aobj).set_flags(((aobj).flags() | ((shl_i32(1_i32, (30_i32 as u32))) as u32)));
 }
 
+pub fn HSD_AObjInterpretAnim<'a>(
+    ctx: &'a Ctx,
+    aobj: HSD_AObj<'a>,
+    obj: Addr<'a>,
+    update_func: FnPtr<'a>,
+) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut aobj = aobj;
+    let mut obj = obj;
+    let mut update_func = update_func;
+    let mut rate: f64 = fp::frsp(0_i32 as f64);
+    if (!(!Handle::is_null(aobj)))
+        || (((aobj).flags() & ((shl_i32(1_i32, (30_i32 as u32))) as u32)) != 0)
+    {
+        return;
+    }
+    if (((aobj).flags() & ((shl_i32(1_i32, (27_i32 as u32))) as u32)) != 0) {
+        (aobj).set_flags(((aobj).flags() & 0xf7ffffff_u32));
+        rate = 0.0;
+    } else {
+        rate = (aobj).framerate();
+        (aobj).set_curr_frame(fp::fadds((aobj).curr_frame(), (aobj).framerate()));
+    }
+    if (((aobj).flags() & ((shl_i32(1_i32, (29_i32 as u32))) as u32)) != 0)
+        && ((aobj).end_frame() <= (aobj).curr_frame())
+    {
+        if (aobj).rewind_frame() < (aobj).end_frame() {
+            fns::HSD_FObjStopAnimAll(ctx, (aobj).fobj(), obj, update_func, rate);
+            (aobj).set_curr_frame(inl_getLoopedFrame_unfused(ctx, aobj));
+            fns::HSD_FObjReqAnimAll(ctx, (aobj).fobj(), (aobj).curr_frame());
+        } else {
+            (aobj).set_curr_frame((aobj).end_frame());
+        }
+        rate = 0.0;
+        (aobj).set_flags(((aobj).flags() | ((shl_i32(1_i32, (26_i32 as u32))) as u32)));
+    } else {
+        (aobj).set_flags(((aobj).flags() & 0xfbffffff_u32));
+    }
+    if (((aobj).flags() & ((shl_i32(1_i32, (28_i32 as u32))) as u32)) != 0) {
+        fns::HSD_FObjInterpretAnimAll(
+            ctx,
+            Handle::cast::<Addr<'a>>((aobj).fobj()),
+            obj,
+            null::<FnPtr<'a>>(ctx),
+            rate,
+        );
+    } else {
+        fns::HSD_FObjInterpretAnimAll(
+            ctx,
+            Handle::cast::<Addr<'a>>((aobj).fobj()),
+            obj,
+            update_func,
+            rate,
+        );
+    }
+    if (!(((aobj).flags() & ((shl_i32(1_i32, (29_i32 as u32))) as u32)) != 0))
+        && ((aobj).end_frame() <= (aobj).curr_frame())
+    {
+        inl_HSD_AObjStopAnim_unfused(ctx, aobj, obj, update_func);
+    }
+    if (((aobj).flags() & ((shl_i32(1_i32, (30_i32 as u32))) as u32)) != 0) {
+        statics::sysdolphin__baselib__aobj::HSD_AObj_804D762C(ctx).set(
+            statics::sysdolphin__baselib__aobj::HSD_AObj_804D762C(ctx)
+                .get()
+                .wrapping_add(1_i32),
+        );
+    } else {
+        statics::sysdolphin__baselib__aobj::HSD_AObj_804D7630(ctx).set(
+            statics::sysdolphin__baselib__aobj::HSD_AObj_804D7630(ctx)
+                .get()
+                .wrapping_add(1_i32),
+        );
+    }
+}
+
 pub fn HSD_AObjLoadDesc<'a>(ctx: &'a Ctx, aobjdesc: HSD_AObjDesc<'a>) -> HSD_AObj<'a> {
     let __frame = ctx.stack_frame(0x20);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
@@ -546,6 +621,40 @@ pub fn _HSD_AObjForgetMemory<'a>(ctx: &'a Ctx, low: Addr<'a>, high: Addr<'a>) {
     statics::sysdolphin__baselib__aobj::endcallback_list(ctx).set(null::<_HSD_SList<'a>>(ctx));
 }
 
+fn inl_fmodf_unfused<'a>(ctx: &'a Ctx, a: f64, b: f64) -> f64 {
+    let mut a = a;
+    let mut b = b;
+    let mut quotient: i64 = 0;
+    if fp::fabs(b) > fp::fabs(a) {
+        return a;
+    }
+    quotient = (fns::__cvt_dbl_usll(ctx, fp::fdivs(a, b)) as i64);
+    return fp::fsubs(a, fp::fmuls(b, fns::__cvt_sll_flt(ctx, quotient)));
+}
+
+fn inl_getLoopedFrame_unfused<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) -> f64 {
+    let mut aobj = aobj;
+    let mut y: f64 = fp::fsubs((aobj).end_frame(), (aobj).rewind_frame());
+    let mut x: f64 = fp::fsubs((aobj).curr_frame(), (aobj).rewind_frame());
+    return fp::fadds(inl_fmodf_unfused(ctx, x, y), (aobj).rewind_frame());
+}
+
+fn inl_HSD_AObjStopAnim_unfused<'a>(
+    ctx: &'a Ctx,
+    aobj: HSD_AObj<'a>,
+    obj: Addr<'a>,
+    func: FnPtr<'a>,
+) {
+    let mut aobj = aobj;
+    let mut obj = obj;
+    let mut func = func;
+    if !(!Handle::is_null(aobj)) {
+        return;
+    }
+    fns::HSD_FObjStopAnimAll(ctx, (aobj).fobj(), obj, func, (aobj).framerate());
+    (aobj).set_flags(((aobj).flags() | ((shl_i32(1_i32, (30_i32 as u32))) as u32)));
+}
+
 fn inl_HSD_AObjSetFlags_unfused<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>, flags: u32) {
     let mut aobj = aobj;
     let mut flags = flags;
@@ -869,6 +978,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1, a2): (HSD_AObj<'_>, Addr<'_>, FnPtr<'_>) = Args::take_all(ctx);
             Ret::put(HSD_AObjStopAnim(ctx, a0, a1, a2), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80364190,
+        |ctx| {
+            let (a0, a1, a2): (HSD_AObj<'_>, Addr<'_>, FnPtr<'_>) = Args::take_all(ctx);
+            Ret::put(HSD_AObjInterpretAnim(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
     );

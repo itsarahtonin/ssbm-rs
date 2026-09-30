@@ -17796,14 +17796,14 @@ use crate::records::*;
 #[inline] pub fn __setjmp<'a>(ctx: &'a Ctx, env: jmp_buf<'a>) -> i32 { ctx.call(0x803227cc, (env, )) }
 #[inline] pub fn __longjmp<'a>(ctx: &'a Ctx, env: jmp_buf<'a>, val: i32) -> () { ctx.call(0x80322840, (env, val, )) }
 #[inline] pub fn __cvt_fp2unsigned<'a>(ctx: &'a Ctx, d: f64) -> u32 { ctx.call(0x803228c0, (d, )) }
-#[inline] pub fn __div2u<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8032291c, ()) }
-#[inline] pub fn __div2i<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80322a08, ()) }
-#[inline] pub fn __mod2u<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80322b40, ()) }
-#[inline] pub fn __mod2i<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80322c24, ()) }
-#[inline] pub fn __shl2i<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80322d30, ()) }
-#[inline] pub fn __shr2u<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80322d54, ()) }
-#[inline] pub fn __shr2i<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80322d78, ()) }
-#[inline] pub fn __cvt_sll_flt<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80322da0, ()) }
+#[inline] pub fn __div2u<'a>(ctx: &'a Ctx, a: u64, b: u64) -> u64 { ctx.call(0x8032291c, (a, b, )) }
+#[inline] pub fn __div2i<'a>(ctx: &'a Ctx, a: i64, b: i64) -> i64 { ctx.call(0x80322a08, (a, b, )) }
+#[inline] pub fn __mod2u<'a>(ctx: &'a Ctx, a: u64, b: u64) -> u64 { ctx.call(0x80322b40, (a, b, )) }
+#[inline] pub fn __mod2i<'a>(ctx: &'a Ctx, a: i64, b: i64) -> i64 { ctx.call(0x80322c24, (a, b, )) }
+#[inline] pub fn __shl2i<'a>(ctx: &'a Ctx, a: i64, n: i32) -> i64 { ctx.call(0x80322d30, (a, n, )) }
+#[inline] pub fn __shr2u<'a>(ctx: &'a Ctx, a: u64, n: i32) -> u64 { ctx.call(0x80322d54, (a, n, )) }
+#[inline] pub fn __shr2i<'a>(ctx: &'a Ctx, a: i64, n: i32) -> i64 { ctx.call(0x80322d78, (a, n, )) }
+#[inline] pub fn __cvt_sll_flt<'a>(ctx: &'a Ctx, x: i64) -> f64 { ctx.call(0x80322da0, (x, )) }
 #[inline] pub fn __cvt_dbl_usll<'a>(ctx: &'a Ctx, x: f64) -> u64 { ctx.call(0x80322e54, (x, )) }
 #[inline] pub fn __fini_cpp_exceptions<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80322f28, ()) }
 #[inline] pub fn __init_cpp_exceptions<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80322f5c, ()) }
@@ -51911,14 +51911,14 @@ pub mod abi {
     #[inline] pub fn __setjmp(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, jmp_buf<'a>) -> i32) { let (env, ): (jmp_buf<'_>, ) = Args::take_all(ctx); Ret::put(__f(ctx, env), ctx); }
     #[inline] pub fn __longjmp(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, jmp_buf<'a>, i32) -> ()) { let (env, val, ): (jmp_buf<'_>, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, env, val), ctx); }
     #[inline] pub fn __cvt_fp2unsigned(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, f64) -> u32) { let (d, ): (f64, ) = Args::take_all(ctx); Ret::put(__f(ctx, d), ctx); }
-    #[inline] pub fn __div2u(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn __div2i(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn __mod2u(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn __mod2i(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn __shl2i(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn __shr2u(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn __shr2i(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
-    #[inline] pub fn __cvt_sll_flt(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
+    #[inline] pub fn __div2u(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u64, u64) -> u64) { let (a, b, ): (u64, u64, ) = Args::take_all(ctx); Ret::put(__f(ctx, a, b), ctx); }
+    #[inline] pub fn __div2i(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i64, i64) -> i64) { let (a, b, ): (i64, i64, ) = Args::take_all(ctx); Ret::put(__f(ctx, a, b), ctx); }
+    #[inline] pub fn __mod2u(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u64, u64) -> u64) { let (a, b, ): (u64, u64, ) = Args::take_all(ctx); Ret::put(__f(ctx, a, b), ctx); }
+    #[inline] pub fn __mod2i(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i64, i64) -> i64) { let (a, b, ): (i64, i64, ) = Args::take_all(ctx); Ret::put(__f(ctx, a, b), ctx); }
+    #[inline] pub fn __shl2i(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i64, i32) -> i64) { let (a, n, ): (i64, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, a, n), ctx); }
+    #[inline] pub fn __shr2u(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, u64, i32) -> u64) { let (a, n, ): (u64, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, a, n), ctx); }
+    #[inline] pub fn __shr2i(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i64, i32) -> i64) { let (a, n, ): (i64, i32, ) = Args::take_all(ctx); Ret::put(__f(ctx, a, n), ctx); }
+    #[inline] pub fn __cvt_sll_flt(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, i64) -> f64) { let (x, ): (i64, ) = Args::take_all(ctx); Ret::put(__f(ctx, x), ctx); }
     #[inline] pub fn __cvt_dbl_usll(ctx: &Ctx, __f: for<'a> fn(&'a Ctx, f64) -> u64) { let (x, ): (f64, ) = Args::take_all(ctx); Ret::put(__f(ctx, x), ctx); }
     #[inline] pub fn __fini_cpp_exceptions(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }
     #[inline] pub fn __init_cpp_exceptions(ctx: &Ctx, __f: for<'a> fn(&'a Ctx) -> ()) { let (): () = Args::take_all(ctx); Ret::put(__f(ctx, ), ctx); }

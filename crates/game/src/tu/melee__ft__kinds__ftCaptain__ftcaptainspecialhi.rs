@@ -47,7 +47,7 @@ pub fn ftCa_SpecialLw_800E49FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
     (fp).cmd_vars()
         .at(1_i32)
-        .set(cvt_fp2unsigned(ctx, (da).specialhi_unk2()));
+        .set(fns::__cvt_fp2unsigned(ctx, (da).specialhi_unk2()));
     (fp).mv()
         .ca()
         .specialhi()

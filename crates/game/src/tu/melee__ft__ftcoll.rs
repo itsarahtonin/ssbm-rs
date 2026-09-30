@@ -993,7 +993,7 @@ pub fn ftColl_80077C60<'a>(
                                 (entry).x10().set_hit1(hit2);
                                 Handle::copy_from((entry).pos(), (hit).hurt_coll_pos());
                                 (entry).set_x20(f4);
-                                (entry).set_size_of_xC(cvt_fp2unsigned(ctx, half_raw_f));
+                                (entry).set_size_of_xC(fns::__cvt_fp2unsigned(ctx, half_raw_f));
                                 statics::melee__ft__ftcoll::dmg_log1_idx(ctx).set(
                                     statics::melee__ft__ftcoll::dmg_log1_idx(ctx)
                                         .get()
@@ -1135,7 +1135,7 @@ pub fn ftColl_80077C60<'a>(
                         (entry_2).x10().set_hit1(hit2);
                         Handle::copy_from((entry_2).pos(), (hit).hurt_coll_pos());
                         (entry_2).set_x20((hit).damage());
-                        (entry_2).set_size_of_xC(cvt_fp2unsigned(ctx, raw_dmg));
+                        (entry_2).set_size_of_xC(fns::__cvt_fp2unsigned(ctx, raw_dmg));
                         statics::melee__ft__ftcoll::dmg_log0_idx(ctx).set(
                             statics::melee__ft__ftcoll::dmg_log0_idx(ctx)
                                 .get()
@@ -3253,7 +3253,7 @@ pub fn ftColl_8007A06C<'a>(
                             hit = (entry).xC().hit0();
                             kb = inl_ftColl_80079C70(ctx, fp, attacker_fp, hit, unk_count);
                             if arg4 != 0_i32 {
-                                let mut dmg_: u32 = cvt_fp2unsigned(ctx, (entry).x20());
+                                let mut dmg_: u32 = fns::__cvt_fp2unsigned(ctx, (entry).x20());
                                 let mut effect: i32 =
                                     statics::melee__ft__ftcoll::hit_effect_ids(ctx)
                                         .at((((entry).xC().hit0()).element() as i32))
@@ -3297,7 +3297,7 @@ pub fn ftColl_8007A06C<'a>(
                                 (co).weight(),
                             );
                             if arg4 != 0_i32 {
-                                let mut dmg__2: u32 = cvt_fp2unsigned(ctx, (entry).x20());
+                                let mut dmg__2: u32 = fns::__cvt_fp2unsigned(ctx, (entry).x20());
                                 let mut effect_2: i32 =
                                     statics::melee__ft__ftcoll::hit_effect_ids(ctx)
                                         .at((((entry).xC().hit0()).element() as i32))
@@ -4620,7 +4620,7 @@ pub fn ftColl_8007BE3C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             inl_getHitEffectId_unfused(ctx, (fp).dmg().x188c()),
             (fp).dmg().x1880(),
             ((fp).dmg().x1890() as u32),
-            cvt_fp2unsigned(ctx, (fp).dmg().x1898()),
+            fns::__cvt_fp2unsigned(ctx, (fp).dmg().x1898()),
             (fp).dmg().x187c(),
         );
     }

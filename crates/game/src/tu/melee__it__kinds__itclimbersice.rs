@@ -538,7 +538,7 @@ fn inl_itClimbersice_Phys_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut sa: itClimbersIceAttributes<'a> = Handle::cast::<itClimbersIceAttributes<'a>>(
         ((ip).xC4_article_data()).x4_specialAttributes(),
     );
-    let mut dmg_: u32 = cvt_fp2unsigned(
+    let mut dmg_: u32 = fns::__cvt_fp2unsigned(
         ctx,
         (if (fp::fmuls((ip).x40_vel().x(), fp::frsp((sa).x30() as f64))) < fp::frsp(0_i32 as f64) {
             fp::fneg((fp::fmuls((ip).x40_vel().x(), fp::frsp((sa).x30() as f64))))

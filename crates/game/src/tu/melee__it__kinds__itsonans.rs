@@ -103,7 +103,7 @@ pub fn it_802CD4FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 fns::it_80272460(
                     ctx,
                     (ip).x5D4_hitboxes().get(0_i32).hit(),
-                    cvt_fp2unsigned(ctx, (ip).xDD4_itemVar().sonans().x68()),
+                    fns::__cvt_fp2unsigned(ctx, (ip).xDD4_itemVar().sonans().x68()),
                     gobj,
                 );
                 (ip).xDD4_itemVar()

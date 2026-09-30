@@ -106,7 +106,8 @@ pub fn lbTime_8000AF74<'a>(ctx: &'a Ctx, a: u32, b: i32) -> u32 {
 
 pub fn lbTime_GetTimeInSeconds<'a>(ctx: &'a Ctx) -> u32 {
     let __frame = ctx.stack_frame(0x10);
-    let mut secs: u64 = ((div_i64(
+    let mut secs: u64 = ((fns::__div2i(
+        ctx,
         (fns::OSGetTime(ctx)),
         ((div_u32(
             ((ptr::<Val<'a, u32>>(

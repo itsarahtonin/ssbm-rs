@@ -41,7 +41,8 @@ pub fn lb_8001C658<'a>(ctx: &'a Ctx) -> Val<'a, i8> {
     let mut title: Val<'a, i8> = null(ctx);
     let mut i: i32 = 0;
     let mut ticks: i64 = fns::OSGetTime(ctx);
-    let mut seconds: u32 = ((div_i64(
+    let mut seconds: u32 = ((fns::__div2i(
+        ctx,
         (ticks),
         ((div_u32(
             ((ptr::<Val<'a, u32>>(
@@ -518,7 +519,8 @@ fn inl_lb_8001C658_unfused<'a>(ctx: &'a Ctx) -> Val<'a, i8> {
     let mut title: Val<'a, i8> = null(ctx);
     let mut i: i32 = 0;
     let mut ticks: i64 = fns::OSGetTime(ctx);
-    let mut seconds: u32 = ((div_i64(
+    let mut seconds: u32 = ((fns::__div2i(
+        ctx,
         (ticks),
         ((div_u32(
             ((ptr::<Val<'a, u32>>(

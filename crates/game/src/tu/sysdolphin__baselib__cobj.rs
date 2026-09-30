@@ -364,10 +364,10 @@ pub fn setupNormalCamera<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
     height = fp::fsubs(bottom, top);
     fns::GXSetScissor(
         ctx,
-        cvt_fp2unsigned(ctx, left),
-        cvt_fp2unsigned(ctx, top),
-        cvt_fp2unsigned(ctx, width),
-        cvt_fp2unsigned(ctx, height),
+        fns::__cvt_fp2unsigned(ctx, left),
+        fns::__cvt_fp2unsigned(ctx, top),
+        fns::__cvt_fp2unsigned(ctx, width),
+        fns::__cvt_fp2unsigned(ctx, height),
     );
     projection_type = inl_makeProjectionMtx_unfused(ctx, cobj, p.get(0));
     fns::GXSetProjection(ctx, p.get(0), projection_type);
@@ -407,10 +407,10 @@ pub fn setupTopHalfCamera<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
     height = fp::fsubs(bottom, top);
     fns::GXSetScissor(
         ctx,
-        cvt_fp2unsigned(ctx, left),
-        cvt_fp2unsigned(ctx, top),
-        cvt_fp2unsigned(ctx, width),
-        cvt_fp2unsigned(ctx, height),
+        fns::__cvt_fp2unsigned(ctx, left),
+        fns::__cvt_fp2unsigned(ctx, top),
+        fns::__cvt_fp2unsigned(ctx, width),
+        fns::__cvt_fp2unsigned(ctx, height),
     );
     top = (cobj).viewport().ymin();
     bottom = (cobj).viewport().ymax();
@@ -553,10 +553,10 @@ pub fn setupBottomHalfCamera<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
     height = fp::fsubs(bottom, top);
     fns::GXSetScissor(
         ctx,
-        cvt_fp2unsigned(ctx, left),
-        cvt_fp2unsigned(ctx, top),
-        cvt_fp2unsigned(ctx, width),
-        cvt_fp2unsigned(ctx, height),
+        fns::__cvt_fp2unsigned(ctx, left),
+        fns::__cvt_fp2unsigned(ctx, top),
+        fns::__cvt_fp2unsigned(ctx, width),
+        fns::__cvt_fp2unsigned(ctx, height),
     );
     top = (cobj).viewport().ymin();
     left = (cobj).viewport().xmin();

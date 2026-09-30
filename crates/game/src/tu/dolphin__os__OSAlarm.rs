@@ -58,7 +58,7 @@ pub fn InsertAlarm<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>, fire: i64, handler: FnP
         if (alarm).start() < time {
             fire = fire.wrapping_add(
                 (alarm).period().wrapping_mul(
-                    (div_i64((time.wrapping_sub((alarm).start())), (alarm).period())
+                    (fns::__div2i(ctx, (time.wrapping_sub((alarm).start())), (alarm).period())
                         .wrapping_add((1_i32 as i64))),
                 ),
             );

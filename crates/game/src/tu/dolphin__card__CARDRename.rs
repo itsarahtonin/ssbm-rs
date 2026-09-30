@@ -116,7 +116,8 @@ pub fn CARDRenameAsync<'a>(
         (32_i32 as u32),
     );
     (ent).set_time(
-        ((div_i64(
+        ((fns::__div2i(
+            ctx,
             (fns::OSGetTime(ctx)),
             ((div_u32(
                 ((ptr::<Val<'a, u32>>(

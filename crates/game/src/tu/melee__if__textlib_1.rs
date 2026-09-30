@@ -365,8 +365,10 @@ pub fn un_80303444<'a>(ctx: &'a Ctx, arg0: un_80304138_objalloc_t<'a>) -> i32 {
             {
                 let mut q_5: Val<'a, u32> =
                     (Handle::add((arg0).x8(), ((arg0).x0() as i32))).x10().w();
-                let mut idk_3: u32 =
-                    cvt_fp2unsigned(ctx, (Handle::add((arg0).x8(), ((arg0).x0() as i32))).x1C());
+                let mut idk_3: u32 = fns::__cvt_fp2unsigned(
+                    ctx,
+                    (Handle::add((arg0).x8(), ((arg0).x0() as i32))).x1C(),
+                );
                 if (q_5).get().wrapping_add((idk_3 & 0xffffffff_u32)) <= 0xffffffff_u32 {
                     (q_5).set((q_5).get().wrapping_add(idk_3));
                 } else {
@@ -498,8 +500,10 @@ pub fn un_80303720<'a>(ctx: &'a Ctx, arg0: un_80304138_objalloc_t<'a>) -> i32 {
             {
                 let mut q_5: Val<'a, u32> =
                     (Handle::add((arg0).x8(), ((arg0).x0() as i32))).x10().w();
-                let mut idk_3: u32 =
-                    cvt_fp2unsigned(ctx, (Handle::add((arg0).x8(), ((arg0).x0() as i32))).x1C());
+                let mut idk_3: u32 = fns::__cvt_fp2unsigned(
+                    ctx,
+                    (Handle::add((arg0).x8(), ((arg0).x0() as i32))).x1C(),
+                );
                 if (q_5).get().wrapping_sub((idk_3 & 0xffffffff_u32)) >= (0_i32 as u32) {
                     (q_5).set((q_5).get().wrapping_sub(idk_3));
                 } else {

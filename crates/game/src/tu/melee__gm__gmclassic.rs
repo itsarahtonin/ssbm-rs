@@ -618,7 +618,8 @@ pub fn gmClassic_801B3500<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
                         ));
                     if (((entry).xC()).x2().x02().at(i).get() as i32) == 4_i32 {
                         audio = (audio
-                            | ((shl_u64((2_i32 as u64), (32_i32 as u32))) | (0x4000_i32 as u64)));
+                            | ((fns::__shl2i(ctx, (2_i32 as u64) as i64, 32_i32) as u64)
+                                | (0x4000_i32 as u64)));
                     }
                 }
             }

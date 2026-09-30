@@ -165,7 +165,7 @@ pub fn itNessPKFlashExplode_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>
         fns::it_80272460(
             ctx,
             (ip).x5D4_hitboxes().get(0_i32).hit(),
-            cvt_fp2unsigned(
+            fns::__cvt_fp2unsigned(
                 ctx,
                 fp::fmadds(
                     (ip).xDD4_itemVar().pkflushexplode().xDD4(),

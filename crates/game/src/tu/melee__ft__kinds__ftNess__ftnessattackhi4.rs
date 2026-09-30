@@ -83,7 +83,7 @@ pub fn ftNs_AttackHi4_YoyoApplyDamage<'a>(ctx: &'a Ctx, charge_frames: f64, gobj
             fns::ftColl_8007ABD0(
                 ctx,
                 (fp).x914().get(0_i32),
-                cvt_fp2unsigned(ctx, final_damage),
+                fns::__cvt_fp2unsigned(ctx, final_damage),
                 gobj,
             );
         }
@@ -1114,7 +1114,7 @@ fn inl_ftNs_AttackHi4_YoyoApplyDamage<'a>(ctx: &'a Ctx, charge_frames: f64, gobj
             fns::ftColl_8007ABD0(
                 ctx,
                 (fp).x914().get(0_i32),
-                cvt_fp2unsigned(ctx, final_damage),
+                fns::__cvt_fp2unsigned(ctx, final_damage),
                 gobj,
             );
         }

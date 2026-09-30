@@ -87,7 +87,7 @@ pub fn GXSetFog<'a>(
         A,
         fp::frsp((shl_i32(1_i32, (B_expn.wrapping_add((1_i32 as u32))))) as f64),
     ));
-    b_m = cvt_fp2unsigned(ctx, fp::fmuls(8388638.0, B_mant));
+    b_m = fns::__cvt_fp2unsigned(ctx, fp::fmuls(8388638.0, B_mant));
     b_s = B_expn.wrapping_add((1_i32 as u32));
     c.set(C);
     fog1 = (0_i32 as u32);
@@ -445,8 +445,8 @@ pub fn GXInitFogAdjTable<'a>(
                     ),
                 );
                 (table).r().at((i as i32)).set(
-                    ((cvt_fp2unsigned(ctx, (fp::fmuls(256.0, rangeVal))) & (0xfff_i32 as u32))
-                        as u16),
+                    ((fns::__cvt_fp2unsigned(ctx, (fp::fmuls(256.0, rangeVal)))
+                        & (0xfff_i32 as u32)) as u16),
                 );
             }
             i = i.wrapping_add(1);

@@ -2597,7 +2597,7 @@ pub fn gm_8016403C<'a>(ctx: &'a Ctx, item: u8) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut item = item;
     let mut item_mask: u64 = (fns::gmMainLib_GetGamePrefs(ctx)).item_mask();
-    if ((((shl_i64(1_i64, ((item as i32) as u32))) as u64) & item_mask) != 0) {
+    if ((((fns::__shl2i(ctx, 1_i64 as i64, (item as i32)) as i64) as u64) & item_mask) != 0) {
         return 1_i32;
     }
     return 0_i32;
@@ -2621,12 +2621,18 @@ pub fn fn_801640B0<'a>(ctx: &'a Ctx, item_mask: Val<'a, u64>) {
                     __t1
                 }) != 35_i32
                 {
-                    if (((temp_r30).item_mask() & ((shl_i64(1_i64, (i as u32))) as u64)) != 0) {
-                        (item_mask)
-                            .set(((item_mask).get() | (shl_i64(1_i64, (shift as u32)) as u64)));
+                    if (((temp_r30).item_mask()
+                        & ((fns::__shl2i(ctx, 1_i64 as i64, i) as i64) as u64))
+                        != 0)
+                    {
+                        (item_mask).set(
+                            ((item_mask).get()
+                                | ((fns::__shl2i(ctx, 1_i64 as i64, shift) as i64) as u64)),
+                        );
                     } else {
                         (item_mask).set(
-                            ((item_mask).get() & ((!(shl_i64(1_i64, (shift as u32)))) as u64)),
+                            ((item_mask).get()
+                                & ((!(fns::__shl2i(ctx, 1_i64 as i64, shift) as i64)) as u64)),
                         );
                     }
                 }
@@ -2775,7 +2781,8 @@ pub fn gm_80164430<'a>(ctx: &'a Ctx, arg0: u16) -> i32 {
     stage_idx = (fns::Stage_8022519C(ctx, (arg0 as i32)) as u8);
     unlock_bit = inl_getStageUnlockIndex_unfused(ctx, stage_idx);
     if ((unlock_bit as i32) == 11_i32)
-        || ((((stage_unlock_mask).get() as i64) & (shl_i64(1_i64, ((unlock_bit as i32) as u32))))
+        || ((((stage_unlock_mask).get() as i64)
+            & (fns::__shl2i(ctx, 1_i64 as i64, (unlock_bit as i32)) as i64))
             != 0)
     {
         return 1_i32;
@@ -2797,7 +2804,8 @@ pub fn gm_80164504<'a>(ctx: &'a Ctx, stkind: u16) {
         notify_val = inl_getStageUnlockNotifyId_unfused(ctx, unlock_idx);
         let _ = fns::gmMainLib_8015D818(ctx, (notify_val as u32));
         (stage_unlock_mask).set(
-            ((((stage_unlock_mask).get() as i64) | (shl_i64(1_i64, ((unlock_idx as i32) as u32))))
+            ((((stage_unlock_mask).get() as i64)
+                | (fns::__shl2i(ctx, 1_i64 as i64, (unlock_idx as i32)) as i64))
                 as u16),
         );
     }
@@ -2811,7 +2819,10 @@ pub fn gm_80164600<'a>(ctx: &'a Ctx) -> i32 {
         i = 0_i32;
         'l1: while i < 11_i32 {
             'c2: {
-                if !((((stage_unlock_mask).get() as i64) & (shl_i64(1_i64, (i as u32)))) != 0) {
+                if !((((stage_unlock_mask).get() as i64)
+                    & (fns::__shl2i(ctx, 1_i64 as i64, i) as i64))
+                    != 0)
+                {
                     return 0_i32;
                 }
             }
@@ -2829,7 +2840,9 @@ pub fn gm_8016468C<'a>(ctx: &'a Ctx) {
         i = 0_i32;
         'l1: while i < 11_i32 {
             'c2: {
-                (ptr_).set(((((ptr_).get() as i64) | shl_i64(1_i64, (i as u32))) as u16));
+                (ptr_).set(
+                    ((((ptr_).get() as i64) | (fns::__shl2i(ctx, 1_i64 as i64, i) as i64)) as u16),
+                );
             }
             i = i.wrapping_add(1);
         }
@@ -2870,7 +2883,7 @@ pub fn gm_IsCKindUnlocked<'a>(ctx: &'a Ctx, ckind: u8) -> i32 {
     let mut unlock_bit: u8 = inl_gm_SelKindToUnlockIndex_unfused(ctx, (selkind as i32));
     if ((unlock_bit as i32) == 11_i32)
         || ((((unlocked_chars_bitmask).get() as i64)
-            & (shl_i64(1_i64, ((unlock_bit as i32) as u32))))
+            & (fns::__shl2i(ctx, 1_i64 as i64, (unlock_bit as i32)) as i64))
             != 0)
     {
         return 1_i32;
@@ -2913,7 +2926,8 @@ pub fn gm_UnlockCKind<'a>(ctx: &'a Ctx, ckind: i32) {
         }
         let _ = fns::gmMainLib_8015D818(ctx, (notify_val as u32));
         (char_unlock_mask).set(
-            ((((char_unlock_mask).get() as i64) | (shl_i64(1_i64, ((unlock_idx as i32) as u32))))
+            ((((char_unlock_mask).get() as i64)
+                | (fns::__shl2i(ctx, 1_i64 as i64, (unlock_idx as i32)) as i64))
                 as u16),
         );
     }
@@ -2931,7 +2945,7 @@ pub fn gm_80164A0C<'a>(ctx: &'a Ctx, ckind: u8) {
     if (idx as i32) != 11_i32 {
         (unlockable_character_bitfield).set(
             ((((unlockable_character_bitfield).get() as u64)
-                & (!(shl_u64(1_u64, ((idx as i32) as u32))))) as u16),
+                & (!(fns::__shl2i(ctx, 1_u64 as i64, (idx as i32)) as u64))) as u16),
         );
     }
 }
@@ -2946,7 +2960,7 @@ pub fn gm_80164ABC<'a>(ctx: &'a Ctx) -> i32 {
         'l1: while i < 11_i32 {
             'c2: {
                 if !((((unlockable_character_bitfield).get() as i64)
-                    & (shl_i64(1_i64, (i as u32))))
+                    & (fns::__shl2i(ctx, 1_i64 as i64, i) as i64))
                     != 0)
                 {
                     return 0_i32;
@@ -3064,7 +3078,9 @@ pub fn gm_80164F18<'a>(ctx: &'a Ctx) {
         i = 0_i32;
         'l1: while i < 11_i32 {
             'c2: {
-                (ptr_).set(((((ptr_).get() as i64) | shl_i64(1_i64, (i as u32))) as u16));
+                (ptr_).set(
+                    ((((ptr_).get() as i64) | (fns::__shl2i(ctx, 1_i64 as i64, i) as i64)) as u16),
+                );
             }
             i = i.wrapping_add(1);
         }
@@ -3886,19 +3902,19 @@ pub fn gm_80166378<'a>(ctx: &'a Ctx, arg0_raw: MatchEnd<'a>) {
                         .get(i)
                         .set_x4C(fns::pl_80040BFC(ctx, i));
                     (arg0).player_standings().get(i).set_x50(
-                        cvt_fp2unsigned(ctx, fns::pl_80040C24(ctx, i))
+                        fns::__cvt_fp2unsigned(ctx, fns::pl_80040C24(ctx, i))
                             .wrapping_mul((10_i32 as u32)),
                     );
                     (arg0).player_standings().get(i).set_x54(
-                        cvt_fp2unsigned(ctx, fns::pl_80040C48(ctx, i))
+                        fns::__cvt_fp2unsigned(ctx, fns::pl_80040C48(ctx, i))
                             .wrapping_mul((10_i32 as u32)),
                     );
                     (arg0).player_standings().get(i).set_x58(
-                        cvt_fp2unsigned(ctx, fns::pl_80040C6C(ctx, i))
+                        fns::__cvt_fp2unsigned(ctx, fns::pl_80040C6C(ctx, i))
                             .wrapping_mul((10_i32 as u32)),
                     );
                     (arg0).player_standings().get(i).set_x5C(
-                        cvt_fp2unsigned(ctx, fns::pl_80040C90(ctx, i))
+                        fns::__cvt_fp2unsigned(ctx, fns::pl_80040C90(ctx, i))
                             .wrapping_mul((10_i32 as u32)),
                     );
                     (arg0)
@@ -3953,27 +3969,33 @@ pub fn gm_80166378<'a>(ctx: &'a Ctx, arg0_raw: MatchEnd<'a>) {
                         .player_standings()
                         .get(i)
                         .set_x90((fns::pl_8003E39C(ctx, i) as u32));
-                    (arg0).player_standings().get(i).set_x94(cvt_fp2unsigned(
-                        ctx,
-                        ({
-                            c = 60.0;
-                            (fp::fmuls(
-                                c,
+                    (arg0)
+                        .player_standings()
+                        .get(i)
+                        .set_x94(fns::__cvt_fp2unsigned(
+                            ctx,
+                            ({
+                                c = 60.0;
                                 (fp::fmuls(
-                                    ({
-                                        let __t3 = 10.0;
-                                        d = __t3;
-                                        __t3
-                                    }),
-                                    fns::pl_80040D44(ctx, i),
-                                )),
-                            ))
-                        }),
-                    ));
-                    (arg0).player_standings().get(i).set_x98(cvt_fp2unsigned(
-                        ctx,
-                        (fp::fmuls(c, (fp::fmuls(d, fns::pl_80040D68(ctx, i))))),
-                    ));
+                                    c,
+                                    (fp::fmuls(
+                                        ({
+                                            let __t3 = 10.0;
+                                            d = __t3;
+                                            __t3
+                                        }),
+                                        fns::pl_80040D44(ctx, i),
+                                    )),
+                                ))
+                            }),
+                        ));
+                    (arg0)
+                        .player_standings()
+                        .get(i)
+                        .set_x98(fns::__cvt_fp2unsigned(
+                            ctx,
+                            (fp::fmuls(c, (fp::fmuls(d, fns::pl_80040D68(ctx, i))))),
+                        ));
                     (arg0)
                         .player_standings()
                         .get(i)
@@ -5048,15 +5070,19 @@ pub fn gm_80167BC8<'a>(ctx: &'a Ctx, vs_data: VsModeData<'a>) {
                     .at(((i as u8) as i32))
                     .get();
                 if (item as i32) != 35_i32 {
-                    if (((prefs).item_mask() & ((shl_i64(1_i64, (i as u32))) as u64)) != 0) {
+                    if (((prefs).item_mask()
+                        & ((fns::__shl2i(ctx, 1_i64 as i64, i) as i64) as u64))
+                        != 0)
+                    {
                         (vs_data).start().rules().set_x20(
                             ((vs_data).start().rules().x20()
-                                | (shl_i64(1_i64, ((item as i32) as u32)) as u64)),
+                                | ((fns::__shl2i(ctx, 1_i64 as i64, (item as i32)) as i64) as u64)),
                         );
                     } else {
                         (vs_data).start().rules().set_x20(
                             ((vs_data).start().rules().x20()
-                                & ((!(shl_i64(1_i64, ((item as i32) as u32)))) as u64)),
+                                & ((!(fns::__shl2i(ctx, 1_i64 as i64, (item as i32)) as i64))
+                                    as u64)),
                         );
                     }
                 }
@@ -6022,7 +6048,7 @@ fn inl_is_character_unlocked_unfused<'a>(ctx: &'a Ctx, n: u8, mask: Val<'a, u16>
     let mut n = n;
     let mut mask = mask;
     if ((n as i32) == 11_i32)
-        || ((((mask).get() as i64) & shl_i64(1_i64, ((n as i32) as u32))) != 0)
+        || ((((mask).get() as i64) & (fns::__shl2i(ctx, 1_i64 as i64, (n as i32)) as i64)) != 0)
     {
         return 1_i32;
     }

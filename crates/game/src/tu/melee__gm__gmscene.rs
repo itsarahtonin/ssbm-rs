@@ -30,7 +30,7 @@ pub fn gm_GetDbPauseFlag<'a>(ctx: &'a Ctx, bit: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut bit = bit;
     return (((statics::melee__gm__gmscene::gm_80479D58(ctx).unk_10().x0() as u64)
-        & (shl_u64(1_u64, (bit as u32)))) as i32);
+        & (fns::__shl2i(ctx, 1_u64 as i64, bit) as u64)) as i32);
 }
 
 pub fn gm_801A4624<'a>(ctx: &'a Ctx) -> i32 {
@@ -44,7 +44,7 @@ pub fn gm_SetDbPauseFlag<'a>(ctx: &'a Ctx, bit: i32) {
         .unk_10()
         .set_x0(
             (((statics::melee__gm__gmscene::gm_80479D58(ctx).unk_10().x0() as u64)
-                | shl_u64(1_u64, (bit as u32))) as u8),
+                | (fns::__shl2i(ctx, 1_u64 as i64, bit) as u64)) as u8),
         );
 }
 
@@ -55,7 +55,7 @@ pub fn gm_ClearDbPauseFlag<'a>(ctx: &'a Ctx, bit: i32) {
         .unk_10()
         .set_x0(
             (((statics::melee__gm__gmscene::gm_80479D58(ctx).unk_10().x0() as u64)
-                & (!(shl_u64(1_u64, (bit as u32))))) as u8),
+                & (!(fns::__shl2i(ctx, 1_u64 as i64, bit) as u64))) as u8),
         );
 }
 
@@ -63,7 +63,7 @@ pub fn gm_801A46B8<'a>(ctx: &'a Ctx, bit: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut bit = bit;
     return (((statics::melee__gm__gmscene::gm_80479D58(ctx).unk_10().x2() as u64)
-        & (shl_u64(1_u64, (bit as u32)))) as i32);
+        & (fns::__shl2i(ctx, 1_u64 as i64, bit) as u64)) as i32);
 }
 
 pub fn fn_801A46F4<'a>(ctx: &'a Ctx) -> i32 {
@@ -288,6 +288,74 @@ pub fn fn_801A4BD0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
 }
 
+pub fn gm_801A4BD4<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x30);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    'l1: loop {
+        'c2: {}
+        if !(0_i32 != 0) {
+            break 'l1;
+        }
+    }
+    inl_gm_SetDbPauseInputHandlers_unfused(ctx, fnptr(ctx, 0x801a46f4), fnptr(ctx, 0x801a47e4));
+    inl_gm_SetPreGObjProcCallback_unfused(ctx, null::<FnPtr<'a>>(ctx));
+    inl_gm_801A4B50_unfused(ctx, 0_i32);
+    fns::lb_80019880(
+        ctx,
+        fns::__cvt_dbl_usll(
+            ctx,
+            (fp::fmuls(
+                (fp::fdivs(1.0, fp::frsp(60_i32 as f64))),
+                fp::frsp(
+                    (div_u32(
+                        ((ptr::<Val<'a, u32>>(
+                            ctx,
+                            ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                        ))
+                        .get()),
+                        (4_i32 as u32),
+                    )) as f64,
+                ),
+            )),
+        ),
+    );
+    fns::HSD_GObjSetInitDefaults(ctx, statics::melee__gm__gmscene::gobj_init_data(ctx));
+    statics::melee__gm__gmscene::gobj_init_data(ctx).set_gproc_pri_max((24_i32 as u8));
+    fns::HSD_SObjLib_804D7960(ctx).set(fns::HSD_GObj_803912A8(
+        ctx,
+        statics::melee__gm__gmscene::gobj_init_data(ctx),
+        fns::HSD_SObjLib_8040C3A4(ctx),
+    ));
+    fns::HSD_SObjLib_803A44A4(ctx);
+    statics::melee__gm__gmscene::gobj_init_data(ctx).set_unk_2(
+        statics::melee__gm__gmscene::gm_80479D58(ctx)
+            .unk_10()
+            .unk_28_ref(),
+    );
+    fns::HSD_GObjInit(ctx, statics::melee__gm__gmscene::gobj_init_data(ctx));
+    fns::hsd_80392474(ctx);
+    let _ = fns::un_802FF78C(ctx);
+    fns::gm_804D672C(ctx).set(fns::GObj_Create(
+        ctx,
+        (14_i32 as u16),
+        (0_i32 as u8),
+        (0_i32 as u8),
+    ));
+    if !Handle::is_null(fns::gm_804D672C(ctx).get()) {
+        let _ = fns::HSD_GObj_SetupProc(
+            ctx,
+            fns::gm_804D672C(ctx).get(),
+            fnptr(ctx, 0x801a4bd0),
+            (0_i32 as u8),
+        );
+    }
+    fns::gm_804D6728(ctx).set(null::<Addr<'a>>(ctx));
+    fns::gm_804D6724(ctx).set(null::<FnPtr<'a>>(ctx));
+    fns::gm_801A3E88(ctx);
+    fns::lbAudioAx_8002835C(ctx);
+    fns::lb_80014534(ctx);
+}
+
 pub fn gm_FindGameSceneHandler<'a>(ctx: &'a Ctx, kind: u8) -> GameScene<'a> {
     let __frame = ctx.stack_frame(0x18);
     let mut kind = kind;
@@ -470,7 +538,7 @@ pub fn gm_801A4D34<'a>(ctx: &'a Ctx, on_frame: FnPtr<'a>, info: GameSceneInfo<'a
 fn inl_gm_GetDbPauseFlag_unfused<'a>(ctx: &'a Ctx, bit: i32) -> i32 {
     let mut bit = bit;
     return (((statics::melee__gm__gmscene::gm_80479D58(ctx).unk_10().x0() as u64)
-        & (shl_u64(1_u64, (bit as u32)))) as i32);
+        & (fns::__shl2i(ctx, 1_u64 as i64, bit) as u64)) as i32);
 }
 
 fn inl_gm_SetDbPauseInputHandlers_unfused<'a>(
@@ -507,7 +575,7 @@ fn inl_gm_801A4B50_unfused<'a>(ctx: &'a Ctx, arg0: i32) {
 fn inl_gm_801A46B8_unfused<'a>(ctx: &'a Ctx, bit: i32) -> i32 {
     let mut bit = bit;
     return (((statics::melee__gm__gmscene::gm_80479D58(ctx).unk_10().x2() as u64)
-        & (shl_u64(1_u64, (bit as u32)))) as i32);
+        & (fns::__shl2i(ctx, 1_u64 as i64, bit) as u64)) as i32);
 }
 
 fn inl_maybe_gm_801A48A4_unfused<'a>(ctx: &'a Ctx, i: u8) -> u64 {
@@ -690,6 +758,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(fn_801A4BD0(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801a4bd4,
+        |ctx| {
+            Ret::put(gm_801A4BD4(ctx), ctx);
         },
         Returns::Nothing,
     );

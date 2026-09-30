@@ -40,6 +40,7 @@ pub mod Runtime__Gecko_setjmp;
 pub mod Runtime____init_cpp_exceptions;
 pub mod Runtime____mem;
 pub mod Runtime__global_destructor_chain;
+pub mod Runtime__runtime;
 pub mod dolphin__ai__ai;
 pub mod dolphin__amcstubs__AmcExi2Stubs;
 pub mod dolphin__ar__ar;
@@ -1021,6 +1022,7 @@ pub mod melee__vi__vi1202;
 pub mod sysdolphin__baselib__aobj;
 pub mod sysdolphin__baselib__archive;
 pub mod sysdolphin__baselib__axdriver;
+pub mod sysdolphin__baselib__bytecode;
 pub mod sysdolphin__baselib__card;
 pub mod sysdolphin__baselib__class;
 pub mod sysdolphin__baselib__cobj;
@@ -1150,6 +1152,7 @@ pub static UNITS: &[(&str, Register)] = &[
         "Runtime/global_destructor_chain",
         Runtime__global_destructor_chain::register,
     ),
+    ("Runtime/runtime", Runtime__runtime::register),
     ("dolphin/ai/ai", dolphin__ai__ai::register),
     (
         "dolphin/amcstubs/AmcExi2Stubs",
@@ -3774,6 +3777,10 @@ pub static UNITS: &[(&str, Register)] = &[
     (
         "sysdolphin/baselib/axdriver",
         sysdolphin__baselib__axdriver::register,
+    ),
+    (
+        "sysdolphin/baselib/bytecode",
+        sysdolphin__baselib__bytecode::register,
     ),
     (
         "sysdolphin/baselib/card",

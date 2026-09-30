@@ -120,7 +120,7 @@ pub fn ftCo_800BDB58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, thrower_gobj: HSD_GOb
     fns::ftColl_8007ABD0(
         ctx,
         (fp).x914().get(0),
-        cvt_fp2unsigned(ctx, inl_inlineB1_unfused(ctx, gobj)),
+        fns::__cvt_fp2unsigned(ctx, inl_inlineB1_unfused(ctx, gobj)),
         gobj,
     );
     fns::ftKb_SpecialN_800F5820(

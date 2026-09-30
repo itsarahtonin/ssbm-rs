@@ -82,7 +82,8 @@ pub fn WriteCallback<'a>(ctx: &'a Ctx, chan: i32, result: i32) {
                 dir = fns::__CARDGetDirBlock(ctx, card);
                 ent = Handle::add(dir, (fileInfo).fileNo());
                 (ent).set_time(
-                    (div_i64(
+                    (fns::__div2i(
+                        ctx,
                         fns::OSGetTime(ctx),
                         ((div_u32(
                             ((ptr::<Val<'a, u32>>(

@@ -340,7 +340,7 @@ pub fn ftPk_SpecialS0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::ftColl_8007ABD0(
             ctx,
             (fp).x914().get(0_i32),
-            cvt_fp2unsigned(ctx, damage_amount),
+            fns::__cvt_fp2unsigned(ctx, damage_amount),
             gobj,
         );
     }
@@ -366,7 +366,7 @@ pub fn ftPk_SpecialAirS0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::ftColl_8007ABD0(
             ctx,
             (fp).x914().get(0_i32),
-            cvt_fp2unsigned(ctx, damage_amount),
+            fns::__cvt_fp2unsigned(ctx, damage_amount),
             gobj,
         );
     }

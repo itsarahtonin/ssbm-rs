@@ -109,7 +109,8 @@ pub fn OSTicksToCalendarTime<'a>(ctx: &'a Ctx, ticks: i64, td: OSCalendarTime<'a
     let mut days: i32 = 0;
     let mut secs: i32 = 0;
     let mut d: i64 = 0;
-    d = rem_i64(
+    d = fns::__mod2i(
+        ctx,
         ticks,
         ((((1_i32) as u32).wrapping_mul(
             (div_u32(
@@ -137,8 +138,10 @@ pub fn OSTicksToCalendarTime<'a>(ctx: &'a Ctx, ticks: i64, td: OSCalendarTime<'a
         );
     }
     (td).set_usec(
-        (rem_i64(
-            (div_i64(
+        (fns::__mod2i(
+            ctx,
+            (fns::__div2i(
+                ctx,
                 ((d).wrapping_mul((8_i32 as i64))),
                 ((div_u32(
                     (div_u32(
@@ -156,8 +159,10 @@ pub fn OSTicksToCalendarTime<'a>(ctx: &'a Ctx, ticks: i64, td: OSCalendarTime<'a
         ) as i32),
     );
     (td).set_msec(
-        (rem_i64(
-            (div_i64(
+        (fns::__mod2i(
+            ctx,
+            (fns::__div2i(
+                ctx,
                 (d),
                 ((div_u32(
                     (div_u32(
@@ -175,8 +180,10 @@ pub fn OSTicksToCalendarTime<'a>(ctx: &'a Ctx, ticks: i64, td: OSCalendarTime<'a
         ) as i32),
     );
     ticks = ticks.wrapping_sub(d);
-    days = ((div_i64(
-        (div_i64(
+    days = ((fns::__div2i(
+        ctx,
+        (fns::__div2i(
+            ctx,
             (ticks),
             ((div_u32(
                 ((ptr::<Val<'a, u32>>(
@@ -190,8 +197,10 @@ pub fn OSTicksToCalendarTime<'a>(ctx: &'a Ctx, ticks: i64, td: OSCalendarTime<'a
         (((60_i32.wrapping_mul(60_i32)).wrapping_mul(24_i32)) as i64),
     ))
     .wrapping_add((0xb2575_i32 as i64)) as i32);
-    secs = (rem_i64(
-        (div_i64(
+    secs = (fns::__mod2i(
+        ctx,
+        (fns::__div2i(
+            ctx,
             (ticks),
             ((div_u32(
                 ((ptr::<Val<'a, u32>>(

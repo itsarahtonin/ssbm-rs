@@ -172,7 +172,7 @@ pub fn it_802B56E4<'a>(
             (attr).x8(),
         ));
         (ip).xDD4_itemVar().samuschargeshot().set_xDF8(
-            (cvt_fp2unsigned(
+            (fns::__cvt_fp2unsigned(
                 ctx,
                 (fp::fmadds(
                     farg1,

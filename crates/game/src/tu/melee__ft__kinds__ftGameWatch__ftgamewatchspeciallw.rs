@@ -698,7 +698,7 @@ pub fn ftGw_SpecialLwShoot_ReleaseOil<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         {
             let mut sa: _ftGameWatchAttributes<'a> =
                 Handle::cast::<_ftGameWatchAttributes<'a>>(inl_getFtSpecialAttrs_unfused(ctx, fp));
-            (fp).cmd_vars().at(1_i32).set(cvt_fp2unsigned(
+            (fp).cmd_vars().at(1_i32).set(fns::__cvt_fp2unsigned(
                 ctx,
                 fp::fmuls(
                     fp::frsp((fp).u().gw().x223C_panicDamage() as f64),
@@ -712,7 +712,7 @@ pub fn ftGw_SpecialLwShoot_ReleaseOil<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 );
                 (fp).cmd_vars()
                     .at(1_i32)
-                    .set(cvt_fp2unsigned(ctx, panicDamage));
+                    .set(fns::__cvt_fp2unsigned(ctx, panicDamage));
                 (fp).u()
                     .gw()
                     .set_x2238_panicCharge((enums::ftGw_Panic_Empty as i32));
@@ -745,7 +745,7 @@ pub fn ftGw_SpecialAirLwShoot_ReleaseOil<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         {
             let mut sa: _ftGameWatchAttributes<'a> =
                 Handle::cast::<_ftGameWatchAttributes<'a>>(inl_getFtSpecialAttrs_unfused(ctx, fp));
-            (fp).cmd_vars().at(1_i32).set(cvt_fp2unsigned(
+            (fp).cmd_vars().at(1_i32).set(fns::__cvt_fp2unsigned(
                 ctx,
                 fp::fmuls(
                     fp::frsp((fp).u().gw().x223C_panicDamage() as f64),
@@ -759,7 +759,7 @@ pub fn ftGw_SpecialAirLwShoot_ReleaseOil<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 );
                 (fp).cmd_vars()
                     .at(1_i32)
-                    .set(cvt_fp2unsigned(ctx, panicDamage));
+                    .set(fns::__cvt_fp2unsigned(ctx, panicDamage));
             }
             (fp).u().gw().set_x2238_panicCharge(0_i32);
             (fp).u().gw().set_x223C_panicDamage(0_i32);

@@ -643,7 +643,9 @@ pub fn HSD_SisLib_803A611C<'a>(
                     );
                 }
                 fns::GObj_SetupGXLinkMax(ctx, (entry).x4(), fnptr(ctx, 0x803910d8), render_prio);
-                ((entry).x4()).set_gxlink_prios(shl_u64((1_i32 as u64), ((gx_link as i32) as u32)));
+                ((entry).x4()).set_gxlink_prios(
+                    (fns::__shl2i(ctx, (1_i32 as u64) as i64, (gx_link as i32)) as u64),
+                );
                 fns::GObj_InitUserData(
                     ctx,
                     (entry).x4(),

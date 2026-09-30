@@ -216,7 +216,7 @@ pub fn fn_8017B410<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     }
     me = fns::fn_80174274(ctx);
     if fns::lbLang_IsSavedLanguageUS(ctx) != 0_i32 {
-        var_r3 = (cvt_fp2unsigned(
+        var_r3 = (fns::__cvt_fp2unsigned(
             ctx,
             (fp::fdivs(
                 fp::frsp((me).player_standings().get(arg0).x5C() as f64),
@@ -353,7 +353,7 @@ pub fn fn_8017B91C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     }
     me = fns::fn_80174274(ctx);
     if fns::lbLang_IsSavedLanguageUS(ctx) != 0_i32 {
-        var_r3 = (cvt_fp2unsigned(
+        var_r3 = (fns::__cvt_fp2unsigned(
             ctx,
             fp::frsp(
                 (fp::fdiv(
@@ -363,7 +363,7 @@ pub fn fn_8017B91C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
             ),
         ) as i32);
     } else {
-        var_r3 = (cvt_fp2unsigned(
+        var_r3 = (fns::__cvt_fp2unsigned(
             ctx,
             (fp::fdivs(
                 fp::frsp((me).player_standings().get(arg0).x94() as f64),
@@ -388,7 +388,7 @@ pub fn fn_8017B9F4<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     }
     me = fns::fn_80174274(ctx);
     if fns::lbLang_IsSavedLanguageUS(ctx) != 0_i32 {
-        var_r3 = cvt_fp2unsigned(
+        var_r3 = fns::__cvt_fp2unsigned(
             ctx,
             fp::frsp(
                 (fp::fdiv(
@@ -398,7 +398,7 @@ pub fn fn_8017B9F4<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
             ),
         );
     } else {
-        var_r3 = cvt_fp2unsigned(
+        var_r3 = fns::__cvt_fp2unsigned(
             ctx,
             (fp::fdivs(
                 fp::frsp((me).player_standings().get(arg0).x98() as f64),

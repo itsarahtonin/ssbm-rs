@@ -29,14 +29,9 @@ pub fn frame_at<'a, H: Handle<'a>>(ctx: &'a Ctx, frame: &StackFrame<'a>, off: u3
     ptr(ctx, frame.base() + off)
 }
 
-/// `(unsigned) f`, which MWCC compiles to a call to the runtime's `__cvt_fp2unsigned`.
-#[inline]
-pub fn cvt_fp2unsigned(ctx: &Ctx, f: f64) -> u32 {
-    ctx.call(ssbm_types::fns::addr::__cvt_fp2unsigned, (f,))
-}
-
 // Division as `divw` and `divwu` compute it: dividing by zero, or the most negative value by
-// -1, gives a defined result instead of a trap.
+// -1, gives a defined result instead of a trap. MWCC divides and shifts 64-bit values with the
+// runtime's helpers, which translated code calls.
 
 #[inline]
 pub fn div_i32(a: i32, b: i32) -> i32 {
@@ -61,26 +56,6 @@ pub fn rem_i32(a: i32, b: i32) -> i32 {
 #[inline]
 pub fn rem_u32(a: u32, b: u32) -> u32 {
     a.wrapping_sub(div_u32(a, b).wrapping_mul(b))
-}
-
-#[inline]
-pub fn div_i64(a: i64, b: i64) -> i64 {
-    if b == 0 { 0 } else { a.wrapping_div(b) }
-}
-
-#[inline]
-pub fn div_u64(a: u64, b: u64) -> u64 {
-    a.checked_div(b).unwrap_or(0)
-}
-
-#[inline]
-pub fn rem_i64(a: i64, b: i64) -> i64 {
-    if b == 0 { a } else { a.wrapping_rem(b) }
-}
-
-#[inline]
-pub fn rem_u64(a: u64, b: u64) -> u64 {
-    if b == 0 { a } else { a % b }
 }
 
 // Shifts as `slw`, `srw` and `sraw` compute them: the amount is taken mod 64, and 32 or more
@@ -117,26 +92,6 @@ pub fn sar_i32(a: i32, n: u32) -> i32 {
 #[inline]
 pub fn sar_u32(a: u32, n: u32) -> u32 {
     sar_i32(a as i32, n) as u32
-}
-
-#[inline]
-pub fn shl_i64(a: i64, n: u32) -> i64 {
-    if n >= 64 { 0 } else { a << n }
-}
-
-#[inline]
-pub fn shl_u64(a: u64, n: u32) -> u64 {
-    if n >= 64 { 0 } else { a << n }
-}
-
-#[inline]
-pub fn shr_u64(a: u64, n: u32) -> u64 {
-    if n >= 64 { 0 } else { a >> n }
-}
-
-#[inline]
-pub fn sar_i64(a: i64, n: u32) -> i64 {
-    if n >= 64 { a >> 63 } else { a >> n }
 }
 
 #[cfg(test)]

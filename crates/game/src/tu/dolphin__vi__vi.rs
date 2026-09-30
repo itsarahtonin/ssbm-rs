@@ -441,7 +441,7 @@ pub fn setFbbRegs<'a>(
         .set((((((tfbb).get() as u16) as i32) & 0xffff_i32) as u16));
     statics::dolphin__vi__vi::changed(ctx).set(
         (statics::dolphin__vi__vi::changed(ctx).get()
-            | (shl_i64(1_i64, ((63_i32.wrapping_sub((15_i32))) as u32)) as u64)),
+            | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((15_i32)))) as i64) as u64)),
     );
     statics::dolphin__vi__vi::regs(ctx).at(14_i32).set(
         (((shl_u32(shifted, (12_i32 as u32)))
@@ -450,21 +450,21 @@ pub fn setFbbRegs<'a>(
     );
     statics::dolphin__vi__vi::changed(ctx).set(
         (statics::dolphin__vi__vi::changed(ctx).get()
-            | (shl_i64(1_i64, ((63_i32.wrapping_sub((14_i32))) as u32)) as u64)),
+            | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((14_i32)))) as i64) as u64)),
     );
     statics::dolphin__vi__vi::regs(ctx)
         .at(19_i32)
         .set((((((bfbb).get() as u16) as i32) & 0xffff_i32) as u16));
     statics::dolphin__vi__vi::changed(ctx).set(
         (statics::dolphin__vi__vi::changed(ctx).get()
-            | (shl_i64(1_i64, ((63_i32.wrapping_sub((19_i32))) as u32)) as u64)),
+            | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((19_i32)))) as i64) as u64)),
     );
     statics::dolphin__vi__vi::regs(ctx)
         .at(18_i32)
         .set(((shr_u32((bfbb).get(), (16_i32 as u32))) as u16));
     statics::dolphin__vi__vi::changed(ctx).set(
         (statics::dolphin__vi__vi::changed(ctx).get()
-            | (shl_i64(1_i64, ((63_i32.wrapping_sub((18_i32))) as u32)) as u64)),
+            | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((18_i32)))) as i64) as u64)),
     );
     if ((HorVer).threeD() != 0) {
         statics::dolphin__vi__vi::regs(ctx)
@@ -472,28 +472,32 @@ pub fn setFbbRegs<'a>(
             .set((((((rtfbb).get() as u16) as i32) & 0xffff_i32) as u16));
         statics::dolphin__vi__vi::changed(ctx).set(
             (statics::dolphin__vi__vi::changed(ctx).get()
-                | (shl_i64(1_i64, ((63_i32.wrapping_sub((17_i32))) as u32)) as u64)),
+                | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((17_i32)))) as i64)
+                    as u64)),
         );
         statics::dolphin__vi__vi::regs(ctx)
             .at(16_i32)
             .set((shr_u32((rtfbb).get(), (16_i32 as u32)) as u16));
         statics::dolphin__vi__vi::changed(ctx).set(
             (statics::dolphin__vi__vi::changed(ctx).get()
-                | (shl_i64(1_i64, ((63_i32.wrapping_sub((16_i32))) as u32)) as u64)),
+                | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((16_i32)))) as i64)
+                    as u64)),
         );
         statics::dolphin__vi__vi::regs(ctx)
             .at(21_i32)
             .set((((((rbfbb).get() as u16) as i32) & 0xffff_i32) as u16));
         statics::dolphin__vi__vi::changed(ctx).set(
             (statics::dolphin__vi__vi::changed(ctx).get()
-                | (shl_i64(1_i64, ((63_i32.wrapping_sub((21_i32))) as u32)) as u64)),
+                | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((21_i32)))) as i64)
+                    as u64)),
         );
         statics::dolphin__vi__vi::regs(ctx)
             .at(20_i32)
             .set((shr_u32((rbfbb).get(), (16_i32 as u32)) as u16));
         statics::dolphin__vi__vi::changed(ctx).set(
             (statics::dolphin__vi__vi::changed(ctx).get()
-                | (shl_i64(1_i64, ((63_i32.wrapping_sub((20_i32))) as u32)) as u64)),
+                | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((20_i32)))) as i64)
+                    as u64)),
         );
     }
 }
@@ -586,35 +590,35 @@ pub fn setVerticalRegs<'a>(
         .set((((equ as i32) | (shl_i32((actualAcv as i32), (4_i32 as u32)))) as u16));
     statics::dolphin__vi__vi::changed(ctx).set(
         (statics::dolphin__vi__vi::changed(ctx).get()
-            | (shl_i64(1_i64, ((63_i32.wrapping_sub((0_i32))) as u32)) as u64)),
+            | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((0_i32)))) as i64) as u64)),
     );
     statics::dolphin__vi__vi::regs(ctx)
         .at(7_i32)
         .set(((actualPrbOdd as u32) as u16));
     statics::dolphin__vi__vi::changed(ctx).set(
         (statics::dolphin__vi__vi::changed(ctx).get()
-            | (shl_i64(1_i64, ((63_i32.wrapping_sub((7_i32))) as u32)) as u64)),
+            | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((7_i32)))) as i64) as u64)),
     );
     statics::dolphin__vi__vi::regs(ctx)
         .at(6_i32)
         .set(((actualPsbOdd as u32) as u16));
     statics::dolphin__vi__vi::changed(ctx).set(
         (statics::dolphin__vi__vi::changed(ctx).get()
-            | (shl_i64(1_i64, ((63_i32.wrapping_sub((6_i32))) as u32)) as u64)),
+            | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((6_i32)))) as i64) as u64)),
     );
     statics::dolphin__vi__vi::regs(ctx)
         .at(9_i32)
         .set(((actualPrbEven as u32) as u16));
     statics::dolphin__vi__vi::changed(ctx).set(
         (statics::dolphin__vi__vi::changed(ctx).get()
-            | (shl_i64(1_i64, ((63_i32.wrapping_sub((9_i32))) as u32)) as u64)),
+            | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((9_i32)))) as i64) as u64)),
     );
     statics::dolphin__vi__vi::regs(ctx)
         .at(8_i32)
         .set(((actualPsbEven as u32) as u16));
     statics::dolphin__vi__vi::changed(ctx).set(
         (statics::dolphin__vi__vi::changed(ctx).get()
-            | (shl_i64(1_i64, ((63_i32.wrapping_sub((8_i32))) as u32)) as u64)),
+            | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((8_i32)))) as i64) as u64)),
     );
 }
 
@@ -802,7 +806,8 @@ pub fn VIConfigure<'a>(ctx: &'a Ctx, rm: _GXRenderModeObj<'a>) {
             .set((reg1 as u16));
         statics::dolphin__vi__vi::changed(ctx).set(
             (statics::dolphin__vi__vi::changed(ctx).get()
-                | (shl_i64(1_i64, ((63_i32.wrapping_sub((1_i32))) as u32)) as u64)),
+                | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((1_i32)))) as i64)
+                    as u64)),
         );
         reg54 = (statics::dolphin__vi__vi::regs(ctx).at(54_i32).get() as u32);
         if ((rm).viTVmode() == (enums::VI_TVMODE_NTSC_PROG as i32))
@@ -841,7 +846,8 @@ pub fn VIConfigure<'a>(ctx: &'a Ctx, rm: _GXRenderModeObj<'a>) {
             .set((reg54 as u16));
         statics::dolphin__vi__vi::changed(ctx).set(
             (statics::dolphin__vi__vi::changed(ctx).get()
-                | (shl_i64(1_i64, ((63_i32.wrapping_sub((54_i32))) as u32)) as u64)),
+                | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((54_i32)))) as i64)
+                    as u64)),
         );
     }
     inl_setScalingRegs_unfused(
@@ -915,7 +921,8 @@ pub fn VIFlush<'a>(ctx: &'a Ctx) {
                 .set(statics::dolphin__vi__vi::regs(ctx).at(regIndex).get());
             statics::dolphin__vi__vi::changed(ctx).set(
                 (statics::dolphin__vi__vi::changed(ctx).get()
-                    & (!(shl_u64((1_i32 as u64), ((63_i32.wrapping_sub(regIndex)) as u32))))),
+                    & (!(fns::__shl2i(ctx, (1_i32 as u64) as i64, (63_i32.wrapping_sub(regIndex)))
+                        as u64))),
             );
         }
     }
@@ -1059,7 +1066,7 @@ fn inl_cntlzd_unfused<'a>(ctx: &'a Ctx, bit: u64) -> i32 {
     let mut hi: u32 = 0;
     let mut lo: u32 = 0;
     let mut value: i32 = 0;
-    hi = (shr_u64(bit, (32_i32 as u32)) as u32);
+    hi = (fns::__shr2u(ctx, bit, 32_i32) as u32);
     lo = ((bit & (0xffffffff_u32 as u64)) as u32);
     value = (hi.leading_zeros() as i32);
     if value < 32_i32 {
@@ -1081,7 +1088,11 @@ fn inl_VISetRegs_unfused<'a>(ctx: &'a Ctx) -> i32 {
                     .set(statics::dolphin__vi__vi::shdwRegs(ctx).at(regIndex).get());
                 statics::dolphin__vi__vi::shdwChanged(ctx).set(
                     (statics::dolphin__vi__vi::shdwChanged(ctx).get()
-                        & (!(shl_u64((1_i32 as u64), ((63_i32.wrapping_sub(regIndex)) as u32))))),
+                        & (!(fns::__shl2i(
+                            ctx,
+                            (1_i32 as u64) as i64,
+                            (63_i32.wrapping_sub(regIndex)),
+                        ) as u64))),
                 );
             }
         }
@@ -1317,14 +1328,14 @@ fn inl_setInterruptRegs_unfused<'a>(ctx: &'a Ctx, tm: VITiming<'a>) {
         .set(((hct as u32) as u16));
     statics::dolphin__vi__vi::changed(ctx).set(
         (statics::dolphin__vi__vi::changed(ctx).get()
-            | (shl_i64(1_i64, ((63_i32.wrapping_sub((25_i32))) as u32)) as u64)),
+            | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((25_i32)))) as i64) as u64)),
     );
     statics::dolphin__vi__vi::regs(ctx)
         .at(24_i32)
         .set((((vct as i32) | 0x1000_i32) as u16));
     statics::dolphin__vi__vi::changed(ctx).set(
         (statics::dolphin__vi__vi::changed(ctx).get()
-            | (shl_i64(1_i64, ((63_i32.wrapping_sub((24_i32))) as u32)) as u64)),
+            | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((24_i32)))) as i64) as u64)),
     );
 }
 
@@ -1382,14 +1393,14 @@ fn inl_setHorizontalRegs_unfused<'a>(
         .set((((tm).hlw() as u32) as u16));
     statics::dolphin__vi__vi::changed(ctx).set(
         (statics::dolphin__vi__vi::changed(ctx).get()
-            | (shl_i64(1_i64, ((63_i32.wrapping_sub((3_i32))) as u32)) as u64)),
+            | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((3_i32)))) as i64) as u64)),
     );
     statics::dolphin__vi__vi::regs(ctx)
         .at(2_i32)
         .set(((((tm).hce() as i32) | (shl_i32(((tm).hcs() as i32), (8_i32 as u32)))) as u16));
     statics::dolphin__vi__vi::changed(ctx).set(
         (statics::dolphin__vi__vi::changed(ctx).get()
-            | (shl_i64(1_i64, ((63_i32.wrapping_sub((2_i32))) as u32)) as u64)),
+            | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((2_i32)))) as i64) as u64)),
     );
     hbe = (((tm).hbe640() as i32)
         .wrapping_sub(40_i32)
@@ -1405,14 +1416,14 @@ fn inl_setHorizontalRegs_unfused<'a>(
         .set(((((tm).hsy() as u32) | (shl_u32(hbeLo, (7_i32 as u32)))) as u16));
     statics::dolphin__vi__vi::changed(ctx).set(
         (statics::dolphin__vi__vi::changed(ctx).get()
-            | (shl_i64(1_i64, ((63_i32.wrapping_sub((5_i32))) as u32)) as u64)),
+            | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((5_i32)))) as i64) as u64)),
     );
     statics::dolphin__vi__vi::regs(ctx)
         .at(4_i32)
         .set(((hbeHi | (hbs.wrapping_mul((2_i32 as u32)))) as u16));
     statics::dolphin__vi__vi::changed(ctx).set(
         (statics::dolphin__vi__vi::changed(ctx).get()
-            | (shl_i64(1_i64, ((63_i32.wrapping_sub((4_i32))) as u32)) as u64)),
+            | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub((4_i32)))) as i64) as u64)),
     );
 }
 
@@ -1435,7 +1446,7 @@ fn inl_setBBIntervalRegs_unfused<'a>(ctx: &'a Ctx, tm: VITiming<'a>) {
     statics::dolphin__vi__vi::regs(ctx).at(12_i32).set(val);
     statics::dolphin__vi__vi::changed(ctx).set(
         (statics::dolphin__vi__vi::changed(ctx).get()
-            | ((shl_i64(1_i64, ((63_i32.wrapping_sub(12_i32)) as u32))) as u64)),
+            | ((fns::__shl2i(ctx, 1_i64 as i64, (63_i32.wrapping_sub(12_i32))) as i64) as u64)),
     );
 }
 

@@ -32,7 +32,7 @@ pub fn mn_802295AC<'a>(ctx: &'a Ctx) -> u8 {
     'l1: while port_idx < 4_i32 {
         'c2: {
             let mut res: u64 = fns::gm_GetButtonsTriggered(ctx, (port_idx as u8));
-            if ((res & (shl_u64(1_u64, (32_i32 as u32)))) != 0) {
+            if ((res & (fns::__shl2i(ctx, 1_u64 as i64, 32_i32) as u64)) != 0) {
                 return (port_idx as u8);
             }
             port_idx = port_idx.wrapping_add(1_i32);
@@ -59,10 +59,10 @@ pub fn mn_80229624<'a>(ctx: &'a Ctx, slot: u32) -> u32 {
     if ((inputs_trigger & ((shl_i32(1_i32, (12_i32 as u32))) as u64)) != 0) {
         ret = (ret | ((enums::MenuInput_StartButton as i32) as u32));
     }
-    if ((inputs_trigger & (shl_u64(1_u64, (32_i32 as u32)))) != 0) {
+    if ((inputs_trigger & (fns::__shl2i(ctx, 1_u64 as i64, 32_i32) as u64)) != 0) {
         ret = (ret | ((enums::MenuInput_Confirm as i32) as u32));
     }
-    if ((inputs_trigger & (shl_u64(1_u64, (33_i32 as u32)))) != 0) {
+    if ((inputs_trigger & (fns::__shl2i(ctx, 1_u64 as i64, 33_i32) as u64)) != 0) {
         ret = (ret | ((enums::MenuInput_Back as i32) as u32));
     }
     if ((inputs_trigger & ((shl_i32(1_i32, (6_i32 as u32))) as u64)) != 0) {
@@ -77,16 +77,16 @@ pub fn mn_80229624<'a>(ctx: &'a Ctx, slot: u32) -> u32 {
     if ((inputs_trigger & ((shl_i32(1_i32, (11_i32 as u32))) as u64)) != 0) {
         ret = (ret | ((enums::MenuInput_YButton as i32) as u32));
     }
-    if ((inputs_repeated & (shl_u64(1_u64, (36_i32 as u32)))) != 0) {
+    if ((inputs_repeated & (fns::__shl2i(ctx, 1_u64 as i64, 36_i32) as u64)) != 0) {
         ret = (ret | ((enums::MenuInput_Up as i32) as u32));
     }
-    if ((inputs_repeated & (shl_u64(1_u64, (37_i32 as u32)))) != 0) {
+    if ((inputs_repeated & (fns::__shl2i(ctx, 1_u64 as i64, 37_i32) as u64)) != 0) {
         ret = (ret | ((enums::MenuInput_Down as i32) as u32));
     }
-    if ((inputs_repeated & (shl_u64(1_u64, (38_i32 as u32)))) != 0) {
+    if ((inputs_repeated & (fns::__shl2i(ctx, 1_u64 as i64, 38_i32) as u64)) != 0) {
         ret = (ret | ((enums::MenuInput_Left as i32) as u32));
     }
-    if ((inputs_repeated & (shl_u64(1_u64, (39_i32 as u32)))) != 0) {
+    if ((inputs_repeated & (fns::__shl2i(ctx, 1_u64 as i64, 39_i32) as u64)) != 0) {
         ret = (ret | ((enums::MenuInput_Right as i32) as u32));
     }
     return ret;
@@ -4290,7 +4290,7 @@ fn inl_mn_8022C7CC_inline_unfused<'a>(ctx: &'a Ctx) -> u8 {
         'l1: while i < 4_i32 {
             'c2: {
                 if ((fns::gm_GetButtonsTriggered(ctx, (i as u8))
-                    & (shl_u64(1_u64, (32_i32 as u32))))
+                    & (fns::__shl2i(ctx, 1_u64 as i64, 32_i32) as u64))
                     != 0)
                 {
                     return (i as u8);

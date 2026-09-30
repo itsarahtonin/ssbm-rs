@@ -2617,7 +2617,7 @@ pub fn lbAudioAx_80026EBC<'a>(ctx: &'a Ctx, stkind: i32) -> u64 {
     {
         return (0_i32 as u64);
     }
-    return shl_u64(1_u64, (shift as u32));
+    return (fns::__shl2i(ctx, 1_u64 as i64, shift) as u64);
 }
 
 pub fn lbAudioAx_80026F2C<'a>(ctx: &'a Ctx, flags: u32) {
@@ -2649,7 +2649,7 @@ pub fn lbAudioAx_80026F2C<'a>(ctx: &'a Ctx, flags: u32) {
                         .at(i)
                         .set(1_i32.wrapping_neg());
                 }
-                mask = shr_u64(mask, (1_i32 as u32));
+                mask = fns::__shr2u(ctx, mask, 1_i32);
             }
             i = i.wrapping_add(1);
         }
@@ -2687,8 +2687,8 @@ pub fn lbAudioAx_8002702C<'a>(ctx: &'a Ctx, flags: u32, mask: u64) {
                         .at(i)
                         .set(1_i32);
                 }
-                result = shr_u64(result, (1_i32 as u32));
-                mask = shr_u64(mask, (1_i32 as u32));
+                result = fns::__shr2u(ctx, result, 1_i32);
+                mask = fns::__shr2u(ctx, mask, 1_i32);
             }
             i = i.wrapping_add(1);
         }
@@ -4258,7 +4258,7 @@ fn inl_lbAudioAx_80026EBC_unfused<'a>(ctx: &'a Ctx, stkind: i32) -> u64 {
     {
         return (0_i32 as u64);
     }
-    return shl_u64(1_u64, (shift as u32));
+    return (fns::__shl2i(ctx, 1_u64 as i64, shift) as u64);
 }
 
 fn inl_lbAudioAx_80027648_unfused<'a>(ctx: &'a Ctx) {

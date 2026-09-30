@@ -96,14 +96,14 @@ pub fn it_802EAF34<'a>(
             fns::it_80272460(
                 ctx,
                 (ip).x5D4_hitboxes().get(0_i32).hit(),
-                cvt_fp2unsigned(ctx, (attr).x0()),
+                fns::__cvt_fp2unsigned(ctx, (attr).x0()),
                 item_gobj,
             );
         } else {
             fns::it_80272460(
                 ctx,
                 (ip).x5D4_hitboxes().get(0_i32).hit(),
-                cvt_fp2unsigned(ctx, (attr).x8()),
+                fns::__cvt_fp2unsigned(ctx, (attr).x8()),
                 item_gobj,
             );
         }
@@ -165,7 +165,7 @@ pub fn itGreatfoxlaser_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> 
             fns::it_80272460(
                 ctx,
                 (ip).x5D4_hitboxes().get(0_i32).hit(),
-                cvt_fp2unsigned(ctx, (attr).x0()),
+                fns::__cvt_fp2unsigned(ctx, (attr).x0()),
                 gobj,
             );
         } else {
@@ -174,7 +174,7 @@ pub fn itGreatfoxlaser_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> 
             fns::it_80272460(
                 ctx,
                 (ip).x5D4_hitboxes().get(0_i32).hit(),
-                cvt_fp2unsigned(ctx, (attr).x8()),
+                fns::__cvt_fp2unsigned(ctx, (attr).x8()),
                 gobj,
             );
         }

@@ -1911,7 +1911,7 @@ pub fn gm_Scene_StaffRoll_OnEnter<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
             Handle::cast::<Addr<'a>>(cobj_2),
         );
         fns::GObj_SetupGXLinkMax(ctx, gobj_2, fnptr(ctx, 0x801aaa28), (8_i32 as u32));
-        (gobj_2).set_gxlink_prios((shl_i64(1_i64, (gx_link as u32)) as u64));
+        (gobj_2).set_gxlink_prios(((fns::__shl2i(ctx, 1_i64 as i64, gx_link) as i64) as u64));
     }
     {
         let mut lobj: HSD_LObj<'a> = null(ctx);

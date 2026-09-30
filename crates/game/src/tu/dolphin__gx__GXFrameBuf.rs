@@ -529,7 +529,7 @@ pub fn GXSetDispCopyYScale<'a>(ctx: &'a Ctx, vscale: f64) -> u32 {
     let mut fScale: f64 = 0.0;
     let mut ht: u32 = 0;
     let mut reg: u32 = 0;
-    iScale = (cvt_fp2unsigned(ctx, (fp::fdivs(256.0, vscale))) & (0x1ff_i32 as u32));
+    iScale = (fns::__cvt_fp2unsigned(ctx, (fp::fdivs(256.0, vscale))) & (0x1ff_i32 as u32));
     fScale = fp::fdivs(256.0, fp::frsp(iScale as f64));
     enable = (((iScale != (0x100_i32 as u32)) as i32) as u8);
     reg = (0_i32 as u32);
@@ -587,7 +587,7 @@ pub fn GXSetDispCopyYScale<'a>(ctx: &'a Ctx, vscale: f64) -> u32 {
     ht = ((((shr_u32(((fns::gx(ctx).get()).cpDispSize()), ((10_i32) as u32))) as i32)
         & ((shl_i32(1_i32, ((10_i32) as u32))).wrapping_sub(1_i32)))
     .wrapping_add(1_i32) as u32);
-    return cvt_fp2unsigned(ctx, fp::fmuls(fp::frsp(ht as f64), fScale));
+    return fns::__cvt_fp2unsigned(ctx, fp::fmuls(fp::frsp(ht as f64), fScale));
 }
 
 pub fn GXSetCopyClear<'a>(ctx: &'a Ctx, clear_clr: _GXColor<'a>, clear_z: u32) {

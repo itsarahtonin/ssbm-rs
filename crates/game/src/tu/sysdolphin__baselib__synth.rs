@@ -1215,7 +1215,7 @@ pub fn HSD_Synth_80389334<'a>(
                             statics::sysdolphin__baselib__synth::HSD_Synth_80407FD8(ctx)
                                 .ratioHi_ref(),
                         ))
-                        .set(cvt_fp2unsigned(
+                        .set(fns::__cvt_fp2unsigned(
                             ctx,
                             (fp::fmuls(
                                 65536.0,
@@ -2419,7 +2419,7 @@ pub fn HSD_SynthPStreamFirstHakoDataCallback<'a>(ctx: &'a Ctx) {
                             statics::sysdolphin__baselib__synth::HSD_Synth_80407FD8(ctx)
                                 .ratioHi_ref(),
                         ))
-                        .set(cvt_fp2unsigned(
+                        .set(fns::__cvt_fp2unsigned(
                             ctx,
                             (fp::fmuls(
                                 65536.0,
@@ -2627,7 +2627,10 @@ pub fn HSD_SynthPStreamHeaderCallback<'a>(
                     (Handle::cast::<Val<'a, u32>>(
                         statics::sysdolphin__baselib__synth::HSD_Synth_80407FD8(ctx).ratioHi_ref(),
                     ))
-                    .set(cvt_fp2unsigned(ctx, (fp::fmuls(65536.0, (node).x14()))));
+                    .set(fns::__cvt_fp2unsigned(
+                        ctx,
+                        (fp::fmuls(65536.0, (node).x14())),
+                    ));
                     fns::AXSetVoiceAddr(
                         ctx,
                         (node).voice().at(i).get(),

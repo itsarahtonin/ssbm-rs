@@ -600,6 +600,101 @@ pub fn fn_8001F2A4<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>, context: OSContext<'a>)
     }
 }
 
+pub fn lbMthp_8001F410<'a>(
+    ctx: &'a Ctx,
+    filename: Val<'a, i8>,
+    rate_table: Val<'a, u32>,
+    buf: Addr<'a>,
+    heap_size: u32,
+    r#loop: i32,
+) {
+    let __frame = ctx.stack_frame(0x50);
+    let mut filename = filename;
+    let mut rate_table = rate_table;
+    let mut buf = buf;
+    let mut heap_size = heap_size;
+    let mut r#loop = r#loop;
+    let mut streamPlayer: THPDecComp<'a> = null(ctx);
+    let mut memoryRequired: u32 = 0;
+    streamPlayer = statics::melee__lb__lbmthp::MoviePlayer(ctx);
+    (if !(statics::melee__lb__lbmthp::MoviePlayer(ctx).power() != 0) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803badb8),
+            (0x210_i32 as u32),
+            cstr(ctx, 0x803badb8),
+        )
+    });
+    statics::melee__lb__lbmthp::MoviePlayer(ctx).set_power(1_i32);
+    let _ = statics::melee__lb__lbmthp::fn_8001EB14(
+        ctx,
+        statics::melee__lb__lbmthp::MoviePlayer(ctx),
+        filename,
+    );
+    statics::melee__lb__lbmthp::MoviePlayer(ctx).set_rate_table(rate_table);
+    memoryRequired = fns::fn_8001EBF0(ctx, statics::melee__lb__lbmthp::MoviePlayer(ctx));
+    if !Handle::is_null(buf) {
+        (if heap_size >= memoryRequired {
+            ({ () })
+        } else {
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x803badb8),
+                (0x216_i32 as u32),
+                cstr(ctx, 0x803badb8),
+            )
+        });
+        statics::melee__lb__lbmthp::MoviePlayer(ctx).set_unk_140(null::<Addr<'a>>(ctx));
+    } else {
+        buf = fns::HSD_MemAlloc(ctx, (memoryRequired as i32));
+        statics::melee__lb__lbmthp::MoviePlayer(ctx).set_unk_140(buf);
+    }
+    statics::melee__lb__lbmthp::MoviePlayer(ctx).set_unk_68(r#loop);
+    statics::melee__lb__lbmthp::fn_8001ECF4(ctx, statics::melee__lb__lbmthp::MoviePlayer(ctx), buf);
+    statics::melee__lb__lbmthp::MoviePlayer(ctx).set_unk_144(0_i32);
+    statics::melee__lb__lbmthp::MoviePlayer(ctx).set_unk_148(1_i32);
+    fns::OSCreateAlarm(ctx, statics::melee__lb__lbmthp::MoviePlayer(ctx).alarm());
+    fns::OSSetPeriodicAlarm(
+        ctx,
+        (streamPlayer).alarm(),
+        (fns::__cvt_dbl_usll(
+            ctx,
+            (fp::fmuls(
+                (fp::fdivs(1.0, fp::frsp(60_i32 as f64))),
+                fp::frsp(
+                    (div_u32(
+                        ((ptr::<Val<'a, u32>>(
+                            ctx,
+                            ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                        ))
+                        .get()),
+                        (4_i32 as u32),
+                    )) as f64,
+                ),
+            )),
+        ) as i64),
+        (fns::__cvt_dbl_usll(
+            ctx,
+            (fp::fmuls(
+                (fp::fdivs(1.0, fp::frsp(60_i32 as f64))),
+                fp::frsp(
+                    (div_u32(
+                        ((ptr::<Val<'a, u32>>(
+                            ctx,
+                            ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                        ))
+                        .get()),
+                        (4_i32 as u32),
+                    )) as f64,
+                ),
+            )),
+        ) as i64),
+        fnptr(ctx, 0x8001f2a4),
+    );
+}
+
 pub fn lbMthp_8001F578<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
@@ -904,6 +999,15 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0, a1): (OSAlarm<'_>, OSContext<'_>) = Args::take_all(ctx);
             Ret::put(fn_8001F2A4(ctx, a0, a1), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8001f410,
+        |ctx| {
+            let (a0, a1, a2, a3, a4): (Val<'_, i8>, Val<'_, u32>, Addr<'_>, u32, i32) =
+                Args::take_all(ctx);
+            Ret::put(lbMthp_8001F410(ctx, a0, a1, a2, a3, a4), ctx);
         },
         Returns::Nothing,
     );

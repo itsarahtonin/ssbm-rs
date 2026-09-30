@@ -272,7 +272,7 @@ pub fn it_802C519C<'a>(
             let mut base_2: f64 = (attr).x10();
             (ip).xDD4_itemVar()
                 .mewtwoshadowball()
-                .set_x24(cvt_fp2unsigned(
+                .set_x24(fns::__cvt_fp2unsigned(
                     ctx,
                     (fp::fmadds(
                         fp::frsp((ip).xDD4_itemVar().mewtwoshadowball().x18() as f64),
@@ -387,7 +387,7 @@ pub fn it_802C53F0<'a>(
             let mut base_2: f64 = (attr).x10();
             (ip).xDD4_itemVar()
                 .mewtwoshadowball()
-                .set_x24(cvt_fp2unsigned(
+                .set_x24(fns::__cvt_fp2unsigned(
                     ctx,
                     (fp::fmadds(
                         charge,

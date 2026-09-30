@@ -214,7 +214,8 @@ pub fn CARDSetStatusAsync<'a>(
         );
     }
     (ent).set_time(
-        ((div_i64(
+        ((fns::__div2i(
+            ctx,
             (fns::OSGetTime(ctx)),
             ((div_u32(
                 ((ptr::<Val<'a, u32>>(

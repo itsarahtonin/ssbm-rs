@@ -379,7 +379,7 @@ pub fn DevText_CreateCObj<'a>(
                 Handle::cast::<Addr<'a>>(cobj),
             );
             fns::GObj_SetupGXLinkMax(ctx, gobj, fnptr(ctx, 0x803910d8), (gx_priority as u32));
-            (gobj).set_gxlink_prios((shl_i64(1_i64, (gx_link as u32)) as u64));
+            (gobj).set_gxlink_prios(((fns::__shl2i(ctx, 1_i64 as i64, gx_link) as i64) as u64));
         } else {
             fns::HSD_GObjFree(ctx, gobj);
         }

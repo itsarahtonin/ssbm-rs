@@ -85,7 +85,7 @@ pub fn mnVibration_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     let _ = inl_Menu_GetAllInputs(ctx);
     inputs = fns::gm_GetButtonsTriggered(ctx, (4_i32 as u8));
-    if ((inputs & (shl_u64(1_u64, (33_i32 as u32)))) != 0) {
+    if ((inputs & (fns::__shl2i(ctx, 1_u64 as i64, 33_i32) as u64)) != 0) {
         let mut exit_data: MnVibrationData<'a> = null(ctx);
         inl_sfxBack(ctx);
         fns::mn_804A04F0(ctx).set_entering_menu((0_i32 as u8));
@@ -116,7 +116,7 @@ pub fn mnVibration_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             'c4: {
                 if ((data).x0().at(i.wrapping_add(2_i32)).get() as i32) == 0_i32 {
                     inputs = fns::gm_GetButtonsTriggered(ctx, (i as u8));
-                    if ((inputs & (shl_u64(1_u64, (32_i32 as u32)))) != 0) {
+                    if ((inputs & (fns::__shl2i(ctx, 1_u64 as i64, 32_i32) as u64)) != 0) {
                         let mut temp_jobj: HSD_JObj<'a> = null(ctx);
                         inl_sfxForward(ctx);
                         if fns::GetRumbleSettingOfPort(ctx, i) != 0_i32 {
@@ -232,7 +232,7 @@ pub fn mnVibration_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             'l9: while j < 4_i32 {
                 'c10: {
                     inputs = fns::gm_GetButtonsTriggered(ctx, (j as u8));
-                    if ((inputs & (shl_u64(1_u64, (38_i32 as u32)))) != 0)
+                    if ((inputs & (fns::__shl2i(ctx, 1_u64 as i64, 38_i32) as u64)) != 0)
                         && (((data).x0().at(j.wrapping_add(2_i32)).get() as i32) == 1_i32)
                     {
                         inl_sfxMove(ctx);
@@ -240,7 +240,7 @@ pub fn mnVibration_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         inl_mnVibration_AnimatePortPanel(ctx, data, j);
                     } else {
                         inputs = fns::gm_GetButtonsTriggered(ctx, (j as u8));
-                        if ((inputs & (shl_u64(1_u64, (39_i32 as u32)))) != 0)
+                        if ((inputs & (fns::__shl2i(ctx, 1_u64 as i64, 39_i32) as u64)) != 0)
                             && (((data).x0().at(j.wrapping_add(2_i32)).get() as i32) == 0_i32)
                         {
                             inl_sfxMove(ctx);
@@ -267,7 +267,7 @@ pub fn mnVibration_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             i = i.wrapping_add(1);
         }
     }
-    if ((inputs_repeat & ((shl_i64(1_i64, (32_i32 as u32))) as u64)) != 0) {
+    if ((inputs_repeat & ((fns::__shl2i(ctx, 1_i64 as i64, 32_i32) as i64) as u64)) != 0) {
         inl_sfxForward(ctx);
         cursor_row = inl_mnVibration_GetCursorRow(ctx, data);
         name_idx = inl_mnVibration_GetNameSlot(ctx, data, (cursor_row as i32));
@@ -282,7 +282,7 @@ pub fn mnVibration_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         inl_mnVibration_AnimateNameRow(ctx, cursor_row, rumble_setting);
         return;
     }
-    if ((inputs_repeat & ((shl_i64(16_i64, (32_i32 as u32))) as u64)) != 0) {
+    if ((inputs_repeat & ((fns::__shl2i(ctx, 16_i64 as i64, 32_i32) as i64) as u64)) != 0) {
         cursor_row = inl_mnVibration_GetCursorRow(ctx, data);
         if (cursor_row as i32) != 0_i32 {
             let mut name_row: i32 = inl_mnVibration_GetPreviousCursorRow(ctx, (cursor_row as i32));
@@ -330,7 +330,7 @@ pub fn mnVibration_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             (data).set_scroll_offset((data).scroll_offset().wrapping_sub(1));
             fns::mnVibration_RefreshNameRows(ctx, fns::mnVibration_804D6C28(ctx).get());
         }
-    } else if ((inputs_repeat & ((shl_i64(32_i64, (32_i32 as u32))) as u64)) != 0) {
+    } else if ((inputs_repeat & ((fns::__shl2i(ctx, 32_i64 as i64, 32_i32) as i64) as u64)) != 0) {
         cursor_row = inl_mnVibration_GetCursorRow(ctx, data);
         if (cursor_row as i32) < 7_i32 {
             let mut name_row_2: i32 = inl_mnVibration_GetNextCursorRow(ctx, (cursor_row as i32));

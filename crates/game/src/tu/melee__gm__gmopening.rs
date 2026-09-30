@@ -116,7 +116,7 @@ pub fn fn_801A9FCC<'a>(ctx: &'a Ctx) -> Addr<'a> {
     );
     (Handle::add(lines, 1_i32)).set_next((Handle::add(lines, 2_i32)));
     (Handle::add(lines, 2_i32)).set_unk_04(0_i32);
-    ms = cvt_fp2unsigned(
+    ms = fns::__cvt_fp2unsigned(
         ctx,
         fp::fdivs(
             fp::frsp(fns::lbMthp_8001F5D4(ctx) as f64),
@@ -330,7 +330,7 @@ pub fn gm_Scene_Opening_OnFrame<'a>(ctx: &'a Ctx) {
     {
         let _ = fns::gmTitle_801A165C(ctx);
         statics::melee__gm__gmopening::gm_804D67D0(ctx).set(1_i32);
-        statics::melee__gm__gmopening::gm_804D67E4(ctx).set(cvt_fp2unsigned(
+        statics::melee__gm__gmopening::gm_804D67E4(ctx).set(fns::__cvt_fp2unsigned(
             ctx,
             (fp::fadds(
                 600.0,

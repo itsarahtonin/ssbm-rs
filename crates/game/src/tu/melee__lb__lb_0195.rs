@@ -58,6 +58,132 @@ pub fn fn_800195FC<'a>(ctx: &'a Ctx) {
     fns::lbSnap_8001D2BC(ctx);
 }
 
+pub fn lb_80019628<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x28);
+    let mut i: i32 = 0;
+    let mut period: i64 = 0;
+    let mut new_val: i64 = (statics::melee__lb__lb_0195::lb_804329F0(ctx).x38() as i64);
+    let mut tmp: UnkArrElem<'a> = statics::melee__lb__lb_0195::lb_804329F0(ctx)
+        .x0()
+        .get(0_i32);
+    if new_val == (tmp).x0() {
+        return;
+    }
+    (tmp).set_x0(new_val);
+    if (tmp).x8() >= (tmp).x0() {
+        (tmp).set_x8((0_i32 as i64));
+    }
+    period = (fns::__cvt_dbl_usll(
+        ctx,
+        fp::frsp(
+            (((1_i32) as u32).wrapping_mul(
+                (div_u32(
+                    ((ptr::<Val<'a, u32>>(
+                        ctx,
+                        ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                    ))
+                    .get()),
+                    (4_i32 as u32),
+                )),
+            )) as f64,
+        ),
+    ) as i64);
+    {
+        i = 0_i32;
+        'l1: while i < 2_i32 {
+            'c2: {
+                if statics::melee__lb__lb_0195::lb_804329F0(ctx)
+                    .x0()
+                    .get(i)
+                    .x0()
+                    < period
+                {
+                    period = statics::melee__lb__lb_0195::lb_804329F0(ctx)
+                        .x0()
+                        .get(i)
+                        .x0();
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    if period
+        >= (fns::__cvt_dbl_usll(
+            ctx,
+            (fp::fmuls(
+                (fp::fdivs(1.0, fp::frsp(60_i32 as f64))),
+                fp::frsp(
+                    (div_u32(
+                        ((ptr::<Val<'a, u32>>(
+                            ctx,
+                            ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                        ))
+                        .get()),
+                        (4_i32 as u32),
+                    )) as f64,
+                ),
+            )),
+        ) as i64)
+    {
+        period = (fns::__cvt_dbl_usll(
+            ctx,
+            (fp::fmuls(
+                (fp::fdivs(1.0, fp::frsp(60_i32 as f64))),
+                fp::frsp(
+                    (div_u32(
+                        ((ptr::<Val<'a, u32>>(
+                            ctx,
+                            ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                        ))
+                        .get()),
+                        (4_i32 as u32),
+                    )) as f64,
+                ),
+            )),
+        ) as i64);
+    }
+    if statics::melee__lb__lb_0195::lb_804329F0(ctx).x40() == period {
+        return;
+    }
+    statics::melee__lb__lb_0195::lb_804329F0(ctx).set_x40(period);
+    {
+        let mut rate: u32 = ((fns::__div2i(
+            ctx,
+            (statics::melee__lb__lb_0195::lb_804329F0(ctx).x40()),
+            ((div_u32(
+                (div_u32(
+                    ((ptr::<Val<'a, u32>>(
+                        ctx,
+                        ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                    ))
+                    .get()),
+                    (4_i32 as u32),
+                )),
+                (0x3e8_i32 as u32),
+            )) as i64),
+        )) as u32);
+        if rate > (11_i32 as u32) {
+            rate = (11_i32 as u32);
+        }
+        if statics::melee__lb__lb_0195::lb_804329F0(ctx).x4() != rate {
+            fns::PADSetSamplingRate(ctx, rate);
+            statics::melee__lb__lb_0195::lb_804329F0(ctx).set_x4(rate);
+        }
+    }
+    if statics::melee__lb__lb_0195::lb_804329F0(ctx).x48() != 0_i32 {
+        fns::OSCancelAlarm(ctx, statics::melee__lb__lb_0195::lb_804329F0(ctx).alarm());
+    }
+    fns::OSCreateAlarm(ctx, statics::melee__lb__lb_0195::lb_804329F0(ctx).alarm());
+    fns::OSSetPeriodicAlarm(
+        ctx,
+        statics::melee__lb__lb_0195::lb_804329F0(ctx).alarm(),
+        statics::melee__lb__lb_0195::lb_804329F0(ctx).x40(),
+        statics::melee__lb__lb_0195::lb_804329F0(ctx).x40(),
+        fnptr(ctx, 0x800195fc),
+    );
+    statics::melee__lb__lb_0195::lb_804329F0(ctx).set_x48(1_i32);
+}
+
 pub fn lb_80019880<'a>(ctx: &'a Ctx, arg0: u64) {
     let mut arg0 = arg0;
     statics::melee__lb__lb_0195::lb_804329F0(ctx).set_x38(arg0);
@@ -159,6 +285,67 @@ pub fn lb_80019A48<'a>(ctx: &'a Ctx) {
     let _ = fns::OSRestoreInterrupts(ctx, enabled);
 }
 
+pub fn lb_80019AAC<'a>(ctx: &'a Ctx, arg0: FnPtr<'a>) {
+    let __frame = ctx.stack_frame(0x48);
+    let mut arg0 = arg0;
+    let mut i: i32 = 0;
+    arg0.call::<_, ()>(());
+    {
+        i = 0_i32;
+        'l1: while i < 2_i32 {
+            'c2: {
+                let mut cur: UnkArrElem<'a> =
+                    statics::melee__lb__lb_0195::lb_804329F0(ctx).x0().get(i);
+                (cur).set_x0(
+                    (fns::__cvt_dbl_usll(
+                        ctx,
+                        (fp::fmuls(
+                            (fp::fdivs(1.0, fp::frsp(60_i32 as f64))),
+                            fp::frsp(
+                                (div_u32(
+                                    ((ptr::<Val<'a, u32>>(
+                                        ctx,
+                                        ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                                    ))
+                                    .get()),
+                                    (4_i32 as u32),
+                                )) as f64,
+                            ),
+                        )),
+                    ) as i64),
+                );
+                (cur).set_x8((0_i32 as i64));
+                (cur).set_x10(0_i32);
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    statics::melee__lb__lb_0195::lb_804329F0(ctx).set_x4((0_i32 as u32));
+    statics::melee__lb__lb_0195::lb_804329F0(ctx).set_x48(0_i32);
+    statics::melee__lb__lb_0195::lb_804329F0(ctx)
+        .x0()
+        .get(0_i32)
+        .set_x0((0_i32 as i64));
+    statics::melee__lb__lb_0195::lb_804329F0(ctx).set_x40((0_i32 as i64));
+    statics::melee__lb__lb_0195::lb_804329F0(ctx).set_x38(fns::__cvt_dbl_usll(
+        ctx,
+        (fp::fmuls(
+            (fp::fdivs(1.0, fp::frsp(60_i32 as f64))),
+            fp::frsp(
+                (div_u32(
+                    ((ptr::<Val<'a, u32>>(
+                        ctx,
+                        ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                    ))
+                    .get()),
+                    (4_i32 as u32),
+                )) as f64,
+            ),
+        )),
+    ));
+    fns::lb_80019628(ctx);
+}
+
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -179,6 +366,13 @@ pub fn register(ctx: &Ctx) {
         0x800195fc,
         |ctx| {
             Ret::put(fn_800195FC(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80019628,
+        |ctx| {
+            Ret::put(lb_80019628(ctx), ctx);
         },
         Returns::Nothing,
     );
@@ -223,6 +417,14 @@ pub fn register(ctx: &Ctx) {
         0x80019a48,
         |ctx| {
             Ret::put(lb_80019A48(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x80019aac,
+        |ctx| {
+            let (a0,): (FnPtr<'_>,) = Args::take_all(ctx);
+            Ret::put(lb_80019AAC(ctx, a0), ctx);
         },
         Returns::Nothing,
     );

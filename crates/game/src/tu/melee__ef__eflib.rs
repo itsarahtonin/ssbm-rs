@@ -604,13 +604,13 @@ pub fn efLib_Create<'a>(ctx: &'a Ctx, gfx_id: i32, parent_gobj: HSD_GObj<'a>) ->
             );
         }
         if rem_u32(
-            cvt_fp2unsigned(ctx, (fp::fmuls(10.0, (desc).lifetime()))),
+            fns::__cvt_fp2unsigned(ctx, (fp::fmuls(10.0, (desc).lifetime()))),
             (10_i32 as u32),
         ) != (0_i32 as u32)
         {
             fns::lb_80011C18(ctx, jobj, (0x8000000_i32 as u32));
         }
-        (effect).set_lifetime((cvt_fp2unsigned(ctx, (desc).lifetime()) as u16));
+        (effect).set_lifetime((fns::__cvt_fp2unsigned(ctx, (desc).lifetime()) as u16));
         if ((effect).lifetime() as i32) != 0_i32 {
             (effect).set_lifetime((effect).lifetime().wrapping_add(1));
         }

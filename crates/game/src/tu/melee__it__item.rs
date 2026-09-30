@@ -1795,7 +1795,7 @@ pub fn Item_80269F14<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                             (temp_item).xC6C(),
                             0.9900000095367432,
                         );
-                        var_r27 = cvt_fp2unsigned(ctx, temp_f30);
+                        var_r27 = fns::__cvt_fp2unsigned(ctx, temp_f30);
                         if var_r27 > (fns::it_804D6D28(ctx).get()).xD8() {
                             var_r27 = (fns::it_804D6D28(ctx).get()).xD8();
                         }

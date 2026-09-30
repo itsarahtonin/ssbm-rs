@@ -623,6 +623,458 @@ pub fn fn_80188EE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::HSD_JObjAnimAll(ctx, cursor_jobj);
 }
 
+pub fn fn_801891F4<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x78);
+    let speed_stack: TrainingSpeedStack<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x2c);
+    let mut sub: CssSubStruct<'a> = null(ctx);
+    let mut buttons: u64 = 0;
+    buttons = fns::gm_801A36C0(
+        ctx,
+        (statics::melee__gm__gm_1884::lbl_80473700(ctx).mode() as u8),
+    );
+    sub = fns::gm_80473814(ctx);
+    if fns::gm_GetDbPauseFlag(ctx, 2_i32) != 0_i32 {
+        if ((sub).x01() as i32) == 0_i32 {
+            fns::fn_801651FC(ctx, 0_i32, 0_i32);
+            inl_gm_801891F4_SetCpuType_unfused(ctx, 0_i32);
+            (sub).anim_frames().at(22_i32).set(0_i32);
+        }
+        (sub).set_x01((1_i32 as u8));
+        if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 36_i32) as u64)) != 0) {
+            inl_sfxMove_unfused(ctx);
+            if ((sub).x00() as i32) != 0_i32 {
+                (sub).set_x00((sub).x00().wrapping_sub(1));
+                if ((sub).x00() as i32) == 5_i32 {
+                    (sub).set_x00((4_i32 as u8));
+                }
+            } else {
+                (sub).set_x00((8_i32 as u8));
+            }
+        }
+        if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 37_i32) as u64)) != 0) {
+            inl_sfxMove_unfused(ctx);
+            if ((sub).x00() as i32) < 8_i32 {
+                (sub).set_x00((sub).x00().wrapping_add(1));
+                if ((sub).x00() as i32) == 5_i32 {
+                    (sub).set_x00((6_i32 as u8));
+                }
+            } else {
+                (sub).set_x00((0_i32 as u8));
+            }
+        }
+        's1: {
+            let __case = match ((sub).x00() as i32) {
+                0_i32 => 0,
+                1_i32 => 1,
+                2_i32 => 2,
+                3_i32 => 3,
+                4_i32 => 4,
+                5_i32 => 5,
+                6_i32 => 6,
+                7_i32 => 7,
+                8_i32 => 8,
+                _ => 9,
+            };
+            if __case <= 0 {
+                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 38_i32) as u64)) != 0) {
+                    inl_sfxMove_unfused(ctx);
+                    if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) != (0_i32 as u32)
+                    {
+                        (sub).menu_values().at(((sub).x00() as i32)).set(
+                            (sub)
+                                .menu_values()
+                                .at(((sub).x00() as i32))
+                                .get()
+                                .wrapping_sub(1),
+                        );
+                        return;
+                    }
+                    (sub).menu_values().at(((sub).x00() as i32)).set(5_i32);
+                    return;
+                }
+                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 39_i32) as u64)) != 0) {
+                    inl_sfxMove_unfused(ctx);
+                    if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) < (5_i32 as u32)
+                    {
+                        (sub).menu_values().at(((sub).x00() as i32)).set(
+                            (sub)
+                                .menu_values()
+                                .at(((sub).x00() as i32))
+                                .get()
+                                .wrapping_add(1),
+                        );
+                        return;
+                    }
+                    (sub).menu_values().at(((sub).x00() as i32)).set(0_i32);
+                    return;
+                }
+                break 's1;
+            }
+            if __case <= 1 {
+                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 38_i32) as u64)) != 0) {
+                    inl_sfxMove_unfused(ctx);
+                    if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) != (0_i32 as u32)
+                    {
+                        (sub).menu_values().at(((sub).x00() as i32)).set(
+                            (sub)
+                                .menu_values()
+                                .at(((sub).x00() as i32))
+                                .get()
+                                .wrapping_sub(1),
+                        );
+                    } else {
+                        (sub).menu_values().at(((sub).x00() as i32)).set(29_i32);
+                    }
+                } else if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 39_i32) as u64)) != 0) {
+                    inl_sfxMove_unfused(ctx);
+                    if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) < (29_i32 as u32)
+                    {
+                        (sub).menu_values().at(((sub).x00() as i32)).set(
+                            (sub)
+                                .menu_values()
+                                .at(((sub).x00() as i32))
+                                .get()
+                                .wrapping_add(1),
+                        );
+                    } else {
+                        (sub).menu_values().at(((sub).x00() as i32)).set(0_i32);
+                    }
+                }
+                if ((buttons & ((shl_i32(1_i32, (8_i32 as u32))) as u64)) != 0) {
+                    let mut item: i16 = 0;
+                    let mut jobj: HSD_JObj<'a> = null(ctx);
+                    fns::lbAudioAx_80024030(ctx, 8_i32);
+                    item = statics::melee__gm__gm_1884::gmTraining_ItemTable(ctx)
+                        .get(fns::gm_80473814(ctx).menu_values().at(1_i32).get())
+                        .item_id();
+                    jobj =
+                        Handle::cast::<HSD_JObj<'a>>((fns::Player_GetEntity(ctx, 0_i32)).hsd_obj());
+                    inl_HSD_JObjGetTranslation2_unfused(ctx, jobj, pos);
+                    pos.set_y(fp::fadds(pos.y(), 10.0));
+                    let _ = fns::it_8026D258(ctx, pos, (item as i32));
+                    return;
+                }
+                break 's1;
+            }
+            if __case <= 2 {
+                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 38_i32) as u64)) != 0) {
+                    inl_sfxMove_unfused(ctx);
+                    if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) != (0_i32 as u32)
+                    {
+                        (sub).menu_values().at(((sub).x00() as i32)).set(
+                            (sub)
+                                .menu_values()
+                                .at(((sub).x00() as i32))
+                                .get()
+                                .wrapping_sub(1),
+                        );
+                        return;
+                    }
+                    (sub).menu_values().at(((sub).x00() as i32)).set(2_i32);
+                    return;
+                }
+                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 39_i32) as u64)) != 0) {
+                    inl_sfxMove_unfused(ctx);
+                    if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) < (2_i32 as u32)
+                    {
+                        (sub).menu_values().at(((sub).x00() as i32)).set(
+                            (sub)
+                                .menu_values()
+                                .at(((sub).x00() as i32))
+                                .get()
+                                .wrapping_add(1),
+                        );
+                        return;
+                    }
+                    (sub).menu_values().at(((sub).x00() as i32)).set(0_i32);
+                    return;
+                }
+                break 's1;
+            }
+            if __case <= 3 {
+                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 38_i32) as u64)) != 0) {
+                    inl_sfxMove_unfused(ctx);
+                    if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) != (0_i32 as u32)
+                    {
+                        (sub).menu_values().at(((sub).x00() as i32)).set(
+                            (sub)
+                                .menu_values()
+                                .at(((sub).x00() as i32))
+                                .get()
+                                .wrapping_sub(1),
+                        );
+                        return;
+                    }
+                    (sub).menu_values().at(((sub).x00() as i32)).set(5_i32);
+                    return;
+                }
+                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 39_i32) as u64)) != 0) {
+                    inl_sfxMove_unfused(ctx);
+                    if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) < (5_i32 as u32)
+                    {
+                        (sub).menu_values().at(((sub).x00() as i32)).set(
+                            (sub)
+                                .menu_values()
+                                .at(((sub).x00() as i32))
+                                .get()
+                                .wrapping_add(1),
+                        );
+                        return;
+                    }
+                    (sub).menu_values().at(((sub).x00() as i32)).set(0_i32);
+                    return;
+                }
+                break 's1;
+            }
+            if __case <= 4 {
+                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 38_i32) as u64)) != 0) {
+                    inl_sfxMove_unfused(ctx);
+                    if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) != (0_i32 as u32)
+                    {
+                        let __t1 = (Handle::add(
+                            inl_gm_801891F4_GetMenuValues_unfused(ctx, sub),
+                            ((sub).x00() as i32),
+                        ));
+                        __t1.set(__t1.get().wrapping_sub(1));
+                        if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32)
+                            == (0_i32 as u32)
+                        {
+                            fns::gm_801A36E0(ctx, 0_i32, 25_i32);
+                            return;
+                        }
+                    } else {
+                        (sub).menu_values().at(((sub).x00() as i32)).set(0x3e7_i32);
+                        return;
+                    }
+                } else if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 39_i32) as u64)) != 0) {
+                    inl_sfxMove_unfused(ctx);
+                    if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32)
+                        < (0x3e7_i32 as u32)
+                    {
+                        (sub).menu_values().at(((sub).x00() as i32)).set(
+                            (sub)
+                                .menu_values()
+                                .at(((sub).x00() as i32))
+                                .get()
+                                .wrapping_add(1),
+                        );
+                        if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32)
+                            == (0x3e7_i32 as u32)
+                        {
+                            fns::gm_801A36E0(ctx, 0_i32, 25_i32);
+                            return;
+                        }
+                    } else {
+                        (sub).menu_values().at(((sub).x00() as i32)).set(0_i32);
+                        return;
+                    }
+                }
+                break 's1;
+            }
+            if __case <= 5 {
+                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 38_i32) as u64)) != 0) {
+                    inl_sfxMove_unfused(ctx);
+                    (sub).menu_values().at(((sub).x00() as i32)).set(0_i32);
+                    return;
+                }
+                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 39_i32) as u64)) != 0) {
+                    inl_sfxMove_unfused(ctx);
+                    (sub).menu_values().at(((sub).x00() as i32)).set(1_i32);
+                    return;
+                }
+                break 's1;
+            }
+            if __case <= 6 {
+                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 38_i32) as u64)) != 0) {
+                    inl_sfxMove_unfused(ctx);
+                    if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) != (0_i32 as u32)
+                    {
+                        (sub).menu_values().at(((sub).x00() as i32)).set(
+                            (sub)
+                                .menu_values()
+                                .at(((sub).x00() as i32))
+                                .get()
+                                .wrapping_sub(1),
+                        );
+                    } else {
+                        (sub).menu_values().at(((sub).x00() as i32)).set(2_i32);
+                    }
+                    's2: {
+                        let __case = match (sub).menu_values().at(((sub).x00() as i32)).get() {
+                            0_i32 => 0,
+                            1_i32 => 1,
+                            2_i32 => 2,
+                            _ => 3,
+                        };
+                        if __case <= 0 {
+                            fns::fn_801650E8(ctx);
+                            return;
+                        }
+                        if __case <= 1 {
+                            fns::fn_80165190(ctx, 0_i32, 5_i32);
+                            return;
+                        }
+                        if __case <= 2 {
+                            if statics::melee__gm__gm_1884::lbl_80473700(ctx).mode() == 3_i32 {
+                                fns::fn_801652B0(ctx, 0_i32, 0_i32);
+                                return;
+                            }
+                            fns::fn_801652B0(ctx, 0_i32, 3_i32);
+                            return;
+                        }
+                    }
+                } else if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 39_i32) as u64)) != 0) {
+                    inl_sfxMove_unfused(ctx);
+                    if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) < (2_i32 as u32)
+                    {
+                        (sub).menu_values().at(((sub).x00() as i32)).set(
+                            (sub)
+                                .menu_values()
+                                .at(((sub).x00() as i32))
+                                .get()
+                                .wrapping_add(1),
+                        );
+                    } else {
+                        (sub).menu_values().at(((sub).x00() as i32)).set(0_i32);
+                    }
+                    's3: {
+                        let __case = match (sub).menu_values().at(((sub).x00() as i32)).get() {
+                            0_i32 => 0,
+                            1_i32 => 1,
+                            2_i32 => 2,
+                            _ => 3,
+                        };
+                        if __case <= 0 {
+                            fns::fn_801650E8(ctx);
+                            return;
+                        }
+                        if __case <= 1 {
+                            fns::fn_80165190(ctx, 0_i32, 5_i32);
+                            return;
+                        }
+                        if __case <= 2 {
+                            if statics::melee__gm__gm_1884::lbl_80473700(ctx).mode() == 3_i32 {
+                                fns::fn_801652B0(ctx, 0_i32, 0_i32);
+                                return;
+                            }
+                            fns::fn_801652B0(ctx, 0_i32, 3_i32);
+                            return;
+                        }
+                    }
+                }
+                break 's1;
+            }
+            if __case <= 7 {
+                if ((buttons & ((shl_i32(1_i32, (8_i32 as u32))) as u64)) != 0) {
+                    inl_sfxForward_unfused(ctx);
+                    fns::fn_80188644(ctx);
+                    return;
+                }
+                break 's1;
+            }
+            if __case <= 8 {
+                if ((buttons & ((shl_i32(1_i32, (8_i32 as u32))) as u64)) != 0) {
+                    fns::gm_8016B328(ctx);
+                    return;
+                }
+                break 's1;
+            }
+        }
+    } else {
+        if ((sub).x01() as i32) == 1_i32 {
+            'l4: loop {
+                'c5: {}
+                if !(0_i32 != 0) {
+                    break 'l4;
+                }
+            }
+            Handle::copy_from(speed_stack.speeds(), fns::lbl_803B7C68(ctx));
+            inl_sfxBack_unfused(ctx);
+            (sub).anim_frames().at(22_i32).set(20_i32);
+            {
+                let mut selected_speed: f64 = speed_stack
+                    .speeds()
+                    .values()
+                    .at((sub).menu_values().at(0_i32).get())
+                    .get();
+                fns::lb_80019880(
+                    ctx,
+                    fns::__cvt_dbl_usll(
+                        ctx,
+                        fp::fmuls(
+                            fp::fdivs(fp::fdivs(fp::frsp(1_i32 as f64), 60.0), selected_speed),
+                            fp::frsp(inl_gm_801891F4_GetTickRate_unfused(ctx) as f64),
+                        ),
+                    ),
+                );
+            }
+            fns::fn_80188550(ctx, (sub).menu_values().at(2_i32).get().wrapping_add(1_i32));
+            inl_gm_801891F4_SetCpuType_unfused(ctx, (sub).menu_values().at(3_i32).get());
+            {
+                let mut count: i32 = 0;
+                let mut i: i32 = 0;
+                let mut damage: i32 = 0;
+                damage = (sub).menu_values().at(4_i32).get();
+                count = statics::melee__gm__gm_1884::lbl_80473700(ctx).count();
+                {
+                    i = 0_i32;
+                    'l6: while i < 4_i32 {
+                        'c7: {
+                            if (i != 0_i32) && (count != 0_i32) {
+                                fns::Player_SetHUDDamage(ctx, i, damage);
+                                count = count.wrapping_sub(1);
+                                if count == 0_i32 {
+                                    break 'l6;
+                                }
+                            }
+                        }
+                        i = i.wrapping_add(1);
+                    }
+                }
+            }
+            {
+                let mut i_2: i32 = 0;
+                {
+                    i_2 = 1_i32;
+                    'l8: while i_2 < 4_i32 {
+                        'c9: {
+                            fns::fn_8016B388(ctx, i_2, (sub).menu_values().at(4_i32).get());
+                        }
+                        i_2 = i_2.wrapping_add(1);
+                    }
+                }
+            }
+            's10: {
+                let __case = match (sub).menu_values().at(6_i32).get() {
+                    0_i32 => 0,
+                    1_i32 => 1,
+                    2_i32 => 2,
+                    _ => 3,
+                };
+                if __case <= 0 {
+                    fns::fn_801650E8(ctx);
+                    break 's10;
+                }
+                if __case <= 1 {
+                    fns::fn_80165190(ctx, 0_i32, 5_i32);
+                    break 's10;
+                }
+                if __case <= 2 {
+                    if statics::melee__gm__gm_1884::lbl_80473700(ctx).mode() == 3_i32 {
+                        fns::fn_801652B0(ctx, 0_i32, 0_i32);
+                    } else {
+                        fns::fn_801652B0(ctx, 0_i32, 3_i32);
+                    }
+                    break 's10;
+                }
+            }
+        }
+        (sub).set_x01((0_i32 as u8));
+    }
+}
+
 pub fn fn_80189B88<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
     let mut gobj: HSD_GObj<'a> = null(ctx);
@@ -1018,6 +1470,13 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(fn_80188EE8(ctx, a0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x801891f4,
+        |ctx| {
+            Ret::put(fn_801891F4(ctx), ctx);
         },
         Returns::Nothing,
     );

@@ -58,7 +58,7 @@ pub fn mnDiagram_ConvertDistanceForDisplay<'a>(ctx: &'a Ctx, distance: u32) -> u
         if distance >= (0x274a6_i32 as u32) {
             return div_u32(distance, (0x274a6_i32 as u32));
         }
-        return cvt_fp2unsigned(ctx, (fp::fdiv((distance as f64), 30.4788)));
+        return fns::__cvt_fp2unsigned(ctx, (fp::fdiv((distance as f64), 30.4788)));
     }
     if distance >= (0x186a0_i32 as u32) {
         return div_u32(distance, (0x186a0_i32 as u32));

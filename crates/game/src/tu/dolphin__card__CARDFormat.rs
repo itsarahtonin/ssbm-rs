@@ -159,21 +159,23 @@ pub fn __CARDFormatRegionAsync<'a>(
         i = (0_i32 as i16);
         'l1: while (i as i32) < 12_i32 {
             'c2: {
-                rand = sar_i64(
+                rand = fns::__shr2i(
+                    ctx,
                     (rand
                         .wrapping_mul((0x41c64e6d_i32 as i64))
                         .wrapping_add((0x3039_i32 as i64))),
-                    (16_i32 as u32),
+                    16_i32,
                 );
                 (id).serial().at((i as i32)).set(
                     ((((sramEx).flashID().get(chan).at((i as i32)).get() as i64).wrapping_add(rand))
                         as u8),
                 );
-                rand = ((sar_i64(
+                rand = ((fns::__shr2i(
+                    ctx,
                     (rand
                         .wrapping_mul((0x41c64e6d_i32 as i64))
                         .wrapping_add((0x3039_i32 as i64))),
-                    (16_i32 as u32),
+                    16_i32,
                 )) & (0x7fff_i32 as i64));
             }
             i = i.wrapping_add(1);

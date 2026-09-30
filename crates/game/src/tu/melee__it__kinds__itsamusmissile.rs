@@ -193,7 +193,7 @@ pub fn it_802B66A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     (ip).x40_vel().set_y(0.0);
     (ip).set_xDAC_itcmd_var0({
         let __t2 = {
-            let __t1 = cvt_fp2unsigned(ctx, 0.0);
+            let __t1 = fns::__cvt_fp2unsigned(ctx, 0.0);
             (ip).set_xDB8_itcmd_var3(__t1);
             __t1
         };

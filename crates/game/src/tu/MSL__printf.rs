@@ -571,8 +571,8 @@ pub fn longlong2str<'a>(
     }
     'l2: loop {
         'c3: {
-            n = (rem_u64(unsigned_num, base) as i32);
-            unsigned_num = div_u64(unsigned_num, base);
+            n = (fns::__mod2u(ctx, unsigned_num, base) as i32);
+            unsigned_num = fns::__div2u(ctx, unsigned_num, base);
             if n < 10_i32 {
                 n = n.wrapping_add(48_i32);
             } else {

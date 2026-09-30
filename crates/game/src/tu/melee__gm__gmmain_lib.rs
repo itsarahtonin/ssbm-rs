@@ -1757,7 +1757,7 @@ fn inl_GetNameTagSlot_unfused<'a>(
 
 fn inl_bitset64_mask_unfused<'a>(ctx: &'a Ctx, bit: u32) -> i64 {
     let mut bit = bit;
-    return shl_i64(1_i64, bit);
+    return (fns::__shl2i(ctx, 1_i64 as i64, (bit as i32)) as i64);
 }
 
 fn inl_GetPersistentFighterData_unfused<'a>(ctx: &'a Ctx, selkind: i32) -> FighterData<'a> {

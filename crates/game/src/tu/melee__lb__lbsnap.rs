@@ -169,7 +169,8 @@ pub fn lbSnap_8001D4A4<'a>(ctx: &'a Ctx, chan: i32, arg1: Val<'a, i8>) {
         chan,
     ));
     let mut time2: i64 = fns::OSGetTime(ctx);
-    let mut time: u32 = ((div_i64(
+    let mut time: u32 = ((fns::__div2i(
+        ctx,
         (time2),
         ((div_u32(
             ((ptr::<Val<'a, u32>>(
@@ -468,7 +469,8 @@ pub fn lbSnap_8001DC0C<'a>(ctx: &'a Ctx, image: Val<'a, u8>) -> i32 {
     }
     fns::lbSnap_8001DA5C(ctx, image);
     ticks = fns::OSGetTime(ctx);
-    seconds = ((div_i64(
+    seconds = ((fns::__div2i(
+        ctx,
         (ticks),
         ((div_u32(
             ((ptr::<Val<'a, u32>>(

@@ -71,6 +71,8 @@ def without_asm_bodies(text):
             i += 1
         head = text[m.start():m.end() - 1]
         decl = re.sub(r"\basm\b", "", head).rstrip() + ";"
+        if m.group(1) in ASM_PROTOTYPES:
+            decl = ASM_PROTOTYPES[m.group(1)] + ";"
         body = text[m.end() - 1:i + 1]
         out.append(text[at:m.start()] + decl + "\n" * body.count("\n"))
         names.append(m.group(1))
@@ -108,6 +110,41 @@ def sdk_headers():
     return [(path, text.replace("#ifdef __MWERKS__\ntypedef signed long s32;", "#if 1\ntypedef signed long s32;", 1))]
 
 
+# The register interfaces of MWCC's runtime helpers, which the decomp declares as `void f(void)`
+# since only assembly calls them: compiled code calls them for 64-bit division, shifts and
+# conversions, with the operands in r3:r4 and r5:r6 (or r5, or f1) and the result in r3:r4 or f1.
+ASM_PROTOTYPES = {
+    "__div2u": "unsigned long long __div2u(unsigned long long a, unsigned long long b)",
+    "__div2i": "long long __div2i(long long a, long long b)",
+    "__mod2u": "unsigned long long __mod2u(unsigned long long a, unsigned long long b)",
+    "__mod2i": "long long __mod2i(long long a, long long b)",
+    "__shl2i": "long long __shl2i(long long a, int n)",
+    "__shr2u": "unsigned long long __shr2u(unsigned long long a, int n)",
+    "__shr2i": "long long __shr2i(long long a, int n)",
+    "__cvt_sll_flt": "float __cvt_sll_flt(long long x)",
+    "__cvt_ull_flt": "float __cvt_ull_flt(unsigned long long x)",
+    "__cvt_sll_dbl": "double __cvt_sll_dbl(long long x)",
+    "__cvt_ull_dbl": "double __cvt_ull_dbl(unsigned long long x)",
+    "__cvt_dbl_ull": "unsigned long long __cvt_dbl_ull(double x)",
+}
+ASM_PROTO_DECL = re.compile(r"\bASM\s+void\s+(\w+)\s*\(\s*void\s*\)\s*;")
+ASM_PROTO_DEF = re.compile(r"\bASM\s+void\s+(\w+)\s*\(\s*void\s*\)\s*\{")
+
+
+def with_asm_prototypes(text):
+    """Source with the runtime helpers' definitions under their register interfaces."""
+    return ASM_PROTO_DEF.sub(
+        lambda m: ASM_PROTOTYPES[m[1]] + " {" if m[1] in ASM_PROTOTYPES else m[0], text)
+
+
+def runtime_header():
+    """The runtime helpers' header with their register interfaces as prototypes."""
+    path = "src/Runtime/runtime.h"
+    text = open(path, encoding="utf-8").read()
+    return [(path, ASM_PROTO_DECL.sub(
+        lambda m: ASM_PROTOTYPES[m[1]] + ";" if m[1] in ASM_PROTOTYPES else m[0], text))]
+
+
 def msl_headers():
     """MSL's stdarg.h as clang should see it: `va_arg` passes __va_arg the class of its type,
     which MWCC computes, as a call c2rs can compute it from."""
@@ -122,9 +159,9 @@ def parse(index, source, extra=()):
     """Parses a unit as its compiler would see it, as far as clang can. Returns (translation
     unit, names of assembly functions left out)."""
     text = open(source, encoding="utf-8", errors="replace").read()
-    fixed, asm = without_asm_bodies(text)
+    fixed, asm = without_asm_bodies(with_asm_prototypes(text))
     unsaved = [(source, fixed)] if fixed != text else []
-    unsaved += msl_headers()
+    unsaved += msl_headers() + runtime_header()
     if source.replace("\\", "/").startswith(SDK_SRC + "/"):
         unsaved += sdk_headers()
     return index.parse(source, args=flags_for(source) + list(extra), unsaved_files=unsaved or None), asm

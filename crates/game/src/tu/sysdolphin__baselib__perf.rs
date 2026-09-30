@@ -42,6 +42,81 @@ pub fn HSD_PerfSetStartTime<'a>(ctx: &'a Ctx) {
     fns::start_time(ctx).set(fns::OSGetTime(ctx));
 }
 
+pub fn HSD_PerfSetCPUTime<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x10);
+    fns::HSD_PerfCurrentStat(ctx).set_cpu_time(fp::fdivs(
+        fns::__cvt_sll_flt(
+            ctx,
+            (fns::OSGetTime(ctx).wrapping_sub(fns::start_time(ctx).get())),
+        ),
+        fp::frsp(
+            (div_u32(
+                (((1_i32) as u32).wrapping_mul(
+                    (div_u32(
+                        ((ptr::<Val<'a, u32>>(
+                            ctx,
+                            ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                        ))
+                        .get()),
+                        (4_i32 as u32),
+                    )),
+                )),
+                (60_i32 as u32),
+            )) as f64,
+        ),
+    ));
+}
+
+pub fn HSD_PerfSetDrawTime<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x10);
+    fns::HSD_PerfCurrentStat(ctx).set_draw_time(fp::fdivs(
+        fns::__cvt_sll_flt(
+            ctx,
+            (fns::OSGetTime(ctx).wrapping_sub(fns::start_time(ctx).get())),
+        ),
+        fp::frsp(
+            (div_u32(
+                (((1_i32) as u32).wrapping_mul(
+                    (div_u32(
+                        ((ptr::<Val<'a, u32>>(
+                            ctx,
+                            ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                        ))
+                        .get()),
+                        (4_i32 as u32),
+                    )),
+                )),
+                (60_i32 as u32),
+            )) as f64,
+        ),
+    ));
+}
+
+pub fn HSD_PerfSetTotalTime<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x10);
+    fns::HSD_PerfCurrentStat(ctx).set_total_time(fp::fdivs(
+        fns::__cvt_sll_flt(
+            ctx,
+            (fns::OSGetTime(ctx).wrapping_sub(fns::start_time(ctx).get())),
+        ),
+        fp::frsp(
+            (div_u32(
+                (((1_i32) as u32).wrapping_mul(
+                    (div_u32(
+                        ((ptr::<Val<'a, u32>>(
+                            ctx,
+                            ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                        ))
+                        .get()),
+                        (4_i32 as u32),
+                    )),
+                )),
+                (60_i32 as u32),
+            )) as f64,
+        ),
+    ));
+}
+
 pub fn HSD_PerfCountEnvelopeBlending<'a>(ctx: &'a Ctx, n: i32) {
     let __frame = ctx.stack_frame(0x18);
     let mut n = n;
@@ -77,6 +152,27 @@ pub fn register(ctx: &Ctx) {
         0x8037e214,
         |ctx| {
             Ret::put(HSD_PerfSetStartTime(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8037e23c,
+        |ctx| {
+            Ret::put(HSD_PerfSetCPUTime(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8037e2b0,
+        |ctx| {
+            Ret::put(HSD_PerfSetDrawTime(ctx), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8037e328,
+        |ctx| {
+            Ret::put(HSD_PerfSetTotalTime(ctx), ctx);
         },
         Returns::Nothing,
     );

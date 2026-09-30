@@ -245,6 +245,58 @@ pub fn gm_8016B258<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
         .x4_b3() as i32);
 }
 
+pub fn gm_SetGameSpeed<'a>(ctx: &'a Ctx, speed: f64) {
+    let __frame = ctx.stack_frame(0x18);
+    let mut speed = speed;
+    fns::lb_80019880(
+        ctx,
+        fns::__cvt_dbl_usll(
+            ctx,
+            (fp::fmuls(
+                (fp::fdivs(fp::fdivs(fp::frsp(1_i32 as f64), 60.0), speed)),
+                fp::frsp(
+                    (div_u32(
+                        ((ptr::<Val<'a, u32>>(
+                            ctx,
+                            ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                        ))
+                        .get()),
+                        (4_i32 as u32),
+                    )) as f64,
+                ),
+            )),
+        ),
+    );
+}
+
+pub fn gm_ResetGameSpeed<'a>(ctx: &'a Ctx) {
+    let __frame = ctx.stack_frame(0x10);
+    fns::lb_80019880(
+        ctx,
+        fns::__cvt_dbl_usll(
+            ctx,
+            (fp::fmuls(
+                (fp::fdivs(
+                    fp::fdivs(fp::frsp(1_i32 as f64), 60.0),
+                    statics::melee__gm__gmvs::controller(ctx)
+                        .start()
+                        .game_speed(),
+                )),
+                fp::frsp(
+                    (div_u32(
+                        ((ptr::<Val<'a, u32>>(
+                            ctx,
+                            ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                        ))
+                        .get()),
+                        (4_i32 as u32),
+                    )) as f64,
+                ),
+            )),
+        ),
+    );
+}
+
 pub fn gm_8016B328<'a>(ctx: &'a Ctx) {
     (inl_gmVs_GetSceneController_unfused(ctx))
         .state()
@@ -2842,6 +2894,94 @@ pub fn fn_8016E5C0<'a>(ctx: &'a Ctx, arg0: StartMeleeData<'a>) -> i32 {
     return 0_i32;
 }
 
+pub fn fn_8016E730<'a>(ctx: &'a Ctx, arg0: StartMeleeData<'a>) {
+    let __frame = ctx.stack_frame(0x20);
+    let mut arg0 = arg0;
+    let mut temp_r30: HSD_GObj<'a> = null(ctx);
+    let mut r30: VsSceneController<'a> = null(ctx);
+    fns::db_Setup(ctx);
+    fns::gm_SetDbPauseInputHandlers(ctx, fnptr(ctx, 0x8016baf4), fnptr(ctx, 0x8016bbb4));
+    fns::gm_SetPreGObjProcCallback(ctx, fnptr(ctx, 0x80225754));
+    fns::gm_801A4B50(ctx, 1_i32);
+    fns::lb_80019880(
+        ctx,
+        fns::__cvt_dbl_usll(
+            ctx,
+            (fp::fmuls(
+                (fp::fdivs(
+                    fp::fdivs(1.0, fp::frsp(60_i32 as f64)),
+                    (arg0).rules().game_speed(),
+                )),
+                fp::frsp(
+                    (div_u32(
+                        ((ptr::<Val<'a, u32>>(
+                            ctx,
+                            ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                        ))
+                        .get()),
+                        (4_i32 as u32),
+                    )) as f64,
+                ),
+            )),
+        ),
+    );
+    fns::Camera_Init(ctx, 70_i32);
+    fns::Camera_Create(ctx);
+    fns::fn_8016DCC0(ctx, arg0);
+    fns::lbRefract_800222A4(ctx);
+    fns::lb_8000FCDC(ctx);
+    fns::efLib_Init(ctx);
+    fns::efAsync_LoadSync(ctx, 0_i32);
+    fns::efAsync_LoadSync(ctx, 31_i32);
+    fns::Player_80036DD8(ctx);
+    fns::ftCo_800C06C0(ctx);
+    fns::mpColl_80041C78(ctx);
+    fns::Ground_801C0378(ctx, 64_i32);
+    fns::Stage_802251E8(
+        ctx,
+        ((arg0).rules().stkind() as i32),
+        null::<Val<'a, i32>>(ctx),
+    );
+    r30 = statics::melee__gm__gmvs::controller(ctx);
+    (r30).state().set_unk_34(inl_get_unk_float_unfused(ctx));
+    fns::Item_80266F70(ctx);
+    fns::Item_80266FCC(ctx);
+    fns::it_8026D018(ctx);
+    fns::lbAudioAx_8002785C(ctx);
+    fns::Stage_8022524C(ctx);
+    fns::Camera_80030730(ctx, fns::Ground_801C20D0(ctx));
+    fns::fn_8016E2BC(ctx);
+    fns::Stage_80225298(ctx);
+    fns::Ground_EnableMatchCamera(ctx);
+    fns::Camera_8002F3AC(ctx);
+    fns::fn_801A1134(ctx);
+    fns::sfx_setupCrowdSFX(ctx);
+    if !Handle::is_null(
+        statics::melee__gm__gmvs::controller(ctx)
+            .start()
+            .on_unpause_override(),
+    ) {
+        statics::melee__gm__gmvs::controller(ctx)
+            .start()
+            .on_unpause_override()
+            .call::<_, ()>((0_i32,));
+        fns::Camera_8002F3AC(ctx);
+    }
+    fns::ifAll_802F390C(ctx);
+    fns::lbBgFlash_Init(ctx, 255_i32);
+    if !Handle::is_null((arg0).rules().on_match_start()) {
+        (arg0).rules().on_match_start().call::<_, ()>(());
+    }
+    temp_r30 = fns::gm_801A4BC8(ctx);
+    fns::fn_80171AD4(ctx);
+    if !Handle::is_null(temp_r30) {
+        let _ = fns::HSD_GObj_SetupProc(ctx, temp_r30, fnptr(ctx, 0x8016c7d0), (20_i32 as u8));
+    }
+    if !((arg0).rules().x1_4() != 0) {
+        let _ = fns::Stage_80225074(ctx, fns::fn_8016E5C0(ctx, arg0));
+    }
+}
+
 pub fn gm_Scene_Vs_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
@@ -3490,6 +3630,35 @@ fn inl_direction_unfused<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return 0.0;
 }
 
+fn inl_get_unk_float_unfused<'a>(ctx: &'a Ctx) -> f64 {
+    if (fns::gm_IsCurrently1PMode_inline(ctx) != 0) {
+        return 1.0;
+    } else {
+        's1: {
+            let __case = match fns::gm_8016B558(ctx) {
+                2_i32 => 0,
+                3_i32 => 1,
+                4_i32 => 2,
+                _ => 3,
+            };
+            if __case <= 0 {
+                return 1.0;
+            }
+            if __case <= 1 {
+                return 1.100000023841858;
+            }
+            if __case <= 2 {
+                return 1.2000000476837158;
+            }
+            if __case <= 3 {
+                return 1.0;
+            }
+        }
+    }
+    #[allow(unreachable_code)]
+    return 0.0;
+}
+
 fn inl_gm_8016E9C8_inline_unfused<'a>(ctx: &'a Ctx) -> i32 {
     's1: {
         let __case = match (fns::gm_GetCurrentGameMode(ctx) as i32) {
@@ -3796,6 +3965,21 @@ pub fn register(ctx: &Ctx) {
             Ret::put(gm_8016B258(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8016b274,
+        |ctx| {
+            let (a0,): (Single,) = Args::take_all(ctx);
+            Ret::put(gm_SetGameSpeed(ctx, a0.0), ctx);
+        },
+        Returns::Nothing,
+    );
+    ctx.register_port(
+        0x8016b2c8,
+        |ctx| {
+            Ret::put(gm_ResetGameSpeed(ctx), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x8016b328,
@@ -4200,6 +4384,14 @@ pub fn register(ctx: &Ctx) {
             Ret::put(fn_8016E5C0(ctx, a0), ctx);
         },
         Returns::Int,
+    );
+    ctx.register_port(
+        0x8016e730,
+        |ctx| {
+            let (a0,): (StartMeleeData<'_>,) = Args::take_all(ctx);
+            Ret::put(fn_8016E730(ctx, a0), ctx);
+        },
+        Returns::Nothing,
     );
     ctx.register_port(
         0x8016e934,

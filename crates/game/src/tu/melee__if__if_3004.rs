@@ -561,7 +561,7 @@ pub fn fn_80300DE0<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
         if __case <= 1 {
             inl_sfxForward_unfused(ctx);
             (ptr_).set(
-                (cvt_fp2unsigned(
+                (fns::__cvt_fp2unsigned(
                     ctx,
                     (fp::fmuls(100.0, statics::melee__if__if_3004::un_804D6DD0(ctx).get())),
                 ) as i32),

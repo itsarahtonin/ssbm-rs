@@ -1989,8 +1989,16 @@ class Translator:
     def shift(self, op, va, vb):
         t = va.ty
         rty = self.u.rust_value_ty(t)
-        n = self.convert(vb, UINT).code
         size, signed = int_info(t)
+        if size == 8:
+            # MWCC shifts 64-bit values with the runtime's helpers.
+            n = self.convert(vb, INT).code
+            if op == "<<":
+                res = self.helper("__shl2i", [f"{va.code} as i64", n], {"k": "int", "size": 8, "signed": True})
+                return Expr(f"({res.code} as {rty})", t, False)
+            name = "__shr2i" if signed else "__shr2u"
+            return self.helper(name, [va.code, n], t)
+        n = self.convert(vb, UINT).code
         if op == "<<":
             fn = "shl"
         else:
@@ -2012,6 +2020,10 @@ class Translator:
             return Expr(f"{va.code}.wrapping_sub({vb.code})", t, pure)
         if op == "*":
             return Expr(f"{va.code}.wrapping_mul({vb.code})", t, pure)
+        if op in ("/", "%") and int_info(t)[0] == 8:
+            # MWCC divides 64-bit values with the runtime's helpers.
+            name = {"/": "__div2", "%": "__mod2"}[op] + ("i" if int_info(t)[1] else "u")
+            return self.helper(name, [va.code, vb.code], t)
         if op == "/":
             return Expr(f"div_{rty}({va.code}, {vb.code})", t, pure)
         if op == "%":
@@ -2603,6 +2615,13 @@ class Translator:
             out += [f"if {tmp} != 0 {{"] + self.indent(self.block(kids[2])) + ["}"]
         return out
 
+    def helper(self, name, argv, t):
+        """A call to one of MWCC's runtime helpers, as the original makes one."""
+        f = self.u.prog.function(name, self.u.name)
+        if f is None:
+            raise Unsupported(f"runtime helper {name} without an address")
+        return Expr(f"{self.u.prog.stub_path(f)}(ctx{''.join(', ' + a for a in argv)})", t, False)
+
     def unprototyped(self, ft, args):
         """The type a call to a function declared without a prototype passes its arguments
         as: C gives them the default promotions."""
@@ -2741,7 +2760,9 @@ class Translator:
         if is_int(fr) and is_float(to):
             size, signed = int_info(fr)
             if size == 8:
-                raise Unsupported("64-bit int to float")
+                if not signed or to["size"] != 4:
+                    raise Unsupported("64-bit int to float")
+                return self.helper("__cvt_sll_flt", [v.code], to)
             code = f"({v.code} as f64)"
             if to["size"] == 4:
                 code = f"fp::frsp{code}"
@@ -2753,16 +2774,15 @@ class Translator:
         if is_float(fr) and is_int(to):
             size, signed = int_info(to)
             if size == 8:
-                raise Unsupported("float to 64-bit int")
+                # Signed or not, MWCC converts through the runtime's __cvt_dbl_usll.
+                res = self.helper("__cvt_dbl_usll", [v.code], {"k": "int", "size": 8, "signed": False})
+                return Expr(f"({res.code} as i64)", to, False) if signed else Expr(res.code, to, False)
             if signed or size < 4:
                 code = f"fp::fctiwz({v.code})"
                 if size < 4:
                     code = f"({code} as {self.u.rust_value_ty(to)})"
                 return Expr(code, to, pure)
-            f = self.u.prog.function("__cvt_fp2unsigned", self.u.name)
-            if f is None:
-                raise Unsupported("float to unsigned")
-            return Expr(f"cvt_fp2unsigned(ctx, {v.code})", to, False)
+            return self.helper("__cvt_fp2unsigned", [v.code], to)
         if (fk in ("ptr", "arr", "fn")) and is_int(to):
             size, _ = int_info(to)
             code = f"Handle::addr({v.code})"

@@ -6,4 +6,5 @@
 
 pub mod MSL__string;
 pub mod Runtime__Gecko_setjmp;
+pub mod Runtime__runtime;
 pub mod melee__gm__gm_1601;

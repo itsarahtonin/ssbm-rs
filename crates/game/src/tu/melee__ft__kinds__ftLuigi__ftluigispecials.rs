@@ -406,7 +406,7 @@ pub fn ftLg_SpecialS_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::ftColl_8007ABD0(
             ctx,
             (fp).x914().get(0_i32),
-            cvt_fp2unsigned(
+            fns::__cvt_fp2unsigned(
                 ctx,
                 fp::fmadds(
                     fp::frsp((fp).mv().lg().SpecialS().chargeFrames() as f64),
@@ -436,7 +436,7 @@ pub fn ftLg_SpecialAirS_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::ftColl_8007ABD0(
             ctx,
             (fp).x914().get(0_i32),
-            cvt_fp2unsigned(
+            fns::__cvt_fp2unsigned(
                 ctx,
                 fp::fmadds(
                     fp::frsp((fp).mv().lg().SpecialS().chargeFrames() as f64),
@@ -576,7 +576,7 @@ pub fn ftLg_SpecialSMisfire_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::ftColl_8007ABD0(
             ctx,
             (fp).x914().get(0_i32),
-            cvt_fp2unsigned(
+            fns::__cvt_fp2unsigned(
                 ctx,
                 fp::fmadds(
                     fp::frsp((fp).mv().lg().SpecialS().chargeFrames() as f64),
@@ -606,7 +606,7 @@ pub fn ftLg_SpecialAirSMisfire_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::ftColl_8007ABD0(
             ctx,
             (fp).x914().get(0_i32),
-            cvt_fp2unsigned(
+            fns::__cvt_fp2unsigned(
                 ctx,
                 fp::fmadds(
                     fp::frsp((fp).mv().lg().SpecialS().chargeFrames() as f64),

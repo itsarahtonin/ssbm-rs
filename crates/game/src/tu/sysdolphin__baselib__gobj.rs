@@ -79,7 +79,8 @@ pub fn HSD_GObj_RunProcs<'a>(ctx: &'a Ctx) {
                             (proc).set_flags_3((fns::HSD_GObj_804D783C(ctx).get() as u8));
                             gobj = (proc).gobj();
                             if ((!((var_r31
-                                & ((shl_i64(1_i64, (((gobj).p_link() as i32) as u32))) as u64))
+                                & ((fns::__shl2i(ctx, 1_i64 as i64, ((gobj).p_link() as i32))
+                                    as i64) as u64))
                                 != 0))
                                 && (!(((proc).flags_1()) != 0)))
                                 && (!(((proc).flags_2()) != 0))
@@ -177,7 +178,7 @@ pub fn HSD_GObj_80390ED0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, mask: u32) {
                             }
                         }
                         j = j.wrapping_add(1);
-                        prios = shr_u64(prios, (1_i32 as u32));
+                        prios = fns::__shr2u(ctx, prios, 1_i32);
                     }
                 }
             }

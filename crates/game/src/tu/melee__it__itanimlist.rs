@@ -159,7 +159,7 @@ pub fn it_802790C0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'
     fns::it_80272460(
         ctx,
         hit,
-        cvt_fp2unsigned(
+        fns::__cvt_fp2unsigned(
             ctx,
             fp::fmuls(
                 (item).xC3C(),
@@ -288,7 +288,7 @@ pub fn it_80279544<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'
     fns::it_80272460(
         ctx,
         hit,
-        cvt_fp2unsigned(
+        fns::__cvt_fp2unsigned(
             ctx,
             (fp::fmuls(
                 (item).xC3C(),

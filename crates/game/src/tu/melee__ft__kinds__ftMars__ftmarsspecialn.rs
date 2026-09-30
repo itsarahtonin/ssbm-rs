@@ -594,7 +594,7 @@ fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
                     fns::ftColl_8007ABD0(
                         ctx,
                         (fp).x914().get(i),
-                        cvt_fp2unsigned(
+                        fns::__cvt_fp2unsigned(
                             ctx,
                             fp::frsp(
                                 ((da).x4().wrapping_add(

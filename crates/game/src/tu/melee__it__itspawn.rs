@@ -208,7 +208,7 @@ pub fn it_8026CA4C<'a>(
             }
             p = Handle::add(p, 1);
             i = i.wrapping_add(1);
-            mask = shr_u64(mask, (1_i32 as u32));
+            mask = fns::__shr2u(ctx, mask, 1_i32);
         }
     }
     (alloc).set_x8((sum as u16));
@@ -255,7 +255,7 @@ pub fn it_8026CB9C<'a>(ctx: &'a Ctx, counts: Val<'a, i32>, mask: u64, weight: f6
             }
             p = Handle::add(p, 1);
             it_kind = it_kind.wrapping_add(1);
-            mask = shr_u64(mask, (1_i32 as u32));
+            mask = fns::__shr2u(ctx, mask, 1_i32);
         }
     }
     (spawner).x4().set_size((cnt as u8));
@@ -298,7 +298,7 @@ pub fn it_8026CB9C<'a>(ctx: &'a Ctx, counts: Val<'a, i32>, mask: u64, weight: f6
             }
             p2 = Handle::add(p2, 1);
             it_kind2 = it_kind2.wrapping_add(1);
-            mask = shr_u64(mask, (1_i32 as u32));
+            mask = fns::__shr2u(ctx, mask, 1_i32);
         }
     }
 }
@@ -330,7 +330,7 @@ pub fn it_8026CD50<'a>(ctx: &'a Ctx, counts: Val<'a, i32>, mask: u64, weight: f6
             }
             p = Handle::add(p, 1);
             it_kind = it_kind.wrapping_add(1);
-            mask = shr_u64(mask, (1_i32 as u32));
+            mask = fns::__shr2u(ctx, mask, 1_i32);
         }
     }
     fns::it_804A0E50(ctx).set_size((cnt as u8));
@@ -373,7 +373,7 @@ pub fn it_8026CD50<'a>(ctx: &'a Ctx, counts: Val<'a, i32>, mask: u64, weight: f6
             }
             p2 = Handle::add(p2, 1);
             it_kind2 = it_kind2.wrapping_add(1);
-            mask = shr_u64(mask, (1_i32 as u32));
+            mask = fns::__shr2u(ctx, mask, 1_i32);
         }
     }
 }
@@ -499,7 +499,7 @@ pub fn it_8026D324<'a>(ctx: &'a Ctx, kind: i32) -> i32 {
     {
         return 0_i32;
     }
-    if !((shr_u64(temp_r29, (kind as u32)) & (1_i32 as u64)) != 0) {
+    if !((fns::__shr2u(ctx, temp_r29, kind) & (1_i32 as u64)) != 0) {
         return 0_i32;
     }
     return 1_i32;
@@ -665,7 +665,7 @@ fn inl_it_8026D018_inline2<'a>(ctx: &'a Ctx) {
     stage_info = fns::Ground_801C2AD8(ctx);
     weight = fns::gm_8016AE94(ctx);
     if (stage_mask != (0_i32 as u64)) && (!Handle::is_null(stage_info)) {
-        stage_mask = shr_u64(stage_mask, (6_i32 as u32));
+        stage_mask = fns::__shr2u(ctx, stage_mask, 6_i32);
         fns::it_8026CA4C(
             ctx,
             fns::it_804A0E50(ctx),
@@ -707,7 +707,7 @@ fn inl_it_8026D324_unfused<'a>(ctx: &'a Ctx, kind: i32) -> i32 {
     {
         return 0_i32;
     }
-    if !((shr_u64(temp_r29, (kind as u32)) & (1_i32 as u64)) != 0) {
+    if !((fns::__shr2u(ctx, temp_r29, kind) & (1_i32 as u64)) != 0) {
         return 0_i32;
     }
     return 1_i32;

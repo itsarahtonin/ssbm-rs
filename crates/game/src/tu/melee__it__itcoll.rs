@@ -2066,7 +2066,7 @@ pub fn it_80272460<'a>(
     if (fns::ftLib_IsFighter(ctx, owner_gobj) != 0) {
         owner = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, owner_gobj)));
         if (owner).x34_scale().y() != 1.0 {
-            dmg_ = cvt_fp2unsigned(
+            dmg_ = fns::__cvt_fp2unsigned(
                 ctx,
                 fp::fadds(
                     0.9990000128746033,

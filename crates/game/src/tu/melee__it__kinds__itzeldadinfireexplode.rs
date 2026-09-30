@@ -165,7 +165,7 @@ pub fn itZeldadinfireexplode_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a
         fns::it_80272460(
             ctx,
             (ip).x5D4_hitboxes().get(0_i32).hit(),
-            cvt_fp2unsigned(ctx, temp_f1),
+            fns::__cvt_fp2unsigned(ctx, temp_f1),
             gobj,
         );
         if (ip).xDD4_itemVar().zeldadinfireexplode().xDD8() == 0.0 {

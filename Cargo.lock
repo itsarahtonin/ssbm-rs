@@ -1147,6 +1147,8 @@ name = "ssbm-game"
 version = "0.1.0"
 dependencies = [
  "gekko-fp",
+ "ssbm-disc",
+ "ssbm-ppc",
  "ssbm-rt",
  "ssbm-types",
 ]

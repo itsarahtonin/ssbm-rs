@@ -374,14 +374,16 @@ pub fn itLinkArrow_802A850C<'a>(
             (fp::fdivs((fp::fsubs((attr).x8(), (attr).x4())), arg5)),
             (attr).x4(),
         ));
-        (ip).xDD4_itemVar().linkarrow().set_xA4(cvt_fp2unsigned(
-            ctx,
-            fp::fmadds(
-                arg4,
-                (fp::fdivs((fp::fsubs((attr).x10(), (attr).xC())), arg5)),
-                (attr).xC(),
-            ),
-        ));
+        (ip).xDD4_itemVar()
+            .linkarrow()
+            .set_xA4(fns::__cvt_fp2unsigned(
+                ctx,
+                fp::fmadds(
+                    arg4,
+                    (fp::fdivs((fp::fsubs((attr).x10(), (attr).xC())), arg5)),
+                    (attr).xC(),
+                ),
+            ));
         (ip).set_facing_dir(fns::ftLib_GetFacingDir(
             ctx,
             (ip).xDD4_itemVar().linkarrow().xE0(),
