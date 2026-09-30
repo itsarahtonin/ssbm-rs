@@ -92,6 +92,8 @@ pub struct Mismatch {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Stats {
     pub calls: u64,
+    /// Instructions the original ran in these checks.
+    pub cost: u64,
     pub mismatches: u64,
     /// Calls whose results differ only because the original reads stack memory it never
     /// wrote: run again on the port's cleared stack, it matches the port, or cannot follow
@@ -161,6 +163,8 @@ pub struct State {
     /// Calls to check per function, if limited: past them its port runs unchecked, so a long
     /// run spends its checks on what it has not checked yet.
     pub calls_per_function: Cell<Option<u64>>,
+    /// Checks each port gets until its checks' originals have run this many instructions.
+    pub budget_per_function: Cell<Option<u64>>,
     /// Ports checked as often as that, to run unchecked once no check is running: a mode that
     /// changed between the sides of a check would give them different callees.
     checked_enough: RefCell<Vec<u32>>,
@@ -291,7 +295,11 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     if shadowed {
         ctx.begin_stack_shadow(ctx.stack_floor(sp, STACK_SCRATCH), sp);
     }
-    let original_panic = catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr))).err();
+    let recording = ctx.coverage.begin(addr);
+    let executed = ctx.executed();
+    let original_panic = passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr))));
+    let cost = ctx.executed() - executed;
+    let hits = ctx.coverage.end(recording);
     if shadowed {
         ctx.end_stack_shadow();
     }
@@ -317,8 +325,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     }
     ctx.mem.begin_journal();
     clear_stack(ctx, sp);
-    let mut port = catch_unwind(AssertUnwindSafe(|| ctx.run_native(addr, native)))
-        .err()
+    let mut port = passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_native(addr, native))))
         .map(|p| {
             if let Some(j) = crate::jump::describe(p.as_ref()) {
                 return j;
@@ -383,11 +390,11 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         }
         ctx.mem.begin_journal();
         clear_stack(ctx, sp);
-        let again = catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr)));
+        let again = passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr))));
         let _ = ctx.take_resume_at();
         let j3 = ctx.mem.end_journal();
         let regs3 = ctx.regs.snapshot();
-        if again.is_ok() && state.cursor.get() == end {
+        if again.is_none() && state.cursor.get() == end {
             let s3 = ctx.mem.capture(j3.keys());
             ctx.mem.restore(&j3);
             ctx.regs.restore(&regs0);
@@ -400,12 +407,13 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
             }
             ctx.mem.begin_journal();
             clear_stack(ctx, sp);
-            let port_again = catch_unwind(AssertUnwindSafe(|| ctx.run_native(addr, native)));
+            let port_again =
+                passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_native(addr, native))));
             ctx.truncate_natives(natives);
             let _ = ctx.take_resume_at();
             let j4 = ctx.mem.end_journal();
             let regs4 = ctx.regs.snapshot();
-            if port_again.is_ok() && state.cursor.get() == end {
+            if port_again.is_none() && state.cursor.get() == end {
                 let s4 = ctx.mem.capture(j4.keys());
                 let original = Outcome {
                     before: &j3,
@@ -485,10 +493,20 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     if !outermost && let Some(p) = original_panic {
         resume_unwind(p);
     }
+    if diffs.is_empty() {
+        ctx.coverage.verified(hits);
+    }
     let mut stats = state.stats.borrow_mut();
     let entry = stats.entry(addr).or_default();
     entry.calls += 1;
-    if state.calls_per_function.get().is_some_and(|n| entry.calls == n) {
+    let spent = entry.cost;
+    entry.cost += cost;
+    if state.calls_per_function.get().is_some_and(|n| entry.calls == n)
+        || state
+            .budget_per_function
+            .get()
+            .is_some_and(|b| spent < b && entry.cost >= b)
+    {
         state.checked_enough.borrow_mut().push(addr);
     }
     if outermost {
@@ -530,6 +548,15 @@ fn describe(ctx: &Ctx, kind: Kind) -> String {
         }
         Kind::Interrupts => "interrupt point".to_owned(),
         Kind::Hook(addr) => format!("hook at {}", ctx.name_of(addr)),
+    }
+}
+
+/// A side's failure, if it failed; the run ending on purpose ends it here too.
+fn passing_stop(result: std::thread::Result<()>) -> Option<Box<dyn std::any::Any + Send>> {
+    match result {
+        Ok(()) => None,
+        Err(p) if p.is::<crate::Stop>() => resume_unwind(p),
+        Err(p) => Some(p),
     }
 }
 

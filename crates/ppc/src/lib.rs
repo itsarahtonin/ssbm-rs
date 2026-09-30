@@ -52,6 +52,10 @@ impl Backend for Interpreter {
     fn resume(&self, ctx: &Ctx, pc: u32) {
         self.resume_to_sentinel(ctx, pc);
     }
+
+    fn executed(&self) -> u64 {
+        self.executed.get()
+    }
 }
 
 impl Interpreter {
@@ -60,6 +64,9 @@ impl Interpreter {
         while pc < RETURN_SENTINEL {
             if ctx.flags_at(pc) & FLAG_HOOK != 0 {
                 ctx.run_hook(pc);
+            }
+            if ctx.coverage.recording() {
+                ctx.coverage.hit(pc);
             }
             self.pc.set(pc);
             let w = ctx.read_u32(pc);

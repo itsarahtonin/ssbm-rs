@@ -36,6 +36,13 @@ pub fn symbol_at(addr: u32) -> Option<(u32, &'static str)> {
     (addr < start + size.max(1)).then_some((start, name))
 }
 
+/// The function starting at `addr`, as `[start, end)`.
+pub fn function_bounds(addr: u32) -> Option<(u32, u32)> {
+    let i = symbols::SYMBOLS.partition_point(|s| s.0 < addr);
+    let &(start, size, _, function) = symbols::SYMBOLS.get(i)?;
+    (start == addr && function && size > 0).then_some((start, start + size))
+}
+
 /// Start addresses of the functions that overlap `[addr, addr + len)`.
 pub fn functions_overlapping(addr: u32, len: u32) -> Vec<u32> {
     let end = addr.saturating_add(len.max(1));

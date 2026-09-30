@@ -15,6 +15,7 @@ use std::rc::Rc;
 pub use ssbm_mem::{MEM1_SIZE, Mem, PAGE_SIZE, Pages};
 
 mod call;
+pub mod coverage;
 pub mod cpu;
 mod jump;
 mod handle;
@@ -64,6 +65,10 @@ pub trait Backend {
     /// Goes on running original code at `pc`, as after a `longjmp`, until the function the run
     /// started with returns.
     fn resume(&self, ctx: &Ctx, pc: u32);
+    /// How many instructions of original code it has run.
+    fn executed(&self) -> u64 {
+        0
+    }
 }
 
 /// Hardware registers at `0xCC00_0000`, including the GX write-gather pipe.
@@ -71,6 +76,9 @@ pub trait Mmio {
     fn read(&self, ctx: &Ctx, addr: u32, size: u32) -> u32;
     fn write(&self, ctx: &Ctx, addr: u32, size: u32, value: u32);
 }
+
+/// Panic payload that ends the run on purpose, which lockstep's checks pass on.
+pub struct Stop;
 
 /// A bad memory access, raised as a panic payload (the console would take a DSI exception).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -148,6 +156,8 @@ pub struct Ctx {
     uninit_hook: RefCell<Option<UninitHook>>,
     /// The running thread's stack, as (lowest address, top), where the OS layer knows it.
     stack_bounds: RefCell<Option<StackBounds>>,
+    /// What lockstep's checks have verified of the original's code.
+    pub coverage: coverage::Coverage,
 }
 
 /// See `Ctx::set_stack_bounds`.
@@ -220,6 +230,7 @@ impl Ctx {
             zero_frames: Cell::new(false),
             uninit_hook: RefCell::default(),
             stack_bounds: RefCell::default(),
+            coverage: Default::default(),
         }
     }
 
@@ -461,6 +472,11 @@ impl Ctx {
 
     pub fn set_backend(&self, backend: Box<dyn Backend>) {
         assert!(self.backend.set(backend).is_ok(), "backend already set");
+    }
+
+    /// How many instructions of original code have run.
+    pub fn executed(&self) -> u64 {
+        self.backend.get().map_or(0, |b| b.executed())
     }
 
     pub fn has_backend(&self) -> bool {

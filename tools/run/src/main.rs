@@ -28,13 +28,10 @@ use std::rc::Rc;
 
 use ssbm_disc::Disc;
 use ssbm_ppc::Interpreter;
-use ssbm_rt::Ctx;
+use ssbm_rt::{Ctx, Stop};
 use ssbm_sdk::{Sdk, boot, hw};
 
 mod monkey;
-
-/// Panic payload that ends the run on purpose.
-struct Stop;
 
 /// Ports lockstep does not check (see where they are set).
 const LOCKSTEP_EXEMPT: &[&str] = &[
@@ -74,15 +71,15 @@ fn calls_to(dol: &ssbm_disc::Dol, target: u32) -> Vec<u32> {
 }
 
 /// Adds `checked` (address, calls, mismatching calls, calls that differ only by reads of
-/// stack the original never wrote) to the CSV ledger at `path`. Returns how many ports it has
-/// checked, and how many of them mismatch.
+/// stack the original never wrote, instructions the checks' originals ran) to the CSV ledger
+/// at `path`. Returns how many ports it has checked, and how many of them mismatch.
 fn update_ledger(
     path: &str,
-    checked: &[(u32, u64, u64, u64)],
+    checked: &[(u32, u64, u64, u64, u64)],
     ported: &[u32],
     name: &dyn Fn(u32) -> String,
 ) -> std::io::Result<(usize, usize)> {
-    let mut rows: std::collections::BTreeMap<u32, [u64; 4]> = Default::default();
+    let mut rows: std::collections::BTreeMap<u32, [u64; 5]> = Default::default();
     if let Ok(text) = std::fs::read_to_string(path) {
         for line in text.lines().skip(1) {
             let f: Vec<&str> = line.split(',').collect();
@@ -92,20 +89,29 @@ fn update_ledger(
             let Ok(addr) = u32::from_str_radix(f[0].trim_start_matches("0x"), 16) else {
                 continue;
             };
-            let n = |i: usize| f[i].parse::<u64>().unwrap_or(0);
-            rows.insert(addr, [n(2), n(3), n(4), n(5)]);
+            let n = |i: usize| f.get(i).and_then(|v| v.parse::<u64>().ok()).unwrap_or(0);
+            rows.insert(addr, [n(2), n(3), n(4), n(5), n(6)]);
         }
     }
-    for &(addr, calls, bad, uninit) in checked {
+    for &(addr, calls, bad, uninit, cost) in checked {
         let r = rows.entry(addr).or_default();
         r[0] += calls;
         r[1] += bad;
         r[2] += uninit;
         r[3] += 1;
+        r[4] += cost;
     }
-    let mut out = String::from("address,name,calls,mismatches,uninitialized,runs\n");
+    let mut out = String::from("address,name,calls,mismatches,uninitialized,runs,cost\n");
     for (addr, r) in &rows {
-        out += &format!("{addr:#010x},{},{},{},{},{}\n", name(*addr), r[0], r[1], r[2], r[3]);
+        out += &format!(
+            "{addr:#010x},{},{},{},{},{},{}\n",
+            name(*addr),
+            r[0],
+            r[1],
+            r[2],
+            r[3],
+            r[4]
+        );
     }
     if let Some(dir) = std::path::Path::new(path).parent() {
         std::fs::create_dir_all(dir)?;
@@ -436,12 +442,26 @@ fn run() -> ExitCode {
         // does not reproduce yet. `__setjmp` and `__longjmp` return elsewhere than to their
         // caller.
         let exempt: Vec<u32> = LOCKSTEP_EXEMPT.iter().map(|n| ssbm_sdk::sym(n)).collect();
+        // LOCKSTEP_DONE=FILE lists ports, by address, that no longer need checking, such as
+        // those whose checks already cover enough of their original.
+        let done: std::collections::HashSet<u32> = std::env::var("LOCKSTEP_DONE")
+            .ok()
+            .map(|path| {
+                let text =
+                    std::fs::read_to_string(&path).unwrap_or_else(|e| panic!("{path}: {e}"));
+                text.lines()
+                    .filter_map(|l| l.split(['#', ',']).next())
+                    .filter_map(|l| u32::from_str_radix(l.trim().trim_start_matches("0x"), 16).ok())
+                    .collect()
+            })
+            .unwrap_or_default();
         let checked: Vec<u32> = ported
             .iter()
             .chain(&with_codes)
             .copied()
-            .filter(|a| !kept.contains(a) && !exempt.contains(a))
+            .filter(|a| !kept.contains(a) && !exempt.contains(a) && !done.contains(a))
             .collect();
+        ctx.coverage.set_bounds(Box::new(ssbm_types::function_bounds));
         let checking = checking.clone();
         let enable = move |ctx: &Ctx| {
             for &addr in &checked {
@@ -463,6 +483,11 @@ fn run() -> ExitCode {
             .set(std::env::var_os("LOCKSTEP_TRACE_CALLS").is_some());
         if let Some(n) = std::env::var("LOCKSTEP_CALLS").ok().and_then(|v| v.parse().ok()) {
             ctx.lockstep.calls_per_function.set(Some(n));
+        }
+        // LOCKSTEP_BUDGET=N checks each port until its checks' originals have run N
+        // instructions, so cheap functions get many more checks than the frame's outer ones.
+        if let Some(n) = std::env::var("LOCKSTEP_BUDGET").ok().and_then(|v| v.parse().ok()) {
+            ctx.lockstep.budget_per_function.set(Some(n));
         }
         // LOCKSTEP_UNINIT=1 reports which instructions of the original read stack it never
         // wrote, as lockstep's checks run it.
@@ -819,9 +844,9 @@ fn run() -> ExitCode {
         // LOCKSTEP_LEDGER=FILE adds this run's checks to a ledger of every port's, kept
         // across runs.
         if let Ok(path) = std::env::var("LOCKSTEP_LEDGER") {
-            let checked: Vec<(u32, u64, u64, u64)> = stats
+            let checked: Vec<(u32, u64, u64, u64, u64)> = stats
                 .iter()
-                .map(|(&a, s)| (a, s.calls, s.mismatches, s.uninitialized))
+                .map(|(&a, s)| (a, s.calls, s.mismatches, s.uninitialized, s.cost))
                 .collect();
             match update_ledger(&path, &checked, &ported, &|a| ctx.name_of(a)) {
                 Ok((n, bad)) => eprintln!(
@@ -829,6 +854,25 @@ fn run() -> ExitCode {
                     ported.len()
                 ),
                 Err(e) => eprintln!("ledger {path}: {e}"),
+            }
+        }
+        // LOCKSTEP_COVERAGE=FILE adds the instructions this run's checks verified to a bitmap
+        // kept across runs: a bit per instruction from 0x80000000, in little-endian words.
+        if let Ok(path) = std::env::var("LOCKSTEP_COVERAGE") {
+            let mut words = ctx.coverage.covered();
+            if let Ok(old) = std::fs::read(&path) {
+                words.resize(words.len().max(old.len() / 8), 0);
+                for (w, b) in words.iter_mut().zip(old.chunks_exact(8)) {
+                    *w |= u64::from_le_bytes(b.try_into().unwrap());
+                }
+            }
+            let bytes: Vec<u8> = words.iter().flat_map(|w| w.to_le_bytes()).collect();
+            match std::fs::write(&path, bytes) {
+                Ok(()) => eprintln!(
+                    "coverage {path}: {} instructions verified",
+                    words.iter().map(|w| w.count_ones()).sum::<u32>()
+                ),
+                Err(e) => eprintln!("coverage {path}: {e}"),
             }
         }
     }
