@@ -403,6 +403,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ee1b05cbd864bcaecbd3455d6d967862d446e4ebfc3c2e5e5b9841e53cba6673"
 
 [[package]]
+name = "fp-fuzz"
+version = "0.1.0"
+dependencies = [
+ "cc",
+ "gekko-fp",
+ "ssbm-ppc",
+ "ssbm-rt",
+]
+
+[[package]]
 name = "futures-core"
 version = "0.3.34"
 source = "registry+https://github.com/rust-lang/crates.io-index"

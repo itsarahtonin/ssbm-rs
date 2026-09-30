@@ -1,0 +1,16 @@
+[package]
+name = "fp-fuzz"
+description = "Differential fuzzing of gekko-fp and the interpreter against Dolphin's float code"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dev-dependencies]
+gekko-fp.workspace = true
+ssbm-ppc.workspace = true
+ssbm-rt.workspace = true
+
+[build-dependencies]
+cc = "1"
