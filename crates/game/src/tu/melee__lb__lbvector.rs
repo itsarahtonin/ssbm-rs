@@ -2499,5 +2499,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Float,
     );
-    ctx.register_port(0x8000d5bc, asm_sqrtf__Ff, Returns::Unknown);
+    ctx.register_port(0x8000d5bc, asm_sqrtf__Ff, Returns::Float);
 }

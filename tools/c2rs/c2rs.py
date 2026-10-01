@@ -3997,8 +3997,10 @@ def translate_unit(args):
                     f"Returns::{returns_of(unit, c)});")
         unit.ported.append(name)
     # Functions the listing has that clang never saw: whole functions under `#ifdef __MWERKS__`,
-    # and out-of-line copies of inline functions. Their machine code is the source to port.
+    # and out-of-line copies of inline functions. Their machine code is the source to port, and
+    # a prototype clang has by their name, such as an inline function's, says what they return.
     registered = {int(m.group(1), 16) for r in regs for m in [re.search(r"register_port\((0x[0-9a-f]+)", r)] if m}
+    prototypes = {c.spelling: c for c in tu.cursor.get_children() if c.kind == CK.FUNCTION_DECL}
     for name in re.findall(r"^\.fn (\w+),", unit.listing, re.M):
         if only and name not in only or name.startswith("gap_"):
             continue  # dtk's `gap_` symbols are padding between functions
@@ -4019,7 +4021,8 @@ def translate_unit(args):
         out_fns.append(f"/// {name}, transliterated from its machine code: not in the C clang reads.\n"
                        f"pub fn asm_{name}(ctx: &Ctx) {{\n" + "\n".join("    " + x for x in body) + "\n}")
         unit.transliterated.append(name)
-        regs.append(f"    ctx.register_port({words[0][0]:#x}, asm_{name}, Returns::Unknown);")
+        returns = returns_of(unit, prototypes[name]) if name in prototypes else "Unknown"
+        regs.append(f"    ctx.register_port({words[0][0]:#x}, asm_{name}, Returns::{returns});")
         registered.add(words[0][0])
         unit.ported.append(name)
     inline_code = unit.finish_inlines()

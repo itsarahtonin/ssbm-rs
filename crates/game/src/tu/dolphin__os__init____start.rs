@@ -559,5 +559,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(0x80005340, asm___init_registers, Returns::Unknown);
+    ctx.register_port(0x80005340, asm___init_registers, Returns::Nothing);
 }

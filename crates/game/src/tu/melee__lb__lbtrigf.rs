@@ -804,5 +804,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Float,
     );
-    ctx.register_port(0x80022e68, asm_atanf, Returns::Unknown);
+    ctx.register_port(0x80022e68, asm_atanf, Returns::Float);
 }

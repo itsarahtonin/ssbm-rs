@@ -3368,5 +3368,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(0x80329b80, asm_TRKExceptionHandler, Returns::Unknown);
+    ctx.register_port(0x80329b80, asm_TRKExceptionHandler, Returns::Nothing);
 }

@@ -6689,5 +6689,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(0x80368b0c, asm_vec_normalize_check, Returns::Unknown);
+    ctx.register_port(0x80368b0c, asm_vec_normalize_check, Returns::Int);
 }

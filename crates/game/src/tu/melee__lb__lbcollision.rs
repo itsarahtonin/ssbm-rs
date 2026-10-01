@@ -4439,5 +4439,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(0x80007d68, asm_HSD_JObjSetupMatrix, Returns::Unknown);
+    ctx.register_port(0x80007d68, asm_HSD_JObjSetupMatrix, Returns::Nothing);
 }

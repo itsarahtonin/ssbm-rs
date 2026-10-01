@@ -1721,5 +1721,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(0x80364340, asm_fmodf, Returns::Unknown);
+    ctx.register_port(0x80364340, asm_fmodf, Returns::Float);
 }
