@@ -3,7 +3,9 @@
 
 //! Hardware registers at `0xCC000000` for the devices whose SDK drivers run as original code:
 //! VI, the DVD interface, ARAM and audio DMA, and the GX FIFO (CP, PE, PI and the write-gather
-//! pipe). Registers without a model keep the last value written.
+//! pipe). EXI transfers finish as they start, with no device answering: the memory cards and
+//! Slippi's device are stood in for above the registers. Registers without a model keep the
+//! last value written.
 
 use std::cell::{Cell, RefCell};
 use std::rc::Rc;
@@ -52,6 +54,9 @@ const DI_CMD: u32 = 0x6008;
 const DI_MAR: u32 = 0x6014;
 const DI_LENGTH: u32 = 0x6018;
 const DI_CR: u32 = 0x601C;
+/// Each EXI channel's control register, whose bit 0 starts a transfer and reads as 0 once it
+/// is done.
+const EXI_CR: [u32; 3] = [0x680C, 0x6820, 0x6834];
 const DI_IMM: u32 = 0x6020;
 const AI_CR: u32 = 0x6C00;
 const AI_SCNT: u32 = 0x6C08;
@@ -281,6 +286,7 @@ impl Hw {
                 self.set32(off, v & !0x28); // AIINT and SCRESET read as 0
             }
             PI_FIFO_WPTR => self.set32(off, v & 0x03FF_FFE0),
+            _ if EXI_CR.contains(&off) => self.set32(off, v & !1),
             _ => {}
         }
     }
