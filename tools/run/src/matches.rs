@@ -13,7 +13,7 @@ use std::rc::Rc;
 
 use ssbm_rt::{At, Ctx};
 use ssbm_types::enums::*;
-use ssbm_types::records::StartMeleeData;
+use ssbm_types::records::{StartMeleeData, gmm_x0};
 
 use crate::monkey::Rng;
 
@@ -65,6 +65,18 @@ pub fn install(ctx: &Ctx, seed: u64) {
             if entered.replace(false) {
                 choose(ctx, &rng, &stages, &fighters, time);
             }
+        }),
+    );
+}
+
+/// Makes the Event mode start at event match `n` (from 0), as if its event select had chosen
+/// it: entering the mode loads that event's files, and its character select if it has one.
+pub fn install_event(ctx: &Ctx, n: u8) {
+    ctx.set_hook(
+        ssbm_sdk::sym("gm_Mode_Event_OnLoad"),
+        Rc::new(move |ctx| {
+            let game = gmm_x0(At::new(ctx, ctx.read_u32(ssbm_sdk::sym("gmMainLib_804D3EE0"))));
+            game.vs().unk_530().set_unk_535(n);
         }),
     );
 }

@@ -293,6 +293,10 @@ fn run() -> ExitCode {
     if std::env::var_os("CPU_PLAYERS").is_some() {
         matches::install_cpu_players(&ctx);
     }
+    // EVENT=N makes the Event mode start at event match N (from 0).
+    if let Some(n) = std::env::var("EVENT").ok().and_then(|v| v.parse().ok()) {
+        matches::install_event(&ctx, n);
+    }
     // PROBES=FILE checks the functions it lists by calling them on live objects (see probe.rs);
     // empty, it probes nothing.
     if let Ok(path) = std::env::var("PROBES")
