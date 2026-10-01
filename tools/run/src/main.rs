@@ -73,17 +73,14 @@ fn calls_to(dol: &ssbm_disc::Dol, target: u32) -> Vec<u32> {
     sites
 }
 
-/// Adds `checked` (address, calls, mismatching calls, calls that differ only by reads of
-/// stack the original never wrote, instructions the checks' originals ran, mismatching calls
-/// with their inputs changed) to the CSV ledger at `path`. Returns how many ports it has
-/// checked, and how many of them mismatch.
-fn update_ledger(
-    path: &str,
-    checked: &[(u32, u64, u64, u64, u64, u64)],
-    ported: &[u32],
-    name: &dyn Fn(u32) -> String,
-) -> std::io::Result<(usize, usize)> {
-    let mut rows: std::collections::BTreeMap<u32, [u64; 6]> = Default::default();
+/// A ledger's rows: per port, calls, mismatching calls, calls that differ only by reads of
+/// stack the original never wrote, runs, instructions the checks' originals ran, and
+/// mismatching calls with their inputs changed.
+type LedgerRows = std::collections::BTreeMap<u32, [u64; 6]>;
+
+/// The rows of the CSV ledger at `path`, if there is one.
+fn read_ledger(path: &str) -> LedgerRows {
+    let mut rows = LedgerRows::default();
     if let Ok(text) = std::fs::read_to_string(path) {
         for line in text.lines().skip(1) {
             let f: Vec<&str> = line.split(',').collect();
@@ -97,6 +94,21 @@ fn update_ledger(
             rows.insert(addr, [n(2), n(3), n(4), n(5), n(6), n(7)]);
         }
     }
+    rows
+}
+
+/// Writes the ledger at `path` as `base`, what it held before this run, with `checked` (address,
+/// calls, mismatching calls, calls that differ only by reads of stack the original never wrote,
+/// instructions the checks' originals ran, mismatching calls with their inputs changed) added.
+/// Returns how many ports it has checked, and how many of them mismatch.
+fn update_ledger(
+    path: &str,
+    base: &LedgerRows,
+    checked: &[(u32, u64, u64, u64, u64, u64)],
+    ported: &[u32],
+    name: &dyn Fn(u32) -> String,
+) -> std::io::Result<(usize, usize)> {
+    let mut rows = base.clone();
     for &(addr, calls, bad, uninit, cost, mutated) in checked {
         let r = rows.entry(addr).or_default();
         r[0] += calls;
@@ -126,6 +138,79 @@ fn update_ledger(
     let n = rows.keys().filter(|a| ported.contains(a)).count();
     let bad = rows.iter().filter(|(a, r)| ported.contains(a) && r[1] > 0).count();
     Ok((n, bad))
+}
+
+/// Where LOCKSTEP_LEDGER and LOCKSTEP_COVERAGE keep a run's results across runs, with what
+/// they held before it.
+struct Results {
+    ledger: Option<(String, LedgerRows)>,
+    coverage: Option<(String, Vec<u64>)>,
+}
+
+/// Fields between saves of a run's results, so a run cut short keeps most of them.
+const SAVE_EVERY: u64 = 1800;
+
+impl Results {
+    fn from_env() -> Self {
+        let ledger = std::env::var("LOCKSTEP_LEDGER").ok().map(|p| {
+            let rows = read_ledger(&p);
+            (p, rows)
+        });
+        let coverage = std::env::var("LOCKSTEP_COVERAGE").ok().map(|p| {
+            let words = std::fs::read(&p)
+                .map(|old| {
+                    old.chunks_exact(8)
+                        .map(|b| u64::from_le_bytes(b.try_into().unwrap()))
+                        .collect()
+                })
+                .unwrap_or_default();
+            (p, words)
+        });
+        Self { ledger, coverage }
+    }
+
+    /// Writes this run's checks so far over what the files held before it; returns what it
+    /// wrote, to report.
+    fn save(&self, ctx: &Ctx, ported: &[u32]) -> Vec<String> {
+        let mut said = Vec::new();
+        // The ledger adds this run's checks to every port's, kept across runs.
+        if let Some((path, base)) = &self.ledger {
+            let checked: Vec<(u32, u64, u64, u64, u64, u64)> = ctx
+                .lockstep
+                .stats
+                .borrow()
+                .iter()
+                .map(|(&a, s)| {
+                    (a, s.calls, s.mismatches, s.uninitialized, s.cost, s.mutated_mismatches)
+                })
+                .collect();
+            said.push(match update_ledger(path, base, &checked, ported, &|a| ctx.name_of(a)) {
+                Ok((n, bad)) => format!(
+                    "ledger {path}: {n} of {} ports checked, {bad} of them with mismatches",
+                    ported.len()
+                ),
+                Err(e) => format!("ledger {path}: {e}"),
+            });
+        }
+        // The coverage bitmap adds the instructions this run's checks verified: a bit per
+        // instruction from 0x80000000, in little-endian words.
+        if let Some((path, base)) = &self.coverage {
+            let mut words = ctx.coverage.covered();
+            words.resize(words.len().max(base.len()), 0);
+            for (w, b) in words.iter_mut().zip(base) {
+                *w |= b;
+            }
+            let bytes: Vec<u8> = words.iter().flat_map(|w| w.to_le_bytes()).collect();
+            said.push(match std::fs::write(path, bytes) {
+                Ok(()) => format!(
+                    "coverage {path}: {} instructions verified",
+                    words.iter().map(|w| w.count_ones()).sum::<u32>()
+                ),
+                Err(e) => format!("coverage {path}: {e}"),
+            });
+        }
+        said
+    }
 }
 
 /// The DOL's read-only data, as the decomp's splits give it: .ctors, .dtors and .rodata, and
@@ -777,6 +862,22 @@ fn run() -> ExitCode {
         sdk.schedule(hw::field_start(60), check(dev, 60));
     }
 
+    // LOCKSTEP_LEDGER=FILE and LOCKSTEP_COVERAGE=FILE keep a run's checks and the instructions
+    // they verified across runs; they are written every so often, and once more at the end.
+    let results = Rc::new(Results::from_env());
+    if lockstep {
+        fn save_from(results: Rc<Results>, ported: Rc<Vec<u32>>, field: u64) -> impl FnOnce(&Ctx) {
+            move |ctx| {
+                let _ = results.save(ctx, &ported);
+                let next = field + SAVE_EVERY;
+                let sdk = ctx.ext::<Sdk>();
+                sdk.schedule(hw::field_start(next), save_from(results, ported, next));
+            }
+        }
+        let ported = Rc::new(ported.clone());
+        sdk.schedule(hw::field_start(SAVE_EVERY), save_from(results.clone(), ported, SAVE_EVERY));
+    }
+
     // Stop after the requested number of fields.
     sdk.schedule(hw::field_start(fields), |_| panic::panic_any(Stop));
 
@@ -985,39 +1086,9 @@ fn run() -> ExitCode {
             }
         }
         lockstep_ok = bad.is_empty();
-        // LOCKSTEP_LEDGER=FILE adds this run's checks to a ledger of every port's, kept
-        // across runs.
-        if let Ok(path) = std::env::var("LOCKSTEP_LEDGER") {
-            let checked: Vec<(u32, u64, u64, u64, u64, u64)> = stats
-                .iter()
-                .map(|(&a, s)| (a, s.calls, s.mismatches, s.uninitialized, s.cost, s.mutated_mismatches))
-                .collect();
-            match update_ledger(&path, &checked, &ported, &|a| ctx.name_of(a)) {
-                Ok((n, bad)) => eprintln!(
-                    "ledger {path}: {n} of {} ports checked, {bad} of them with mismatches",
-                    ported.len()
-                ),
-                Err(e) => eprintln!("ledger {path}: {e}"),
-            }
-        }
-        // LOCKSTEP_COVERAGE=FILE adds the instructions this run's checks verified to a bitmap
-        // kept across runs: a bit per instruction from 0x80000000, in little-endian words.
-        if let Ok(path) = std::env::var("LOCKSTEP_COVERAGE") {
-            let mut words = ctx.coverage.covered();
-            if let Ok(old) = std::fs::read(&path) {
-                words.resize(words.len().max(old.len() / 8), 0);
-                for (w, b) in words.iter_mut().zip(old.chunks_exact(8)) {
-                    *w |= u64::from_le_bytes(b.try_into().unwrap());
-                }
-            }
-            let bytes: Vec<u8> = words.iter().flat_map(|w| w.to_le_bytes()).collect();
-            match std::fs::write(&path, bytes) {
-                Ok(()) => eprintln!(
-                    "coverage {path}: {} instructions verified",
-                    words.iter().map(|w| w.count_ones()).sum::<u32>()
-                ),
-                Err(e) => eprintln!("coverage {path}: {e}"),
-            }
+        drop(stats);
+        for line in results.save(&ctx, &ported) {
+            eprintln!("{line}");
         }
     }
     eprintln!(
