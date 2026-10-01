@@ -16,7 +16,7 @@
 //! is reported at the innermost port that has it, and callers still see correct results.
 
 use std::cell::{Cell, RefCell};
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::panic::{AssertUnwindSafe, catch_unwind, panic_any, resume_unwind};
 
 use gekko_fp::Ps;
@@ -182,6 +182,12 @@ pub struct State {
     pub mutations: Cell<u32>,
     mutating: Cell<bool>,
     pub rng: Cell<u64>,
+    /// The game's code, from its first address to past its last: a mutated check whose
+    /// original writes there goes on running code only it sees changed.
+    pub code: Cell<(u32, u32)>,
+    /// Ports that run as ports even on a mutated check's original side, which otherwise runs
+    /// original code throughout.
+    pub always_native: RefCell<BTreeSet<u32>>,
     /// Calls a port under a mutated check may still make, which stops one that would never
     /// return.
     pub(crate) calls_left: Cell<Option<u64>>,
@@ -338,7 +344,12 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     let executed = ctx.executed();
     // A mutated check's original may loop in ports it calls, where no heartbeat sees it.
     let calls_left = state.calls_left.replace(state.mutating.get().then_some(MUTATED_CALLS));
+    let mutating = state.mutating.get();
+    if mutating {
+        ctx.check_conventions(true);
+    }
     let original_panic = passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr))));
+    let broke_convention = mutating && ctx.check_conventions(false).is_some();
     state.calls_left.set(calls_left);
     let cost = ctx.executed() - executed;
     let hits = ctx.coverage.end(recording);
@@ -349,19 +360,24 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     // Where the original asked its caller to continue, if not after the call.
     let original_resume = ctx.take_resume_at();
     let j1 = ctx.mem.end_journal();
-    if original_panic.as_ref().is_some_and(|p| p.is::<ReachedSdk>() || p.is::<Runaway>()) {
+    let (code_start, code_end) = state.code.get();
+    let wrote_code = state.mutating.get()
+        && j1.keys().any(|&page| {
+            let at = 0x8000_0000 + page * ssbm_mem::PAGE_SIZE;
+            at < code_end && at + ssbm_mem::PAGE_SIZE > code_start
+        });
+    if wrote_code
+        || broke_convention
+        || original_panic.as_ref().is_some_and(|p| p.is::<ReachedSdk>() || p.is::<Runaway>())
+    {
         // A mutated call that reaches the SDK layer would change its state, which no journal
-        // undoes, and one that runs on and on may never return on the port's side: drop it.
+        // undoes, and one that runs on and on may never return on the port's side. One that
+        // writes over code then runs what ports never read, and one that writes over a frame's
+        // saved registers or return address then returns with what ports never saved: drop
+        // it.
         ctx.mem.restore(&j1);
         ctx.regs.restore(&regs0);
-        if traced {
-            state.traces.borrow_mut().pop();
-        }
-        state.phase.set(enclosing);
-        state.checking.borrow_mut().pop();
-        state.active.set(false);
-        CHECKING.with(|c| c.set(false));
-        return;
+        return drop_check(ctx, traced, enclosing, outermost);
     }
     let regs1 = ctx.regs.snapshot();
     let s1 = ctx.mem.capture(j1.keys());
@@ -384,8 +400,9 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     ctx.mem.begin_journal();
     let rechecking = state.rechecking.replace(state.rechecking.get() || deep);
     let calls_left = state.calls_left.replace(state.mutating.get().then_some(MUTATED_CALLS));
-    let mut port = passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_native(addr, native))))
-        .map(|p| {
+    let port_failure = passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_native(addr, native))));
+    let port_dropped = port_failure.as_ref().is_some_and(|p| p.is::<Dropped>());
+    let mut port = port_failure.map(|p| {
             if let Some(j) = crate::jump::describe(p.as_ref()) {
                 return j;
             }
@@ -403,6 +420,13 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     state.calls_left.set(calls_left);
     let port_resume = ctx.take_resume_at();
     let j2 = ctx.mem.end_journal();
+    if port_dropped {
+        // A check of a port this one's port called had to be dropped: the call can't be
+        // compared without it.
+        ctx.mem.restore(&j2);
+        ctx.regs.restore(&regs0);
+        return drop_check(ctx, traced, enclosing, outermost);
+    }
     let regs2 = ctx.regs.snapshot();
     let s2 = ctx.mem.capture(j2.keys());
     let at = state.cursor.get();
@@ -436,6 +460,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     // leftovers the port cannot reproduce. Otherwise they differ given the same stack, and the
     // differences are those of this second look.
     let mut uninitialized = false;
+    let mut dropped = false;
     if !diffs.is_empty() && original.is_none() && !state.first_look_only.get() {
         let zero = ctx.zero_frames.replace(true);
         let rechecking = state.rechecking.replace(true);
@@ -452,6 +477,9 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         ctx.mem.begin_journal();
         clear_stack(ctx, sp);
         let again = passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr))));
+        dropped |= again
+            .as_ref()
+            .is_some_and(|p| p.is::<ReachedSdk>() || p.is::<Runaway>());
         let _ = ctx.take_resume_at();
         let j3 = ctx.mem.end_journal();
         let regs3 = ctx.regs.snapshot();
@@ -470,6 +498,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
             clear_stack(ctx, sp);
             let port_again =
                 passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_native(addr, native))));
+            dropped |= port_again.as_ref().is_some_and(|p| p.is::<Dropped>());
             ctx.truncate_natives(natives);
             let _ = ctx.take_resume_at();
             let j4 = ctx.mem.end_journal();
@@ -546,6 +575,11 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         });
     }
 
+    if dropped {
+        ctx.mem.restore(&j2);
+        ctx.regs.restore(&regs0);
+        return drop_check(ctx, traced, enclosing, outermost);
+    }
     // Continue from the original's results.
     ctx.mem.restore(&j2);
     ctx.mem.restore(&s1);
@@ -618,6 +652,25 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
 
 /// Panic payload that ends a mutated check that reached the SDK layer.
 struct ReachedSdk;
+
+/// Panic payload that ends the check enclosing a mutated one that had to be dropped.
+struct Dropped;
+
+/// Ends a check that can't be compared, its memory and registers already as it found them.
+/// Nested in another check, it ends that one too.
+fn drop_check(ctx: &Ctx, traced: bool, enclosing: Phase, outermost: bool) {
+    let state = &ctx.lockstep;
+    if traced {
+        state.traces.borrow_mut().pop();
+    }
+    state.phase.set(enclosing);
+    state.checking.borrow_mut().pop();
+    if !outermost {
+        panic_any(Dropped);
+    }
+    state.active.set(false);
+    CHECKING.with(|c| c.set(false));
+}
 
 /// Panic payload that ends a mutated check whose original runs on and on, from the heartbeat or
 /// the limit on its calls.

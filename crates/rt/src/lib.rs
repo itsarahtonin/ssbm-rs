@@ -30,6 +30,24 @@ pub use regs::{Regs, RegsSnapshot, spr};
 /// Code run when execution reaches an address.
 pub type Hook = Rc<dyn Fn(&Ctx)>;
 
+/// The interpreter's record of the original calls it is in, to see each keep the calling
+/// convention, and the first function seen breaking it.
+#[derive(Default)]
+struct Conventions {
+    calls: Vec<Call>,
+    broken: Option<u32>,
+}
+
+/// A call of original code: its function, where it returns to, and the stack pointer and
+/// nonvolatile registers (r14-r31, f14-f31) it must return with.
+struct Call {
+    function: u32,
+    ret: u32,
+    sp: u32,
+    gpr: [u32; 18],
+    fpr: [u64; 18],
+}
+
 /// Called with the PC every `HEARTBEAT` interpreted instructions.
 pub type Heartbeat = Rc<dyn Fn(&Ctx, u32)>;
 
@@ -155,6 +173,8 @@ pub struct Ctx {
     /// Whether each new frame starts zeroed, as lockstep's second look at a mismatch runs both
     /// sides: reads of stack a function never wrote then agree.
     pub(crate) zero_frames: Cell<bool>,
+    /// The calls of original code the interpreter is in, while it checks the calling convention.
+    conventions: RefCell<Option<Conventions>>,
     uninit_hook: RefCell<Option<UninitHook>>,
     /// The running thread's stack, as (lowest address, top), where the OS layer knows it.
     stack_bounds: RefCell<Option<StackBounds>>,
@@ -231,6 +251,7 @@ impl Ctx {
             shadow_on: Cell::new(false),
             running_original: Cell::new(false),
             zero_frames: Cell::new(false),
+            conventions: RefCell::default(),
             uninit_hook: RefCell::default(),
             stack_bounds: RefCell::default(),
             coverage: Default::default(),
@@ -801,6 +822,16 @@ impl Ctx {
             {
                 lockstep::run(self, addr, e.native, e.returns)
             }
+            // So does a mutated check's, even for ports checked enough already: a loop its
+            // inputs send it into is then one the heartbeat sees.
+            Mode::Native
+                if self.has_backend()
+                    && self.lockstep.is_mutating()
+                    && self.lockstep.in_original()
+                    && !self.lockstep.always_native.borrow().contains(&addr) =>
+            {
+                self.run_original(addr)
+            }
             _ => self.run_native(addr, e.native),
         }
     }
@@ -876,6 +907,54 @@ impl Ctx {
         }
         self.current_run.set(outer);
         self.running_original.set(was_original);
+    }
+
+    /// Starts or stops checking that the original code the interpreter runs keeps the calling
+    /// convention: that each call returns where it was called from with the stack pointer and
+    /// nonvolatile registers it found. Stopping returns the first function seen breaking it,
+    /// which garbage inputs do by writing over their saved registers or return address.
+    pub fn check_conventions(&self, on: bool) -> Option<u32> {
+        self.conventions
+            .replace(on.then(Conventions::default))
+            .and_then(|c| c.broken)
+    }
+
+    /// For the interpreter: original code calls `function`, to return to `ret`.
+    pub fn convention_call(&self, function: u32, ret: u32) {
+        if let Some(c) = self.conventions.borrow_mut().as_mut() {
+            let (g, f) = (&self.regs.gpr, &self.regs.fpr);
+            c.calls.push(Call {
+                function,
+                ret,
+                sp: g[1].get(),
+                gpr: std::array::from_fn(|i| g[14 + i].get()),
+                fpr: std::array::from_fn(|i| f[14 + i].get().ps0.to_bits()),
+            });
+        }
+    }
+
+    /// For the interpreter: original code returns to `to`.
+    pub fn convention_return(&self, to: u32) {
+        let mut c = self.conventions.borrow_mut();
+        let Some(c) = c.as_mut() else { return };
+        let (g, f) = (&self.regs.gpr, &self.regs.fpr);
+        let sp = g[1].get();
+        // Calls a jump past them, such as a longjmp, left.
+        while c.calls.last().is_some_and(|call| call.sp < sp) {
+            c.calls.pop();
+        }
+        let Some(call) = c.calls.last() else { return };
+        let kept = call.sp == sp
+            && call.ret == to
+            && (0..18).all(|i| {
+                g[14 + i].get() == call.gpr[i] && f[14 + i].get().ps0.to_bits() == call.fpr[i]
+            });
+        if !kept && c.broken.is_none() {
+            c.broken = Some(call.function);
+        }
+        if call.ret == to && call.sp == sp {
+            c.calls.pop();
+        }
     }
 
     // Hooks run when original code reaches an address; ported code calls `run_hook`.

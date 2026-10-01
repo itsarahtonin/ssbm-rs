@@ -488,6 +488,7 @@ fn run() -> ExitCode {
         // does not reproduce yet. `__setjmp` and `__longjmp` return elsewhere than to their
         // caller.
         let exempt: Vec<u32> = LOCKSTEP_EXEMPT.iter().map(|n| ssbm_sdk::sym(n)).collect();
+        ctx.lockstep.always_native.borrow_mut().extend(&exempt);
         // LOCKSTEP_DONE=FILE lists ports, by address, that no longer need checking, such as
         // those whose checks already cover enough of their original.
         let done: std::collections::HashSet<u32> = std::env::var("LOCKSTEP_DONE")
@@ -508,6 +509,13 @@ fn run() -> ExitCode {
             .filter(|a| !kept.contains(a) && !exempt.contains(a) && !done.contains(a))
             .collect();
         ctx.coverage.set_bounds(Box::new(ssbm_types::function_bounds));
+        let functions = ssbm_types::symbols::SYMBOLS
+            .iter()
+            .filter(|s| s.3 && s.1 > 0);
+        ctx.lockstep.code.set((
+            functions.clone().map(|s| s.0).min().unwrap_or(0),
+            functions.map(|s| s.0 + s.1).max().unwrap_or(0),
+        ));
         let checking = checking.clone();
         let enable = move |ctx: &Ctx| {
             for &addr in &checked {

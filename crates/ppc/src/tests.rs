@@ -129,6 +129,34 @@ fn quantized_loads_scale() {
 }
 
 #[test]
+fn notes_calls_that_break_the_calling_convention() {
+    // stwu r1, -16(r1); stw r31, 12(r1); ...; lwz r31, 12(r1); addi r1, r1, 16; blr
+    let keeps = [0x9421_FFF0, 0x93E1_000C, li(31, 7), 0x83E1_000C, addi(1, 1, 16), BLR];
+    let ctx = machine(&keeps);
+    ctx.regs.set_r(31, 42);
+    ctx.check_conventions(true);
+    ctx.run_original(CODE);
+    assert_eq!(ctx.check_conventions(false), None);
+    assert_eq!(ctx.regs.r(31), 42);
+
+    // The same with r31's saved copy written over (stw r0, 12(r1)) before it comes back.
+    let smashes = [
+        0x9421_FFF0,
+        0x93E1_000C,
+        li(0, 99),
+        0x9001_000C,
+        0x83E1_000C,
+        addi(1, 1, 16),
+        BLR,
+    ];
+    let ctx = machine(&smashes);
+    ctx.regs.set_r(31, 42);
+    ctx.check_conventions(true);
+    ctx.run_original(CODE);
+    assert_eq!(ctx.check_conventions(false), Some(CODE));
+}
+
+#[test]
 fn lockstep_flags_a_wrong_port() {
     let body = [li(3, 5), 0x9061_0000 | 0x2000, BLR]; // stw r3, 0x2000(r1)
     let good = machine(&body);

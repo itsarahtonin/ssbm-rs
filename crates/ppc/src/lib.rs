@@ -41,6 +41,7 @@ impl Backend for Interpreter {
     fn run(&self, ctx: &Ctx, addr: u32) {
         let ret = ctx.regs.lr.get();
         ctx.regs.lr.set(RETURN_SENTINEL);
+        ctx.convention_call(addr, RETURN_SENTINEL);
         let end = self.resume_to_sentinel(ctx, addr);
         // A code that returns past its function's caller returns past the sentinel: the port
         // that called continues as far past its own return address.
@@ -162,9 +163,12 @@ fn branch(ctx: &Ctx, pc: u32, target: u32, link: bool) -> u32 {
     if link {
         ctx.regs.lr.set(pc.wrapping_add(4));
     }
-    if ctx.flags_at(target) & FLAG_NATIVE != 0
-        && ctx.entry(target).is_some_and(|e| e.mode != Mode::Original)
-    {
+    let native = ctx.flags_at(target) & FLAG_NATIVE != 0
+        && ctx.entry(target).is_some_and(|e| e.mode != Mode::Original);
+    if link && !native {
+        ctx.convention_call(target, pc.wrapping_add(4));
+    }
+    if native {
         let ret = ctx.regs.lr.get();
         ctx.invoke(target);
         if let Some(to) = ctx.take_resume_at() {
@@ -318,6 +322,9 @@ fn op19(ctx: &Ctx, pc: u32, w: u32) -> u32 {
             let target = ctx.regs.lr.get() & !3;
             let ctr = ctr_ok(ctx, d);
             if ctr && cond_ok(ctx, d, a) {
+                if w & 1 == 0 {
+                    ctx.convention_return(target);
+                }
                 return branch(ctx, pc, target, w & 1 != 0);
             }
             if w & 1 != 0 {
