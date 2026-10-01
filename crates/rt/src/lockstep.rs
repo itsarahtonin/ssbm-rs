@@ -839,6 +839,15 @@ fn mutate(ctx: &Ctx, reads: &[u32]) -> Vec<String> {
                 4 => v ^ (1 << (next() % 8)),
                 _ => (next() % 64) as u32,
             };
+            // Extended as the value was, as a caller passes a narrow argument: a byte stays a
+            // byte, whose upper bits the original may rely on and the port's adapter drops.
+            let new = match v {
+                0..=0xFF => new & 0xFF,
+                0x100..=0xFFFF => new & 0xFFFF,
+                0xFFFF_FF80.. => new as u8 as i8 as u32,
+                0xFFFF_8000.. => new as u16 as i16 as u32,
+                _ => new,
+            };
             ctx.regs.set_r(r, new);
             changes.borrow_mut().push(format!("r{r} {v:#X}->{new:#X}"));
         }
