@@ -28,7 +28,8 @@ pub fn gm_80168B34(_ctx: &Ctx, ckind: i32, arg1: i32, arg2: i32) -> f64 {
         return 59.0;
     } else if ck == enums::ChKind_Popo as u32 {
         base = 0xE;
-    } else if ck > enums::CKind_Seak as u32 {
+    } else if ckind > enums::CKind_Seak {
+        // Signed, as `-enum int` makes CharacterKind.
         base = ckind.wrapping_sub(1);
     }
     fp::frsp(base.wrapping_add(arg2.wrapping_mul(30)) as f64)
