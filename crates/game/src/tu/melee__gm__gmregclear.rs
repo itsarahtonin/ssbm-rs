@@ -209,12 +209,6 @@ pub fn fn_8017F2A4<'a>(ctx: &'a Ctx, arg0: Ptr<'a, HSD_Text<'a>>, farg0: f64, fa
         cstr(ctx, 0x803d8c30),
         &[],
     );
-    'l3: loop {
-        'c4: {}
-        if !(0_i32 != 0) {
-            break 'l3;
-        }
-    }
     #[allow(unreachable_code)]
     return 0;
 }
@@ -326,12 +320,6 @@ pub fn fn_8017F47C<'a>(ctx: &'a Ctx, arg0: Ptr<'a, HSD_Text<'a>>, arg1: i32) -> 
         mask,
         (0_i32 as u8),
     );
-    'l3: loop {
-        'c4: {}
-        if !(0_i32 != 0) {
-            break 'l3;
-        }
-    }
     #[allow(unreachable_code)]
     return 0;
 }
@@ -1148,12 +1136,6 @@ pub fn fn_801803FC<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> i32 {
     }
     fns::fn_8017FBA4(ctx, arg0);
     return fns::fn_8017FA1C(ctx, arg0);
-    'l3: loop {
-        'c4: {}
-        if !(0_i32 != 0) {
-            break 'l3;
-        }
-    }
     #[allow(unreachable_code)]
     return 0;
 }

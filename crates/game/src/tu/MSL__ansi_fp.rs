@@ -200,7 +200,6 @@ fn inl__fpclassify_unfused<'a>(ctx: &'a Ctx, x: f64, __in_caller: u32) -> i32 {
                 } else {
                     return (enums::FP_INFINITE as i32);
                 }
-                break 's1;
             }
         }
         if __case <= 1 {
@@ -217,7 +216,6 @@ fn inl__fpclassify_unfused<'a>(ctx: &'a Ctx, x: f64, __in_caller: u32) -> i32 {
                 } else {
                     return (enums::FP_ZERO as i32);
                 }
-                break 's1;
             }
         }
     }

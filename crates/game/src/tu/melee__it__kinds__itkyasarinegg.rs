@@ -364,7 +364,6 @@ fn inl_it_damage_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             return 1_i32;
         }
     }
-    return 0_i32;
 }
 
 /// Registers this unit's ports.

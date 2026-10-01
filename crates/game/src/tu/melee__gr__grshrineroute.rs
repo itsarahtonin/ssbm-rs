@@ -1696,12 +1696,6 @@ pub fn grShrineRoute_8020AB58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<
         fns::HSD_LObjSetFlags(ctx, new_lobj, (32_i32 as u32));
     }
     return new_lobj;
-    'l3: loop {
-        'c4: {}
-        if !(0_i32 != 0) {
-            break 'l3;
-        }
-    }
     #[allow(unreachable_code)]
     return null(ctx);
 }

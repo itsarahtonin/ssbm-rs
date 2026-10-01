@@ -201,12 +201,6 @@ pub fn fn_8016F39C<'a>(
         }
     }
     return count;
-    'l3: loop {
-        'c4: {}
-        if !(0_i32 != 0) {
-            break 'l3;
-        }
-    }
     #[allow(unreachable_code)]
     return 0;
 }
@@ -288,12 +282,6 @@ pub fn fn_8016F548<'a>(ctx: &'a Ctx, arg0: Addr<'a>, arg1: u16, mask: u8, player
         }
     }
     return 1_i32.wrapping_neg();
-    'l5: loop {
-        'c6: {}
-        if !(0_i32 != 0) {
-            break 'l5;
-        }
-    }
     #[allow(unreachable_code)]
     return 0;
 }
@@ -348,12 +336,6 @@ pub fn fn_8016F740<'a>(ctx: &'a Ctx, arg0: Addr<'a>, arg1: u16, mask: u8, player
         }
     }
     return 1_i32.wrapping_neg();
-    'l3: loop {
-        'c4: {}
-        if !(0_i32 != 0) {
-            break 'l3;
-        }
-    }
     #[allow(unreachable_code)]
     return 0;
 }
@@ -456,12 +438,6 @@ pub fn fn_8016F9A8<'a>(ctx: &'a Ctx, arg0: Addr<'a>, arg1: u16, mask: u8, player
         }
     }
     return count;
-    'l3: loop {
-        'c4: {}
-        if !(0_i32 != 0) {
-            break 'l3;
-        }
-    }
     #[allow(unreachable_code)]
     return 0;
 }
@@ -658,12 +634,6 @@ pub fn fn_8016FFD4<'a>(ctx: &'a Ctx, arg0: MatchEnd<'a>, arg1: i32, arg2: u8) ->
         }
     }
     return count;
-    'l3: loop {
-        'c4: {}
-        if !(0_i32 != 0) {
-            break 'l3;
-        }
-    }
     #[allow(unreachable_code)]
     return 0;
 }

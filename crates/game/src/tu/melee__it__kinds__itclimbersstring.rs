@@ -313,12 +313,6 @@ pub fn itClimbersstring_UnkMotion3_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) ->
         return 1_i32;
     }
     return 0_i32;
-    'l1: loop {
-        'c2: {}
-        if !(0_i32 != 0) {
-            break 'l1;
-        }
-    }
     #[allow(unreachable_code)]
     return 0;
 }

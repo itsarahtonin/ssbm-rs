@@ -1039,8 +1039,10 @@ class Translator:
         if any(n.kind == CK.LABEL_STMT for n in nodes):
             return self.goto_region(list(nodes))
         out = []
-        for n in nodes:
+        for k, n in enumerate(nodes):
             out += self.stmt(n)
+            if always_returns(n) and not any(has_label(x) for x in nodes[k + 1:]):
+                break  # what follows never runs, and MWCC leaves it out
         return out
 
     # A body whose gotos jump into blocks becomes a loop over a match of its basic blocks.
@@ -3489,6 +3491,50 @@ def unread_params(defn):
     used = {n.referenced.spelling for n in (body[0].walk_preorder() if body else ())
             if n.kind == CK.DECL_REF_EXPR and n.referenced is not None and n.referenced.kind == CK.PARM_DECL}
     return {i for i, a in enumerate(params) if a.spelling not in used}
+
+
+def has_label(node):
+    """Whether a statement holds a label that code before it could jump to."""
+    return any(n.kind in (CK.LABEL_STMT, CK.CASE_STMT, CK.DEFAULT_STMT) for n in node.walk_preorder())
+
+
+def breaks_out(body):
+    """Whether a switch body breaks out of its switch: a break outside nested loops and
+    switches."""
+    def walk(n):
+        for k in children(n):
+            if k.kind == CK.BREAK_STMT:
+                return True
+            if k.kind in (CK.FOR_STMT, CK.WHILE_STMT, CK.DO_STMT, CK.SWITCH_STMT):
+                continue
+            if walk(k):
+                return True
+        return False
+    return walk(body)
+
+
+def always_returns(node):
+    """Whether control that enters a statement at its start always leaves by a return."""
+    k = node.kind
+    if k == CK.RETURN_STMT:
+        return True
+    if k in (CK.CASE_STMT, CK.DEFAULT_STMT, CK.LABEL_STMT):
+        return always_returns(children(node)[-1])
+    if k == CK.COMPOUND_STMT:
+        return any(always_returns(x) for x in children(node))
+    if k == CK.IF_STMT:
+        kids = children(node)
+        return len(kids) == 3 and always_returns(kids[1]) and always_returns(kids[2])
+    if k == CK.SWITCH_STMT:
+        # With a default and no break out, every case falls through to the body's end.
+        body = children(node)[-1]
+        kids = children(body) if body.kind == CK.COMPOUND_STMT else [body]
+
+        def has_default(n):
+            return any(x.kind == CK.DEFAULT_STMT or (x.kind != CK.SWITCH_STMT and has_default(x))
+                       for x in children(n))
+        return bool(kids) and has_default(body) and not breaks_out(body) and always_returns(kids[-1])
+    return False
 
 
 def calls_or_effects(node):

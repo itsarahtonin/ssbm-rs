@@ -384,7 +384,6 @@ pub fn SIUnregisterPollingHandler<'a>(ctx: &'a Ctx, handler: FnPtr<'a>) -> i32 {
                     }
                     let _ = fns::OSRestoreInterrupts(ctx, enabled);
                     return 1_i32;
-                    break 'l1;
                 }
             }
             i = i.wrapping_add(1);
