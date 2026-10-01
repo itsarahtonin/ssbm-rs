@@ -279,6 +279,10 @@ fn run() -> ExitCode {
     if let Some(seed) = match_seed {
         matches::install(&ctx, seed);
     }
+    // CPU_PLAYERS=1 makes every match's human players CPUs.
+    if std::env::var_os("CPU_PLAYERS").is_some() {
+        matches::install_cpu_players(&ctx);
+    }
     let log_modes = std::env::var_os("MODES").is_some();
     if start_mode.is_some() || log_modes {
         let first = Cell::new(true);
