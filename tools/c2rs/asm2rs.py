@@ -123,7 +123,8 @@ class Emitter:
     def goto(self, pc, t, link):
         """Statements that transfer control to `t`."""
         if link:
-            if self.inside(t):
+            # A call to its own start recurses, through dispatch as any call.
+            if self.inside(t) and t != self.start:
                 raise AsmUnsupported(f"call within the function at {pc:#010x}")
             return [f"c::call(ctx, {hexu(t)}, {hexu(pc + 4)});"]
         if self.inside(t):

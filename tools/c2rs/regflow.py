@@ -11,6 +11,11 @@ their own callers. c2rs ports those callers from machine code too (`callers_to_p
 
 lists every function whose code reads registers that way, with the registers, most of them on
 paths their C never takes.
+
+The other way round, code ported from machine code may read a register that a call leaves
+and the callee's C doesn't return, such as r3 after a call to a `void` function, to return it
+as a value its own C never sets. Only a port of the callee's machine code leaves that
+register as the original does (`callees_to_port`).
 """
 
 import glob
@@ -49,6 +54,11 @@ READ_MODIFY_WRITE = {"rlwimi", "inslwi", "insrwi"}
 KEEPS_REGISTERS = {"OSSaveContext", "__OSSaveFPUContext", "__setjmp", "OSDefaultExceptionHandler",
                    "ExternalInterruptHandler", "DecrementerExceptionHandler", "InitMetroTRK",
                    "TRKInterruptHandler", "TRKSwapAndGo"}
+# Functions that never return: what follows a call to one never runs. gm_801A4510 is the game's
+# main loop.
+NORETURN = {"__assert", "OSPanic", "HSD_Panic", "OSResetSystem", "PPCHalt", "gm_801A4510"}
+# Where a return reads, for `flows`.
+RETURN = ("return", 0)
 # Callers a seed's dependence may pass through before the seed is left be.
 FOLLOWED = 10
 # Functions whose unset reads stay with them: their callers would pass the dependence up
@@ -157,6 +167,8 @@ def arg_regs(ft):
             else:
                 args.add(("r", g))
                 g += 1
+        # Past r10 and f8, parameters go on the stack.
+        args &= ALL_ARGS
     ret = ft.get("ret") or {"k": "void"}
     if ret.get("k") == "void":
         rets = set()
@@ -204,8 +216,14 @@ class Program:
         its parameters, given what each callee reads beyond its own (`extra`)."""
         if name in KEEPS_REGISTERS:
             return set()
+        live, _ = self.liveness(name, extra)
+        return live - self.params(name)[0] - FIXED
+
+    def blocks(self, name, extra, rets):
+        """`name`'s code as blocks: (instructions' effects, successors), each effect (callee or
+        None, registers written, registers read), with what each callee reads beyond its
+        parameters (`extra`) and what a return reads (`rets`)."""
         insns, labels, cases = self.funcs[name]
-        args, rets = self.params(name)
         addrs = [a for a, _, _ in insns]
         index = {a: i for i, a in enumerate(addrs)}
         starts = {addrs[0]} | (labels & set(addrs))
@@ -216,9 +234,9 @@ class Program:
         bounds = [(s, order[j + 1] if j + 1 < len(order) else addrs[-1] + 4)
                   for j, s in enumerate(order)]
         block_of = {s: j for j, (s, _) in enumerate(bounds)}
-        succs, gen, kill = [], [], []
+        out = []
         for s, e in bounds:
-            g, k, nxt, falls = set(), set(), [], True
+            effects, nxt, falls = [], [], True
             for a in range(s, e, 4):
                 _, m, ops = insns[index[a]]
                 if m in ("bl", "b") and ops and ops[0] in self.funcs:
@@ -227,24 +245,27 @@ class Program:
                         continue  # saves the caller's registers
                     if callee.startswith(("_restgpr", "_restfpr")):
                         n = int(re.sub(r"\D", "", callee) or 14)
-                        k |= {("r" if "gpr" in callee else "f", i) for i in range(n, 32)}
+                        effects.append((None, {("r" if "gpr" in callee else "f", i)
+                                               for i in range(n, 32)}, set()))
                         continue
-                    g |= (self.passed(callee) | extra.get(callee, set())) - k
+                    reads = self.passed(callee) | extra.get(callee, set())
                     if m == "b":
-                        g |= rets - k  # a tail call returns for this function
+                        # A tail call returns for this function.
+                        effects.append((callee, set(), reads | rets))
                         falls = False
-                    else:
-                        k |= VOLATILE
+                        break
+                    effects.append((callee, set(VOLATILE), reads))
                     continue
                 if m == "bl":
-                    k |= VOLATILE  # a call to code without a listing
+                    effects.append((None, set(VOLATILE), set()))  # code without a listing
                     continue
                 if m.startswith("b"):
                     if m.endswith(("lrl", "ctrl")):
-                        k |= VOLATILE  # an indirect call, whose arguments are set before it
+                        # An indirect call, whose arguments are set before it.
+                        effects.append((None, set(VOLATILE), set()))
                         continue
                     if m.endswith("lr"):
-                        g |= rets - k  # a return, perhaps conditional
+                        effects.append((None, set(), set(rets)))  # a return, perhaps conditional
                         falls = m != "blr"
                         if falls:
                             continue
@@ -265,26 +286,122 @@ class Program:
                 if m in STORES and any(MEM.match(o) and MEM.match(o).group(1) == "1" for o in ops):
                     # Storing a callee-saved register to the frame saves the caller's value.
                     r = r - CALLEE_SAVED
-                g |= r - k
-                k |= w
+                effects.append((None, w, r))
             if falls and e in index:
                 nxt.append(e)
-            succs.append(nxt)
-            gen.append(g)
-            kill.append(k)
-        live = [set() for _ in bounds]
+            out.append((effects, [block_of[t] for t in nxt]))
+        return out
+
+    def liveness(self, name, extra, rets=None):
+        """(registers live at `name`'s entry, [(callee, registers live once it returns)]),
+        given what each callee reads beyond its parameters (`extra`) and what `name`'s callers
+        read once it returns (`rets`, by default what its C returns)."""
+        if rets is None:
+            rets = self.params(name)[1]
+        blocks = self.blocks(name, extra, rets)
+
+        def back(effects, live, calls=None):
+            for callee, w, r in reversed(effects):
+                if calls is not None and callee is not None:
+                    # A tail call's callee returns to this function's callers.
+                    calls.append((callee, set(live) if w else set(rets)))
+                live = (live - w) | r
+            return live
+
+        live = [set() for _ in blocks]
         changed = True
         while changed:
             changed = False
-            for j in reversed(range(len(bounds))):
-                out = set()
-                for t in succs[j]:
-                    out |= live[block_of[t]]
-                new = gen[j] | (out - kill[j])
+            for j in reversed(range(len(blocks))):
+                effects, succ = blocks[j]
+                out = set().union(*(live[t] for t in succ)) if succ else set()
+                new = back(effects, out)
                 if new != live[j]:
                     live[j] = new
                     changed = True
-        return live[0] - args - FIXED
+        calls = []
+        for effects, succ in blocks:
+            back(effects, set().union(*(live[t] for t in succ)) if succ else set(), calls)
+        return live[0] if live else set(), calls
+
+    def leftovers(self, name, returned=frozenset()):
+        """[(callee, registers)]: the calls in `name` after which its code reads registers the
+        callee's C doesn't return, which the callee's code left."""
+        if name in KEEPS_REGISTERS or name not in self.funcs:
+            return []
+        # A function without a known type, such as an inline one's copy, returns nothing more.
+        rets = (self.params(name)[1] if name in self.types else set()) | returned
+        out = []
+        for callee, live in self.liveness(name, {}, rets)[1]:
+            left = (live & VOLATILE) - self.params(callee)[1]
+            if left and callee not in NORETURN:
+                out.append((callee, left))
+        return out
+
+    def flows(self, name, regs):
+        """(the registers of `regs` that `name`'s own code sets on some way to a return that
+        keeps them there, [(callee, registers)] whose values reach a return as the callee left
+        them)."""
+        blocks = self.blocks(name, {}, {RETURN})
+
+        def back(effects, live, own=None, calls=None):
+            for callee, w, r in reversed(effects):
+                if callee is not None and RETURN in r:
+                    # A tail call: what this function returns, the callee leaves.
+                    if calls is not None and regs & VOLATILE:
+                        calls.append((callee, regs & VOLATILE))
+                    live = set()
+                elif callee is not None:
+                    if calls is not None and live & VOLATILE:
+                        calls.append((callee, live & VOLATILE))
+                    live = live - w
+                elif RETURN in r:
+                    live = live | regs
+                else:
+                    if own is not None and r != VOLATILE:
+                        own |= live & w
+                    live = live - w
+            return live
+
+        live = [set() for _ in blocks]
+        changed = True
+        while changed:
+            changed = False
+            for j in reversed(range(len(blocks))):
+                effects, succ = blocks[j]
+                new = back(effects, set().union(*(live[t] for t in succ)) if succ else set())
+                if new != live[j]:
+                    live[j] = new
+                    changed = True
+        own, calls = set(), []
+        for effects, succ in blocks:
+            back(effects, set().union(*(live[t] for t in succ)) if succ else set(), own, calls)
+        return own, calls
+
+    def callees_to_port(self, ported):
+        """{callee: (reader, registers)} for the functions that must be ported from machine
+        code because code ported that way (`ported`, the reader) reads registers they set that
+        their C doesn't return: what their own instructions leave there, which a port of their
+        C never writes. Such a register may come down through callees that leave it as a callee
+        of theirs did."""
+        port, seen = {}, {}
+        work = [(callee, regs, f) for f in sorted(set(ported)) for callee, regs in self.leftovers(f)]
+        while work:
+            callee, regs, reader = work.pop()
+            if callee in ported or callee in NORETURN or callee not in self.funcs:
+                continue
+            # What its C returns, a port of it returns there too.
+            regs = regs - self.params(callee)[1]
+            known = seen.get(callee, set())
+            if regs <= known:
+                continue
+            seen[callee] = known | regs
+            own, calls = self.flows(callee, seen[callee])
+            if own:
+                first, before = port.get(callee, (reader, set()))
+                port[callee] = (first, before | own)
+            work.extend((c, r, reader) for c, r in calls)
+        return port
 
     def callers_to_port(self, seeds):
         """({caller: callee}, [seeds left be]) for the callers that must be ported from

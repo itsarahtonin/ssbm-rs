@@ -3828,6 +3828,7 @@ UNSET_WARNINGS = {"-Wreturn-type", "-Wuninitialized", "-Wsometimes-uninitialized
                   "-Wconditional-uninitialized"}
 UNSET_REASON = "returns or uses a value its C never sets"
 CALLER_REASON = "calls {}, which reads registers its caller sets without passing them"
+LEFTOVER_REASON = "leaves {1} as {0}, ported from machine code, reads it"
 HARDWARE_REASON = "hardware register order"
 
 
@@ -3977,7 +3978,7 @@ def manual_ports(out_dir, unit_name):
 
 
 def translate_unit(args):
-    root, types_path, unit_name, source, only, out_dir, callers = args
+    root, types_path, unit_name, source, only, out_dir, reasons = args
     os.chdir(root)
     prog = PROGRAM[0] if PROGRAM else Program(root, types_path)
     if not PROGRAM:
@@ -3995,7 +3996,7 @@ def translate_unit(args):
         # Every function the unit defines is left to the original.
         names = sorted({f["name"] for f in prog.data["functions"]
                         if f.get("tu") == unit_name and f.get("addr") is not None}) or ["*"]
-        return unit_name, source, None, [(n, "parse error: " + errors[0]) for n in names], [], [], {}, []
+        return unit_name, source, None, [(n, "parse error: " + errors[0]) for n in names], [], [], {}, [], []
     unit = Unit(prog, unit_name, source)
     unit.gekko = gekko
     manual = manual_ports(out_dir, unit_name)
@@ -4039,8 +4040,8 @@ def translate_unit(args):
                         f"Returns::{returns_of(unit, c)});")
             unit.ported.append(name)
             continue
-        why = FROM_MACHINE_CODE.get(name) or (UNSET_REASON if name in unset else None) or (
-            CALLER_REASON.format(callers[name]) if name in callers else None) or (
+        why = FROM_MACHINE_CODE.get(name) or (UNSET_REASON if name in unset else None) or \
+            reasons.get(name) or (
             HARDWARE_REASON if hardware_order(unit.listing, f.get("symbol") or name) else None)
         code = None
         if why:
@@ -4157,7 +4158,8 @@ def translate_unit(args):
     inlining = {"fallbacks": unit.inline_fallbacks, "partial": sorted(unit.inline_partial),
                 "unset_from_c": unit.unset_fallbacks}
     if not out_fns and not regs:
-        return unit_name, source, None, unit.skipped, unit.ported, fuse, inlining, sorted(unset)
+        return unit_name, source, None, unit.skipped, unit.ported, fuse, inlining, sorted(unset), \
+            sorted(unit.transliterated)
     text = HEADER.format(source=source.replace("\\", "/"), unit=unit_name)
     if manual:
         text += f"use crate::manual::{tu_mod(unit_name)} as manual;\n"
@@ -4166,7 +4168,8 @@ def translate_unit(args):
     text += "\n"
     text += "\n\n".join(out_fns + inline_code) + "\n\n"
     text += "/// Registers this unit's ports.\npub fn register(ctx: &Ctx) {\n" + "\n".join(regs) + "\n}\n"
-    return unit_name, source, text, unit.skipped, unit.ported, fuse, inlining, sorted(unset)
+    return unit_name, source, text, unit.skipped, unit.ported, fuse, inlining, sorted(unset), \
+        sorted(unit.transliterated)
 
 
 PROGRAM = []
@@ -4313,6 +4316,22 @@ def unset_elsewhere(out, units):
     return found
 
 
+def transliterated_elsewhere(out, units):
+    """The functions the units not translated this run port from machine code, from their
+    generated modules."""
+    found = set()
+    tu = os.path.join(out, "tu")
+    for fname in sorted(os.listdir(tu)) if os.path.isdir(tu) else []:
+        if not fname.endswith(".rs") or fname == "mod.rs":
+            continue
+        text = open(os.path.join(tu, fname), encoding="utf-8").read()
+        m = re.search(r"^// unit: (\S+)$", text[:512], re.M)
+        if m and m.group(1) in units:
+            continue
+        found.update(re.findall(r"register_port\(0x[0-9a-f]+, asm_(\w+),", text))
+    return found
+
+
 def main():
     root, types_path, out = (os.path.abspath(a) for a in sys.argv[1:4])
     wanted = sys.argv[4:]
@@ -4346,12 +4365,27 @@ def main():
         | UNSET_FROM_MACHINE_CODE
     flow = regflow.Program(root, types_path)
     callers, unfollowed = flow.callers_to_port(unset)
-    redo = [(root, types_path, u, s, only.get(u), out,
-             {c: f for c, f in callers.items() if flow.units.get(c) == u})
-            for u, s in units if any(flow.units.get(c) == u for c in callers)]
-    if redo:
-        again = {r[0]: r for r in map(translate_unit, redo)}
-        results = [again.get(r[0], r) for r in results]
+    reasons = {c: CALLER_REASON.format(f) for c, f in callers.items()}
+
+    def redo(names):
+        jobs = [(root, types_path, u, s, only.get(u), out,
+                 {c: why for c, why in reasons.items() if flow.units.get(c) == u})
+                for u, s in units if any(flow.units.get(c) == u for c in names)]
+        again = {r[0]: r for r in map(translate_unit, jobs)}
+        return [again.get(r[0], r) for r in results]
+
+    if callers:
+        results = redo(callers)
+    # Callees whose own code sets registers that code ported from machine code reads after
+    # calling them, where their C returns nothing: ported from machine code too, as no port of
+    # their C sets those registers.
+    transliterated = {n for r in results for n in r[8]} | \
+        transliterated_elsewhere(out, {r[0] for r in results})
+    leftovers = flow.callees_to_port(transliterated)
+    reasons.update({c: LEFTOVER_REASON.format(f, regflow.fmt(regs))
+                    for c, (f, regs) in leftovers.items()})
+    if leftovers:
+        results = redo(leftovers)
     mods = []
     report = {}
     written = []
@@ -4359,7 +4393,7 @@ def main():
     fuse_total = fuse_match = 0
     fuse_examples = []
     fallbacks = partial = 0
-    for unit_name, source, text, skipped, ported, fuse, inlining, _ in results:
+    for unit_name, source, text, skipped, ported, fuse, inlining, _, _ in results:
         fallbacks += len(inlining.get("fallbacks", []))
         partial += len(inlining.get("partial", []))
         for name, asm_n, ours in fuse:
@@ -4419,6 +4453,7 @@ def main():
           f"{partial} where only some calls are inlined")
     print(f"callers ported from machine code for registers they set: {len(callers)}; seeds whose "
           f"dependence carries too far to follow: {', '.join(unfollowed) or 'none'}")
+    print(f"callees ported from machine code for registers they leave: {len(leftovers)}")
     for why, n in sorted(reasons.items(), key=lambda x: -x[1])[:25]:
         print(f"  {n:6} {why}")
 

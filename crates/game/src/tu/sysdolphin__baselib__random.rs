@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn HSD_Rand<'a>(ctx: &'a Ctx) -> i32 {
     (fns::HSD_RandSeedPtr(ctx).get()).set(
@@ -37,17 +38,116 @@ pub fn HSD_Rand<'a>(ctx: &'a Ctx) -> i32 {
 }
 
 pub fn HSD_Randf<'a>(ctx: &'a Ctx) -> f64 {
-    let __frame = ctx.stack_frame(0x10);
-    (fns::HSD_RandSeedPtr(ctx).get()).set(
-        (fns::HSD_RandSeedPtr(ctx).get())
-            .get()
-            .wrapping_mul((0x343fd_i32 as u32))
-            .wrapping_add((0x269ec3_i32 as u32)),
-    );
-    return fp::fdivs(
-        fp::frsp((shr_u32((fns::HSD_RandSeedPtr(ctx).get()).get(), (16_i32 as u32))) as f64),
-        fp::frsp((shl_i32(1_i32, (16_i32 as u32))) as f64),
-    );
+    // Transliterated from its machine code: leaves r3 as itLinkArrow_802A81C4, ported from machine code, reads it.
+    ().put_regs(ctx);
+    asm_HSD_Randf(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_HSD_Randf(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // stwu r1, -0x10(r1)
+    {
+        let ea = g[1].get().wrapping_add(0xfffffff0_u32);
+        ctx.stack_allocated(ea, g[1].get());
+        ctx.write_u32(ea, g[1].get());
+        g[1].set(ea);
+    }
+    // lis r3, 0x3
+    g[3].set(0x30000_u32);
+    // addi r3, r3, 0x43fd
+    g[3].set(g[3].get().wrapping_add(0x43fd_u32));
+    // lwz r5, HSD_RandSeedPtr@sda21(r0)
+    {
+        let ea = g[13].get().wrapping_add(0xffffa8f4_u32);
+        g[5].set(ctx.read_u32(ea));
+    }
+    // lis r0, 0x4330
+    g[0].set(0x43300000_u32);
+    // lwz r4, 0x0(r5)
+    {
+        let ea = g[5].get();
+        g[4].set(ctx.read_u32(ea));
+    }
+    // mullw r3, r4, r3
+    {
+        let (v, ov) = {
+            let p = i64::from(g[4].get() as i32) * i64::from(g[3].get() as i32);
+            (p as u32, p != i64::from(p as i32))
+        };
+        g[3].set(v);
+        let _ = ov;
+    }
+    // addis r3, r3, 0x27
+    g[3].set(g[3].get().wrapping_add(0x270000_u32));
+    // subi r3, r3, 0x613d
+    g[3].set(g[3].get().wrapping_add(0xffff9ec3_u32));
+    // stw r3, 0x0(r5)
+    {
+        let ea = g[5].get();
+        ctx.write_u32(ea, g[3].get());
+    }
+    // lwz r3, HSD_RandSeedPtr@sda21(r0)
+    {
+        let ea = g[13].get().wrapping_add(0xffffa8f4_u32);
+        g[3].set(ctx.read_u32(ea));
+    }
+    // lfd f2, "@7"@sda21(r0)
+    {
+        let ea = g[2].get().wrapping_add(0xffffedb8_u32);
+        ctx.regs.set_f(2, f64::from_bits(ctx.read_u64(ea)));
+    }
+    // lwz r3, 0x0(r3)
+    {
+        let ea = g[3].get();
+        g[3].set(ctx.read_u32(ea));
+    }
+    // lfs f0, "@5"@sda21(r0)
+    {
+        let ea = g[2].get().wrapping_add(0xffffedb0_u32);
+        c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
+    }
+    // srwi r3, r3, 16
+    {
+        let v = g[3].get().rotate_left(16) & 0xffff_u32;
+        g[3].set(v);
+    }
+    // stw r3, 0xc(r1)
+    {
+        let ea = g[1].get().wrapping_add(0xc_u32);
+        ctx.write_u32(ea, g[3].get());
+    }
+    // stw r0, 0x8(r1)
+    {
+        let ea = g[1].get().wrapping_add(0x8_u32);
+        ctx.write_u32(ea, g[0].get());
+    }
+    // lfd f1, 0x8(r1)
+    {
+        let ea = g[1].get().wrapping_add(0x8_u32);
+        ctx.regs.set_f(1, f64::from_bits(ctx.read_u64(ea)));
+    }
+    // fsubs f1, f1, f2
+    {
+        let v = fp::fsubs(ctx.regs.f(1), ctx.regs.f(2));
+        c::fill(ctx, 1, v);
+    }
+    // fdivs f1, f1, f0
+    {
+        let v = fp::fdivs(ctx.regs.f(1), ctx.regs.f(0));
+        c::fill(ctx, 1, v);
+    }
+    // addi r1, r1, 0x10
+    g[1].set(g[1].get().wrapping_add(0x10_u32));
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
 }
 
 pub fn HSD_Randi<'a>(ctx: &'a Ctx, max_val: i32) -> i32 {
@@ -89,13 +189,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80380528,
-        |ctx| {
-            Ret::put(HSD_Randf(ctx), ctx);
-        },
-        Returns::Float,
-    );
+    ctx.register_port(0x80380528, asm_HSD_Randf, Returns::Float);
     ctx.register_port(
         0x80380580,
         |ctx| {

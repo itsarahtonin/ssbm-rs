@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn it_80272560<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, idx: i32) {
     let __frame = ctx.stack_frame(0x28);
@@ -1780,27 +1781,183 @@ pub fn it_802750E8<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, mask: i32) -> i32 
     return (((item).xDC0() & (mask as u32)) as i32);
 }
 
-pub fn it_802750F8<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let mut item_gobj = item_gobj;
-    let mut item: Item<'a> = null(ctx);
-    item = Handle::cast::<Item<'a>>((item_gobj).user_data());
-    (item).xDCC_flag().set_b3((0_i32 as u8));
-    fns::Item_802697D4(ctx, item_gobj);
-    fns::Item_80269978(ctx, item_gobj);
-    (item).xDCC_flag().set_b3((1_i32 as u8));
+pub fn it_802750F8<'a>(ctx: &'a Ctx, a0: HSD_GObj<'a>) {
+    // Transliterated from its machine code: leaves r3 as it_802E7654, ported from machine code, reads it.
+    (a0,).put_regs(ctx);
+    asm_it_802750F8(ctx);
 }
 
-pub fn it_80275158<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, lifetime: f64) {
-    let mut item_gobj = item_gobj;
-    let mut lifetime = lifetime;
-    let mut item: Item<'a> = null(ctx);
-    item = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
-    (item).set_xD44_lifeTimer(lifetime);
-    (item).set_xD48_halfLifeTimer(fp::fmuls(
-        lifetime,
-        (fns::it_804D6D28(ctx).get()).x4C_float(),
-    ));
+fn asm_it_802750F8(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x802750f8_u32;
+    loop {
+        match pc {
+            0x802750f8_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // mr r30, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[30].set(v);
+                }
+                // lwz r31, 0x2c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x2c_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lbz r0, 0xdcc(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xdcc_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // rlwimi r0, r4, 4, 27, 27
+                {
+                    let v = (g[4].get().rotate_left(4) & 0x10_u32) | (g[0].get() & 0xffffffef_u32);
+                    g[0].set(v);
+                }
+                // stb r0, 0xdcc(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xdcc_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                // bl Item_802697D4
+                c::call(ctx, 0x802697d4_u32, 0x80275128_u32);
+                pc = 0x80275128_u32;
+            }
+            0x80275128_u32 => {
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // bl Item_80269978
+                c::call(ctx, 0x80269978_u32, 0x80275130_u32);
+                pc = 0x80275130_u32;
+            }
+            0x80275130_u32 => {
+                // lbz r0, 0xdcc(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xdcc_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // rlwimi r0, r3, 4, 27, 27
+                {
+                    let v = (g[3].get().rotate_left(4) & 0x10_u32) | (g[0].get() & 0xffffffef_u32);
+                    g[0].set(v);
+                }
+                // stb r0, 0xdcc(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xdcc_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of it_802750F8");
+            }
+            _ => unreachable!("it_802750F8: no block at {pc:#010x}"),
+        }
+    }
+}
+
+pub fn it_80275158<'a>(ctx: &'a Ctx, a0: HSD_GObj<'a>, a1: f64) {
+    // Transliterated from its machine code: leaves r3 as itLinkArrow_802A850C, ported from machine code, reads it.
+    (a0, Single(a1)).put_regs(ctx);
+    asm_it_80275158(ctx);
+}
+
+fn asm_it_80275158(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // lwz r4, 0x2c(r3)
+    {
+        let ea = g[3].get().wrapping_add(0x2c_u32);
+        g[4].set(ctx.read_u32(ea));
+    }
+    // stfs f1, 0xd44(r4)
+    {
+        let ea = g[4].get().wrapping_add(0xd44_u32);
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(1)));
+    }
+    // lwz r3, it_804D6D28@sda21(r0)
+    {
+        let ea = g[13].get().wrapping_add(0xffffb688_u32);
+        g[3].set(ctx.read_u32(ea));
+    }
+    // lfs f0, 0x4c(r3)
+    {
+        let ea = g[3].get().wrapping_add(0x4c_u32);
+        c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
+    }
+    // fmuls f0, f1, f0
+    {
+        let v = fp::fmuls(ctx.regs.f(1), ctx.regs.f(0));
+        c::fill(ctx, 0, v);
+    }
+    // stfs f0, 0xd48(r4)
+    {
+        let ea = g[4].get().wrapping_add(0xd48_u32);
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+    }
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
 }
 
 pub fn it_80275174<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, lifetime: f64) {
@@ -3221,22 +3378,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x802750f8,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(it_802750F8(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80275158,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, Single) = Args::take_all(ctx);
-            Ret::put(it_80275158(ctx, a0, a1.0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x802750f8, asm_it_802750F8, Returns::Nothing);
+    ctx.register_port(0x80275158, asm_it_80275158, Returns::Nothing);
     ctx.register_port(
         0x80275174,
         |ctx| {

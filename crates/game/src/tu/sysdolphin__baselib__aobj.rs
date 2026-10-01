@@ -84,18 +84,142 @@ pub fn HSD_AObjInitEndCallBack<'a>(ctx: &'a Ctx) {
 }
 
 pub fn HSD_AObjInvokeCallBacks<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x18);
-    let mut list: _HSD_SList<'a> = null(ctx);
-    if (statics::sysdolphin__baselib__aobj::HSD_AObj_804D762C(ctx).get() != 0_i32)
-        && (statics::sysdolphin__baselib__aobj::HSD_AObj_804D7630(ctx).get() == 0_i32)
-    {
-        list = statics::sysdolphin__baselib__aobj::endcallback_list(ctx).get();
-        'l1: while !Handle::is_null(list) {
-            'c2: {
-                let mut func: FnPtr<'a> = Handle::cast::<FnPtr<'a>>((list).data());
-                func.call::<_, ()>(());
-                list = (list).next();
+    // Transliterated from its machine code: leaves r3 as mnSnap_8025441C, ported from machine code, reads it.
+    ().put_regs(ctx);
+    asm_HSD_AObjInvokeCallBacks(ctx);
+}
+
+fn asm_HSD_AObjInvokeCallBacks(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x803640b0_u32;
+    loop {
+        match pc {
+            0x803640b0_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // lwz r0, HSD_AObj_804D762C@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbf8c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_803640F8
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x803640f8_u32;
+                    continue;
+                }
+                pc = 0x803640cc_u32;
             }
+            0x803640cc_u32 => {
+                // lwz r0, HSD_AObj_804D7630@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbf90_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_803640F8
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x803640f8_u32;
+                    continue;
+                }
+                pc = 0x803640d8_u32;
+            }
+            0x803640d8_u32 => {
+                // lwz r31, endcallback_list@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbf88_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // b .L_803640F0
+                pc = 0x803640f0_u32;
+                continue;
+                pc = 0x803640e0_u32;
+            }
+            0x803640e0_u32 => {
+                // lwz r12, 0x4(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x4_u32);
+                    g[12].set(ctx.read_u32(ea));
+                }
+                // mtlr r12
+                ctx.regs.set_spr(8, g[12].get());
+                // blrl
+                c::call(ctx, ctx.regs.lr.get() & !3, 0x803640ec_u32);
+                pc = 0x803640ec_u32;
+            }
+            0x803640ec_u32 => {
+                // lwz r31, 0x0(r31)
+                {
+                    let ea = g[31].get();
+                    g[31].set(ctx.read_u32(ea));
+                }
+                pc = 0x803640f0_u32;
+            }
+            0x803640f0_u32 => {
+                // cmplwi r31, 0x0
+                {
+                    let (x, y) = (g[31].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_803640E0
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x803640e0_u32;
+                    continue;
+                }
+                pc = 0x803640f8_u32;
+            }
+            0x803640f8_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of HSD_AObjInvokeCallBacks");
+            }
+            _ => unreachable!("HSD_AObjInvokeCallBacks: no block at {pc:#010x}"),
         }
     }
 }
@@ -1549,13 +1673,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x803640b0,
-        |ctx| {
-            Ret::put(HSD_AObjInvokeCallBacks(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x803640b0, asm_HSD_AObjInvokeCallBacks, Returns::Nothing);
     ctx.register_port(
         0x8036410c,
         |ctx| {

@@ -168,13 +168,73 @@ pub fn mem_free<'a>(ctx: &'a Ctx, ptr_: Addr<'a>) {
 }
 
 pub fn Ground_801C0498<'a>(ctx: &'a Ctx) -> f64 {
-    if !Handle::is_null(fns::stage_info(ctx).param()) {
-        return (fns::stage_info(ctx).param()).y();
-    } else {
-        return 1.0;
+    // Transliterated from its machine code: leaves r3 as grMuteCity_801F2AB0, ported from machine code, reads it.
+    ().put_regs(ctx);
+    asm_Ground_801C0498(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_Ground_801C0498(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x801c0498_u32;
+    loop {
+        match pc {
+            0x801c0498_u32 => {
+                // lis r3, stage_info@ha
+                g[3].set(0x804a0000_u32);
+                // addi r3, r3, stage_info@l
+                g[3].set(g[3].get().wrapping_add(0xffffe6c8_u32));
+                // lwz r3, 0x6b0(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x6b0_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // cmplwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_801C04B4
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x801c04b4_u32;
+                    continue;
+                }
+                pc = 0x801c04ac_u32;
+            }
+            0x801c04ac_u32 => {
+                // lfs f1, 0x0(r3)
+                {
+                    let ea = g[3].get();
+                    c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
+                }
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                pc = 0x801c04b4_u32;
+            }
+            0x801c04b4_u32 => {
+                // lfs f1, "@330"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffffb2e4_u32);
+                    c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
+                }
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of Ground_801C0498");
+            }
+            _ => unreachable!("Ground_801C0498: no block at {pc:#010x}"),
+        }
     }
-    #[allow(unreachable_code)]
-    return 0.0;
 }
 
 pub fn Ground_SetParamY<'a>(ctx: &'a Ctx, y: f64) {
@@ -5843,13 +5903,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801c0498,
-        |ctx| {
-            Ret::put(Ground_801C0498(ctx), ctx);
-        },
-        Returns::Float,
-    );
+    ctx.register_port(0x801c0498, asm_Ground_801C0498, Returns::Float);
     ctx.register_port(
         0x801c04bc,
         |ctx| {

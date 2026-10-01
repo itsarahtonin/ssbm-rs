@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn gm_GetDbPauseFlag<'a>(ctx: &'a Ctx, bit: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
@@ -251,7 +252,33 @@ pub fn gm_801A4B50<'a>(ctx: &'a Ctx, arg0: i32) {
 }
 
 pub fn gm_801A4B60<'a>(ctx: &'a Ctx) {
-    statics::melee__gm__gmscene::gm_80479D58(ctx).set_unk_C(1_i32);
+    // Transliterated from its machine code: leaves r3 as un_80301CE0, ported from machine code, reads it.
+    ().put_regs(ctx);
+    asm_gm_801A4B60(ctx);
+}
+
+fn asm_gm_801A4B60(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // lis r3, gm_80479D58@ha
+    g[3].set(0x80480000_u32);
+    // addi r3, r3, gm_80479D58@l
+    g[3].set(g[3].get().wrapping_add(0xffff9d58_u32));
+    // li r0, 0x1
+    g[0].set(0x1_u32);
+    // stw r0, 0xc(r3)
+    {
+        let ea = g[3].get().wrapping_add(0xc_u32);
+        ctx.write_u32(ea, g[0].get());
+    }
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
 }
 
 pub fn gm_801A4B74<'a>(ctx: &'a Ctx) {
@@ -693,13 +720,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801a4b60,
-        |ctx| {
-            Ret::put(gm_801A4B60(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801a4b60, asm_gm_801A4B60, Returns::Nothing);
     ctx.register_port(
         0x801a4b74,
         |ctx| {
