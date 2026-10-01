@@ -8,7 +8,8 @@ ssbm-run's LOCKSTEP_COVERAGE bitmaps mark each instruction of the original that 
 check of its own function whose sides agreed. This splits every function of the decomp's
 listings into basic blocks and counts a block verified when any of its instructions is marked.
 Blocks that call __assert, OSPanic or HSD_Panic, which never return and never run in a
-correct game, are left out of the count. A function is verified at or above the bar, as long
+correct game, are left out of the count, and so are those feasible.py finds no input can
+reach, such as a clamp at 999999 of a halfword. A function is verified at or above the bar, as long
 as no ledger records a mismatch for it; --done lists those, for LOCKSTEP_DONE. Functions
 reach.py finds can never run (--dead), and those the SDK layer stands in for (--stand-ins, from
 ssbm-run's STAND_INS), are counted apart: no run can check them. Results of a binary built
@@ -23,6 +24,9 @@ import glob
 import os
 import re
 import sys
+
+sys.path.insert(0, os.path.dirname(__file__))
+import feasible  # noqa: E402
 
 LO = 0x8000_0000
 NORETURN = {"__assert", "OSPanic", "HSD_Panic"}
@@ -149,10 +153,18 @@ def main():
     ledger = load_ledgers([p for g in args.ledger for p in glob.glob(g)], stale)
 
     rows = []
+    unreachable, contradicted = 0, []
     for unit, name, insns, labels in funcs:
         bs = blocks(insns, labels)
-        countable = [b for b in bs if not any(is_call(m) and ops.split(",")[0].strip() in NORETURN
-                                              for _, m, ops in b)]
+        unreached = feasible.infeasible(insns, labels)
+        for b in bs:
+            if b[0][0] in unreached and any(covered(bits, a) for a, _, _ in b):
+                contradicted.append(f"{name}+{b[0][0] - insns[0][0]:#x}")
+        unreached -= {b[0][0] for b in bs if any(covered(bits, a) for a, _, _ in b)}
+        unreachable += len(unreached)
+        countable = [b for b in bs if b[0][0] not in unreached and
+                     not any(is_call(m) and ops.split(",")[0].strip() in NORETURN
+                             for _, m, ops in b)]
         done = sum(1 for b in countable if any(covered(bits, a) for a, _, _ in b))
         start = insns[0][0]
         calls, bad, uninit, mutated = ledger.get(start, (0, 0, 0, 0))
@@ -174,7 +186,11 @@ def main():
           f"{sum(r[1] in stand_ins for r in apart)} that the SDK layer stands in for), "
           f"{len(rows)} to check")
     print(f"{blocks_all} blocks of these that can run "
-          f"({sum(r[3] - r[4] for r in rows)} more only fail an assertion)")
+          f"({sum(r[3] - r[4] for r in rows)} more only fail an assertion or no input reaches: "
+          f"{unreachable} found unreachable in the machine code)")
+    if contradicted:
+        print(f"blocks found unreachable that runs verified, so counted: {len(contradicted)} "
+              f"({', '.join(contradicted[:8])})")
     print(f"checked: {len(checked)} functions; blocks verified: {blocks_done} "
           f"({100 * blocks_done / max(blocks_all, 1):.1f}%)")
     print(f"verified at {args.bar:.0%} of their blocks, with no mismatch: {len(verified)}")
