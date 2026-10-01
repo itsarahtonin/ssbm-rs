@@ -12,7 +12,7 @@ import re
 import subprocess
 import sys
 
-FN = re.compile(r"^(pub )?fn (\w+)<", re.M)
+FN = re.compile(r"^(pub )?fn (\w+)[<(]", re.M)
 REGISTER = re.compile(r"register_port\(\s*(0x[0-9a-f]+),\s*(.*?)Returns::", re.S)
 
 
