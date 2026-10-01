@@ -107,7 +107,9 @@ fn choose(ctx: &Ctx, rng: &Rng, stages: &[i32], fighters: &[i32], time: u32) {
     for i in 0..4 {
         let p = data.players().get(i);
         let fighter = fighters[rng.below(fighters.len() as u64) as usize] as usize;
-        let cpu = rng.chance(50);
+        // Bosses and the other special fighters only play as CPUs, as in the modes that have
+        // them: the game crashes with some of them under a player's control.
+        let cpu = fighter >= PLAYABLE || rng.chance(50);
         p.set_ckind(fighter as i8);
         p.set_slot_type(if cpu { Gm_PKind_Cpu } else { Gm_PKind_Human } as u8);
         p.set_cpu_level(if cpu { 1 + rng.below(9) as u8 } else { 0 });
