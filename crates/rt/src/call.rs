@@ -314,6 +314,10 @@ impl Ctx {
         }
         self.invoke(addr);
         if let Some(to) = self.take_resume_at() {
+            // A jump to no code faults where the original fetches its first instruction.
+            if to.wrapping_sub(0x8000_0000) >= crate::MEM1_SIZE {
+                self.fault(to, 4, false);
+            }
             panic!(
                 "{} jumped to {} past a port that called it",
                 self.name_of(addr),
