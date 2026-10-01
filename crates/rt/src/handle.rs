@@ -363,10 +363,11 @@ impl<'a> Handle<'a> for FnPtr<'a> {
 }
 
 impl<'a> FnPtr<'a> {
-    /// Calls through the pointer with C calling conventions.
+    /// Calls through the pointer with C calling conventions. The branch ignores the address's
+    /// low two bits, as the CPU's does.
     #[inline]
     pub fn call<A: crate::Args<'a>, R: crate::Ret<'a>>(self, args: A) -> R {
-        self.0.ctx.call(self.0.addr, args)
+        self.0.ctx.call(self.0.addr & !3, args)
     }
 }
 
