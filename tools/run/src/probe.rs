@@ -239,6 +239,11 @@ fn probe_some(ctx: &Ctx, state: &State) {
         return;
     }
     let objects = objects(ctx);
+    // Not while the game boots, before it has objects: until it sets the registers it reads
+    // its small globals through, original code reads them elsewhere than ports do.
+    if objects.is_empty() {
+        return;
+    }
     let mut ran = 0;
     // A full pass over the list at most, so fields without the right objects stay short.
     for _ in 0..state.probes.len() {
