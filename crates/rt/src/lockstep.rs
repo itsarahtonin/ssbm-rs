@@ -92,6 +92,8 @@ pub struct Mismatch {
     pub function: u32,
     /// Which call of the function this was, counting from 1.
     pub call: u64,
+    /// Whether its inputs were changed at random from a call's.
+    pub mutated: bool,
     pub diffs: Vec<Diff>,
 }
 
@@ -105,6 +107,8 @@ pub struct Stats {
     /// wrote: run again on the port's cleared stack, it matches the port, or cannot follow
     /// its own log.
     pub uninitialized: u64,
+    /// Mismatching calls whose inputs were changed at random from a call's.
+    pub mutated_mismatches: u64,
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
@@ -173,6 +177,14 @@ pub struct State {
     pub calls_per_function: Cell<Option<u64>>,
     /// Checks each port gets until its checks' originals have run this many instructions.
     pub budget_per_function: Cell<Option<u64>>,
+    /// Further checks of each outermost check's function from the same call, with its
+    /// arguments and what they point to changed at random, to reach more of its code.
+    pub mutations: Cell<u32>,
+    mutating: Cell<bool>,
+    pub rng: Cell<u64>,
+    /// Calls a port under a mutated check may still make, which stops one that would never
+    /// return.
+    pub(crate) calls_left: Cell<Option<u64>>,
     /// Ports checked as often as that, to run unchecked once no check is running: a mode that
     /// changed between the sides of a check would give them different callees.
     checked_enough: RefCell<Vec<u32>>,
@@ -329,6 +341,20 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     // Where the original asked its caller to continue, if not after the call.
     let original_resume = ctx.take_resume_at();
     let j1 = ctx.mem.end_journal();
+    if original_panic.as_ref().is_some_and(|p| p.is::<ReachedSdk>()) {
+        // A mutated call that reaches the SDK layer would change its state, which no journal
+        // undoes: drop it.
+        ctx.mem.restore(&j1);
+        ctx.regs.restore(&regs0);
+        if traced {
+            state.traces.borrow_mut().pop();
+        }
+        state.phase.set(enclosing);
+        state.checking.borrow_mut().pop();
+        state.active.set(false);
+        CHECKING.with(|c| c.set(false));
+        return;
+    }
     let regs1 = ctx.regs.snapshot();
     let s1 = ctx.mem.capture(j1.keys());
     let end = if outermost {
@@ -349,6 +375,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     // does: what either reads of it before writing it is the same.
     ctx.mem.begin_journal();
     let rechecking = state.rechecking.replace(state.rechecking.get() || deep);
+    let calls_left = state.calls_left.replace(state.mutating.get().then_some(MUTATED_CALLS));
     let mut port = passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_native(addr, native))))
         .map(|p| {
             if let Some(j) = crate::jump::describe(p.as_ref()) {
@@ -365,6 +392,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         });
     ctx.truncate_natives(natives);
     state.rechecking.set(rechecking);
+    state.calls_left.set(calls_left);
     let port_resume = ctx.take_resume_at();
     let j2 = ctx.mem.end_journal();
     let regs2 = ctx.regs.snapshot();
@@ -554,20 +582,137 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     if uninitialized {
         entry.uninitialized += 1;
     } else if !diffs.is_empty() {
-        entry.mismatches += 1;
-        let keep = state.keep_per_function.get().max(1) as u64;
-        if entry.mismatches <= keep {
+        let mutated = state.mutating.get();
+        let n = if mutated {
+            &mut entry.mutated_mismatches
+        } else {
+            &mut entry.mismatches
+        };
+        *n += 1;
+        if *n <= state.keep_per_function.get().max(1) as u64 {
             state.mismatches.borrow_mut().push(Mismatch {
                 function: addr,
                 call: entry.calls,
+                mutated,
                 diffs,
             });
         }
     }
     drop(stats);
+    if outermost && original_panic.is_none() && !state.mutating.get() && state.mutations.get() > 0 {
+        mutated_checks(ctx, addr, native, returns, &j1, &regs0, &regs1, original_resume);
+    }
     // The original's panic is the run's to handle, such as the end of a run.
     if let Some(p) = original_panic {
         resume_unwind(p);
+    }
+}
+
+/// Panic payload that ends a mutated check that reached the SDK layer.
+struct ReachedSdk;
+
+/// Calls a port under a mutated check may make: a runaway loop makes many more.
+const MUTATED_CALLS: u64 = 10_000_000;
+
+/// Checks the function again from the call just checked, as many times as `mutations` says,
+/// each with the call's arguments and what they point to changed at random; then goes on
+/// from the call's results.
+#[allow(clippy::too_many_arguments)]
+fn mutated_checks(
+    ctx: &Ctx,
+    addr: u32,
+    native: Native,
+    returns: Returns,
+    before: &Pages,
+    regs0: &crate::RegsSnapshot,
+    regs1: &crate::RegsSnapshot,
+    resume: Option<u32>,
+) {
+    let state = &ctx.lockstep;
+    state.mutating.set(true);
+    // The pages the call wrote, as it left them; `before` has them as it found them.
+    let after = ctx.mem.capture(before.keys());
+    let _ = ctx.take_resume_at();
+    let mut stop = None;
+    for _ in 0..state.mutations.get() {
+        ctx.mem.begin_journal();
+        ctx.mem.restore(before);
+        ctx.regs.restore(regs0);
+        mutate(ctx);
+        let result = catch_unwind(AssertUnwindSafe(|| run(ctx, addr, native, returns)));
+        let _ = ctx.take_resume_at();
+        let undo = ctx.mem.end_journal();
+        ctx.mem.restore(&undo);
+        ctx.mem.restore(&after);
+        if let Err(p) = result
+            && p.is::<crate::Stop>()
+        {
+            stop = Some(p);
+            break;
+        }
+    }
+    ctx.regs.restore(regs1);
+    if let Some(at) = resume {
+        ctx.resume_at(at);
+    }
+    state.mutating.set(false);
+    if let Some(p) = stop {
+        resume_unwind(p);
+    }
+}
+
+/// Changes a call's inputs at random: some of the bytes its pointer arguments reach, and some
+/// of its other integer and float arguments.
+fn mutate(ctx: &Ctx) {
+    let state = &ctx.lockstep;
+    let next = || {
+        let mut x = state.rng.get().max(1);
+        x ^= x << 13;
+        x ^= x >> 7;
+        x ^= x << 17;
+        state.rng.set(x);
+        x
+    };
+    let ram = |a: u32| (0x8000_0000..0x8180_0000).contains(&a);
+    for r in 3..=10 {
+        let v = ctx.regs.r(r);
+        if ram(v) {
+            for _ in 0..=next() % 3 {
+                let at = v.wrapping_add((next() % 0x80) as u32);
+                if ram(at) {
+                    let old = ctx.read_u8(at);
+                    let new = if next() % 2 == 0 {
+                        old ^ (1 << (next() % 8))
+                    } else {
+                        next() as u8
+                    };
+                    ctx.write_u8(at, new);
+                }
+            }
+        } else if next() % 3 == 0 {
+            let new = match next() % 6 {
+                0 => 0,
+                1 => 1,
+                2 => v.wrapping_add(1),
+                3 => v.wrapping_sub(1),
+                4 => v ^ (1 << (next() % 8)),
+                _ => (next() % 64) as u32,
+            };
+            ctx.regs.set_r(r, new);
+        }
+    }
+    for f in 1..=8 {
+        if next() % 3 == 0 {
+            let v = ctx.regs.f(f);
+            let new = match next() % 5 {
+                0 => 0.0,
+                1 => 1.0,
+                2 => -v,
+                3 => v * 2.0,
+                _ => v * 0.5,
+            };
+            ctx.regs.set_f(f, new);
+        }
     }
 }
 
@@ -603,6 +748,9 @@ fn interact(ctx: &Ctx, kind: Kind, f: impl FnOnce() -> u32) -> u32 {
     let state = &ctx.lockstep;
     match state.phase.get() {
         Phase::Original if state.depth.get() == 0 => {
+            if state.mutating.get() {
+                panic_any(ReachedSdk);
+            }
             state.depth.set(1);
             let sp = ctx.regs.r(1);
             let lr = ctx.regs.lr.get();
@@ -743,7 +891,14 @@ fn compare(ctx: &Ctx, a: &Outcome, b: &Outcome, returns: Returns, sp: u32) -> Ve
     let mut diffs = Vec::new();
     // The same panic on both sides, such as the same longjmp, is the same behavior; the ports a
     // port's names as running then are only where it happened.
-    let cause = |p: &Option<String>| p.as_ref().map(|t| t.split(" (in ").next().unwrap_or(t).to_owned());
+    // A fault through a bad pointer ends both alike, whichever access of the same object each
+    // side made first.
+    let cause = |p: &Option<String>| {
+        p.as_ref().map(|t| {
+            let t = t.split(" (in ").next().unwrap_or(t);
+            if t.starts_with("unmapped ") { "memory fault" } else { t }.to_owned()
+        })
+    };
     if cause(&a.panic) != cause(&b.panic) {
         diffs.push(Diff::Panic {
             original: a.panic.clone(),

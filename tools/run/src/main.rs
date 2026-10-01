@@ -72,15 +72,16 @@ fn calls_to(dol: &ssbm_disc::Dol, target: u32) -> Vec<u32> {
 }
 
 /// Adds `checked` (address, calls, mismatching calls, calls that differ only by reads of
-/// stack the original never wrote, instructions the checks' originals ran) to the CSV ledger
-/// at `path`. Returns how many ports it has checked, and how many of them mismatch.
+/// stack the original never wrote, instructions the checks' originals ran, mismatching calls
+/// with their inputs changed) to the CSV ledger at `path`. Returns how many ports it has
+/// checked, and how many of them mismatch.
 fn update_ledger(
     path: &str,
-    checked: &[(u32, u64, u64, u64, u64)],
+    checked: &[(u32, u64, u64, u64, u64, u64)],
     ported: &[u32],
     name: &dyn Fn(u32) -> String,
 ) -> std::io::Result<(usize, usize)> {
-    let mut rows: std::collections::BTreeMap<u32, [u64; 5]> = Default::default();
+    let mut rows: std::collections::BTreeMap<u32, [u64; 6]> = Default::default();
     if let Ok(text) = std::fs::read_to_string(path) {
         for line in text.lines().skip(1) {
             let f: Vec<&str> = line.split(',').collect();
@@ -91,27 +92,29 @@ fn update_ledger(
                 continue;
             };
             let n = |i: usize| f.get(i).and_then(|v| v.parse::<u64>().ok()).unwrap_or(0);
-            rows.insert(addr, [n(2), n(3), n(4), n(5), n(6)]);
+            rows.insert(addr, [n(2), n(3), n(4), n(5), n(6), n(7)]);
         }
     }
-    for &(addr, calls, bad, uninit, cost) in checked {
+    for &(addr, calls, bad, uninit, cost, mutated) in checked {
         let r = rows.entry(addr).or_default();
         r[0] += calls;
         r[1] += bad;
         r[2] += uninit;
         r[3] += 1;
         r[4] += cost;
+        r[5] += mutated;
     }
-    let mut out = String::from("address,name,calls,mismatches,uninitialized,runs,cost\n");
+    let mut out = String::from("address,name,calls,mismatches,uninitialized,runs,cost,mutated\n");
     for (addr, r) in &rows {
         out += &format!(
-            "{addr:#010x},{},{},{},{},{},{}\n",
+            "{addr:#010x},{},{},{},{},{},{},{}\n",
             name(*addr),
             r[0],
             r[1],
             r[2],
             r[3],
-            r[4]
+            r[4],
+            r[5]
         );
     }
     if let Some(dir) = std::path::Path::new(path).parent() {
@@ -529,6 +532,13 @@ fn run() -> ExitCode {
         if let Some(n) = std::env::var("LOCKSTEP_BUDGET").ok().and_then(|v| v.parse().ok()) {
             ctx.lockstep.budget_per_function.set(Some(n));
         }
+        // LOCKSTEP_MUTATE=K checks each outermost check's function K times more from the same
+        // call, its arguments and what they point to changed at random, from LOCKSTEP_SEED.
+        if let Some(k) = std::env::var("LOCKSTEP_MUTATE").ok().and_then(|v| v.parse().ok()) {
+            ctx.lockstep.mutations.set(k);
+            let seed = std::env::var("LOCKSTEP_SEED").ok().and_then(|v| v.parse().ok());
+            ctx.lockstep.rng.set(seed.unwrap_or(1));
+        }
         // LOCKSTEP_UNINIT=1 reports which instructions of the original read stack it never
         // wrote, as lockstep's checks run it.
         if std::env::var_os("LOCKSTEP_UNINIT").is_some() {
@@ -849,6 +859,7 @@ fn run() -> ExitCode {
         let stats = ctx.lockstep.stats.borrow();
         let calls: u64 = stats.values().map(|s| s.calls).sum();
         let bad: Vec<_> = stats.iter().filter(|(_, s)| s.mismatches > 0).collect();
+        let mutated: Vec<_> = stats.iter().filter(|(_, s)| s.mutated_mismatches > 0).collect();
         let unverifiable: Vec<_> = stats.iter().filter(|(_, s)| s.uninitialized > 0).collect();
         eprintln!(
             "lockstep: {calls} calls to {} of {} ported functions, {} functions mismatch",
@@ -874,8 +885,17 @@ fn run() -> ExitCode {
                 s.calls
             );
         }
+        for (addr, s) in &mutated {
+            eprintln!(
+                "  {}: {} of {} calls mismatch with their inputs changed",
+                ctx.name_of(**addr),
+                s.mutated_mismatches,
+                s.calls
+            );
+        }
         for m in ctx.lockstep.mismatches.borrow().iter() {
-            eprintln!("  {} call {}:", ctx.name_of(m.function), m.call);
+            let how = if m.mutated { " with its inputs changed" } else { "" };
+            eprintln!("  {} call {}{how}:", ctx.name_of(m.function), m.call);
             for d in m.diffs.iter().take(6) {
                 eprintln!("    {d:X?}");
             }
@@ -884,9 +904,9 @@ fn run() -> ExitCode {
         // LOCKSTEP_LEDGER=FILE adds this run's checks to a ledger of every port's, kept
         // across runs.
         if let Ok(path) = std::env::var("LOCKSTEP_LEDGER") {
-            let checked: Vec<(u32, u64, u64, u64, u64)> = stats
+            let checked: Vec<(u32, u64, u64, u64, u64, u64)> = stats
                 .iter()
-                .map(|(&a, s)| (a, s.calls, s.mismatches, s.uninitialized, s.cost))
+                .map(|(&a, s)| (a, s.calls, s.mismatches, s.uninitialized, s.cost, s.mutated_mismatches))
                 .collect();
             match update_ledger(&path, &checked, &ported, &|a| ctx.name_of(a)) {
                 Ok((n, bad)) => eprintln!(
