@@ -5,7 +5,8 @@
 //! GObj class of the first object parameter (-1 for any), a fighter kind (-1 for any), and one
 //! letter per parameter: g a game object, F/I/R a fighter's, item's or ground's user data, j/c/l
 //! a game object's joint, camera or light, p scratch memory (zeroed, or holding small numbers or
-//! floats), i an integer, f a float. Once a video field, outside any check, the next
+//! floats), x a function that returns at once, i an integer, w a 64-bit integer, f a float.
+//! Once a video field, outside any check, the next
 //! `PROBE_RATE` of them (default 8) whose objects are around run under lockstep, and everything
 //! they do is undone; a probe for a fighter kind that isn't around takes another fighter a
 //! quarter of the time. `PROBE_LIMIT` (default 20) probes each function at most. Deterministic
@@ -195,14 +196,30 @@ fn object_for(
     }
 }
 
-/// An integer argument: mostly small, as kinds, indices and flags are, and now and then any.
+/// A function that does nothing but return.
+fn noop(ctx: &Ctx) -> u32 {
+    thread_local! {
+        static NOOP: Cell<u32> = const { Cell::new(0) };
+    }
+    if NOOP.get() == 0 {
+        let blr = ssbm_types::symbols::SYMBOLS
+            .iter()
+            .find(|s| s.3 && s.1 == 4 && ctx.mem.read_u32(s.0).ok() == Some(0x4E80_0020));
+        NOOP.set(blr.map_or(0, |s| s.0));
+    }
+    NOOP.get()
+}
+
+/// An integer argument: mostly small, as kinds and indices are, now and then -1, a byte or a
+/// flag. Larger values mostly index past the game's tables and stack arrays, into what ports
+/// keep elsewhere, such as saved registers.
 fn int(rng: &Rng) -> u32 {
     match rng.below(10) {
         0..=4 => rng.below(5) as u32,
         5 | 6 => rng.below(64) as u32,
         7 => u32::MAX,
-        8 => rng.below(0x1_0000) as u32,
-        _ => rng.below(1 << 32) as u32,
+        8 => rng.below(0x100) as u32,
+        _ => 1 << rng.below(32),
     }
 }
 
@@ -255,7 +272,7 @@ fn probe_some(ctx: &Ctx, state: &State) {
         if state.log {
             eprintln!("probe {} on {values:08X?}", ctx.name_of(p.addr));
         }
-        let rng = &state.rng;
+        let (rng, log) = (&state.rng, state.log);
         let ran_it = ssbm_rt::lockstep::probe(ctx, p.addr, |ctx| {
             // Scratch memory sits above a lowered stack pointer, with zeroed room around it for
             // the headers and neighbors code may reach for, so the callee's frames stay apart.
@@ -286,6 +303,18 @@ fn probe_some(ctx: &Ctx, state: &State) {
                         ctx.regs.set_r(r, int(rng));
                         r += 1;
                     }
+                    b'w' => {
+                        // In the next pair of registers that starts at an odd one.
+                        r |= 1;
+                        let high = if rng.chance(25) { int(rng) } else { 0 };
+                        ctx.regs.set_r(r, high);
+                        ctx.regs.set_r(r + 1, int(rng));
+                        r += 2;
+                    }
+                    b'x' => {
+                        ctx.regs.set_r(r, noop(ctx));
+                        r += 1;
+                    }
                     b'p' => {
                         ctx.regs.set_r(r, next);
                         next += SCRATCH;
@@ -296,6 +325,11 @@ fn probe_some(ctx: &Ctx, state: &State) {
                         r += 1;
                     }
                 }
+            }
+            if log {
+                let gpr: Vec<u32> = (3..r).map(|i| ctx.regs.r(i)).collect();
+                let fpr: Vec<f64> = (1..f).map(|i| ctx.regs.f(i)).collect();
+                eprintln!("  r1 {:08X}, r3.. {gpr:08X?}, f1.. {fpr:?}", ctx.regs.r(1));
             }
         });
         if ran_it {

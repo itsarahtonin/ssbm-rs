@@ -293,8 +293,11 @@ fn run() -> ExitCode {
     if std::env::var_os("CPU_PLAYERS").is_some() {
         matches::install_cpu_players(&ctx);
     }
-    // PROBES=FILE checks the functions it lists by calling them on live objects (see probe.rs).
-    if let Ok(path) = std::env::var("PROBES") {
+    // PROBES=FILE checks the functions it lists by calling them on live objects (see probe.rs);
+    // empty, it probes nothing.
+    if let Ok(path) = std::env::var("PROBES")
+        && !path.is_empty()
+    {
         probe::install(&sdk, &path);
     }
     let log_modes = std::env::var_os("MODES").is_some();

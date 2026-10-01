@@ -13,8 +13,9 @@ any), and params one letter per parameter:
     g  a game object (HSD_GObj)
     F  a fighter (its Fighter), I  an item (its Item), R  a ground (its Ground)
     j  a joint (HSD_JObj), c  a camera (HSD_CObj), l  a light (HSD_LObj): a game object's own
-    p  zeroed scratch memory, for any other pointer
-    i  an integer, f  a float
+    p  scratch memory, for any other pointer or a struct passed by value
+    x  a function that returns at once, for a function pointer
+    i  an integer, w  a 64-bit integer, f  a float
 
 or `-` for none. --dead adds the functions reach.py found nothing calls (`name unit` lines), which
 only probes can check.
@@ -61,14 +62,16 @@ def unit_class(unit):
 
 def letter(p, records):
     k = p.get("k")
-    if k in ("int", "enum") and p.get("size", 4) <= 4:
-        return "i"
+    if k in ("int", "enum"):
+        return "i" if p.get("size", 4) <= 4 else "w"
     if k == "float":
         return "f"
+    if k == "rec":
+        return "p"
     if k == "ptr":
         to = p.get("to") or {}
         if to.get("k") == "fn":
-            return None
+            return "x"
         name = records.get(to.get("id"), {}).get("name") if to.get("k") == "rec" else None
         return RECORDS.get(name, "p")
     return None
@@ -107,7 +110,7 @@ def main():
             continue
         params = [letter(p, records) for p in ft.get("params") or []]
         if None in params:
-            skipped["function pointers or structs"] = skipped.get("function pointers or structs", 0) + 1
+            skipped["other parameter types"] = skipped.get("other parameter types", 0) + 1
             continue
         cls, kind = unit_class(r["unit"])
         first = next((x for x in params if x in "gFIR"), None)
