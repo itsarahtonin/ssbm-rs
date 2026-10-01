@@ -41,7 +41,7 @@ pub fn ftCo_8009CA0C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vic_gobj: HSD_GObj<'a
     });
     (fp).x221B().set_x221B_b5((0_i32 as u8));
     (fp).set_facing_dir(fp::fneg((vic_fp).facing_dir()));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::ftCo_800DB368(ctx, vic_fp, fp);
         (fp).x221B().set_x221B_b7((0_i32 as u8));
     } else {

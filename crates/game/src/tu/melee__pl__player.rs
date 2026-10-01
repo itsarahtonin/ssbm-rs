@@ -41,8 +41,8 @@ pub fn Player_80031790<'a>(ctx: &'a Ctx, slot: i32) {
     let mut i: i32 = 0;
     inl_Player_CheckSlot_unfused(ctx, slot);
     player = fns::player_slots(ctx).get(slot);
-    if (((player).pkind() as u32) == ((enums::Gm_PKind_Human as i32) as u32))
-        || (((player).pkind() as u32) == ((enums::Gm_PKind_Cpu as i32) as u32))
+    if ((player).pkind() == (((enums::Gm_PKind_Human as i32) as u32) as i32))
+        || ((player).pkind() == (((enums::Gm_PKind_Cpu as i32) as u32) as i32))
     {
         {
             i = 0_i32;
@@ -76,8 +76,8 @@ pub fn Player_80031848<'a>(ctx: &'a Ctx, slot: i32) {
     let mut i: i32 = 0;
     inl_Player_CheckSlot_unfused(ctx, slot);
     player = fns::player_slots(ctx).get(slot);
-    if (((player).pkind() as u32) == ((enums::Gm_PKind_Human as i32) as u32))
-        || (((player).pkind() as u32) == ((enums::Gm_PKind_Cpu as i32) as u32))
+    if ((player).pkind() == (((enums::Gm_PKind_Human as i32) as u32) as i32))
+        || ((player).pkind() == (((enums::Gm_PKind_Cpu as i32) as u32) as i32))
     {
         {
             i = 0_i32;
@@ -534,8 +534,8 @@ pub fn Player_8003248C<'a>(ctx: &'a Ctx, slot: i32, arg1: i32) -> i32 {
             .has_transformation()
             != 0)
         {
-            if (((player).pkind() as u32) == ((enums::Gm_PKind_Human as i32) as u32))
-                || (((player).pkind() as u32) == ((enums::Gm_PKind_Cpu as i32) as u32))
+            if ((player).pkind() == (((enums::Gm_PKind_Human as i32) as u32) as i32))
+                || ((player).pkind() == (((enums::Gm_PKind_Cpu as i32) as u32) as i32))
             {
                 return 1_i32;
             }
@@ -2385,7 +2385,7 @@ pub fn Player_GetUnk45<'a>(ctx: &'a Ctx, slot: i32) -> u32 {
     let mut player: _StaticPlayer<'a> = null(ctx);
     inl_Player_CheckSlot_unfused(ctx, slot);
     player = fns::player_slots(ctx).get(slot);
-    if ((player).pkind() as u32) == ((enums::Gm_PKind_Human as i32) as u32) {
+    if (player).pkind() == (((enums::Gm_PKind_Human as i32) as u32) as i32) {
         return ((player).unk45() as u32);
     }
     return (4_i32 as u32);
@@ -2925,8 +2925,8 @@ fn inl_Player_CheckSlot_unfused<'a>(ctx: &'a Ctx, slot: i32) {
 
 fn inl_func_8008688C_wrapper_unfused<'a>(ctx: &'a Ctx, player: _StaticPlayer<'a>) {
     let mut player = player;
-    if (((player).pkind() as u32) == ((enums::Gm_PKind_Human as i32) as u32))
-        || (((player).pkind() as u32) == ((enums::Gm_PKind_Cpu as i32) as u32))
+    if ((player).pkind() == (((enums::Gm_PKind_Human as i32) as u32) as i32))
+        || ((player).pkind() == (((enums::Gm_PKind_Cpu as i32) as u32) as i32))
     {
         let mut i: i32 = 0;
         {

@@ -68,6 +68,8 @@ BINOPS = {3: "*", 4: "/", 5: "%", 6: "+", 7: "-", 8: "<<", 9: ">>", 11: "<", 12:
           14: ">=", 15: "==", 16: "!=", 17: "&", 18: "^", 19: "|", 20: "&&", 21: "||", 22: "=",
           23: "*=", 24: "/=", 25: "%=", 26: "+=", 27: "-=", 28: "<<=", 29: ">>=", 30: "&=",
           31: "^=", 32: "|=", 33: ","}
+# Operators whose operands take the usual arithmetic conversions.
+ARITH_OPS = ("*", "/", "%", "+", "-", "&", "^", "|")
 UNOPS = {1: "post++", 2: "post--", 3: "++", 4: "--", 5: "&", 6: "*", 7: "+", 8: "-", 9: "~",
          10: "!", 13: "__extension__"}
 
@@ -1916,7 +1918,7 @@ class Translator:
         if op in ("<<", ">>"):
             res = self.shift(op, self.convert(cur, promote(lv.ty)), self.convert(rhs, promote(rhs.ty)))
         else:
-            ct = arith(lv.ty, rhs.ty)
+            ct = (is_int(rhs.ty) and self.common_type(a, b)) or arith(lv.ty, rhs.ty)
             res = self.arith_op(op, self.convert(cur, ct), self.convert(rhs, ct), ct)
         return pre + [lv.write(self.convert(res, lv.ty).code) + ";"]
 
@@ -2242,6 +2244,8 @@ class Translator:
             return Expr(f"(({self.cond(a)}) {rop} ({self.cond(b)})) as i32", INT, True)
         if op in ("<", ">", "<=", ">=", "==", "!="):
             return Expr(f"({self.compare(op, a, b)}) as i32", INT, True)
+        if is_int(t) and op in ARITH_OPS:
+            t = self.enum_type(c) or t
         va, vb = self.expr(a), self.expr(b)
         if calls_or_effects(b) and (calls_or_effects(a) or self.reads_memory(a)) and \
                 not (op in ("+", "-") and is_float(t) and (self.product(a, t) or self.product(b, t, True))):
@@ -2261,10 +2265,30 @@ class Translator:
             fused = self.try_fuse_binary(op, a, b, t)
             if fused is not None:
                 return fused
-        if op in ("/", "%") and is_int(t):
-            # Signedness from the operands as MWCC types them (enums are signed there).
-            t = arith(va.ty, vb.ty)
         return self.arith_op(op, self.convert(va, t), self.convert(vb, t), t)
+
+    def enum_type(self, node):
+        """The type MWCC gives an integer operand that involves an enum, before the usual
+        arithmetic conversions, else None. Clang makes an enum without negative values unsigned
+        and converts the other operand to match; MWCC's `-enum int` keeps both signed."""
+        n = strip(node)
+        t = self.u.ctype(n.type)
+        if t["k"] == "enum":
+            return INT
+        if n.kind == CK.BINARY_OPERATOR and BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(n)) in ARITH_OPS \
+                and is_int(t):
+            return self.common_type(*children(n))
+        return None
+
+    def common_type(self, a, b):
+        """The type MWCC converts two integer operands to, when either involves an enum."""
+        ta, tb = self.enum_type(a), self.enum_type(b)
+        if ta is None and tb is None:
+            return None
+        plain = [self.u.ctype(strip(x).type) for x in (a, b)]
+        if not all(is_int(x) for x in plain):
+            return None
+        return arith(ta or promote(plain[0]), tb or promote(plain[1]))
 
     def ptr_arith(self, op, va, vb):
         if is_ptr(va.ty) and is_ptr(vb.ty):
@@ -2537,14 +2561,15 @@ class Translator:
 
     def compare(self, op, a, b):
         va, vb = self.expr(a), self.expr(b)
+        t = self.common_type(a, b)
         if calls_or_effects(b) and (calls_or_effects(a) or self.reads_memory(a)):
             # MWCC evaluates the right side first.
             pre = []
             vb = Expr(self.first(vb.code, pre), vb.ty, True)
-            return "{ " + " ".join(pre) + f" {self.compare_values(op, va, vb)} }}"
-        return self.compare_values(op, va, vb)
+            return "{ " + " ".join(pre) + f" {self.compare_values(op, va, vb, t)} }}"
+        return self.compare_values(op, va, vb, t)
 
-    def compare_values(self, op, va, vb):
+    def compare_values(self, op, va, vb, t=None):
         if is_ptr(va.ty) or is_ptr(vb.ty) or va.ty["k"] == "fn" or vb.ty["k"] == "fn":
             def addr(v):
                 if is_null_code(v.code):
@@ -2555,7 +2580,8 @@ class Translator:
                 p = va if cb == "0" else vb
                 return f"Handle::is_null({p.code})" if op == "==" else f"!Handle::is_null({p.code})"
             return f"{ca} {op} {cb}"
-        t = arith(va.ty, vb.ty)
+        if t is None or not is_int(va.ty) or not is_int(vb.ty):
+            t = arith(va.ty, vb.ty)
         return f"{self.convert(va, t).code} {op} {self.convert(vb, t).code}"
 
     # Evaluation order. MWCC evaluates the operands that call something (or have other side

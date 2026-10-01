@@ -268,8 +268,8 @@ pub fn gm_801A8D54<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>) {
                     } else {
                         0_i32
                     }) != 0)
-                        && ((fns::gm_801BEFB0(ctx) as u32) != ((enums::CKind_Zelda as i32) as u32)))
-                        && ((fns::gm_801BEFB0(ctx) as u32) != ((enums::CKind_Seak as i32) as u32))
+                        && (fns::gm_801BEFB0(ctx) != (((enums::CKind_Zelda as i32) as u32) as i32)))
+                        && (fns::gm_801BEFB0(ctx) != (((enums::CKind_Seak as i32) as u32) as i32))
                     {
                         sp84.at(count).set(i);
                         count = count.wrapping_add(1);
@@ -281,7 +281,7 @@ pub fn gm_801A8D54<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>) {
                     } else {
                         0_i32
                     }) != 0)
-                        && ((i as u32) != (fns::gm_801BEFB0(ctx) as u32))
+                        && (((i as u32) as i32) != fns::gm_801BEFB0(ctx))
                     {
                         sp84.at(count).set(i);
                         count = count.wrapping_add(1);

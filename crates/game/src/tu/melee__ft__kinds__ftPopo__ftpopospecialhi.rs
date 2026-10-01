@@ -1604,7 +1604,7 @@ pub fn ftPp_SpecialHi_8012280C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCommon_8007D60C(ctx, fp);
     } else {
         (fp).set_x1968_jumpsUsed(((co).max_jumps() as u8));

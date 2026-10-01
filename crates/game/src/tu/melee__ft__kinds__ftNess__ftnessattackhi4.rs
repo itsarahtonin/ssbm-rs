@@ -31,7 +31,7 @@ pub fn ftNs_AttackHi4_YoyoUpdateHitPos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut hitbox_data: HitCapsule<'a> = (fp).x914().get(0_i32);
-    if ((hitbox_data).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32) {
+    if (hitbox_data).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32) {
         if ((fp).u().ns().yoyo_hitbox_pos().x() != 0.0)
             || ((fp).u().ns().yoyo_hitbox_pos().y() != 0.0)
         {
@@ -71,7 +71,7 @@ pub fn ftNs_AttackHi4_YoyoApplyDamage<'a>(ctx: &'a Ctx, charge_frames: f64, gobj
     let mut damage_mul: f64 = 0.0;
     let mut final_damage: f64 = 0.0;
     if charge_frames != 0.0 {
-        if (((fp).x914().get(0)).state() as u32) == ((enums::HitCapsule_Enabled as i32) as u32) {
+        if ((fp).x914().get(0)).state() == (((enums::HitCapsule_Enabled as i32) as u32) as i32) {
             let mut mul: f64 = 0.0039059999398887157;
             charge_duration = (ness_attr).xAC_YOYO_CHARGE_DURATION();
             charge_duration2 = fp::fdivs(charge_frames, charge_duration);
@@ -1106,7 +1106,7 @@ fn inl_ftNs_AttackHi4_YoyoApplyDamage<'a>(ctx: &'a Ctx, charge_frames: f64, gobj
     let mut damage_mul: f64 = 0.0;
     let mut final_damage: f64 = 0.0;
     if charge_frames != 0.0 {
-        if (((fp).x914().get(0)).state() as u32) == ((enums::HitCapsule_Enabled as i32) as u32) {
+        if ((fp).x914().get(0)).state() == (((enums::HitCapsule_Enabled as i32) as u32) as i32) {
             let mut mul: f64 = 0.0039059999398887157;
             charge_duration = (ness_attr).xAC_YOYO_CHARGE_DURATION();
             charge_duration2 = fp::fdivs(charge_frames, charge_duration);

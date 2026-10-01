@@ -2609,7 +2609,7 @@ pub fn fn_80026E58<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 
 pub fn lbAudioAx_80026E84<'a>(ctx: &'a Ctx, ckind: i32) -> u64 {
     let mut ckind = ckind;
-    if ((ckind as u32) < (0_i32 as u32)) || ((ckind as u32) >= ((enums::ChKind_Max as i32) as u32))
+    if (ckind < ((0_i32 as u32) as i32)) || (ckind >= (((enums::ChKind_Max as i32) as u32) as i32))
     {
         return (0_i32 as u64);
     }
@@ -2624,7 +2624,7 @@ pub fn lbAudioAx_80026EBC<'a>(ctx: &'a Ctx, stkind: i32) -> u64 {
     let mut imax: i32 = ((div_u32(0x14d_u32, 3_u32)) as i32);
     let mut grkind: i32 = fns::Stage_8022519C(ctx, stkind);
     let mut shift: i32 = 0;
-    if ((grkind as u32) < (0_i32 as u32)) || ((grkind as u32) >= (imax as u32)) {
+    if (grkind < ((0_i32 as u32) as i32)) || (grkind >= ((imax as u32) as i32)) {
         return (0_i32 as u64);
     }
     if ({
@@ -2865,8 +2865,8 @@ pub fn lbAudioAx_8002785C<'a>(ctx: &'a Ctx) {
             i = 0_i32;
             'l3: while i < 4_i32 {
                 'c4: {
-                    if (fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                        != ((enums::Gm_PKind_NA as i32) as u32)
+                    if fns::Player_GetPlayerSlotType(ctx, i)
+                        != (((enums::Gm_PKind_NA as i32) as u32) as i32)
                     {
                         result = (result
                             | inl_lbAudioAx_80026E84_unfused(
@@ -2880,10 +2880,10 @@ pub fn lbAudioAx_8002785C<'a>(ctx: &'a Ctx) {
         }
     }
     stkind = fns::Stage_80225194(ctx);
-    if ((stkind as u32) == (217_i32 as u32)) || ((stkind as u32) == (229_i32 as u32)) {
+    if (stkind == ((217_i32 as u32) as i32)) || (stkind == ((229_i32 as u32) as i32)) {
         result = (result | (0x200004000_i64 as u64));
     }
-    if ((stkind as u32) == (70_i32 as u32)) || ((stkind as u32) == (71_i32 as u32)) {
+    if (stkind == ((70_i32 as u32) as i32)) || (stkind == ((71_i32 as u32) as i32)) {
         result = (result | (0xc00_i32 as u64));
     }
     statics::melee__lb__lbaudio_ax::lbl_804D38D8(ctx).set(
@@ -4257,7 +4257,7 @@ fn inl_fn_80027488_unfused<'a>(ctx: &'a Ctx) -> i32 {
 
 fn inl_lbAudioAx_80026E84_unfused<'a>(ctx: &'a Ctx, ckind: i32) -> u64 {
     let mut ckind = ckind;
-    if ((ckind as u32) < (0_i32 as u32)) || ((ckind as u32) >= ((enums::ChKind_Max as i32) as u32))
+    if (ckind < ((0_i32 as u32) as i32)) || (ckind >= (((enums::ChKind_Max as i32) as u32) as i32))
     {
         return (0_i32 as u64);
     }
@@ -4271,7 +4271,7 @@ fn inl_lbAudioAx_80026EBC_unfused<'a>(ctx: &'a Ctx, stkind: i32) -> u64 {
     let mut imax: i32 = ((div_u32(0x14d_u32, 3_u32)) as i32);
     let mut grkind: i32 = fns::Stage_8022519C(ctx, stkind);
     let mut shift: i32 = 0;
-    if ((grkind as u32) < (0_i32 as u32)) || ((grkind as u32) >= (imax as u32)) {
+    if (grkind < ((0_i32 as u32) as i32)) || (grkind >= ((imax as u32) as i32)) {
         return (0_i32 as u64);
     }
     if ({

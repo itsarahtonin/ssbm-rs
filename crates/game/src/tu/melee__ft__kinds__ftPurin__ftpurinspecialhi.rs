@@ -59,8 +59,8 @@ pub fn ftPr_SpecialHi_Anim<'a>(ctx: &'a Ctx, fighter_gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, fighter_gobj)));
     if (((fighter).mv().pr().specialhi().x0() != 0_i32)
         && (!((fighter).x914().get(0_i32).x43_b2() != 0)))
-        && (((fighter).x914().get(0_i32).state() as u32)
-            != ((enums::HitCapsule_Disabled as i32) as u32))
+        && ((fighter).x914().get(0_i32).state()
+            != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
     {
         (fighter).x914().get(0_i32).set_x43_b2((1_i32 as u8));
         (fighter)
@@ -79,8 +79,8 @@ pub fn ftPr_SpecialAirHi_Anim<'a>(ctx: &'a Ctx, fighter_gobj: HSD_GObj<'a>) {
     let mut fighter: Fighter<'a> = Handle::cast::<Fighter<'a>>((fighter_gobj).user_data());
     if (((fighter).mv().pr().specialhi().x0() != 0_i32)
         && (!((fighter).x914().get(0_i32).x43_b2() != 0)))
-        && (((fighter).x914().get(0_i32).state() as u32)
-            != ((enums::HitCapsule_Disabled as i32) as u32))
+        && ((fighter).x914().get(0_i32).state()
+            != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
     {
         (fighter).x914().get(0_i32).set_x43_b2((1_i32 as u8));
         (fighter)

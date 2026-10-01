@@ -77,7 +77,7 @@ pub fn getNewTask<'a>(ctx: &'a Ctx) -> CardTask<'a> {
                 result = statics::melee__lb__lbcardnew::state(ctx)
                     .task_array()
                     .get(i);
-                if ((result).r#type() as u32) == ((enums::LbCardNewTask_None as i32) as u32) {
+                if (result).r#type() == (((enums::LbCardNewTask_None as i32) as u32) as i32) {
                     break 'l1;
                 }
             }
@@ -111,11 +111,11 @@ pub fn executeNextTask<'a>(ctx: &'a Ctx, result: i32) -> i32 {
                         task = statics::melee__lb__lbcardnew::state(ctx)
                             .task_array()
                             .get(i);
-                        if (statics::melee__lb__lbcardnew::state(ctx)
+                        if statics::melee__lb__lbcardnew::state(ctx)
                             .task_array()
                             .get(i)
-                            .r#type() as u32)
-                            != ((enums::LbCardNewTask_None as i32) as u32)
+                            .r#type()
+                            != (((enums::LbCardNewTask_None as i32) as u32) as i32)
                         {
                             break 'l3;
                         }
@@ -229,7 +229,7 @@ pub fn executeNextTask<'a>(ctx: &'a Ctx, result: i32) -> i32 {
                         }
                     }
                     (task).set_type((enums::LbCardNewTask_None as i32));
-                    if (result as u32) != ((enums::LbCardResult_Busy as i32) as u32) {
+                    if result != (((enums::LbCardResult_Busy as i32) as u32) as i32) {
                         break 'c2;
                     }
                 }
@@ -237,13 +237,13 @@ pub fn executeNextTask<'a>(ctx: &'a Ctx, result: i32) -> i32 {
             break 'l1;
         }
     }
-    if ((result as u32) != ((enums::LbCardResult_Busy as i32) as u32))
+    if (result != (((enums::LbCardResult_Busy as i32) as u32) as i32))
         && (!Handle::is_null((statics::melee__lb__lbcardnew::state(ctx).on_finished())))
     {
         (statics::melee__lb__lbcardnew::state(ctx).on_finished()).call::<_, ()>((result,));
         statics::melee__lb__lbcardnew::state(ctx).set_on_finished(null::<FnPtr<'a>>(ctx));
     }
-    if ((result as u32) != ((enums::LbCardResult_Busy as i32) as u32))
+    if (result != (((enums::LbCardResult_Busy as i32) as u32) as i32))
         && ((statics::melee__lb__lbcardnew::state(ctx).mounted()) != 0_i32)
     {
         let _ = fns::CARDUnmount(ctx, (statics::melee__lb__lbcardnew::state(ctx).chan()));
@@ -2009,7 +2009,7 @@ fn inl_getNewTask_unfused<'a>(ctx: &'a Ctx) -> CardTask<'a> {
                 result = statics::melee__lb__lbcardnew::state(ctx)
                     .task_array()
                     .get(i);
-                if ((result).r#type() as u32) == ((enums::LbCardNewTask_None as i32) as u32) {
+                if (result).r#type() == (((enums::LbCardNewTask_None as i32) as u32) as i32) {
                     break 'l1;
                 }
             }

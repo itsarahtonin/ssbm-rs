@@ -160,10 +160,10 @@ pub fn ftPartsSetupRigidMtx<'a>(
         fns::GXLoadPosMtxImm(ctx, tmp, ((enums::GX_PNMTX0 as i32) as u32));
         inl_HSD_PerfCountMtxLoad_unfused(ctx);
         flags = inl_ftPartsGetSetupFlags_unfused(ctx, jobj, rendermode);
-        if (((flags as u32) & ((enums::SETUP_NORMAL as i32) as u32)) != 0) {
+        if ((flags & (((enums::SETUP_NORMAL as i32) as u32) as i32)) != 0) {
             inl_ftPartsSetupZScaleMtx_unfused(ctx, tmp, mtx.get(0), Handle::addr(__inl));
             inl_ftPartsSetupNrmMtx_unfused(ctx, jobj, mtx.get(0), (enums::GX_PNMTX0 as i32));
-            if (((flags as u32) & ((enums::SETUP_NORMAL_PROJECTION as i32) as u32)) != 0) {
+            if ((flags & (((enums::SETUP_NORMAL_PROJECTION as i32) as u32) as i32)) != 0) {
                 inl_ftPartsSetupTexMtx_unfused(ctx, mtx.get(0), (enums::GX_TEXMTX0 as i32));
             }
         }
@@ -196,14 +196,14 @@ pub fn ftPartsSetupSharedVtxMtx<'a>(
     if (Handle::addr(mark_obj.get()) != Handle::addr(Handle::cast::<Addr<'a>>(jobj)))
         && (mark.get() != (1_i32 as u32))
     {
-        flags = (((flags as u32) | ((enums::SETUP_JOINT0 as i32) as u32)) as i32);
+        flags = (flags | (((enums::SETUP_JOINT0 as i32) as u32) as i32));
     }
     fns::HSD_PObjSetMtxMark(ctx, 0_i32, Handle::cast::<Addr<'a>>(jobj), (1_i32 as u32));
     fns::HSD_PObjGetMtxMark(ctx, 1_i32, mark_obj, mark);
     if (Handle::addr(mark_obj.get()) != Handle::addr(Handle::cast::<Addr<'a>>((pobj).u().jobj())))
         && (mark.get() != (1_i32 as u32))
     {
-        flags = (((flags as u32) | ((enums::SETUP_JOINT1 as i32) as u32)) as i32);
+        flags = (flags | (((enums::SETUP_JOINT1 as i32) as u32) as i32));
     }
     fns::HSD_PObjSetMtxMark(
         ctx,
@@ -211,31 +211,31 @@ pub fn ftPartsSetupSharedVtxMtx<'a>(
         Handle::cast::<Addr<'a>>((pobj).u().jobj()),
         (1_i32 as u32),
     );
-    if (flags as u32) == ((enums::SETUP_NONE as i32) as u32) {
+    if flags == (((enums::SETUP_NONE as i32) as u32) as i32) {
         return;
     }
     flags = (flags | inl_ftPartsGetSetupFlags_unfused(ctx, jobj, rendermode));
-    if (((flags as u32) | ((enums::SETUP_NORMAL as i32) as u32)) != 0) {
+    if ((flags | (((enums::SETUP_NORMAL as i32) as u32) as i32)) != 0) {
         fns::GXSetCurrentMtx(ctx, ((enums::GX_PNMTX0 as i32) as u32));
         fns::GXLoadPosMtxImm(ctx, pmtx, ((enums::GX_PNMTX0 as i32) as u32));
         inl_HSD_PerfCountMtxLoad_unfused(ctx);
-        if (((flags as u32) & ((enums::SETUP_NORMAL as i32) as u32)) != 0) {
+        if ((flags & (((enums::SETUP_NORMAL as i32) as u32) as i32)) != 0) {
             inl_ftPartsSetupZScaleMtx_unfused(ctx, pmtx, mtx0.get(0), Handle::addr(__inl));
             inl_ftPartsSetupNrmMtx_unfused(ctx, jobj, mtx0.get(0), (enums::GX_PNMTX0 as i32));
-            if (((flags as u32) & ((enums::SETUP_NORMAL_PROJECTION as i32) as u32)) != 0) {
+            if ((flags & (((enums::SETUP_NORMAL_PROJECTION as i32) as u32) as i32)) != 0) {
                 inl_ftPartsSetupTexMtx_unfused(ctx, mtx0.get(0), (enums::GX_TEXMTX0 as i32));
             }
         }
     }
-    if (((flags as u32) | ((enums::SETUP_REFLECTION as i32) as u32)) != 0) {
+    if ((flags | (((enums::SETUP_REFLECTION as i32) as u32) as i32)) != 0) {
         inl_HSD_JObjSetupMatrix_unfused(ctx, (pobj).u().jobj());
         fns::PSMTXConcat(ctx, vmtx, ((pobj).u().jobj()).mtx().get(0), tmp.get(0));
         fns::GXLoadPosMtxImm(ctx, tmp.get(0), ((enums::GX_PNMTX1 as i32) as u32));
         inl_HSD_PerfCountMtxLoad_unfused(ctx);
-        if (((flags as u32) & ((enums::SETUP_NORMAL as i32) as u32)) != 0) {
+        if ((flags & (((enums::SETUP_NORMAL as i32) as u32) as i32)) != 0) {
             inl_ftPartsSetupZScaleMtx_unfused(ctx, tmp.get(0), mtx1.get(0), Handle::addr(__inl_2));
             inl_ftPartsSetupNrmMtx_unfused(ctx, jobj, mtx1.get(0), (enums::GX_PNMTX1 as i32));
-            if (((flags as u32) & ((enums::SETUP_NORMAL_PROJECTION as i32) as u32)) != 0) {
+            if ((flags & (((enums::SETUP_NORMAL_PROJECTION as i32) as u32) as i32)) != 0) {
                 inl_ftPartsSetupTexMtx_unfused(ctx, mtx1.get(0), (enums::GX_TEXMTX1 as i32));
             }
         }
@@ -409,7 +409,7 @@ pub fn ftPartsSetupEnvelopeMtx<'a>(
                 fns::PSMTXConcat(ctx, vmtx, mtxp, tmp.get(0));
                 fns::GXLoadPosMtxImm(ctx, tmp.get(0), mtx_id);
                 inl_HSD_PerfCountMtxLoad_unfused(ctx);
-                if (((flags as u32) & ((enums::SETUP_NORMAL as i32) as u32)) != 0) {
+                if ((flags & (((enums::SETUP_NORMAL as i32) as u32) as i32)) != 0) {
                     inl_ftPartsSetupZScaleMtx_unfused(
                         ctx,
                         tmp.get(0),
@@ -417,7 +417,7 @@ pub fn ftPartsSetupEnvelopeMtx<'a>(
                         Handle::addr(__inl),
                     );
                     inl_ftPartsSetupNrmMtx_unfused(ctx, jobj, mtx.get(0), (mtx_id as i32));
-                    if (((flags as u32) & ((enums::SETUP_NORMAL_PROJECTION as i32) as u32)) != 0) {
+                    if ((flags & (((enums::SETUP_NORMAL_PROJECTION as i32) as u32) as i32)) != 0) {
                         {
                             let __t12 = fns::HSD_Index2TexMtx(ctx, (i as u32));
                             inl_ftPartsSetupTexMtx_unfused(ctx, mtx.get(0), __t12)
@@ -1964,25 +1964,25 @@ fn inl_ftPartsGetSetupFlags_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, render
     let mut flags: i32 = (enums::SETUP_NONE as i32);
     if !((rendermode & ((shl_i32(1_i32, (26_i32 as u32))) as u32)) != 0) {
         if (((jobj).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0) {
-            flags = (((flags as u32) | ((enums::SETUP_NORMAL as i32) as u32)) as i32);
+            flags = (flags | (((enums::SETUP_NORMAL as i32) as u32) as i32));
         }
         if !Handle::is_null(fns::_HSD_TObjGetCurrentByType(
             ctx,
             null::<HSD_TObj<'a>>(ctx),
             (1_i32 as u32),
         )) {
-            flags = (((flags as u32)
-                | (((enums::SETUP_NORMAL as i32) | (enums::SETUP_REFLECTION as i32)) as u32))
-                as i32);
+            flags = (flags
+                | ((((enums::SETUP_NORMAL as i32) | (enums::SETUP_REFLECTION as i32)) as u32)
+                    as i32));
         }
         if !Handle::is_null(fns::_HSD_TObjGetCurrentByType(
             ctx,
             null::<HSD_TObj<'a>>(ctx),
             (2_i32 as u32),
         )) {
-            flags = (((flags as u32)
-                | (((enums::SETUP_NORMAL as i32) | (enums::SETUP_HIGHLIGHT as i32)) as u32))
-                as i32);
+            flags = (flags
+                | ((((enums::SETUP_NORMAL as i32) | (enums::SETUP_HIGHLIGHT as i32)) as u32)
+                    as i32));
         }
     }
     return flags;

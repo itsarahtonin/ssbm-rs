@@ -820,9 +820,9 @@ pub fn ftData_80085FD4<'a>(ctx: &'a Ctx, fp: Fighter<'a>, msid: i32) -> ftData_8
     let __frame = ctx.stack_frame(0x18);
     let mut fp = fp;
     let mut msid = msid;
-    if ((((fp).kind() as u32) == ((enums::Ft_Kind_Nana as i32) as u32))
-        && ((fns::Player_GetPlayerSlotType(ctx, ((fp).player_idx() as i32)) as u32)
-            != ((enums::Gm_PKind_Demo as i32) as u32)))
+    if (((fp).kind() == (((enums::Ft_Kind_Nana as i32) as u32) as i32))
+        && (fns::Player_GetPlayerSlotType(ctx, ((fp).player_idx() as i32))
+            != (((enums::Gm_PKind_Demo as i32) as u32) as i32)))
         && ((Handle::add((fp).x24(), msid)).x14() == (0_i32 as u32))
     {
         return Handle::cast::<ftData_80085FD4_ret<'a>>(
@@ -838,9 +838,9 @@ pub fn ftData_80085FD4<'a>(ctx: &'a Ctx, fp: Fighter<'a>, msid: i32) -> ftData_8
 pub fn ftData_80086060<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Fighter<'a> {
     let __frame = ctx.stack_frame(0x18);
     let mut fp = fp;
-    if (((fp).kind() as u32) == ((enums::Ft_Kind_Nana as i32) as u32))
-        && ((fns::Player_GetPlayerSlotType(ctx, ((fp).player_idx() as i32)) as u32)
-            != ((enums::Gm_PKind_Demo as i32) as u32))
+    if ((fp).kind() == (((enums::Ft_Kind_Nana as i32) as u32) as i32))
+        && (fns::Player_GetPlayerSlotType(ctx, ((fp).player_idx() as i32))
+            != (((enums::Gm_PKind_Demo as i32) as u32) as i32))
     {
         let mut gobj: HSD_GObj<'a> =
             fns::Player_GetEntityAtIndex(ctx, ((fp).player_idx() as i32), 0_i32);

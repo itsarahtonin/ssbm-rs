@@ -364,7 +364,7 @@ pub fn itLeadead_UnkMotion11_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         }
     }
     if (ip).xDD4_itemVar().leadead().x48() == 0_i32 {
-        if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             fns::it_8027CAD8(ctx, gobj);
             (ip).xDC8_word().flags().set_x1A((1_i32 as u32));
             fns::Item_80268E5C(ctx, gobj, 1_i32, (enums::ITEM_ANIM_UPDATE as i32));
@@ -382,7 +382,7 @@ pub fn itLeadead_UnkMotion12_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (ip).xDD4_itemVar().leadead().x48() == 0_i32 {
-        if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             fns::it_802E98E0(ctx, gobj);
         }
     } else if (ip).xDD4_itemVar().leadead().x48() > 0_i32 {
@@ -396,7 +396,7 @@ pub fn itLeadead_UnkMotion12_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn itLeadead_UnkMotion12_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         (ip).x40_vel().set_y(fp::fsubs(
             (ip).x40_vel().y(),
             ((ip).xCC_item_attr()).x10_fall_speed(),
@@ -408,7 +408,7 @@ pub fn itLeadead_UnkMotion12_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         let mut coll: i32 = fns::it_8026DB40(ctx, gobj);
         if ((coll & 12_i32) != 0) {
             let _ = fns::it_8027781C(ctx, gobj);
@@ -1241,7 +1241,7 @@ pub fn it_802EADD8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
     }
     fns::it_802EAC8C(ctx, gobj);
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         inl_it_802E8F24_inline_unfused(ctx, gobj);
     } else {
         inl_it_802E9308_inline_unfused(ctx, gobj);
@@ -1253,7 +1253,7 @@ pub fn it_802EAE80<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     fns::it_802EAC8C(ctx, gobj);
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         inl_it_802EAE80_inline_unfused(ctx, gobj);
     } else {
         inl_it_802E9308_inline_unfused(ctx, gobj);

@@ -62,9 +62,9 @@ pub fn ftBossLib_ReportGObjSlotType<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut kind: i32 = fns::Player_GetPlayerSlotType(ctx, ((fp).player_idx() as i32));
-    (if (((kind as u32) == ((enums::Gm_PKind_Human as i32) as u32))
-        || ((kind as u32) == ((enums::Gm_PKind_Boss as i32) as u32)))
-        || ((kind as u32) == ((enums::Gm_PKind_Cpu as i32) as u32))
+    (if ((kind == (((enums::Gm_PKind_Human as i32) as u32) as i32))
+        || (kind == (((enums::Gm_PKind_Boss as i32) as u32) as i32)))
+        || (kind == (((enums::Gm_PKind_Cpu as i32) as u32) as i32))
     {
         { () }
     } else {

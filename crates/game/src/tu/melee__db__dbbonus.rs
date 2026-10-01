@@ -197,7 +197,7 @@ pub fn fn_80228E54<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32) {
                         fns::DevText_Printf(ctx, text, cstr(ctx, 0x803eae48), &[]);
                         return;
                     }
-                    if (fns::gmDecisionGetType(ctx, bonus) as u32) == (0_i32 as u32) {
+                    if fns::gmDecisionGetType(ctx, bonus) == ((0_i32 as u32) as i32) {
                         fns::DevText_Printf(
                             ctx,
                             text,
@@ -472,7 +472,7 @@ fn inl_fn_80228E54_unfused<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32) {
                         fns::DevText_Printf(ctx, text, cstr(ctx, 0x803eae48), &[]);
                         return;
                     }
-                    if (fns::gmDecisionGetType(ctx, bonus) as u32) == (0_i32 as u32) {
+                    if fns::gmDecisionGetType(ctx, bonus) == ((0_i32 as u32) as i32) {
                         fns::DevText_Printf(
                             ctx,
                             text,

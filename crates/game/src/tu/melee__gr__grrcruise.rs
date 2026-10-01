@@ -3498,7 +3498,7 @@ pub fn grRCruise_80201918<'a>(ctx: &'a Ctx, vec: Vec<'a>) {
 pub fn grRCruise_80201988<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
     let __frame = ctx.stack_frame(0x28);
     let mut line_id = line_id;
-    if ((fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_RCruise as i32) as u32))
+    if (fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_RCruise as i32) as u32) as i32))
         && (line_id != 1_i32.wrapping_neg())
     {
         let mut joint: i32 = fns::mpJointFromLine(ctx, line_id);

@@ -442,9 +442,9 @@ pub fn setupArrayDesc<'a>(ctx: &'a Ctx, desc_list: HSD_VtxDescList<'a>) {
     {
         {
             desc = desc_list;
-            'l1: while ((desc).attr() as u32) != ((enums::GX_VA_NULL as i32) as u32) {
+            'l1: while (desc).attr() != (((enums::GX_VA_NULL as i32) as u32) as i32) {
                 'c2: {
-                    if ((desc).attr_type() as u32) != ((enums::GX_DIRECT as i32) as u32) {
+                    if (desc).attr_type() != (((enums::GX_DIRECT as i32) as u32) as i32) {
                         fns::GXSetArray(
                             ctx,
                             (desc).attr(),
@@ -470,7 +470,7 @@ pub fn setupVtxDesc<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>) {
         fns::GXClearVtxDesc(ctx);
         {
             desc = (pobj).verts();
-            'l1: while ((desc).attr() as u32) != ((enums::GX_VA_NULL as i32) as u32) {
+            'l1: while (desc).attr() != (((enums::GX_VA_NULL as i32) as u32) as i32) {
                 'c2: {
                     fns::GXSetVtxDesc(ctx, (desc).attr(), (desc).attr_type());
                     's3: {
@@ -514,9 +514,9 @@ pub fn setupShapeAnimArrayDesc<'a>(ctx: &'a Ctx, desc_list: HSD_VtxDescList<'a>)
     let mut desc: HSD_VtxDescList<'a> = null(ctx);
     {
         desc = desc_list;
-        'l1: while ((desc).attr() as u32) != ((enums::GX_VA_NULL as i32) as u32) {
+        'l1: while (desc).attr() != (((enums::GX_VA_NULL as i32) as u32) as i32) {
             'c2: {
-                if ((desc).attr_type() as u32) != ((enums::GX_DIRECT as i32) as u32) {
+                if (desc).attr_type() != (((enums::GX_DIRECT as i32) as u32) as i32) {
                     's3: {
                         let __case = match ((desc).attr() as u32) {
                             9_u32 => 0,
@@ -552,7 +552,7 @@ pub fn setupShapeAnimVtxDesc<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>) {
     fns::GXClearVtxDesc(ctx);
     {
         desc = (pobj).verts();
-        'l1: while ((desc).attr() as u32) != ((enums::GX_VA_NULL as i32) as u32) {
+        'l1: while (desc).attr() != (((enums::GX_VA_NULL as i32) as u32) as i32) {
             'c2: {
                 's3: {
                     let __case = match ((desc).attr() as u32) {
@@ -620,7 +620,7 @@ pub fn get_shape_vertex_xyz<'a>(
     let mut index_array: Val<'a, u8> = (Handle::add((shape_set).vertex_idx_list(), shape_id)).get();
     let mut idx: i32 = 0;
     let mut src_base: Addr<'a> = null(ctx);
-    if (((shape_set).vertex_desc()).attr_type() as u32) == ((enums::GX_INDEX16 as i32) as u32) {
+    if ((shape_set).vertex_desc()).attr_type() == (((enums::GX_INDEX16 as i32) as u32) as i32) {
         idx = ((Handle::add(index_array, arrayidx.wrapping_mul(2_i32))).get() as i32);
         idx = (shl_i32(idx, (8_i32 as u32))).wrapping_add(
             ((Handle::add(
@@ -632,7 +632,7 @@ pub fn get_shape_vertex_xyz<'a>(
     } else {
         idx = ((Handle::add(index_array, arrayidx)).get() as i32);
     }
-    (if (((shape_set).vertex_desc()).comp_cnt() as u32) == ((enums::GX_POS_XYZ as i32) as u32) {
+    (if ((shape_set).vertex_desc()).comp_cnt() == (((enums::GX_POS_XYZ as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -646,7 +646,7 @@ pub fn get_shape_vertex_xyz<'a>(
         (Handle::cast::<Val<'a, u8>>(((shape_set).vertex_desc()).vertex())),
         idx.wrapping_mul((((shape_set).vertex_desc()).stride() as i32)),
     ));
-    if (((shape_set).vertex_desc()).comp_type() as u32) == ((enums::GX_F32 as i32) as u32) {
+    if ((shape_set).vertex_desc()).comp_type() == (((enums::GX_F32 as i32) as u32) as i32) {
         let _ = fns::memcpy(ctx, Handle::cast::<Addr<'a>>(dst), src_base, 12_u32);
     } else {
         let mut decimal_point: i32 =
@@ -702,7 +702,7 @@ pub fn get_shape_normal_xyz<'a>(
     let mut index_array: Val<'a, u8> = (Handle::add((shape_set).normal_idx_list(), shape_id)).get();
     let mut idx: i32 = 0;
     let mut src_base: Addr<'a> = null(ctx);
-    if (((shape_set).normal_desc()).attr_type() as u32) == ((enums::GX_INDEX16 as i32) as u32) {
+    if ((shape_set).normal_desc()).attr_type() == (((enums::GX_INDEX16 as i32) as u32) as i32) {
         idx = ((Handle::add(index_array, arrayidx.wrapping_mul(2_i32))).get() as i32);
         idx = (shl_i32(idx, (8_i32 as u32))).wrapping_add(
             ((Handle::add(
@@ -714,7 +714,7 @@ pub fn get_shape_normal_xyz<'a>(
     } else {
         idx = ((Handle::add(index_array, arrayidx)).get() as i32);
     }
-    (if (((shape_set).normal_desc()).comp_cnt() as u32) == ((enums::GX_NRM_XYZ as i32) as u32) {
+    (if ((shape_set).normal_desc()).comp_cnt() == (((enums::GX_NRM_XYZ as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -728,7 +728,7 @@ pub fn get_shape_normal_xyz<'a>(
         (Handle::cast::<Val<'a, u8>>(((shape_set).normal_desc()).vertex())),
         idx.wrapping_mul((((shape_set).normal_desc()).stride() as i32)),
     ));
-    if (((shape_set).normal_desc()).comp_type() as u32) == ((enums::GX_F32 as i32) as u32) {
+    if ((shape_set).normal_desc()).comp_type() == (((enums::GX_F32 as i32) as u32) as i32) {
         let _ = fns::memcpy(ctx, Handle::cast::<Addr<'a>>(dst), src_base, 12_u32);
     } else {
         let mut decimal_point: i32 =
@@ -785,7 +785,7 @@ pub fn get_shape_nbt_xyz<'a>(
     let mut i: i32 = 0;
     let mut idx: i32 = 0;
     let mut src_base: Addr<'a> = null(ctx);
-    (if (((shape_set).normal_desc()).attr() as u32) == ((enums::GX_VA_NBT as i32) as u32) {
+    (if ((shape_set).normal_desc()).attr() == (((enums::GX_VA_NBT as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -795,7 +795,7 @@ pub fn get_shape_nbt_xyz<'a>(
             cstr(ctx, 0x8040639c),
         )
     });
-    if (((shape_set).normal_desc()).attr_type() as u32) == ((enums::GX_INDEX16 as i32) as u32) {
+    if ((shape_set).normal_desc()).attr_type() == (((enums::GX_INDEX16 as i32) as u32) as i32) {
         idx = ((Handle::add(index_array, arrayidx.wrapping_mul(2_i32))).get() as i32);
         idx = (shl_i32(idx, (8_i32 as u32))).wrapping_add(
             ((Handle::add(
@@ -807,7 +807,7 @@ pub fn get_shape_nbt_xyz<'a>(
     } else {
         idx = ((Handle::add(index_array, arrayidx)).get() as i32);
     }
-    (if (((shape_set).normal_desc()).comp_cnt() as u32) == ((enums::GX_NRM_XYZ as i32) as u32) {
+    (if ((shape_set).normal_desc()).comp_cnt() == (((enums::GX_NRM_XYZ as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -821,7 +821,7 @@ pub fn get_shape_nbt_xyz<'a>(
         (Handle::cast::<Val<'a, u8>>(((shape_set).normal_desc()).vertex())),
         idx.wrapping_mul((((shape_set).normal_desc()).stride() as i32)),
     ));
-    if (((shape_set).normal_desc()).comp_type() as u32) == ((enums::GX_F32 as i32) as u32) {
+    if ((shape_set).normal_desc()).comp_type() == (((enums::GX_F32 as i32) as u32) as i32) {
         let _ = fns::memcpy(ctx, Handle::cast::<Addr<'a>>(dst), src_base, 36_u32);
     } else {
         let mut decimal_point: i32 =
@@ -959,8 +959,8 @@ pub fn interpretShapeAnimDisplayList<'a>(
                                     'c6: {
                                         let mut desc: HSD_VtxDescList<'a> =
                                             (Handle::add((pobj).verts(), j));
-                                        if ((desc).attr() as u32)
-                                            == ((enums::GX_VA_NULL as i32) as u32)
+                                        if (desc).attr()
+                                            == (((enums::GX_VA_NULL as i32) as u32) as i32)
                                         {
                                             break 'l5;
                                         } else {
@@ -1002,8 +1002,9 @@ pub fn interpretShapeAnimDisplayList<'a>(
                                                     break 's7;
                                                 }
                                                 if __case <= 1 {
-                                                    if ((desc).attr_type() as u32)
-                                                        == ((enums::GX_INDEX16 as i32) as u32)
+                                                    if (desc).attr_type()
+                                                        == (((enums::GX_INDEX16 as i32) as u32)
+                                                            as i32)
                                                     {
                                                         idx = (((shl_i32(
                                                             (idx as i32),
@@ -1032,8 +1033,9 @@ pub fn interpretShapeAnimDisplayList<'a>(
                                                     break 's7;
                                                 }
                                                 if __case <= 2 {
-                                                    if ((desc).attr_type() as u32)
-                                                        == ((enums::GX_INDEX16 as i32) as u32)
+                                                    if (desc).attr_type()
+                                                        == (((enums::GX_INDEX16 as i32) as u32)
+                                                            as i32)
                                                     {
                                                         idx = (((shl_i32(
                                                             (idx as i32),
@@ -1062,8 +1064,9 @@ pub fn interpretShapeAnimDisplayList<'a>(
                                                     break 's7;
                                                 }
                                                 if __case <= 3 {
-                                                    if ((desc).attr_type() as u32)
-                                                        == ((enums::GX_INDEX16 as i32) as u32)
+                                                    if (desc).attr_type()
+                                                        == (((enums::GX_INDEX16 as i32) as u32)
+                                                            as i32)
                                                     {
                                                         idx = (((shl_i32(
                                                             (idx as i32),
@@ -1144,8 +1147,9 @@ pub fn interpretShapeAnimDisplayList<'a>(
                                                     break 's7;
                                                 }
                                                 if __case <= 4 {
-                                                    if ((desc).attr_type() as u32)
-                                                        == ((enums::GX_INDEX16 as i32) as u32)
+                                                    if (desc).attr_type()
+                                                        == (((enums::GX_INDEX16 as i32) as u32)
+                                                            as i32)
                                                     {
                                                         idx = (((shl_i32(
                                                             (idx as i32),
@@ -1165,8 +1169,9 @@ pub fn interpretShapeAnimDisplayList<'a>(
                                                     break 's7;
                                                 }
                                                 if __case <= 5 {
-                                                    if ((desc).attr_type() as u32)
-                                                        == ((enums::GX_INDEX16 as i32) as u32)
+                                                    if (desc).attr_type()
+                                                        == (((enums::GX_INDEX16 as i32) as u32)
+                                                            as i32)
                                                     {
                                                         idx = (((shl_i32(
                                                             (idx as i32),
@@ -1180,8 +1185,9 @@ pub fn interpretShapeAnimDisplayList<'a>(
                                                             as i32))
                                                             as u16);
                                                         inl_GXColor1x16_unfused(ctx, idx);
-                                                    } else if ((desc).attr_type() as u32)
-                                                        == ((enums::GX_INDEX8 as i32) as u32)
+                                                    } else if (desc).attr_type()
+                                                        == (((enums::GX_INDEX8 as i32) as u32)
+                                                            as i32)
                                                     {
                                                         inl_GXColor1x8_unfused(ctx, (idx as u8));
                                                     } else {
@@ -1251,8 +1257,9 @@ pub fn interpretShapeAnimDisplayList<'a>(
                                                     break 's7;
                                                 }
                                                 if __case <= 6 {
-                                                    if ((desc).attr_type() as u32)
-                                                        == ((enums::GX_INDEX16 as i32) as u32)
+                                                    if (desc).attr_type()
+                                                        == (((enums::GX_INDEX16 as i32) as u32)
+                                                            as i32)
                                                     {
                                                         idx = (((shl_i32(
                                                             (idx as i32),
@@ -3836,13 +3843,13 @@ pub fn SetupRigidModelMtx<'a>(
     fns::GXLoadPosMtxImm(ctx, pmtx, ((enums::GX_PNMTX0 as i32) as u32));
     inl_HSD_PerfCountMtxLoad_unfused(ctx);
     flags = inl_GetSetupFlags_unfused(ctx, jobj, rendermode);
-    if (((flags as u32) & ((enums::SETUP_NORMAL as i32) as u32)) != 0) {
+    if ((flags & (((enums::SETUP_NORMAL as i32) as u32) as i32)) != 0) {
         fns::HSD_MtxInverseTranspose(ctx, pmtx, n.get(0));
         if (((jobj).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0) {
             fns::GXLoadNrmMtxImm(ctx, n.get(0), ((enums::GX_PNMTX0 as i32) as u32));
             inl_HSD_PerfCountMtxLoad_unfused(ctx);
         }
-        if (((flags as u32) & ((enums::SETUP_NORMAL_PROJECTION as i32) as u32)) != 0) {
+        if ((flags & (((enums::SETUP_NORMAL_PROJECTION as i32) as u32) as i32)) != 0) {
             fns::GXLoadTexMtxImm(
                 ctx,
                 n.get(0),
@@ -3880,30 +3887,30 @@ pub fn SetupSharedVtxModelMtx<'a>(
         if (Handle::addr(obj.get()) != Handle::addr(Handle::cast::<Addr<'a>>(jobj)))
             && (mark.get() != (1_i32 as u32))
         {
-            flags = (((flags as u32) | ((enums::SETUP_JOINT0 as i32) as u32)) as i32);
+            flags = (flags | (((enums::SETUP_JOINT0 as i32) as u32) as i32));
         }
         inl_HSD_PObjGetMtxMark_unfused(ctx, 1_i32, obj, mark);
         if (Handle::addr(obj.get()) != Handle::addr(Handle::cast::<Addr<'a>>((pobj).u().jobj())))
             && (mark.get() != (1_i32 as u32))
         {
-            flags = (((flags as u32) | ((enums::SETUP_JOINT1 as i32) as u32)) as i32);
+            flags = (flags | (((enums::SETUP_JOINT1 as i32) as u32) as i32));
         }
     }
-    if (flags as u32) == ((enums::SETUP_NONE as i32) as u32) {
+    if flags == (((enums::SETUP_NONE as i32) as u32) as i32) {
         return;
     }
     flags = (flags | inl_GetSetupFlags_unfused(ctx, jobj, rendermode));
-    if (((flags as u32) | ((enums::SETUP_JOINT0 as i32) as u32)) != 0) {
+    if ((flags | (((enums::SETUP_JOINT0 as i32) as u32) as i32)) != 0) {
         fns::GXSetCurrentMtx(ctx, ((enums::GX_PNMTX0 as i32) as u32));
         fns::GXLoadPosMtxImm(ctx, pmtx, ((enums::GX_PNMTX0 as i32) as u32));
         inl_HSD_PerfCountMtxLoad_unfused(ctx);
-        if (((flags as u32) & ((enums::SETUP_NORMAL as i32) as u32)) != 0) {
+        if ((flags & (((enums::SETUP_NORMAL as i32) as u32) as i32)) != 0) {
             fns::HSD_MtxInverseTranspose(ctx, pmtx, n0.get(0));
             if (((jobj).flags() & (128_i32 as u32)) != 0) {
                 fns::GXLoadNrmMtxImm(ctx, n0.get(0), ((enums::GX_PNMTX0 as i32) as u32));
                 inl_HSD_PerfCountMtxLoad_unfused(ctx);
             }
-            if (((flags as u32) & ((enums::SETUP_NORMAL_PROJECTION as i32) as u32)) != 0) {
+            if ((flags & (((enums::SETUP_NORMAL_PROJECTION as i32) as u32) as i32)) != 0) {
                 fns::GXLoadTexMtxImm(
                     ctx,
                     n0.get(0),
@@ -3914,18 +3921,18 @@ pub fn SetupSharedVtxModelMtx<'a>(
             }
         }
     }
-    if (((flags as u32) | ((enums::SETUP_JOINT1 as i32) as u32)) != 0) {
+    if ((flags | (((enums::SETUP_JOINT1 as i32) as u32) as i32)) != 0) {
         inl_HSD_JObjSetupMatrix_unfused(ctx, (pobj).u().jobj());
         fns::PSMTXConcat(ctx, vmtx, ((pobj).u().jobj()).mtx().get(0), m.get(0));
         fns::GXLoadPosMtxImm(ctx, m.get(0), ((enums::GX_PNMTX1 as i32) as u32));
         inl_HSD_PerfCountMtxLoad_unfused(ctx);
-        if (((flags as u32) & ((enums::SETUP_NORMAL as i32) as u32)) != 0) {
+        if ((flags & (((enums::SETUP_NORMAL as i32) as u32) as i32)) != 0) {
             fns::HSD_MtxInverseTranspose(ctx, m.get(0), n1.get(0));
             if (((jobj).flags() & (128_i32 as u32)) != 0) {
                 fns::GXLoadNrmMtxImm(ctx, n1.get(0), ((enums::GX_PNMTX1 as i32) as u32));
                 inl_HSD_PerfCountMtxLoad_unfused(ctx);
             }
-            if (((flags as u32) & ((enums::SETUP_NORMAL_PROJECTION as i32) as u32)) != 0) {
+            if ((flags & (((enums::SETUP_NORMAL_PROJECTION as i32) as u32) as i32)) != 0) {
                 fns::GXLoadTexMtxImm(
                     ctx,
                     n1.get(0),
@@ -4105,13 +4112,13 @@ pub fn SetupEnvelopeModelMtx<'a>(
                 fns::PSMTXConcat(ctx, vmtx, mtxp, tmp.get(0));
                 fns::GXLoadPosMtxImm(ctx, tmp.get(0), (mtx_no as u32));
                 inl_HSD_PerfCountMtxLoad_unfused(ctx);
-                if (((flags as u32) & ((enums::SETUP_NORMAL as i32) as u32)) != 0) {
+                if ((flags & (((enums::SETUP_NORMAL as i32) as u32) as i32)) != 0) {
                     fns::HSD_MtxInverseTranspose(ctx, tmp.get(0), mtx_2.get(0));
                     if (((jobj).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0) {
                         fns::GXLoadNrmMtxImm(ctx, mtx_2.get(0), (mtx_no as u32));
                         inl_HSD_PerfCountMtxLoad_unfused(ctx);
                     }
-                    if (((flags as u32) & ((enums::SETUP_NORMAL_PROJECTION as i32) as u32)) != 0) {
+                    if ((flags & (((enums::SETUP_NORMAL_PROJECTION as i32) as u32) as i32)) != 0) {
                         {
                             let __t12 = (fns::HSD_Index2TexMtx(ctx, (MtxIdx as u32)) as u32);
                             fns::GXLoadTexMtxImm(
@@ -4748,25 +4755,25 @@ fn inl_GetSetupFlags_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rendermode: u
     let mut flags: i32 = (enums::SETUP_NONE as i32);
     if !((rendermode & (0x4000000_i32 as u32)) != 0) {
         if (((jobj).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0) {
-            flags = (((flags as u32) | ((enums::SETUP_NORMAL as i32) as u32)) as i32);
+            flags = (flags | (((enums::SETUP_NORMAL as i32) as u32) as i32));
         }
         if !Handle::is_null(fns::_HSD_TObjGetCurrentByType(
             ctx,
             null::<HSD_TObj<'a>>(ctx),
             (1_i32 as u32),
         )) {
-            flags = (((flags as u32)
-                | (((enums::SETUP_NORMAL as i32) | (enums::SETUP_REFLECTION as i32)) as u32))
-                as i32);
+            flags = (flags
+                | ((((enums::SETUP_NORMAL as i32) | (enums::SETUP_REFLECTION as i32)) as u32)
+                    as i32));
         }
         if !Handle::is_null(fns::_HSD_TObjGetCurrentByType(
             ctx,
             null::<HSD_TObj<'a>>(ctx),
             (2_i32 as u32),
         )) {
-            flags = (((flags as u32)
-                | (((enums::SETUP_NORMAL as i32) | (enums::SETUP_HIGHLIGHT as i32)) as u32))
-                as i32);
+            flags = (flags
+                | ((((enums::SETUP_NORMAL as i32) | (enums::SETUP_HIGHLIGHT as i32)) as u32)
+                    as i32));
         }
     }
     return flags;

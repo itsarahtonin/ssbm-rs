@@ -50,7 +50,7 @@ pub fn fn_800D9CE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     startFrame = frame;
     if (fp).motion_id() == 212_i32 {
         nextMotion = 213_i32;
-        if ((fp).kind() as u32) == ((enums::Ft_Kind_Yoshi as i32) as u32) {
+        if (fp).kind() == (((enums::Ft_Kind_Yoshi as i32) as u32) as i32) {
             yattrs = Handle::cast::<_ftYoshiAttributes<'a>>((fp).dat_attrs());
             if (frame >= (yattrs).x124()) && (frame < (yattrs).x128()) {
                 rate = fp::fsubs(frame, (yattrs).x124());

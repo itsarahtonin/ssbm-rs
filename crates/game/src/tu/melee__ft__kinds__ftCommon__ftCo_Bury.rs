@@ -312,7 +312,7 @@ pub fn ftCo_800C0CB8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (((fp).dmg().x1860_element() == ((enums::HitElement_Ground as i32) as u32))
-        && (((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32)))
+        && ((fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32)))
         && (!((fp).x2227_b6() != 0))
     {
         fns::ftCo_800C0D0C(ctx, gobj);

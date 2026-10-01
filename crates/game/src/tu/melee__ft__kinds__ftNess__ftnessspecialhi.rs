@@ -1809,7 +1809,7 @@ pub fn ftNs_SpecialHiStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::ftCommon_8007D60C(ctx, fp);
         fns::Fighter_ChangeMotionState(
             ctx,
@@ -1832,7 +1832,7 @@ pub fn ftNs_SpecialHiHold_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::ftCommon_8007D60C(ctx, fp);
         fns::Fighter_ChangeMotionState(
             ctx,
@@ -1855,7 +1855,7 @@ pub fn ftNs_SpecialHiEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::ftCommon_8007D60C(ctx, fp);
         fns::Fighter_ChangeMotionState(
             ctx,
@@ -1880,7 +1880,7 @@ pub fn ftNs_SpecialHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp0: Fighter<'a> = null(ctx);
     fp0 = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         let mut env_flags: u32 = ((fp0).coll_data().env_flags() as u32);
         if ((env_flags & (63_i32 as u32)) != 0) || ((env_flags & (0xfc0_i32 as u32)) != 0) {
             fns::ftCommon_8007D60C(ctx, fp0);
@@ -2029,7 +2029,7 @@ pub fn ftNs_SpecialAirHiStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(
             ctx,
             gobj,
@@ -2048,7 +2048,7 @@ pub fn ftNs_SpecialAirHiHold_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(
             ctx,
             gobj,
@@ -2067,7 +2067,7 @@ pub fn ftNs_SpecialAirHiEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(
             ctx,
             gobj,

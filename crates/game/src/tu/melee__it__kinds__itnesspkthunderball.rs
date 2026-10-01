@@ -215,7 +215,7 @@ pub fn it_802AB58C<'a>(
             .set_xF08(null::<HSD_GObj<'a>>(ctx));
         fns::it_802ABA4C(ctx, ball);
         (ip).xDCC_flag().set_b3((0_i32 as u8));
-        if (fns::Stage_80225194(ctx) as u32) == (84_i32 as u32) {
+        if fns::Stage_80225194(ctx) == ((84_i32 as u32) as i32) {
             fns::Item_80267454(ctx, ball);
         }
     }

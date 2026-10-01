@@ -657,9 +657,9 @@ fn inl_ft_SetVec_unfused<'a>(ctx: &'a Ctx, dst: Vec<'a>, src: Vec<'a>) {
 fn inl_ft_JumpAerial_Sound_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, ftkind: i32) {
     let mut fp = fp;
     let mut ftkind = ftkind;
-    if (((ftkind as u32) != ((enums::Ft_Kind_Mewtwo as i32) as u32))
-        && (((ftkind as u32) >= (16_i32 as u32))
-            || ((ftkind as u32) != ((enums::Ft_Kind_Ness as i32) as u32))))
+    if ((ftkind != (((enums::Ft_Kind_Mewtwo as i32) as u32) as i32))
+        && ((ftkind >= ((16_i32 as u32) as i32))
+            || (ftkind != (((enums::Ft_Kind_Ness as i32) as u32) as i32))))
         && (!Handle::is_null((fp).x197C()))
     {
         fns::ft_PlaySFX(ctx, fp, 0x11b_i32, (127_i32 as u8), (64_i32 as u8));
@@ -722,9 +722,9 @@ fn inl_ft_SetVec<'a>(ctx: &'a Ctx, dst: Vec<'a>, src: Vec<'a>) {
 fn inl_ft_JumpAerial_Sound<'a>(ctx: &'a Ctx, fp: Fighter<'a>, ftkind: i32) {
     let mut fp = fp;
     let mut ftkind = ftkind;
-    if (((ftkind as u32) != ((enums::Ft_Kind_Mewtwo as i32) as u32))
-        && (((ftkind as u32) >= (16_i32 as u32))
-            || ((ftkind as u32) != ((enums::Ft_Kind_Ness as i32) as u32))))
+    if ((ftkind != (((enums::Ft_Kind_Mewtwo as i32) as u32) as i32))
+        && ((ftkind >= ((16_i32 as u32) as i32))
+            || (ftkind != (((enums::Ft_Kind_Ness as i32) as u32) as i32))))
         && (!Handle::is_null((fp).x197C()))
     {
         fns::ft_PlaySFX(ctx, fp, 0x11b_i32, (127_i32 as u8), (64_i32 as u8));

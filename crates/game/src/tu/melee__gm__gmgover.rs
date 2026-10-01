@@ -33,7 +33,7 @@ pub fn gm_801BEE9C<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let mut ckind: u8 = 0;
     game_mode = Handle::cast::<Val<'a, i8>>((arg0).info().exit_data());
     ckind = fns::gm_80173224(ctx, statics::melee__gm__gmgover::gm_801BF030(ctx), 1_i32);
-    if ((fns::gm_801BEFB0(ctx) as u32) == ((enums::CKind_GameWatch as i32) as u32))
+    if (fns::gm_801BEFB0(ctx) == (((enums::CKind_GameWatch as i32) as u32) as i32))
         && (!(fns::gm_80164430(ctx, (27_i32 as u16)) != 0))
     {
         fns::gm_80164504(ctx, (27_i32 as u16));

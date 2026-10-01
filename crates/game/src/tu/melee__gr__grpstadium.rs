@@ -1882,8 +1882,8 @@ pub fn grStadium_801D3460<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         i = 0_i32;
         'l3: while i < 4_i32 {
             'c4: {
-                if (fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                    != ((enums::Gm_PKind_NA as i32) as u32)
+                if fns::Player_GetPlayerSlotType(ctx, i)
+                    != (((enums::Gm_PKind_NA as i32) as u32) as i32)
                 {
                     let mut character_name: Val<'a, i8> = fns::gm_80160A60(ctx, i);
                     sp38.at(var_r28).set(character_name);
@@ -2196,7 +2196,7 @@ pub fn grStadium_801D3B4C<'a>(ctx: &'a Ctx, arg0: i32, slot_type: i32) {
     let mut slot_type = slot_type;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut gp: Ground<'a> = null(ctx);
-    if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_PStadium as i32) as u32) {
+    if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_PStadium as i32) as u32) as i32) {
         gobj = fns::Ground_GetMapGObj(ctx, (enums::PsType_Display as i32));
         gp = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
         (gp).u().display().set_xEE((arg0 as i16));
@@ -2259,8 +2259,8 @@ pub fn grStadium_801D3BBC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         player_index = 0_i32;
         'l3: while player_index < 6_i32 {
             'c4: {
-                if ((fns::Player_GetPlayerSlotType(ctx, player_index) as u32)
-                    != ((enums::Gm_PKind_NA as i32) as u32))
+                if (fns::Player_GetPlayerSlotType(ctx, player_index)
+                    != (((enums::Gm_PKind_NA as i32) as u32) as i32))
                     && (fns::Player_8003219C(ctx, player_index) == 0_i32)
                 {
                     player_gobj = fns::Player_GetEntity(ctx, player_index);
@@ -2307,8 +2307,8 @@ pub fn grStadium_801D3BBC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         player_num = 0_i32;
         'l5: while player_num < 6_i32 {
             'c6: {
-                if ((fns::Player_GetPlayerSlotType(ctx, player_num) as u32)
-                    != ((enums::Gm_PKind_NA as i32) as u32))
+                if (fns::Player_GetPlayerSlotType(ctx, player_num)
+                    != (((enums::Gm_PKind_NA as i32) as u32) as i32))
                     && (fns::Player_8003219C(ctx, player_num) == 0_i32)
                 {
                     current_player_gobj = fns::Player_GetEntity(ctx, player_num);
@@ -2436,7 +2436,7 @@ pub fn grStadium_801D3F40<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32) {
 
 pub fn grStadium_801D4040<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
-    if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_PStadium as i32) as u32) {
+    if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_PStadium as i32) as u32) as i32) {
         fns::grStadium_801D2528(
             ctx,
             fns::Ground_GetMapGObj(ctx, (enums::PsType_Display as i32)),
@@ -2448,7 +2448,7 @@ pub fn grStadium_801D4040<'a>(ctx: &'a Ctx) {
 
 pub fn grStadium_801D4084<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
-    if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_PStadium as i32) as u32) {
+    if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_PStadium as i32) as u32) as i32) {
         fns::grStadium_801D2528(
             ctx,
             fns::Ground_GetMapGObj(ctx, (enums::PsType_Display as i32)),
@@ -2460,7 +2460,7 @@ pub fn grStadium_801D4084<'a>(ctx: &'a Ctx) {
 
 pub fn grStadium_801D40C8<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
-    if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_PStadium as i32) as u32) {
+    if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_PStadium as i32) as u32) as i32) {
         fns::grStadium_801D2528(
             ctx,
             fns::Ground_GetMapGObj(ctx, (enums::PsType_Display as i32)),
@@ -2472,7 +2472,7 @@ pub fn grStadium_801D40C8<'a>(ctx: &'a Ctx) {
 
 pub fn grStadium_801D410C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
-    if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_PStadium as i32) as u32) {
+    if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_PStadium as i32) as u32) as i32) {
         fns::grStadium_801D2528(
             ctx,
             fns::Ground_GetMapGObj(ctx, (enums::PsType_Display as i32)),
@@ -2484,7 +2484,7 @@ pub fn grStadium_801D410C<'a>(ctx: &'a Ctx) {
 
 pub fn grStadium_801D4150<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
-    if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_PStadium as i32) as u32) {
+    if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_PStadium as i32) as u32) as i32) {
         fns::grStadium_801D2528(
             ctx,
             fns::Ground_GetMapGObj(ctx, (enums::PsType_Display as i32)),
@@ -2761,7 +2761,7 @@ pub fn grStadium_801D4548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if (fns::gm_8018841C(ctx) != 0) {
         return;
     }
-    if (fns::Stage_80225194(ctx) as u32) == (240_i32 as u32) {
+    if fns::Stage_80225194(ctx) == ((240_i32 as u32) as i32) {
         display_gobj = fns::Ground_GetMapGObj(ctx, (enums::PsType_Display as i32));
         if !Handle::is_null(display_gobj) {
             display_gp = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, display_gobj)));
@@ -3070,7 +3070,7 @@ pub fn grStadium_801D4548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn grStadium_801D4FF8<'a>(ctx: &'a Ctx, pl_slot: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut pl_slot = pl_slot;
-    if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_PStadium as i32) as u32) {
+    if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_PStadium as i32) as u32) as i32) {
         let mut gobj: HSD_GObj<'a> = fns::Ground_GetMapGObj(ctx, (enums::PsType_Display as i32));
         if !Handle::is_null(gobj) {
             let mut gp: Ground<'a> =

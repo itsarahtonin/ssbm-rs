@@ -169,7 +169,7 @@ pub fn ftMr_SpecialHi_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::ft_80085154(ctx, gobj);
     } else {
         fns::ft_80084FA8(ctx, gobj);
@@ -215,7 +215,7 @@ pub fn ftMr_SpecialHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if ((fp).cmd_vars().at(0_i32).get() == (0_i32 as u32))
             || ((fp).self_vel().y() >= fp::frsp(0_i32 as f64))
         {
@@ -344,7 +344,7 @@ fn inl_ftMr_SpecialHi_Coll_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if ((fp).cmd_vars().at(0_i32).get() == (0_i32 as u32))
             || ((fp).self_vel().y() >= fp::frsp(0_i32 as f64))
         {

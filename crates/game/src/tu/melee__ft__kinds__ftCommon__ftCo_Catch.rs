@@ -266,8 +266,8 @@ pub fn fn_800D8E94<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut kind: i32 = (fp).kind();
-    if (((kind as u32) == ((enums::Ft_Kind_Link as i32) as u32))
-        || ((kind as u32) == ((enums::Ft_Kind_CLink as i32) as u32)))
+    if ((kind == (((enums::Ft_Kind_Link as i32) as u32) as i32))
+        || (kind == (((enums::Ft_Kind_CLink as i32) as u32) as i32)))
         && (!Handle::is_null((fp).u().lk().xC()))
     {
         return 0_i32;

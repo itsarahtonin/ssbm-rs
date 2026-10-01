@@ -178,15 +178,15 @@ pub fn ftAction_8007121C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
         statics::melee__ft__ftaction::ftAction_800715EC(ctx, gobj, cmd);
     } else {
         hit_group = ((cmd).x8().u()).create_hitbox_0().hit_group();
-        if ((({
+        if (({
             let __t1 = (fp)
                 .x914()
                 .get((((cmd).x8().u()).create_hitbox_0().id() as i32));
             hitbox = __t1;
             __t1
         })
-        .state() as u32)
-            == ((enums::HitCapsule_Disabled as i32) as u32))
+        .state()
+            == (((enums::HitCapsule_Disabled as i32) as u32) as i32))
             || ((hitbox).x4() != hit_group)
         {
             (hitbox).set_x4(hit_group);

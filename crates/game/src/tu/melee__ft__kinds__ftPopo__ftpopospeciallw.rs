@@ -231,7 +231,7 @@ pub fn ftPp_SpecialLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         let mut fp: Fighter<'a> =
             (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
         fns::ftPartSetRotX(ctx, fp, 0_i32, 0.0);
@@ -298,7 +298,7 @@ pub fn fn_80122D2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             (fp).u().pp().set_x2230_b0((1_i32 as u8));
             inl_ftPp_set_cbs(ctx, gobj);
             (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
-            if ((fp).kind() as u32) == ((enums::Ft_Kind_Popo as i32) as u32) {
+            if (fp).kind() == (((enums::Ft_Kind_Popo as i32) as u32) as i32) {
                 fns::ft_800881D8(ctx, fp, 0x1fc42_i32, (127_i32 as u8), (64_i32 as u8));
                 fns::ft_80088510(ctx, fp, 0x1fbeb_i32, (127_i32 as u8), (64_i32 as u8));
             } else {

@@ -60,7 +60,7 @@ pub fn ftNs_SpecialS_ItemPKFireSpawn<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         ));
         ItemBonePos.set_y(fp::fadds(ItemBonePos.y(), (ness_attr).x34_PKFIRE_SPAWN_Y()));
         ItemBonePos.set_z(0.0);
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             PKFireLaunch = (ness_attr).x20_PKFIRE_AERIAL_LAUNCH_TRAJECTORY();
             PKFireVel = (ness_attr).x24_PKFIRE_AERIAL_VELOCITY();
         } else {
@@ -171,7 +171,7 @@ pub fn ftNs_SpecialAirS_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut ness_attr: ftNessAttributes<'a> = null(ctx);
     ness_attr = Handle::cast::<ftNessAttributes<'a>>((fp).dat_attrs());
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         fns::ftCo_LandingFallSpecial_Enter(ctx, gobj, 0_i32, (ness_attr).x38_PKFIRE_LANDING_LAG());
     }
 }

@@ -582,7 +582,7 @@ pub fn pl_8003E2CC<'a>(ctx: &'a Ctx, arg0: i32, pl_itemlog_kind: i32) -> u32 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
     let mut pl_itemlog_kind = pl_itemlog_kind;
-    (if (pl_itemlog_kind as u32) < ((enums::Pl_ItemLog_Terminate as i32) as u32) {
+    (if pl_itemlog_kind < (((enums::Pl_ItemLog_Terminate as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -603,7 +603,7 @@ pub fn pl_8003E334<'a>(ctx: &'a Ctx, arg0: i32, pl_itemlog_kind: i32) -> u32 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
     let mut pl_itemlog_kind = pl_itemlog_kind;
-    (if (pl_itemlog_kind as u32) < ((enums::Pl_ItemLog_Terminate as i32) as u32) {
+    (if pl_itemlog_kind < (((enums::Pl_ItemLog_Terminate as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(

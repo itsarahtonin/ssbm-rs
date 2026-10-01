@@ -331,7 +331,7 @@ pub fn ftPk_SpecialS0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut sa: _ftPikachuAttributes<'a> =
         Handle::cast::<_ftPikachuAttributes<'a>>((fp).dat_attrs());
-    if ((fp).x914().get(0_i32).state() as u32) == ((enums::HitCapsule_Enabled as i32) as u32) {
+    if (fp).x914().get(0_i32).state() == (((enums::HitCapsule_Enabled as i32) as u32) as i32) {
         let mut damage_amount: f64 = fp::fmadds(
             fp::frsp((fp).mv().pk().unk3().x0() as f64),
             (sa).x2C(),
@@ -357,7 +357,7 @@ pub fn ftPk_SpecialAirS0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut sa: _ftPikachuAttributes<'a> =
         Handle::cast::<_ftPikachuAttributes<'a>>((fp).dat_attrs());
-    if ((fp).x914().get(0_i32).state() as u32) == ((enums::HitCapsule_Enabled as i32) as u32) {
+    if (fp).x914().get(0_i32).state() == (((enums::HitCapsule_Enabled as i32) as u32) as i32) {
         let mut damage_amount: f64 = fp::fmadds(
             fp::frsp((fp).mv().pk().unk3().x0() as f64),
             (sa).x2C(),

@@ -41,7 +41,7 @@ pub fn ftPe_8011BA54<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut float_input: i32 = inl_checkStartFloatInput_unfused(ctx, gobj);
-    if ((((fp).kind() as u32) == ((enums::Ft_Kind_Peach as i32) as u32))
+    if (((fp).kind() == (((enums::Ft_Kind_Peach as i32) as u32) as i32))
         && ((fp).u().pe().has_float() != 0))
         && (float_input != 0)
     {
@@ -56,7 +56,7 @@ pub fn ftPe_8011BAD8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Peach as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Peach as i32) as u32) as i32) {
         if ((fp).self_vel().y() <= fp::frsp(0_i32 as f64)) && ((fp).u().pe().has_float() != 0) {
             if (inl_ftPe_Float_CheckContinueInput_unfused(ctx, fp) != 0) {
                 fns::ftPe_8011BB6C(ctx, gobj, 1_i32);

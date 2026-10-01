@@ -740,7 +740,7 @@ pub fn ftCo_8009DD94<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
         }
     }
     if (dynamics_num != 0_i32)
-        && ((fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Flatzone as i32) as u32))
+        && (fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Flatzone as i32) as u32) as i32))
     {
         let mut jobj: HSD_JObj<'a> =
             (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
@@ -758,14 +758,14 @@ pub fn ftCo_8009DD94<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
             ret_B0 = 0_i32;
         } else {
             kind = (fp).kind();
-            if (((kind as u32) == ((enums::Ft_Kind_Mewtwo as i32) as u32))
+            if ((kind == (((enums::Ft_Kind_Mewtwo as i32) as u32) as i32))
                 && ((fp).motion_id() >= 223_i32))
                 && ((fp).motion_id() <= 232_i32)
             {
                 ret_B0 = 1_i32;
-            } else if ((((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32))
-                || ((kind as u32) == ((enums::Ft_Kind_Koopa as i32) as u32)))
-                || ((kind as u32) == ((enums::Ft_Kind_GKoops as i32) as u32))
+            } else if (((fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32))
+                || (kind == (((enums::Ft_Kind_Koopa as i32) as u32) as i32)))
+                || (kind == (((enums::Ft_Kind_GKoops as i32) as u32) as i32))
             {
                 ret_B0 = 0_i32;
             } else {
@@ -774,7 +774,7 @@ pub fn ftCo_8009DD94<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
         }
         fns::ftColl_8007AF60(ctx, gobj);
         statics::melee__ft__ftdynamics::ftCo_8009E614(ctx, fp);
-        if ((fp).kind() as u32) == ((enums::Ft_Kind_Peach as i32) as u32) {
+        if (fp).kind() == (((enums::Ft_Kind_Peach as i32) as u32) as i32) {
             {
                 i = 0_i32;
                 'l3: while i < dynamics_num.wrapping_sub(1_i32) {
@@ -806,7 +806,7 @@ pub fn ftCo_8009DD94<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
                 0_i32,
                 ret_B0,
             );
-        } else if ((fp).kind() as u32) == ((enums::Ft_Kind_Mewtwo as i32) as u32) {
+        } else if (fp).kind() == (((enums::Ft_Kind_Mewtwo as i32) as u32) as i32) {
             {
                 i = 0_i32;
                 'l5: while i < dynamics_num {
@@ -851,7 +851,7 @@ pub fn ftCo_8009DD94<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
         }
     }
     if (dynamics_num != 0_i32)
-        && ((fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Flatzone as i32) as u32))
+        && (fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Flatzone as i32) as u32) as i32))
     {
         let mut jobj_2: HSD_JObj<'a> =
             (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
@@ -918,10 +918,10 @@ pub fn ftCo_8009E140<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) {
             break 'l1;
         }
     }
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Kirby as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Kirby as i32) as u32) as i32) {
         return;
     }
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Purin as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Purin as i32) as u32) as i32) {
         statics::melee__ft__ftdynamics::ftCo_8009CB40(
             ctx,
             fp,
@@ -1133,8 +1133,8 @@ pub fn ftCo_8009E4A8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 pub fn ftCo_8009E614<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let mut fp = fp;
-    if ((((fp).kind() as u32) == ((enums::Ft_Kind_Mars as i32) as u32))
-        || (((fp).kind() as u32) == ((enums::Ft_Kind_Emblem as i32) as u32)))
+    if (((fp).kind() == (((enums::Ft_Kind_Mars as i32) as u32) as i32))
+        || ((fp).kind() == (((enums::Ft_Kind_Emblem as i32) as u32) as i32)))
         && (!((fp).x2227_b6() != 0))
     {
         let mut x: i32 = fns::lb_80011ABC(ctx);

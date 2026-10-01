@@ -48,7 +48,7 @@ pub fn ftZd_SpecialHi_801396E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             null::<Vec<'a>>(ctx),
             vec,
         );
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             let _ = fns::efSync_Spawn(
                 ctx,
                 0x4f6_i32,
@@ -312,7 +312,7 @@ pub fn ftZd_SpecialHiStart_1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut collData: CollData<'a> = (fp).coll_data();
     let mut env_flags: u32 = 0;
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         env_flags = ((collData).env_flags() as u32);
         if ((env_flags & (63_i32 as u32)) != (0_i32 as u32))
             || ((env_flags & (0xfc0_i32 as u32)) != (0_i32 as u32))

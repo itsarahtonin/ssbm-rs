@@ -131,7 +131,7 @@ pub fn ft_800895E0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) {
     {
         (fp).x2074().set_x2088(fns::plAttack_80037B08(ctx));
     }
-    if (((fp).kind() as u32) == ((enums::Ft_Kind_Luigi as i32) as u32))
+    if ((fp).kind() == (((enums::Ft_Kind_Luigi as i32) as u32) as i32))
         && ((val.x0().x2073() as i32) == 113_i32)
     {
         sp18.set_x2070_int(0x240063_i32);
@@ -258,17 +258,17 @@ pub fn ft_80089914<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) -> i32 {
     if (msid < (enums::ftCo_MS_AttackS3Hi as i32)) || (msid > (enums::ftCo_MS_AttackS4LwS as i32)) {
         return 0_i32;
     }
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Fox as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Fox as i32) as u32) as i32) {
         if ((msid.wrapping_sub((enums::ftCo_MS_AttackS3LwS as i32))) as u32) <= (2_i32 as u32) {
             return 0_i32;
         }
     }
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Falco as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Falco as i32) as u32) as i32) {
         if ((msid.wrapping_sub((enums::ftCo_MS_AttackS3LwS as i32))) as u32) <= (2_i32 as u32) {
             return 0_i32;
         }
     }
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Mewtwo as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Mewtwo as i32) as u32) as i32) {
         if msid == (enums::ftCo_MS_AttackS3S as i32) {
             return 0_i32;
         }

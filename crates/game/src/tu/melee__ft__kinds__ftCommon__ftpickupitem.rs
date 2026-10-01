@@ -46,7 +46,7 @@ pub fn ftpickupitem_80094150<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, item_gobj: HS
         && ((Handle::is_null((fp).item_gobj())) || (fns::it_8026B4F0(ctx, item_gobj) != 0))
     {
         pickup = (fp).x294_itPickup();
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             offset0 = (pickup).gr_light_offset();
         } else {
             offset0 = (pickup).air_light_offset();
@@ -90,7 +90,7 @@ pub fn ftpickupitem_800942A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flags: u32) -
     let mut offset0: Quaternion<'a> = null(ctx);
     fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     pickup = inl_ftpickupitem_800942A0_inline(ctx, fp);
-    offset0 = (if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    offset0 = (if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         (pickup).gr_light_offset()
     } else {
         (pickup).air_light_offset()

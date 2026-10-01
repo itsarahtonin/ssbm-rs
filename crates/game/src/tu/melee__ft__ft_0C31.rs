@@ -300,7 +300,7 @@ pub fn ftCo_EntryStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .x2C()
             .set_bottom(fp::fneg((fp2).mv().co().entry().x28()));
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::ft_80083E64(
             ctx,
             gobj,
@@ -491,7 +491,7 @@ pub fn ftCo_EntryEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .x2C()
             .set_bottom(fp::fneg((fp2).mv().co().entry().x28()));
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::ft_80083E64(
             ctx,
             gobj,

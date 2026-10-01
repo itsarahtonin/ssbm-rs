@@ -40,7 +40,7 @@ pub fn pl_80038824<'a>(ctx: &'a Ctx, player: i32, kind: i32) {
     let mut kind = kind;
     let mut temp_r31: pl_StaleMoveTableExt_t<'a> =
         fns::Player_GetStaleMoveTableIndexPtr2(ctx, player);
-    (if (fns::gmDecisionGetType(ctx, kind) as u32) == ((enums::Gm_DecType_Point as i32) as u32) {
+    (if fns::gmDecisionGetType(ctx, kind) == (((enums::Gm_DecType_Point as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -67,7 +67,7 @@ pub fn pl_80038898<'a>(ctx: &'a Ctx, player: i32, kind: i32) {
     let mut currentValue: u32 = 0;
     let mut temp_r31: pl_StaleMoveTableExt_t<'a> =
         fns::Player_GetStaleMoveTableIndexPtr2(ctx, player);
-    (if (fns::gmDecisionGetType(ctx, kind) as u32) == ((enums::Gm_DecType_Point as i32) as u32) {
+    (if fns::gmDecisionGetType(ctx, kind) == (((enums::Gm_DecType_Point as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -1739,7 +1739,7 @@ fn inl_setPointValue_unfused<'a>(ctx: &'a Ctx, player: i32, kind: i32, val: u32)
             cstr(ctx, 0x804d7f20),
         )
     });
-    (if (fns::gmDecisionGetType(ctx, kind) as u32) == ((enums::Gm_DecType_Point as i32) as u32) {
+    (if fns::gmDecisionGetType(ctx, kind) == (((enums::Gm_DecType_Point as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -1771,8 +1771,8 @@ fn inl_resetBonuses_unfused<'a>(ctx: &'a Ctx, player: i32) {
         i = 0_i32;
         'l1: while i < 215_i32 {
             'c2: {
-                if (fns::gmDecisionGetType(ctx, i) as u32)
-                    == ((enums::Gm_DecType_Flag as i32) as u32)
+                if fns::gmDecisionGetType(ctx, i)
+                    == (((enums::Gm_DecType_Flag as i32) as u32) as i32)
                 {
                     (table).x0_staleMoveTable().x904().at(i).set((0_i32 as u32));
                 }
@@ -1796,7 +1796,7 @@ fn inl_setFlag_unfused<'a>(ctx: &'a Ctx, player: i32, kind: i32) {
             cstr(ctx, 0x804d7f20),
         )
     });
-    (if (fns::gmDecisionGetType(ctx, kind) as u32) == ((enums::Gm_DecType_Flag as i32) as u32) {
+    (if fns::gmDecisionGetType(ctx, kind) == (((enums::Gm_DecType_Flag as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(

@@ -68,8 +68,8 @@ pub fn assign_reg<'a>(
                     i = 0_i32;
                     'l5: while i < 4_i32 {
                         'c6: {
-                            if (fns::HSD_TExpGetType(ctx, (tev).c_in().get(i).exp()) as u32)
-                                == ((enums::HSD_TE_TEV as i32) as u32)
+                            if fns::HSD_TExpGetType(ctx, (tev).c_in().get(i).exp())
+                                == (((enums::HSD_TE_TEV as i32) as u32) as i32)
                             {
                                 if ((tev).c_in().get(i).sel() as i32) == 1_i32 {
                                     color_refs
@@ -97,8 +97,8 @@ pub fn assign_reg<'a>(
                                         );
                                 }
                             }
-                            if (fns::HSD_TExpGetType(ctx, (tev).a_in().get(i).exp()) as u32)
-                                == ((enums::HSD_TE_TEV as i32) as u32)
+                            if fns::HSD_TExpGetType(ctx, (tev).a_in().get(i).exp())
+                                == (((enums::HSD_TE_TEV as i32) as u32) as i32)
                             {
                                 alpha_refs
                                     .at((((tev).a_in().get(i).exp()).tev().a_dst() as i32))
@@ -355,7 +355,7 @@ pub fn HSD_TExpMakeDag<'a>(ctx: &'a Ctx, root: HSD_TExp<'a>, list: HSD_TExpDag<'
     let mut idx: i32 = 0;
     let mut num: i32 = 0;
     let mut dag: HSD_TExpDag<'a> = null(ctx);
-    (if (fns::HSD_TExpGetType(ctx, root) as u32) == ((enums::HSD_TE_TEV as i32) as u32) {
+    (if fns::HSD_TExpGetType(ctx, root) == (((enums::HSD_TE_TEV as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -777,11 +777,10 @@ pub fn HSD_TExpSchedule<'a>(
                         j = 0_i32;
                         'l3: while j < 4_i32 {
                             'c4: {
-                                if (fns::HSD_TExpGetType(
+                                if fns::HSD_TExpGetType(
                                     ctx,
                                     ((Handle::add(result, i)).get()).tev().c_in().get(j).exp(),
-                                ) as u32)
-                                    == ((enums::HSD_TE_TEV as i32) as u32)
+                                ) == (((enums::HSD_TE_TEV as i32) as u32) as i32)
                                 {
                                     if (((Handle::add(result, i)).get()).tev().c_in().get(j).sel()
                                         as i32)
@@ -843,11 +842,10 @@ pub fn HSD_TExpSchedule<'a>(
                         j = 0_i32;
                         'l5: while j < 4_i32 {
                             'c6: {
-                                if (fns::HSD_TExpGetType(
+                                if fns::HSD_TExpGetType(
                                     ctx,
                                     ((Handle::add(result, i)).get()).tev().a_in().get(j).exp(),
-                                ) as u32)
-                                    == ((enums::HSD_TE_TEV as i32) as u32)
+                                ) == (((enums::HSD_TE_TEV as i32) as u32) as i32)
                                 {
                                     ((Handle::add(result, i)).get())
                                         .tev()
@@ -1907,10 +1905,10 @@ pub fn SimplifyByMerge<'a>(ctx: &'a Ctx, arg0: HSD_TExp<'a>) -> i32 {
                     && (((arg0).tev().c_in().get(1_i32).sel() as i32)
                         == (enums::HSD_TE_0 as i32)))
                     && (((arg0).tev().c_in().get(2_i32).sel() as i32) == (enums::HSD_TE_0 as i32)))
-                    && ((fns::HSD_TExpGetType(ctx, (arg0).tev().c_in().get(0_i32).exp()) as u32)
-                        != ((enums::HSD_TE_CNST as i32) as u32)))
-                    && ((fns::HSD_TExpGetType(ctx, (arg0).tev().c_in().get(3_i32).exp()) as u32)
-                        != ((enums::HSD_TE_CNST as i32) as u32))
+                    && (fns::HSD_TExpGetType(ctx, (arg0).tev().c_in().get(0_i32).exp())
+                        != (((enums::HSD_TE_CNST as i32) as u32) as i32)))
+                    && (fns::HSD_TExpGetType(ctx, (arg0).tev().c_in().get(3_i32).exp())
+                        != (((enums::HSD_TE_CNST as i32) as u32) as i32))
                 {
                     if ((((arg0).tev().c_op() as i32) == 0_i32)
                         && (((arg0).tev().c_in().get(3_i32).r#type() as i32)
@@ -2221,10 +2219,10 @@ pub fn SimplifyByMerge<'a>(ctx: &'a Ctx, arg0: HSD_TExp<'a>) -> i32 {
                     && (((arg0).tev().a_in().get(1_i32).sel() as i32)
                         == (enums::HSD_TE_0 as i32)))
                     && (((arg0).tev().a_in().get(2_i32).sel() as i32) == (enums::HSD_TE_0 as i32)))
-                    && ((fns::HSD_TExpGetType(ctx, (arg0).tev().a_in().get(0_i32).exp()) as u32)
-                        != ((enums::HSD_TE_CNST as i32) as u32)))
-                    && ((fns::HSD_TExpGetType(ctx, (arg0).tev().a_in().get(3_i32).exp()) as u32)
-                        != ((enums::HSD_TE_CNST as i32) as u32))
+                    && (fns::HSD_TExpGetType(ctx, (arg0).tev().a_in().get(0_i32).exp())
+                        != (((enums::HSD_TE_CNST as i32) as u32) as i32)))
+                    && (fns::HSD_TExpGetType(ctx, (arg0).tev().a_in().get(3_i32).exp())
+                        != (((enums::HSD_TE_CNST as i32) as u32) as i32))
                 {
                     if ((((arg0).tev().a_op() as i32) == 0_i32)
                         && (((arg0).tev().a_in().get(3_i32).r#type() as i32)
@@ -2522,7 +2520,7 @@ pub fn HSD_TExpSimplify<'a>(ctx: &'a Ctx, texp_: HSD_TExp<'a>) -> i32 {
     let mut texp_ = texp_;
     let mut texp: HSD_TExp<'a> = texp_;
     let mut res: i32 = 0_i32;
-    if (fns::HSD_TExpGetType(ctx, texp) as u32) != ((enums::HSD_TE_TEV as i32) as u32) {
+    if fns::HSD_TExpGetType(ctx, texp) != (((enums::HSD_TE_TEV as i32) as u32) as i32) {
         return 0_i32;
     }
     if fns::SimplifySrc(ctx, texp) != 0_i32 {

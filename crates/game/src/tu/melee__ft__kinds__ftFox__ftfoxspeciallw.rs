@@ -138,7 +138,7 @@ pub fn ftFx_SpecialLwStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).mv().fx().SpecialLw().set_isRelease(1_i32);
     }
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             statics::melee__ft__kinds__ftFox__ftfoxspeciallw::ftFx_SpecialLwLoop_Enter(ctx, gobj);
         } else {
             statics::melee__ft__kinds__ftFox__ftfoxspeciallw::ftFx_SpecialAirLwLoop_Enter(
@@ -162,7 +162,7 @@ pub fn ftFx_SpecialAirLwStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).mv().fx().SpecialLw().set_isRelease(1_i32);
     }
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             statics::melee__ft__kinds__ftFox__ftfoxspeciallw::ftFx_SpecialLwLoop_Enter(ctx, gobj);
         } else {
             statics::melee__ft__kinds__ftFox__ftfoxspeciallw::ftFx_SpecialAirLwLoop_Enter(
@@ -246,7 +246,7 @@ pub fn ftFx_SpecialAirLwStart_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftFx_SpecialLwStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::ftFx_SpecialLwStart_GroundToAir(ctx, gobj);
     }
 }
@@ -254,7 +254,7 @@ pub fn ftFx_SpecialLwStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftFx_SpecialAirLwStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         fns::ftFx_SpecialAirLwStart_AirToGround(ctx, gobj);
     }
 }
@@ -307,7 +307,7 @@ pub fn ftFx_SpecialLwLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if ((fp).mv().fx().SpecialLw().releaseLag() <= 0_i32)
         && ((fp).mv().fx().SpecialLw().isRelease() != 0)
     {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             fns::ftFx_SpecialLwEnd_Enter(ctx, gobj);
             return;
         }
@@ -334,7 +334,7 @@ pub fn ftFx_SpecialAirLwLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if ((fp).mv().fx().SpecialLw().releaseLag() <= 0_i32)
         && ((fp).mv().fx().SpecialLw().isRelease() != 0_i32)
     {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             fns::ftFx_SpecialLwEnd_Enter(ctx, gobj);
             return;
         }
@@ -409,7 +409,7 @@ pub fn ftFx_SpecialAirLwLoop_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftFx_SpecialLwLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         statics::melee__ft__kinds__ftFox__ftfoxspeciallw::ftFx_SpecialLwLoop_GroundToAir(ctx, gobj);
     }
 }
@@ -417,7 +417,7 @@ pub fn ftFx_SpecialLwLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftFx_SpecialAirLwLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         statics::melee__ft__kinds__ftFox__ftfoxspeciallw::ftFx_SpecialAirLwLoop_AirToGround(
             ctx, gobj,
         );
@@ -604,7 +604,7 @@ pub fn ftFx_SpecialAirLwTurn_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftFx_SpecialLwTurn_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::ftFx_SpecialLwTurn_GroundToAir(ctx, gobj);
     }
 }
@@ -612,7 +612,7 @@ pub fn ftFx_SpecialLwTurn_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftFx_SpecialAirLwTurn_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         fns::ftFx_SpecialAirLwTurn_GroundToAir(ctx, gobj);
     }
 }
@@ -653,7 +653,7 @@ pub fn ftFx_SpecialLwTurn_Check<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     if fns::ftCo_800C97A8(ctx, gobj) != 0_i32 {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             inl_enterGroundTurn_unfused(ctx, gobj);
         } else {
             inl_enterAirTurn_unfused(ctx, gobj);
@@ -671,14 +671,14 @@ pub fn ftFx_SpecialLwHit_Check<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     if ((fp).mv().fx().SpecialLw().releaseLag() <= 0_i32)
         && ((fp).mv().fx().SpecialLw().isRelease() != 0)
     {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             fns::ftFx_SpecialLwEnd_Enter(ctx, gobj);
         } else {
             fns::ftFx_SpecialAirLwEnd_Enter(ctx, gobj);
         }
         return 0_i32;
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         inl_ftFx_SpecialLwLoop_Enter_unfused(ctx, gobj);
     } else {
         inl_ftFx_SpecialAirLwLoop_Enter_unfused(ctx, gobj);
@@ -828,7 +828,7 @@ pub fn ftFx_SpecialLwHit_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fp::frsp(0.1),
         fp::frsp(fp::fdiv(3.141592653589793, (3_i32 as f64))),
     );
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         msid = (enums::ftFx_MS_SpecialLwHit as i32);
     } else {
         msid = (enums::ftFx_MS_SpecialAirLwHit as i32);
@@ -911,7 +911,7 @@ pub fn ftFx_SpecialAirLwEnd_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftFx_SpecialLwEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::ftFx_SpecialLwEnd_GroundToAir(ctx, gobj);
     }
 }
@@ -919,7 +919,7 @@ pub fn ftFx_SpecialLwEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftFx_SpecialAirLwEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         fns::ftFx_SpecialAirLwEnd_AirToGround(ctx, gobj);
     }
 }
@@ -1269,14 +1269,14 @@ fn inl_ftFx_SpecialLwHit_Check_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> 
     if ((fp).mv().fx().SpecialLw().releaseLag() <= 0_i32)
         && ((fp).mv().fx().SpecialLw().isRelease() != 0)
     {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             fns::ftFx_SpecialLwEnd_Enter(ctx, gobj);
         } else {
             fns::ftFx_SpecialAirLwEnd_Enter(ctx, gobj);
         }
         return 0_i32;
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         inl_ftFx_SpecialLwLoop_Enter_unfused(ctx, gobj);
     } else {
         inl_ftFx_SpecialAirLwLoop_Enter_unfused(ctx, gobj);

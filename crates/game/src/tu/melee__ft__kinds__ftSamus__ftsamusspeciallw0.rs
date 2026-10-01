@@ -127,7 +127,7 @@ pub fn ftSs_Init_80128B1C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, angle: f64, arg9
     (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
     (fp).cmd_vars().at(1_i32).set((0_i32 as u32));
     (fp).mv().ss().unk2().set_x0(0_i32);
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCommon_8007D5D4(ctx, fighter2);
     }
     fns::Fighter_ChangeMotionState(

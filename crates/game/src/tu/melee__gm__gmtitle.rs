@@ -430,7 +430,7 @@ pub fn gm_Scene_Title_OnFrame<'a>(ctx: &'a Ctx) {
         tmp = Handle::cast::<Val<'a, i32>>(fns::gm_GetCurrentSceneExitData(ctx));
         (tmp).set(input);
         fns::gm_801A4B60(ctx);
-    } else if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32) {
+    } else if fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32) {
         if ((input & (shl_i32(1_i32, (11_i32 as u32)))) != 0) {
             inl_sfxForward_unfused(ctx);
             tmp = Handle::cast::<Val<'a, i32>>(fns::gm_GetCurrentSceneExitData(ctx));
@@ -509,7 +509,7 @@ pub fn gm_Scene_Title_OnEnter<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     fns::lbAudioAx_80027648(ctx);
     fns::gm_PreloadTitleDemo(ctx);
     inl_fn_801A1498_inline_unfused(ctx);
-    if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_NoDebugRom as i32) as u32) {
+    if fns::DbLevel(ctx).get() >= (((enums::DbLKind_NoDebugRom as i32) as u32) as i32) {
         let _ = fns::HSD_SisLib_803A611C(
             ctx,
             0_i32,

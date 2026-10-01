@@ -430,7 +430,7 @@ pub fn ftCa_SpecialSStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::ft_80084104(ctx, gobj);
         return;
     }
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::efLib_DestroyAll(ctx, gobj);
         fns::ftCommon_8007D60C(ctx, fp);
         if (da).specials_miss_landing_lag() == fp::frsp(0_i32 as f64) {
@@ -501,7 +501,7 @@ pub fn ftCa_SpecialAirSStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut da: ftCaptain_DatAttrs<'a> = Handle::cast::<ftCaptain_DatAttrs<'a>>((fp).dat_attrs());
-    if (fns::ft_80081D0C(ctx, gobj) as u32) == (1_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) == ((1_i32 as u32) as i32) {
         fns::efLib_DestroyAll(ctx, gobj);
         fns::ftCo_LandingFallSpecial_Enter(ctx, gobj, 0_i32, (da).specials_miss_landing_lag());
     }
@@ -514,7 +514,7 @@ pub fn ftCa_SpecialAirS_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut da: ftCaptain_DatAttrs<'a> = Handle::cast::<ftCaptain_DatAttrs<'a>>((fp).dat_attrs());
-    if (fns::ft_80081D0C(ctx, gobj) as u32) == (1_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) == ((1_i32 as u32) as i32) {
         (fp).set_gr_vel((fp).self_vel().x());
         fns::efLib_DestroyAll(ctx, gobj);
         fns::ftCo_LandingFallSpecial_Enter(ctx, gobj, 0_i32, (da).specials_hit_landing_lag());

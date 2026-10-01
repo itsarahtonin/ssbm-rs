@@ -424,8 +424,8 @@ pub fn HSD_StartRender<'a>(ctx: &'a Ctx, pass: i32) {
 }
 
 pub fn HSD_Init_803755A8<'a>(ctx: &'a Ctx) {
-    if (statics::sysdolphin__baselib__initialize::current_render_pass(ctx).get() as u32)
-        == ((enums::HSD_RP_OFFSCREEN as i32) as u32)
+    if statics::sysdolphin__baselib__initialize::current_render_pass(ctx).get()
+        == (((enums::HSD_RP_OFFSCREEN as i32) as u32) as i32)
     {}
 }
 

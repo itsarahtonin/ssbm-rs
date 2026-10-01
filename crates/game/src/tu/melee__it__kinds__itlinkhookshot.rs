@@ -361,7 +361,7 @@ pub fn it_802A2BA4<'a>(
         );
         inl_it_802A2428_unfused(ctx, gobj);
     }
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_CLink as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_CLink as i32) as u32) as i32) {
         fns::it_804D6D48(ctx).set(6.0);
     } else {
         fns::it_804D6D48(ctx).set(6.0);
@@ -699,7 +699,7 @@ pub fn it_802A3630<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         return;
     }
     fns::it_802A7384(ctx, item, pos, (fp2).x34_scale().y());
-    if ((fp2).ground_or_air() as u32) != (1_i32 as u32) {
+    if (fp2).ground_or_air() != ((1_i32 as u32) as i32) {
         fns::it_802A77DC(ctx, arg0);
         return;
     }
@@ -765,7 +765,7 @@ pub fn it_802A3828<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp2).cur_pos().set_x(fp::fadds(pos.x(), x_offset));
     (fp2).cur_pos().set_y(fp::fadds(pos.y(), y_offset));
     fns::it_802A7384(ctx, item, pos, (fp2).x34_scale().y());
-    if ((fp2).ground_or_air() as u32) != (1_i32 as u32) {
+    if (fp2).ground_or_air() != ((1_i32 as u32) as i32) {
         fns::it_802A77DC(ctx, gobj);
     }
 }
@@ -873,7 +873,7 @@ pub fn it_802A39FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).self_vel().set_y(temp_f0_2);
     (fp).pos_delta().set_y(temp_f0_2);
     fns::it_802A7384(ctx, item, pos, (fp).x34_scale().y());
-    if ((fp).ground_or_air() as u32) != (1_i32 as u32) {
+    if (fp).ground_or_air() != ((1_i32 as u32) as i32) {
         fns::it_802A77DC(ctx, gobj);
         return;
     }
@@ -1015,7 +1015,7 @@ pub fn it_802A3E50<'a>(ctx: &'a Ctx, item_link: ItemLink<'a>, arg1: i32, arg8: f
             .set_y(fp::fadds((coll).cur_pos().y(), arg8));
     }
     if ((((item_link).x2C_b1() as i32) != 0) && (!(flag != 0))) && (!((item_link).x2C_b2() != 0)) {
-        if (arg1 as u32) == ((enums::Ft_Kind_CLink as i32) as u32) {
+        if arg1 == (((enums::Ft_Kind_CLink as i32) as u32) as i32) {
             let _ = fns::lbAudioAx_800237A8(ctx, 0x111bf_i32, (127_u32 as i32), (64_u32 as i32));
         } else {
             let _ = fns::lbAudioAx_800237A8(ctx, 0x2714f_i32, (127_u32 as i32), (64_u32 as i32));
@@ -2293,7 +2293,7 @@ pub fn it_802A7168<'a>(ctx: &'a Ctx, arg0: Item<'a>, arg1: Vec<'a>, arg8: f64) {
         }
     }
     fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, (arg0).owner())));
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Link as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Link as i32) as u32) as i32) {
         item_link = (arg0).xDD4_itemVar().linkhookshot().x4();
     } else {
         item_link = (arg0).xDD4_itemVar().linkhookshot().x4();

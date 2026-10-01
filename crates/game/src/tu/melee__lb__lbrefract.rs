@@ -764,7 +764,7 @@ pub fn lbRefract_PObjLoad<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>, desc: HSD_PObjDe
     pnmtx_offset = 1_i32.wrapping_neg();
     last_offset = 1_i32.wrapping_neg();
     'l1: while (!Handle::is_null(verts))
-        && (((verts).attr() as u32) != ((enums::GX_VA_NULL as i32) as u32))
+        && ((verts).attr() != (((enums::GX_VA_NULL as i32) as u32) as i32))
     {
         'c2: {
             's3: {
@@ -803,7 +803,7 @@ pub fn lbRefract_PObjLoad<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>, desc: HSD_PObjDe
                     break 's3;
                 }
                 if __case <= 2 {
-                    if ((verts).attr_type() as u32) == ((enums::GX_INDEX16 as i32) as u32) {
+                    if (verts).attr_type() == (((enums::GX_INDEX16 as i32) as u32) as i32) {
                         stride = stride.wrapping_add(2_i32);
                     } else {
                         stride = stride.wrapping_add(1);

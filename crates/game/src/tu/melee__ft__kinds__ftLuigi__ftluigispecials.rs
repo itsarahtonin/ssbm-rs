@@ -401,7 +401,7 @@ pub fn ftLg_SpecialS_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut sa: _ftLuigiAttributes<'a> =
         Handle::cast::<_ftLuigiAttributes<'a>>(inl_getFtSpecialAttrsD(ctx, fp));
     if (!((fp).mv().lg().SpecialS().isMisfire() != 0))
-        && (((fp).x914().get(0_i32).state() as u32) == ((enums::HitCapsule_Enabled as i32) as u32))
+        && ((fp).x914().get(0_i32).state() == (((enums::HitCapsule_Enabled as i32) as u32) as i32))
     {
         fns::ftColl_8007ABD0(
             ctx,
@@ -431,7 +431,7 @@ pub fn ftLg_SpecialAirS_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut sa: _ftLuigiAttributes<'a> =
         Handle::cast::<_ftLuigiAttributes<'a>>(inl_getFtSpecialAttrsD(ctx, fp));
     if (!((fp).mv().lg().SpecialS().isMisfire() != 0))
-        && (((fp).x914().get(0_i32).state() as u32) == ((enums::HitCapsule_Enabled as i32) as u32))
+        && ((fp).x914().get(0_i32).state() == (((enums::HitCapsule_Enabled as i32) as u32) as i32))
     {
         fns::ftColl_8007ABD0(
             ctx,
@@ -571,7 +571,7 @@ pub fn ftLg_SpecialSMisfire_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut sa: _ftLuigiAttributes<'a> =
         Handle::cast::<_ftLuigiAttributes<'a>>(inl_getFtSpecialAttrsD(ctx, fp));
     if (!((fp).mv().lg().SpecialS().isMisfire() != 0))
-        && (((fp).x914().get(0_i32).state() as u32) == ((enums::HitCapsule_Enabled as i32) as u32))
+        && ((fp).x914().get(0_i32).state() == (((enums::HitCapsule_Enabled as i32) as u32) as i32))
     {
         fns::ftColl_8007ABD0(
             ctx,
@@ -601,7 +601,7 @@ pub fn ftLg_SpecialAirSMisfire_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut sa: _ftLuigiAttributes<'a> =
         Handle::cast::<_ftLuigiAttributes<'a>>(inl_getFtSpecialAttrsD(ctx, fp));
     if (!((fp).mv().lg().SpecialS().isMisfire() != 0))
-        && (((fp).x914().get(0_i32).state() as u32) == ((enums::HitCapsule_Enabled as i32) as u32))
+        && ((fp).x914().get(0_i32).state() == (((enums::HitCapsule_Enabled as i32) as u32) as i32))
     {
         fns::ftColl_8007ABD0(
             ctx,

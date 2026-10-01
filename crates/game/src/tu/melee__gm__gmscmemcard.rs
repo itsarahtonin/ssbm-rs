@@ -357,7 +357,7 @@ pub fn gm_Scene_MemCard_OnFrame<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0xb8);
     let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut temp_r29: i32 = 0;
-    if ((fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32))
+    if (fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32))
         && ((inl_set_gm_804D6870_inline_unfused(ctx) as i32) != 0_i32)
     {
         if (((fns::HSD_PadCopyStatus(ctx).get(0)).trigger()

@@ -52,7 +52,7 @@ pub fn ftCo_800CED30<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             0 => {
                 fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
                 kind = (fp).kind();
-                __state = if (kind as u32) == ((enums::Ft_Kind_CLink as i32) as u32) {
+                __state = if kind == (((enums::Ft_Kind_CLink as i32) as u32) as i32) {
                     1
                 } else {
                     3
@@ -65,7 +65,7 @@ pub fn ftCo_800CED30<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = 19;
             }
             3 => {
-                __state = if (kind as u32) < ((enums::Ft_Kind_CLink as i32) as u32) {
+                __state = if kind < (((enums::Ft_Kind_CLink as i32) as u32) as i32) {
                     7
                 } else {
                     9
@@ -75,7 +75,7 @@ pub fn ftCo_800CED30<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 unreachable!();
             }
             5 => {
-                __state = if (kind as u32) != ((enums::Ft_Kind_Link as i32) as u32) {
+                __state = if kind != (((enums::Ft_Kind_Link as i32) as u32) as i32) {
                     16
                 } else {
                     17
@@ -85,7 +85,7 @@ pub fn ftCo_800CED30<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = 2;
             }
             7 => {
-                __state = if (kind as u32) != ((enums::Ft_Kind_Link as i32) as u32) {
+                __state = if kind != (((enums::Ft_Kind_Link as i32) as u32) as i32) {
                     11
                 } else {
                     12

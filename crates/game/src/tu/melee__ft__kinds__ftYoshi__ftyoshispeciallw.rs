@@ -232,7 +232,7 @@ pub fn ftYs_SpecialLwLanding_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCo_Fall_Enter(ctx, gobj);
     }
 }

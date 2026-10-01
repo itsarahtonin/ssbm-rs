@@ -44,14 +44,14 @@ pub fn Fighter_SuperMushroomApply<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         return 0_i32;
     }
     if ((fp).x2220_b6() != 0) {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             fns::ftCo_800D2490(ctx, gobj, 1_i32);
         } else {
             fns::ftCo_800D2600(ctx, gobj, 1_i32);
         }
         return 1_i32;
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCo_800D170C(ctx, gobj);
     } else {
         fns::ftCo_800D18CC(ctx, gobj);
@@ -84,7 +84,7 @@ pub fn ftCo_800D15D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     fns::ftCo_800D2770(ctx, gobj, (fp).mv().co().walk().fast_anim_frame());
     fns::ftCommon_8007E2FC(ctx, gobj);
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ft_8008A324(ctx, gobj);
         return;
     }

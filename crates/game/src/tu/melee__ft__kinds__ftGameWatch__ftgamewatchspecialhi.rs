@@ -281,7 +281,7 @@ pub fn ftGw_SpecialAirHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     gawAttrs = Handle::cast::<_ftGameWatchAttributes<'a>>((fp).dat_attrs());
     if (fp).cur_anim_frame() > 4.0 {
         if (fp).self_vel().y() >= 0.0 {
-            if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+            if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
                 inl_ftGw_SpecialHi_ItemRescueRemove_unfused(ctx, gobj);
                 fns::ftCommon_8007D7FC(ctx, fp);
                 fns::ftCo_LandingFallSpecial_Enter(

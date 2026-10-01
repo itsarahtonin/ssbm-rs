@@ -99,7 +99,7 @@ pub fn ftCo_800BBED4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
             (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
         let mut jobj: HSD_JObj<'a> =
             (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             fns::ftCommon_8007D5D4(ctx, fp);
         }
         fns::Fighter_ChangeMotionState(
@@ -243,9 +243,8 @@ pub fn ftCo_YoshiEgg_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_YoshiEgg_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    if ((Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).ground_or_air()
-        as u32)
-        == ((enums::GA_Ground as i32) as u32)
+    if (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).ground_or_air()
+        == (((enums::GA_Ground as i32) as u32) as i32)
     {
         fns::ft_80084F3C(ctx, gobj);
     } else {
@@ -256,9 +255,8 @@ pub fn ftCo_YoshiEgg_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_YoshiEgg_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    if ((Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).ground_or_air()
-        as u32)
-        == ((enums::GA_Ground as i32) as u32)
+    if (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).ground_or_air()
+        == (((enums::GA_Ground as i32) as u32) as i32)
     {
         fns::ft_8008403C(ctx, gobj, fnptr(ctx, 0x800bc3ac));
     } else {

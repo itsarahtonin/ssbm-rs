@@ -517,7 +517,7 @@ pub fn grOnett_801E40E4<'a>(
     let mut ground_kind = ground_kind;
     let mut delta_y = delta_y;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>(user_data);
-    if (ground_kind as u32) == (1_i32 as u32) {
+    if ground_kind == ((1_i32 as u32) as i32) {
         (gp).u()
             .onett_building()
             .set_hit_count((gp).u().onett_building().hit_count().wrapping_add(1_i32));
@@ -4827,7 +4827,7 @@ pub fn grOnett_801E54B4<'a>(
         return;
     }
     idx = (if joint_id == 0_i32 { 0_i32 } else { 1_i32 });
-    if (ground_kind as u32) == (1_i32 as u32) {
+    if ground_kind == ((1_i32 as u32) as i32) {
         (gp).u().onett().awnings().get(idx).set_flag((1_i32 as i16));
         (gp).u()
             .onett()

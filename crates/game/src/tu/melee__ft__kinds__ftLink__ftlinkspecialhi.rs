@@ -37,13 +37,13 @@ pub fn onAccessory4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     ))
     .joint();
     let mut jobj1: HSD_JObj<'a> = null(ctx);
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Link as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Link as i32) as u32) as i32) {
         jobj1 = (Handle::add((fp).parts(), (enums::FtPart_L2ndNa as i32))).joint();
     } else {
         jobj1 = (Handle::add((fp).parts(), (enums::FtPart_L3rdNa as i32))).joint();
     }
     if !((fp).x2219_b0() != 0) {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             let _ = fns::efSync_Spawn(
                 ctx,
                 0x4bb_i32,
@@ -184,7 +184,7 @@ pub fn ftLk_SpecialHi_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         inl_ftLk_SpecialAirHi_Phys_unfused(ctx, gobj, Handle::addr(__inl));
     } else {
         fns::ft_80084F3C(ctx, gobj);

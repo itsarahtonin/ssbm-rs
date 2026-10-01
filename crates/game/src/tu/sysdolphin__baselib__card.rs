@@ -42,7 +42,7 @@ pub fn hsd_803A949C<'a>(ctx: &'a Ctx, chan: i32, card_result: i32) {
     let mut icons_start: i32 = 0;
     let mut phys: i32 = 0;
     let mut i: i32 = 0;
-    if (statics::sysdolphin__baselib__card::hsd_804D799C(ctx).get() as u32) != (1_i32 as u32) {
+    if statics::sysdolphin__baselib__card::hsd_804D799C(ctx).get() != ((1_i32 as u32) as i32) {
         return;
     }
     state = statics::sysdolphin__baselib__card::commands(ctx)
@@ -1512,8 +1512,8 @@ pub fn hsd_803AAA48<'a>(ctx: &'a Ctx) {
             'goto_next: {
                 state_ptr = statics::sysdolphin__baselib__card::active_requests(ctx).state_ref();
                 intr = fns::OSDisableInterrupts(ctx);
-                if (statics::sysdolphin__baselib__card::hsd_804D799C(ctx).get() as u32)
-                    == (1_i32 as u32)
+                if statics::sysdolphin__baselib__card::hsd_804D799C(ctx).get()
+                    == ((1_i32 as u32) as i32)
                 {
                     busy = 1_i32;
                 } else {
@@ -1524,10 +1524,10 @@ pub fn hsd_803AAA48<'a>(ctx: &'a Ctx) {
                     return;
                 }
                 if statics::sysdolphin__baselib__card::curr_result(ctx).get() < 0_i32 {
-                    'l3: while (statics::sysdolphin__baselib__card::commands(ctx)
+                    'l3: while statics::sysdolphin__baselib__card::commands(ctx)
                         .get(statics::sysdolphin__baselib__card::curr_head(ctx).get())
-                        .r#type() as u32)
-                        != ((enums::CARD_CMD_NONE as i32) as u32)
+                        .r#type()
+                        != (((enums::CARD_CMD_NONE as i32) as u32) as i32)
                     {
                         'c4: {
                             statics::sysdolphin__baselib__card::commands(ctx)
@@ -1571,13 +1571,11 @@ pub fn hsd_803AAA48<'a>(ctx: &'a Ctx) {
                         _ => 17,
                     };
                     if __case <= 0 {
-                        if (statics::sysdolphin__baselib__card::active_requests(ctx).r#type()
-                            as u32)
-                            != ((enums::CARD_ACTIVE_NONE as i32) as u32)
+                        if statics::sysdolphin__baselib__card::active_requests(ctx).r#type()
+                            != (((enums::CARD_ACTIVE_NONE as i32) as u32) as i32)
                         {
-                            if (statics::sysdolphin__baselib__card::active_requests(ctx).r#type()
-                                as u32)
-                                == ((enums::CARD_ACTIVE_WRITE_FILE_1_2 as i32) as u32)
+                            if statics::sysdolphin__baselib__card::active_requests(ctx).r#type()
+                                == (((enums::CARD_ACTIVE_WRITE_FILE_1_2 as i32) as u32) as i32)
                             {
                                 let mut file_idx: i32 =
                                     statics::sysdolphin__baselib__card::active_requests(ctx)
@@ -1658,10 +1656,10 @@ pub fn hsd_803AAA48<'a>(ctx: &'a Ctx) {
                         statics::sysdolphin__baselib__card::hsd_804D799C(ctx).set(2_i32);
                         if (statics::sysdolphin__baselib__card::hsd_804D7990(ctx).get()
                             == statics::sysdolphin__baselib__card::hsd_804D7994(ctx).get())
-                            && ((statics::sysdolphin__baselib__card::requests(ctx)
+                            && (statics::sysdolphin__baselib__card::requests(ctx)
                                 .get(statics::sysdolphin__baselib__card::hsd_804D7990(ctx).get())
-                                .r#type() as u32)
-                                == ((enums::CARD_REQ_NONE as i32) as u32))
+                                .r#type()
+                                == (((enums::CARD_REQ_NONE as i32) as u32) as i32))
                         {
                             return;
                         }
@@ -4076,7 +4074,7 @@ pub fn fn_803ADF90<'a>(
     if r#async == 0_i32 {
         let mut intr: i32 = fns::OSDisableInterrupts(ctx);
         let mut busy: i32 = 0;
-        if (statics::sysdolphin__baselib__card::hsd_804D799C(ctx).get() as u32) == (1_i32 as u32) {
+        if statics::sysdolphin__baselib__card::hsd_804D799C(ctx).get() == ((1_i32 as u32) as i32) {
             busy = 1_i32;
         } else {
             busy = 0_i32;
@@ -4335,8 +4333,8 @@ pub fn fn_803AE7F8<'a>(
         if r#async == 0_i32 {
             let mut intr: i32 = fns::OSDisableInterrupts(ctx);
             let mut busy: i32 = 0;
-            if (statics::sysdolphin__baselib__card::hsd_804D799C(ctx).get() as u32)
-                == (1_i32 as u32)
+            if statics::sysdolphin__baselib__card::hsd_804D799C(ctx).get()
+                == ((1_i32 as u32) as i32)
             {
                 busy = 1_i32;
             } else {
@@ -4960,8 +4958,8 @@ pub fn fn_803AF3F0<'a>(
         if r#async == 0_i32 {
             let mut intr: i32 = fns::OSDisableInterrupts(ctx);
             let mut busy: i32 = 0;
-            if (statics::sysdolphin__baselib__card::hsd_804D799C(ctx).get() as u32)
-                == (1_i32 as u32)
+            if statics::sysdolphin__baselib__card::hsd_804D799C(ctx).get()
+                == ((1_i32 as u32) as i32)
             {
                 busy = 1_i32;
             } else {
@@ -5502,7 +5500,7 @@ pub fn fn_803B0120<'a>(
     if r#async == 0_i32 {
         let mut intr: i32 = fns::OSDisableInterrupts(ctx);
         let mut busy: i32 = 0;
-        if (statics::sysdolphin__baselib__card::hsd_804D799C(ctx).get() as u32) == (1_i32 as u32) {
+        if statics::sysdolphin__baselib__card::hsd_804D799C(ctx).get() == ((1_i32 as u32) as i32) {
             busy = 1_i32;
         } else {
             busy = 0_i32;
@@ -7143,10 +7141,10 @@ pub fn hsd_803B2550<'a>(
         let mut read_idx: i32 = statics::sysdolphin__baselib__card::hsd_804D7990(ctx).get();
         write_idx = statics::sysdolphin__baselib__card::hsd_804D7994(ctx).get();
         if read_idx == write_idx {
-            if (statics::sysdolphin__baselib__card::requests(ctx)
+            if statics::sysdolphin__baselib__card::requests(ctx)
                 .get(read_idx)
-                .r#type() as u32)
-                != ((enums::CARD_REQ_NONE as i32) as u32)
+                .r#type()
+                != (((enums::CARD_REQ_NONE as i32) as u32) as i32)
             {
                 return 0x109_i32.wrapping_neg();
             }
@@ -7249,10 +7247,10 @@ pub fn hsd_803B27F4<'a>(
     let mut read_idx: i32 = statics::sysdolphin__baselib__card::hsd_804D7990(ctx).get();
     let mut write_idx: i32 = statics::sysdolphin__baselib__card::hsd_804D7994(ctx).get();
     if read_idx == write_idx {
-        if (statics::sysdolphin__baselib__card::requests(ctx)
+        if statics::sysdolphin__baselib__card::requests(ctx)
             .get(read_idx)
-            .r#type() as u32)
-            != ((enums::CARD_REQ_NONE as i32) as u32)
+            .r#type()
+            != (((enums::CARD_REQ_NONE as i32) as u32) as i32)
         {
             return 0x109_i32.wrapping_neg();
         }
@@ -7320,10 +7318,10 @@ pub fn hsd_803B286C<'a>(
                 __t1
             })
         {
-            if (statics::sysdolphin__baselib__card::requests(ctx)
+            if statics::sysdolphin__baselib__card::requests(ctx)
                 .get(read_idx)
-                .r#type() as u32)
-                != ((enums::CARD_REQ_NONE as i32) as u32)
+                .r#type()
+                != (((enums::CARD_REQ_NONE as i32) as u32) as i32)
             {
                 return 0x109_i32.wrapping_neg();
             }
@@ -7388,10 +7386,10 @@ pub fn hsd_803B2928<'a>(
                 __t1
             })
         {
-            if (statics::sysdolphin__baselib__card::requests(ctx)
+            if statics::sysdolphin__baselib__card::requests(ctx)
                 .get(read_idx)
-                .r#type() as u32)
-                != ((enums::CARD_REQ_NONE as i32) as u32)
+                .r#type()
+                != (((enums::CARD_REQ_NONE as i32) as u32) as i32)
             {
                 return 0x109_i32.wrapping_neg();
             }
@@ -7435,10 +7433,10 @@ pub fn hsd_803B29D8<'a>(
     let mut read_idx: i32 = statics::sysdolphin__baselib__card::hsd_804D7990(ctx).get();
     let mut write_idx: i32 = statics::sysdolphin__baselib__card::hsd_804D7994(ctx).get();
     if read_idx == write_idx {
-        if (statics::sysdolphin__baselib__card::requests(ctx)
+        if statics::sysdolphin__baselib__card::requests(ctx)
             .get(read_idx)
-            .r#type() as u32)
-            != ((enums::CARD_REQ_NONE as i32) as u32)
+            .r#type()
+            != (((enums::CARD_REQ_NONE as i32) as u32) as i32)
         {
             return 0x109_i32.wrapping_neg();
         }
@@ -7488,10 +7486,10 @@ pub fn hsd_803B2A4C<'a>(
     read_idx = statics::sysdolphin__baselib__card::hsd_804D7990(ctx).get();
     write_idx = statics::sysdolphin__baselib__card::hsd_804D7994(ctx).get();
     if read_idx == write_idx {
-        if (statics::sysdolphin__baselib__card::requests(ctx)
+        if statics::sysdolphin__baselib__card::requests(ctx)
             .get(read_idx)
-            .r#type() as u32)
-            != ((enums::CARD_REQ_NONE as i32) as u32)
+            .r#type()
+            != (((enums::CARD_REQ_NONE as i32) as u32) as i32)
         {
             return 0x109_i32.wrapping_neg();
         }

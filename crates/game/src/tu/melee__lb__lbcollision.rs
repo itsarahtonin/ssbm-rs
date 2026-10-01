@@ -1857,7 +1857,7 @@ pub fn lbColl_80007ECC<'a>(
     let mut hurt_pos_z = hurt_pos_z;
     let mut hit_radius: f64 = 0.0;
     let mut hurt_mtx: ArrV<'a, F32, 4> = null(ctx);
-    if ((arg1).state() as u32) == ((enums::HurtCapsule_Enabled as i32) as u32) {
+    if (arg1).state() == (((enums::HurtCapsule_Enabled as i32) as u32) as i32) {
         if !((arg1).skip_update_pos() != 0) {
             fns::lb_8000B1CC(ctx, (arg1).bone(), (arg1).a_offset(), (arg1).a_pos());
             fns::lb_8000B1CC(ctx, (arg1).bone(), (arg1).b_offset(), (arg1).b_pos());
@@ -1931,7 +1931,7 @@ pub fn lbColl_8000805C<'a>(
     let mut arg6 = arg6;
     let mut var_r9: ArrV<'a, F32, 4> = null(ctx);
     let mut hit_radius: f64 = 0.0;
-    if ((arg1).state() as u32) != ((enums::HurtCapsule_Intangible as i32) as u32) {
+    if (arg1).state() != (((enums::HurtCapsule_Intangible as i32) as u32) as i32) {
         if !((arg1).skip_update_pos() != 0) {
             fns::lb_8000B1CC(ctx, (arg1).bone(), (arg1).a_offset(), (arg1).a_pos());
             fns::lb_8000B1CC(ctx, (arg1).bone(), (arg1).b_offset(), (arg1).b_pos());
@@ -2337,7 +2337,7 @@ pub fn lbColl_800089B8<'a>(ctx: &'a Ctx, hit: HitCapsule<'a>, arg1: Addr<'a>) {
 
 pub fn lbColl_80008A5C<'a>(ctx: &'a Ctx, hit: HitCapsule<'a>) {
     let mut hit = hit;
-    if ((hit).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32) {
+    if (hit).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32) {
         let mut i: u32 = 0;
         {
             i = (0_i32 as u32);
@@ -3092,7 +3092,7 @@ pub fn lbColl_80009F54<'a>(ctx: &'a Ctx, hit: HitCapsule<'a>, arg1: u32, arg8: f
     let mut var_r5: _GXColor<'a> = null(ctx);
     let mut var_f1: f64 = 0.0;
     let mut var_r0: u32 = 0;
-    if (((hit).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32))
+    if ((hit).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
         && (!((hit).x43_b2() != 0))
     {
         's1: {
@@ -3154,7 +3154,7 @@ pub fn lbColl_8000A044<'a>(ctx: &'a Ctx, hit: HitCapsule<'a>, arg1: u32, arg8: f
     let mut arg8 = arg8;
     let mut var_f1: f64 = 0.0;
     let mut var_r0: u32 = 0;
-    if (((hit).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32))
+    if ((hit).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
         && (!((hit).x43_b2() != 0))
     {
         if (statics::melee__lb__lbcollision::lbColl_804D36E8(ctx).a() as i32) == 255_i32 {
@@ -3406,7 +3406,7 @@ pub fn lbColl_8000A584<'a>(
         let mut var_r4: u32 = 0;
         let mut temp_r3: _GXColor<'a> = null(ctx);
         var_r4 = arg1;
-        if ((hurt).state() as u32) == ((enums::HurtCapsule_Intangible as i32) as u32) {
+        if (hurt).state() == (((enums::HurtCapsule_Intangible as i32) as u32) as i32) {
             var_r4 = (2_i32 as u32);
         }
         temp_r3 = fns::lbColl_803B9928(ctx).get((var_r4 as i32)).pad();

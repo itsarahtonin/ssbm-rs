@@ -283,8 +283,8 @@ pub fn GXSetTexCopyDst<'a>(ctx: &'a Ctx, wd: u16, ht: u16, fmt: i32, mipmap: u8)
     let mut peTexFmt: u32 = 0;
     let mut peTexFmtH: u32 = 0;
     (fns::gx(ctx).get()).set_cpTexZ((0_i32 as u8));
-    peTexFmt = ((fmt as u32) & (15_i32 as u32));
-    if (fmt as u32) == ((enums::GX_TF_Z16 as i32) as u32) {
+    peTexFmt = ((fmt & ((15_i32 as u32) as i32)) as u32);
+    if fmt == (((enums::GX_TF_Z16 as i32) as u32) as i32) {
         peTexFmt = (11_i32 as u32);
     }
     's1: {
@@ -334,7 +334,7 @@ pub fn GXSetTexCopyDst<'a>(ctx: &'a Ctx, wd: u16, ht: u16, fmt: i32, mipmap: u8)
         }
     }
     (fns::gx(ctx).get())
-        .set_cpTexZ(((((fmt as u32) & (16_i32 as u32)) == (16_i32 as u32)) as i32 as u8));
+        .set_cpTexZ((((fmt & ((16_i32 as u32) as i32)) == ((16_i32 as u32) as i32)) as i32 as u8));
     peTexFmtH = ((shr_u32(peTexFmt, (3_i32 as u32))) & (1_i32 as u32));
     'l6: loop {
         'c7: {
@@ -457,8 +457,8 @@ pub fn GXSetCopyClamp<'a>(ctx: &'a Ctx, clamp: i32) {
     let mut clamp = clamp;
     let mut clmpB: u8 = 0;
     let mut clmpT: u8 = 0;
-    clmpT = ((((clamp as u32) & (1_i32 as u32)) == (1_i32 as u32)) as i32 as u8);
-    clmpB = ((((clamp as u32) & (2_i32 as u32)) == (2_i32 as u32)) as i32 as u8);
+    clmpT = (((clamp & ((1_i32 as u32) as i32)) == ((1_i32 as u32) as i32)) as i32 as u8);
+    clmpB = (((clamp & ((2_i32 as u32) as i32)) == ((2_i32 as u32) as i32)) as i32 as u8);
     'l1: loop {
         'c2: {
             (fns::gx(ctx).get()).set_cpDisp(

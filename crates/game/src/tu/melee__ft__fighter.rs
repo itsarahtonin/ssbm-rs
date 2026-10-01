@@ -766,7 +766,7 @@ pub fn Fighter_80068E64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Flatzone as i32) as u32) {
+    if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Flatzone as i32) as u32) as i32) {
         (fp).x34_scale()
             .set_z((fns::p_ftCommonData(ctx).get()).x7E4_scaleZ());
     } else {
@@ -842,9 +842,9 @@ pub fn Fighter_Create<'a>(ctx: &'a Ctx, input: plAllocInfo<'a>) -> HSD_GObj<'a> 
     let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x8006d9ec), (18_i32 as u8));
     let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x8006da4c), (22_i32 as u8));
     fns::Fighter_Spawn(ctx, gobj);
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_MasterH as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_MasterH as i32) as u32) as i32) {
         fns::ftMh_MS_341_8014FE10(ctx, gobj);
-    } else if ((fp).kind() as u32) == ((enums::Ft_Kind_CrezyH as i32) as u32) {
+    } else if (fp).kind() == (((enums::Ft_Kind_CrezyH as i32) as u32) as i32) {
         fns::ftCh_Init_80155FCC(ctx, gobj);
     } else if ((input).x6().has_transformation() != 0) {
         fns::ftCo_800BFD04(ctx, gobj);
@@ -1038,8 +1038,8 @@ pub fn Fighter_ChangeMotionState<'a>(
         fns::HSD_JObjRemoveAll(ctx, (fp).x20A0_accessory());
         (fp).set_x20A0_accessory(null::<HSD_JObj<'a>>(ctx));
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
-        if ((fp).kind() as u32) == ((enums::Ft_Kind_Peach as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
+        if (fp).kind() == (((enums::Ft_Kind_Peach as i32) as u32) as i32) {
             (fp).u().pe().set_has_float(1_i32);
         }
         (fp).set_x2221_b5((0_i32 as u8));
@@ -1110,7 +1110,7 @@ pub fn Fighter_ChangeMotionState<'a>(
     } else {
         new_motion_state = (Handle::add((fp).x1C_actionStateList(), msid));
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         if (flags & (64_i32 as u32)) == (0_i32 as u32) {
             if (((new_motion_state).x8().x0().x1().x9_b1() as i32) != 0_i32)
                 && ((fp).dmg().x18C8() == 1_i32.wrapping_neg())
@@ -1318,7 +1318,7 @@ pub fn Fighter_ChangeMotionState<'a>(
                         });
                         Handle::copy_from((fp).x698(), (fp).x68C_transNPos());
                     } else if ((flags & 32_u32) == (0_i32 as u32))
-                        && (((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+                        && ((fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32))
                     {
                         let mut temp_vel: f64 =
                             fp::fmuls((fp).x6A4_transNOffset().z(), (fp).facing_dir());
@@ -1349,7 +1349,7 @@ pub fn Fighter_ChangeMotionState<'a>(
                         });
                         Handle::copy_from((fp).x6CC(), (fp).x6C0());
                     } else if ((flags & 32_u32) == (0_i32 as u32))
-                        && (((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+                        && ((fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32))
                     {
                         let mut temp_vel_2: f64 = fp::fmuls((fp).x6D8().z(), (fp).facing_dir());
                         (fp).self_vel().set_x(temp_vel_2);
@@ -1855,7 +1855,7 @@ pub fn Fighter_procInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         break 'l9;
                     }
                 }
-                if ((fns::DbLevel(ctx).get() as u32) < ((enums::DbLKind_DebugRom as i32) as u32))
+                if (fns::DbLevel(ctx).get() < (((enums::DbLKind_DebugRom as i32) as u32) as i32))
                     && (!(fns::gm_IsCurrently1PMode_inline(ctx) != 0))
                 {
                     'l11: loop {
@@ -1907,7 +1907,7 @@ pub fn Fighter_procInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         break 'l13;
                     }
                 }
-                if ((fns::DbLevel(ctx).get() as u32) < ((enums::DbLKind_DebugRom as i32) as u32))
+                if (fns::DbLevel(ctx).get() < (((enums::DbLKind_DebugRom as i32) as u32) as i32))
                     && (fns::gm_IsCurrently1PMode_inline(ctx) == 0_i32)
                 {
                     'l15: loop {
@@ -2376,7 +2376,7 @@ pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }) != fp::frsp(0_i32 as f64))
             || ((p_kb_vel).y() != fp::frsp(0_i32 as f64))
         {
-            if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                 kb_vel_x = (p_kb_vel).x();
                 kb_vel_y = (p_kb_vel).y();
                 if ((fp).is_sandbag() != 0) {
@@ -2444,7 +2444,7 @@ pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }) != fp::frsp(0_i32 as f64))
             || ((pAtkShieldKB).y() != fp::frsp(0_i32 as f64))
         {
-            if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                 let mut kb_x: f64 = (pAtkShieldKB).x();
                 let mut kb_y: f64 = (pAtkShieldKB).y();
                 let mut atkShieldKBAngle: f64 = fns::atan2f(ctx, kb_y, kb_x);
@@ -2633,7 +2633,7 @@ pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if !Handle::is_null((fp).hitlag_cb()) {
         (fp).hitlag_cb().call::<_, ()>((gobj,));
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         if (fns::mpGetSpeed(
             ctx,
             (fp).coll_data().floor().index(),
@@ -2681,7 +2681,7 @@ pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).dmg().set_x18A4_knockbackMagnitude(0.0);
     }
     fns::ftColl_8007AF28(ctx, gobj);
-    if ((fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32))
+    if (fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32))
         && ((((if 4_u32 == 4_u32 {
             inl___fpclassifyf(ctx, ((fp).cur_pos().x()), Handle::addr(__inl))
         } else {
@@ -2777,14 +2777,14 @@ pub fn Fighter_procMap<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             (fp).coll_cb().call::<_, ()>((gobj,));
             fns::ftKb_SpecialN_800F1D24(ctx, gobj);
         }
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             fns::pl_80041280(
                 ctx,
                 ((fp).player_idx() as i32),
                 ((fp).is_sub_fighter() as i32),
             );
         }
-        if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32) {
+        if fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32) {
             if (((if 4_u32 == 4_u32 {
                 inl___fpclassifyf_unfused(ctx, ((fp).cur_pos().x()), Handle::addr(__inl))
             } else {
@@ -2893,7 +2893,7 @@ pub fn Fighter_procCollPos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         if !Handle::is_null((fp).x20A0_accessory()) {
             fns::HSD_JObjAnimAll(ctx, (fp).x20A0_accessory());
         }
-        if (((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32))
+        if ((fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32))
             && ({
                 let __t1 = fns::Stage_GetCamBoundsBottomOffset(ctx);
                 (fp).cur_pos().y() < __t1
@@ -3889,7 +3889,7 @@ fn inl_Fighter_80068E64_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Flatzone as i32) as u32) {
+    if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Flatzone as i32) as u32) as i32) {
         (fp).x34_scale()
             .set_z((fns::p_ftCommonData(ctx).get()).x7E4_scaleZ());
     } else {

@@ -481,7 +481,7 @@ pub fn itOldkuri_UnkMotion9_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         }
     }
     if !(fns::it_80272C6C(ctx, gobj) != 0) {
-        if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             fns::Item_80268E5C(ctx, gobj, 9_i32, (enums::ITEM_ANIM_UPDATE as i32));
         } else {
             fns::it_8027CAD8(ctx, gobj);
@@ -496,7 +496,7 @@ pub fn itOldkuri_UnkMotion9_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn itOldkuri_UnkMotion9_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         (ip).x40_vel().set_y(fp::fsubs(
             (ip).x40_vel().y(),
             ((ip).xCC_item_attr()).x10_fall_speed(),
@@ -508,7 +508,7 @@ pub fn itOldkuri_UnkMotion9_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::it_8026E414(ctx, gobj, fnptr(ctx, 0x802d747c));
     } else {
         fns::it_8026D62C(ctx, gobj, fnptr(ctx, 0x802d7af0));
@@ -551,7 +551,7 @@ pub fn it_802D8098<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     fns::it_80275474(ctx, gobj);
     fns::it_8027CE44(ctx, gobj);
     fns::Camera_RequestQuake(ctx, (enums::QuakeKind_Small as i32), (ip).pos());
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::it_802D81FC(ctx, gobj);
     } else {
         fns::it_802D813C(ctx, gobj);

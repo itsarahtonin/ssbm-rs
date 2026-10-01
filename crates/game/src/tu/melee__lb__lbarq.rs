@@ -160,8 +160,8 @@ pub fn lbArq_80014BD0<'a>(
     );
     if Handle::is_null((rp).callback()) {
         let _ = fns::OSRestoreInterrupts(ctx, intr);
-        'l5: while (statics::melee__lb__lbarq::lbArq_80014ABC(ctx, rp) as u32)
-            != ((enums::LB_ARQ_STATE_DONE as i32) as u32)
+        'l5: while statics::melee__lb__lbarq::lbArq_80014ABC(ctx, rp)
+            != (((enums::LB_ARQ_STATE_DONE as i32) as u32) as i32)
         {
             'c6: {}
         }

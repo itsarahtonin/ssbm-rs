@@ -107,7 +107,7 @@ pub fn ftWalkCommon_800DFCA4<'a>(
     (fp).mv().co().walk().set_accel_mul(accel_mul);
     {
         let mut walk_type: i32 = inl_ftWalkCommon_GetWalkType_800DFBF8_fake_unfused(ctx, gobj);
-        let mut new_msid: i32 = ((msid as u32).wrapping_add((walk_type as u32)) as i32);
+        let mut new_msid: i32 = ((msid as u32) as i32).wrapping_add(walk_type);
         fns::Fighter_ChangeMotionState(
             ctx,
             gobj,

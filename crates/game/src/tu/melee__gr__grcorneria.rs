@@ -121,7 +121,7 @@ pub fn grCorneria_801DCE1C<'a>(ctx: &'a Ctx) {
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let pos2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    if (fns::Stage_80225194(ctx) as u32) != (70_i32 as u32) {
+    if fns::Stage_80225194(ctx) != ((70_i32 as u32) as i32) {
         if !(statics::melee__gr__grcorneria::grCn_804D69B0(ctx).get() != 0) {
             if Handle::is_null(
                 statics::melee__gr__grcorneria::arwing_gobjs(ctx)
@@ -1852,8 +1852,8 @@ pub fn grCorneria_801DED50<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                 'l10: while tries < 4_i32 {
                                     'c11: {
                                         player = ((player.wrapping_add(tries)) & 3_i32);
-                                        if (fns::Player_GetPlayerSlotType(ctx, player) as u32)
-                                            != ((enums::Gm_PKind_NA as i32) as u32)
+                                        if fns::Player_GetPlayerSlotType(ctx, player)
+                                            != (((enums::Gm_PKind_NA as i32) as u32) as i32)
                                         {
                                             break 'l10;
                                         }
@@ -8906,7 +8906,7 @@ pub fn grCorneria_801E2A6C<'a>(ctx: &'a Ctx) {
             break 'l1;
         }
     }
-    if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Corneria as i32) as u32) {
+    if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Corneria as i32) as u32) as i32) {
         gobj = fns::Ground_GetMapGObj(ctx, 12_i32);
         if Handle::is_null(gobj) {
             return;
@@ -8921,7 +8921,7 @@ pub fn grCorneria_801E2A6C<'a>(ctx: &'a Ctx) {
             fns::Ground_801C4A08(ctx, gobj);
         }
         fns::HSD_SisLib_803A5F50(ctx, 1_i32);
-    } else if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Venom as i32) as u32) {
+    } else if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Venom as i32) as u32) as i32) {
         fns::grVenom_80206CB0(ctx, 0_i32);
     }
 }
@@ -8936,7 +8936,7 @@ pub fn grCorneria_801E2AF4<'a>(ctx: &'a Ctx) {
             break 'l1;
         }
     }
-    if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Corneria as i32) as u32) {
+    if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Corneria as i32) as u32) as i32) {
         gobj = fns::Ground_GetMapGObj(ctx, 12_i32);
         if Handle::is_null(gobj) {
             return;
@@ -8952,7 +8952,7 @@ pub fn grCorneria_801E2AF4<'a>(ctx: &'a Ctx) {
             fns::Ground_801C4A08(ctx, gobj);
         }
         fns::HSD_SisLib_803A5F50(ctx, 1_i32);
-    } else if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Venom as i32) as u32) {
+    } else if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Venom as i32) as u32) as i32) {
         fns::grVenom_80206CB0(ctx, 1_i32);
     }
 }
@@ -8982,8 +8982,8 @@ pub fn grCorneria_801E2C34<'a>(ctx: &'a Ctx) -> i32 {
 }
 
 pub fn grCorneria_801E2CE8<'a>(ctx: &'a Ctx) -> i32 {
-    if ((fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Corneria as i32) as u32))
-        || ((fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Venom as i32) as u32))
+    if (fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Corneria as i32) as u32) as i32))
+        || (fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Venom as i32) as u32) as i32))
     {
         return 1_i32;
     }
@@ -8993,13 +8993,13 @@ pub fn grCorneria_801E2CE8<'a>(ctx: &'a Ctx) -> i32 {
 pub fn grCorneria_801E2D14<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj: HSD_GObj<'a> = null(ctx);
-    if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Corneria as i32) as u32) {
+    if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Corneria as i32) as u32) as i32) {
         gobj = fns::Ground_GetMapGObj(ctx, 12_i32);
         if !Handle::is_null(gobj) {
             return 1_i32;
         }
         return 0_i32;
-    } else if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Venom as i32) as u32) {
+    } else if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Venom as i32) as u32) as i32) {
         gobj = fns::Ground_GetMapGObj(ctx, 8_i32);
         if !Handle::is_null(gobj) {
             return 1_i32;
@@ -9012,7 +9012,7 @@ pub fn grCorneria_801E2D14<'a>(ctx: &'a Ctx) -> i32 {
 pub fn grCorneria_801E2D90<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut line_id = line_id;
-    if ((fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Corneria as i32) as u32))
+    if (fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Corneria as i32) as u32) as i32))
         && (line_id != 1_i32.wrapping_neg())
     {
         let mut joint: i32 = fns::mpJointFromLine(ctx, line_id);
@@ -9031,7 +9031,7 @@ pub fn grCorneria_801E2D90<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
 pub fn grCorneria_801E2E50<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut line_id = line_id;
-    if ((fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Corneria as i32) as u32))
+    if (fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Corneria as i32) as u32) as i32))
         && (line_id != 1_i32.wrapping_neg())
     {
         if fns::mpJointFromLine(ctx, line_id) == 4_i32 {
@@ -10143,7 +10143,7 @@ fn inl_startTalk_unfused<'a>(ctx: &'a Ctx, talk: i32, venom_talk: i32) -> i32 {
     let mut venom_talk = venom_talk;
     let mut wgobj: HSD_GObj<'a> = null(ctx);
     let mut rand: i32 = 0;
-    if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Corneria as i32) as u32) {
+    if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Corneria as i32) as u32) as i32) {
         if !Handle::is_null(fns::Ground_GetMapGObj(ctx, 12_i32)) {
             return 0_i32;
         }
@@ -10161,7 +10161,7 @@ fn inl_startTalk_unfused<'a>(ctx: &'a Ctx, talk: i32, venom_talk: i32) -> i32 {
         });
         fns::grCorneria_801E0F34(ctx, wgobj, rand);
         return 1_i32;
-    } else if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Venom as i32) as u32) {
+    } else if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Venom as i32) as u32) as i32) {
         return fns::grVenom_80206BF0(ctx, venom_talk);
     }
     return 1_i32;

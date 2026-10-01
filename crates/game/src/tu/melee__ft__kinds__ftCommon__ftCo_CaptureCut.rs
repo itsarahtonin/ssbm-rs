@@ -32,7 +32,7 @@ pub fn ftCo_CaptureCut_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     fns::ftCo_800DC920(ctx, (fp).victim_gobj(), gobj);
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         (fp).set_gr_vel(fp::fmuls(
             fp::fneg((fp).facing_dir()),
             (fns::p_ftCommonData(ctx).get()).x370(),
@@ -79,7 +79,7 @@ pub fn ftCo_CaptureCut_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCommon_CalcGroundAccel_Deaccel(
             ctx,
             fp,
@@ -99,7 +99,7 @@ pub fn ftCo_CaptureCut_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ft_800841B8(ctx, gobj, fnptr(ctx, 0x800dc8d8));
         return;
     }
@@ -153,7 +153,7 @@ pub fn ftCo_800DC920<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, gobj: HSD_GObj<'a>) {
     (var_r31).x221B().set_x221B_b5((0_i32 as u8));
     (var_r31).x221B().set_x221B_b7((0_i32 as u8));
     if ((var_r30).x2226_b2() != 0) {
-        if (((var_r31).kind() as u32) == ((enums::Ft_Kind_Kirby as i32) as u32))
+        if ((var_r31).kind() == (((enums::Ft_Kind_Kirby as i32) as u32) as i32))
             && (((var_r31).motion_id() == (enums::ftKb_MS_SpecialNCapture0 as i32))
                 || ((var_r31).motion_id() == (enums::ftKb_MS_SpecialAirNCapture0 as i32)))
         {
@@ -226,19 +226,19 @@ pub fn ftCo_800DC920<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, gobj: HSD_GObj<'a>) {
             fns::mpColl_80043670(ctx, temp_r28_2);
             Handle::copy_from((temp_r28_2).cur_pos(), sp4C);
             inl_HSD_JObjSetTranslate(ctx, temp_r29, sp4C);
-            if ((var_r30).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+            if (var_r30).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
                 var_r3_3 = fns::mpColl_80048654(ctx, temp_r28_2);
             } else {
                 fns::ftCommon_UnlockECB(ctx, var_r30);
                 var_r3_3 = fns::mpColl_800477E0(ctx, temp_r28_2);
             }
             if (var_r3_3 != 0) {
-                if ((var_r30).ground_or_air() as u32) != ((enums::GA_Ground as i32) as u32) {
+                if (var_r30).ground_or_air() != (((enums::GA_Ground as i32) as u32) as i32) {
                     fns::ftCommon_8007D7FC(ctx, var_r30);
                 }
                 Handle::copy_from((var_r30).cur_pos(), (temp_r28_2).cur_pos());
             } else {
-                if ((var_r30).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32) {
+                if (var_r30).ground_or_air() != (((enums::GA_Air as i32) as u32) as i32) {
                     fns::ftCommon_8007D5D4(ctx, var_r30);
                 }
                 Handle::copy_from((var_r30).cur_pos(), sp4C);

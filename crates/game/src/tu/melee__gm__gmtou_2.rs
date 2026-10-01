@@ -1956,7 +1956,7 @@ pub fn fn_8019EF08<'a>(ctx: &'a Ctx, arg0: TmVsData<'a>) {
         i = 0_i32;
         'l1: while i < 4_i32 {
             'c2: {
-                if ((arg0).slot_type().at(i).get() as u32) != ((enums::Gm_PKind_NA as i32) as u32) {
+                if (arg0).slot_type().at(i).get() != (((enums::Gm_PKind_NA as i32) as u32) as i32) {
                     (game_cache)
                         .entries()
                         .get(i)

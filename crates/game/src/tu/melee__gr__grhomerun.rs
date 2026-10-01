@@ -4481,7 +4481,7 @@ pub fn fn_8021E994<'a>(
         if collKind == 1_i32 {
             gobj = fns::gm_80180AF4(ctx);
             if (Handle::addr((coll).x0_gobj()) == Handle::addr(gobj))
-                && ((ground_kind as u32) == (1_i32 as u32))
+                && (ground_kind == ((1_i32 as u32) as i32))
             {
                 (gp).u().homerun().xE8_flags().set_b0((1_i32 as u8));
             }

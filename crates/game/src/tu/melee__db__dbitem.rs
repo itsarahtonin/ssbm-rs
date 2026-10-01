@@ -44,7 +44,7 @@ pub fn fn_SetupItemAndPokemonMenu<'a>(ctx: &'a Ctx) {
 pub fn fn_80225A54<'a>(ctx: &'a Ctx, player: i32) {
     let __frame = ctx.stack_frame(0x18);
     let mut player = player;
-    if (fns::DbLevel(ctx).get() as u32) == ((enums::DbLKind_Develop as i32) as u32) {
+    if fns::DbLevel(ctx).get() == (((enums::DbLKind_Develop as i32) as u32) as i32) {
         if ((fns::db_ButtonsDown(ctx, player) & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0) {
             if ((fns::db_ButtonsPressed(ctx, player) & ((shl_i32(1_i32, (1_i32 as u32))) as u32))
                 != 0)

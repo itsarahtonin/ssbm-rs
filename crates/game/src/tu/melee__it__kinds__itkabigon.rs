@@ -110,7 +110,7 @@ pub fn itKabigon_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (ip).xDB0_itcmd_var1() == (0_i32 as u32) {
-        if ((ip).ground_or_air() as u32) == (1_i32 as u32) {
+        if (ip).ground_or_air() == ((1_i32 as u32) as i32) {
             let mut attrs: ItemAttr<'a> = (ip).xCC_item_attr();
             fns::it_80272860(
                 ctx,
@@ -127,7 +127,7 @@ pub fn itKabigon_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (ip).xDB0_itcmd_var1() == (0_i32 as u32) {
-        if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             fns::it_8026E15C(ctx, gobj, fnptr(ctx, 0x802c9dfc));
         } else {
             fns::it_8026D62C(ctx, gobj, fnptr(ctx, 0x802c9dfc));

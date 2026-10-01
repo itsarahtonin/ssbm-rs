@@ -241,7 +241,7 @@ pub fn ftFx_SpecialAirSStart_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftFx_SpecialSStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::ftFx_SpecialSStart_GroundToAir(ctx, gobj);
     }
 }
@@ -318,7 +318,7 @@ pub fn ftFx_SpecialS_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (((fp).input().pressed_buttons() & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0) {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             fns::ftFx_SpecialAirSEnd_Enter(ctx, gobj);
             return;
         } else {
@@ -333,7 +333,7 @@ pub fn ftFx_SpecialAirS_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (((fp).input().pressed_buttons() & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0) {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             fns::ftFx_SpecialAirSEnd_Enter(ctx, gobj);
             return;
         } else {
@@ -359,7 +359,7 @@ pub fn ftFx_SpecialAirS_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftFx_SpecialS_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::ftFx_SpecialS_GroundToAir(ctx, gobj);
     }
 }
@@ -661,7 +661,7 @@ fn inl_ftFox_SpecialS_CreateGhostItem_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'
     let mut ghostGObj: HSD_GObj<'a> = null(ctx);
     if (fp).cmd_vars().at(2_i32).get() == (1_i32 as u32) {
         (fp).cmd_vars().at(2_i32).set((0_i32 as u32));
-        if ((fp).kind() as u32) == ((enums::Ft_Kind_Fox as i32) as u32) {
+        if (fp).kind() == (((enums::Ft_Kind_Fox as i32) as u32) as i32) {
             ghostGObj = fns::it_8029CEB4(
                 ctx,
                 gobj,

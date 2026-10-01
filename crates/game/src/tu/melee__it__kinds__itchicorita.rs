@@ -147,8 +147,8 @@ pub fn itChicorita_UnkMotion0_Phys<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 pub fn itChicorita_UnkMotion0_Coll<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut item_gobj = item_gobj;
-    if ((Handle::cast::<Item<'a>>((item_gobj).user_data())).ground_or_air() as u32)
-        == ((enums::GA_Air as i32) as u32)
+    if (Handle::cast::<Item<'a>>((item_gobj).user_data())).ground_or_air()
+        == (((enums::GA_Air as i32) as u32) as i32)
     {
         fns::it_8026E15C(ctx, item_gobj, fnptr(ctx, 0x802c9618));
     } else {
@@ -205,8 +205,8 @@ pub fn itChicorita_UnkMotion1_Phys<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 pub fn itChicorita_UnkMotion1_Coll<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut item_gobj = item_gobj;
-    if ((Handle::cast::<Item<'a>>((item_gobj).user_data())).ground_or_air() as u32)
-        == ((enums::GA_Air as i32) as u32)
+    if (Handle::cast::<Item<'a>>((item_gobj).user_data())).ground_or_air()
+        == (((enums::GA_Air as i32) as u32) as i32)
     {
         fns::it_8026E15C(ctx, item_gobj, fnptr(ctx, 0x802c9618));
     } else {
@@ -377,7 +377,7 @@ fn inl_itChicorita_Phys_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
             0 => {
                 item = Handle::cast::<Item<'a>>((item_gobj).user_data());
                 fns::it_8027A344(ctx, item_gobj);
-                __state = if ((item).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+                __state = if (item).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                     1
                 } else {
                     2

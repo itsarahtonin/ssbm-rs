@@ -117,7 +117,7 @@ pub fn gmMain_8015FDA4<'a>(ctx: &'a Ctx) {
             fns::db_804D6B20(ctx).set(0_i32);
         }
     } else {
-        (if (fns::DbLevel(ctx).get() as u32) == ((enums::DbLKind_NoDebugRom as i32) as u32) {
+        (if fns::DbLevel(ctx).get() == (((enums::DbLKind_NoDebugRom as i32) as u32) as i32) {
             ({ () })
         } else {
             fns::__assert(

@@ -617,7 +617,7 @@ pub fn ftSk_SpecialS_CheckInitChain<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32
         inl_ftSk_SpecialS_SpawnChain_unfused(ctx, gobj, Handle::addr(__inl));
         (fp).mv().sk().specials().set_x1C(fp::fctiwz((da).x18()));
         if Handle::is_null((fp).u().sk().x8()) {
-            if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                 fns::ftCo_Fall_Enter(ctx, gobj);
             } else {
                 fns::ft_8008A2BC(ctx, gobj);

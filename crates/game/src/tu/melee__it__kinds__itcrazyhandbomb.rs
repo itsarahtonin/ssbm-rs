@@ -174,7 +174,7 @@ pub fn itCrazyhandbomb_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> 
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::it_8026E71C(ctx, gobj, fnptr(ctx, 0x802f1030));
     }
     return 0_i32;

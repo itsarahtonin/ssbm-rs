@@ -48,8 +48,8 @@ pub fn un_802FD928<'a>(ctx: &'a Ctx, slot: u8, arg1: u8, arg2: _GXColor<'a>) {
         i = 0_i32;
         'l1: while i < 4_i32 {
             'c2: {
-                if (fns::Player_GetPlayerSlotType(ctx, (slot as i32)) as u32)
-                    == ((enums::Gm_PKind_Cpu as i32) as u32)
+                if fns::Player_GetPlayerSlotType(ctx, (slot as i32))
+                    == (((enums::Gm_PKind_Cpu as i32) as u32) as i32)
                 {
                     break 'c2;
                 }

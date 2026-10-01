@@ -802,7 +802,7 @@ pub fn mnCount_CreateRow<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, visible_row: i32,
         (text).font_size().set_x(0.029999999329447746);
         (text).font_size().set_y(0.029999999329447746);
         selkind = fns::mnCount_GetRowValue_Character(ctx, data_row);
-        if (selkind as u32) == ((enums::SELKIND_COUNT as i32) as u32) {
+        if selkind == (((enums::SELKIND_COUNT as i32) as u32) as i32) {
             let _ = fns::HSD_SisLib_803A6B98(ctx, text, 0.0, 0.0, cstr(ctx, 0x804d5064), &[]);
         } else {
             fns::gm_80160B40(

@@ -31,7 +31,7 @@ pub fn onExitTitle<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let mut arg0 = arg0;
     let mut temp_r3: Val<'a, i32> =
         Handle::cast::<Val<'a, i32>>(fns::gm_GetGameModeStateExitData(ctx, arg0));
-    if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32) {
+    if fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32) {
         if (((temp_r3).get() & 0x100_i32) != 0) {
             fns::gm_SetPendingGameMode(ctx, ((enums::GM_DEBUG_VS as i32) as u8));
             fns::gm_SetNewGameModePending(ctx);

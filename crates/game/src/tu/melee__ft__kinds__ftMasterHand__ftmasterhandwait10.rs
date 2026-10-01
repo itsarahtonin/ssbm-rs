@@ -29,7 +29,7 @@ use crate::support::*;
 pub fn ftMh_MS_341_8014FE10<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::Stage_80225194(ctx) as u32) == (251_i32 as u32) {
+    if fns::Stage_80225194(ctx) == ((251_i32 as u32) as i32) {
         statics::melee__ft__kinds__ftMasterHand__ftmasterhandwait10::ifStage251(ctx, gobj);
     } else {
         fns::ftMh_MS_343_801510B0(ctx, gobj);
@@ -244,7 +244,7 @@ pub fn ftMh_Wait1_0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let unused_2: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
-    if (fns::Player_GetPlayerSlotType(ctx, ((fp).player_idx() as i32)) as u32) == (0_i32 as u32) {
+    if fns::Player_GetPlayerSlotType(ctx, ((fp).player_idx() as i32)) == ((0_i32 as u32) as i32) {
         fns::ftMh_MS_341_80150894(ctx, gobj);
         if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
             if (fp).motion_id() == (enums::ftMh_MS_Wait1_0 as i32) {
@@ -482,7 +482,7 @@ pub fn ftMh_Wait1_0_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::Player_GetPlayerSlotType(ctx, ((fp).player_idx() as i32)) as u32) == (0_i32 as u32) {
+    if fns::Player_GetPlayerSlotType(ctx, ((fp).player_idx() as i32)) == ((0_i32 as u32) as i32) {
         fns::ftBossLib_8015BD20(ctx, gobj);
     }
 }

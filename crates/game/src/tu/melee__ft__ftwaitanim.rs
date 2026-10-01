@@ -30,7 +30,7 @@ pub fn ftCo_8008A698<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut fp = fp;
     if (!Handle::is_null((fp).item_gobj()))
-        && ((fns::itGetHoldKind(ctx, (fp).item_gobj()) as u32) != (2_i32 as u32))
+        && (fns::itGetHoldKind(ctx, (fp).item_gobj()) != ((2_i32 as u32) as i32))
     {
         return 1_i32;
     }
@@ -75,8 +75,8 @@ pub fn ftCo_8008A7A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: WaitStruct<'a>)
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
         if (Handle::is_null(arg1))
             || (((!Handle::is_null((fp).item_gobj()))
-                && (((fp).kind() as u32) != ((enums::Ft_Kind_Mewtwo as i32) as u32)))
-                && (((fp).kind() as u32) != ((enums::Ft_Kind_Fox as i32) as u32)))
+                && ((fp).kind() != (((enums::Ft_Kind_Mewtwo as i32) as u32) as i32)))
+                && ((fp).kind() != (((enums::Ft_Kind_Fox as i32) as u32) as i32)))
         {
             let mut temp: i32 = 0;
             temp = (fp).anim_id();

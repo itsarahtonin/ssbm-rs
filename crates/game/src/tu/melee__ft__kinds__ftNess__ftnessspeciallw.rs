@@ -219,7 +219,7 @@ pub fn ftNs_SpecialAirLwStart_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftNs_SpecialLwStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::ftNs_SpecialLwStart_GroundToAir(ctx, gobj);
     }
 }
@@ -227,7 +227,7 @@ pub fn ftNs_SpecialLwStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftNs_SpecialAirLwStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         fns::ftNs_SpecialAirLwStart_AirToGround(ctx, gobj);
     }
 }
@@ -393,7 +393,7 @@ pub fn ftNs_SpecialAirLwHold_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftNs_SpecialLwHold_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::ftNs_SpecialLwHold_GroundToAir(ctx, gobj);
     }
 }
@@ -401,7 +401,7 @@ pub fn ftNs_SpecialLwHold_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftNs_SpecialAirLwHold_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         fns::ftNs_SpecialAirLwHold_AirToGround(ctx, gobj);
     }
 }
@@ -595,7 +595,7 @@ pub fn ftNs_SpecialAirLwTurn_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftNs_SpecialLwTurn_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::ftNs_SpecialLwTurn_GroundToAir(ctx, gobj);
     }
 }
@@ -603,7 +603,7 @@ pub fn ftNs_SpecialLwTurn_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftNs_SpecialAirLwTurn_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         fns::ftNs_SpecialAirLwTurn_AirToGround(ctx, gobj);
     }
 }
@@ -652,7 +652,7 @@ pub fn ftNs_SpecialLwHold_GroundOrAir<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i
     if ((fp).mv().ns().speciallw().releaseLag() <= 0_i32)
         && ((fp).mv().ns().speciallw().isRelease() != 0)
     {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             fns::ftNs_SpecialLwEnd_Enter(ctx, arg0);
         } else {
             fns::ftNs_SpecialAirLwEnd_Enter(ctx, arg0);
@@ -890,7 +890,7 @@ pub fn ftNs_SpecialAirLwHit_Phys<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 pub fn ftNs_SpecialLwHit_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::ftNs_SpecialLwHit_GroundToAir(ctx, gobj);
     }
 }
@@ -898,7 +898,7 @@ pub fn ftNs_SpecialLwHit_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftNs_SpecialAirLwHit_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         fns::ftNs_SpecialAirLwHit_AirToGround(ctx, gobj);
     }
 }
@@ -992,7 +992,7 @@ pub fn ftNs_AbsorbThink_DecideAction<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         || (!((fp).cur_anim_frame() <= (sa).x7C_PSI_MAGNET_UNK2()))
     {
         let mut msid_2: i32 = 0;
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             msid_2 = (enums::ftNs_MS_SpecialLwHit as i32);
         } else {
             msid_2 = (enums::ftNs_MS_SpecialAirLwHit as i32);
@@ -1083,7 +1083,7 @@ pub fn ftNs_SpecialLwEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftNs_SpecialAirLwEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         fns::ftNs_SpecialAirLwEnd_AirToGround(ctx, gobj);
     }
 }

@@ -98,8 +98,8 @@ pub fn HSD_VIPreRetraceCB<'a>(ctx: &'a Ctx, retraceCount: u32) {
         flush = 1_i32;
         renew = 1_i32;
     } else if (inl_HSD_VIGetNbXFB_unfused(ctx) == 1_i32)
-        && (((fns::HSD_VIData(ctx)).efb().status() as u32)
-            == ((enums::HSD_VI_EFB_DRAWDONE as i32) as u32))
+        && ((fns::HSD_VIData(ctx)).efb().status()
+            == (((enums::HSD_VI_EFB_DRAWDONE as i32) as u32) as i32))
     {
         if ({
             let __t1 = inl_HSD_VISearchXFBByStatus_unfused(ctx, (enums::HSD_VI_XFB_DISPLAY as i32));
@@ -438,8 +438,8 @@ pub fn HSD_VIDrawDoneXFB<'a>(ctx: &'a Ctx, idx: i32) {
     let mut idx = idx;
     let mut intr: i32 = 0;
     intr = fns::OSDisableInterrupts(ctx);
-    (if ((fns::HSD_VIData(ctx)).xfb().get(idx).status() as u32)
-        == ((enums::HSD_VI_XFB_WAITDONE as i32) as u32)
+    (if (fns::HSD_VIData(ctx)).xfb().get(idx).status()
+        == (((enums::HSD_VI_XFB_WAITDONE as i32) as u32) as i32)
     {
         ({ () })
     } else {
@@ -683,8 +683,8 @@ fn inl_HSD_VISetXFBWaitDone_unfused<'a>(ctx: &'a Ctx, idx: i32) {
     let mut idx = idx;
     let mut intr: i32 = 0;
     intr = fns::OSDisableInterrupts(ctx);
-    (if ((fns::HSD_VIData(ctx)).xfb().get(idx).status() as u32)
-        == ((enums::HSD_VI_XFB_DRAWING as i32) as u32)
+    (if (fns::HSD_VIData(ctx)).xfb().get(idx).status()
+        == (((enums::HSD_VI_XFB_DRAWING as i32) as u32) as i32)
     {
         ({ () })
     } else {

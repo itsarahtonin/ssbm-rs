@@ -315,7 +315,7 @@ pub fn itMarumine_UnkMotion5_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         let mut attr: ItemAttr<'a> = (ip).xCC_item_attr();
         fns::it_80272860(
             ctx,
@@ -330,7 +330,7 @@ pub fn itMarumine_UnkMotion5_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::it_8026E15C(ctx, gobj, fnptr(ctx, 0x802d0aac));
     } else {
         fns::it_8026D62C(ctx, gobj, fnptr(ctx, 0x802d0aac));

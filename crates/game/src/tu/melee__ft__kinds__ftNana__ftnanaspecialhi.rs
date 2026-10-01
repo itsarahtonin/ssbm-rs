@@ -141,7 +141,7 @@ pub fn ftNn_Init_801232A4<'a>(ctx: &'a Ctx, nana_gobj: HSD_GObj<'a>) {
             (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, popo_gobj)));
         (nana_fp).set_facing_dir((popo_fp).facing_dir());
     }
-    if ((nana_fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (nana_fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCommon_8007D60C(ctx, nana_fp);
     } else {
         (nana_fp).set_x1968_jumpsUsed(((attrs).max_jumps() as u8));
@@ -311,7 +311,7 @@ pub fn ftPp_SpecialHi_4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != (((enums::GA_Ground as i32) as u32) as i32) {
         statics::melee__ft__kinds__ftNana__ftnanaspecialhi::ftNn_Init_8012378C(ctx, gobj);
         return;
     }

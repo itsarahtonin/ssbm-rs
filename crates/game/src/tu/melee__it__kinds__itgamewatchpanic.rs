@@ -94,7 +94,7 @@ pub fn itGameWatchPanic_Logic78_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (ip).set_xDAC_itcmd_var0((0_i32 as u32));
     if !Handle::is_null((ip).owner()) {
         (ip).set_ground_or_air(fns::ftLib_GetGroundAir(ctx, (ip).owner()));
-        if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             fns::Item_80268E5C(ctx, gobj, 0_i32, (enums::ITEM_ANIM_UPDATE as i32));
         } else {
             fns::Item_80268E5C(ctx, gobj, 1_i32, (enums::ITEM_ANIM_UPDATE as i32));

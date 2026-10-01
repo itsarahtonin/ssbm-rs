@@ -228,7 +228,7 @@ pub fn ftPk_SpecialHiStart1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if (fp).mv().pk().specialhi().x4() <= 0_i32 {
         fns::ftPk_SpecialHi_MotionChangeUpdateVel_Unk0(ctx, gobj);
         fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
-        if ((fp).kind() as u32) != ((enums::Ft_Kind_Pichu as i32) as u32) {
+        if (fp).kind() != (((enums::Ft_Kind_Pichu as i32) as u32) as i32) {
             fns::lb_8000B1CC(
                 ctx,
                 (Handle::add(
@@ -245,7 +245,7 @@ pub fn ftPk_SpecialHiStart1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
     } else {
         fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
-        if ((fp).kind() as u32) != ((enums::Ft_Kind_Pichu as i32) as u32) {
+        if (fp).kind() != (((enums::Ft_Kind_Pichu as i32) as u32) as i32) {
             let mut tempf: f64 = 0.0;
             fns::lb_8000B1CC(
                 ctx,
@@ -288,7 +288,7 @@ pub fn ftPk_SpecialAirHiStart1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if (fp).mv().pk().specialhi().x4() <= 0_i32 {
         fns::ftPk_SpecialHi_MotionChangeUpdateVel_Unk1(ctx, gobj);
         fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
-        if ((fp).kind() as u32) != ((enums::Ft_Kind_Pichu as i32) as u32) {
+        if (fp).kind() != (((enums::Ft_Kind_Pichu as i32) as u32) as i32) {
             fns::lb_8000B1CC(
                 ctx,
                 (Handle::add(
@@ -305,7 +305,7 @@ pub fn ftPk_SpecialAirHiStart1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
     } else {
         fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
-        if ((fp).kind() as u32) != ((enums::Ft_Kind_Pichu as i32) as u32) {
+        if (fp).kind() != (((enums::Ft_Kind_Pichu as i32) as u32) as i32) {
             let mut tempf: f64 = 0.0;
             fns::lb_8000B1CC(
                 ctx,

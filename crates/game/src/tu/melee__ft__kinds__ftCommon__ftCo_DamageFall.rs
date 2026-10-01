@@ -49,10 +49,10 @@ pub fn ftCo_80090594<'a>(
     let mut ground_or_air = ground_or_air;
     let mut hitlag_mul = hitlag_mul;
     let mut motion_id: i32 = msid;
-    if ((((element as u32) == ((enums::HitElement_Cape as i32) as u32))
-        || ((element as u32) == ((enums::HitElement_Disable as i32) as u32)))
-        || ((element as u32) == ((enums::HitElement_Nap as i32) as u32)))
-        || ((element as u32) == ((enums::HitElement_Sleep as i32) as u32))
+    if (((element == (((enums::HitElement_Cape as i32) as u32) as i32))
+        || (element == (((enums::HitElement_Disable as i32) as u32) as i32)))
+        || (element == (((enums::HitElement_Nap as i32) as u32) as i32)))
+        || (element == (((enums::HitElement_Sleep as i32) as u32) as i32))
     {
         return;
     }
@@ -62,9 +62,9 @@ pub fn ftCo_80090594<'a>(
     (fp).dmg()
         .set_x18fa_model_shift_frames(inl_calcShift(ctx, hitlag_mul, motion_id, dmg_));
     (fp).dmg().set_x18FC((0_i32 as u8));
-    if (element as u32) == ((enums::HitElement_Electric as i32) as u32) {
+    if element == (((enums::HitElement_Electric as i32) as u32) as i32) {
         (fp).dmg().set_x18F8((2_i32 as u8));
-    } else if (ground_or_air as u32) == ((enums::GA_Air as i32) as u32) {
+    } else if ground_or_air == (((enums::GA_Air as i32) as u32) as i32) {
         (fp).dmg().set_x18F8((0_i32 as u8));
     } else {
         (fp).dmg().set_x18F8((1_i32 as u8));
@@ -127,7 +127,7 @@ pub fn ftCo_80090780<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCommon_8007D5D4(ctx, fp);
     }
     if fns::ftGetParasolStatus(ctx, gobj) != 1_i32.wrapping_neg() {

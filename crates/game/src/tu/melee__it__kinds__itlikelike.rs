@@ -1157,7 +1157,7 @@ pub fn itLikelike_UnkMotion12_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut temp_r4_2: ItemAttr<'a> = null(ctx);
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         temp_r4_2 = (ip).xCC_item_attr();
         fns::it_80272860(
             ctx,
@@ -1180,7 +1180,7 @@ pub fn itLikelike_UnkMotion12_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if fns::it_8026DA08(ctx, gobj) != 0_i32 {
             fns::it_802762B0(ctx, ip);
             fns::it_80273454(ctx, gobj);

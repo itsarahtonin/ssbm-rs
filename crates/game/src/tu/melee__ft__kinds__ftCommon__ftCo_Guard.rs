@@ -1665,7 +1665,7 @@ pub fn ftCo_80093240<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     if (((fp).allow_sdi() as i32) != 0)
-        && (((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+        && ((fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32))
     {
         if ((if (fp).input().lstick().get(0_i32).x() < fp::frsp(0_i32 as f64) {
             fp::fneg((fp).input().lstick().get(0_i32).x())
@@ -1700,7 +1700,7 @@ pub fn ftCo_80093240<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_800932DC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         if (if (fp).input().lstick().get(0_i32).x() < fp::frsp(0_i32 as f64) {
             fp::fneg((fp).input().lstick().get(0_i32).x())
         } else {
@@ -2179,7 +2179,7 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
 
 fn inl_inlineB0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
     let mut fp = fp;
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Yoshi as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Yoshi as i32) as u32) as i32) {
         return (fp).co_attrs().initial_shield_size();
     } else {
         let mut n1: f64 = fp::fmuls(
@@ -2265,7 +2265,7 @@ fn inl_HSD_JObjSetScale<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
 fn inl_inlineD0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if ((fp).kind() as u32) != ((enums::Ft_Kind_Yoshi as i32) as u32) {
+    if (fp).kind() != (((enums::Ft_Kind_Yoshi as i32) as u32) as i32) {
         let mut alpha: f64 = (fns::p_ftCommonData(ctx).get()).x2F4();
         let mut lightshield_amount: f64 = (fp).lightshield_amount();
         {
@@ -2704,7 +2704,7 @@ fn inl_ftCo_80091BC4_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 fn inl_inlineB0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
     let mut fp = fp;
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Yoshi as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Yoshi as i32) as u32) as i32) {
         return (fp).co_attrs().initial_shield_size();
     } else {
         let mut n1: f64 = fp::fmuls(
@@ -2770,7 +2770,7 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
 fn inl_inlineD0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if ((fp).kind() as u32) != ((enums::Ft_Kind_Yoshi as i32) as u32) {
+    if (fp).kind() != (((enums::Ft_Kind_Yoshi as i32) as u32) as i32) {
         let mut alpha: f64 = (fns::p_ftCommonData(ctx).get()).x2F4();
         let mut lightshield_amount: f64 = (fp).lightshield_amount();
         {

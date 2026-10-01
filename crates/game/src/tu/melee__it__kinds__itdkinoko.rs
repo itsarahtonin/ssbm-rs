@@ -81,7 +81,7 @@ pub fn itDkinoko_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut it: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: KinokoAttrs<'a> =
         Handle::cast::<KinokoAttrs<'a>>(((it).xC4_article_data()).x4_specialAttributes());
-    if ((it).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32) {
+    if (it).ground_or_air() != (((enums::GA_Air as i32) as u32) as i32) {
         (it).xDD4_itemVar()
             .kinoko()
             .set_x0(fp::fmuls((attrs).x0(), (it).facing_dir()));
@@ -105,7 +105,7 @@ pub fn itDkinoko_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         }
     }
     fns::it_8026D78C(ctx, gobj, fnptr(ctx, 0x80293c10));
-    if ((it).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32) {
+    if (it).ground_or_air() != (((enums::GA_Air as i32) as u32) as i32) {
         if (((cd).env_flags() & (0x8000_i32 | 0x10000_i32)) != 0) {
             fns::it_80276408(ctx, gobj, cd, (it).xDD4_itemVar().kinoko().x4());
         } else {
@@ -185,7 +185,7 @@ pub fn itDkinoko_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut it: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut cd: CollData<'a> = (it).x378_itemColl();
     fns::it_8026E414(ctx, gobj, fnptr(ctx, 0x80293a70));
-    if (((it).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32))
+    if ((it).ground_or_air() != (((enums::GA_Air as i32) as u32) as i32))
         && (((cd).env_flags() & (0x8000_i32 | 0x10000_i32)) != 0)
     {
         fns::it_80276408(ctx, gobj, cd, (it).xDD4_itemVar().kinoko().x4());

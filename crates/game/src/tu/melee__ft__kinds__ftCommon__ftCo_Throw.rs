@@ -199,8 +199,8 @@ pub fn ftCo_800DD4B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
                     _ => 1,
                 };
                 if __case <= 0 {
-                    if (((victim).kind() as u32) == ((enums::Ft_Kind_Peach as i32) as u32))
-                        || (((victim).kind() as u32) == ((enums::Ft_Kind_Zelda as i32) as u32))
+                    if ((victim).kind() == (((enums::Ft_Kind_Peach as i32) as u32) as i32))
+                        || ((victim).kind() == (((enums::Ft_Kind_Zelda as i32) as u32) as i32))
                     {
                         victim_msid = 243_i32;
                     }
@@ -327,7 +327,7 @@ pub fn ftCo_800DD724<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         if !Handle::is_null((fp).victim_gobj()) {
             fns::ftCo_800DE920(ctx, (fp).victim_gobj(), (fp).cur_anim_frame());
         }
-        if (((fp).kind() as u32) == ((enums::Ft_Kind_Kirby as i32) as u32))
+        if ((fp).kind() == (((enums::Ft_Kind_Kirby as i32) as u32) as i32))
             && ((fp).motion_id() == 221_i32)
         {
             (fp).set_x2219_b2((0_i32 as u8));
@@ -375,7 +375,7 @@ pub fn ftCo_ThrowF_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if (fp).mv().co().fighterthrow().x4() != 0_i32 {
             (fp).self_vel().set_x(fp::fmuls(
                 (fp).mv().co().throw_().xC().z(),
@@ -395,7 +395,7 @@ pub fn ftCo_ThrowF_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if (fp).mv().co().fighterthrow().x4() != 0_i32 {
             fns::ft_80083C00(ctx, gobj, fnptr(ctx, 0x800dd568));
         } else if (fp).mv().co().fighterthrow().x8() == 0_i32 {
@@ -428,7 +428,7 @@ pub fn ftCo_ThrowB_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if (fp).mv().co().fighterthrow().x4() != 0_i32 {
             (fp).self_vel().set_x(fp::fmuls(
                 (fp).mv().co().fighterthrow().self_vel_x(),
@@ -449,7 +449,7 @@ pub fn ftCo_ThrowB_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if (fp).mv().co().fighterthrow().x4() != 0_i32 {
             fns::ft_80083C00(ctx, gobj, fnptr(ctx, 0x800dd568));
         } else if (fp).mv().co().fighterthrow().x8() == 0_i32 {
@@ -482,7 +482,7 @@ pub fn ftCo_ThrowHi_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if (fp).mv().co().fighterthrow().x4() != 0_i32 {
             (fp).self_vel().set_x(fp::fmuls(
                 (fp).mv().co().fighterthrow().self_vel_x(),
@@ -503,7 +503,7 @@ pub fn ftCo_ThrowHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if (fp).mv().co().fighterthrow().x4() != 0_i32 {
             fns::ft_80083C00(ctx, gobj, fnptr(ctx, 0x800dd568));
         } else if (fp).mv().co().fighterthrow().x8() == 0_i32 {
@@ -521,7 +521,7 @@ pub fn ftCo_ThrowHi_Cam<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (((fp).kind() as u32) == ((enums::Ft_Kind_Kirby as i32) as u32))
+    if ((fp).kind() == (((enums::Ft_Kind_Kirby as i32) as u32) as i32))
         && ((fp).motion_id() == 221_i32)
     {
         fns::ftCamera_800762F4(ctx, gobj);
@@ -550,7 +550,7 @@ pub fn ftCo_ThrowLw_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if (fp).mv().co().fighterthrow().x4() != 0_i32 {
             (fp).self_vel().set_x(fp::fmuls(
                 (fp).mv().co().fighterthrow().self_vel_x(),
@@ -571,7 +571,7 @@ pub fn ftCo_ThrowLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if (fp).mv().co().fighterthrow().x4() != 0_i32 {
             fns::ft_80083C00(ctx, gobj, fnptr(ctx, 0x800dd568));
         } else if (fp).mv().co().fighterthrow().x8() == 0_i32 {

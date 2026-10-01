@@ -44,7 +44,7 @@ pub fn ftCo_Damage_CalcAngle<'a>(ctx: &'a Ctx, fp: Fighter<'a>, f: f64) -> f64 {
             0.01745329238474369,
         ));
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         return (fns::p_ftCommonData(ctx).get()).x144_radians();
     } else if f < (fns::p_ftCommonData(ctx).get()).x14C() {
         return fp::frsp(0_i32 as f64);
@@ -122,7 +122,7 @@ pub fn ftCo_Damage_CalcKnockback<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             (fns::p_ftCommonData(ctx).get()).kb_ice_mul(),
         ));
     }
-    if ((fp).smash_attrs().state() as u32) == ((enums::SmashState_Charging as i32) as u32) {
+    if (fp).smash_attrs().state() == (((enums::SmashState_Charging as i32) as u32) as i32) {
         (fp).dmg().set_kb_applied(fp::fmuls(
             (fp).dmg().kb_applied(),
             (fns::p_ftCommonData(ctx).get()).kb_smashcharge_mul(),
@@ -590,7 +590,7 @@ pub fn ftCo_8008DCE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, facing_dir
             fp::fmuls(scaled_kb.v(), __t2)
         };
         (fp).set_facing_dir((fp).dmg().facing_dir_1());
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             msid = fns::ftCo_803C5520(ctx)
                 .get(1_i32)
                 .get(kb_level)
@@ -684,7 +684,7 @@ pub fn ftCo_8008DCE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, facing_dir
         });
         (fp).set_gr_vel(fp::frsp(0_i32 as f64));
         if kb_level == 3_i32 {
-            if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                 if (kb_angle > (fns::p_ftCommonData(ctx).get()).x234_radians())
                     && (kb_angle < (fns::p_ftCommonData(ctx).get()).x238_radians())
                 {
@@ -773,7 +773,7 @@ pub fn ftCo_8008DCE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, facing_dir
     }
     if kb_level == 3_i32 {
         let mut quake_kind: i32 = 0;
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             if scaled_kb_154 >= (fns::p_ftCommonData(ctx).get()).x174() {
                 quake_kind = (enums::QuakeKind_Large as i32);
             } else {
@@ -1262,7 +1262,7 @@ pub fn ftCo_Damage_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     inl_ftCo_8008F744_unfused(ctx, gobj);
     if (!(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0)) && (!((fp).x221C_b6() != 0)) {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             if ((fp).stamina_dead() != 0) {
                 fns::ftCo_80090780(ctx, gobj);
             } else if !(inl_inlineC0_unfused(ctx, gobj) != 0) {
@@ -1292,7 +1292,7 @@ pub fn doIasa<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         if !(!((fp).mv().co().damage().x1B() != 0)) {
             break 'goto_ret_inline;
         }
-        if ((((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32))
+        if (((fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32))
             && ((fp).x8c_kb_vel().y() < fp::frsp(0_i32 as f64)))
             && ((fns::ftCo_800D69C4(ctx, gobj) != 0) || (fns::ftCo_800CB8E0(ctx, gobj) != 0))
         {
@@ -1327,7 +1327,7 @@ pub fn ftCo_Damage_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     if !((fp).x221C_b6() != 0) {
         if (fns::ftCo_800C5240(ctx, gobj) != 0) {
-            if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                 fns::ftCo_HammerFall_IASA(ctx, gobj);
             } else {
                 fns::ftCo_HammerWait_IASA(ctx, gobj);
@@ -1342,7 +1342,7 @@ pub fn ftCo_Damage_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             as u32)),
                 );
             }
-            if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                 let _ = fns::ftCo_Fall_IASA_Inner(ctx, gobj);
             } else {
                 fns::ftCo_Wait_IASA(ctx, gobj);
@@ -1366,7 +1366,7 @@ pub fn ftCo_Damage_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if !((fp).x221C_b6() != 0) {
             fns::ft_80084DB0(ctx, gobj);
         } else {
@@ -1381,7 +1381,7 @@ pub fn ftCo_Damage_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ft_800848DC(ctx, gobj, fnptr(ctx, 0x8008fc94));
     } else if (fns::ft_80081DD4(ctx, gobj) != 0) {
         if ((fp).stamina_dead() != 0) {
@@ -1414,7 +1414,7 @@ pub fn ftCo_8008FC94<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_Damage_SetMv8FromKbThreshold<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut fp = fp;
-    let mut kb_vel: f64 = (if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    let mut kb_vel: f64 = (if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         inl_sqrtf_unfused(
             ctx,
             (fp::fadds(
@@ -1488,7 +1488,7 @@ pub fn ftCo_DamageFly_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         inl_inlineE0(ctx, gobj);
     } else {
         fns::ft_80084F3C(ctx, gobj);
@@ -1624,7 +1624,7 @@ pub fn ftCo_DamageFlyRoll_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         inl_inlineE0_unfused(ctx, gobj);
     } else {
         fns::ft_80084F3C(ctx, gobj);
@@ -2125,7 +2125,7 @@ fn inl_inlineD0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) 
         if (fp).mv().co().damage().x8() == 0_i32 {
             let mut x: f64 = 0.0;
             let mut y: f64 = 0.0;
-            if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                 y = (fp).x8c_kb_vel().x();
                 x = (fp).x8c_kb_vel().y();
             } else {

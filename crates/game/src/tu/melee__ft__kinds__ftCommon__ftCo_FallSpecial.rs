@@ -336,7 +336,7 @@ fn inl_inline0_unfused<'a>(
         .set_allow_interrupt(allow_interrupt);
     (fp).mv().co().fallspecial().set_x0(26_i32);
     (fp).mv().co().fallspecial().set_x4(fp::frsp(0_i32 as f64));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCommon_8007D60C(ctx, fp);
     } else if (unk != 0) {
         fns::ftCommon_UseAllJumps(ctx, fp);

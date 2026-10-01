@@ -96,7 +96,7 @@ pub fn ftKb_SpecialN_800F598C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut da: ftKb_DatAttrs<'a> = Handle::cast::<ftKb_DatAttrs<'a>>((fp).dat_attrs());
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         new_var = fp::frsp(arg1 as f64);
         fns::ftKb_SpecialS_800F6BB0(ctx, gobj);
         (fp).self_vel()
@@ -1804,7 +1804,7 @@ pub fn ftKb_EatWait_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     if !(inl_ftKb_EatWait_Turn_unfused(ctx, gobj) != 0) {
         jump = fns::ftCo_Jump_GetInput(ctx, gobj);
-        if (jump as u32) != ((enums::JumpInput_None as i32) as u32) {
+        if jump != (((enums::JumpInput_None as i32) as u32) as i32) {
             let mut fp3: Fighter<'a> =
                 (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
             (fp3).mv().kb().specialhi().set_x4(jump);
@@ -1893,7 +1893,7 @@ pub fn ftKb_EatWalk_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
     }
     jump_input = fns::ftCo_Jump_GetInput(ctx, gobj);
-    if (jump_input as u32) != ((enums::JumpInput_None as i32) as u32) {
+    if jump_input != (((enums::JumpInput_None as i32) as u32) as i32) {
         let mut fp: Fighter<'a> =
             (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
         (fp).mv().kb().specialhi().set_x4(jump_input);
@@ -2294,8 +2294,8 @@ pub fn ftKb_SpecialN_800F9090<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if ((!Handle::is_null((fp).target_item_gobj()))
-        && (((fp).kind() as u32) == ((enums::Ft_Kind_Kirby as i32) as u32)))
-        && (((fp).u().kb().hat().kind() as u32) == ((enums::Ft_Kind_Kirby as i32) as u32))
+        && ((fp).kind() == (((enums::Ft_Kind_Kirby as i32) as u32) as i32)))
+        && ((fp).u().kb().hat().kind() == (((enums::Ft_Kind_Kirby as i32) as u32) as i32))
     {
         let mut capturing: i32 = 0_i32;
         if ((fp).motion_id() == (enums::ftKb_MS_SpecialNCapture1 as i32))

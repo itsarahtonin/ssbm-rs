@@ -1854,7 +1854,7 @@ pub fn VIConfigure<'a>(ctx: &'a Ctx, rm: _GXRenderModeObj<'a>) {
     let mut tvInBootrom: u32 = 0;
     let mut tvInGame: u32 = 0;
     enabled = fns::OSDisableInterrupts(ctx);
-    nonInter = (((rm).viTVmode() as u32) & (3_i32 as u32));
+    nonInter = (((rm).viTVmode() & ((3_i32 as u32) as i32)) as u32);
     if statics::dolphin__vi__vi::HorVer(ctx).nonInter() != nonInter {
         statics::dolphin__vi__vi::shdwChangeMode(ctx).set((1_i32 as u32));
         statics::dolphin__vi__vi::HorVer(ctx).set_nonInter(nonInter);
@@ -1905,8 +1905,8 @@ pub fn VIConfigure<'a>(ctx: &'a Ctx, rm: _GXRenderModeObj<'a>) {
             (if statics::dolphin__vi__vi::HorVer(ctx).nonInter() == (3_i32 as u32) {
                 (statics::dolphin__vi__vi::HorVer(ctx).PanSizeY() as i32)
             } else {
-                (if (statics::dolphin__vi__vi::HorVer(ctx).FBMode() as u32)
-                    == ((enums::VI_XFBMODE_SF as i32) as u32)
+                (if statics::dolphin__vi__vi::HorVer(ctx).FBMode()
+                    == (((enums::VI_XFBMODE_SF as i32) as u32) as i32)
                 {
                     ((((statics::dolphin__vi__vi::HorVer(ctx).PanSizeY() as i32)
                         .wrapping_mul(2_i32)) as u16) as i32)
@@ -2315,8 +2315,8 @@ fn inl_AdjustPosition_unfused<'a>(ctx: &'a Ctx, acv: u16) {
             })
         }) as u16),
     );
-    coeff = (if (statics::dolphin__vi__vi::HorVer(ctx).FBMode() as u32)
-        == ((enums::VI_XFBMODE_SF as i32) as u32)
+    coeff = (if statics::dolphin__vi__vi::HorVer(ctx).FBMode()
+        == (((enums::VI_XFBMODE_SF as i32) as u32) as i32)
     {
         2_i32
     } else {
@@ -2470,7 +2470,7 @@ fn inl_calcFbbs_unfused<'a>(
             .wrapping_add((bytesPerLine.wrapping_mul((panPosY as u32)))),
     );
     (bfbb).set(
-        (if (xfbMode as u32) == ((enums::VI_XFBMODE_SF as i32) as u32) {
+        (if xfbMode == (((enums::VI_XFBMODE_SF as i32) as u32) as i32) {
             (tfbb).get()
         } else {
             (tfbb).get().wrapping_add(bytesPerLine)
@@ -2647,7 +2647,7 @@ fn inl_setPicConfig_unfused<'a>(
     let mut xof = xof;
     (wordPerLine).set((div_i32(((fbSizeX as i32).wrapping_add(15_i32)), 16_i32) as u8));
     (std).set(
-        ((if (xfbMode as u32) == ((enums::VI_XFBMODE_SF as i32) as u32) {
+        ((if xfbMode == (((enums::VI_XFBMODE_SF as i32) as u32) as i32) {
             ((wordPerLine).get() as i32)
         } else {
             (((((wordPerLine).get() as i32).wrapping_mul(2_i32)) as u8) as i32)

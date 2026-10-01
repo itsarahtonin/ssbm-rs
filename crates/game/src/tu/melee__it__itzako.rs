@@ -141,7 +141,7 @@ pub fn it_8027B798<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, out_vel: Vec<'a>) -> i3
     dx = fp::fmuls(mag, fns::cosf(ctx, angle_rad));
     dy = fp::fmuls(mag, fns::sinf(ctx, angle_rad));
     (ip).set_facing_dir((ip).xCCC_incDamageDirection());
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         (out_vel).set_x(fp::fmuls(fp::fneg(dx), (ip).facing_dir()));
         (out_vel).set_y(dy);
         (out_vel).set_z(0.0);
@@ -1041,7 +1041,7 @@ fn inl_it_8027B798_CalcAngle<'a>(
     let mut knockback = knockback;
     if angle != 0x169_i32 {
         return fp::fmuls(0.01745329238474369, fp::frsp(angle as f64));
-    } else if (ground_or_air as u32) == ((enums::GA_Air as i32) as u32) {
+    } else if ground_or_air == (((enums::GA_Air as i32) as u32) as i32) {
         return (common_data).x144_radians();
     } else if knockback < (common_data).x14C() {
         return 0.0;

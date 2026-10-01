@@ -32,9 +32,9 @@ pub fn ftCo_800C70D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut ms: i32 = 0;
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Mario as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Mario as i32) as u32) as i32) {
         ms = (enums::ftCo_MS_Wait as i32);
-    } else if ((fp).kind() as u32) == ((enums::Ft_Kind_Luigi as i32) as u32) {
+    } else if (fp).kind() == (((enums::Ft_Kind_Luigi as i32) as u32) as i32) {
         ms = (enums::ftCo_MS_Wait as i32);
     } else {
         inl_inlineB2_unfused(ctx, gobj);

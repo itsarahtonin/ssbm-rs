@@ -95,7 +95,7 @@ pub fn it_8026FA2C<'a>(
         'l1: while (i as u32) < (div_u32(0x4f0_u32, 0x13c_u32)) {
             'c2: {
                 hit = (arg_item0).x5D4_hitboxes().get(i).hit();
-                if (((((hit).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32))
+                if ((((hit).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
                     && ((hit).x4() == (arg_hit).x4()))
                     && (fns::lbColl_80008688(ctx, hit, arg2, Handle::cast::<Addr<'a>>(arg_item3))
                         != 0))
@@ -229,8 +229,8 @@ pub fn it_8026FCF8<'a>(ctx: &'a Ctx, arg_item: Item<'a>, arg_hit: HitCapsule<'a>
                             'c6: {
                                 hit = (item).x5D4_hitboxes().get((i as i32)).hit();
                                 if ((Handle::addr(hit) != Handle::addr(arg_hit))
-                                    && (((hit).state() as u32)
-                                        != ((enums::HitCapsule_Disabled as i32) as u32)))
+                                    && ((hit).state()
+                                        != (((enums::HitCapsule_Disabled as i32) as u32) as i32)))
                                     && ((hit).x4() == (arg_hit).x4())
                                 {
                                     fns::lbColl_CopyHitCapsule(ctx, hit, arg_hit);
@@ -438,15 +438,15 @@ pub fn it_802701BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         let mut arg_hit: HitCapsule<'a> =
                             (ip).x5D4_hitboxes().get((it_hit_index as i32)).hit();
                         let mut new_var: HitCapsule<'a> = arg_hit;
-                        if (((((new_var).state() as u32)
-                            != ((enums::HitCapsule_Disabled as i32) as u32))
+                        if ((((new_var).state()
+                            != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
                             && ((new_var).element() == ((enums::HitElement_Catch as i32) as u32)))
                             && (((((new_var).x40_b2() as i32) != 0)
-                                && (((fp).ground_or_air() as u32)
-                                    == ((enums::GA_Air as i32) as u32)))
+                                && ((fp).ground_or_air()
+                                    == (((enums::GA_Air as i32) as u32) as i32)))
                                 || ((((new_var).x40_b3() as i32) != 0)
-                                    && (((fp).ground_or_air() as u32)
-                                        == ((enums::GA_Ground as i32) as u32)))))
+                                    && ((fp).ground_or_air()
+                                        == (((enums::GA_Ground as i32) as u32) as i32)))))
                             && (!(fns::lbColl_8000ACFC(ctx, Handle::cast::<Addr<'a>>(fp), new_var)
                                 != 0))
                         {
@@ -570,17 +570,17 @@ pub fn it_802703E8<'a>(ctx: &'a Ctx, arg_item_gobj: HSD_GObj<'a>) {
                     'l5: while hit_index < (4_i32 as u32) {
                         'c6: {
                             hit = (fighter).x914().get((hit_index as i32));
-                            if (((((((hit).state() as u32)
-                                == ((enums::HitCapsule_Disabled as i32) as u32))
+                            if ((((((hit).state()
+                                == (((enums::HitCapsule_Disabled as i32) as u32) as i32))
                                 || ((hit).element()
                                     == ((enums::HitElement_Catch as i32) as u32)))
                                 || (((hit).x42_b7() as i32) != 1_i32))
                                 || (((!((hit).x40_b2() != 0))
-                                    || (((arg_item).ground_or_air() as u32)
-                                        != ((enums::GA_Air as i32) as u32)))
+                                    || ((arg_item).ground_or_air()
+                                        != (((enums::GA_Air as i32) as u32) as i32)))
                                     && ((!((hit).x40_b3() != 0))
-                                        || (((arg_item).ground_or_air() as u32)
-                                            != ((enums::GA_Ground as i32) as u32)))))
+                                        || ((arg_item).ground_or_air()
+                                            != (((enums::GA_Ground as i32) as u32) as i32)))))
                                 || (fns::lbColl_8000ACFC(
                                     ctx,
                                     Handle::cast::<Addr<'a>>(arg_item),
@@ -742,16 +742,16 @@ pub fn it_802706D0<'a>(ctx: &'a Ctx, arg_item_gobj: HSD_GObj<'a>) {
                                 let mut arg_hit: HitCapsule<'a> =
                                     (arg_item).x5D4_hitboxes().get((hit_index as i32)).hit();
                                 let mut tmp_hit: HitCapsule<'a> = arg_hit;
-                                if (((((arg_hit).state() as u32)
-                                    != ((enums::HitCapsule_Disabled as i32) as u32))
+                                if ((((arg_hit).state()
+                                    != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
                                     && ((arg_hit).element()
                                         != ((enums::HitElement_Catch as i32) as u32)))
                                     && (((((arg_hit).x40_b2() as i32) != 0)
-                                        && (((item).ground_or_air() as u32)
-                                            == ((enums::GA_Air as i32) as u32)))
+                                        && ((item).ground_or_air()
+                                            == (((enums::GA_Air as i32) as u32) as i32)))
                                         || ((((arg_hit).x40_b3() as i32) != 0)
-                                            && (((item).ground_or_air() as u32)
-                                                == ((enums::GA_Ground as i32) as u32)))))
+                                            && ((item).ground_or_air()
+                                                == (((enums::GA_Ground as i32) as u32) as i32)))))
                                     && (!(fns::lbColl_8000ACFC(
                                         ctx,
                                         Handle::cast::<Addr<'a>>(item),
@@ -777,15 +777,15 @@ pub fn it_802706D0<'a>(ctx: &'a Ctx, arg_item_gobj: HSD_GObj<'a>) {
                     'l7: while hit_index < (4_i32 as u32) {
                         'c8: {
                             hit = (item).x5D4_hitboxes().get((hit_index as i32)).hit();
-                            if (((((hit).state() as u32)
-                                == ((enums::HitCapsule_Disabled as i32) as u32))
+                            if ((((hit).state()
+                                == (((enums::HitCapsule_Disabled as i32) as u32) as i32))
                                 || (((hit).x42_b7() as i32) != 1_i32))
                                 || (((!((hit).x40_b2() != 0))
-                                    || (((arg_item).ground_or_air() as u32)
-                                        != ((enums::GA_Air as i32) as u32)))
+                                    || ((arg_item).ground_or_air()
+                                        != (((enums::GA_Air as i32) as u32) as i32)))
                                     && ((!((hit).x40_b3() != 0))
-                                        || (((arg_item).ground_or_air() as u32)
-                                            != ((enums::GA_Ground as i32) as u32)))))
+                                        || ((arg_item).ground_or_air()
+                                            != (((enums::GA_Ground as i32) as u32) as i32)))))
                                 || (fns::lbColl_8000ACFC(
                                     ctx,
                                     Handle::cast::<Addr<'a>>(arg_item),
@@ -1811,7 +1811,7 @@ pub fn it_80271D2C<'a>(ctx: &'a Ctx, arg_item_gobj: HSD_GObj<'a>) {
             item = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
             if ((((Handle::addr(arg_item_gobj) != Handle::addr(item_gobj))
                 && (!((item).xDC8_word().flags().x13() != 0)))
-                && (((item).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32)))
+                && ((item).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32)))
                 && (!((item).xDD1_flag().x0().b0() != 0)))
                 && (((item).hold_kind() != 3_i32)
                     || (((item).hold_kind() == 3_i32)
@@ -1890,7 +1890,7 @@ pub fn it_80271F78<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             item = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
             if ((((Handle::addr(gobj) != Handle::addr(item_gobj))
                 && (!((item).xDC8_word().flags().x13() != 0)))
-                && (((item).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32)))
+                && ((item).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32)))
                 && (!((item).xDD1_flag().x0().b0() != 0)))
                 && (fns::itIsHeavy(ctx, item_gobj) == 1_i32)
             {
@@ -1949,7 +1949,7 @@ pub fn it_802721B8<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     (item).set_xDC0((0_i32 as u32));
     if !((item).xDC8_word().flags().x13() != 0) {
         if (((item).xDC8_word().flags().x1A() as i32) == 1_i32)
-            && (((item).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+            && ((item).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32))
         {
             if ((item).xDC8_word().flags().x1C() != 0) {
                 statics::melee__it__itcoll::it_80271B60(ctx, item_gobj);
@@ -1960,7 +1960,7 @@ pub fn it_802721B8<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
         }
     }
     if ((!((item).xDC8_word().flags().x13() != 0))
-        && (((item).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32)))
+        && ((item).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32)))
         && (fns::itIsHeavy(ctx, item_gobj) == 1_i32)
     {
         statics::melee__it__itcoll::it_80271F78(ctx, item_gobj);
@@ -2122,7 +2122,7 @@ fn inl_it_8026FA2C_unfused<'a>(
         'l1: while (i as u32) < (div_u32(0x4f0_u32, 0x13c_u32)) {
             'c2: {
                 hit = (arg_item0).x5D4_hitboxes().get(i).hit();
-                if (((((hit).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32))
+                if ((((hit).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
                     && ((hit).x4() == (arg_hit).x4()))
                     && (fns::lbColl_80008688(ctx, hit, arg2, Handle::cast::<Addr<'a>>(arg_item3))
                         != 0))
@@ -2153,7 +2153,7 @@ fn inl_it_8026FC00_inline_unfused<'a>(
         'l1: while (i as u32) < (div_u32(0x4f0_u32, 0x13c_u32)) {
             'c2: {
                 let mut hit: HitCapsule<'a> = (arg_item).x5D4_hitboxes().get(i).hit();
-                if (((hit).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32))
+                if ((hit).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
                     && ((hit).x4() == (arg_hit).x4())
                 {
                     let _ = fns::lbColl_80008820(ctx, hit, arg2, Handle::cast::<Addr<'a>>(arg3));

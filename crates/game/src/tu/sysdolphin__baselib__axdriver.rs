@@ -1694,7 +1694,7 @@ pub fn AXDriverSetupAux<'a>(ctx: &'a Ctx, channel: i32, r#type: i32, param: Addr
             cstr(ctx, 0x803b95f8),
         )
     });
-    (if ((0_i32 as u32) <= (r#type as u32)) && ((r#type as u32) <= (4_i32 as u32)) {
+    (if (((0_i32 as u32) as i32) <= r#type) && (r#type <= ((4_i32 as u32) as i32)) {
         ({ () })
     } else {
         fns::__assert(
@@ -1704,7 +1704,7 @@ pub fn AXDriverSetupAux<'a>(ctx: &'a Ctx, channel: i32, r#type: i32, param: Addr
             cstr(ctx, 0x803b95f8),
         )
     });
-    (if ((r#type as u32) == (0_i32 as u32)) || (!Handle::is_null(param)) {
+    (if (r#type == ((0_i32 as u32) as i32)) || (!Handle::is_null(param)) {
         ({ () })
     } else {
         fns::__assert(
@@ -1845,8 +1845,8 @@ pub fn HSD_AudioGetAuxHeapSize<'a>(ctx: &'a Ctx, r#type: i32, param: Addr<'a>) -
     let mut result: i32 = 0_i32;
     let mut i: i32 = 0;
     let mut k: i32 = 0;
-    if (((r#type as u32) < (0_i32 as u32)) || ((r#type as u32) > (4_i32 as u32)))
-        || (((r#type as u32) != (0_i32 as u32)) && (Handle::is_null(param)))
+    if ((r#type < ((0_i32 as u32) as i32)) || (r#type > ((4_i32 as u32) as i32)))
+        || ((r#type != ((0_i32 as u32) as i32)) && (Handle::is_null(param)))
     {
         return 0_i32;
     }
@@ -2022,9 +2022,9 @@ pub fn HSD_AudioSFXSetupAux<'a>(
 pub fn HSD_AudioSFXGetDefaultAuxParam<'a>(ctx: &'a Ctx, r#type: i32, param: Addr<'a>) -> i32 {
     let mut r#type = r#type;
     let mut param = param;
-    if (((r#type as u32) < (0_i32 as u32))
-        || ((r#type as u32) > ((enums::AXDRIVER_AUX_DELAY as i32) as u32)))
-        || (((r#type as u32) != ((enums::AXDRIVER_AUX_OFF as i32) as u32))
+    if ((r#type < ((0_i32 as u32) as i32))
+        || (r#type > (((enums::AXDRIVER_AUX_DELAY as i32) as u32) as i32)))
+        || ((r#type != (((enums::AXDRIVER_AUX_OFF as i32) as u32) as i32))
             && (Handle::is_null(param)))
     {
         return 0_i32;

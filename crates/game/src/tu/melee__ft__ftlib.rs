@@ -49,7 +49,7 @@ pub fn ftLib_IsMasterHandPresent<'a>(ctx: &'a Ctx) -> i32 {
         cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
         'l1: while !Handle::is_null(cur) {
             'c2: {
-                if (fns::ftLib_GetKind(ctx, cur) as u32) == ((enums::Ft_Kind_MasterH as i32) as u32)
+                if fns::ftLib_GetKind(ctx, cur) == (((enums::Ft_Kind_MasterH as i32) as u32) as i32)
                 {
                     return 1_i32;
                 }
@@ -68,7 +68,7 @@ pub fn ftLib_IsCrazyHandPresent<'a>(ctx: &'a Ctx) -> i32 {
         cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
         'l1: while !Handle::is_null(cur) {
             'c2: {
-                if (fns::ftLib_GetKind(ctx, cur) as u32) == ((enums::Ft_Kind_CrezyH as i32) as u32)
+                if fns::ftLib_GetKind(ctx, cur) == (((enums::Ft_Kind_CrezyH as i32) as u32) as i32)
                 {
                     return 1_i32;
                 }
@@ -1217,7 +1217,7 @@ pub fn ftLib_IsChargingSmash<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).smash_attrs().state() as u32) == ((enums::SmashState_Charging as i32) as u32) {
+    if (fp).smash_attrs().state() == (((enums::SmashState_Charging as i32) as u32) as i32) {
         return 1_i32;
     } else {
         return 0_i32;
@@ -1244,7 +1244,7 @@ pub fn ftLib_GetGameWatchColor<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, dst: Addr<'
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
     let mut dst = dst;
-    if (inl_ftLib_GetKind_unfused(ctx, gobj) as u32) == ((enums::Ft_Kind_GameWatch as i32) as u32) {
+    if inl_ftLib_GetKind_unfused(ctx, gobj) == (((enums::Ft_Kind_GameWatch as i32) as u32) as i32) {
         fns::ftGw_Init_8014A7F4(ctx, gobj, Handle::cast::<ItemModStruct<'a>>(dst));
     } else {
         fns::ftKb_Init_800EEB00(
@@ -1259,7 +1259,7 @@ pub fn ftLib_GetGameWatchOutlineColor<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, dst:
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
     let mut dst = dst;
-    if (inl_ftLib_GetKind_unfused(ctx, gobj) as u32) == ((enums::Ft_Kind_GameWatch as i32) as u32) {
+    if inl_ftLib_GetKind_unfused(ctx, gobj) == (((enums::Ft_Kind_GameWatch as i32) as u32) as i32) {
         fns::ftGw_Init_8014A814(ctx, gobj, Handle::cast::<ItemModStruct<'a>>(dst));
     } else {
         fns::ftKb_Init_800EEB1C(ctx, gobj, Handle::cast::<Val<'a, i32>>(dst));
@@ -1271,7 +1271,7 @@ pub fn ftLib_GetGroundSlopeAngle<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    (if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    (if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(

@@ -409,7 +409,7 @@ pub fn TObjForeachAnim<'a>(
     {
         'l1: while !Handle::is_null(tobj) {
             'c2: {
-                if (((mask as u32) & ((enums::TOBJ_MASK as i32) as u32)) != 0)
+                if ((mask & (((enums::TOBJ_MASK as i32) as u32) as i32)) != 0)
                     && (!Handle::is_null((tobj).aobj()))
                 {
                     statics::sysdolphin__baselib__aobj::callbackForeachFunc(
@@ -445,7 +445,7 @@ pub fn RObjForeachAnim<'a>(
     {
         'l1: while !Handle::is_null(robj) {
             'c2: {
-                if (((mask as u32) & ((enums::ROBJ_MASK as i32) as u32)) != 0)
+                if ((mask & (((enums::ROBJ_MASK as i32) as u32) as i32)) != 0)
                     && (!Handle::is_null((robj).aobj()))
                 {
                     statics::sysdolphin__baselib__aobj::callbackForeachFunc(
@@ -481,7 +481,7 @@ pub fn DObjForeachAnim<'a>(
     {
         'l1: while !Handle::is_null(dobj) {
             'c2: {
-                if (((mask as u32) & ((enums::DOBJ_MASK as i32) as u32)) != 0)
+                if ((mask & (((enums::DOBJ_MASK as i32) as u32) as i32)) != 0)
                     && (!Handle::is_null((dobj).aobj()))
                 {
                     statics::sysdolphin__baselib__aobj::callbackForeachFunc(
@@ -526,7 +526,7 @@ pub fn JObjForeachAnim<'a>(
             cstr(ctx, 0x80405fc0),
         )
     });
-    if (((mask as u32) & ((enums::JOBJ_MASK as i32) as u32)) != 0)
+    if ((mask & (((enums::JOBJ_MASK as i32) as u32) as i32)) != 0)
         && (!Handle::is_null((obj).aobj()))
     {
         statics::sysdolphin__baselib__aobj::callbackForeachFunc(
@@ -1067,7 +1067,7 @@ fn inl_TObjForeachAnim_unfused<'a>(
     {
         'l1: while !Handle::is_null(tobj) {
             'c2: {
-                if (((mask as u32) & ((enums::TOBJ_MASK as i32) as u32)) != 0)
+                if ((mask & (((enums::TOBJ_MASK as i32) as u32) as i32)) != 0)
                     && (!Handle::is_null((tobj).aobj()))
                 {
                     statics::sysdolphin__baselib__aobj::callbackForeachFunc(
@@ -1102,7 +1102,7 @@ fn inl_MObjForeachAnim_unfused<'a>(
     if Handle::is_null(mobj) {
         return;
     }
-    if (((mask as u32) & ((enums::MOBJ_MASK as i32) as u32)) != 0)
+    if ((mask & (((enums::MOBJ_MASK as i32) as u32) as i32)) != 0)
         && (!Handle::is_null((mobj).aobj()))
     {
         statics::sysdolphin__baselib__aobj::callbackForeachFunc(
@@ -1131,7 +1131,7 @@ fn inl_PObjForeachAnim_unfused<'a>(
     let mut func = func;
     let mut arg_type = arg_type;
     let mut arg = arg;
-    if ((((((mask as u32) & ((enums::POBJ_MASK as i32) as u32)) != 0) && (!Handle::is_null(pobj)))
+    if (((((mask & (((enums::POBJ_MASK as i32) as u32) as i32)) != 0) && (!Handle::is_null(pobj)))
         && ((((pobj).flags() as i32) & 0x3000_i32) == (shl_i32(1_i32, (12_i32 as u32)))))
         && (!Handle::is_null((pobj).u().shape_set())))
         && (!Handle::is_null(((pobj).u().shape_set()).aobj()))
@@ -1164,7 +1164,7 @@ fn inl_RObjForeachAnim_unfused<'a>(
     {
         'l1: while !Handle::is_null(robj) {
             'c2: {
-                if (((mask as u32) & ((enums::ROBJ_MASK as i32) as u32)) != 0)
+                if ((mask & (((enums::ROBJ_MASK as i32) as u32) as i32)) != 0)
                     && (!Handle::is_null((robj).aobj()))
                 {
                     statics::sysdolphin__baselib__aobj::callbackForeachFunc(
@@ -1206,7 +1206,7 @@ fn inl_JObjForeachAnim_unfused<'a>(
             cstr(ctx, 0x80405fc0),
         )
     });
-    if (((mask as u32) & ((enums::JOBJ_MASK as i32) as u32)) != 0)
+    if ((mask & (((enums::JOBJ_MASK as i32) as u32) as i32)) != 0)
         && (!Handle::is_null((obj).aobj()))
     {
         statics::sysdolphin__baselib__aobj::callbackForeachFunc(
@@ -1276,7 +1276,7 @@ fn inl_JObjForeachAnim_unfused_2<'a>(
             cstr(ctx, 0x80405fc0),
         )
     });
-    if (((mask as u32) & ((enums::JOBJ_MASK as i32) as u32)) != 0)
+    if ((mask & (((enums::JOBJ_MASK as i32) as u32) as i32)) != 0)
         && (!Handle::is_null((obj).aobj()))
     {
         statics::sysdolphin__baselib__aobj::callbackForeachFunc(
@@ -1346,7 +1346,7 @@ fn inl_MObjForeachAnim_unfused_2<'a>(
     if Handle::is_null(mobj) {
         return;
     }
-    if (((mask as u32) & ((enums::MOBJ_MASK as i32) as u32)) != 0)
+    if ((mask & (((enums::MOBJ_MASK as i32) as u32) as i32)) != 0)
         && (!Handle::is_null((mobj).aobj()))
     {
         statics::sysdolphin__baselib__aobj::callbackForeachFunc(
@@ -1385,7 +1385,7 @@ fn inl_WObjForeachAnim_unfused<'a>(
     if Handle::is_null(wobj) {
         return;
     }
-    if (((mask as u32) & ((enums::WOBJ_MASK as i32) as u32)) != 0)
+    if ((mask & (((enums::WOBJ_MASK as i32) as u32) as i32)) != 0)
         && (!Handle::is_null((wobj).aobj()))
     {
         statics::sysdolphin__baselib__aobj::callbackForeachFunc(
@@ -1424,7 +1424,7 @@ fn inl_LObjForeachAnim_unfused<'a>(
     {
         'l1: while !Handle::is_null(lobj) {
             'c2: {
-                if (((mask as u32) & ((enums::LOBJ_MASK as i32) as u32)) != 0)
+                if ((mask & (((enums::LOBJ_MASK as i32) as u32) as i32)) != 0)
                     && (!Handle::is_null((lobj).aobj()))
                 {
                     statics::sysdolphin__baselib__aobj::callbackForeachFunc(
@@ -1461,7 +1461,7 @@ fn inl_CObjForeachAnim_unfused<'a>(
     if Handle::is_null(cobj) {
         return;
     }
-    if (((mask as u32) & ((enums::COBJ_MASK as i32) as u32)) != 0)
+    if ((mask & (((enums::COBJ_MASK as i32) as u32) as i32)) != 0)
         && (!Handle::is_null((cobj).aobj()))
     {
         statics::sysdolphin__baselib__aobj::callbackForeachFunc(
@@ -1491,7 +1491,7 @@ fn inl_FogForeachAnim_unfused<'a>(
     let mut func = func;
     let mut arg_type = arg_type;
     let mut arg = arg;
-    if ((((mask as u32) & ((enums::FOG_MASK as i32) as u32)) != 0) && (!Handle::is_null(fog)))
+    if (((mask & (((enums::FOG_MASK as i32) as u32) as i32)) != 0) && (!Handle::is_null(fog)))
         && (!Handle::is_null((fog).aobj()))
     {
         statics::sysdolphin__baselib__aobj::callbackForeachFunc(

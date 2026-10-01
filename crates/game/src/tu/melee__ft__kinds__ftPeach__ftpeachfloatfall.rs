@@ -33,7 +33,7 @@ pub fn ftPe_UpdateFloatDir<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut da: ftPe_DatAttrs<'a> = Handle::cast::<ftPe_DatAttrs<'a>>((fp).dat_attrs());
     let mut msid: i32 = inl_getFloatDir_unfused(ctx, gobj);
-    let mut anim_start: f64 = (if (msid as u32) == ((enums::ftPe_MS_FloatFallF as i32) as u32) {
+    let mut anim_start: f64 = (if msid == (((enums::ftPe_MS_FloatFallF as i32) as u32) as i32) {
         (da).floatfallf_anim_start()
     } else {
         (da).floatfallb_anim_start()

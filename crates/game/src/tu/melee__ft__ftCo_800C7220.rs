@@ -31,7 +31,7 @@ pub fn ftCo_800C7220<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).kind() as u32) != ((enums::Ft_Kind_Kirby as i32) as u32) {
+    if (fp).kind() != (((enums::Ft_Kind_Kirby as i32) as u32) as i32) {
         inl_inlineB2_unfused(ctx, gobj);
     } else {
         fns::Fighter_ChangeMotionState(
@@ -54,7 +54,7 @@ pub fn ftCo_800C7294<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).kind() as u32) != ((enums::Ft_Kind_Kirby as i32) as u32) {
+    if (fp).kind() != (((enums::Ft_Kind_Kirby as i32) as u32) as i32) {
         inl_inlineB2_unfused(ctx, gobj);
     } else {
         fns::Fighter_ChangeMotionState(
@@ -77,7 +77,7 @@ pub fn ftCo_800C7308<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).kind() as u32) != ((enums::Ft_Kind_Kirby as i32) as u32) {
+    if (fp).kind() != (((enums::Ft_Kind_Kirby as i32) as u32) as i32) {
         inl_inlineB2_unfused(ctx, gobj);
     } else {
         fns::Fighter_ChangeMotionState(

@@ -244,12 +244,11 @@ pub fn un_80321EBC<'a>(ctx: &'a Ctx, arg0: u32, arg1: f64) -> i32 {
             }
             2 => {
                 port = fns::ftLib_IsSubFighter(ctx, gobj);
-                __state = if (fns::Player_8003248C(
+                __state = if fns::Player_8003248C(
                     ctx,
                     (fns::ftLib_GetPlayerIndex(ctx, gobj) as i32),
                     port,
-                ) as u32)
-                    == (1_i32 as u32)
+                ) == ((1_i32 as u32) as i32)
                 {
                     6
                 } else {

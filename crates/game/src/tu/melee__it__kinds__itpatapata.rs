@@ -85,7 +85,7 @@ pub fn itPatapata_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
     let mut it: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
-    if ((it).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (it).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         let _ = fns::it_8026DA08(ctx, gobj);
     } else {
         let _ = fns::it_8026D564(ctx, gobj);

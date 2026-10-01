@@ -18231,10 +18231,10 @@ fn inl_psUpdateBillboardAxes<'a>(ctx: &'a Ctx, inv_view: ArrV<'a, F32, 4>) {
 
 fn inl_psSetCurrentMtx<'a>(ctx: &'a Ctx, idx: i32) {
     let mut idx = idx;
-    if (statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D7948(ctx)
+    if ((statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D7948(ctx)
         .at(0_i32)
-        .get() as u32)
-        != (idx as u32)
+        .get() as u32) as i32)
+        != idx
     {
         statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D7948(ctx)
             .at(0_i32)

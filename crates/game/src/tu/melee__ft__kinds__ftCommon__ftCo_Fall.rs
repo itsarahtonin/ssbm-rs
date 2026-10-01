@@ -31,11 +31,11 @@ pub fn ftCo_Fall_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ftLib_GetKind(ctx, gobj) as u32) == ((enums::Ft_Kind_MasterH as i32) as u32) {
+    if fns::ftLib_GetKind(ctx, gobj) == (((enums::Ft_Kind_MasterH as i32) as u32) as i32) {
         fns::ftMh_MS_389_80151018(ctx, gobj);
         return;
     }
-    if (fns::ftLib_GetKind(ctx, gobj) as u32) == ((enums::Ft_Kind_CrezyH as i32) as u32) {
+    if fns::ftLib_GetKind(ctx, gobj) == (((enums::Ft_Kind_CrezyH as i32) as u32) as i32) {
         fns::ftCh_GrabUnk1_8015BC88(ctx, gobj);
         return;
     }
@@ -53,7 +53,7 @@ pub fn ftCo_Fall_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::ftCommon_ClampAirDrift(ctx, fp);
         (fp).mv().co().fall().set_smid((enums::ftCo_SM_Fall as i32));
         (fp).mv().co().fall().set_x4(0.0);
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             fns::ftCommon_8007D5D4(ctx, fp);
         }
     }

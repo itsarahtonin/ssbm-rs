@@ -16541,7 +16541,7 @@ pub fn fn_801EF60C<'a>(
     if ((coll).x34_flags().b1234() as i32) != 1_i32 {
         return;
     }
-    if (ground_kind as u32) != (1_i32 as u32) {
+    if ground_kind != ((1_i32 as u32) as i32) {
         return;
     }
     table = statics::melee__gr__grbigblue::lbl_803E2DFC(ctx).at(0);
@@ -16606,7 +16606,7 @@ pub fn grBigBlue_801EF7D8<'a>(ctx: &'a Ctx, pos: Vec<'a>) {
 pub fn grBigBlue_801EF844<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
     let __frame = ctx.stack_frame(0x68);
     let mut line_id = line_id;
-    if ((fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_BigBlue as i32) as u32))
+    if (fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_BigBlue as i32) as u32) as i32))
         && (line_id != 1_i32.wrapping_neg())
     {
         let mut joint: i32 = fns::mpJointFromLine(ctx, line_id);

@@ -116,7 +116,7 @@ pub fn it_80275534<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, scale: f64) {
         'l1: while var_ctr < 4_u32 {
             'c2: {
                 hitcapsule = (item).x5D4_hitboxes().get((var_ctr as i32)).hit();
-                if ((hitcapsule).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32) {
+                if (hitcapsule).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32) {
                     (hitcapsule).set_scale(scale);
                 }
             }
@@ -133,7 +133,7 @@ pub fn it_80275594<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, idx: i32, mult: f6
     let mut hitcapsule: HitCapsule<'a> = null(ctx);
     item = Handle::cast::<Item<'a>>((item_gobj).user_data());
     hitcapsule = (item).x5D4_hitboxes().get(idx).hit();
-    if ((hitcapsule).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32) {
+    if (hitcapsule).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32) {
         (hitcapsule).set_scale(fp::fmuls((hitcapsule).scale(), mult));
     }
 }
@@ -150,7 +150,7 @@ pub fn it_802755C0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, scale: f64) {
         'l1: while var_ctr < 4_u32 {
             'c2: {
                 hitcapsule = (item).x5D4_hitboxes().get((var_ctr as i32)).hit();
-                if ((hitcapsule).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32) {
+                if (hitcapsule).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32) {
                     (hitcapsule).set_scale(fp::fmuls((hitcapsule).scale(), scale));
                 }
             }
@@ -171,7 +171,7 @@ pub fn it_80275640<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: f64) {
         'l1: while i < (4_i32 as u32) {
             'c2: {
                 let mut hitcapsule: HitCapsule<'a> = (item).x5D4_hitboxes().get((i as i32)).hit();
-                if ((hitcapsule).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32) {
+                if (hitcapsule).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32) {
                     fns::it_80272460(
                         ctx,
                         hitcapsule,
@@ -242,7 +242,7 @@ pub fn it_80275788<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
         'l1: while var_ctr < 4_u32 {
             'c2: {
                 hitcapsule = ({ (item).x5D4_hitboxes().get((var_ctr as i32)).hit() });
-                if ((hitcapsule).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32) {
+                if (hitcapsule).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32) {
                     (hitcapsule).set_state(state);
                     (item).xDAA().xDAA_flag().x0().set_b2((1_i32 as u8));
                 }
@@ -267,7 +267,7 @@ pub fn it_80275820<'a>(
     let mut hitcapsule: HitCapsule<'a> = null(ctx);
     item = Handle::cast::<Item<'a>>((item_gobj).user_data());
     hitcapsule = (item).x5D4_hitboxes().get(idx).hit();
-    if ((hitcapsule).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32) {
+    if (hitcapsule).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32) {
         Handle::copy_from((hitcapsule).x58(), (arg2));
         Handle::copy_from((hitcapsule).x4C(), (arg1));
     }
@@ -284,7 +284,7 @@ pub fn it_80275870<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
         'l1: while var_ctr < 4_u32 {
             'c2: {
                 hitcapsule = (item).x5D4_hitboxes().get((var_ctr as i32)).hit();
-                if ((hitcapsule).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32) {
+                if (hitcapsule).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32) {
                     return 1_i32;
                 }
             }
@@ -308,7 +308,7 @@ pub fn it_802758D4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> f64 {
         'l1: while var_ctr < 4_u32 {
             'c2: {
                 hitcapsule = (item).x5D4_hitboxes().get((var_ctr as i32)).hit();
-                if ((hitcapsule).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32) {
+                if (hitcapsule).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32) {
                     disable_chk = 1_i32;
                     break 'l1;
                 } else {
@@ -324,7 +324,7 @@ pub fn it_802758D4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> f64 {
             'l3: while var_ctr < 4_u32 {
                 'c4: {
                     hitcapsule = (item).x5D4_hitboxes().get((var_ctr as i32)).hit();
-                    if ((hitcapsule).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32)
+                    if (hitcapsule).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32)
                     {
                         if damage <= (hitcapsule).damage() {
                             damage = (hitcapsule).damage();

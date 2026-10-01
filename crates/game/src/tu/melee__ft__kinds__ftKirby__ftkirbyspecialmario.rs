@@ -38,7 +38,7 @@ pub fn ftKb_SpecialN_800F9110<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     {
         let mut fp_2: Fighter<'a> =
             (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-        if ((fp_2).u().kb().hat().kind() as u32) != ((enums::Ft_Kind_Mario as i32) as u32) {
+        if (fp_2).u().kb().hat().kind() != (((enums::Ft_Kind_Mario as i32) as u32) as i32) {
             msid = ({
                 let __t1 = 0x200_i32;
                 new_var = __t1;
@@ -87,7 +87,7 @@ pub fn ftKb_MrSpecialN_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftKb_MrSpecialN_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftKb_SpecialNLg_800F951C(ctx, gobj);
     }
 }
@@ -102,7 +102,7 @@ pub fn fn_800F9260<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut bone: i32 = 0;
     let mut pick: i32 = 0;
     let mut joint: HSD_JObj<'a> = null(ctx);
-    if ((fp).u().kb().hat().kind() as u32) != ((enums::Ft_Kind_Kirby as i32) as u32) {
+    if (fp).u().kb().hat().kind() != (((enums::Ft_Kind_Kirby as i32) as u32) as i32) {
         if (inl_ftCheckThrowB0_unfused(ctx, fp) != 0) {
             fns::lb_8000B1CC(
                 ctx,
@@ -114,7 +114,7 @@ pub fn fn_800F9260<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 null::<Vec<'a>>(ctx),
                 sp44,
             );
-            if ((fp).u().kb().hat().kind() as u32) == ((enums::Ft_Kind_Mario as i32) as u32) {
+            if (fp).u().kb().hat().kind() == (((enums::Ft_Kind_Mario as i32) as u32) as i32) {
                 fns::it_8029B6F8(
                     ctx,
                     gobj,
@@ -156,12 +156,12 @@ pub fn ftKb_SpecialNMr_800F93CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut msid: i32 = (enums::ftKb_MS_MrSpecialAirN as i32);
     (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
     (fp).x2210().set_throw_flags((0_i32 as u32));
-    if ((Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
+    if (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
         .u()
         .kb()
         .hat()
-        .kind() as u32)
-        != ((enums::Ft_Kind_Mario as i32) as u32)
+        .kind()
+        != (((enums::Ft_Kind_Mario as i32) as u32) as i32)
     {
         msid = (enums::ftKb_MS_DrSpecialAirN as i32);
     }
@@ -206,7 +206,7 @@ pub fn ftKb_MrSpecialAirN_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftKb_MrSpecialAirN_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftKb_SpecialNLg_800F9598(ctx, gobj);
     }
 }
@@ -223,7 +223,7 @@ pub fn ftKb_SpecialNLg_800F951C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fp2 = Handle::cast::<Fighter<'a>>((gobj).user_data());
     motion_id = 0x190_i32;
     anim_frame = (fp).cur_anim_frame();
-    if ((fp2).u().kb().hat().kind() as u32) != (0_i32 as u32) {
+    if (fp2).u().kb().hat().kind() != ((0_i32 as u32) as i32) {
         motion_id = 0x201_i32;
     }
     fns::Fighter_ChangeMotionState(
@@ -251,7 +251,7 @@ pub fn ftKb_SpecialNLg_800F9598<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fp2 = Handle::cast::<Fighter<'a>>((gobj).user_data());
     motion_id = 0x18f_i32;
     anim_frame = (fp).cur_anim_frame();
-    if ((fp2).u().kb().hat().kind() as u32) != (0_i32 as u32) {
+    if (fp2).u().kb().hat().kind() != ((0_i32 as u32) as i32) {
         motion_id = 0x200_i32;
     }
     fns::Fighter_ChangeMotionState(

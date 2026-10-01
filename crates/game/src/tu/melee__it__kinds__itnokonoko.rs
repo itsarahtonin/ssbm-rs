@@ -293,7 +293,7 @@ pub fn itNokonoko_UnkMotion8_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn itNokonoko_UnkMotion7_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((ip).ground_or_air() as u32) == (1_i32 as u32) {
+    if (ip).ground_or_air() == ((1_i32 as u32) as i32) {
         (ip).x40_vel().set_y(fp::fsubs(
             (ip).x40_vel().y(),
             ((ip).xCC_item_attr()).x10_fall_speed(),
@@ -428,7 +428,7 @@ pub fn itNokonoko_UnkMotion5_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn itNokonoko_UnkMotion5_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         (ip).x40_vel().set_y(fp::fsubs(
             (ip).x40_vel().y(),
             ((ip).xCC_item_attr()).x10_fall_speed(),
@@ -447,7 +447,7 @@ pub fn itNokonoko_UnkMotion5_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             break 'l1;
         }
     }
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if ((fns::it_8026DB40(ctx, gobj) & 1_i32) != 0) {
             fns::it_802762B0(ctx, ip);
             inl_itResetVelocity_unfused(ctx, ip);

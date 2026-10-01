@@ -162,7 +162,7 @@ pub fn ftZd_SpecialAirLw_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftZd_SpecialLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::ftZd_SpecialLw_8013B1CC(ctx, gobj);
     }
 }
@@ -170,7 +170,7 @@ pub fn ftZd_SpecialLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftZd_SpecialAirLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         fns::ftZd_SpecialLw_8013B238(ctx, gobj);
     }
 }
@@ -240,7 +240,7 @@ pub fn ftZd_SpecialAirLw2_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftZd_SpecialLw2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::ftZd_SpecialLw_8013B400(ctx, gobj);
     }
 }
@@ -248,7 +248,7 @@ pub fn ftZd_SpecialLw2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftZd_SpecialAirLw2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         fns::ftZd_SpecialLw_8013B46C(ctx, gobj);
     }
 }
@@ -280,7 +280,7 @@ pub fn ftZd_SpecialLw_8013B4D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut sa: ftZelda_DatAttrs<'a> = Handle::cast::<ftZelda_DatAttrs<'a>>((fp).dat_attrs());
     {
         let mut msid: i32 = 0;
-        if ((fp).ground_or_air() as u32) == (0_i32 as u32) {
+        if (fp).ground_or_air() == ((0_i32 as u32) as i32) {
             msid = 0x164_i32;
         } else {
             msid = 0x166_i32;

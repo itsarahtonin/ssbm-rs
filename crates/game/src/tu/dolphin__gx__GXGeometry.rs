@@ -57,8 +57,7 @@ pub fn GXBegin<'a>(ctx: &'a Ctx, r#type: i32, vtxfmt: i32, nverts: u16) {
     if (Handle::cast::<Val<'a, u32>>((fns::gx(ctx).get()).unk_ref())).get() == (0_i32 as u32) {
         fns::__GXSendFlushPrim(ctx);
     }
-    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
-        .set_u8((((vtxfmt as u32) | (r#type as u32)) as u8));
+    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((vtxfmt | r#type) as u8));
     (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u16((nverts));
 }
 

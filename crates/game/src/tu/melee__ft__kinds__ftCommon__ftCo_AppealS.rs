@@ -141,15 +141,15 @@ pub fn ftCo_800DEBD0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32) {
-        if ((fp).kind() as u32) == ((enums::Ft_Kind_Peach as i32) as u32) {
+    if fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32) {
+        if (fp).kind() == (((enums::Ft_Kind_Peach as i32) as u32) as i32) {
             fns::ftPe_Init_8011B93C(ctx, gobj);
         }
-        if ((fp).kind() as u32) == ((enums::Ft_Kind_Zelda as i32) as u32) {
+        if (fp).kind() == (((enums::Ft_Kind_Zelda as i32) as u32) as i32) {
             fns::ftZd_Init_801395C8(ctx, gobj);
         }
     }
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Kirby as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Kirby as i32) as u32) as i32) {
         fns::ftKb_SpecialN_800F5D04(ctx, gobj, 1_i32);
     }
     inl_ftCo_800DEAE8_unfused(

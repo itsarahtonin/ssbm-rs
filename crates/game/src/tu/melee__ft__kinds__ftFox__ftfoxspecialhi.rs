@@ -134,7 +134,7 @@ pub fn ftFx_SpecialHiHold_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             fns::ftFx_SpecialAirHi_Enter(ctx, gobj);
             return;
         }
@@ -148,7 +148,7 @@ pub fn ftFx_SpecialHiHoldAir_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             fns::ftFx_SpecialAirHi_Enter(ctx, gobj);
             return;
         }
@@ -202,7 +202,7 @@ pub fn ftFx_SpecialHiHoldAir_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftFx_SpecialHiHold_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::ftFx_SpecialHiHold_GroundToAir(ctx, gobj);
     }
 }
@@ -272,7 +272,7 @@ pub fn ftFx_SpecialHi_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .SpecialHi()
         .set_travelFrames((fp).mv().fx().SpecialHi().travelFrames().wrapping_sub(1));
     if (fp).mv().fx().SpecialHi().travelFrames() <= 0_i32 {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             fns::ftFx_SpecialHiLanding_GroundToAir(ctx, gobj);
             return;
         }
@@ -290,7 +290,7 @@ pub fn ftFx_SpecialAirHi_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .SpecialHi()
         .set_travelFrames((fp).mv().fx().SpecialHi().travelFrames().wrapping_sub(1));
     if (fp).mv().fx().SpecialHi().travelFrames() <= 0_i32 {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             fns::ftFx_SpecialHiLanding_GroundToAir(ctx, gobj);
             return;
         }
@@ -362,7 +362,7 @@ pub fn ftFx_SpecialHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .fx()
         .SpecialHi()
         .set_unk2((fp).mv().fx().SpecialHi().unk2().wrapping_add(1_i32));
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::ftFx_SpecialHi_GroundToAir(ctx, gobj);
         return;
     }
@@ -837,7 +837,7 @@ pub fn ftFx_SpecialHiLanding_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut da: ftFox_DatAttrs<'a> = Handle::cast::<ftFox_DatAttrs<'a>>((fp).dat_attrs());
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::ftCo_80096900(
             ctx,
             gobj,
@@ -889,7 +889,7 @@ pub fn ftFx_SpecialHiFall_AirToGround<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     fns::ftCommon_8007DB24(ctx, gobj);
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::ftCommon_8007D7FC(ctx, fp);
     }
     fns::Fighter_ChangeMotionState(
@@ -935,7 +935,7 @@ pub fn ftFx_SpecialHiBound_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     ca = (fp).co_attrs();
     da = Handle::cast::<ftFox_DatAttrs<'a>>((fp).dat_attrs());
     if ((fp).cmd_vars().at(0_i32).get() != (0_i32 as u32))
-        && (((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32))
+        && ((fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32))
     {
         fns::ftCo_80096900(
             ctx,
@@ -950,7 +950,7 @@ pub fn ftFx_SpecialHiBound_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         return;
     }
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             fns::ftCo_80096900(
                 ctx,
                 gobj,
@@ -991,7 +991,7 @@ pub fn ftFx_SpecialHiBound_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if (fns::ft_CheckGroundAndLedge(ctx, gobj, inl_ftGetFacingDirInt_unfused(ctx, fp)) != 0) {
             fns::ftCommon_8007D7FC(ctx, fp);
             return;

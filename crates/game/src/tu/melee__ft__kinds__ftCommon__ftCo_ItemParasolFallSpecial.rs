@@ -105,7 +105,7 @@ fn inl_ftCo_ItemParasolGetFallMotionId_unfused<'a>(
     let mut co_msid = co_msid;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (((fp).kind() as u32) == ((enums::Ft_Kind_Peach as i32) as u32))
+    if ((fp).kind() == (((enums::Ft_Kind_Peach as i32) as u32) as i32))
         && (!Handle::is_null((fp).u().pe().parasol_gobj_0()))
     {
         return pe_msid;

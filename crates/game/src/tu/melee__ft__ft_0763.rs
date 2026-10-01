@@ -98,7 +98,7 @@ pub fn ftColl_80076528<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if (fp_x2092 as i32) != 0_i32 {
         (fp).set_x2092((((fp_x2092 as i32).wrapping_sub(1_i32)) as u16));
         if (Handle::is_null((fp).victim_gobj()))
-            && (((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+            && ((fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32))
         {
             inl_comboCount_Push(ctx, fp);
         }

@@ -951,7 +951,7 @@ pub fn ftKb_SpecialLw1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         fp2 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
         Handle::copy_from((fp2).mv().kb().speciallw().x24().get(0_i32), (p).vec());
         Handle::copy_from(
@@ -1028,7 +1028,7 @@ pub fn ftKb_SpecialLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         fp2 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
         Handle::copy_from((fp2).mv().kb().speciallw().x24().get(0_i32), (p).vec());
         Handle::copy_from(
@@ -1156,7 +1156,7 @@ pub fn ftKb_SpecialAirLwStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if (fns::ft_80081D0C(ctx, gobj) as u32) == ((enums::GA_Air as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) == (((enums::GA_Air as i32) as u32) as i32) {
         fns::ftKb_SpecialHi_800F3570(ctx, gobj);
         fns::ftKb_SpecialHi_800F37EC(ctx, gobj);
         (fp).self_vel().set_y(0.0);
@@ -1237,7 +1237,7 @@ pub fn ftKb_SpecialAirLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if (fns::ft_80081D0C(ctx, gobj) as u32) == ((enums::GA_Air as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) == (((enums::GA_Air as i32) as u32) as i32) {
         fns::ftKb_SpecialHi_800F3570(ctx, gobj);
         fns::ftKb_SpecialHi_800F37EC(ctx, gobj);
         (fp).self_vel().set_y(0.0);

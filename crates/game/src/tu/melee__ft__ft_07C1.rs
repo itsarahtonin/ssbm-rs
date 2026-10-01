@@ -137,7 +137,7 @@ pub fn ft_8007C2E0<'a>(
     }
     {
         let _ = fns::lbColl_80008688(ctx, hit1, 3_i32, Handle::cast::<Addr<'a>>(fp0));
-        if ((fp1).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp1).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             let mut weight_ratio: f64 =
                 fp::fdivs((fp0).co_attrs().weight(), (fp1).co_attrs().weight());
             if weight_ratio > fp::frsp(1_i32 as f64) {
@@ -177,7 +177,7 @@ pub fn ft_8007C2E0<'a>(
     }
     {
         let _ = fns::lbColl_80008688(ctx, hit0, 3_i32, Handle::cast::<Addr<'a>>(fp1));
-        if ((fp0).ground_or_air() as u32) == (1_i32 as u32) {
+        if (fp0).ground_or_air() == ((1_i32 as u32) as i32) {
             let mut weight_ratio_2: f64 =
                 fp::fdivs((fp1).co_attrs().weight(), (fp0).co_attrs().weight());
             if weight_ratio_2 > fp::frsp(1_i32 as f64) {
@@ -275,8 +275,8 @@ pub fn ft_8007C4BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             }
                             {
                                 let mut hit: HitCapsule<'a> = (fp1).x1064_thrownHitbox();
-                                if (((fp1).x1064_thrownHitbox().state() as u32)
-                                    == ((enums::HitCapsule_Disabled as i32) as u32))
+                                if ((fp1).x1064_thrownHitbox().state()
+                                    == (((enums::HitCapsule_Disabled as i32) as u32) as i32))
                                     || (!(seen != 0))
                                 {
                                     break 'c4;

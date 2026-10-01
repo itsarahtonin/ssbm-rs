@@ -211,7 +211,7 @@ pub fn ftCommon_ApplyGroundedKnockbackFriction<'a>(ctx: &'a Ctx, fp: Fighter<'a>
 pub fn ftCommon_SetGroundedKnockbackIfLanded<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut fp = fp;
     let mut ground_normal: Vec<'a> = null(ctx);
-    if (((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+    if ((fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32))
         && ((fp).xF0_ground_kb_vel() == fp::frsp(0_i32 as f64))
     {
         ground_normal = (fp).coll_data().floor().normal();
@@ -259,7 +259,7 @@ pub fn ftCommon_SandbagKnockbackDeaccel<'a>(ctx: &'a Ctx, kb: f64, decrement: f6
 pub fn ftCommon_SandbagGetKnockbackDeaccelX<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x18);
     let mut fp = fp;
-    (if ((fp).kind() as u32) == ((enums::Ft_Kind_Sandbag as i32) as u32) {
+    (if (fp).kind() == (((enums::Ft_Kind_Sandbag as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -275,7 +275,7 @@ pub fn ftCommon_SandbagGetKnockbackDeaccelX<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -
 pub fn ftCommon_SandbagGetKnockbackDeaccelY<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x18);
     let mut fp = fp;
-    (if ((fp).kind() as u32) == ((enums::Ft_Kind_Sandbag as i32) as u32) {
+    (if (fp).kind() == (((enums::Ft_Kind_Sandbag as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -808,7 +808,7 @@ pub fn ftCommon_8007D6A4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 pub fn ftCommon_8007D780<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut fp = fp;
-    if ((fp).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() != (((enums::GA_Air as i32) as u32) as i32) {
         return;
     }
     if (fns::un_803224DC(
@@ -833,7 +833,7 @@ pub fn ftCommon_8007D780<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 pub fn ftCommon_8007D7FC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut fp = fp;
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if (fns::un_803224DC(
             ctx,
             (fp).x8_spawnNum(),
@@ -859,7 +859,7 @@ pub fn ftCommon_8007D92C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::ftCo_Fall_Enter(ctx, gobj);
     } else {
         fns::ft_8008A2BC(ctx, gobj);
@@ -1064,8 +1064,8 @@ pub fn ftCommon_8007DD7C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, v: Vec<'a>) {
                 {
                     cur_ft = Handle::cast::<Fighter<'a>>((cur).user_data());
                     if (((((cur_ft).is_sleeping() as i32) != 0)
-                        || (((cur_ft).ground_or_air() as u32)
-                            != ((enums::GA_Ground as i32) as u32)))
+                        || ((cur_ft).ground_or_air()
+                            != (((enums::GA_Ground as i32) as u32) as i32)))
                         || (!Handle::is_null((cur_ft).victim_gobj())))
                         || (((cur_ft).is_sub_fighter() as i32) != 0)
                     {
@@ -1167,7 +1167,7 @@ pub fn ftCommon_8007DFD0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: Vec<'a>) {
     new_var = fns::Player_GetEntity(ctx, ((fp).player_idx() as i32));
     temp_r3 = Handle::cast::<Fighter<'a>>((new_var).user_data());
     if (!((temp_r3).is_sleeping() != 0))
-        && (((temp_r3).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+        && ((temp_r3).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32))
     {
         temp_r0 = (fp).coll_data().floor().index();
         temp_r30 = ({
@@ -1213,7 +1213,7 @@ pub fn ftCommon_8007E0E4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).xF8_playerNudgeVel().set_y(fp::frsp(0_i32 as f64));
     (fp).xF8_playerNudgeVel().set_x(fp::frsp(0_i32 as f64));
     if ((!((fp).x2219_b1() != 0)) && (!((fp).x2219_b5() != 0)))
-        && (((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+        && ((fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32))
     {
         if !((fp).is_sub_fighter() != 0) {
             phi_f30 = (fns::p_ftCommonData(ctx).get()).x454();
@@ -1344,7 +1344,7 @@ pub fn ftCommon_8007E5AC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut fp = fp;
     let mut ground_normal: Vec<'a> = (fp).coll_data().floor().normal();
     let mut tmp: f64 = fp::fneg(fns::atan2f(ctx, (ground_normal).x(), (ground_normal).y()));
-    (if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    (if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -2533,7 +2533,7 @@ pub fn ftCommon_800804EC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
 
 pub fn ftCommon_800804FC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut fp = fp;
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         (fp).dmg().set_x18c4_source_ply(6_i32);
         (fp).dmg().set_x18C8(1_i32.wrapping_neg());
     }

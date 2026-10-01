@@ -73,7 +73,7 @@ pub fn it_802874F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut var_f1: f64 = 0.0;
     let mut new_var: f64 = 0.0;
     let mut var_f2: f64 = 0.0;
-    if ((ip).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() != (((enums::GA_Air as i32) as u32) as i32) {
         var_f1 = (ip).xDD4_itemVar().taru().xDE8().x();
         temp_f2 = var_f1;
         new_var2 = (temp_f2 < 0.0) as i32;
@@ -228,7 +228,7 @@ pub fn itTaru_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         fns::it_80287D0C(ctx, gobj);
         return 0_i32;
     }
-    if (((ip).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32))
+    if ((ip).ground_or_air() != (((enums::GA_Air as i32) as u32) as i32))
         && (((coll).env_flags() & 0x18000_i32) != 0)
     {
         fns::it_80276408(ctx, gobj, coll, (ip).xDD4_itemVar().taru().xDE8());
@@ -538,7 +538,7 @@ pub fn itTaru_UnkMotion5_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut var_f1: f64 = 0.0;
     let mut env_flags: i32 = 0;
     fns::it_8026D62C(ctx, gobj, fnptr(ctx, 0x80287f20));
-    if ((ip).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() != (((enums::GA_Air as i32) as u32) as i32) {
         if (((coll).env_flags() & 0x18000_i32) != 0) {
             fns::it_80276408(ctx, gobj, coll, (ip).xDD4_itemVar().taru().xDE8());
         } else {

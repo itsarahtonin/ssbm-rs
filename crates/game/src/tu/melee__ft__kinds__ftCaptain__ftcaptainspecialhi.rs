@@ -250,7 +250,7 @@ pub fn ftCa_SpecialHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         inl_doAirColl_unfused(ctx, gobj, Handle::addr(__inl));
     } else if !(fns::ft_80082708(ctx, gobj) != 0) {
         fns::ftCommon_8007D5D4(ctx, fp);
@@ -329,7 +329,7 @@ pub fn ftCa_SpecialLw_800E5128<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).set_x2222_b2((1_i32 as u8));
     fns::ftCommon_8007E2F4(ctx, fp, (0x1ff_i32 as i16));
     fns::ftCommon_8007E2FC(ctx, gobj);
-    if ((vic_fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (vic_fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         (fp).x221B().set_x221B_b7((0_i32 as u8));
     } else {
         fns::ftCo_800DB368(ctx, vic_fp, fp);
@@ -586,7 +586,7 @@ fn inl_ftCa_SpecialHi_Coll_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_ca
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         statics::melee__ft__kinds__ftCaptain__ftcaptainspecialhi::doAirColl(ctx, gobj);
     } else if !(fns::ft_80082708(ctx, gobj) != 0) {
         fns::ftCommon_8007D5D4(ctx, fp);

@@ -92,7 +92,7 @@ pub fn ftNn_Init_80123954<'a>(ctx: &'a Ctx, nana_gobj: HSD_GObj<'a>, pp_ga: i32)
                         ) as f64)
                     {
                         ret = 0_i32;
-                        if (pp_ga as u32) == ((enums::GA_Air as i32) as u32) {
+                        if pp_ga == (((enums::GA_Air as i32) as u32) as i32) {
                             if pp_ga != (nana_fp).ground_or_air() {
                                 fns::ftCommon_8007D5D4(ctx, nana_fp);
                             }

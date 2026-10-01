@@ -35,16 +35,17 @@ pub fn ftCo_800BD9E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, victim_gobj: HSD_GObj
     let mut victim_fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, victim_gobj)));
     let mut victim_kind: i32 = (victim_fp).kind();
-    if (victim_kind as u32) == ((enums::Ft_Kind_Kirby as i32) as u32) {
+    if victim_kind == (((enums::Ft_Kind_Kirby as i32) as u32) as i32) {
         fns::ftCo_800BDA50(ctx, victim_gobj);
         return (victim_fp).u().kb().hat().kind();
     }
-    if (((victim_kind as u32).wrapping_sub(((enums::Ft_Kind_Boy as i32) as u32))) <= (1_i32 as u32))
-        || ((victim_kind as u32) == ((enums::Ft_Kind_Sandbag as i32) as u32))
+    if (((victim_kind.wrapping_sub((((enums::Ft_Kind_Boy as i32) as u32) as i32))) as u32)
+        <= (1_i32 as u32))
+        || (victim_kind == (((enums::Ft_Kind_Sandbag as i32) as u32) as i32))
     {
         return (fp).u().kb().hat().kind();
     }
-    if (victim_kind as u32) == ((enums::Ft_Kind_Nana as i32) as u32) {
+    if victim_kind == (((enums::Ft_Kind_Nana as i32) as u32) as i32) {
         victim_kind = (enums::Ft_Kind_Popo as i32);
     }
     return victim_kind;
@@ -54,7 +55,7 @@ pub fn ftCo_800BDA50<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).u().kb().hat().kind() as u32) != ((enums::Ft_Kind_Kirby as i32) as u32) {
+    if (fp).u().kb().hat().kind() != (((enums::Ft_Kind_Kirby as i32) as u32) as i32) {
         (fp).mv()
             .co()
             .thrownkirby()
@@ -310,7 +311,7 @@ pub fn ftCo_800BE494<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 ),
             ));
         }
-    } else if ((((fp).kind() as u32) == ((enums::Ft_Kind_Kirby as i32) as u32))
+    } else if (((fp).kind() == (((enums::Ft_Kind_Kirby as i32) as u32) as i32))
         && (((fp).mv().co().thrownkirby().x18_u().x0().x18_b1() as i32) != 0))
         && (!((fp).u().kb().hat().x8_b0() != 0))
     {

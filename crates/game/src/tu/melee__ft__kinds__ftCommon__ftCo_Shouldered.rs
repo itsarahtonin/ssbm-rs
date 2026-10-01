@@ -264,7 +264,7 @@ fn inl_ftCo_8009C5A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
 fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    return (if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    return (if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         (fns::p_ftCommonData(ctx).get()).x4A8()
     } else {
         fp::fmuls(

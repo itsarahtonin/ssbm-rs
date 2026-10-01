@@ -659,8 +659,8 @@ pub fn grLast_8021B2E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut temp_f1: f64 = 0.0;
     let mut temp_gp: Ground<'a> = null(ctx);
     gp = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fns::Stage_80225194(ctx) as u32) == (176_i32 as u32))
-        || ((fns::Stage_80225194(ctx) as u32) == (251_i32 as u32))
+    if (fns::Stage_80225194(ctx) == ((176_i32 as u32) as i32))
+        || (fns::Stage_80225194(ctx) == ((251_i32 as u32) as i32))
     {
         temp_f1 = fns::gm_8016ECE8(ctx);
         's1: {

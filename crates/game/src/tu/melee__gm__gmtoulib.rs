@@ -3356,11 +3356,11 @@ pub fn fn_8018F6DC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 
 pub fn fn_8018F6FC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let mut arg0 = arg0;
-    if (arg0 as u32) >= (19_i32 as u32) {
-        if (arg0 as u32) == (29_i32 as u32) {
+    if arg0 >= ((19_i32 as u32) as i32) {
+        if arg0 == ((29_i32 as u32) as i32) {
             return 5_i32;
         }
-        return ((arg0 as u32).wrapping_add((1_i32 as u32)) as i32);
+        return arg0.wrapping_add(((1_i32 as u32) as i32));
     }
     return arg0;
 }

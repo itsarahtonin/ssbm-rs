@@ -173,7 +173,7 @@ pub fn fn_8012EFF4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .x0()
             .wrapping_sub((attributes).x50()),
     );
-    temp_f2 = (if ((fp).ground_or_air() as u32) == (1_i32 as u32) {
+    temp_f2 = (if (fp).ground_or_air() == ((1_i32 as u32) as i32) {
         (attributes).x8C()
     } else {
         (attributes).x7C()
@@ -299,7 +299,7 @@ pub fn ftYs_SpecialS_8012F35C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
     }
     inl_HSD_JObjGetScale_unfused(ctx, jobj, (fp).u().ys().x222C());
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         var_f0 = (attributes).x54();
     } else {
         var_f0 = (attributes).x58();
@@ -1817,8 +1817,8 @@ pub fn ftYs_SpecialAirSLoop_3_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .specials()
             .set_xC((fp4).mv().ys().specials().xC().wrapping_add(1));
         if ((fp4).mv().ys().specials().xC() >= (attrs4).xDC())
-            && (((fp4).x914().get(0_i32).state() as u32)
-                != ((enums::HitCapsule_Disabled as i32) as u32))
+            && ((fp4).x914().get(0_i32).state()
+                != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
         {
             (fp4).x914().get(0_i32).set_x4(
                 (((fp4).x914().get(0_i32).x4().wrapping_add((1_i32 as u32))) & (1_i32 as u32)),
@@ -1831,10 +1831,10 @@ pub fn ftYs_SpecialAirSLoop_3_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         let mut fp5: Fighter<'a> =
             (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
         attrs5 = Handle::cast::<_ftYoshiAttributes<'a>>((fp5).dat_attrs());
-        if ((fp5).x914().get(0_i32).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32)
+        if (fp5).x914().get(0_i32).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32)
         {
             let mut rate: i32 = 0;
-            if ((fp5).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            if (fp5).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                 let mut vel: f64 = 0.0;
                 if ({
                     let __t1 = (fp5).self_vel().x();
@@ -2459,7 +2459,7 @@ pub fn ftYs_SpecialAirSStart_0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         inl_ftCommon_GroundToAirStateChange_unfused(ctx, gobj, fp, 0x168_i32, 0xc4c5092_u32);
         inl_ftYoshi_SpecialS_SetCall_unfused(ctx, gobj);
     }
@@ -2644,7 +2644,7 @@ pub fn ftYs_SpecialAirSEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCommon_8007D5D4(ctx, fp);
         fns::ftYs_SpecialS_8012F0DC(ctx, gobj, 1_i32, 0x4c4092_i32, (fp).cur_anim_frame());
     }
@@ -2656,7 +2656,7 @@ pub fn ftYs_SpecialAirSStart_1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     (fp).mv().ys().specials().set_x30(0_i32);
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != (((enums::GA_Ground as i32) as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(ctx, gobj, fp, 0x164_i32, 0xc4c5092_u32);
         inl_ftYoshi_SpecialS_SetCall_unfused(ctx, gobj);
     }
@@ -2998,7 +2998,7 @@ pub fn ftYs_SpecialAirSLanding_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     (fp).mv().ys().specials().set_x30(0_i32);
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCommon_8007D7FC(ctx, fp);
         fns::ftYs_SpecialS_8012F0DC(ctx, gobj, 0_i32, 0x4c4092_i32, (fp).cur_anim_frame());
     }

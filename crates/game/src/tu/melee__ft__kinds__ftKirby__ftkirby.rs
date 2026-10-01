@@ -582,9 +582,9 @@ pub fn ftKb_SpecialN_800EEEC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, kind: i32) {
     if !Handle::is_null(
         ({
             let __t1 = fns::ftKb_Init_803C9CC8(ctx)
-                .at(((kind as u32)
-                    .wrapping_mul((2_i32 as u32))
-                    .wrapping_add((1_i32 as u32)) as i32))
+                .at(kind
+                    .wrapping_mul(((2_i32 as u32) as i32))
+                    .wrapping_add(((1_i32 as u32) as i32)))
                 .get();
             cb = __t1;
             __t1
@@ -2474,13 +2474,18 @@ pub fn ftKb_SpecialN_800F1BAC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, kind: i32, a
     let mut arg2 = arg2;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut cb: FnPtr<'a> = null(ctx);
-    if ((fp).u().kb().hat().kind() as u32) != (kind as u32) {
+    if (fp).u().kb().hat().kind() != ((kind as u32) as i32) {
         (fp).u().kb().hat().set_kind(kind);
         fns::ftKb_SpecialN_800F190C(ctx, gobj, (fp).u().kb().hat().kind());
         if !Handle::is_null(
             ({
                 let __t1 = fns::ftKb_Init_803C9CC8(ctx)
-                    .at((((fp).u().kb().hat().kind() as u32).wrapping_mul((2_i32 as u32)) as i32))
+                    .at((fp)
+                        .u()
+                        .kb()
+                        .hat()
+                        .kind()
+                        .wrapping_mul(((2_i32 as u32) as i32)))
                     .get();
                 cb = __t1;
                 __t1
@@ -2538,7 +2543,7 @@ pub fn ftKb_SpecialN_800F1D24<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut x60: i32 = 0;
     let mut coll: CollData<'a> = (fp).coll_data();
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Kirby as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Kirby as i32) as u32) as i32) {
         x60 = (fp).u().kb().x60();
         if x60 != 0_i32 {
             (fp).u().kb().set_x60(x60.wrapping_sub(1_i32));
@@ -2638,7 +2643,7 @@ pub fn ftKb_SpecialN_800F1F1C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>
     let mut pos = pos;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Kirby as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Kirby as i32) as u32) as i32) {
         fns::efAsync_Spawn(
             ctx,
             gobj,

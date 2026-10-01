@@ -1957,8 +1957,8 @@ pub fn fn_80171BA4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> i32 {
         player = 0_i32;
         'l1: while player < 6_i32 {
             'c2: {
-                if (fns::Player_GetPlayerSlotType(ctx, player) as u32)
-                    != ((enums::Gm_PKind_NA as i32) as u32)
+                if fns::Player_GetPlayerSlotType(ctx, player)
+                    != (((enums::Gm_PKind_NA as i32) as u32) as i32)
                 {
                     ko_count = 0_i32;
                     falls = fns::Player_GetFalls(ctx, player);
@@ -1969,8 +1969,8 @@ pub fn fn_80171BA4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> i32 {
                             j = 0_i32;
                             'l3: while j < 6_i32 {
                                 'c4: {
-                                    if (fns::Player_GetPlayerSlotType(ctx, j) as u32)
-                                        != ((enums::Gm_PKind_NA as i32) as u32)
+                                    if fns::Player_GetPlayerSlotType(ctx, j)
+                                        != (((enums::Gm_PKind_NA as i32) as u32) as i32)
                                     {
                                         if team != fns::Player_GetTeam(ctx, j) {
                                             if player != j {
@@ -1997,8 +1997,8 @@ pub fn fn_80171BA4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> i32 {
                             j = 0_i32;
                             'l5: while j < 6_i32 {
                                 'c6: {
-                                    if (fns::Player_GetPlayerSlotType(ctx, j) as u32)
-                                        != ((enums::Gm_PKind_NA as i32) as u32)
+                                    if fns::Player_GetPlayerSlotType(ctx, j)
+                                        != (((enums::Gm_PKind_NA as i32) as u32) as i32)
                                     {
                                         if player != j {
                                             ko_count = ko_count.wrapping_add(
@@ -2046,8 +2046,8 @@ pub fn fn_80171BA4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> i32 {
                         j = 0_i32;
                         'l9: while j < 6_i32 {
                             'c10: {
-                                if (((fns::Player_GetPlayerSlotType(ctx, j) as u32)
-                                    != ((enums::Gm_PKind_NA as i32) as u32))
+                                if ((fns::Player_GetPlayerSlotType(ctx, j)
+                                    != (((enums::Gm_PKind_NA as i32) as u32) as i32))
                                     && (player != j))
                                     && (scores.at(player).get() < scores.at(j).get())
                                 {

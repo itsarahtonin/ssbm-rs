@@ -55,9 +55,9 @@ pub fn ft_8008A244<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn ft_8008A2BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ftLib_GetKind(ctx, gobj) as u32) == ((enums::Ft_Kind_MasterH as i32) as u32) {
+    if fns::ftLib_GetKind(ctx, gobj) == (((enums::Ft_Kind_MasterH as i32) as u32) as i32) {
         fns::ftMh_MS_389_80151018(ctx, gobj);
-    } else if (fns::ftLib_GetKind(ctx, gobj) as u32) == ((enums::Ft_Kind_CrezyH as i32) as u32) {
+    } else if fns::ftLib_GetKind(ctx, gobj) == (((enums::Ft_Kind_CrezyH as i32) as u32) as i32) {
         fns::ftCh_GrabUnk1_8015BC88(ctx, gobj);
     } else {
         fns::ft_8008A348(ctx, gobj, fp::frsp(0_i32 as f64));
@@ -84,10 +84,10 @@ pub fn ft_8008A348<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, anim_blend: f64) {
         fns::ftCo_800C4ED8(ctx, gobj);
         return;
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::ftCommon_8007D7FC(ctx, fp);
     }
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Peach as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Peach as i32) as u32) as i32) {
         if (!Handle::is_null((fp).item_gobj()))
             && (fns::itGetKind(ctx, (fp).item_gobj()) == (enums::It_Kind_Peach_Parasol as i32))
         {

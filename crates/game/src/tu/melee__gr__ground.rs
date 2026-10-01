@@ -354,7 +354,7 @@ pub fn Ground_801C0754<'a>(ctx: &'a Ctx, pair: StageIdPair<'a>) {
     stage = statics::melee__gr__ground::stage_datas(ctx)
         .at((pair).grkind())
         .get();
-    arg3 = (if ((pair).stkind() as u32) == ((enums::St_Kind_Heal as i32) as u32) {
+    arg3 = (if (pair).stkind() == (((enums::St_Kind_Heal as i32) as u32) as i32) {
         0_i32
     } else {
         1_i32
@@ -3606,9 +3606,9 @@ pub fn Ground_801C4DA0<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: Val<'a, F32>) -> i
 pub fn Ground_801C4DD0<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut stkind: i32 = fns::stage_info(ctx).grkind();
-    if (stkind as u32) == ((enums::Gr_Kind_Kongo as i32) as u32) {
+    if stkind == (((enums::Gr_Kind_Kongo as i32) as u32) as i32) {
         fns::grKongo_801D8270(ctx, fns::stage_info(ctx).x72C());
-    } else if (stkind as u32) == ((enums::Gr_Kind_OldKongo as i32) as u32) {
+    } else if stkind == (((enums::Gr_Kind_OldKongo as i32) as u32) as i32) {
         fns::grOldKongo_802105AC(ctx, fns::stage_info(ctx).x72C());
     }
     return 1_i32;
@@ -3617,9 +3617,9 @@ pub fn Ground_801C4DD0<'a>(ctx: &'a Ctx) -> i32 {
 pub fn Ground_801C4E20<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut stkind: i32 = fns::stage_info(ctx).grkind();
-    if (stkind as u32) == ((enums::Gr_Kind_Kongo as i32) as u32) {
+    if stkind == (((enums::Gr_Kind_Kongo as i32) as u32) as i32) {
         fns::grKongo_801D828C(ctx, fns::stage_info(ctx).x72C());
-    } else if (stkind as u32) == ((enums::Gr_Kind_OldKongo as i32) as u32) {
+    } else if stkind == (((enums::Gr_Kind_OldKongo as i32) as u32) as i32) {
         fns::grOldKongo_802105C8(ctx, fns::stage_info(ctx).x72C());
     }
     return 1_i32;

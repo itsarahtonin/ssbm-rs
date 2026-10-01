@@ -710,7 +710,7 @@ pub fn fn_802190A0<'a>(
         3_u32,
     )) & 15_i32)
         == 1_i32)
-        && (((ground_kind as u32).wrapping_sub((1_i32 as u32))) <= 1_u32)
+        && (((ground_kind.wrapping_sub(((1_i32 as u32) as i32))) as u32) <= 1_u32)
     {
         (gp).u().map().set_xC4_b0((1_i32 as u32));
     }

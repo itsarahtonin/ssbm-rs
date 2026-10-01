@@ -46,7 +46,7 @@ pub fn grGarden_80202B70<'a>(ctx: &'a Ctx) {
     let _ = fns::grGarden_80202C78(ctx, 2_i32);
     fns::Ground_801C39C0(ctx);
     fns::Ground_801C3BB4(ctx);
-    if ((fns::Stage_80225194(ctx) as u32) != (62_i32 as u32)) && (fns::gm_8016B238(ctx) == 0_i32) {
+    if (fns::Stage_80225194(ctx) != ((62_i32 as u32) as i32)) && (fns::gm_8016B238(ctx) == 0_i32) {
         fns::Ground_801C53EC(ctx, (0x64194_i32 as u32));
     }
 }

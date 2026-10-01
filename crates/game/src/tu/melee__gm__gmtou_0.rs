@@ -4986,7 +4986,7 @@ fn inl_fn_80191FD4_is_selected_unfused<'a>(
     let mut hud = hud;
     let mut slot = slot;
     let mut tm = tm;
-    return (((tm).x37().get(slot).x3() as u32) == (hud as u32)) as i32;
+    return ((((tm).x37().get(slot).x3() as u32) as i32) == hud) as i32;
 }
 
 fn inl_fn_8019249C_get_jobj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_JObj<'a> {

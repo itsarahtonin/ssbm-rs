@@ -65,7 +65,7 @@ pub fn grIceMt_801F686C<'a>(ctx: &'a Ctx) {
     let _ = fns::Ground_801C3260(ctx, 4_i32);
     let _ = fns::Ground_801C3260(ctx, 5_i32);
     let _ = fns::Ground_801C3260(ctx, 6_i32);
-    if (fns::Stage_80225194(ctx) as u32) == (76_i32 as u32) {
+    if fns::Stage_80225194(ctx) == ((76_i32 as u32) as i32) {
         {
             i = (0_i32 as u32);
             'l3: while i < (div_u32(72_u32, 12_u32)) {
@@ -403,7 +403,7 @@ pub fn grIceMt_801F7080<'a>(ctx: &'a Ctx) {
     ) {
         let _ = fns::Ground_UpdateMapColl(ctx, gobj);
     }
-    if (fns::Stage_80225194(ctx) as u32) == (76_i32 as u32) {
+    if fns::Stage_80225194(ctx) == ((76_i32 as u32) as i32) {
         let _ = fns::grZakoGenerator_801CAE04(
             ctx,
             (statics::melee__gr__gricemt::yakumono_param(ctx).get()).xBC(),
@@ -1908,7 +1908,7 @@ pub fn fn_801F8E58<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, out: Val<'a, i32>) -> i
         'l1: while i < 12_i32 {
             'c2: {
                 if (((gp).u().icemt9().x18().at(0_i32).get() as i32) == 0_i32)
-                    && (((fns::Stage_80225194(ctx) as u32) != (212_i32 as u32)) || (i >= 4_i32))
+                    && ((fns::Stage_80225194(ctx) != ((212_i32 as u32) as i32)) || (i >= 4_i32))
                 {
                     (p).set(i);
                     p = Handle::add(p, 1);
@@ -3646,7 +3646,7 @@ pub fn grIceMt_801FA6D8<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut gp: Ground<'a> = null(ctx);
-    if (fns::Stage_80225194(ctx) as u32) == (76_i32 as u32) {
+    if fns::Stage_80225194(ctx) == ((76_i32 as u32) as i32) {
         gobj = fns::Ground_GetMapGObj(ctx, 10_i32);
         if !Handle::is_null(gobj) {
             gp = Handle::cast::<Ground<'a>>((gobj).user_data());
@@ -3666,7 +3666,7 @@ pub fn grIceMt_801FA728<'a>(ctx: &'a Ctx, arg0: Vec<'a>) {
     let mut temp_r3_3: HSD_GObj<'a> = null(ctx);
     let mut temp_r3_2: Ground<'a> = null(ctx);
     let mut temp_r3_4: Ground<'a> = null(ctx);
-    if (fns::Stage_80225194(ctx) as u32) == (76_i32 as u32) {
+    if fns::Stage_80225194(ctx) == ((76_i32 as u32) as i32) {
         temp_r3 = fns::Ground_GetMapGObj(ctx, 10_i32);
         if !Handle::is_null(temp_r3) {
             temp_r3_2 = Handle::cast::<Ground<'a>>((temp_r3).user_data());

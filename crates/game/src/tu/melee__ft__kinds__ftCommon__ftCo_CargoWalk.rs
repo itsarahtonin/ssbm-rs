@@ -64,9 +64,8 @@ pub fn ftCo_8009B6C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, anim_start: f64) {
         fp::frsp(1_i32 as f64),
     );
     {
-        let __t1 = ((fns::ftWalkCommon_GetWalkType(ctx, gobj) as u32)
-            .wrapping_add(((enums::ftCo_MS_ShoulderedWait as i32) as u32))
-            as i32);
+        let __t1 = fns::ftWalkCommon_GetWalkType(ctx, gobj)
+            .wrapping_add((((enums::ftCo_MS_ShoulderedWait as i32) as u32) as i32));
         fns::ftCo_8009C5A4(ctx, (fp).victim_gobj(), __t1)
     };
 }

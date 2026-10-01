@@ -73,7 +73,7 @@ pub fn ftKb_SpecialNSk_8010603C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 }
                 {
                     let mut y_offset: f64 = 0.0;
-                    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+                    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
                         y_offset = (da).specialn_sk_graphic_y_offset_ground();
                     } else {
                         y_offset = (da).specialn_sk_graphic_y_offset_air();
@@ -573,7 +573,7 @@ pub fn ftKb_SkSpecialNStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         inl_ftCommon_GroundToAirStateChange_unfused(
             ctx,
             gobj,
@@ -590,7 +590,7 @@ pub fn ftKb_SkSpecialNLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         inl_ftCommon_GroundToAirStateChange_unfused(
             ctx,
             gobj,
@@ -615,7 +615,7 @@ pub fn ftKb_SkSpecialNCancel_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         if (da).specialn_sk_freefall_toggle() == 0.0 {
             fns::ftCo_Fall_Enter(ctx, gobj);
         } else {
@@ -645,7 +645,7 @@ pub fn ftKb_SkSpecialNEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         (fp).u().kb().set_xB4(0_i32);
         (fp).mv().kb().specialhi().set_x4(0_i32);
         if (da).specialn_sk_freefall_toggle() == 0.0 {
@@ -669,7 +669,7 @@ pub fn ftKb_SkSpecialAirNStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != (((enums::GA_Ground as i32) as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(
             ctx,
             gobj,
@@ -686,7 +686,7 @@ pub fn ftKb_SkSpecialAirNLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != (((enums::GA_Ground as i32) as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(
             ctx,
             gobj,
@@ -710,7 +710,7 @@ pub fn ftKb_SkSpecialAirNCancel_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCo_Landing_Enter_Basic(ctx, gobj);
     }
 }
@@ -751,7 +751,7 @@ pub fn fn_80106DB0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     break 'l1;
                 }
             }
-            if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+            if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
                 pos.set_x(fp::fmadds(
                     (fp).x34_scale().y(),
                     (fp::fmuls(

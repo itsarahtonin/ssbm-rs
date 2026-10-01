@@ -131,7 +131,7 @@ pub fn ftCo_800B4AB0<'a>(
             }
             t = fp::frsp((list).x04() as f64);
             relx = fp::fsubs((fp::fmadds(tgtVx, t, tgtX)), (fp::fmadds(fpVx, t, fpX)));
-            if ((target).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            if (target).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                 if (fpGrav < 9.999999747378752e-06_f64)
                     && (fpGrav > fp::fneg(9.999999747378752e-06_f64))
                 {
@@ -169,7 +169,7 @@ pub fn ftCo_800B4AB0<'a>(
             } else {
                 fpPredY = fp::fmadds(fpVy, t, fpY);
             }
-            if ((target).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            if (target).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                 if (tgtGrav < 9.999999747378752e-06_f64)
                     && (tgtGrav > fp::fneg(9.999999747378752e-06_f64))
                 {
@@ -420,7 +420,7 @@ pub fn ftCo_800B52AC<'a>(
             }
             t = fp::frsp((list).x04() as f64);
             relx = fp::fsubs((fp::fmadds(tgtVx, t, tgtX)), (fp::fmadds(fpVx, t, fpX)));
-            if ((target).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            if (target).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                 if (fpGrav < 9.999999747378752e-06_f64)
                     && (fpGrav > fp::fneg(9.999999747378752e-06_f64))
                 {
@@ -458,7 +458,7 @@ pub fn ftCo_800B52AC<'a>(
             } else {
                 fpPredY = fp::fmadds(fpVy, t, fpY);
             }
-            if ((target).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            if (target).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                 if (tgtGrav < 9.999999747378752e-06_f64)
                     && (tgtGrav > fp::fneg(9.999999747378752e-06_f64))
                 {
@@ -685,7 +685,7 @@ pub fn ftCo_800B5AB0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Addr<'a>, arg2: Ad
                 inl_ftCo_CpuAttackValue(ctx, (list).x04(), 0, 0, 0, 0, 0, 0, 0, 0, 0) as f64,
             );
             relx = fp::fsubs((fp::fmadds(x50Vx, t, x50X)), (fp::fmadds(fpVx, t, fpX)));
-            if ((x50).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            if (x50).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                 if (fpGrav < 9.999999747378752e-06_f64)
                     && (fpGrav > fp::fneg(9.999999747378752e-06_f64))
                 {
@@ -729,7 +729,7 @@ pub fn ftCo_800B5AB0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Addr<'a>, arg2: Ad
             } else {
                 fpPredY = fp::fmadds(fpVy, t, fpY);
             }
-            if ((x50).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            if (x50).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                 if (x50Grav < 9.999999747378752e-06_f64)
                     && (x50Grav > fp::fneg(9.999999747378752e-06_f64))
                 {
@@ -941,15 +941,15 @@ pub fn ftCo_800B630C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     if (fns::ftCo_800A5A90(ctx, fp) != 0) {
         return 1_i32;
     }
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Donkey as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Donkey as i32) as u32) as i32) {
         if (fp).motion_id() <= (enums::ftDk_MS_ThrowAirFLw as i32) {
             return 0_i32;
         }
-    } else if ((fp).kind() as u32) == ((enums::Ft_Kind_Kirby as i32) as u32) {
+    } else if (fp).kind() == (((enums::Ft_Kind_Kirby as i32) as u32) as i32) {
         if (fp).motion_id() <= (enums::ftKb_MS_AttackDashAir as i32) {
             return 0_i32;
         }
-    } else if ((fp).kind() as u32) == ((enums::Ft_Kind_Peach as i32) as u32) {
+    } else if (fp).kind() == (((enums::Ft_Kind_Peach as i32) as u32) as i32) {
         if (fp).motion_id() <= (enums::ftPe_MS_FloatFallB as i32) {
             return 0_i32;
         }
@@ -1076,7 +1076,7 @@ pub fn ftCo_800B658C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         return;
     }
     if ((((temp_r31).xF8_b6() as i32) != 0)
-        && (((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32)))
+        && ((fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32)))
         && (fns::HSD_Randf(ctx)
             < fp::fmuls(0.05000000074505806, fp::frsp((temp_r31).level() as f64)))
     {
@@ -1085,7 +1085,7 @@ pub fn ftCo_800B658C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             return;
         }
     }
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Ness as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Ness as i32) as u32) as i32) {
         if ((fp).motion_id() >= (enums::ftNs_MS_SpecialNStart as i32))
             && ((fp).motion_id() <= (enums::ftNs_MS_SpecialNEnd as i32))
         {
@@ -1098,22 +1098,22 @@ pub fn ftCo_800B658C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             fns::ftCo_800B92D4(ctx, fp);
             return;
         }
-    } else if ((fp).kind() as u32) == ((enums::Ft_Kind_Yoshi as i32) as u32) {
+    } else if (fp).kind() == (((enums::Ft_Kind_Yoshi as i32) as u32) as i32) {
         if ((fp).motion_id() >= (enums::ftYs_MS_SpecialAirSStart_0 as i32))
             && ((fp).motion_id() <= (enums::ftYs_MS_SpecialAirSEnd as i32))
         {
             fns::ftCo_800B9340(ctx, fp);
             return;
         }
-    } else if ((fp).kind() as u32) == ((enums::Ft_Kind_Samus as i32) as u32) {
+    } else if (fp).kind() == (((enums::Ft_Kind_Samus as i32) as u32) as i32) {
         if (fp).motion_id() == (enums::ftSs_MS_SpecialNHold as i32) {
             inl_ftCo_CpuTapRAndWaitFiveFrames_unfused(ctx, fp);
         }
-    } else if ((fp).kind() as u32) == ((enums::Ft_Kind_Donkey as i32) as u32) {
+    } else if (fp).kind() == (((enums::Ft_Kind_Donkey as i32) as u32) as i32) {
         if (fp).motion_id() == (enums::ftDk_MS_SpecialNLoop as i32) {
             inl_ftCo_CpuTapRAndWaitFiveFrames_unfused(ctx, fp);
         }
-    } else if ((fp).kind() as u32) == ((enums::Ft_Kind_Zelda as i32) as u32) {
+    } else if (fp).kind() == (((enums::Ft_Kind_Zelda as i32) as u32) as i32) {
         if ((fp).motion_id() >= (enums::ftZd_MS_SpecialSLoop as i32))
             && ((fp).motion_id() <= (enums::ftZd_MS_SpecialAirSEnd as i32))
         {
@@ -1127,7 +1127,7 @@ pub fn ftCo_800B658C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         return;
     }
     if (temp_r31).xA4() == 0_i32 {
-        if (((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+        if ((fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32))
             && (!(fns::ftCo_800A2C08(ctx, fp) != 0))
         {
             fns::ftCo_800A0098(ctx, fp);
@@ -1169,7 +1169,7 @@ pub fn ftCo_800B683C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         return;
     }
     var_r30 = 0_i32;
-    if ((((fp).kind() as u32) == ((enums::Ft_Kind_Donkey as i32) as u32))
+    if (((fp).kind() == (((enums::Ft_Kind_Donkey as i32) as u32) as i32))
         && ((fp).motion_id() >= 0x15f_i32))
         && ((fp).motion_id() <= 0x164_i32)
     {
@@ -1225,12 +1225,12 @@ pub fn ftCo_800B683C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             inl_ftCo_CpuPressAWithLstickX_unfused(ctx, fp, (129_i32 as i8));
         }
         return;
-    } else if ((((fp).kind() as u32) == ((enums::Ft_Kind_Koopa as i32) as u32))
-        || (((fp).kind() as u32) == ((enums::Ft_Kind_GKoops as i32) as u32)))
+    } else if (((fp).kind() == (((enums::Ft_Kind_Koopa as i32) as u32) as i32))
+        || ((fp).kind() == (((enums::Ft_Kind_GKoops as i32) as u32) as i32)))
         && ((fp).motion_id() == 0x15e_i32)
     {
         var_r30 = 1_i32;
-    } else if ((((fp).kind() as u32) == ((enums::Ft_Kind_Kirby as i32) as u32))
+    } else if (((fp).kind() == (((enums::Ft_Kind_Kirby as i32) as u32) as i32))
         && ((fp).motion_id() >= 0x164_i32))
         && ((fp).motion_id() <= 0x17e_i32)
     {
@@ -1243,7 +1243,7 @@ pub fn ftCo_800B683C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             var_r3 = null::<Fighter<'a>>(ctx);
         }
         if (!Handle::is_null(var_r3))
-            && (((var_r3).kind() as u32) == ((enums::Ft_Kind_Kirby as i32) as u32))
+            && ((var_r3).kind() == (((enums::Ft_Kind_Kirby as i32) as u32) as i32))
         {
             fns::ftCo_800B46B8(
                 ctx,
@@ -1301,7 +1301,7 @@ pub fn ftCo_800B683C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             fns::ftCo_800B463C(ctx, fp, ((enums::CpuCmd_Done as i32) as u8));
         }
         return;
-    } else if ((fp).kind() as u32) == ((enums::Ft_Kind_Popo as i32) as u32) {
+    } else if (fp).kind() == (((enums::Ft_Kind_Popo as i32) as u32) as i32) {
         if (((temp_r31).x94() == 0_i32) && ((temp_r31).level() > 4_i32))
             && (fns::HSD_Randf(ctx)
                 < fp::fmuls(0.05000000074505806, fp::frsp((temp_r31).level() as f64)))
@@ -1309,7 +1309,7 @@ pub fn ftCo_800B683C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             fns::ftCo_800B4880(ctx, fp, 59_i32);
             return;
         }
-    } else if ((fp).kind() as u32) == ((enums::Ft_Kind_Mario as i32) as u32) {
+    } else if (fp).kind() == (((enums::Ft_Kind_Mario as i32) as u32) as i32) {
         if (((temp_r31).x94() == 0_i32) && ((temp_r31).level() < 5_i32))
             && (fns::HSD_Randf(ctx)
                 < fp::fmuls(0.05000000074505806, fp::frsp((temp_r31).level() as f64)))
@@ -1317,7 +1317,7 @@ pub fn ftCo_800B683C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             fns::ftCo_800B4880(ctx, fp, 53_i32);
             return;
         }
-    } else if ((fp).kind() as u32) == ((enums::Ft_Kind_Fox as i32) as u32) {
+    } else if (fp).kind() == (((enums::Ft_Kind_Fox as i32) as u32) as i32) {
         if (((temp_r31).x94() == 0_i32) && ((temp_r31).level() > 4_i32))
             && (fns::HSD_Randf(ctx)
                 < fp::fmuls(0.05000000074505806, fp::frsp((temp_r31).level() as f64)))
@@ -1325,7 +1325,7 @@ pub fn ftCo_800B683C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             fns::ftCo_800B4880(ctx, fp, 61_i32);
             return;
         }
-    } else if ((fp).kind() as u32) == ((enums::Ft_Kind_Captain as i32) as u32) {
+    } else if (fp).kind() == (((enums::Ft_Kind_Captain as i32) as u32) as i32) {
         if (((temp_r31).x94() == 0_i32) && ((temp_r31).level() > 4_i32))
             && (fns::HSD_Randf(ctx)
                 < fp::fmuls(0.05000000074505806, fp::frsp((temp_r31).level() as f64)))
@@ -1515,7 +1515,7 @@ pub fn ftCo_800B7180<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             break 's1;
         }
         if __case <= 2 {
-            if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                 if (fp).pos_delta().y() > 0.0 {
                     fns::ftCo_800B46B8(
                         ctx,
@@ -1568,7 +1568,7 @@ pub fn ftCo_800B732C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     if Handle::is_null(temp_r0) {
         return 0_i32;
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         return 0_i32;
     }
     if fns::ftCo_800A3200(ctx, temp_r0) != 0_i32 {
@@ -1609,7 +1609,7 @@ pub fn ftCo_800B732C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     if !((temp_r29).xF9_b3() != 0) {
         return 0_i32;
     }
-    if ((temp_r29).kind() as u32) == (16_i32 as u32) {
+    if (temp_r29).kind() == ((16_i32 as u32) as i32) {
         return fns::ftCo_800B7638(ctx, fp);
     }
     if fns::ftCo_800A2BD4(ctx, fp) == 0_i32 {
@@ -1621,7 +1621,7 @@ pub fn ftCo_800B732C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     if fns::ftCo_800A28D0(ctx, fp, 4.0) != 0_i32 {
         return 0_i32;
     }
-    if ((temp_r0).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (temp_r0).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if (temp_r0).cur_pos().y() < (fp).cur_pos().y() {
             return 0_i32;
         }
@@ -1704,7 +1704,7 @@ pub fn ftCo_800B7638<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     if Handle::is_null(target) {
         return 0_i32;
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if (fp).co_attrs().max_jumps() <= ((fp).x1968_jumpsUsed() as i32) {
             return 0_i32;
         }
@@ -1715,7 +1715,7 @@ pub fn ftCo_800B7638<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     if fp::fsubs((target).cur_pos().y(), (fp).cur_pos().y()) < 0.0 {
         return 0_i32;
     }
-    if ((target).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (target).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if (fns::mpCheckCeiling(
             ctx,
             (fp).cur_pos().x(),
@@ -1787,7 +1787,7 @@ pub fn ftCo_800B77E8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut charge: i32 = 0;
     let mut x: f64 = 0.0;
     let mut y: f64 = 0.0;
-    if (((cpu).kind() as u32) == (7_i32 as u32)) || (fns::ftCo_800A1C44(ctx, fp) != 0) {
+    if ((cpu).kind() == ((7_i32 as u32) as i32)) || (fns::ftCo_800A1C44(ctx, fp) != 0) {
         let mut tmp: CpuFighter<'a> = (fp).cpu();
         if ((fp).cpu().xEC() as u32) < 8_u32 {
             (tmp).xCC_array().at(((tmp).xEC() as i32)).set(52_i32);
@@ -1900,7 +1900,7 @@ pub fn ftCo_800B77E8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             break 's1;
         }
         if __case <= 4 {
-            if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+            if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
                 target = (fp).cpu().x44();
                 can_attack = inl_ftCo_CpuCanUseRangedAttack_unfused(ctx, fp, target, c6, 27.0);
                 if can_attack != 0_i32 {
@@ -1922,7 +1922,7 @@ pub fn ftCo_800B77E8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             break 's1;
         }
         if __case <= 5 {
-            if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+            if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
                 target = (fp).cpu().x44();
                 can_attack = inl_ftCo_CpuCanUseRangedAttack_unfused(ctx, fp, target, c7, 53.0);
                 if can_attack != 0_i32 {
@@ -1944,7 +1944,7 @@ pub fn ftCo_800B77E8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             break 's1;
         }
         if __case <= 6 {
-            if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+            if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
                 target = (fp).cpu().x44();
                 can_attack = inl_ftCo_CpuCanUseRangedAttack_unfused(ctx, fp, target, c8, 16.0);
                 if can_attack != 0_i32 {
@@ -2063,7 +2063,7 @@ pub fn ftCo_800B77E8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             break 's1;
         }
         if __case <= 9 {
-            if (((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32))
+            if ((fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32))
                 && (!((cpu).xFA_b5() != 0))
             {
                 let mut tmp_17: CpuFighter<'a> = (fp).cpu();
@@ -2170,7 +2170,7 @@ pub fn ftCo_800B89CC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
             break 'l1;
         }
     }
-    if ((fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Kongo as i32) as u32))
+    if (fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Kongo as i32) as u32) as i32))
         && (((fp).cur_pos().x() > 25.0) || ((fp).cur_pos().x() < fp::fneg(25.0)))
     {
         return 0_i32;
@@ -2182,7 +2182,7 @@ pub fn ftCo_800B89CC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
         return 0_i32;
     }
     if (!((temp_r31).xFA_b5() != 0))
-        && (((fp).kind() as u32) == ((enums::Ft_Kind_Koopa as i32) as u32))
+        && ((fp).kind() == (((enums::Ft_Kind_Koopa as i32) as u32) as i32))
     {
         return 0_i32;
     }
@@ -2281,7 +2281,7 @@ pub fn ftCo_800B8A9C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
                         (tmp_3).set_xEC((tmp_3).xEC().wrapping_add(1));
                     }
                 }
-                if ((fp).kind() as u32) == ((enums::Ft_Kind_Kirby as i32) as u32) {
+                if (fp).kind() == (((enums::Ft_Kind_Kirby as i32) as u32) as i32) {
                     let mut tmp_4: CpuFighter<'a> = (fp).cpu();
                     if ((xec_2).get() as u32) < 8_u32 {
                         (tmp_4).xCC_array().at(((tmp_4).xEC() as i32)).set(17_i32);
@@ -2291,7 +2291,7 @@ pub fn ftCo_800B8A9C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
             }
         }
         fns::ftCo_800B77E8(ctx, fp);
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             if (fns::ftCo_800B89CC(ctx, fp) != 0) {
                 result = fns::ftCo_800B4AB0(
                     ctx,
@@ -2504,7 +2504,7 @@ pub fn ftCo_800B9020<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         inl_ftCo_CpuClearTargetAndFinish_unfused(ctx, fp);
         return;
     }
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Ness as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Ness as i32) as u32) as i32) {
         if ((fp).motion_id() >= (enums::ftNs_MS_SpecialNStart as i32))
             && ((fp).motion_id() <= (enums::ftNs_MS_SpecialNEnd as i32))
         {
@@ -2519,7 +2519,7 @@ pub fn ftCo_800B9020<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             (temp_r31).set_x90((temp_r31).x90().wrapping_add(1));
             return;
         }
-    } else if ((fp).kind() as u32) == ((enums::Ft_Kind_Yoshi as i32) as u32) {
+    } else if (fp).kind() == (((enums::Ft_Kind_Yoshi as i32) as u32) as i32) {
         if ((fp).motion_id() >= (enums::ftYs_MS_SpecialAirSStart_0 as i32))
             && ((fp).motion_id() <= (enums::ftYs_MS_SpecialAirSEnd as i32))
         {
@@ -2527,7 +2527,7 @@ pub fn ftCo_800B9020<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             (temp_r31).set_x90((temp_r31).x90().wrapping_add(1));
             return;
         }
-    } else if ((fp).kind() as u32) == ((enums::Ft_Kind_Zelda as i32) as u32) {
+    } else if (fp).kind() == (((enums::Ft_Kind_Zelda as i32) as u32) as i32) {
         if ((fp).motion_id() >= (enums::ftZd_MS_SpecialSLoop as i32))
             && ((fp).motion_id() <= (enums::ftZd_MS_SpecialAirSEnd as i32))
         {
@@ -2806,7 +2806,7 @@ pub fn ftCo_800B9704<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         (fp::fmadds(rand, 15.0, 15.0)),
         10.0,
     )));
-    if ((cpu).kind() as u32) == (7_i32 as u32) {
+    if (cpu).kind() == ((7_i32 as u32) as i32) {
         (cpu).set_x34(div_i32((cpu).x34(), 2_i32));
     }
 }
@@ -2818,7 +2818,7 @@ pub fn ftCo_800B9790<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: f64, arg2: f64) ->
     let mut arg2 = arg2;
     let mut temp_r31: CpuFighter<'a> = (fp).cpu();
     let mut temp_r30: Fighter<'a> = (fp).cpu().x44();
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if (((arg1 < fp::fneg(0.6981316953897476)) && (arg1 > fp::fneg(0.8726646192371845)))
             && (arg2 < 53.0))
             && (fns::ftCo_800A2C08(ctx, fp) != 0)
@@ -2852,7 +2852,7 @@ pub fn ftCo_800B98C8<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: f64, arg2: f64) ->
     let mut arg2 = arg2;
     let mut temp_r31: CpuFighter<'a> = (fp).cpu();
     let mut temp_r30: Fighter<'a> = (fp).cpu().x44();
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         return 0_i32;
     }
     if !(fns::ftCo_800A2C08(ctx, fp) != 0) {
@@ -2862,7 +2862,7 @@ pub fn ftCo_800B98C8<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: f64, arg2: f64) ->
         return 0_i32;
     }
     if (arg1 < 0.08726646192371845) && (arg1 > fp::fneg(0.08726646192371845)) {
-        if ((temp_r30).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (temp_r30).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             return 0_i32;
         }
         if !(fns::ftCo_800A2170(ctx, fp, temp_r30) != 0) {
@@ -3063,7 +3063,7 @@ pub fn ftCo_800B9CBC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
         }
         if __case <= 2 {
             temp_r3 = (fp).cpu();
-            if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+            if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
                 var_r3 = 0_i32;
             } else if temp_f31 < fp::fneg(0.7853981573134661) {
                 (temp_r3).set_xA4(38_i32);
@@ -3361,9 +3361,9 @@ pub fn ftCo_800BA9A0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         fns::ftCo_800A0C8C(ctx, fp);
         return;
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
-        if (((fp).kind() as u32) == ((enums::Ft_Kind_Fox as i32) as u32))
-            || (((fp).kind() as u32) == ((enums::Ft_Kind_Falco as i32) as u32))
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
+        if ((fp).kind() == (((enums::Ft_Kind_Fox as i32) as u32) as i32))
+            || ((fp).kind() == (((enums::Ft_Kind_Falco as i32) as u32) as i32))
         {
             if temp_r4 == (2_i32 as u32) {
                 inl_ftCo_CpuFireBlaster_unfused(ctx, fp);
@@ -3384,8 +3384,8 @@ pub fn ftCo_800BA9A0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         } else if (temp_r30_3).kind() == (enums::It_Kind_DKinoko as i32) {
             inl_inline1_unfused(ctx, fp, temp_r30_3);
         } else {
-            if (((fp).kind() as u32) == ((enums::Ft_Kind_Fox as i32) as u32))
-                || (((fp).kind() as u32) == ((enums::Ft_Kind_Falco as i32) as u32))
+            if ((fp).kind() == (((enums::Ft_Kind_Fox as i32) as u32) as i32))
+                || ((fp).kind() == (((enums::Ft_Kind_Falco as i32) as u32) as i32))
             {
                 if fns::HSD_Randf(ctx) > 0.5 {
                     inl_ftCo_CpuFireBlaster_unfused(ctx, fp);
@@ -3438,8 +3438,8 @@ pub fn ftCo_800BB104<'a>(
             'c4: {
                 temp_r0 = (arg1).x914().get(i).state();
                 temp_r29 = (arg1).x914().get(i);
-                if (((((temp_r0 as u32) != ((enums::HitCapsule_Disabled as i32) as u32))
-                    && ((temp_r0 as u32) != ((enums::HitCapsule_Enabled as i32) as u32)))
+                if ((((temp_r0 != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
+                    && (temp_r0 != (((enums::HitCapsule_Enabled as i32) as u32) as i32)))
                     && (!((temp_r29).x43_b2() != 0)))
                     && ((temp_r29).element() != ((enums::HitElement_Catch as i32) as u32)))
                     && (!(fns::lbColl_8000ACFC(ctx, Handle::cast::<Addr<'a>>(fp), temp_r29) != 0))
@@ -3570,7 +3570,7 @@ pub fn ftCo_800BB220<'a>(
         fp::frsp(count as f64),
         (arg2).z(),
     ));
-    if (((fp).kind() as u32) == ((enums::Ft_Kind_Ness as i32) as u32))
+    if ((fp).kind() == (((enums::Ft_Kind_Ness as i32) as u32) as i32))
         && ((temp_r31).level() > 3_i32)
     {
         if count < 21_i32 {
@@ -3580,8 +3580,8 @@ pub fn ftCo_800BB220<'a>(
                     'c5: {
                         state = (ip).x5D4_hitboxes().get(i).hit().state();
                         hit = (ip).x5D4_hitboxes().get(i).hit();
-                        if ((((((state as u32) != ((enums::HitCapsule_Disabled as i32) as u32))
-                            && ((state as u32) != ((enums::HitCapsule_Enabled as i32) as u32)))
+                        if (((((state != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
+                            && (state != (((enums::HitCapsule_Enabled as i32) as u32) as i32)))
                             && (!((hit).x43_b2() != 0)))
                             && ((hit).element() != ((enums::HitElement_Inert as i32) as u32)))
                             && (!(fns::lbColl_8000ACFC(ctx, Handle::cast::<Addr<'a>>(fp), hit)
@@ -3619,8 +3619,8 @@ pub fn ftCo_800BB220<'a>(
                     'c7: {
                         state = (ip).x5D4_hitboxes().get(i).hit().state();
                         hit = (ip).x5D4_hitboxes().get(i).hit();
-                        if ((((((state as u32) != ((enums::HitCapsule_Disabled as i32) as u32))
-                            && ((state as u32) != ((enums::HitCapsule_Enabled as i32) as u32)))
+                        if (((((state != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
+                            && (state != (((enums::HitCapsule_Enabled as i32) as u32) as i32)))
                             && (!((hit).x43_b2() != 0)))
                             && ((hit).element() != ((enums::HitElement_Inert as i32) as u32)))
                             && (!(fns::lbColl_8000ACFC(ctx, Handle::cast::<Addr<'a>>(fp), hit)
@@ -3662,8 +3662,8 @@ pub fn ftCo_800BB220<'a>(
                 'c9: {
                     state = (ip).x5D4_hitboxes().get(i).hit().state();
                     hit = (ip).x5D4_hitboxes().get(i).hit();
-                    if ((((((state as u32) != ((enums::HitCapsule_Disabled as i32) as u32))
-                        && ((state as u32) != ((enums::HitCapsule_Enabled as i32) as u32)))
+                    if (((((state != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
+                        && (state != (((enums::HitCapsule_Enabled as i32) as u32) as i32)))
                         && (!((hit).x43_b2() != 0)))
                         && ((hit).element() != ((enums::HitElement_Inert as i32) as u32)))
                         && (!(fns::lbColl_8000ACFC(ctx, Handle::cast::<Addr<'a>>(fp), hit) != 0)))
@@ -3839,7 +3839,7 @@ pub fn ftCo_800BB9B4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     if (fns::ftCo_800A1C44(ctx, fp) != 0) {
         return ((temp_r31).xF8_b12() as i32);
     }
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_GKoops as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_GKoops as i32) as u32) as i32) {
         return ((temp_r31).xF8_b12() as i32);
     }
     temp_f31 = fp::fmuls(0.5, (temp_r31).x568());
@@ -4267,7 +4267,7 @@ fn inl_ftCo_800B9704<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
         (fp::fmadds(rand, 15.0, 15.0)),
         10.0,
     )));
-    if ((cpu).kind() as u32) == (7_i32 as u32) {
+    if (cpu).kind() == ((7_i32 as u32) as i32) {
         (cpu).set_x34(div_i32((cpu).x34(), 2_i32));
     }
 }

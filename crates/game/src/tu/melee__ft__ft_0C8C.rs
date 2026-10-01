@@ -79,7 +79,7 @@ pub fn ftCo_800C8D00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             fns::ftCommon_8007DB58(ctx, victim);
         }
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::ftCo_80090780(ctx, gobj);
     } else {
         fns::ftCo_DownSpot_Enter(ctx, gobj);
@@ -105,10 +105,10 @@ pub fn fn_800C8E74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (((fp).kind() as u32) == ((enums::Ft_Kind_MasterH as i32) as u32))
-        || (((fp).kind() as u32) == ((enums::Ft_Kind_CrezyH as i32) as u32))
+    if ((fp).kind() == (((enums::Ft_Kind_MasterH as i32) as u32) as i32))
+        || ((fp).kind() == (((enums::Ft_Kind_CrezyH as i32) as u32) as i32))
     {
-        if ((fp).kind() as u32) == ((enums::Ft_Kind_MasterH as i32) as u32) {
+        if (fp).kind() == (((enums::Ft_Kind_MasterH as i32) as u32) as i32) {
             fns::ftMh_MS_343_80151484(ctx, gobj);
         } else {
             fns::ftCh_GrabUnk1_8015ADD0(ctx, gobj);

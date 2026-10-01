@@ -98,14 +98,14 @@ pub fn fn_80160400<'a>(ctx: &'a Ctx, ckind: i32) -> u32 {
     let mut theme: VictoryTheme<'a> = statics::melee__gm__gm_1601::ckind_victory_themes(ctx).get(0);
     'l1: loop {
         'c2: {
-            if ((theme).ckind() as u32) == (ckind as u32) {
+            if (((theme).ckind() as u32) as i32) == ckind {
                 return ((theme).theme_id() as u32);
             }
             {
                 let mut ckind_2: i32 = 0;
                 ckind_2 = ((Handle::add(theme, 1_i32)).ckind() as i32);
                 theme = Handle::add(theme, 1);
-                if (ckind_2 as u32) == ((enums::ChKind_None as i32) as u32) {
+                if ckind_2 == (((enums::ChKind_None as i32) as u32) as i32) {
                     return (1_i32.wrapping_neg() as u32);
                 }
             }
@@ -244,10 +244,10 @@ pub fn gm_SelKindToUnlockIndex<'a>(ctx: &'a Ctx, selkind: i32) -> u8 {
         i = 0_i32;
         'l1: while i < 11_i32 {
             'c2: {
-                if (selkind as u32)
-                    == (statics::melee__gm__gm_1601::lbl_803B78C8(ctx)
+                if selkind
+                    == ((statics::melee__gm__gm_1601::lbl_803B78C8(ctx)
                         .get(i)
-                        .selkind() as u32)
+                        .selkind() as u32) as i32)
                 {
                     return statics::melee__gm__gm_1601::lbl_803B78C8(ctx).get(i).idx();
                 }
@@ -302,10 +302,10 @@ pub fn gm_GetChallengerStKind<'a>(ctx: &'a Ctx, selkind: i32) -> i32 {
         i = 0_i32;
         'l1: while i < 11_i32 {
             'c2: {
-                if (selkind as u32)
-                    == (statics::melee__gm__gm_1601::lbl_803B78C8(ctx)
+                if selkind
+                    == ((statics::melee__gm__gm_1601::lbl_803B78C8(ctx)
                         .get(i)
-                        .selkind() as u32)
+                        .selkind() as u32) as i32)
                 {
                     return (statics::melee__gm__gm_1601::lbl_803B78C8(ctx)
                         .get(i)
@@ -500,12 +500,12 @@ pub fn gm_80160A60<'a>(ctx: &'a Ctx, arg0: i32) -> Val<'a, i8> {
     let __frame = ctx.stack_frame(0x20);
     let mut arg0 = arg0;
     let mut ckind: u8 = 0;
-    if (fns::Player_GetPlayerSlotType(ctx, arg0) as u32) != ((enums::Gm_PKind_NA as i32) as u32) {
+    if fns::Player_GetPlayerSlotType(ctx, arg0) != (((enums::Gm_PKind_NA as i32) as u32) as i32) {
         ckind = (fns::Player_GetPlayerCharacter(ctx, arg0) as u8);
         if ((ckind as i32) == (enums::CKind_Zelda as i32))
             || ((ckind as i32) == (enums::CKind_Seak as i32))
         {
-            if (fns::Player_80036394(ctx, arg0) as u32) == ((enums::Ft_Kind_Seak as i32) as u32) {
+            if fns::Player_80036394(ctx, arg0) == (((enums::Ft_Kind_Seak as i32) as u32) as i32) {
                 if (fns::lbLang_IsSavedLanguageUS(ctx) != 0) {
                     return fns::lbl_803D4FDC(ctx).at((enums::CKind_Seak as i32)).get();
                 } else {
@@ -3520,10 +3520,10 @@ pub fn gm_EnablePlayerPauseCamera<'a>(ctx: &'a Ctx, playerSlot: i32, playerId: i
         fns::Camera_SetUpPauseCameraWithDefaultZoom(ctx, (11_i32 as i8), (5_i32 as i8));
         return;
     }
-    if (((fns::Player_GetPlayerSlotType(ctx, playerSlot) as u32)
-        == ((enums::Gm_PKind_Human as i32) as u32))
-        || ((fns::Player_GetPlayerSlotType(ctx, playerSlot) as u32)
-            == ((enums::Gm_PKind_Cpu as i32) as u32)))
+    if ((fns::Player_GetPlayerSlotType(ctx, playerSlot)
+        == (((enums::Gm_PKind_Human as i32) as u32) as i32))
+        || (fns::Player_GetPlayerSlotType(ctx, playerSlot)
+            == (((enums::Gm_PKind_Cpu as i32) as u32) as i32)))
         && (!Handle::is_null(fns::Player_GetEntity(ctx, playerSlot)))
     {
         fns::Camera_SetUpPauseCameraWithDefaultZoom(ctx, (playerSlot as i8), (playerId as i8));
@@ -3534,10 +3534,10 @@ pub fn fn_80165190<'a>(ctx: &'a Ctx, slot: i32, arg1: i32) {
     let __frame = ctx.stack_frame(0x18);
     let mut slot = slot;
     let mut arg1 = arg1;
-    if (((fns::Player_GetPlayerSlotType(ctx, slot) as u32)
-        == ((enums::Gm_PKind_Human as i32) as u32))
-        || ((fns::Player_GetPlayerSlotType(ctx, slot) as u32)
-            == ((enums::Gm_PKind_Cpu as i32) as u32)))
+    if ((fns::Player_GetPlayerSlotType(ctx, slot)
+        == (((enums::Gm_PKind_Human as i32) as u32) as i32))
+        || (fns::Player_GetPlayerSlotType(ctx, slot)
+            == (((enums::Gm_PKind_Cpu as i32) as u32) as i32)))
         && (!Handle::is_null(fns::Player_GetEntity(ctx, slot)))
     {
         fns::Camera_8002F760(ctx, (slot as i8), (arg1 as i8));
@@ -3548,10 +3548,10 @@ pub fn fn_801651FC<'a>(ctx: &'a Ctx, slot: i32, arg1: i32) {
     let __frame = ctx.stack_frame(0x18);
     let mut slot = slot;
     let mut arg1 = arg1;
-    if (((fns::Player_GetPlayerSlotType(ctx, slot) as u32)
-        == ((enums::Gm_PKind_Human as i32) as u32))
-        || ((fns::Player_GetPlayerSlotType(ctx, slot) as u32)
-            == ((enums::Gm_PKind_Cpu as i32) as u32)))
+    if ((fns::Player_GetPlayerSlotType(ctx, slot)
+        == (((enums::Gm_PKind_Human as i32) as u32) as i32))
+        || (fns::Player_GetPlayerSlotType(ctx, slot)
+            == (((enums::Gm_PKind_Cpu as i32) as u32) as i32)))
         && (!Handle::is_null(fns::Player_GetEntity(ctx, slot)))
     {
         fns::Camera_8002F784(ctx, (slot as i8), (arg1 as i8));
@@ -4964,7 +4964,7 @@ pub fn fn_8016719C<'a>(ctx: &'a Ctx, slot: i32, subchar: i32) {
         offset.set_z(0.0);
         offset.set_y(0.0);
         offset.set_x(0.0);
-        if ((stkind as u32) != (76_i32 as u32)) && (subchar == 0_i32) {
+        if (stkind != ((76_i32 as u32) as i32)) && (subchar == 0_i32) {
             fns::Ground_801C38BC(ctx, respawn_pos.x(), respawn_pos.y());
             fns::Camera_8002F3AC(ctx);
         }
@@ -5607,10 +5607,10 @@ pub fn gm_80167FC4<'a>(ctx: &'a Ctx, arg0: SSSData<'a>) {
                 'l4: while i < (enums::St_Kind_OldYoshi as i32) {
                     'c5: {
                         temp_r28 = ((arg0).vs().ordered_stage_index() as i32).wrapping_add(i);
-                        temp_r28 = (rem_u32(
-                            ((temp_r28 as u32).wrapping_add((1_i32 as u32))),
-                            ((enums::St_Kind_OldYoshi as i32) as u32),
-                        ) as i32);
+                        temp_r28 = rem_i32(
+                            (temp_r28.wrapping_add(((1_i32 as u32) as i32))),
+                            (((enums::St_Kind_OldYoshi as i32) as u32) as i32),
+                        );
                         temp_r30 = fns::mnStageSel_8025BC08(ctx, temp_r28);
                         temp_r25 = fns::gmMainLib_8015EDA4(ctx);
                         if (inl_is_character_unlocked_unfused(
@@ -6361,10 +6361,10 @@ fn inl_gm_SelKindToUnlockIndex_unfused<'a>(ctx: &'a Ctx, selkind: i32) -> u8 {
         i = 0_i32;
         'l1: while i < 11_i32 {
             'c2: {
-                if (selkind as u32)
-                    == (statics::melee__gm__gm_1601::lbl_803B78C8(ctx)
+                if selkind
+                    == ((statics::melee__gm__gm_1601::lbl_803B78C8(ctx)
                         .get(i)
-                        .selkind() as u32)
+                        .selkind() as u32) as i32)
                 {
                     return statics::melee__gm__gm_1601::lbl_803B78C8(ctx).get(i).idx();
                 }

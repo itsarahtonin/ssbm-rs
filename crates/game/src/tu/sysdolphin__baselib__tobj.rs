@@ -724,7 +724,7 @@ pub fn MakeTextureMtx<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
     trans.set_y(fp::fneg(
         (fp::fadds(
             (tobj).translate().y(),
-            (if ((tobj).wrap_t() as u32) == ((enums::GX_MIRROR as i32) as u32) {
+            (if (tobj).wrap_t() == (((enums::GX_MIRROR as i32) as u32) as i32) {
                 fp::fdivs(
                     1.0,
                     (fp::fdivs(
@@ -1736,7 +1736,7 @@ pub fn HSD_TObjSetupTextureCoordGen<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
     {
         'l1: while !Handle::is_null(tobj) {
             'c2: {
-                if ((tobj).id() as u32) == ((enums::GX_TEXMAP_NULL as i32) as u32) {
+                if (tobj).id() == (((enums::GX_TEXMAP_NULL as i32) as u32) as i32) {
                     break 'c2;
                 }
                 if (((tobj).flags() & ((shl_i32(1_i32, (24_i32 as u32))) as u32)) != 0) {
@@ -1760,7 +1760,7 @@ pub fn HSD_TObjSetupVolatileTev<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>, rendermode
     {
         'l1: while !Handle::is_null(tobj) {
             'c2: {
-                if ((tobj).id() as u32) == ((enums::GX_TEXMAP_NULL as i32) as u32) {
+                if (tobj).id() == (((enums::GX_TEXMAP_NULL as i32) as u32) as i32) {
                     break 'c2;
                 }
                 if (((tobj).flags() & ((shl_i32(1_i32, (24_i32 as u32))) as u32)) != 0) {
@@ -2959,7 +2959,7 @@ pub fn HSD_TObjAssignResources<'a>(ctx: &'a Ctx, tobj_top: HSD_TObj<'a>) -> i32 
         tobj = tobj_top;
         'l6: while !Handle::is_null(tobj) {
             'c7: {
-                if (((tobj).id() as u32) != ((enums::GX_TEXMAP_NULL as i32) as u32))
+                if ((tobj).id() != (((enums::GX_TEXMAP_NULL as i32) as u32) as i32))
                     && (!(((tobj).flags() & ((shl_i32(1_i32, (24_i32 as u32))) as u32)) != 0))
                 {
                     's8: {
@@ -3037,7 +3037,7 @@ pub fn HSD_TObjSetup<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
                 let mut lod: _HSD_TexLODDesc<'a> = null(ctx);
                 let mut imagedesc: HSD_ImageDesc<'a> = (tobj).imagedesc();
                 let mut min_filter: i32 = 0;
-                if ((tobj).id() as u32) == ((enums::GX_TEXMAP_NULL as i32) as u32) {
+                if (tobj).id() == (((enums::GX_TEXMAP_NULL as i32) as u32) as i32) {
                     break 'c2;
                 }
                 statics::sysdolphin__baselib__tobj::TObjSetupMtx(ctx, tobj);
@@ -3167,7 +3167,7 @@ pub fn HSD_TObjSetup<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
                                 }) as u8),
                                 (tlut).tlut_name(),
                             );
-                            if (min_filter as u32) == ((enums::GX_LIN_MIP_LIN as i32) as u32) {
+                            if min_filter == (((enums::GX_LIN_MIP_LIN as i32) as u32) as i32) {
                                 min_filter = (enums::GX_LIN_MIP_NEAR as i32);
                             }
                         }
@@ -3205,7 +3205,7 @@ pub fn HSD_TObjSetup<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
                     }
                 }
                 if !((imagedesc).mipmap() != 0) {
-                    min_filter = (((min_filter as u32) & (1_i32 as u32)) as i32);
+                    min_filter = (min_filter & ((1_i32 as u32) as i32));
                 }
                 fns::GXInitTexObjLOD(
                     ctx,
@@ -4096,7 +4096,7 @@ fn inl_setupTextureCoordGenBump_unfused<'a>(ctx: &'a Ctx, bump: HSD_TObj<'a>) {
         let __t1 = fns::HSD_TexCoordID2TexGenSrc(ctx, (bump).coord());
         inl_GXSetTexCoordGen_unfused(
             ctx,
-            ((((bump).coord() as u32).wrapping_add((1_i32 as u32))) as i32),
+            ((bump).coord().wrapping_add(((1_i32 as u32) as i32))),
             At::new(ctx, 0x804056b8)
                 .field::<ArrV<'a, i32, 8>>(0)
                 .at(i)
@@ -4151,7 +4151,7 @@ fn inl_SetupEmbossBumpTev_unfused<'a>(ctx: &'a Ctx, bump: HSD_TObj<'a>) {
         .set_stage((fns::HSD_StateAssignTev(ctx) as u32));
     At::new(ctx, 0x8040574c)
         .field::<_HSD_TevDesc<'a>>(0)
-        .set_coord((((((bump).coord() as u32).wrapping_add((1_i32 as u32))) as i32) as u32));
+        .set_coord((((bump).coord().wrapping_add(((1_i32 as u32) as i32))) as u32));
     At::new(ctx, 0x8040574c)
         .field::<_HSD_TevDesc<'a>>(0)
         .u()

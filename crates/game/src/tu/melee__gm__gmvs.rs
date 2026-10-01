@@ -447,8 +447,8 @@ pub fn gm_8016B558<'a>(ctx: &'a Ctx) -> i32 {
         i = 0_i32;
         'l1: while i < 6_i32 {
             'c2: {
-                if (fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                    != ((enums::Gm_PKind_NA as i32) as u32)
+                if fns::Player_GetPlayerSlotType(ctx, i)
+                    != (((enums::Gm_PKind_NA as i32) as u32) as i32)
                 {
                     count = count.wrapping_add(1);
                 }
@@ -488,8 +488,8 @@ pub fn fn_8016B5B0<'a>(ctx: &'a Ctx) -> f64 {
         i = 0_i32;
         'l3: while i < 6_i32 {
             'c4: {
-                if (fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                    != ((enums::Gm_PKind_NA as i32) as u32)
+                if fns::Player_GetPlayerSlotType(ctx, i)
+                    != (((enums::Gm_PKind_NA as i32) as u32) as i32)
                 {
                     count = count.wrapping_add(1);
                 }
@@ -671,8 +671,8 @@ pub fn fn_8016B918<'a>(ctx: &'a Ctx) {
         i = 0_i32;
         'l3: while i < 6_i32 {
             'c4: {
-                if ((((fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                    != ((enums::Gm_PKind_NA as i32) as u32))
+                if (((fns::Player_GetPlayerSlotType(ctx, i)
+                    != (((enums::Gm_PKind_NA as i32) as u32) as i32))
                     && (!Handle::is_null(fns::Player_GetEntity(ctx, i))))
                     && (fns::Player_8003219C(ctx, i) != 0_i32))
                     && (fns::Player_GetStocks(ctx, i) == 0_i32)
@@ -685,7 +685,7 @@ pub fn fn_8016B918<'a>(ctx: &'a Ctx) {
                     break 'c4;
                 }
                 temp_r3_2 = fns::Player_GetPadPort(ctx, i);
-                if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32) {
+                if fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32) {
                     temp_r3_3 = fns::HSD_PadCopyStatus(ctx).get(((temp_r3_2 as u8) as i32));
                     if (((temp_r3_3).trigger() & ((shl_i32(1_i32, (3_i32 as u32))) as u32)) != 0)
                         && (((temp_r3_3).button() & ((shl_i32(1_i32, (10_i32 as u32))) as u32))
@@ -785,7 +785,7 @@ pub fn gm_DefaultVSGetPauser<'a>(ctx: &'a Ctx) -> i32 {
         spPlayerId = fns::Player_GetPadPort(ctx, 0_i32);
         spPadStatus = fns::HSD_PadCopyStatus(ctx).get(((spPlayerId as u8) as i32));
         if ((spPadStatus).err() as i32) == 0_i32 {
-            if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32) {
+            if fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32) {
                 if (((spPadStatus).trigger() & ((shl_i32(1_i32, (3_i32 as u32))) as u32)) != 0)
                     && (((spPadStatus).button() & ((shl_i32(1_i32, (10_i32 as u32))) as u32)) != 0)
                 {
@@ -808,8 +808,8 @@ pub fn gm_DefaultVSGetPauser<'a>(ctx: &'a Ctx) -> i32 {
                 'c4: {
                     mpPadStatus = fns::HSD_PadCopyStatus(ctx).get(((mpPlayerId as u8) as i32));
                     if ((mpPadStatus).err() as i32) == 0_i32 {
-                        if (fns::DbLevel(ctx).get() as u32)
-                            >= ((enums::DbLKind_DebugRom as i32) as u32)
+                        if fns::DbLevel(ctx).get()
+                            >= (((enums::DbLKind_DebugRom as i32) as u32) as i32)
                         {
                             if (((mpPadStatus).trigger()
                                 & ((shl_i32(1_i32, (3_i32 as u32))) as u32))
@@ -832,9 +832,8 @@ pub fn gm_DefaultVSGetPauser<'a>(ctx: &'a Ctx) -> i32 {
                                 mpPlayerSlot = 0_i32;
                                 'l5: while mpPlayerSlot < 6_i32 {
                                     'c6: {
-                                        if ((((fns::Player_GetPlayerSlotType(ctx, mpPlayerSlot)
-                                            as u32)
-                                            != ((enums::Gm_PKind_NA as i32) as u32))
+                                        if (((fns::Player_GetPlayerSlotType(ctx, mpPlayerSlot)
+                                            != (((enums::Gm_PKind_NA as i32) as u32) as i32))
                                             && (!Handle::is_null(fns::Player_GetEntity(
                                                 ctx,
                                                 mpPlayerSlot,
@@ -878,7 +877,7 @@ pub fn gm_CameraModeVSGetPauser<'a>(ctx: &'a Ctx) -> i32 {
             'c4: {
                 temp_r3 = fns::HSD_PadCopyStatus(ctx).get(((var_r30 as u8) as i32));
                 if ((temp_r3).err() as i32) == 0_i32 {
-                    if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32)
+                    if fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32)
                     {
                         if (((temp_r3).trigger() & ((shl_i32(1_i32, (3_i32 as u32))) as u32)) != 0)
                             && (((temp_r3).button() & ((shl_i32(1_i32, (10_i32 as u32))) as u32))
@@ -901,8 +900,8 @@ pub fn gm_CameraModeVSGetPauser<'a>(ctx: &'a Ctx) -> i32 {
                             'l5: while var_r29 < 6_i32 {
                                 'c6: {
                                     if (var_r30 == fns::Player_GetPadPort(ctx, var_r29))
-                                        && ((fns::Player_GetPlayerSlotType(ctx, var_r29) as u32)
-                                            != ((enums::Gm_PKind_NA as i32) as u32))
+                                        && (fns::Player_GetPlayerSlotType(ctx, var_r29)
+                                            != (((enums::Gm_PKind_NA as i32) as u32) as i32))
                                     {
                                         return var_r30;
                                     }
@@ -980,8 +979,8 @@ pub fn gm_GetFFAOutcome<'a>(ctx: &'a Ctx) -> i32 {
             i = 0_i32;
             'l3: while i < 6_i32 {
                 'c4: {
-                    if (fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                        != ((enums::Gm_PKind_NA as i32) as u32)
+                    if fns::Player_GetPlayerSlotType(ctx, i)
+                        != (((enums::Gm_PKind_NA as i32) as u32) as i32)
                     {
                         if fns::Player_GetStocks(ctx, i) == 0_i32 {
                             eliminatedPlayers = eliminatedPlayers.wrapping_add(1_i32);
@@ -1062,8 +1061,8 @@ pub fn gm_GetTeamBattleOutcome<'a>(ctx: &'a Ctx) -> i32 {
                 'l3: while slot < 6_i32 {
                     'c4: {
                         if ((fns::Player_GetFlagsBit1(ctx, slot) == 0_i32)
-                            && ((fns::Player_GetPlayerSlotType(ctx, slot) as u32)
-                                != ((enums::Gm_PKind_NA as i32) as u32)))
+                            && (fns::Player_GetPlayerSlotType(ctx, slot)
+                                != (((enums::Gm_PKind_NA as i32) as u32) as i32)))
                             && (!Handle::is_null(fns::Player_GetEntity(ctx, slot)))
                         {
                             if {
@@ -1111,8 +1110,8 @@ pub fn gm_GetTeamBattleOutcome<'a>(ctx: &'a Ctx) -> i32 {
             slot_2 = 0_i32;
             'l5: while slot_2 < 6_i32 {
                 'c6: {
-                    if (fns::Player_GetPlayerSlotType(ctx, slot_2) as u32)
-                        != ((enums::Gm_PKind_NA as i32) as u32)
+                    if fns::Player_GetPlayerSlotType(ctx, slot_2)
+                        != (((enums::Gm_PKind_NA as i32) as u32) as i32)
                     {
                         if (teamStocks.at(fns::Player_GetTeam(ctx, slot_2)).get() as i32)
                             == 1_i32.wrapping_neg()
@@ -1204,13 +1203,13 @@ pub fn gm_GetMatchOutcome<'a>(ctx: &'a Ctx) -> i32 {
     }
     if !(statics::melee__gm__gmvs::controller(ctx).start().is_teams() != 0) {
         ffa_outcome = fns::gm_GetFFAOutcome(ctx);
-        if (ffa_outcome as u32) != ((enums::OUTCOME_NONE as i32) as u32) {
+        if ffa_outcome != (((enums::OUTCOME_NONE as i32) as u32) as i32) {
             return ffa_outcome;
         }
     }
     if (statics::melee__gm__gmvs::controller(ctx).start().is_teams() as i32) == 1_i32 {
         team_battle_outcome = fns::gm_GetTeamBattleOutcome(ctx);
-        if (team_battle_outcome as u32) != (0_i32 as u32) {
+        if team_battle_outcome != ((0_i32 as u32) as i32) {
             return team_battle_outcome;
         }
     }
@@ -1723,8 +1722,8 @@ pub fn fn_8016CF4C<'a>(ctx: &'a Ctx, slot: i32, matchResult: i32) {
     statics::melee__gm__gmvs::controller(ctx)
         .state()
         .set_match_result((matchResult as u8));
-    if ((matchResult as u32) != ((enums::OUTCOME_RETRY as i32) as u32))
-        && ((fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32))
+    if (matchResult != (((enums::OUTCOME_RETRY as i32) as u32) as i32))
+        && (fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32))
     {
         fns::gm_ClearDbPauseFlag(ctx, 1_i32);
         if (statics::melee__gm__gmvs::controller(ctx).start().xD() as i32) > 1_i32 {
@@ -1788,8 +1787,8 @@ pub fn fn_8016CFE0<'a>(ctx: &'a Ctx) {
             }
             6 => {
                 unpauser_slot = inl_gm_GetPlayerPressingUnpause_unfused(ctx);
-                __state = if (fns::DbLevel(ctx).get() as u32)
-                    >= ((enums::DbLKind_DebugRom as i32) as u32)
+                __state = if fns::DbLevel(ctx).get()
+                    >= (((enums::DbLKind_DebugRom as i32) as u32) as i32)
                 {
                     10
                 } else {
@@ -2273,13 +2272,13 @@ pub fn fn_8016D8AC<'a>(ctx: &'a Ctx, arg0: i32, arg1: PlayerInitData<'a>) {
             .button()
             & ((shl_i32(1_i32, (8_i32 as u32))) as u32))
             != 0))
-        && (((fns::Player_GetPlayerCharacter(ctx, arg0) as u32)
-            == ((enums::CKind_Zelda as i32) as u32))
-            || ((fns::Player_GetPlayerCharacter(ctx, arg0) as u32)
-                == ((enums::CKind_Seak as i32) as u32)))
+        && ((fns::Player_GetPlayerCharacter(ctx, arg0)
+            == (((enums::CKind_Zelda as i32) as u32) as i32))
+            || (fns::Player_GetPlayerCharacter(ctx, arg0)
+                == (((enums::CKind_Seak as i32) as u32) as i32)))
     {
-        if (fns::Player_GetPlayerCharacter(ctx, arg0) as u32)
-            == ((enums::CKind_Zelda as i32) as u32)
+        if fns::Player_GetPlayerCharacter(ctx, arg0)
+            == (((enums::CKind_Zelda as i32) as u32) as i32)
         {
             fns::Player_SetPlayerCharacter(ctx, arg0, (enums::CKind_Seak as i32));
         } else {
@@ -2566,8 +2565,8 @@ pub fn fn_8016DEEC<'a>(ctx: &'a Ctx) {
         i = 0_i32;
         'l1: while i < 6_i32 {
             'c2: {
-                if (fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                    != ((enums::Gm_PKind_NA as i32) as u32)
+                if fns::Player_GetPlayerSlotType(ctx, i)
+                    != (((enums::Gm_PKind_NA as i32) as u32) as i32)
                 {
                     inl_getSpawnPoint_unfused(ctx, i, spC);
                     sp18.at(i).set(spC.x());
@@ -2580,7 +2579,7 @@ pub fn fn_8016DEEC<'a>(ctx: &'a Ctx) {
         i = 0_i32;
         'l3: while i < 6_i32 {
             'c4: {
-                if ((fns::Player_GetPlayerSlotType(ctx, i) as u32) != (3_i32 as u32))
+                if (fns::Player_GetPlayerSlotType(ctx, i) != ((3_i32 as u32) as i32))
                     && (fns::Player_GetFacingDirection(ctx, i) == 0.0)
                 {
                     var_r23 = 1_i32.wrapping_neg();
@@ -2589,8 +2588,8 @@ pub fn fn_8016DEEC<'a>(ctx: &'a Ctx) {
                         'l5: while j < 6_i32 {
                             'c6: {
                                 if ((j != i)
-                                    && ((fns::Player_GetPlayerSlotType(ctx, j) as u32)
-                                        != ((enums::Gm_PKind_NA as i32) as u32)))
+                                    && (fns::Player_GetPlayerSlotType(ctx, j)
+                                        != (((enums::Gm_PKind_NA as i32) as u32) as i32)))
                                     && ((((tmp).start().is_teams() as i32) != 1_i32)
                                         || ({
                                             let __t1 = fns::Player_GetTeam(ctx, j);
@@ -2670,9 +2669,9 @@ pub fn fn_8016E124<'a>(ctx: &'a Ctx) {
         i = 0_i32;
         'l3: while i < 6_i32 {
             'c4: {
-                if ((fns::Player_GetPlayerSlotType(ctx, i) as u32) != (3_i32 as u32))
-                    && ((fns::Player_GetPlayerCharacter(ctx, i) as u32)
-                        == ((enums::CKind_Kirby as i32) as u32))
+                if (fns::Player_GetPlayerSlotType(ctx, i) != ((3_i32 as u32) as i32))
+                    && (fns::Player_GetPlayerCharacter(ctx, i)
+                        == (((enums::CKind_Kirby as i32) as u32) as i32))
                 {
                     let mut temp_r3_2: i8 = (fns::Player_GetCostumeId(ctx, i) as i8);
                     let mut var_r5: i32 = 0_i32;
@@ -2702,8 +2701,8 @@ pub fn fn_8016E124<'a>(ctx: &'a Ctx) {
             i = 0_i32;
             'l7: while i < 6_i32 {
                 'c8: {
-                    if (fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                        != ((enums::Gm_PKind_NA as i32) as u32)
+                    if fns::Player_GetPlayerSlotType(ctx, i)
+                        != (((enums::Gm_PKind_NA as i32) as u32) as i32)
                     {
                         temp_r3 = (fns::Player_80032610(ctx, i, 0_i32) as i32);
                         if (temp_r3 != 1_i32.wrapping_neg()) && (temp_r3 != 4_i32) {
@@ -2822,8 +2821,8 @@ pub fn fn_8016E2BC<'a>(ctx: &'a Ctx) {
             i = 0_i32;
             'l3: while i < 6_i32 {
                 'c4: {
-                    if (fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                        != ((enums::Gm_PKind_NA as i32) as u32)
+                    if fns::Player_GetPlayerSlotType(ctx, i)
+                        != (((enums::Gm_PKind_NA as i32) as u32) as i32)
                     {
                         inl_getSpawnPoint_unfused(ctx, i, sp18);
                         tmp = statics::melee__gm__gmvs::controller(ctx);
@@ -3090,8 +3089,8 @@ pub fn gm_Scene_Vs_OnExit<'a>(ctx: &'a Ctx, user_data: Addr<'a>) {
                 i = 0_i32;
                 'l1: while i < 6_i32 {
                     'c2: {
-                        if (fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                            == ((enums::Gm_PKind_Human as i32) as u32)
+                        if fns::Player_GetPlayerSlotType(ctx, i)
+                            == (((enums::Gm_PKind_Human as i32) as u32) as i32)
                         {
                             fns::gmMainLib_8015D00C(
                                 ctx,
@@ -3183,8 +3182,8 @@ pub fn gm_8016ECE8<'a>(ctx: &'a Ctx) -> f64 {
         'l1: while i < 6_i32 {
             'c2: {
                 let mut kind: i32 = fns::Player_GetPlayerCharacter(ctx, i);
-                if ((kind as u32) == ((enums::CKind_MasterH as i32) as u32))
-                    || ((kind as u32) == ((enums::CKind_CrezyH as i32) as u32))
+                if (kind == (((enums::CKind_MasterH as i32) as u32) as i32))
+                    || (kind == (((enums::CKind_CrezyH as i32) as u32) as i32))
                 {
                     var_f29 = fp::fadds(var_f29, {
                         let __t1 = fp::frsp(fns::Player_GetOtherStamina(ctx, i) as f64);
@@ -3220,8 +3219,8 @@ pub fn gm_8016EDDC<'a>(ctx: &'a Ctx, arg0: i32, arg1: PlayerInitData<'a>) -> i32
         .state()
         .is_singleplayer() as i32)
         == 0_i32)
-        && ((fns::Player_GetPlayerSlotType(ctx, arg0) as u32)
-            == ((enums::Gm_PKind_NA as i32) as u32)))
+        && (fns::Player_GetPlayerSlotType(ctx, arg0)
+            == (((enums::Gm_PKind_NA as i32) as u32) as i32)))
         && (Handle::is_null(fns::Player_GetEntity(ctx, arg0)))
     {
         fns::Player_80036D24(ctx, arg0);
@@ -3400,7 +3399,7 @@ fn inl_fn_8016B918_inline_unfused<'a>(ctx: &'a Ctx, var_r31: i32) -> i32 {
         i = 0_i32;
         'l1: while i < 6_i32 {
             'c2: {
-                if ((((fns::Player_GetPlayerSlotType(ctx, i) as u32) != (3_i32 as u32))
+                if (((fns::Player_GetPlayerSlotType(ctx, i) != ((3_i32 as u32) as i32))
                     && (var_r31 != i))
                     && (team == fns::Player_GetTeam(ctx, i)))
                     && (fns::Player_GetStocks(ctx, i) > 1_i32)
@@ -3452,8 +3451,8 @@ fn inl_gm_GetSlotByPlayerId_unfused<'a>(ctx: &'a Ctx, pauserId: i32) -> i8 {
         'l1: while slot < 6_i32 {
             'c2: {
                 if (pauserId == fns::Player_GetPadPort(ctx, slot))
-                    && ((fns::Player_GetPlayerSlotType(ctx, slot) as u32)
-                        == ((enums::Gm_PKind_Human as i32) as u32))
+                    && (fns::Player_GetPlayerSlotType(ctx, slot)
+                        == (((enums::Gm_PKind_Human as i32) as u32) as i32))
                 {
                     return (slot as i8);
                 }
@@ -3474,7 +3473,7 @@ fn inl_gm_GetPlayerPressingUnpause_unfused<'a>(ctx: &'a Ctx) -> i32 {
             'c2: {
                 pad = fns::HSD_PadCopyStatus(ctx).get(((playerId as u8) as i32));
                 if ((pad).err() as i32) == 0_i32 {
-                    if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32)
+                    if fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32)
                     {
                         if (((pad).trigger() & ((shl_i32(1_i32, (3_i32 as u32))) as u32)) != 0)
                             && (((pad).button() & ((shl_i32(1_i32, (10_i32 as u32))) as u32)) != 0)
@@ -3501,7 +3500,7 @@ fn inl_gm_GetPlayerPressingUnpause_unfused<'a>(ctx: &'a Ctx) -> i32 {
 fn inl_fn_8016CFE0_inline_unfused<'a>(ctx: &'a Ctx) {
     let mut i: i32 = 0;
     let mut tmp: VsSceneController<'a> = null(ctx);
-    if (((fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32))
+    if ((fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32))
         && (fns::gm_801A46B8(ctx, 0_i32) != 0_i32))
         && (((fns::HSD_PadCopyStatus(ctx).get(0)).button()
             & (((((shl_i32(1_i32, (6_i32 as u32))) | (shl_i32(1_i32, (5_i32 as u32))))
@@ -3558,7 +3557,7 @@ fn inl_fn_8016CBE8_inline_unfused<'a>(ctx: &'a Ctx) -> i32 {
             'c2: {
                 pad = fns::HSD_PadCopyStatus(ctx).get(((i as u8) as i32));
                 if ((pad).err() as i32) == 0_i32 {
-                    if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32)
+                    if fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32)
                     {
                         if (((pad).trigger() & ((shl_i32(1_i32, (3_i32 as u32))) as u32)) != 0)
                             && (((pad).button() & ((shl_i32(1_i32, (10_i32 as u32))) as u32)) != 0)

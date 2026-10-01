@@ -302,7 +302,7 @@ pub fn lbDvd_80017960<'a>(ctx: &'a Ctx) {
             }
         }
     }
-    if ((game_cache).stkind() as u32) != (0x148_i32 as u32) {
+    if (game_cache).stkind() != ((0x148_i32 as u32) as i32) {
         fns::Stage_802251B4(ctx, (game_cache).stkind());
     }
     {
@@ -321,7 +321,7 @@ pub fn lbDvd_80017960<'a>(ctx: &'a Ctx) {
                         let mut kind: i32 = 0;
                         {
                             kind = 0_i32;
-                            'l4: while (kind as u32) < ((enums::ChKind_Max as i32) as u32) {
+                            'l4: while kind < (((enums::ChKind_Max as i32) as u32) as i32) {
                                 'c5: {
                                     fns::Player_80031D2C(
                                         ctx,
@@ -348,8 +348,8 @@ pub fn lbDvd_80017960<'a>(ctx: &'a Ctx) {
                                             let mut kind_2: i32 = 0;
                                             {
                                                 kind_2 = 0_i32;
-                                                'l8: while (kind_2 as u32)
-                                                    < ((enums::ChKind_Max as i32) as u32)
+                                                'l8: while kind_2
+                                                    < (((enums::ChKind_Max as i32) as u32) as i32)
                                                 {
                                                     'c9: {
                                                         fns::Player_80031D2C(
@@ -632,7 +632,7 @@ pub fn lbDvd_8001819C<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> HSD_Archive<'a
         ctx,
         fns::DVDConvertPathToEntrynum(ctx, filename),
     ));
-    if (((fns::DbLevel(ctx).get() as u32) != ((enums::DbLKind_Master as i32) as u32))
+    if ((fns::DbLevel(ctx).get() != (((enums::DbLKind_Master as i32) as u32) as i32))
         && (statics::melee__lb__lbdvd::preloadCache(ctx).preloaded() != 0))
         && (Handle::is_null(archive))
     {

@@ -181,8 +181,8 @@ pub fn GXPokeBlendMode<'a>(ctx: &'a Ctx, r#type: i32, src_factor: i32, dst_facto
                     ((0_i32) as u32),
                 ))) as u32))
                 | (shl_u32(
-                    (((((r#type as u32) == ((enums::GX_BM_BLEND as i32) as u32))
-                        || ((r#type as u32) == ((enums::GX_BM_SUBTRACT as i32) as u32)))
+                    ((((r#type == (((enums::GX_BM_BLEND as i32) as u32) as i32))
+                        || (r#type == (((enums::GX_BM_SUBTRACT as i32) as u32) as i32)))
                         as i32) as u32),
                     ((0_i32) as u32),
                 )));
@@ -199,7 +199,7 @@ pub fn GXPokeBlendMode<'a>(ctx: &'a Ctx, r#type: i32, src_factor: i32, dst_facto
                     ((11_i32) as u32),
                 ))) as u32))
                 | (shl_u32(
-                    ((((r#type as u32) == ((enums::GX_BM_SUBTRACT as i32) as u32)) as i32) as u32),
+                    (((r#type == (((enums::GX_BM_SUBTRACT as i32) as u32) as i32)) as i32) as u32),
                     ((11_i32) as u32),
                 )));
         }
@@ -215,7 +215,7 @@ pub fn GXPokeBlendMode<'a>(ctx: &'a Ctx, r#type: i32, src_factor: i32, dst_facto
                     ((1_i32) as u32),
                 ))) as u32))
                 | (shl_u32(
-                    ((((r#type as u32) == ((enums::GX_BM_LOGIC as i32) as u32)) as i32) as u32),
+                    (((r#type == (((enums::GX_BM_LOGIC as i32) as u32) as i32)) as i32) as u32),
                     ((1_i32) as u32),
                 )));
         }

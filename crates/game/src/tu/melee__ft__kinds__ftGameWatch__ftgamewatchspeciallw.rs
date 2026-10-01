@@ -361,7 +361,7 @@ pub fn ftGw_SpecialLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftGw_SpecialAirLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         fns::ftGw_SpecialAirLw_AirToGround(ctx, gobj);
     }
 }
@@ -571,7 +571,7 @@ pub fn ftGw_SpecialLw_AbsorbThink_DecideAction<'a>(ctx: &'a Ctx, gobj: HSD_GObj<
     if (fp).u().gw().x2238_panicCharge() >= (enums::ftGw_Panic_Full as i32) {
         let _ = fns::ftCo_800BFFD0(ctx, fp, 5_i32, 0_i32);
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         msid = (enums::ftGw_MS_SpecialLwCatch as i32);
     } else {
         msid = (enums::ftGw_MS_SpecialAirLwCatch as i32);
@@ -917,8 +917,8 @@ fn inl_ftGameWatch_SpecialLwShoot_ApplyDamage_unfused<'a>(ctx: &'a Ctx, gobj: HS
         i = 0_i32;
         'l1: while i < 4_i32 {
             'c2: {
-                if ((fp).x914().get(i).state() as u32)
-                    == ((enums::HitCapsule_Enabled as i32) as u32)
+                if (fp).x914().get(i).state()
+                    == (((enums::HitCapsule_Enabled as i32) as u32) as i32)
                 {
                     fns::ftColl_8007ABD0(
                         ctx,

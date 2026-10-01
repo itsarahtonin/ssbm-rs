@@ -309,7 +309,7 @@ pub fn HSD_LObjSetup<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, color: _GXColor<'a>, 
             );
         }
     }
-    if ((lobj).spec_id() as u32) != ((enums::GX_LIGHT_NULL as i32) as u32) {
+    if (lobj).spec_id() != (((enums::GX_LIGHT_NULL as i32) as u32) as i32) {
         if (lobj).shininess() != shininess {
             (lobj).set_shininess(shininess);
             k0 = fp::fmuls(k0, 0.5);
@@ -353,7 +353,7 @@ pub fn HSD_LObjSetupSpecularInit<'a>(ctx: &'a Ctx, pmtx: ArrV<'a, F32, 4>) {
         'l1: while i < num {
             'c2: {
                 let mut lobj: HSD_LObj<'a> = inl_HSD_LObjGetActiveByIndex_unfused(ctx, i);
-                if ((lobj).spec_id() as u32) == ((enums::GX_LIGHT_NULL as i32) as u32) {
+                if (lobj).spec_id() == (((enums::GX_LIGHT_NULL as i32) as u32) as i32) {
                     break 'c2;
                 }
                 's3: {

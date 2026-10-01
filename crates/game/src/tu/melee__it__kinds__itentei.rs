@@ -147,7 +147,7 @@ pub fn itEntei_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
     let mut it: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((it).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (it).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::it_80272860(
             ctx,
             gobj,
@@ -161,7 +161,7 @@ pub fn itEntei_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
     let mut it: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((it).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (it).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::it_8026E248(ctx, gobj, fnptr(ctx, 0x802cf44c));
     } else {
         fns::it_8026D62C(ctx, gobj, fnptr(ctx, 0x802cf44c));

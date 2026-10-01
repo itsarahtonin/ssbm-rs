@@ -104,7 +104,7 @@ pub fn ftMr_SpecialN_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftMr_SpecialN_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         fns::ftMr_SpecialN_GroundToAir(ctx, gobj);
     }
 }
@@ -136,7 +136,7 @@ pub fn ftMr_SpecialN_ItemFireSpawn<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             null::<Vec<'a>>(ctx),
             coords,
         );
-        if ((fp).kind() as u32) == ((enums::Ft_Kind_Mario as i32) as u32) {
+        if (fp).kind() == (((enums::Ft_Kind_Mario as i32) as u32) as i32) {
             fns::it_8029B6F8(
                 ctx,
                 gobj,

@@ -113,7 +113,7 @@ pub fn ftCo_800909D0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             .left()
             .set_y(fp::frsp(0_i32 as f64));
         fns::ftCommon_UnlockECB(ctx, fp);
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             let _ = fns::ft_80082638(ctx, (fp).gobj(), (fp).mv().co().damageice().ice_coll());
         } else {
             let _ = fns::ft_80082888(ctx, (fp).gobj(), (fp).mv().co().damageice().ice_coll());
@@ -232,7 +232,7 @@ pub fn ftCo_DamageIce_Init<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ftCo_8009E140(ctx, fp, 0_i32);
     fns::ftCommon_8007F824(ctx, (fp).gobj());
     (fp).set_x2222_b3((1_i32 as u8));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         Handle::copy_from((fp).self_vel(), (fp).x8c_kb_vel());
         (fp).x8c_kb_vel().set_x({
             let __t2 = {
@@ -339,7 +339,7 @@ pub fn ftCo_DamageIce_HitWhileFrozen<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ftCo_8009E140(ctx, fp, 0_i32);
     fns::ftCommon_8007F824(ctx, (fp).gobj());
     (fp).set_x2222_b3((1_i32 as u8));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         Handle::copy_from((fp).self_vel(), (fp).x8c_kb_vel());
         (fp).x8c_kb_vel().set_x({
             let __t2 = {
@@ -433,7 +433,7 @@ pub fn ftCo_DamageIce_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         let mut rot_x: f64 = (fp).mv().co().damageice().rot_speed();
         jobj = (Handle::add(
             (fp).parts(),
@@ -468,7 +468,7 @@ pub fn ftCo_DamageIce_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut co: ftCo_DatAttrs<'a> = (fp).co_attrs();
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::ftCommon_CalcSelfAccel_DeaccelAir(ctx, fp);
         fns::ftCommon_Fall(
             ctx,
@@ -488,7 +488,7 @@ pub fn ftCo_DamageIce_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::ftCo_DamageIce_InAirUpdate(ctx, gobj);
     } else if !(fns::ft_80082888(ctx, gobj, (fp).mv().co().damageice().ice_coll()) != 0) {
         fns::ftCommon_8007D5D4(ctx, fp);

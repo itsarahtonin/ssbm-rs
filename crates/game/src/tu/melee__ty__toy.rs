@@ -11093,8 +11093,8 @@ pub fn Toy_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
                 fns::_Toy_sbss_804D6EA2(ctx).set((0_i32 as i8));
                 fns::_Toy_sbss_804D6E50(ctx).set((0_i32 as i8));
                 fns::_Toy_sbss_804D6EA1(ctx).set((0_i32 as u8));
-                __state = if (fns::DbLevel(ctx).get() as u32)
-                    >= ((enums::DbLKind_DebugRom as i32) as u32)
+                __state = if fns::DbLevel(ctx).get()
+                    >= (((enums::DbLKind_DebugRom as i32) as u32) as i32)
                 {
                     6
                 } else {

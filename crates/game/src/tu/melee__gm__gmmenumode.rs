@@ -83,7 +83,7 @@ pub fn onEnter<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     }
     (data).set_load_assets((1_i32 as u8));
     previous_mode = (fns::gm_GetPreviousGameMode(ctx) as i32);
-    if (previous_mode as u32) == ((enums::GM_CHALLENGER_APPROACH as i32) as u32) {
+    if previous_mode == (((enums::GM_CHALLENGER_APPROACH as i32) as u32) as i32) {
         previous_mode = (fns::gm_801737D8(ctx) as i32);
     }
     's3: {

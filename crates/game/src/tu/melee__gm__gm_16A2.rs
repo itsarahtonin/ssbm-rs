@@ -109,8 +109,8 @@ pub fn gm_801694A0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
         i = 0_i32;
         'l3: while i < 6_i32 {
             'c4: {
-                if (((fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                    != ((enums::Gm_PKind_NA as i32) as u32))
+                if ((fns::Player_GetPlayerSlotType(ctx, i)
+                    != (((enums::Gm_PKind_NA as i32) as u32) as i32))
                     && (fns::Player_GetFlagsBit1(ctx, i) != 0))
                     && (fns::Player_GetPlayerState(ctx, i) == 2_i32)
                 {
@@ -748,8 +748,8 @@ pub fn fn_8016A09C<'a>(ctx: &'a Ctx) {
         i = 0_i32;
         'l3: while i < 6_i32 {
             'c4: {
-                if (fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                    == ((enums::Gm_PKind_NA as i32) as u32)
+                if fns::Player_GetPlayerSlotType(ctx, i)
+                    == (((enums::Gm_PKind_NA as i32) as u32) as i32)
                 {
                     if var_r29
                         >= ({
@@ -1125,8 +1125,8 @@ pub fn fn_8016A4C8<'a>(ctx: &'a Ctx) {
                         } else {
                             fns::Player_SetMoreFlagsBit5(ctx, spawn_slot, (0_i32 as u8));
                         }
-                        if ((fns::Player_GetPlayerCharacter(ctx, spawn_slot) as u32)
-                            == ((enums::CKind_Kirby as i32) as u32))
+                        if (fns::Player_GetPlayerCharacter(ctx, spawn_slot)
+                            == (((enums::CKind_Kirby as i32) as u32) as i32))
                             && (((gp).xE() as i32) != 0_i32)
                         {
                             let mut tmp: i32 =
@@ -1163,8 +1163,8 @@ pub fn fn_8016A4C8<'a>(ctx: &'a Ctx) {
         let mut active_slot: i32 = 0;
         active_slot = 0_i32;
         'back_scan_active_spawn: loop {
-            if (((fns::Player_GetPlayerSlotType(ctx, active_slot) as u32)
-                != ((enums::Gm_PKind_NA as i32) as u32))
+            if ((fns::Player_GetPlayerSlotType(ctx, active_slot)
+                != (((enums::Gm_PKind_NA as i32) as u32) as i32))
                 && (fns::Player_GetFlagsBit1(ctx, active_slot) != 0_i32))
                 && (fns::Player_GetStocks(ctx, active_slot) != 0_i32)
             {
@@ -1445,11 +1445,11 @@ fn inl_hasDuplicateCostume_unfused<'a>(ctx: &'a Ctx, spawn_slot: i32, costume_id
         matching_slot = 0_i32;
         'l1: while matching_slot < 6_i32 {
             'c2: {
-                if ((((fns::Player_GetPlayerSlotType(ctx, matching_slot) as u32)
-                    != ((enums::Gm_PKind_NA as i32) as u32))
+                if (((fns::Player_GetPlayerSlotType(ctx, matching_slot)
+                    != (((enums::Gm_PKind_NA as i32) as u32) as i32))
                     && (fns::Player_GetFlagsBit1(ctx, matching_slot) == 0_i32))
-                    && ((chr as u32)
-                        == (fns::Player_GetPlayerCharacter(ctx, matching_slot) as u32)))
+                    && (((chr as u32) as i32)
+                        == fns::Player_GetPlayerCharacter(ctx, matching_slot)))
                     && (costume_id == (fns::Player_GetCostumeId(ctx, matching_slot) as i32))
                 {
                     return (1_i32 as i8);

@@ -156,7 +156,7 @@ pub fn it_802DDD38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     } else {
         let _ = fns::it_8027236C(ctx, gobj);
         fns::it_802756D0(ctx, gobj);
-        if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             fns::it_802DEC80(ctx, gobj);
         } else {
             fns::it_802DE6F0(ctx, gobj);
@@ -215,7 +215,7 @@ pub fn it_802DDEB4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .set_x(fp::fmuls((attrs).x1C(), fp::fneg((ip_3).xCD0())));
                 let _ = fns::it_802723FC(ctx, gobj);
                 (ip_3).xDD4_itemVar().zgshell().set_xE08_b1((1_i32 as u8));
-                if ((ip_3).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+                if (ip_3).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                     fns::it_802DEC80(ctx, gobj);
                 } else {
                     fns::it_802DE6F0(ctx, gobj);
@@ -321,7 +321,7 @@ pub fn itZrshell_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
     attrs = Handle::cast::<itZGShell_Attrs<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         inl_Item_UpdateRollingShellRotation_unfused(ctx, gobj, ip, jobj, (attrs).x20_ref());
     }
     return 0_i32;
@@ -628,7 +628,7 @@ pub fn itZrshell_UnkMotion6_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
     attrs = Handle::cast::<itZGShell_Attrs<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         inl_Item_UpdateRollingShellRotation_unfused(ctx, gobj, ip, jobj, (attrs).x20_ref());
     }
     if (fns::it_8027770C(ctx, gobj) != 0) {
@@ -804,7 +804,7 @@ pub fn itZrshell_UnkMotion9_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
     attrs = Handle::cast::<itZGShell_Attrs<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::it_80276CB8(ctx, gobj);
         jobj = inl_HSD_JObjGetChild_unfused(ctx, jobj);
         inl_HSD_JObjAddRotationY_unfused(
@@ -951,7 +951,7 @@ pub fn itZrshell_UnkMotion11_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             (ip).xDD4_itemVar()
                 .zgshell()
                 .set_xE14((ip).xDD4_itemVar().zgshell().xE14().wrapping_sub(1));
-        } else if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        } else if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             if ((ip).x40_vel().y() != 0.0) {
                 (ip).x40_vel().set_y(fp::fsubs(
                     (ip).x40_vel().y(),
@@ -969,7 +969,7 @@ pub fn itZrshell_UnkMotion11_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             inl_itResetVelocity_unfused(ctx, ip);
             fns::it_80276CB8(ctx, gobj);
         }
-    } else if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    } else if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::lb_8000B1CC(
             ctx,
             (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj))),
@@ -1014,7 +1014,7 @@ pub fn itZrshell_UnkMotion11_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if ((fns::it_8026DB40(ctx, gobj) & 1_i32) != 0) {
             fns::it_802762B0(ctx, ip);
             (ip).x40_vel().set_x({
@@ -1056,7 +1056,7 @@ pub fn itZrshell_UnkMotion10_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         }
     }
     if (!(fns::it_80272C6C(ctx, gobj) != 0))
-        && (((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+        && ((ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32))
     {
         if !(fns::it_80277040(ctx, gobj) != 0) {
             ip = ({ (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))) });
@@ -1104,7 +1104,7 @@ pub fn itZrshell_UnkMotion10_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if ((fns::it_8026DB40(ctx, gobj) & 1_i32) != 0) {
             fns::it_802762B0(ctx, ip);
             (ip).x40_vel().set_x({

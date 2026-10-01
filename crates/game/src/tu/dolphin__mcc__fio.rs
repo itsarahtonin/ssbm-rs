@@ -204,7 +204,7 @@ pub fn FIOFopen<'a>(ctx: &'a Ctx, filename: Val<'a, i8>, mode: u32) -> i32 {
             statics::dolphin__mcc__fio::gLastErr(ctx).set((176_i32 as u8));
             break 'goto_exit;
         }
-        if (statics::dolphin__mcc__fio::bAsyncBusy(ctx).get() as u32) != (0_i32 as u32) {
+        if statics::dolphin__mcc__fio::bAsyncBusy(ctx).get() != ((0_i32 as u32) as i32) {
             statics::dolphin__mcc__fio::gLastErr(ctx).set((161_i32 as u8));
             break 'goto_exit;
         }
@@ -259,7 +259,7 @@ pub fn FIOFclose<'a>(ctx: &'a Ctx, handle: i32) -> i32 {
             statics::dolphin__mcc__fio::gLastErr(ctx).set((176_i32 as u8));
             break 'goto_exit;
         }
-        if (statics::dolphin__mcc__fio::bAsyncBusy(ctx).get() as u32) != (0_i32 as u32) {
+        if statics::dolphin__mcc__fio::bAsyncBusy(ctx).get() != ((0_i32 as u32) as i32) {
             statics::dolphin__mcc__fio::gLastErr(ctx).set((161_i32 as u8));
             break 'goto_exit;
         }
@@ -314,7 +314,7 @@ pub fn FIOFwrite<'a>(ctx: &'a Ctx, handle: i32, data: Addr<'a>, size: u32) -> u3
         if size == (0_i32 as u32) {
             return (0_i32 as u32);
         }
-        if (statics::dolphin__mcc__fio::bAsyncBusy(ctx).get() as u32) != (0_i32 as u32) {
+        if statics::dolphin__mcc__fio::bAsyncBusy(ctx).get() != ((0_i32 as u32) as i32) {
             statics::dolphin__mcc__fio::gLastErr(ctx).set((161_i32 as u8));
             break 'goto_exit;
         }
@@ -592,7 +592,7 @@ pub fn fioPacketResultWrite<'a>(ctx: &'a Ctx, buffer: Addr<'a>, dataSize: u32) -
             } else {
                 'back_loop: loop {
                     let _ = fns::MCCGetConnectionStatus(ctx, nChID, state);
-                    if (state.get() as u32) != (0_i32 as u32) {
+                    if state.get() != ((0_i32 as u32) as i32) {
                         continue 'back_loop;
                     }
                     if fns::MCCStreamOpen(ctx, nChID, nChannelBlocks) == 0_i32 {
@@ -603,7 +603,7 @@ pub fn fioPacketResultWrite<'a>(ctx: &'a Ctx, buffer: Addr<'a>, dataSize: u32) -
                         'c2: {
                             let _ = fns::MCCGetConnectionStatus(ctx, nChID, state);
                         }
-                        if !((state.get() as u32) != (3_i32 as u32)) {
+                        if !(state.get() != ((3_i32 as u32) as i32)) {
                             break 'l1;
                         }
                     }
@@ -615,7 +615,7 @@ pub fn fioPacketResultWrite<'a>(ctx: &'a Ctx, buffer: Addr<'a>, dataSize: u32) -
                             'c4: {
                                 let _ = fns::MCCGetConnectionStatus(ctx, nChID, state_2);
                             }
-                            if !((state_2.get() as u32) == (3_i32 as u32)) {
+                            if !(state_2.get() == ((3_i32 as u32) as i32)) {
                                 break 'l3;
                             }
                         }
@@ -626,7 +626,7 @@ pub fn fioPacketResultWrite<'a>(ctx: &'a Ctx, buffer: Addr<'a>, dataSize: u32) -
                                 'c6: {
                                     let _ = fns::MCCGetConnectionStatus(ctx, nChID, state_2);
                                 }
-                                if !((state_2.get() as u32) == (0_i32 as u32)) {
+                                if !(state_2.get() == ((0_i32 as u32) as i32)) {
                                     break 'l5;
                                 }
                             }

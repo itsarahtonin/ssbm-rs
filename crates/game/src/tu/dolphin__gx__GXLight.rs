@@ -963,9 +963,9 @@ pub fn GXSetChanCtrl<'a>(
     let mut attn_fn = attn_fn;
     let mut reg: u32 = 0;
     let mut idx: u32 = 0;
-    if (chan as u32) == (4_i32 as u32) {
+    if chan == ((4_i32 as u32) as i32) {
         idx = (0_i32 as u32);
-    } else if (chan as u32) == (5_i32 as u32) {
+    } else if chan == ((5_i32 as u32) as i32) {
         idx = (1_i32 as u32);
     } else {
         idx = (chan as u32);
@@ -1154,7 +1154,7 @@ pub fn GXSetChanCtrl<'a>(
                     ((7_i32) as u32),
                 ))) as u32))
                 | (shl_u32(
-                    (if (attn_fn as u32) == (0_i32 as u32) {
+                    (if attn_fn == ((0_i32 as u32) as i32) {
                         (0_i32 as u32)
                     } else {
                         (diff_fn as u32)
@@ -1174,7 +1174,7 @@ pub fn GXSetChanCtrl<'a>(
                     ((9_i32) as u32),
                 ))) as u32))
                 | (shl_u32(
-                    ((((attn_fn as u32) != (2_i32 as u32)) as i32) as u32),
+                    (((attn_fn != ((2_i32 as u32) as i32)) as i32) as u32),
                     ((9_i32) as u32),
                 )));
         }
@@ -1190,7 +1190,7 @@ pub fn GXSetChanCtrl<'a>(
                     ((10_i32) as u32),
                 ))) as u32))
                 | (shl_u32(
-                    ((((attn_fn as u32) != (0_i32 as u32)) as i32) as u32),
+                    (((attn_fn != ((0_i32 as u32) as i32)) as i32) as u32),
                     ((10_i32) as u32),
                 )));
         }
@@ -1210,7 +1210,7 @@ pub fn GXSetChanCtrl<'a>(
         }
     }
     (fns::gx(ctx).get()).set_bpSent((1_i32 as u16));
-    if (chan as u32) == ((enums::GX_COLOR0A0 as i32) as u32) {
+    if chan == (((enums::GX_COLOR0A0 as i32) as u32) as i32) {
         'l31: loop {
             'c32: {
                 (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((16_i32) as u8));
@@ -1222,7 +1222,7 @@ pub fn GXSetChanCtrl<'a>(
                 break 'l31;
             }
         }
-    } else if (chan as u32) == ((enums::GX_COLOR1A1 as i32) as u32) {
+    } else if chan == (((enums::GX_COLOR1A1 as i32) as u32) as i32) {
         'l33: loop {
             'c34: {
                 (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((16_i32) as u8));

@@ -215,8 +215,8 @@ pub fn lbCardGame_SetCardStatus<'a>(ctx: &'a Ctx, status: i32) {
 pub fn lb_8001CBBC<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x10);
     let mut result: i32 = 0;
-    if (statics::melee__lb__lbcardgame::updateCardStatus(ctx) as u32)
-        != ((enums::LbCardStatus_0 as i32) as u32)
+    if statics::melee__lb__lbcardgame::updateCardStatus(ctx)
+        != (((enums::LbCardStatus_0 as i32) as u32) as i32)
     {
         return (enums::LbCardResult_Invalid as i32);
     }
@@ -227,8 +227,8 @@ pub fn lb_8001CBBC<'a>(ctx: &'a Ctx) -> i32 {
         Handle::cast::<Addr<'a>>(statics::melee__lb__lbcardgame::manifest(ctx).get(0)),
         Handle::cast::<Addr<'a>>(statics::melee__lb__lbcardgame::state(ctx).unk_status_ref()),
     );
-    if ((result as u32) != ((enums::LbCardResult_Ready as i32) as u32))
-        && ((result as u32) != ((enums::LbCardResult_2 as i32) as u32))
+    if (result != (((enums::LbCardResult_Ready as i32) as u32) as i32))
+        && (result != (((enums::LbCardResult_2 as i32) as u32) as i32))
     {
         statics::melee__lb__lbcardgame::state(ctx).set_card_status((enums::LbCardStatus_2 as i32));
     }
@@ -277,8 +277,8 @@ pub fn lb_8001CC84<'a>(ctx: &'a Ctx) {
                     if ((statics::melee__lb__lbcardgame::state(ctx).card_status()) != 0) {
                         break 's5;
                     }
-                    if (inl_dont_inline_helper_unfused(ctx) as u32)
-                        != ((enums::LbCardResult_Busy as i32) as u32)
+                    if inl_dont_inline_helper_unfused(ctx)
+                        != (((enums::LbCardResult_Busy as i32) as u32) as i32)
                     {
                         statics::melee__lb__lbcardgame::state(ctx).set_failed(1_i32);
                     } else {
@@ -304,8 +304,8 @@ pub fn lb_8001CC84<'a>(ctx: &'a Ctx) {
                 }
             }
         }
-        if !((((statics::melee__lb__lbcardgame::state(ctx).x10()) as u32)
-            != ((enums::statex10_1 as i32) as u32))
+        if !(((statics::melee__lb__lbcardgame::state(ctx).x10())
+            != (((enums::statex10_1 as i32) as u32) as i32))
             && ((statics::melee__lb__lbcardgame::state(ctx).dirty()) != 0))
         {
             break 'l3;
@@ -316,8 +316,8 @@ pub fn lb_8001CC84<'a>(ctx: &'a Ctx) {
 pub fn lb_8001CDB4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x10);
     'l1: while ((statics::melee__lb__lbcardgame::state(ctx).dirty()) != 0)
-        || (((statics::melee__lb__lbcardgame::state(ctx).x10()) as u32)
-            != ((enums::statex10_0 as i32) as u32))
+        || ((statics::melee__lb__lbcardgame::state(ctx).x10())
+            != (((enums::statex10_0 as i32) as u32) as i32))
     {
         'c2: {
             fns::lb_8001CC84(ctx);
@@ -346,10 +346,10 @@ pub fn lbCardGame_SaveChanges<'a>(ctx: &'a Ctx) {
 pub fn lbCardGame_DecideGameMode<'a>(ctx: &'a Ctx) -> u8 {
     let __frame = ctx.stack_frame(0x8);
     let _ = statics::melee__lb__lbcardgame::updateCardStatus(ctx);
-    if (((statics::melee__lb__lbcardgame::state(ctx).card_status()) as u32)
-        != ((enums::LbCardStatus_0 as i32) as u32))
-        && (((statics::melee__lb__lbcardgame::state(ctx).card_status()) as u32)
-            != ((enums::LbCardStatus_4 as i32) as u32))
+    if ((statics::melee__lb__lbcardgame::state(ctx).card_status())
+        != (((enums::LbCardStatus_0 as i32) as u32) as i32))
+        && ((statics::melee__lb__lbcardgame::state(ctx).card_status())
+            != (((enums::LbCardStatus_4 as i32) as u32) as i32))
     {
         return ((enums::GM_MEMCARD as i32) as u8);
     }
@@ -366,7 +366,7 @@ pub fn gobj0_RenderFunc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
     let mut arg1 = arg1;
-    if ((statics::melee__lb__lbcardgame::state(ctx).x10()) as u32) == (1_i32 as u32) {
+    if (statics::melee__lb__lbcardgame::state(ctx).x10()) == ((1_i32 as u32) as i32) {
         fns::HSD_GObj_803910D8(ctx, gobj, arg1);
     }
 }
@@ -598,7 +598,7 @@ fn inl_getCurrentIcon_unfused<'a>(ctx: &'a Ctx) -> Addr<'a> {
 
 fn inl_dont_inline_helper_unfused<'a>(ctx: &'a Ctx) -> i32 {
     let mut icon: Addr<'a> = null(ctx);
-    if (statics::melee__lb__lbcardgame::updateCardStatus(ctx) as u32) != (0_i32 as u32) {
+    if statics::melee__lb__lbcardgame::updateCardStatus(ctx) != ((0_i32 as u32) as i32) {
         return (enums::LbCardResult_Invalid as i32);
     }
     icon = statics::melee__lb__lbcardgame::getCurrentIcon(ctx);

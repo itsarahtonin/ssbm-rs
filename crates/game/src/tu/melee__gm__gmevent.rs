@@ -1346,8 +1346,8 @@ pub fn gm_801BC4F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             i = 1_i32;
             'l3: while i < 6_i32 {
                 'c4: {
-                    if (fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                        != ((enums::Gm_PKind_NA as i32) as u32)
+                    if fns::Player_GetPlayerSlotType(ctx, i)
+                        != (((enums::Gm_PKind_NA as i32) as u32) as i32)
                     {
                         var_r27 = var_r27
                             .wrapping_add((fns::Player_GetKOsByPlayerIndex(ctx, 0_i32, i) as u32));
@@ -1412,7 +1412,7 @@ pub fn gm_801BC670<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         (temp_r31).set_x2C((temp_r30).x0());
         (temp_r31).set_x30(0_i32);
     }
-    if (fns::Player_80036394(ctx, 0_i32) as u32) == ((enums::Ft_Kind_Seak as i32) as u32) {
+    if fns::Player_80036394(ctx, 0_i32) == (((enums::Ft_Kind_Seak as i32) as u32) as i32) {
         (temp_r31).set_x38((19_i32 as u8));
     } else {
         (temp_r31).set_x38((33_i32 as u8));
@@ -1461,8 +1461,8 @@ pub fn gm_801BC754<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 i = 1_i32;
                 'l4: while i < 6_i32 {
                     'c5: {
-                        if ((fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                            != ((enums::Gm_PKind_NA as i32) as u32))
+                        if (fns::Player_GetPlayerSlotType(ctx, i)
+                            != (((enums::Gm_PKind_NA as i32) as u32) as i32))
                             && (fns::Player_GetStocks(ctx, i) != 0_i32)
                         {
                             count = count.wrapping_add(1_i32);
@@ -1632,8 +1632,8 @@ pub fn gm_801BCAF0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 unreachable!();
             }
             11 => {
-                __state = if (fns::ftLib_GetKind(ctx, temp_r3) as u32)
-                    == ((enums::Ft_Kind_Seak as i32) as u32)
+                __state = if fns::ftLib_GetKind(ctx, temp_r3)
+                    == (((enums::Ft_Kind_Seak as i32) as u32) as i32)
                 {
                     15
                 } else {
@@ -2119,8 +2119,8 @@ pub fn gm_801BD658<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         i = 1_i32;
         'l3: while i < 6_i32 {
             'c4: {
-                if ((fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                    != ((enums::Gm_PKind_NA as i32) as u32))
+                if (fns::Player_GetPlayerSlotType(ctx, i)
+                    != (((enums::Gm_PKind_NA as i32) as u32) as i32))
                     && (fns::Player_GetStocks(ctx, i) != 0_i32)
                 {
                     var_r30 = var_r30.wrapping_add(1_i32);

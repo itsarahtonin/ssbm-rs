@@ -170,7 +170,7 @@ pub fn un_802FF9DC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_802FFB58<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    if (arg0 as u32) == (1_i32 as u32) {
+    if arg0 == ((1_i32 as u32) as i32) {
         let _ = fns::lbAudioAx_80023694(ctx);
         let _ = fns::lbAudioAx_80023B24(
             ctx,
@@ -180,7 +180,7 @@ pub fn un_802FFB58<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
             ))
             .get(),
         );
-    } else if (arg0 as u32) == (0_i32 as u32) {
+    } else if arg0 == ((0_i32 as u32) as i32) {
         let _ = fns::lbAudioAx_80023694(ctx);
     }
     return 0_i32;
@@ -189,7 +189,7 @@ pub fn un_802FFB58<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_802FFBAC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    if (arg0 as u32) == (1_i32 as u32) {
+    if arg0 == ((1_i32 as u32) as i32) {
         if statics::melee__if__soundtest::un_804D585C(ctx).get()
             == statics::melee__if__soundtest::un_804D6DB8(ctx).get()
         {
@@ -206,7 +206,7 @@ pub fn un_802FFBAC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
                 .set(statics::melee__if__soundtest::un_804D6DB8(ctx).get());
             statics::melee__if__soundtest::un_804D6DC0(ctx).set(0_i32);
         }
-    } else if (arg0 as u32) == (0_i32 as u32) {
+    } else if arg0 == ((0_i32 as u32) as i32) {
         let _ = fns::lbAudioAx_800236DC(ctx);
         statics::melee__if__soundtest::un_804D585C(ctx).set(1_i32.wrapping_neg());
         statics::melee__if__soundtest::un_804D6DC0(ctx).set(0_i32);
@@ -227,7 +227,7 @@ pub fn un_802FFC30<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_802FFC6C<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         let _ = fns::lbAudioAx_80023694(ctx);
         inl_sfxBack_unfused(ctx);
         let _ = fns::lbAudioAx_800236DC(ctx);

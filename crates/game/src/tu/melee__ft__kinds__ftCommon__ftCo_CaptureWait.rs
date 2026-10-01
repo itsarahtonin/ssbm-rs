@@ -34,7 +34,7 @@ pub fn fn_800DB5D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut victim_fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, (fp).victim_gobj())));
-    if ((victim_fp).kind() as u32) == ((enums::Ft_Kind_Yoshi as i32) as u32) {
+    if (victim_fp).kind() == (((enums::Ft_Kind_Yoshi as i32) as u32) as i32) {
         (fp).set_invisible((1_i32 as u8));
         (fp).set_accessory1_cb(fnptr(ctx, 0x800db464));
         fns::ftColl_8007B0C0(ctx, gobj, (enums::HurtCapsule_Intangible as i32));
@@ -131,7 +131,7 @@ pub fn fn_800DB790<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         0.0,
         null::<HSD_GObj<'a>>(ctx),
     );
-    if (({
+    if ({
         let __t2 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(
             ctx,
             ({
@@ -145,8 +145,8 @@ pub fn fn_800DB790<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         victim_fp = __t2;
         __t2
     })
-    .kind() as u32)
-        == ((enums::Ft_Kind_Yoshi as i32) as u32)
+    .kind()
+        == (((enums::Ft_Kind_Yoshi as i32) as u32) as i32)
     {
         (fp).set_invisible((1_i32 as u8));
         (fp).set_accessory1_cb(fnptr(ctx, 0x800db464));
@@ -309,7 +309,7 @@ pub fn fn_800DBAE4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         0.0,
         null::<HSD_GObj<'a>>(ctx),
     );
-    if (({
+    if ({
         let __t2 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(
             ctx,
             ({
@@ -323,8 +323,8 @@ pub fn fn_800DBAE4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         victim_fp = __t2;
         __t2
     })
-    .kind() as u32)
-        == ((enums::Ft_Kind_Yoshi as i32) as u32)
+    .kind()
+        == (((enums::Ft_Kind_Yoshi as i32) as u32) as i32)
     {
         (fp).set_invisible((1_i32 as u8));
         (fp).set_accessory1_cb(fnptr(ctx, 0x800db464));
@@ -383,7 +383,7 @@ pub fn fn_800DBBF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         0.0,
         null::<HSD_GObj<'a>>(ctx),
     );
-    if (({
+    if ({
         let __t2 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(
             ctx,
             ({
@@ -397,8 +397,8 @@ pub fn fn_800DBBF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         victim_fp = __t2;
         __t2
     })
-    .kind() as u32)
-        == ((enums::Ft_Kind_Yoshi as i32) as u32)
+    .kind()
+        == (((enums::Ft_Kind_Yoshi as i32) as u32) as i32)
     {
         (fp).set_invisible((1_i32 as u8));
         (fp).set_accessory1_cb(fnptr(ctx, 0x800db464));

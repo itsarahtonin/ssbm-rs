@@ -274,7 +274,7 @@ pub fn hsd_80392E80<'a>(ctx: &'a Ctx) -> i32 {
                                     'c7: {
                                         if (fns::MCCGetConnectionStatus(ctx, 15_i32, status)
                                             != 0_i32)
-                                            && ((status.get() as u32) == (3_i32 as u32))
+                                            && (status.get() == ((3_i32 as u32) as i32))
                                         {
                                             waiting = 0_i32;
                                         } else if (div_u32(

@@ -70,7 +70,7 @@ pub fn it_802CD4FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 attrs = Handle::cast::<itsonansAttributes<'a>>(
                     ((ip).xC4_article_data()).x4_specialAttributes(),
                 );
-                __state = if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+                __state = if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                     1
                 } else {
                     2
@@ -377,9 +377,8 @@ pub fn itSonans_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itSonans_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    if ((Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).ground_or_air()
-        as u32)
-        == ((enums::GA_Air as i32) as u32)
+    if (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).ground_or_air()
+        == (((enums::GA_Air as i32) as u32) as i32)
     {
         fns::it_8026E15C(ctx, gobj, fnptr(ctx, 0x802cd4d8));
     } else {
@@ -418,9 +417,8 @@ pub fn itSonans_UnkMotion1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itSonans_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    if ((Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).ground_or_air()
-        as u32)
-        == ((enums::GA_Air as i32) as u32)
+    if (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).ground_or_air()
+        == (((enums::GA_Air as i32) as u32) as i32)
     {
         fns::it_8026E15C(ctx, gobj, fnptr(ctx, 0x802cd4d8));
     } else {

@@ -161,7 +161,7 @@ pub fn ftColl_80076808<'a>(
         'l1: while i < (div_u32(0x4e0_u32, 0x138_u32)) {
             'c2: {
                 let mut cur: HitCapsule<'a> = (fp).x914().get((i as i32));
-                if (((((cur).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32))
+                if ((((cur).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
                     && ((cur).x4() == (hit).x4()))
                     && (fns::lbColl_80008688(ctx, cur, arg2, victim) != 0))
                     && (arg4 != 0)
@@ -188,7 +188,7 @@ pub fn ftColl_800768A0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, dst: HitCapsule<'a>) {
             'c2: {
                 let mut hitbox: HitCapsule<'a> = (fp).x914().get((i as i32));
                 if ((Handle::addr(hitbox) != Handle::addr(dst))
-                    && (((hitbox).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32)))
+                    && ((hitbox).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32)))
                     && ((hitbox).x4() == (dst).x4())
                 {
                     fns::lbColl_CopyHitCapsule(ctx, hitbox, dst);
@@ -281,7 +281,7 @@ pub fn ftColl_80076CBC<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, hit0: HitCapsule<'a>,
         let mut int_dmg: i32 = inl_getEnvDmg_unfused(ctx, (hit0).damage());
         if int_dmg > (fp0).dmg().x1924() {
             (fp0).dmg().set_x1924(int_dmg);
-            if ((fp0).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+            if (fp0).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
                 (fp0).dmg().set_x1928(fp::fmuls(
                     (fp1).lightshield_amount(),
                     fp::frsp(int_dmg as f64),
@@ -385,8 +385,8 @@ pub fn ftColl_80076ED8<'a>(
         if (statics::melee__ft__ftcoll::dmg_log0_idx(ctx).get() == 0_i32)
             && (!((fp1).dmg().x189C_unk_num_frames() != 0.0))
         {
-            if (inl_checkTipLog_unfused(ctx, Handle::cast::<Addr<'a>>(fp1), hit0) as u32)
-                == ((enums::HitCapsule_Disabled as i32) as u32)
+            if inl_checkTipLog_unfused(ctx, Handle::cast::<Addr<'a>>(fp1), hit0)
+                == (((enums::HitCapsule_Disabled as i32) as u32) as i32)
             {
                 let mut temp_dmg: f64 = 0.0;
                 if (!((fp::fctiwz(
@@ -403,7 +403,7 @@ pub fn ftColl_80076ED8<'a>(
                 inl_inlineB0_unfused(ctx, fp0, hit0, fp1, 0_i32);
                 if ((((fp1).x1988() == 0_i32) && ((fp1).x198C() == 0_i32))
                     && (!((fp1).x221D_b6() != 0)))
-                    && (((hit1).state() as u32) == ((enums::HitCapsule_Disabled as i32) as u32))
+                    && ((hit1).state() == (((enums::HitCapsule_Disabled as i32) as u32) as i32))
                 {
                     let mut count: u32 = (hit0).unk_count();
                     let mut fp: Fighter<'a> = fp0;
@@ -464,7 +464,7 @@ pub fn ftColl_80076ED8<'a>(
                 'l3: while i.v() < (div_u32(0x4e0_u32, 0x138_u32)) {
                     'c4: {
                         let mut cur: HitCapsule<'a> = (fp0).x914().get((i.v() as i32));
-                        if (((cur).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32))
+                        if ((cur).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
                             && ((cur).x4() == (hit0).x4())
                         {
                             let _ = fns::lbColl_80008688(
@@ -483,7 +483,7 @@ pub fn ftColl_80076ED8<'a>(
             (fp0).dmg().set_x1914(int_dmg.v());
         }
         if ((((fp1).x1988() == 0_i32) && ((fp1).x198C() == 0_i32)) && (!((fp1).x221D_b6() != 0)))
-            && (((hit1).state() as u32) == ((enums::HitCapsule_Disabled as i32) as u32))
+            && ((hit1).state() == (((enums::HitCapsule_Disabled as i32) as u32) as i32))
         {
             if (dmg_ != 0.0) {
                 if (fp::fctiwz(dmg_) != 0) {
@@ -945,7 +945,7 @@ pub fn ftColl_80077C60<'a>(
             {
                 let mut state: i32 =
                     inl_checkTipLog_unfused(ctx, Handle::cast::<Addr<'a>>(fp), hit);
-                if (state as u32) == ((enums::HitCapsule_Disabled as i32) as u32) {
+                if state == (((enums::HitCapsule_Disabled as i32) as u32) as i32) {
                     let mut mode_2: i32 = 0;
                     if ((hit).x41_b5() != 0) {
                         mode_2 = 5_i32;
@@ -955,7 +955,7 @@ pub fn ftColl_80077C60<'a>(
                     fns::it_8026FC00(ctx, item, hit, mode_2, fp);
                     if ((((fp).x1988() == 0_i32) && ((fp).x198C() == 0_i32))
                         && (!((fp).x221D_b6() != 0)))
-                        && (((hit2).state() as u32) == ((enums::HitCapsule_Disabled as i32) as u32))
+                        && ((hit2).state() == (((enums::HitCapsule_Disabled as i32) as u32) as i32))
                     {
                         let mut int_scaled: i32 = fp::fctiwz(scaled_dmg);
                         let mut int_raw: i32 = fp::fctiwz(raw_dmg);
@@ -1071,7 +1071,7 @@ pub fn ftColl_80077C60<'a>(
                 (item).set_xCB8_outDamageDirection(dir);
             }
             if ((((fp).x1988() == 0_i32) && ((fp).x198C() == 0_i32)) && (!((fp).x221D_b6() != 0)))
-                && (((hit2).state() as u32) == ((enums::HitCapsule_Disabled as i32) as u32))
+                && ((hit2).state() == (((enums::HitCapsule_Disabled as i32) as u32) as i32))
             {
                 let mut dmg_count: i32 = 0;
                 if (scaled_dmg != 0.0) {
@@ -1191,7 +1191,7 @@ pub fn ftColl_80078384<'a>(
     let mut arg2 = arg2;
     let mut var_r0: i32 = 0;
     if ((((fp).x1988() != 0_i32) || ((fp).x198C() != 0_i32)) || (((fp).x221D_b6() as i32) != 0))
-        || (((arg1).capsule().state() as u32) != ((enums::HurtCapsule_Enabled as i32) as u32))
+        || ((arg1).capsule().state() != (((enums::HurtCapsule_Enabled as i32) as u32) as i32))
     {
         fns::ft_PlaySFX(
             ctx,
@@ -1630,16 +1630,17 @@ pub fn ftColl_80078A2C<'a>(ctx: &'a Ctx, this_gobj: HSD_GObj<'a>) {
                             'l5: while i < (4_i32 as u32) {
                                 'c6: {
                                     this_hit = inl_HitCapsuleGetPtr_unfused(ctx, this_fp, i);
-                                    if ((((this_hit).state() as u32)
-                                        != ((enums::HitCapsule_Disabled as i32) as u32))
+                                    if (((this_hit).state()
+                                        != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
                                         && ((this_hit).element()
                                             == ((enums::HitElement_Catch as i32) as u32)))
                                         && (((((this_hit).x40_b2() as i32) != 0)
-                                            && (((victim_fp).ground_or_air() as u32)
-                                                == ((enums::GA_Air as i32) as u32)))
+                                            && ((victim_fp).ground_or_air()
+                                                == (((enums::GA_Air as i32) as u32) as i32)))
                                             || ((((this_hit).x40_b3() as i32) != 0)
-                                                && (((victim_fp).ground_or_air() as u32)
-                                                    == ((enums::GA_Ground as i32) as u32))))
+                                                && ((victim_fp).ground_or_air()
+                                                    == (((enums::GA_Ground as i32) as u32)
+                                                        as i32))))
                                     {
                                         if !(fns::lbColl_8000ACFC(
                                             ctx,
@@ -1908,8 +1909,8 @@ pub fn ftColl_80078C70<'a>(ctx: &'a Ctx, this_gobj: HSD_GObj<'a>) {
             }
             41 => {
                 this_hit = inl_HitCapsuleGetPtr_unfused(ctx, this_fp, i);
-                __state = if (((this_hit).state() as u32)
-                    != ((enums::HitCapsule_Disabled as i32) as u32))
+                __state = if ((this_hit).state()
+                    != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
                     && (((((!(((this_hit).x43_b2()) != 0))
                         && ((((this_hit).element()
                             == (((enums::HitElement_Catch as i32) as u8) as u32))
@@ -1920,11 +1921,11 @@ pub fn ftColl_80078C70<'a>(ctx: &'a Ctx, this_gobj: HSD_GObj<'a>) {
                         && ((((((this_hit).x40_b0()) as i32) == 1_i32) as i32) != 0_i32))
                         && (((((((((this_hit).x42_b5()) as i32) == 1_i32) as i32) as u32) != 0)
                             && ((((((this_hit).x40_b2()) as i32) != 0)
-                                && (((victim_fp).ground_or_air() as u32)
-                                    == ((enums::GA_Air as i32) as u32)))
+                                && ((victim_fp).ground_or_air()
+                                    == (((enums::GA_Air as i32) as u32) as i32)))
                                 || (((((this_hit).x40_b3() as u8) as i32) != 0)
-                                    && (((victim_fp).ground_or_air() as u32)
-                                        == ((enums::GA_Ground as i32) as u32)))))
+                                    && ((victim_fp).ground_or_air()
+                                        == (((enums::GA_Ground as i32) as u32) as i32)))))
                             && (fns::lbColl_8000ACFC(
                                 ctx,
                                 Handle::cast::<Addr<'a>>(victim_fp),
@@ -1967,13 +1968,13 @@ pub fn ftColl_80078C70<'a>(ctx: &'a Ctx, this_gobj: HSD_GObj<'a>) {
             }
             48 => {
                 hit0 = inl_HitCapsuleGetPtr_unfused(ctx, victim_fp, j);
-                __state = if (((((((hit0).state() as u32)
-                    != ((enums::HitCapsule_Disabled as i32) as u32))
+                __state = if ((((((hit0).state()
+                    != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
                     && ((hit0).element() != ((enums::HitElement_Catch as i32) as u32)))
                     && ((((hit0).x42_b5()) as u32) == (1_i32 as u32)))
                     && ((((((hit0).x40_b2() as u8) as i32) != 0)
-                        && (((this_fp).ground_or_air() as u32)
-                            == ((enums::GA_Air as i32) as u32)))
+                        && ((this_fp).ground_or_air()
+                            == (((enums::GA_Air as i32) as u32) as i32)))
                         || (((((hit0).x40_b3() as u8) as i32) != 0)
                             && ((this_fp).ground_or_air() == 0_i32))))
                     && ((((!(((hit0).x134().hit_grabbed_victim_only()) != 0))
@@ -2358,8 +2359,8 @@ pub fn ftColl_80078C70<'a>(ctx: &'a Ctx, this_gobj: HSD_GObj<'a>) {
             124 => {
                 __state = if ((((this_fp).x1988() != 0_i32) || ((this_fp).x198C() != 0_i32))
                     || (((this_fp).x221D_b6() as i32) != 0))
-                    || ((((this_fp).hurt_capsules().get((n as i32)).capsule()).state() as u32)
-                        != ((enums::HurtCapsule_Enabled as i32) as u32))
+                    || (((this_fp).hurt_capsules().get((n as i32)).capsule()).state()
+                        != (((enums::HurtCapsule_Enabled as i32) as u32) as i32))
                 {
                     127
                 } else {
@@ -2516,8 +2517,9 @@ pub fn ftColl_8007925C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                             (fp).x914().get((i as i32));
                                         this_hit = cur_hit;
                                     }
-                                    if (((((((this_hit).state() as u32)
-                                        != ((enums::HitCapsule_Disabled as i32) as u32))
+                                    if ((((((this_hit).state()
+                                        != (((enums::HitCapsule_Disabled as i32) as u32)
+                                            as i32))
                                         && (!(((this_hit).x43_b2()) != 0)))
                                         && ((this_hit).element()
                                             != (((enums::HitElement_Catch as i32) as u8) as u32)))
@@ -2525,11 +2527,12 @@ pub fn ftColl_8007925C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                             as u32)
                                             != 0))
                                         && ((((((this_hit).x40_b2()) as i32) != 0)
-                                            && (((item).ground_or_air() as u32)
-                                                == ((enums::GA_Air as i32) as u32)))
+                                            && ((item).ground_or_air()
+                                                == (((enums::GA_Air as i32) as u32) as i32)))
                                             || (((((this_hit).x40_b3() as u8) as i32) != 0)
-                                                && (((item).ground_or_air() as u32)
-                                                    == ((enums::GA_Ground as i32) as u32)))))
+                                                && ((item).ground_or_air()
+                                                    == (((enums::GA_Ground as i32) as u32)
+                                                        as i32)))))
                                         && (fns::lbColl_8000ACFC(
                                             ctx,
                                             Handle::cast::<Addr<'a>>(item),
@@ -2558,8 +2561,8 @@ pub fn ftColl_8007925C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             let mut item_hitbox: ItemHitbox<'a> =
                                 (item).x5D4_hitboxes().get((j as i32));
                             hurt = (item_hitbox).hit();
-                            if ((hurt).state() as u32)
-                                == ((enums::HitCapsule_Disabled as i32) as u32)
+                            if (hurt).state()
+                                == (((enums::HitCapsule_Disabled as i32) as u32) as i32)
                             {
                                 break 'c8;
                             }
@@ -2567,8 +2570,8 @@ pub fn ftColl_8007925C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                 break 'c8;
                             }
                             if (!(((((hurt).x40_b2() as u8) as i32) != 0)
-                                && (((fp).ground_or_air() as u32)
-                                    == ((enums::GA_Air as i32) as u32))))
+                                && ((fp).ground_or_air()
+                                    == (((enums::GA_Air as i32) as u32) as i32))))
                                 && (!(((((hurt).x40_b3() as u8) as i32) != 0)
                                     && ((fp).ground_or_air() == (enums::GA_Ground as i32))))
                             {
@@ -2865,14 +2868,14 @@ pub fn ftColl_8007925C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                                 if ((((fp).x1988() != 0_i32)
                                                     || ((fp).x198C() != 0_i32))
                                                     || (((fp).x221D_b6() as i32) != 0))
-                                                    || (((fp)
+                                                    || ((fp)
                                                         .hurt_capsules()
                                                         .get((n as i32))
                                                         .capsule()
                                                         .state()
-                                                        as u32)
-                                                        != ((enums::HurtCapsule_Enabled as i32)
-                                                            as u32))
+                                                        != (((enums::HurtCapsule_Enabled as i32)
+                                                            as u32)
+                                                            as i32))
                                                 {
                                                     fns::ft_PlaySFX(
                                                         ctx,
@@ -7043,7 +7046,7 @@ pub fn ftColl_8007B0C0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
             i = i.wrapping_add(1);
         }
     }
-    if (arg1 as u32) == ((enums::HurtCapsule_Enabled as i32) as u32) {
+    if arg1 == (((enums::HurtCapsule_Enabled as i32) as u32) as i32) {
         (fp).set_x221A_b5((0_i32 as u8));
     } else {
         (fp).set_x221A_b5((1_i32 as u8));
@@ -7066,7 +7069,7 @@ pub fn ftColl_8007B128<'a>(ctx: &'a Ctx, fighter_gobj: HSD_GObj<'a>, bone_id: i3
                 let mut bone_idx: i32 = (hurt).capsule().bone_idx();
                 if bone_idx == bone_id {
                     (hurt).capsule().set_state(state);
-                    if (state as u32) != ((enums::HurtCapsule_Enabled as i32) as u32) {
+                    if state != (((enums::HurtCapsule_Enabled as i32) as u32) as i32) {
                         (fp).set_x221A_b5((1_i32 as u8));
                     }
                     return;
@@ -7699,8 +7702,8 @@ pub fn ftColl_8007BC90<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         'l5: while i < (4_i32 as u32) {
                             'c6: {
                                 hit = inl_HitCapsuleGetPtr_unfused(ctx, fp, i);
-                                if ((hit).state() as u32)
-                                    == ((enums::HitCapsule_Disabled as i32) as u32)
+                                if (hit).state()
+                                    == (((enums::HitCapsule_Disabled as i32) as u32) as i32)
                                 {
                                     break 'c6;
                                 }
@@ -7708,14 +7711,14 @@ pub fn ftColl_8007BC90<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                     break 'c6;
                                 }
                                 if (!((hit).x40_b2() != 0))
-                                    || (((ip).ground_or_air() as u32)
-                                        != ((enums::GA_Air as i32) as u32))
+                                    || ((ip).ground_or_air()
+                                        != (((enums::GA_Air as i32) as u32) as i32))
                                 {
                                     if !((hit).x40_b3() != 0) {
                                         break 'c6;
                                     }
-                                    if ((ip).ground_or_air() as u32)
-                                        != ((enums::GA_Ground as i32) as u32)
+                                    if (ip).ground_or_air()
+                                        != (((enums::GA_Ground as i32) as u32) as i32)
                                     {
                                         break 'c6;
                                     }
@@ -7852,7 +7855,7 @@ fn inl_ftColl_80076808<'a>(
         'l1: while i < (div_u32(0x4e0_u32, 0x138_u32)) {
             'c2: {
                 let mut cur: HitCapsule<'a> = (fp).x914().get((i as i32));
-                if (((((cur).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32))
+                if ((((cur).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
                     && ((cur).x4() == (hit).x4()))
                     && (fns::lbColl_80008688(ctx, cur, arg2, victim) != 0))
                     && (arg4 != 0)
@@ -7884,7 +7887,7 @@ fn inl_updateClankDamage<'a>(
     if int_dmg > (fp).dmg().int_value() {
         (fp).dmg().set_int_value(int_dmg);
         if (((hit).x40_b1() as i32) == 1_i32)
-            && (((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+            && ((fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32))
         {
             (fp).dmg().set_x191C(fp::fmadds(
                 fp::frsp(int_dmg as f64),
@@ -7930,7 +7933,7 @@ fn inl_ftColl_80076808_unfused<'a>(
         'l1: while i < (div_u32(0x4e0_u32, 0x138_u32)) {
             'c2: {
                 let mut cur: HitCapsule<'a> = (fp).x914().get((i as i32));
-                if (((((cur).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32))
+                if ((((cur).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
                     && ((cur).x4() == (hit).x4()))
                     && (fns::lbColl_80008688(ctx, cur, arg2, victim) != 0))
                     && (arg4 != 0)
@@ -8020,7 +8023,7 @@ fn inl_inlineB0_unfused<'a>(
         'l1: while i < (div_u32(0x4e0_u32, 0x138_u32)) {
             'c2: {
                 let mut cur: HitCapsule<'a> = (fp0).x914().get((i as i32));
-                if (((cur).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32))
+                if ((cur).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
                     && ((cur).x4() == (hitbox).x4())
                 {
                     let _ = fns::lbColl_80008820(ctx, cur, arg3, Handle::cast::<Addr<'a>>(fp1));

@@ -151,7 +151,7 @@ pub fn ftCo_ItemScopeRapid_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             && (fns::it_8026B594(ctx, (fp).item_gobj()) != 0_i32)
         {
             fp = Handle::cast::<Fighter<'a>>((gobj).user_data());
-            if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+            if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
                 fns::Fighter_ChangeMotionState(
                     ctx,
                     gobj,
@@ -204,7 +204,7 @@ pub fn ftCo_ItemScopeAirRapid_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             && (fns::it_8026B594(ctx, (fp).item_gobj()) != 0_i32)
         {
             fp = Handle::cast::<Fighter<'a>>((gobj).user_data());
-            if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+            if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
                 fns::Fighter_ChangeMotionState(
                     ctx,
                     gobj,

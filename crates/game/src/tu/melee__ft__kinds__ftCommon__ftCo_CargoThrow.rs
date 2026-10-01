@@ -32,7 +32,7 @@ pub fn ftCo_CargoWait2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     fns::ftCo_8008F744(ctx, gobj);
     if !((fp).x221C_b6() != 0) {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             fns::ftCo_8009BC58(ctx, gobj);
         } else {
             fns::ftCo_8009B518(ctx, gobj);
@@ -50,11 +50,11 @@ pub fn ftCo_CargoWait2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
-        if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
+        if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
             fns::ftCommon_8007D5D4(ctx, fp);
         }
-    } else if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {
+    } else if fns::ft_80081D0C(ctx, gobj) != (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCommon_8007D7FC(ctx, fp);
     }
 }
@@ -82,12 +82,12 @@ pub fn ftCo_8009C02C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
     {
         let mut mf: u32 = 0;
         let mut msid1: i32 = 0;
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             mf = (1_i32 as u32);
         } else {
             mf = (0_i32 as u32);
         }
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             msid1 = msid.wrapping_add(4_i32);
         } else {
             msid1 = msid;

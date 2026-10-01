@@ -691,8 +691,10 @@ pub fn ifStatus_802F61FC<'a>(
         (hud).damage_mark_matanims(),
         (hud).damage_mark_shapeanims(),
     );
-    if ((chara.get() as u32) == ((enums::CKind_MasterH as i32) as u32))
-        || (((chara.get() as u32).wrapping_sub(((enums::CKind_GKoops as i32) as u32)))
+    if (chara.get() == (((enums::CKind_MasterH as i32) as u32) as i32))
+        || (((chara
+            .get()
+            .wrapping_sub((((enums::CKind_GKoops as i32) as u32) as i32))) as u32)
             <= (1_i32 as u32))
     {
         chara.set((enums::CKind_Boy as i32));
@@ -729,7 +731,7 @@ pub fn ifStatus_802F6508<'a>(ctx: &'a Ctx, arg0: i32) {
     let mut hud_player: IfDamageState<'a> = null(ctx);
     let mut rules: StartMeleeRules<'a> = null(ctx);
     let mut mode: u32 = 0;
-    if (((fns::Player_GetPlayerSlotType(ctx, arg0) as u32) != ((enums::Gm_PKind_NA as i32) as u32))
+    if ((fns::Player_GetPlayerSlotType(ctx, arg0) != (((enums::Gm_PKind_NA as i32) as u32) as i32))
         && ((statics::melee__if__ifstatus::ifStatus_804D6D60(ctx).get() as i32) > arg0))
         && ((({
             rules = fns::gm_GetStartMeleeRules(ctx);
@@ -2055,10 +2057,10 @@ fn inl_ifStatus_TriggerStockLoss_unfused<'a>(ctx: &'a Ctx, player_idx: i32, call
         }
     }
     if ((((big_thing).start().is_stock() as i32) != 0_i32)
-        && (((fns::Player_GetPlayerSlotType(ctx, player_idx) as u32)
-            == ((enums::Gm_PKind_Human as i32) as u32))
-            || ((fns::Player_GetPlayerSlotType(ctx, player_idx) as u32)
-                == ((enums::Gm_PKind_Cpu as i32) as u32))))
+        && ((fns::Player_GetPlayerSlotType(ctx, player_idx)
+            == (((enums::Gm_PKind_Human as i32) as u32) as i32))
+            || (fns::Player_GetPlayerSlotType(ctx, player_idx)
+                == (((enums::Gm_PKind_Cpu as i32) as u32) as i32))))
         && (fns::Player_GetStocks(ctx, player_idx) == 0_i32)
     {
         fns::gm_8016B8D4(
@@ -2097,10 +2099,10 @@ fn inl_ifStatus_TriggerStockLoss_unfused_2<'a>(ctx: &'a Ctx, player_idx: i32, ca
         }
     }
     if ((((big_thing).start().is_stock() as i32) != 0_i32)
-        && (((fns::Player_GetPlayerSlotType(ctx, player_idx) as u32)
-            == ((enums::Gm_PKind_Human as i32) as u32))
-            || ((fns::Player_GetPlayerSlotType(ctx, player_idx) as u32)
-                == ((enums::Gm_PKind_Cpu as i32) as u32))))
+        && ((fns::Player_GetPlayerSlotType(ctx, player_idx)
+            == (((enums::Gm_PKind_Human as i32) as u32) as i32))
+            || (fns::Player_GetPlayerSlotType(ctx, player_idx)
+                == (((enums::Gm_PKind_Cpu as i32) as u32) as i32))))
         && (fns::Player_GetStocks(ctx, player_idx) == 0_i32)
     {
         fns::gm_8016B8D4(
@@ -2139,10 +2141,10 @@ fn inl_ifStatus_TriggerStockLoss_unfused_3<'a>(ctx: &'a Ctx, player_idx: i32, ca
         }
     }
     if ((((big_thing).start().is_stock() as i32) != 0_i32)
-        && (((fns::Player_GetPlayerSlotType(ctx, player_idx) as u32)
-            == ((enums::Gm_PKind_Human as i32) as u32))
-            || ((fns::Player_GetPlayerSlotType(ctx, player_idx) as u32)
-                == ((enums::Gm_PKind_Cpu as i32) as u32))))
+        && ((fns::Player_GetPlayerSlotType(ctx, player_idx)
+            == (((enums::Gm_PKind_Human as i32) as u32) as i32))
+            || (fns::Player_GetPlayerSlotType(ctx, player_idx)
+                == (((enums::Gm_PKind_Cpu as i32) as u32) as i32))))
         && (fns::Player_GetStocks(ctx, player_idx) == 0_i32)
     {
         fns::gm_8016B8D4(
@@ -2181,10 +2183,10 @@ fn inl_ifStatus_TriggerStockLoss_unfused_4<'a>(ctx: &'a Ctx, player_idx: i32, ca
         }
     }
     if ((((big_thing).start().is_stock() as i32) != 0_i32)
-        && (((fns::Player_GetPlayerSlotType(ctx, player_idx) as u32)
-            == ((enums::Gm_PKind_Human as i32) as u32))
-            || ((fns::Player_GetPlayerSlotType(ctx, player_idx) as u32)
-                == ((enums::Gm_PKind_Cpu as i32) as u32))))
+        && ((fns::Player_GetPlayerSlotType(ctx, player_idx)
+            == (((enums::Gm_PKind_Human as i32) as u32) as i32))
+            || (fns::Player_GetPlayerSlotType(ctx, player_idx)
+                == (((enums::Gm_PKind_Cpu as i32) as u32) as i32))))
         && (fns::Player_GetStocks(ctx, player_idx) == 0_i32)
     {
         fns::gm_8016B8D4(

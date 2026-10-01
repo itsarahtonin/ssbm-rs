@@ -328,7 +328,7 @@ pub fn fn_CheckAnimationInfo<'a>(ctx: &'a Ctx, player: i32) {
             }
         }
         if ((fns::db_ButtonsPressed(ctx, player) & ((shl_i32(1_i32, (1_i32 as u32))) as u32)) != 0)
-            && ((fns::Player_GetPlayerSlotType(ctx, player) as u32) != (3_i32 as u32))
+            && (fns::Player_GetPlayerSlotType(ctx, player) != ((3_i32 as u32) as i32))
         {
             let mut x: u32 = 0;
             gobj = fns::Player_GetEntity(ctx, player);
@@ -374,7 +374,7 @@ pub fn fn_CheckAnimationInfo<'a>(ctx: &'a Ctx, player: i32) {
     }
     if ((fns::db_ButtonsDown(ctx, player) & ((shl_i32(1_i32, (11_i32 as u32))) as u32)) != 0) {
         if ((fns::db_ButtonsPressed(ctx, player) & ((shl_i32(1_i32, (0_i32 as u32))) as u32)) != 0)
-            && ((fns::Player_GetPlayerSlotType(ctx, player) as u32) != (3_i32 as u32))
+            && (fns::Player_GetPlayerSlotType(ctx, player) != ((3_i32 as u32) as i32))
         {
             gobj = fns::Player_GetEntity(ctx, player);
             if ((fns::db_ButtonsDown(ctx, player) & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0)
@@ -385,7 +385,7 @@ pub fn fn_CheckAnimationInfo<'a>(ctx: &'a Ctx, player: i32) {
             }
         }
         if ((fns::db_ButtonsPressed(ctx, player) & ((shl_i32(1_i32, (1_i32 as u32))) as u32)) != 0)
-            && ((fns::Player_GetPlayerSlotType(ctx, player) as u32) != (3_i32 as u32))
+            && (fns::Player_GetPlayerSlotType(ctx, player) != ((3_i32 as u32) as i32))
         {
             gobj = fns::Player_GetEntity(ctx, player);
             if ((fns::db_ButtonsDown(ctx, player) & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0)

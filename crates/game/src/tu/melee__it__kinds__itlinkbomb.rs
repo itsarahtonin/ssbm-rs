@@ -53,14 +53,14 @@ pub fn it_8029D9A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32, arg2: i32) {
             ctx,
             gobj,
             msid,
-            (((arg2 as u32) | ((enums::ITEM_CMD_UPDATE as i32) as u32)) as i32),
+            (arg2 | (((enums::ITEM_CMD_UPDATE as i32) as u32) as i32)),
         );
     } else {
         fns::Item_80268E5C(
             ctx,
             gobj,
             msid,
-            (((arg2 as u32) | ((enums::ITEM_ANIM_UPDATE as i32) as u32)) as i32),
+            (arg2 | (((enums::ITEM_ANIM_UPDATE as i32) as u32) as i32)),
         );
     }
     inl_HSD_JObjSetTranslateY_unfused(ctx, jobj, y);
@@ -891,14 +891,14 @@ fn inl_it_8029D9A4_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32, arg2
             ctx,
             gobj,
             msid,
-            (((arg2 as u32) | ((enums::ITEM_CMD_UPDATE as i32) as u32)) as i32),
+            (arg2 | (((enums::ITEM_CMD_UPDATE as i32) as u32) as i32)),
         );
     } else {
         fns::Item_80268E5C(
             ctx,
             gobj,
             msid,
-            (((arg2 as u32) | ((enums::ITEM_ANIM_UPDATE as i32) as u32)) as i32),
+            (arg2 | (((enums::ITEM_ANIM_UPDATE as i32) as u32) as i32)),
         );
     }
     inl_HSD_JObjSetTranslateY_unfused(ctx, jobj, y);

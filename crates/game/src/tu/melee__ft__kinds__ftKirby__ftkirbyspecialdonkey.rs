@@ -223,7 +223,7 @@ pub fn ftKb_DkSpecialN_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .dk()
             .specialn()
             .set_x8((fp).mv().dk().specialn().x8().wrapping_add(1));
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             let _ = fns::efSync_Spawn(
                 ctx,
                 0x4aa_i32,
@@ -249,7 +249,7 @@ pub fn ftKb_DkSpecialN_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             );
         }
     }
-    if ((fp).x914().get(0_i32).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32) {
+    if (fp).x914().get(0_i32).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32) {
         if (fp).mv().dk().specialn().x4() == 0_i32 {
             (fp).mv().dk().specialn().set_x4(1_i32);
         }
@@ -329,7 +329,7 @@ pub fn ftKb_DkSpecialNFull_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .dk()
             .specialn()
             .set_x8((fp).mv().dk().specialn().x8().wrapping_add(1));
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             let _ = fns::efSync_Spawn(
                 ctx,
                 0x4aa_i32,
@@ -355,7 +355,7 @@ pub fn ftKb_DkSpecialNFull_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             );
         }
     }
-    if (((fp).x914().get(0_i32).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32))
+    if ((fp).x914().get(0_i32).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
         && ((fp).mv().dk().specialn().x4() == 0_i32)
     {
         (fp).mv().dk().specialn().set_x4(1_i32);
@@ -471,7 +471,7 @@ pub fn ftKb_DkSpecialAirN_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .dk()
             .specialn()
             .set_x8((fp).mv().dk().specialn().x8().wrapping_add(1));
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             let _ = fns::efSync_Spawn(
                 ctx,
                 0x4aa_i32,
@@ -497,7 +497,7 @@ pub fn ftKb_DkSpecialAirN_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             );
         }
     }
-    if ((fp).x914().get(0_i32).state() as u32) != ((enums::HitCapsule_Disabled as i32) as u32) {
+    if (fp).x914().get(0_i32).state() != (((enums::HitCapsule_Disabled as i32) as u32) as i32) {
         if (fp).mv().dk().specialn().x10() == 1_i32.wrapping_neg() {
             (fp).mv()
                 .dk()
@@ -578,7 +578,7 @@ pub fn ftKb_DkSpecialAirNFull_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .dk()
             .specialn()
             .set_x8((fp).mv().dk().specialn().x8().wrapping_add(1));
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             let _ = fns::efSync_Spawn(
                 ctx,
                 0x4aa_i32,
@@ -808,7 +808,7 @@ pub fn ftKb_DkSpecialNStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         inl_ftCommon_GroundToAirStateChange_unfused(
             ctx,
             gobj,
@@ -825,7 +825,7 @@ pub fn ftKb_DkSpecialNLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         inl_ftCommon_GroundToAirStateChange_unfused(
             ctx,
             gobj,
@@ -842,7 +842,7 @@ pub fn ftKb_DkSpecialNCancel_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         inl_ftCommon_GroundToAirStateChange_unfused(
             ctx,
             gobj,
@@ -893,7 +893,7 @@ pub fn ftKb_DkSpecialAirNStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80081D0C(ctx, gobj) as u32) == ((enums::GA_Air as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) == (((enums::GA_Air as i32) as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(
             ctx,
             gobj,
@@ -910,7 +910,7 @@ pub fn ftKb_DkSpecialAirNLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80081D0C(ctx, gobj) as u32) == ((enums::GA_Air as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) == (((enums::GA_Air as i32) as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(
             ctx,
             gobj,
@@ -927,7 +927,7 @@ pub fn ftKb_DkSpecialAirNCancel_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80081D0C(ctx, gobj) as u32) == ((enums::GA_Air as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) == (((enums::GA_Air as i32) as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(
             ctx,
             gobj,
@@ -944,7 +944,7 @@ pub fn ftKb_DkSpecialAirN_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != (((enums::GA_Ground as i32) as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(
             ctx,
             gobj,
@@ -961,7 +961,7 @@ pub fn ftKb_DkSpecialAirNFull_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != (((enums::GA_Ground as i32) as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(
             ctx,
             gobj,

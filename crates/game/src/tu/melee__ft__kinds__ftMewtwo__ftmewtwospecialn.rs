@@ -1045,7 +1045,7 @@ pub fn ftMt_SpecialNStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = inl_getFighter_unfused(ctx, gobj);
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         inl_ftCommon_GroundToAirStateChange_unfused(
             ctx,
             gobj,
@@ -1062,7 +1062,7 @@ pub fn ftMt_SpecialNLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = inl_getFighter_unfused(ctx, gobj);
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         inl_ftCommon_GroundToAirStateChange_unfused(
             ctx,
             gobj,
@@ -1079,7 +1079,7 @@ pub fn ftMt_SpecialNLoopFull_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = inl_getFighter_unfused(ctx, gobj);
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         inl_ftCommon_GroundToAirStateChange_unfused(
             ctx,
             gobj,
@@ -1096,7 +1096,7 @@ pub fn ftMt_SpecialNCancel_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = inl_getFighter_unfused(ctx, gobj);
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         inl_ftCommon_GroundToAirStateChange_unfused(
             ctx,
             gobj,
@@ -1113,7 +1113,7 @@ pub fn ftMt_SpecialNEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = inl_getFighter_unfused(ctx, gobj);
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         inl_ftCommon_GroundToAirStateChange_unfused(
             ctx,
             gobj,
@@ -1130,7 +1130,7 @@ pub fn ftMt_SpecialAirNStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = inl_getFighter_unfused(ctx, gobj);
-    if (fns::ft_80081D0C(ctx, gobj) as u32) == (1_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) == ((1_i32 as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(
             ctx,
             gobj,
@@ -1147,7 +1147,7 @@ pub fn ftMt_SpecialAirNLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = inl_getFighter_unfused(ctx, gobj);
-    if (fns::ft_80081D0C(ctx, gobj) as u32) == (1_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) == ((1_i32 as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(
             ctx,
             gobj,
@@ -1164,7 +1164,7 @@ pub fn ftMt_SpecialAirNLoopFull_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = inl_getFighter_unfused(ctx, gobj);
-    if (fns::ft_80081D0C(ctx, gobj) as u32) == (1_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) == ((1_i32 as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(
             ctx,
             gobj,
@@ -1181,7 +1181,7 @@ pub fn ftMt_SpecialAirNCancel_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = inl_getFighter_unfused(ctx, gobj);
-    if (fns::ft_80081D0C(ctx, gobj) as u32) == (1_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) == ((1_i32 as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(
             ctx,
             gobj,
@@ -1198,7 +1198,7 @@ pub fn ftMt_SpecialAirNEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = inl_getFighter_unfused(ctx, gobj);
-    if (fns::ft_80081D0C(ctx, gobj) as u32) == (1_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) == ((1_i32 as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(
             ctx,
             gobj,

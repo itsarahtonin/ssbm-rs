@@ -154,8 +154,8 @@ pub fn itZeldadinfireexplode_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a
         __t2
     });
     inl_HSD_JObjSetScale(ctx, jobj, scale);
-    if ((ip).x5D4_hitboxes().get(0_i32).hit().state() as u32)
-        != ((enums::HitCapsule_Disabled as i32) as u32)
+    if (ip).x5D4_hitboxes().get(0_i32).hit().state()
+        != (((enums::HitCapsule_Disabled as i32) as u32) as i32)
     {
         temp_f1 = (fp::fmadds(
             (ip).xDD4_itemVar().zeldadinfireexplode().xDD4(),

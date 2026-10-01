@@ -313,10 +313,10 @@ pub fn fn_8017E8A4<'a>(ctx: &'a Ctx, arg0_int: i32) {
             i = 0_i32;
             'l1: while i < 6_i32 {
                 'c2: {
-                    if ((fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                        == ((enums::Gm_PKind_Cpu as i32) as u32))
-                        && ((fns::Player_GetPlayerCharacter(ctx, i) as u32)
-                            == ((enums::CKind_Luigi as i32) as u32))
+                    if (fns::Player_GetPlayerSlotType(ctx, i)
+                        == (((enums::Gm_PKind_Cpu as i32) as u32) as i32))
+                        && (fns::Player_GetPlayerCharacter(ctx, i)
+                            == (((enums::CKind_Luigi as i32) as u32) as i32))
                     {
                         (Handle::cast::<u8_bits<'a>>((Handle::add(flags, 1_i32))))
                             .set_b7((1_i32 as u8));
@@ -341,10 +341,10 @@ pub fn fn_8017E8A4<'a>(ctx: &'a Ctx, arg0_int: i32) {
             i = 0_i32;
             'l3: while i < 6_i32 {
                 'c4: {
-                    if ((fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                        == ((enums::Gm_PKind_Cpu as i32) as u32))
-                        && ((fns::Player_GetPlayerCharacter(ctx, i) as u32)
-                            == ((enums::CKind_Luigi as i32) as u32))
+                    if (fns::Player_GetPlayerSlotType(ctx, i)
+                        == (((enums::Gm_PKind_Cpu as i32) as u32) as i32))
+                        && (fns::Player_GetPlayerCharacter(ctx, i)
+                            == (((enums::CKind_Luigi as i32) as u32) as i32))
                     {
                         (Handle::cast::<u8_bits<'a>>((Handle::add(flags, 1_i32))))
                             .set_b4((1_i32 as u8));

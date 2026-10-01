@@ -139,7 +139,7 @@ pub fn it_8028D100<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         if did_hit != 0_i32 {
             fns::it_802756D0(ctx, gobj);
         }
-        if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             fns::it_8028E170(ctx, gobj);
             return;
         }
@@ -209,7 +209,7 @@ pub fn it_8028D26C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         if did_hit != 0_i32 {
             fns::it_802756D0(ctx, gobj);
         }
-        if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             fns::it_8028E170(ctx, gobj);
             return;
         }
@@ -267,7 +267,7 @@ pub fn it_8028D3B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             (ip).xDD4_itemVar().rshell().set_xDF4_b0((1_i32 as u8));
         }
         if ((ip).msid() != 6_i32) && ((ip).msid() != 5_i32) {
-            if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+            if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
                 fns::it_8028E170(ctx, gobj);
                 return;
             }
@@ -385,7 +385,7 @@ pub fn itRshell_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
     attrs = Handle::cast::<itRShell_Attrs<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         inl_Item_UpdateRollingShellRotation_unfused(ctx, gobj, ip, jobj, (attrs).x38_ref());
     }
     return 0_i32;
@@ -745,7 +745,7 @@ pub fn itRshell_UnkMotion7_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
     attrs = Handle::cast::<itRShell_Attrs<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         inl_Item_UpdateRollingShellRotation_unfused(ctx, gobj, ip, jobj, (attrs).x38_ref());
     }
     return 0_i32;
@@ -1048,8 +1048,8 @@ fn inl_itRshell_UM5_MaybeBrake_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itRShell_Attrs<'a> =
         Handle::cast::<itRShell_Attrs<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
-    if ((ip).x5D4_hitboxes().get(0_i32).hit().state() as u32)
-        == ((enums::HitCapsule_Disabled as i32) as u32)
+    if (ip).x5D4_hitboxes().get(0_i32).hit().state()
+        == (((enums::HitCapsule_Disabled as i32) as u32) as i32)
     {
         if (if ((ip).x40_vel().x()) < fp::frsp(0_i32 as f64) {
             fp::fneg(((ip).x40_vel().x()))
@@ -1078,7 +1078,7 @@ fn inl_itRshell_UM5C_GroundSpin_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         Handle::cast::<itRShell_Attrs<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
     let mut jobj: HSD_JObj<'a> =
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::it_80276CB8(ctx, gobj);
         jobj = inl_HSD_JObjGetChild_unfused(ctx, jobj);
         inl_HSD_JObjAddRotationY_unfused(

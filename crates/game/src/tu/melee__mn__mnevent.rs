@@ -29,7 +29,7 @@ use crate::support::*;
 pub fn mnEvent_8024CE74<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut count: i32 = 0;
-    if (fns::DbLevel(ctx).get() as u32) > ((enums::DbLKind_DebugDevelop as i32) as u32) {
+    if fns::DbLevel(ctx).get() > (((enums::DbLKind_DebugDevelop as i32) as u32) as i32) {
         return 42_i32;
     }
     count = inl_mnEvent_CountUnlocked_unfused(ctx);

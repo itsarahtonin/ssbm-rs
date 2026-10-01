@@ -94,7 +94,7 @@ pub fn fn_800D2890<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ms_id: i32) {
     let mut ms_id = ms_id;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (((fp).kind() as u32) == ((enums::Ft_Kind_Peach as i32) as u32)) && (ms_id == 0x172_i32) {
+    if ((fp).kind() == (((enums::Ft_Kind_Peach as i32) as u32) as i32)) && (ms_id == 0x172_i32) {
         (fp).mv().co().unk_800D2890().set_x0(fnptr(ctx, 0x800968c8));
         return;
     }

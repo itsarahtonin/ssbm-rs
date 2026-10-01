@@ -1492,7 +1492,7 @@ pub fn fn_801FC9AC<'a>(
         (gp).u()
             .inishie1()
             .set_xE8((((gp).u().inishie1().xE8() as i32).wrapping_add(1_i32) as i16));
-        if (ground_kind as u32) == (1_i32 as u32) {
+        if ground_kind == ((1_i32 as u32) as i32) {
             (gp).u().inishie1().set_xE0(fp::fmadds(
                 fp::frsp(coll_x50 as f64),
                 (statics::melee__gr__grinishie1::yakumono_param(ctx).get())
@@ -1511,7 +1511,7 @@ pub fn fn_801FC9AC<'a>(
         (gp).u()
             .inishie1()
             .set_xEA((((gp).u().inishie1().xEA() as i32).wrapping_add(1_i32) as i16));
-        if (ground_kind as u32) == (1_i32 as u32) {
+        if ground_kind == ((1_i32 as u32) as i32) {
             (gp).u().inishie1().set_xE4(fp::fmadds(
                 fp::frsp(coll_x50 as f64),
                 (statics::melee__gr__grinishie1::yakumono_param(ctx).get())
@@ -1532,7 +1532,7 @@ pub fn fn_801FC9AC<'a>(
 pub fn grInishie1_801FCAAC<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut line_id = line_id;
-    if ((fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Inishie1 as i32) as u32))
+    if (fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Inishie1 as i32) as u32) as i32))
         && (line_id != 1_i32.wrapping_neg())
     {
         let mut result: i32 = 0;

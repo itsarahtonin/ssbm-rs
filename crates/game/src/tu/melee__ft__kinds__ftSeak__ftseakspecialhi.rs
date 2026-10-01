@@ -190,7 +190,7 @@ pub fn ftSk_SpecialAirHiStart_0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftSk_SpecialHiStart_0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         statics::melee__ft__kinds__ftSeak__ftseakspecialhi::ftSk_SpecialHi_80113324(ctx, gobj);
     }
 }
@@ -301,7 +301,7 @@ pub fn ftSk_SpecialHiStart_1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut collData: CollData<'a> = null(ctx);
     fp = Handle::cast::<Fighter<'a>>((gobj).user_data());
     collData = (fp).coll_data();
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         temp_r3 = (collData).env_flags();
         if ((temp_r3 & 63_i32) != 0) || ((temp_r3 & 0xfc0_i32) != 0) {
             fns::ftCommon_8007D60C(ctx, fp);

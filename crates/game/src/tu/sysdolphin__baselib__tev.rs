@@ -76,7 +76,7 @@ pub fn HSD_SetupChannel<'a>(ctx: &'a Ctx, ch: HSD_Chan<'a>) {
         match __state {
             0 => {
                 __state = if (Handle::is_null(ch))
-                    || (((ch).chan() as u32) == ((enums::GX_COLOR_NULL as i32) as u32))
+                    || ((ch).chan() == (((enums::GX_COLOR_NULL as i32) as u32) as i32))
                 {
                     1
                 } else {
@@ -88,10 +88,10 @@ pub fn HSD_SetupChannel<'a>(ctx: &'a Ctx, ch: HSD_Chan<'a>) {
             }
             2 => {
                 chan = (ch).chan();
-                idx = (((chan as u32) & (3_i32 as u32)) as i32);
-                no = (((chan as u32) & (1_i32 as u32)) as i32);
+                idx = (chan & ((3_i32 as u32) as i32));
+                no = (chan & ((1_i32 as u32) as i32));
                 __state = if (((ch).enable() as i32) != ((0_i32 as u8) as i32))
-                    && (((ch).amb_src() as u32) == ((enums::GX_SRC_REG as i32) as u32))
+                    && ((ch).amb_src() == (((enums::GX_SRC_REG as i32) as u32) as i32))
                 {
                     5
                 } else {
@@ -112,7 +112,7 @@ pub fn HSD_SetupChannel<'a>(ctx: &'a Ctx, ch: HSD_Chan<'a>) {
                 };
             }
             6 => {
-                __state = if ((ch).mat_src() as u32) == ((enums::GX_SRC_REG as i32) as u32) {
+                __state = if (ch).mat_src() == (((enums::GX_SRC_REG as i32) as u32) as i32) {
                     32
                 } else {
                     33
@@ -139,8 +139,8 @@ pub fn HSD_SetupChannel<'a>(ctx: &'a Ctx, ch: HSD_Chan<'a>) {
                 __state = 6;
             }
             10 => {
-                __state = if ((chan as u32) == ((enums::GX_COLOR0A0 as i32) as u32))
-                    || ((chan as u32) == ((enums::GX_COLOR1A1 as i32) as u32))
+                __state = if (chan == (((enums::GX_COLOR0A0 as i32) as u32) as i32))
+                    || (chan == (((enums::GX_COLOR1A1 as i32) as u32) as i32))
                 {
                     12
                 } else {
@@ -168,8 +168,8 @@ pub fn HSD_SetupChannel<'a>(ctx: &'a Ctx, ch: HSD_Chan<'a>) {
                 __state = 9;
             }
             14 => {
-                __state = if ((chan as u32) == ((enums::GX_COLOR0 as i32) as u32))
-                    || ((chan as u32) == ((enums::GX_COLOR1 as i32) as u32))
+                __state = if (chan == (((enums::GX_COLOR0 as i32) as u32) as i32))
+                    || (chan == (((enums::GX_COLOR1 as i32) as u32) as i32))
                 {
                     21
                 } else {
@@ -327,8 +327,8 @@ pub fn HSD_SetupChannel<'a>(ctx: &'a Ctx, ch: HSD_Chan<'a>) {
                 __state = 33;
             }
             37 => {
-                __state = if ((chan as u32) == ((enums::GX_COLOR0A0 as i32) as u32))
-                    || ((chan as u32) == ((enums::GX_COLOR1A1 as i32) as u32))
+                __state = if (chan == (((enums::GX_COLOR0A0 as i32) as u32) as i32))
+                    || (chan == (((enums::GX_COLOR1A1 as i32) as u32) as i32))
                 {
                     39
                 } else {
@@ -356,8 +356,8 @@ pub fn HSD_SetupChannel<'a>(ctx: &'a Ctx, ch: HSD_Chan<'a>) {
                 __state = 36;
             }
             41 => {
-                __state = if ((chan as u32) == ((enums::GX_COLOR0 as i32) as u32))
-                    || ((chan as u32) == ((enums::GX_COLOR1 as i32) as u32))
+                __state = if (chan == (((enums::GX_COLOR0 as i32) as u32) as i32))
+                    || (chan == (((enums::GX_COLOR1 as i32) as u32) as i32))
                 {
                     48
                 } else {
@@ -485,8 +485,8 @@ pub fn HSD_SetupChannel<'a>(ctx: &'a Ctx, ch: HSD_Chan<'a>) {
                 statics::sysdolphin__baselib__tev::prev_ch(ctx)
                     .get(idx)
                     .set_attn_fn((ch).attn_fn());
-                __state = if ((chan as u32) == ((enums::GX_COLOR0A0 as i32) as u32))
-                    || ((chan as u32) == ((enums::GX_COLOR1A1 as i32) as u32))
+                __state = if (chan == (((enums::GX_COLOR0A0 as i32) as u32) as i32))
+                    || (chan == (((enums::GX_COLOR1A1 as i32) as u32) as i32))
                 {
                     62
                 } else {

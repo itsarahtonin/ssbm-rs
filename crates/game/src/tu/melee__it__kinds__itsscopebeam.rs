@@ -139,8 +139,8 @@ pub fn itSscopebeam_UnkMotion9_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32
         Handle::cast::<ScopeBeamAttrs<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
     let mut data: ScopeBeamFloats<'a> = (attrs).floats().get(index);
     if (ip).xD44_lifeTimer() == (data).lifetime() {
-        if ((ip).x5D4_hitboxes().get(0_i32).hit().state() as u32)
-            >= ((enums::HitCapsule_Enabled as i32) as u32)
+        if (ip).x5D4_hitboxes().get(0_i32).hit().state()
+            >= (((enums::HitCapsule_Enabled as i32) as u32) as i32)
         {
             (ip).x5D4_hitboxes().get(0_i32).hit().set_scale(fp::fmuls(
                 (ip).x5D4_hitboxes().get(0_i32).hit().scale(),

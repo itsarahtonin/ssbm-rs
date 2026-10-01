@@ -292,7 +292,7 @@ pub fn it_80275E98<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, spawn: SpawnItem<'
     fns::mpCollSetFacingDir(ctx, (item2).x378_itemColl(), int_dir);
     (coll).set_x50((attr).x1C_damage_mul());
     if ((spawn).x44_flag().x0().b0() as i32) == 1_i32 {
-        if ((spawn).x48_ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (spawn).x48_ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             fns::it_80276100(ctx, item_gobj, (spawn).pos());
             return;
         }

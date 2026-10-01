@@ -223,7 +223,7 @@ pub fn fn_8020B4D8<'a>(
     }
     if ((coll).x34_flags().b1234() as i32) == 1_i32 {
         if Handle::addr(fns::Ground_GetP1Fighter(ctx)) == Handle::addr((coll).x0_gobj()) {
-            if (ground_kind as u32) == (1_i32 as u32) {
+            if ground_kind == ((1_i32 as u32) as i32) {
                 fns::stage_info(ctx).set_flags((fns::stage_info(ctx).flags() | (16_i32 as u32)));
             }
         }

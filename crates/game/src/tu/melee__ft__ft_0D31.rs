@@ -60,7 +60,7 @@ pub fn ftCo_800D3158<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     if ({
         let __t3 = fns::Stage_GetBlastZoneTopOffset(ctx);
         (fp).cur_pos().y() > __t3
-    }) && (((((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+    }) && ((((fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32))
         || (((fp).x2222_b3() as i32) != 0))
         || ((fp).x8c_kb_vel().y() > (fns::p_ftCommonData(ctx).get()).x4F0()))
     {

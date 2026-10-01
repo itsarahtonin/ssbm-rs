@@ -34,7 +34,7 @@ pub fn Fighter_PoisonMushroomEnd<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     if !(fns::fn_800D2818(ctx, fp) != 0) {
         return 0_i32;
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCo_800D2490(ctx, gobj, 0_i32);
     } else {
         fns::ftCo_800D2600(ctx, gobj, 0_i32);
@@ -54,7 +54,7 @@ pub fn ftCo_800D23F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::ftCommon_8007E2FC(ctx, gobj);
         (fp).mv().co().mushroom().set_x8(0_i32);
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ft_8008A324(ctx, gobj);
         return;
     }

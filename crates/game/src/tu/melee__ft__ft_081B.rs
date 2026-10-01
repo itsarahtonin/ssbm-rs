@@ -69,7 +69,7 @@ pub fn ft_80081B38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     );
     (coll).set_x50((fp).co_attrs().weight());
     temp_f0 = fp::fmuls(10.0, (fp).x34_scale().y());
-    if ((coll).ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32) {
+    if (coll).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
         (coll).ecb_source().set_x128(temp_f0);
         (coll).ecb_source().set_x12C(temp_f0);
     }
@@ -85,7 +85,7 @@ pub fn ft_80081C88<'a>(ctx: &'a Ctx, dst_gobj: HSD_GObj<'a>, scl_y: f64) {
     {
         let mut temp_r5: CollData<'a> = (fp).coll_data();
         let mut tmp: f64 = fp::fmuls((temp_r3).unkC(), scl_y);
-        if ((fp).coll_data().ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32)
+        if (fp).coll_data().ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32)
         {
             (temp_r5).ecb_source().set_x124(tmp);
         }
@@ -93,7 +93,7 @@ pub fn ft_80081C88<'a>(ctx: &'a Ctx, dst_gobj: HSD_GObj<'a>, scl_y: f64) {
             let mut ledge_snap_height: f64 = fp::fmuls((temp_r3).ledge_snap_height(), scl_y);
             let mut ledge_snap_y: f64 = fp::fmuls((temp_r3).ledge_snap_y(), scl_y);
             let mut ledge_snap_x: f64 = fp::fmuls((temp_r3).ledge_snap_x(), scl_y);
-            if ((temp_r5).ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32) {
+            if (temp_r5).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
                 (temp_r5).set_ledge_snap_x(ledge_snap_x);
                 (temp_r5).set_ledge_snap_y(ledge_snap_y);
                 (temp_r5).set_ledge_snap_height(ledge_snap_height);
@@ -101,7 +101,7 @@ pub fn ft_80081C88<'a>(ctx: &'a Ctx, dst_gobj: HSD_GObj<'a>, scl_y: f64) {
         }
         (temp_r5).set_x50((fp).co_attrs().weight());
         temp_f0 = fp::fmuls(10.0, (fp).x34_scale().y());
-        if ((temp_r5).ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32) {
+        if (temp_r5).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
             (temp_r5).ecb_source().set_x128(temp_f0);
             (temp_r5).ecb_source().set_x12C(temp_f0);
         }
@@ -153,12 +153,12 @@ pub fn ft_80081DD4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             fp::fmuls((temp_r28).ledge_snap_height(), (fp).x34_scale().y()),
             (fns::p_ftCommonData(ctx).get()).x1CC(),
         );
-        if ((coll).ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32) {
+        if (coll).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
             (coll).set_ledge_snap_height(tmp);
         }
         var_r28 = fns::mpColl_800473CC(ctx, coll);
         tmp = fp::fmuls((temp_r28).ledge_snap_height(), (fp).x34_scale().y());
-        if ((coll).ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32) {
+        if (coll).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
             (coll).set_ledge_snap_height(tmp);
         }
     }
@@ -197,12 +197,12 @@ pub fn ft_80081F2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             fp::fmuls((temp_r28).ledge_snap_height(), (fp).x34_scale().y()),
             (fns::p_ftCommonData(ctx).get()).x1CC(),
         );
-        if ((coll).ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32) {
+        if (coll).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
             (coll).set_ledge_snap_height(tmp);
         }
         var_r28 = fns::mpColl_80048464(ctx, coll);
         tmp = fp::fmuls((temp_r28).ledge_snap_height(), (fp).x34_scale().y());
-        if ((coll).ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32) {
+        if (coll).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
             (coll).set_ledge_snap_height(tmp);
         }
     }
@@ -241,12 +241,12 @@ pub fn ft_80082084<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             fp::fmuls((temp_r28).ledge_snap_height(), (fp).x34_scale().y()),
             (fns::p_ftCommonData(ctx).get()).x1CC(),
         );
-        if ((coll).ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32) {
+        if (coll).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
             (coll).set_ledge_snap_height(tmp);
         }
         var_r28 = fns::mpColl_80048578(ctx, coll);
         tmp = fp::fmuls((temp_r28).ledge_snap_height(), (fp).x34_scale().y());
-        if ((coll).ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32) {
+        if (coll).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
             (coll).set_ledge_snap_height(tmp);
         }
     }
@@ -1157,7 +1157,7 @@ pub fn ft_80083F88<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if (inl_ft_80082708_unfused(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if inl_ft_80082708_unfused(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCo_Fall_Enter(ctx, gobj);
     }
 }
@@ -1446,8 +1446,8 @@ pub fn ft_80084A18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn ft_GetGroundFrictionMultiplier<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x8);
     let mut fp = fp;
-    if (((fp).kind() as u32) == ((enums::Ft_Kind_Popo as i32) as u32))
-        || (((fp).kind() as u32) == ((enums::Ft_Kind_Nana as i32) as u32))
+    if ((fp).kind() == (((enums::Ft_Kind_Popo as i32) as u32) as i32))
+        || ((fp).kind() == (((enums::Ft_Kind_Nana as i32) as u32) as i32))
     {
         return 1.0;
     }
@@ -1482,7 +1482,7 @@ pub fn ft_80084A80<'a>(
             break 'l1;
         }
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         temp_r0 = (fp).coll_data().floor().index();
         if temp_r0 != 1_i32.wrapping_neg() {
             temp_r26 = fns::mpLineGetFlags(ctx, temp_r0);

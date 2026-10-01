@@ -152,7 +152,7 @@ pub fn ftPp_SpecialAirN_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     fp = Handle::cast::<Fighter<'a>>((gobj).user_data());
     da = Handle::cast::<ftIceClimberAttributes<'a>>((fp).dat_attrs());
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != (((enums::GA_Ground as i32) as u32) as i32) {
         fp1 = Handle::cast::<Fighter<'a>>((gobj).user_data());
         if !Handle::is_null((fp1).u().pp().x222C()) {
             fns::it_802C17DC(ctx, (fp1).u().pp().x222C());
@@ -216,7 +216,7 @@ pub fn ftPp_SpecialN_8011F500<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         if !Handle::is_null((fp).u().pp().x222C()) {
             fns::it_802C16F8(ctx, (fp).u().pp().x222C());
             (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
-            if ((fp).kind() as u32) == ((enums::Ft_Kind_Popo as i32) as u32) {
+            if (fp).kind() == (((enums::Ft_Kind_Popo as i32) as u32) as i32) {
                 fns::ft_800881D8(ctx, fp, 0x1fc5d_i32, (127_i32 as u8), (64_i32 as u8));
             } else {
                 fns::ft_800881D8(ctx, fp, 0x1fc2a_i32, (127_i32 as u8), (64_i32 as u8));

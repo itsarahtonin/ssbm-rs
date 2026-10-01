@@ -28,8 +28,8 @@ use crate::support::*;
 
 pub fn cmSnap_800315C8<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
-    (if ((statics::melee__cm__cmsnap::cmsnap_data(ctx).status()) as u32)
-        == ((enums::CmSnapStatus_Sleep as i32) as u32)
+    (if (statics::melee__cm__cmsnap::cmsnap_data(ctx).status())
+        == (((enums::CmSnapStatus_Sleep as i32) as u32) as i32)
     {
         ({ () })
     } else {
@@ -44,8 +44,8 @@ pub fn cmSnap_800315C8<'a>(ctx: &'a Ctx) {
 }
 
 pub fn cmSnap_80031618<'a>(ctx: &'a Ctx) -> Addr<'a> {
-    if ((statics::melee__cm__cmsnap::cmsnap_data(ctx).status()) as u32)
-        != ((enums::CmSnapStatus_Unk5 as i32) as u32)
+    if (statics::melee__cm__cmsnap::cmsnap_data(ctx).status())
+        != (((enums::CmSnapStatus_Unk5 as i32) as u32) as i32)
     {
         return null::<Addr<'a>>(ctx);
     }

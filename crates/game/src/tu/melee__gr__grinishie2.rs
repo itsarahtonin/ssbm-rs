@@ -299,7 +299,7 @@ pub fn grInishie2_801FD198<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (gp).u().inishie2().xC4_flags().set_b0((0_i32 as u8));
     (gp).u()
         .inishie2()
-        .set_xC8((((gp).map_id() as u32).wrapping_sub((3_i32 as u32)) as i16));
+        .set_xC8(((gp).map_id().wrapping_sub(((3_i32 as u32) as i32)) as i16));
     (gp).u().inishie2().set_xC6(
         (statics::melee__gr__grinishie2::yakumono_param(ctx).get())
             .unk10()

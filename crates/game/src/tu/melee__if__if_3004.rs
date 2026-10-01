@@ -450,7 +450,7 @@ pub fn un_80300934<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_80300968<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_ChangeGameModeAfterCurrentScene(ctx, (enums::GM_HANYU_CSS as i32));
         fns::gm_801A4B60(ctx);
@@ -461,7 +461,7 @@ pub fn un_80300968<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
 pub fn un_803009A4<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_ChangeGameModeAfterCurrentScene(ctx, (enums::GM_HANYU_SSS as i32));
         fns::gm_801A4B60(ctx);
@@ -534,7 +534,7 @@ pub fn un_80300A88<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_80300AB8<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_SetNextGameModeStateId(ctx, (4_i32 as u8));
         fns::gm_801A4B60(ctx);
@@ -545,7 +545,7 @@ pub fn un_80300AB8<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
 pub fn un_80300AF4<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    if (arg0 as u32) == (1_i32 as u32) {
+    if arg0 == ((1_i32 as u32) as i32) {
         inl_startDebugMatch_unfused(ctx, 63_i32, 14_i32);
     }
     return 0_i32;
@@ -554,7 +554,7 @@ pub fn un_80300AF4<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_80300B58<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    if (arg0 as u32) == (1_i32 as u32) {
+    if arg0 == ((1_i32 as u32) as i32) {
         inl_startDebugMatch_unfused(ctx, 59_i32, 2_i32);
     }
     return 0_i32;
@@ -563,7 +563,7 @@ pub fn un_80300B58<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_80300BBC<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         fns::Toy_803124BC(ctx);
         fns::Toy_80311680(ctx);
         fns::gm_ChangeGameModeAfterCurrentScene(ctx, (enums::GM_TOY_GALLERY as i32));
@@ -575,7 +575,7 @@ pub fn un_80300BBC<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
 pub fn un_80300BF8<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         fns::Toy_803124BC(ctx);
         fns::Toy_SetUnlockState(ctx, 230_i32, 1_i32);
         fns::gm_ChangeGameModeAfterCurrentScene(ctx, (enums::GM_MENU as i32));
@@ -587,7 +587,7 @@ pub fn un_80300BF8<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
 pub fn un_80300C3C<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         fns::Toy_803124BC(ctx);
         fns::Toy_SetUnlockState(ctx, 201_i32, 1_i32);
         fns::gm_ChangeGameModeAfterCurrentScene(ctx, (enums::GM_MENU as i32));
@@ -599,7 +599,7 @@ pub fn un_80300C3C<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
 pub fn un_80300C80<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    if (arg0 as u32) == (1_i32 as u32) {
+    if arg0 == ((1_i32 as u32) as i32) {
         let mut ptr_: Val<'a, u32> = fns::gmMainLib_8015CCF0(ctx);
         (ptr_).set(
             (statics::melee__if__if_3004::un_804D6DDC(ctx)
@@ -855,7 +855,7 @@ fn asm_fn_80300CC8(ctx: &Ctx) {
 pub fn un_80300D78<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
-    if (arg0 as u32) == (1_i32 as u32) {
+    if arg0 == ((1_i32 as u32) as i32) {
         fns::lbAudioAx_80024030(ctx, 1_i32);
         statics::melee__if__if_3004::un_804D6DE0(ctx)
             .set(statics::melee__if__if_3004::un_804D6DF0(ctx).get());
@@ -1076,7 +1076,7 @@ fn asm_fn_80300DE0(ctx: &Ctx) {
 pub fn un_80300E74<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
-    if (arg0 as u32) == (1_i32 as u32) {
+    if arg0 == ((1_i32 as u32) as i32) {
         fns::lbAudioAx_80024030(ctx, 1_i32);
         statics::melee__if__if_3004::un_804D6DD8(ctx).set(2_i32);
         fns::un_802FFD94(
@@ -1246,7 +1246,7 @@ fn asm_fn_80300ED0(ctx: &Ctx) {
 pub fn un_80300F3C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
-    if (arg0 as u32) == (1_i32 as u32) {
+    if arg0 == ((1_i32 as u32) as i32) {
         fns::lbAudioAx_80024030(ctx, 1_i32);
         statics::melee__if__if_3004::un_804D6DD8(ctx).set(3_i32);
         fns::un_802FFD94(
@@ -1263,7 +1263,7 @@ pub fn un_80300F98<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
     let mut temp_r31: Val<'a, i32> = null(ctx);
-    if (arg0 as u32) == (1_i32 as u32) {
+    if arg0 == ((1_i32 as u32) as i32) {
         temp_r31 = fns::gmMainLib_GetKOTotal(ctx);
         inl_sfxForward_unfused(ctx);
         (temp_r31).set(statics::melee__if__if_3004::un_804D6DF4(ctx).get());
@@ -1276,7 +1276,7 @@ pub fn un_80300F98<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_80300FEC<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_SetNextGameModeStateId(ctx, (4_i32 as u8));
         fns::gm_801A4B60(ctx);
@@ -1287,7 +1287,7 @@ pub fn un_80300FEC<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
 pub fn un_80301028<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    if (arg0 as u32) == (1_i32 as u32) {
+    if arg0 == ((1_i32 as u32) as i32) {
         let mut ptr_: gmm_x0_528_t<'a> = fns::gmMainLib_8015CDD4(ctx);
         (ptr_).set_x5(
             (statics::melee__if__if_3004::un_804D5908(ctx)
@@ -1304,7 +1304,7 @@ pub fn un_80301028<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_80301074<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    if (arg0 as u32) == (1_i32 as u32) {
+    if arg0 == ((1_i32 as u32) as i32) {
         let mut ptr_: gmm_x0_528_t<'a> = fns::gmMainLib_8015CDC8(ctx);
         (ptr_).set_x5(
             (statics::melee__if__if_3004::un_804D590C(ctx)
@@ -1321,7 +1321,7 @@ pub fn un_80301074<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_803010C0<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    if (arg0 as u32) == (1_i32 as u32) {
+    if arg0 == ((1_i32 as u32) as i32) {
         let mut ptr_: gmm_x0_528_t<'a> = fns::gmMainLib_8015CDE0(ctx);
         (ptr_).set_x5(
             (statics::melee__if__if_3004::un_804D5910(ctx)
@@ -1598,7 +1598,7 @@ fn asm_fn_803011EC(ctx: &Ctx) {
 pub fn un_80301280<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
-    if (arg0 as u32) == (1_i32 as u32) {
+    if arg0 == ((1_i32 as u32) as i32) {
         fns::lbAudioAx_80024030(ctx, 1_i32);
         fns::un_802FFD94(
             ctx,
@@ -1613,7 +1613,7 @@ pub fn un_80301280<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_803012D4<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
-    if (arg0 as u32) == (1_i32 as u32) {
+    if arg0 == ((1_i32 as u32) as i32) {
         fns::lbAudioAx_80024030(ctx, 1_i32);
         fns::un_802FFD94(
             ctx,
@@ -1628,7 +1628,7 @@ pub fn un_803012D4<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_80301328<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_801BF708(ctx, (0_i32 as i8));
         fns::gm_ChangeGameModeAfterCurrentScene(ctx, (enums::GM_OPENING_MV as i32));
@@ -1640,7 +1640,7 @@ pub fn un_80301328<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
 pub fn un_8030136C<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_801BF708(ctx, (5_i32 as i8));
         fns::gm_ChangeGameModeAfterCurrentScene(ctx, (enums::GM_OPENING_MV as i32));
@@ -1652,7 +1652,7 @@ pub fn un_8030136C<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
 pub fn un_803013B0<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_ChangeGameModeAfterCurrentScene(ctx, (enums::GM_DEBUG_CUTSCENE as i32));
         fns::gm_801A4B60(ctx);
@@ -1687,7 +1687,7 @@ pub fn un_80301420<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_80301454<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_ChangeGameModeAfterCurrentScene(ctx, (enums::GM_BOOT as i32));
         fns::gm_801A4B60(ctx);
@@ -1698,7 +1698,7 @@ pub fn un_80301454<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
 pub fn un_80301490<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_SetNextGameModeStateId(ctx, (13_i32 as u8));
         fns::gm_801A4B60(ctx);
@@ -1709,7 +1709,7 @@ pub fn un_80301490<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
 pub fn un_803014CC<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_SetNextGameModeStateId(ctx, (7_i32 as u8));
         fns::gm_801A4B60(ctx);
@@ -1720,7 +1720,7 @@ pub fn un_803014CC<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
 pub fn un_80301508<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_SetNextGameModeStateId(ctx, (3_i32 as u8));
         fns::gm_801A4B60(ctx);
@@ -1731,7 +1731,7 @@ pub fn un_80301508<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
 pub fn un_80301544<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_SetNextGameModeStateId(ctx, (9_i32 as u8));
         fns::gm_801A4B60(ctx);
@@ -1742,7 +1742,7 @@ pub fn un_80301544<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
 pub fn un_80301580<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_SetNextGameModeStateId(ctx, (12_i32 as u8));
         fns::gm_801A4B60(ctx);
@@ -1753,7 +1753,7 @@ pub fn un_80301580<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
 pub fn un_803015BC<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_ChangeGameModeAfterCurrentScene(ctx, (enums::GM_PROGRESSIVE_SCAN as i32));
         fns::gm_801A4B60(ctx);
@@ -1764,7 +1764,7 @@ pub fn un_803015BC<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
 pub fn un_803015F8<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_SetNextGameModeStateId(ctx, (10_i32 as u8));
         fns::gm_801A4B60(ctx);
@@ -1799,7 +1799,7 @@ pub fn un_80301634<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_803016D8<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    if (arg0 as u32) != (1_i32 as u32) {
+    if arg0 != ((1_i32 as u32) as i32) {
         return 0_i32;
     }
     fns::OSReport(ctx, ptr::<ArrV<'a, i8, 0>>(ctx, 0x803fd224).at(0), &[]);
@@ -1817,7 +1817,7 @@ pub fn un_803016D8<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_80301734<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    if (arg0 as u32) != (1_i32 as u32) {
+    if arg0 != ((1_i32 as u32) as i32) {
         return 0_i32;
     }
     fns::OSReport(ctx, ptr::<ArrV<'a, i8, 0>>(ctx, 0x803fd23c).at(0), &[]);
@@ -1835,7 +1835,7 @@ pub fn un_80301734<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_8030178C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
-    if (arg0 as u32) != (1_i32 as u32) {
+    if arg0 != ((1_i32 as u32) as i32) {
         return 0_i32;
     }
     fns::OSReport(ctx, ptr::<ArrV<'a, i8, 0>>(ctx, 0x803fd24c).at(0), &[]);
@@ -1856,7 +1856,7 @@ pub fn un_8030178C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_80301800<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    if (arg0 as u32) != (1_i32 as u32) {
+    if arg0 != ((1_i32 as u32) as i32) {
         return 0_i32;
     }
     fns::OSReport(
@@ -1871,7 +1871,7 @@ pub fn un_80301800<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_80301840<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
-    if (arg0 as u32) != (1_i32 as u32) {
+    if arg0 != ((1_i32 as u32) as i32) {
         return 0_i32;
     }
     fns::OSReport(
@@ -1897,7 +1897,7 @@ pub fn un_80301840<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_803018BC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    if (arg0 as u32) != (1_i32 as u32) {
+    if arg0 != ((1_i32 as u32) as i32) {
         return 0_i32;
     }
     fns::OSReport(ctx, ptr::<ArrV<'a, i8, 0>>(ctx, 0x803fd258).at(0), &[]);
@@ -1916,7 +1916,7 @@ pub fn un_803018BC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_8030191C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    if (arg0 as u32) != (1_i32 as u32) {
+    if arg0 != ((1_i32 as u32) as i32) {
         return 0_i32;
     }
     fns::OSReport(ctx, ptr::<ArrV<'a, i8, 0>>(ctx, 0x803fd264).at(0), &[]);
@@ -1927,7 +1927,7 @@ pub fn un_8030191C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_80301964<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut arg0 = arg0;
-    if (arg0 as u32) != (1_i32 as u32) {
+    if arg0 != ((1_i32 as u32) as i32) {
         return 0_i32;
     }
     fns::OSReport(ctx, ptr::<ArrV<'a, i8, 0>>(ctx, 0x803fd28c).at(0), &[]);
@@ -1977,7 +1977,7 @@ pub fn un_80301964<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_80301A64<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    if (arg0 as u32) != (1_i32 as u32) {
+    if arg0 != ((1_i32 as u32) as i32) {
         return 0_i32;
     }
     fns::OSReport(ctx, ptr::<ArrV<'a, i8, 0>>(ctx, 0x803fd29c).at(0), &[]);
@@ -1995,7 +1995,7 @@ pub fn un_80301A64<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_80301AD4<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    if (arg0 as u32) != (1_i32 as u32) {
+    if arg0 != ((1_i32 as u32) as i32) {
         return 0_i32;
     }
     fns::OSReport(ctx, ptr::<ArrV<'a, i8, 0>>(ctx, 0x803fd2ac).at(0), &[]);
@@ -2233,7 +2233,7 @@ fn asm_un_80301CE0(ctx: &Ctx) {
 pub fn un_80301D40<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_ChangeGameModeAfterCurrentScene(ctx, (enums::GM_CAMERA_VS as i32));
         fns::gm_801A4B60(ctx);
@@ -2244,7 +2244,7 @@ pub fn un_80301D40<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
 pub fn un_80301D7C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut arg0 = arg0;
-    if (arg0 as u32) == (1_i32 as u32) {
+    if arg0 == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_801BEB74(
             ctx,
@@ -2259,7 +2259,7 @@ pub fn un_80301D7C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 pub fn un_80301DCC<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_SetNextGameModeStateId(ctx, (4_i32 as u8));
         fns::gm_801A4B60(ctx);
@@ -2270,7 +2270,7 @@ pub fn un_80301DCC<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
 pub fn un_80301E08<'a>(ctx: &'a Ctx, update_scene: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut update_scene = update_scene;
-    if (update_scene as u32) == (1_i32 as u32) {
+    if update_scene == ((1_i32 as u32) as i32) {
         inl_sfxForward_unfused(ctx);
         fns::gm_SetNextGameModeStateId(ctx, (14_i32 as u8));
         fns::gm_801A4B60(ctx);

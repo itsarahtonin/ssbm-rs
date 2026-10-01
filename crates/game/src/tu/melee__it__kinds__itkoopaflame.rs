@@ -334,8 +334,8 @@ pub fn itKoopaFlame_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32
     );
     let mut jobj: HSD_JObj<'a> =
         Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj));
-    if ((it).x5D4_hitboxes().get(0_i32).hit().state() as u32)
-        != ((enums::HitCapsule_Disabled as i32) as u32)
+    if (it).x5D4_hitboxes().get(0_i32).hit().state()
+        != (((enums::HitCapsule_Disabled as i32) as u32) as i32)
     {
         if (it).xDD4_itemVar().koopaflame().x34_base_scale() == 0.0 {
             (it).xDD4_itemVar()

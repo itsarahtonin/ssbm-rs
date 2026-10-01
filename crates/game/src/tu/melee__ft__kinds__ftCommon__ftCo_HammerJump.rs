@@ -30,7 +30,7 @@ pub fn ftCo_800C5A50<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut e: i32 = fns::ftCo_Jump_GetInput(ctx, gobj);
-    if (e as u32) != (0_i32 as u32) {
+    if e != ((0_i32 as u32) as i32) {
         fns::ftCo_800C5B88(ctx, gobj, e);
         return 1_i32;
     }

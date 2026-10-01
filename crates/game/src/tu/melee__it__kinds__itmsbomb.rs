@@ -458,7 +458,7 @@ fn inl_it_80290314_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     fns::it_80273454(ctx, gobj);
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::it_80274740(ctx, gobj);
         fns::it_802765BC(ctx, gobj, 0_i32);
         fns::it_80290238(ctx, gobj);

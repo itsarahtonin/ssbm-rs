@@ -44,7 +44,7 @@ pub fn ftKb_SpecialNCa_800F99BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
     (fp).x2210().set_throw_flags((0_i32 as u32));
     fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).u().kb().hat().kind() as u32) != ((enums::Ft_Kind_Captain as i32) as u32) {
+    if (fp).u().kb().hat().kind() != (((enums::Ft_Kind_Captain as i32) as u32) as i32) {
         msid = (enums::ftKb_MS_GnSpecialN as i32);
     }
     fns::Fighter_ChangeMotionState(
@@ -78,7 +78,7 @@ pub fn ftKb_SpecialNCa_800F9A54<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
     (fp).x2210().set_throw_flags((0_i32 as u32));
     fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).u().kb().hat().kind() as u32) != ((enums::Ft_Kind_Captain as i32) as u32) {
+    if (fp).u().kb().hat().kind() != (((enums::Ft_Kind_Captain as i32) as u32) as i32) {
         msid = (enums::ftKb_MS_GnSpecialAirN as i32);
     }
     fns::Fighter_ChangeMotionState(
@@ -343,7 +343,7 @@ pub fn ftKb_CaSpecialN_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         msid = (enums::ftKb_MS_CaSpecialAirN as i32);
         {
             let mut anim_frame: f64 = (fp).cur_anim_frame();
-            if ((fp2).u().kb().hat().kind() as u32) != ((enums::Ft_Kind_Captain as i32) as u32) {
+            if (fp2).u().kb().hat().kind() != (((enums::Ft_Kind_Captain as i32) as u32) as i32) {
                 msid = (enums::ftKb_MS_GnSpecialAirN as i32);
             }
             fns::Fighter_ChangeMotionState(
@@ -375,14 +375,14 @@ pub fn ftKb_CaSpecialAirN_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != (((enums::GA_Ground as i32) as u32) as i32) {
         fp = inl_getFighter_unfused(ctx, gobj);
         fns::ftCommon_8007D7FC(ctx, fp);
         fp2 = inl_getFighter_unfused(ctx, gobj);
         msid = (enums::ftKb_MS_CaSpecialN as i32);
         {
             let mut anim_frame: f64 = (fp).cur_anim_frame();
-            if ((fp2).u().kb().hat().kind() as u32) != ((enums::Ft_Kind_Captain as i32) as u32) {
+            if (fp2).u().kb().hat().kind() != (((enums::Ft_Kind_Captain as i32) as u32) as i32) {
                 msid = (enums::ftKb_MS_GnSpecialN as i32);
             }
             fns::Fighter_ChangeMotionState(

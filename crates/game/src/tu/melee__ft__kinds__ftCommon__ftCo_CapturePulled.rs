@@ -117,7 +117,7 @@ pub fn fn_800DAA40<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
     let mut temp_r30: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg1)));
     fns::fn_800DAC78(ctx, arg0, sp18);
-    if ((temp_r31).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (temp_r31).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         (temp_r30).set_x2170(fp::fsubs(
             fp::fadds(sp18.y(), (temp_r31).cur_pos().y()),
             (temp_r30).cur_pos().y(),
@@ -152,7 +152,7 @@ pub fn fn_800DAADC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         msid = (enums::ftCo_MS_CapturePulledLw as i32);
     } else {
         msid = (enums::ftCo_MS_CapturePulledHi as i32);
@@ -395,7 +395,7 @@ pub fn fn_800DAEEC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     dx = fp::fsubs(sp28.x(), sp34.x());
     dy = fp::fsubs(sp28.y(), sp34.y());
     dz = fp::fsubs(sp28.z(), sp34.z());
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         (victim_fp).set_x2170(fp::fsubs(
             fp::fadds(dy, (fp).cur_pos().y()),
             (victim_fp).cur_pos().y(),
@@ -634,7 +634,7 @@ fn inl_fn_800DAADC_applyMotion_unfused<'a>(
     temp_r30 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg0)));
     temp_r31 = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg1)));
     fns::fn_800DAC78(ctx, arg0, sp24);
-    if ((temp_r30).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (temp_r30).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         (temp_r31).set_x2170(fp::fsubs(
             fp::fadds((sp24).y(), (temp_r30).cur_pos().y()),
             (temp_r31).cur_pos().y(),

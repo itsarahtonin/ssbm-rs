@@ -60,8 +60,8 @@ pub fn ftCh_PaperCrush_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ft: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::Player_GetPlayerSlotType(ctx, ((ft).player_idx() as i32)) as u32)
-        == ((enums::Gm_PKind_Human as i32) as u32)
+    if fns::Player_GetPlayerSlotType(ctx, ((ft).player_idx() as i32))
+        == (((enums::Gm_PKind_Human as i32) as u32) as i32)
     {
         fns::ftBossLib_8015BD20(ctx, gobj);
     }
@@ -120,8 +120,8 @@ pub fn ftCh_Poke1_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ft: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::Player_GetPlayerSlotType(ctx, ((ft).player_idx() as i32)) as u32)
-        == ((enums::Gm_PKind_Human as i32) as u32)
+    if fns::Player_GetPlayerSlotType(ctx, ((ft).player_idx() as i32))
+        == (((enums::Gm_PKind_Human as i32) as u32) as i32)
     {
         fns::ftBossLib_8015BD20(ctx, gobj);
     }
@@ -260,8 +260,8 @@ pub fn ftCh_Poke2_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ft: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::Player_GetPlayerSlotType(ctx, ((ft).player_idx() as i32)) as u32)
-        == ((enums::Gm_PKind_Human as i32) as u32)
+    if fns::Player_GetPlayerSlotType(ctx, ((ft).player_idx() as i32))
+        == (((enums::Gm_PKind_Human as i32) as u32) as i32)
     {
         fns::ftBossLib_8015BD20(ctx, gobj);
     }

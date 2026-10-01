@@ -39,7 +39,7 @@ pub fn mpCollPrev<'a>(ctx: &'a Ctx, cd: CollData<'a>) {
     let mut cd = cd;
     statics::melee__mp__mpcoll::mpColl_804D64A0(ctx).set(null::<FnPtr<'a>>(ctx));
     statics::melee__mp__mpcoll::mpColl_804D64A4(ctx).set(null::<HSD_GObj<'a>>(ctx));
-    if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32) {
+    if fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32) {
         if (((!((cd).cur_pos().x() < 45000.0)) || (!((cd).cur_pos().x() > fp::fneg(45000.0))))
             || (!((cd).cur_pos().y() < 45000.0)))
             || (!((cd).cur_pos().y() > fp::fneg(45000.0)))
@@ -765,7 +765,7 @@ pub fn mpColl_LoadECB<'a>(ctx: &'a Ctx, coll: CollData<'a>) {
         saved_bottom_x = (coll).desired_ecb().bottom().x();
         saved_bottom_y = (coll).desired_ecb().bottom().y();
     }
-    if ((coll).ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32) {
+    if (coll).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
         fns::mpColl_LoadECB_JObj(ctx, coll, (6_i32 as u32));
     } else {
         fns::mpColl_LoadECB_Fixed(ctx, coll);
@@ -941,7 +941,7 @@ pub fn mpCollEnd<'a>(ctx: &'a Ctx, coll: CollData<'a>, arg1: i32, arg2: i32) {
             Handle::addr(__inl),
         );
     }
-    if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32) {
+    if fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32) {
         if !(((((coll).cur_pos().x() < 45000.0) && ((coll).cur_pos().x() > fp::fneg(45000.0)))
             && ((coll).cur_pos().y() < 45000.0))
             && ((coll).cur_pos().y() > fp::fneg(45000.0)))
@@ -1076,7 +1076,7 @@ pub fn mpColl_800436E4<'a>(ctx: &'a Ctx, coll: CollData<'a>, arg1: f64) {
     let mut arg1 = arg1;
     let mut var_f1: f64 = 0.0;
     var_f1 = arg1;
-    if ((coll).ecb_source().kind() as u32) == ((enums::ECBSource_Fixed as i32) as u32) {
+    if (coll).ecb_source().kind() == (((enums::ECBSource_Fixed as i32) as u32) as i32) {
         if var_f1 > 6.283185307179586 {
             var_f1 = fp::frsp(fp::fsub(var_f1, 6.283185307179586));
         } else if var_f1 < fp::fneg(6.283185307179586) {
@@ -4179,7 +4179,7 @@ pub fn mpColl_80047D20<'a>(
     let mut arg1 = arg1;
     let mut arg2 = arg2;
     fns::mpCollPrev(ctx, coll);
-    if ((coll).ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32) {
+    if (coll).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
         fns::mpColl_LoadECB_JObj(ctx, coll, (18_i32 as u32));
     } else {
         fns::mpColl_LoadECB_Fixed(ctx, coll);
@@ -4229,7 +4229,7 @@ pub fn mpColl_8004806C<'a>(
     let mut arg1 = arg1;
     let mut arg2 = arg2;
     fns::mpCollPrev(ctx, coll);
-    if ((coll).ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32) {
+    if (coll).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
         fns::mpColl_LoadECB_JObj(ctx, coll, (18_i32 as u32));
     } else {
         fns::mpColl_LoadECB_Fixed(ctx, coll);
@@ -4258,7 +4258,7 @@ pub fn mpColl_80048388<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut coll = coll;
     fns::mpCollPrev(ctx, coll);
-    if ((coll).ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32) {
+    if (coll).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
         fns::mpColl_LoadECB_JObj(ctx, coll, (18_i32 as u32));
     } else {
         fns::mpColl_LoadECB_Fixed(ctx, coll);
@@ -4279,7 +4279,7 @@ pub fn mpColl_80048578<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut coll = coll;
     fns::mpCollPrev(ctx, coll);
-    if ((coll).ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32) {
+    if (coll).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
         fns::mpColl_LoadECB_JObj(ctx, coll, (18_i32 as u32));
     } else {
         fns::mpColl_LoadECB_Fixed(ctx, coll);
@@ -4300,7 +4300,7 @@ pub fn mpColl_80048768<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut coll = coll;
     fns::mpCollPrev(ctx, coll);
-    if ((coll).ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32) {
+    if (coll).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
         fns::mpColl_LoadECB_JObj(ctx, coll, (18_i32 as u32));
     } else {
         fns::mpColl_LoadECB_Fixed(ctx, coll);
@@ -7080,7 +7080,7 @@ fn inl_mpColl_LoadECB_unfused<'a>(ctx: &'a Ctx, coll: CollData<'a>) {
         saved_bottom_x = (coll).desired_ecb().bottom().x();
         saved_bottom_y = (coll).desired_ecb().bottom().y();
     }
-    if ((coll).ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32) {
+    if (coll).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
         fns::mpColl_LoadECB_JObj(ctx, coll, (6_i32 as u32));
     } else {
         fns::mpColl_LoadECB_Fixed(ctx, coll);
@@ -7120,7 +7120,7 @@ fn inl_mpColl_LoadECB_inline_unfused<'a>(ctx: &'a Ctx, coll: CollData<'a>, i: i3
         saved_bottom_x = (coll).desired_ecb().bottom().x();
         saved_bottom_y = (coll).desired_ecb().bottom().y();
     }
-    if ((coll).ecb_source().kind() as u32) == ((enums::ECBSource_JObj as i32) as u32) {
+    if (coll).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
         fns::mpColl_LoadECB_JObj(ctx, coll, (i as u32));
     } else {
         fns::mpColl_LoadECB_Fixed(ctx, coll);

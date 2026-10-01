@@ -186,7 +186,7 @@ pub fn ftKb_SpecialS_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
-    if (fns::ft_80082708(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) != ((0_i32 as u32) as i32) {
         return;
     }
     fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -289,7 +289,7 @@ fn inl_fn_800F53AC_SpawnEffect_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut ef_id: i32 = 0;
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         ef_id = 0x497_i32;
     } else {
         ef_id = 0x496_i32;

@@ -32,7 +32,7 @@ pub fn GXSetTevOp<'a>(ctx: &'a Ctx, id: i32, mode: i32) {
     let mut mode = mode;
     let mut carg: i32 = (enums::GX_CC_RASC as i32);
     let mut aarg: i32 = (enums::GX_CA_RASA as i32);
-    if (id as u32) != ((enums::GX_TEVSTAGE0 as i32) as u32) {
+    if id != (((enums::GX_TEVSTAGE0 as i32) as u32) as i32) {
         carg = (enums::GX_CC_CPREV as i32);
         aarg = (enums::GX_CA_APREV as i32);
     }
@@ -346,14 +346,14 @@ pub fn GXSetTevColorOp<'a>(
                         ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
                         ((18_i32) as u32),
                     ))) as u32))
-                    | (shl_u32(((op as u32) & (1_i32 as u32)), ((18_i32) as u32)))),
+                    | (shl_u32(((op & ((1_i32 as u32) as i32)) as u32), ((18_i32) as u32)))),
             );
         }
         if !(0_i32 != 0) {
             break 'l1;
         }
     }
-    if (op as u32) <= (1_i32 as u32) {
+    if op <= ((1_i32 as u32) as i32) {
         'l3: loop {
             'c4: {
                 (pTevReg).set(
@@ -486,14 +486,14 @@ pub fn GXSetTevAlphaOp<'a>(
                         ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)),
                         ((18_i32) as u32),
                     ))) as u32))
-                    | (shl_u32(((op as u32) & (1_i32 as u32)), ((18_i32) as u32)))),
+                    | (shl_u32(((op & ((1_i32 as u32) as i32)) as u32), ((18_i32) as u32)))),
             );
         }
         if !(0_i32 != 0) {
             break 'l1;
         }
     }
-    if (op as u32) <= (1_i32 as u32) {
+    if op <= ((1_i32 as u32) as i32) {
         'l3: loop {
             'c4: {
                 (pTevReg).set(
@@ -640,7 +640,9 @@ pub fn GXSetTevColor<'a>(ctx: &'a Ctx, id: i32, color: _GXColor<'a>) {
                     ((24_i32) as u32),
                 ))) as u32))
                 | (shl_u32(
-                    ((224_i32 as u32).wrapping_add((id as u32).wrapping_mul((2_i32 as u32)))),
+                    ((((224_i32 as u32) as i32)
+                        .wrapping_add(id.wrapping_mul(((2_i32 as u32) as i32))))
+                        as u32),
                     ((24_i32) as u32),
                 )));
         }
@@ -683,7 +685,9 @@ pub fn GXSetTevColor<'a>(ctx: &'a Ctx, id: i32, color: _GXColor<'a>) {
                     ((24_i32) as u32),
                 ))) as u32))
                 | (shl_u32(
-                    ((225_i32 as u32).wrapping_add((id as u32).wrapping_mul((2_i32 as u32)))),
+                    ((((225_i32 as u32) as i32)
+                        .wrapping_add(id.wrapping_mul(((2_i32 as u32) as i32))))
+                        as u32),
                     ((24_i32) as u32),
                 )));
         }
@@ -769,7 +773,9 @@ pub fn GXSetTevColorS10<'a>(ctx: &'a Ctx, id: i32, color: _GXColorS10<'a>) {
                     ((24_i32) as u32),
                 ))) as u32))
                 | (shl_u32(
-                    ((224_i32 as u32).wrapping_add((id as u32).wrapping_mul((2_i32 as u32)))),
+                    ((((224_i32 as u32) as i32)
+                        .wrapping_add(id.wrapping_mul(((2_i32 as u32) as i32))))
+                        as u32),
                     ((24_i32) as u32),
                 )));
         }
@@ -812,7 +818,9 @@ pub fn GXSetTevColorS10<'a>(ctx: &'a Ctx, id: i32, color: _GXColorS10<'a>) {
                     ((24_i32) as u32),
                 ))) as u32))
                 | (shl_u32(
-                    ((225_i32 as u32).wrapping_add((id as u32).wrapping_mul((2_i32 as u32)))),
+                    ((((225_i32 as u32) as i32)
+                        .wrapping_add(id.wrapping_mul(((2_i32 as u32) as i32))))
+                        as u32),
                     ((24_i32) as u32),
                 )));
         }
@@ -911,7 +919,9 @@ pub fn GXSetTevKColor<'a>(ctx: &'a Ctx, id: i32, color: _GXColor<'a>) {
                     ((24_i32) as u32),
                 ))) as u32))
                 | (shl_u32(
-                    ((224_i32 as u32).wrapping_add((id as u32).wrapping_mul((2_i32 as u32)))),
+                    ((((224_i32 as u32) as i32)
+                        .wrapping_add(id.wrapping_mul(((2_i32 as u32) as i32))))
+                        as u32),
                     ((24_i32) as u32),
                 )));
         }
@@ -967,7 +977,9 @@ pub fn GXSetTevKColor<'a>(ctx: &'a Ctx, id: i32, color: _GXColor<'a>) {
                     ((24_i32) as u32),
                 ))) as u32))
                 | (shl_u32(
-                    ((225_i32 as u32).wrapping_add((id as u32).wrapping_mul((2_i32 as u32)))),
+                    ((((225_i32 as u32) as i32)
+                        .wrapping_add(id.wrapping_mul(((2_i32 as u32) as i32))))
+                        as u32),
                     ((24_i32) as u32),
                 )));
         }
@@ -1003,7 +1015,7 @@ pub fn GXSetTevKColorSel<'a>(ctx: &'a Ctx, stage: i32, sel: i32) {
     Kreg = (fns::gx(ctx).get())
         .tevKsel()
         .at(sar_i32(stage, (1_i32 as u32)));
-    if (((stage as u32) & (1_i32 as u32)) != 0) {
+    if ((stage & ((1_i32 as u32) as i32)) != 0) {
         'l1: loop {
             'c2: {
                 (Kreg).set(
@@ -1055,7 +1067,7 @@ pub fn GXSetTevKAlphaSel<'a>(ctx: &'a Ctx, stage: i32, sel: i32) {
     Kreg = (fns::gx(ctx).get())
         .tevKsel()
         .at(sar_i32(stage, (1_i32 as u32)));
-    if (((stage as u32) & (1_i32 as u32)) != 0) {
+    if ((stage & ((1_i32 as u32) as i32)) != 0) {
         'l1: loop {
             'c2: {
                 (Kreg).set(
@@ -1162,7 +1174,7 @@ pub fn GXSetTevSwapModeTable<'a>(
     let mut blue = blue;
     let mut alpha = alpha;
     let mut Kreg: Val<'a, u32> = null(ctx);
-    let mut index: i32 = ((table as u32).wrapping_mul((2_i32 as u32)) as i32);
+    let mut index: i32 = table.wrapping_mul(((2_i32 as u32) as i32));
     Kreg = (fns::gx(ctx).get()).tevKsel().at(index);
     'l1: loop {
         'c2: {
@@ -1203,9 +1215,9 @@ pub fn GXSetTevSwapModeTable<'a>(
             break 'l5;
         }
     }
-    Kreg = (fns::gx(ctx).get()).tevKsel().at(((table as u32)
-        .wrapping_mul((2_i32 as u32))
-        .wrapping_add((1_i32 as u32)) as i32));
+    Kreg = (fns::gx(ctx).get()).tevKsel().at(table
+        .wrapping_mul(((2_i32 as u32) as i32))
+        .wrapping_add(((1_i32 as u32) as i32)));
     'l7: loop {
         'c8: {
             (Kreg).set(
@@ -1479,20 +1491,20 @@ pub fn GXSetTevOrder<'a>(ctx: &'a Ctx, stage: i32, coord: i32, map: i32, color: 
     let mut tcoord: u32 = 0;
     ptref = (fns::gx(ctx).get())
         .tref()
-        .at((div_u32((stage as u32), (2_i32 as u32)) as i32));
+        .at(div_i32(stage, ((2_i32 as u32) as i32)));
     (fns::gx(ctx).get()).texmapId().at(stage).set((map as u32));
-    tmap = ((map as u32) & ((!0x100_i32) as u32));
+    tmap = ((map & (((!0x100_i32) as u32) as i32)) as u32);
     tmap = (if tmap >= ((enums::GX_MAX_TEXMAP as i32) as u32) {
         ((enums::GX_TEXMAP0 as i32) as u32)
     } else {
         tmap
     });
-    tcoord = (if (coord as u32) >= ((enums::GX_MAX_TEXCOORD as i32) as u32) {
+    tcoord = (if coord >= (((enums::GX_MAX_TEXCOORD as i32) as u32) as i32) {
         ((enums::GX_TEXCOORD0 as i32) as u32)
     } else {
         (coord as u32)
     });
-    if (((stage as u32) & (1_i32 as u32)) != 0) {
+    if ((stage & ((1_i32 as u32) as i32)) != 0) {
         'l1: loop {
             'c2: {
                 (ptref).set(
@@ -1532,7 +1544,7 @@ pub fn GXSetTevOrder<'a>(ctx: &'a Ctx, stage: i32, coord: i32, map: i32, color: 
                             ((19_i32) as u32),
                         ))) as u32))
                         | (shl_u32(
-                            ((if (color as u32) == ((enums::GX_COLOR_NULL as i32) as u32) {
+                            ((if color == (((enums::GX_COLOR_NULL as i32) as u32) as i32) {
                                 7_i32
                             } else {
                                 At::new(ctx, 0x804014e0)
@@ -1557,8 +1569,8 @@ pub fn GXSetTevOrder<'a>(ctx: &'a Ctx, stage: i32, coord: i32, map: i32, color: 
                             ((18_i32) as u32),
                         ))) as u32))
                         | (shl_u32(
-                            (((((map as u32) != ((enums::GX_TEXMAP_NULL as i32) as u32))
-                                && (!(((map as u32) & (0x100_i32 as u32)) != 0)))
+                            ((((map != (((enums::GX_TEXMAP_NULL as i32) as u32) as i32))
+                                && (!((map & ((0x100_i32 as u32) as i32)) != 0)))
                                 as i32) as u32),
                             ((18_i32) as u32),
                         ))),
@@ -1608,7 +1620,7 @@ pub fn GXSetTevOrder<'a>(ctx: &'a Ctx, stage: i32, coord: i32, map: i32, color: 
                             ((7_i32) as u32),
                         ))) as u32))
                         | (shl_u32(
-                            ((if (color as u32) == ((enums::GX_COLOR_NULL as i32) as u32) {
+                            ((if color == (((enums::GX_COLOR_NULL as i32) as u32) as i32) {
                                 7_i32
                             } else {
                                 At::new(ctx, 0x804014e0)
@@ -1633,8 +1645,8 @@ pub fn GXSetTevOrder<'a>(ctx: &'a Ctx, stage: i32, coord: i32, map: i32, color: 
                             ((6_i32) as u32),
                         ))) as u32))
                         | (shl_u32(
-                            (((((map as u32) != ((enums::GX_TEXMAP_NULL as i32) as u32))
-                                && (!(((map as u32) & (0x100_i32 as u32)) != 0)))
+                            ((((map != (((enums::GX_TEXMAP_NULL as i32) as u32) as i32))
+                                && (!((map & ((0x100_i32 as u32) as i32)) != 0)))
                                 as i32) as u32),
                             ((6_i32) as u32),
                         ))),

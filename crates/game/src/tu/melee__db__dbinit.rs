@@ -85,7 +85,7 @@ pub fn db_Setup<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
     let commonData: Ptr<'a, db_Setup_commonData<'a>> = frame_at(ctx, &__frame, 0x8);
     let mut i: i32 = 0;
-    if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32) {
+    if fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32) {
         {
             i = 0_i32;
             'l1: while i < 4_i32 {
@@ -227,7 +227,7 @@ pub fn db_RunEveryFrame<'a>(ctx: &'a Ctx) {
     let stack: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
     let mut num_players: i32 = 0;
-    if (fns::DbLevel(ctx).get() as u32) < ((enums::DbLKind_DebugRom as i32) as u32) {
+    if fns::DbLevel(ctx).get() < (((enums::DbLKind_DebugRom as i32) as u32) as i32) {
         return;
     }
     if (fns::ftLib_IsMasterHandPresent(ctx) != 0) || (fns::ftLib_IsCrazyHandPresent(ctx) != 0) {

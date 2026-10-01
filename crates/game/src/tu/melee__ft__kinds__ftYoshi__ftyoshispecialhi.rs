@@ -34,10 +34,10 @@ pub fn ftYs_SpecialS_8012DF18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if !Handle::is_null((fp).target_item_gobj()) {
         let mut msid: i32 = (fp).motion_id();
         let mut clear_destroy_type: i32 = 0_i32;
-        if ((((msid as u32) == ((enums::ftYs_MS_SpecialN1_1 as i32) as u32))
-            || ((msid as u32) == ((enums::ftYs_MS_SpecialN2_1 as i32) as u32)))
-            || ((msid as u32) == ((enums::ftYs_MS_SpecialAirN1_2 as i32) as u32)))
-            || ((msid as u32) == ((enums::ftYs_MS_SpecialAirN2_1 as i32) as u32))
+        if (((msid == (((enums::ftYs_MS_SpecialN1_1 as i32) as u32) as i32))
+            || (msid == (((enums::ftYs_MS_SpecialN2_1 as i32) as u32) as i32)))
+            || (msid == (((enums::ftYs_MS_SpecialAirN1_2 as i32) as u32) as i32)))
+            || (msid == (((enums::ftYs_MS_SpecialAirN2_1 as i32) as u32) as i32))
         {
             clear_destroy_type = 1_i32;
         }

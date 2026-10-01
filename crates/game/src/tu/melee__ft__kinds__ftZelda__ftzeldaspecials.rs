@@ -603,7 +603,7 @@ pub fn ftZd_SpecialSStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         inl_ftCommon_GroundToAirStateChange_unfused(ctx, gobj, fp, 0x15a_i32, 0xc4c5082_u32);
     }
 }
@@ -613,7 +613,7 @@ pub fn ftZd_SpecialSLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         inl_ftCommon_GroundToAirStateChange_unfused(ctx, gobj, fp, 0x15b_i32, 0xc4c5080_u32);
     }
 }
@@ -623,7 +623,7 @@ pub fn ftZd_SpecialSEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+    if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
         inl_ftCommon_GroundToAirStateChange_unfused(ctx, gobj, fp, 0x15c_i32, 0xc4c5080_u32);
     }
 }
@@ -633,7 +633,7 @@ pub fn ftZd_SpecialAirSStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(ctx, gobj, fp, 0x157_i32, 0xc4c5082_u32);
     }
 }
@@ -643,7 +643,7 @@ pub fn ftZd_SpecialAirSLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(ctx, gobj, fp, 0x158_i32, 0xc4c5080_u32);
     }
 }
@@ -653,7 +653,7 @@ pub fn ftZd_SpecialAirSEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         inl_ftCommon_AirToGroundStateChange_unfused(ctx, gobj, fp, 0x159_i32, 0xc4c5080_u32);
     }
 }

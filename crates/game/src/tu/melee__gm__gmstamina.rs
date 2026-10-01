@@ -169,8 +169,8 @@ pub fn gm_801B9600<'a>(ctx: &'a Ctx) -> i32 {
         i = 0_i32;
         'l3: while i < 4_i32 {
             'c4: {
-                if ((fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                    != ((enums::Gm_PKind_NA as i32) as u32))
+                if (fns::Player_GetPlayerSlotType(ctx, i)
+                    != (((enums::Gm_PKind_NA as i32) as u32) as i32))
                     && (fns::Player_GetStocks(ctx, i) == 0_i32)
                 {
                     statics::melee__gm__gmstamina::gm_804975F8(ctx)
@@ -242,8 +242,8 @@ pub fn fn_801B96E8<'a>(ctx: &'a Ctx, unused: HSD_GObj<'a>) {
         i = 0_i32;
         'l3: while i < 4_i32 {
             'c4: {
-                if (fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                    != ((enums::Gm_PKind_NA as i32) as u32)
+                if fns::Player_GetPlayerSlotType(ctx, i)
+                    != (((enums::Gm_PKind_NA as i32) as u32) as i32)
                 {
                     if ((statics::melee__gm__gmstamina::gm_804975F8(ctx)
                         .slomo_counter()
@@ -330,8 +330,8 @@ pub fn fn_801B9850<'a>(ctx: &'a Ctx) {
         i = 0_i32;
         'l1: while i < 4_i32 {
             'c2: {
-                if (fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                    == ((enums::Gm_PKind_NA as i32) as u32)
+                if fns::Player_GetPlayerSlotType(ctx, i)
+                    == (((enums::Gm_PKind_NA as i32) as u32) as i32)
                 {
                     statics::melee__gm__gmstamina::gm_804975F8(ctx)
                         .eliminated()

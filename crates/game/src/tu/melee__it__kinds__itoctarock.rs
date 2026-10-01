@@ -187,7 +187,7 @@ pub fn itOctarock_UnkMotion3_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !(fns::it_80272C6C(ctx, gobj) != 0) {
-        if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             fns::Item_80268E5C(ctx, gobj, 3_i32, (enums::ITEM_ANIM_UPDATE as i32));
         } else {
             inl_it_802E4C08_unfused(ctx, gobj);
@@ -199,7 +199,7 @@ pub fn itOctarock_UnkMotion3_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn itOctarock_UnkMotion3_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         (ip).x40_vel().set_y(fp::fsubs(
             (ip).x40_vel().y(),
             ((ip).xCC_item_attr()).x10_fall_speed(),
@@ -211,7 +211,7 @@ pub fn itOctarock_UnkMotion3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::it_8026E414(ctx, gobj, fnptr(ctx, 0x802e4c08));
     } else {
         fns::it_8026D62C(ctx, gobj, fnptr(ctx, 0x802e4db4));
@@ -300,7 +300,7 @@ pub fn itOctarock_UnkMotion4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             break 'l1;
         }
     }
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         if !(fns::it_8026D5CC(ctx, gobj) != 0) {
             inl_it_802E4DB4_unfused(ctx, gobj);
         }
@@ -401,7 +401,7 @@ pub fn itOctarock_UnkMotion1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+    if ((ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32))
         && ((ip).x40_vel().y() > 0.0)
     {
         fns::it_802762BC(ctx, ip);
@@ -419,7 +419,7 @@ pub fn itOctarock_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             break 'l1;
         }
     }
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         if !(fns::it_8026D5CC(ctx, gobj) != 0) {
             inl_it_802E4DB4_unfused(ctx, gobj);
         }

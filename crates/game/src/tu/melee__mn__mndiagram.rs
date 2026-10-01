@@ -5211,7 +5211,7 @@ fn inl_mnDiagram_FindPrevFighter_unfused<'a>(ctx: &'a Ctx, sorted: Val<'a, u8>, 
         'c2: {
             found = found.wrapping_sub(1);
             p = Handle::add(p, -1);
-            if (found as u32) < (0_i32 as u32) {
+            if found < ((0_i32 as u32) as i32) {
                 return cur;
             }
         }
@@ -5233,7 +5233,7 @@ fn inl_mnDiagram_FindNextFighter_unfused<'a>(ctx: &'a Ctx, sorted: Val<'a, u8>, 
         'c2: {
             found = found.wrapping_add(1);
             p = Handle::add(p, 1);
-            if (found as u32) >= ((enums::SELKIND_COUNT as i32) as u32) {
+            if found >= (((enums::SELKIND_COUNT as i32) as u32) as i32) {
                 return (cur as u8);
             }
         }

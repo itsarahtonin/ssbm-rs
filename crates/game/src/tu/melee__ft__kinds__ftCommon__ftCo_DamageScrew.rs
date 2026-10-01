@@ -57,7 +57,7 @@ pub fn ftCo_800D3004<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     inl_ftCo_ReleaseItemAndVictim_unfused(ctx, gobj);
     (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCommon_8007D5D4(ctx, fp);
         fns::Fighter_ChangeMotionState(
             ctx,

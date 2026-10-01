@@ -161,8 +161,8 @@ pub fn __GetImageTileCount<'a>(
         ) as u32),
     );
     (cmpTiles).set(
-        ((if ((fmt as u32) == ((enums::GX_TF_RGBA8 as i32) as u32))
-            || ((fmt as u32) == ((enums::GX_TF_Z24X8 as i32) as u32))
+        ((if (fmt == (((enums::GX_TF_RGBA8 as i32) as u32) as i32))
+            || (fmt == (((enums::GX_TF_Z24X8 as i32) as u32) as i32))
         {
             2_i32
         } else {
@@ -247,7 +247,7 @@ pub fn GXInitTexObj<'a>(
     if (mipmap as i32) != 0_i32 {
         let mut lmax: u8 = 0;
         (t).set_flags(((((t).flags() as i32) | 1_i32) as u8));
-        if (format as u32).wrapping_sub((8_i32 as u32)) <= 2_u32 {
+        if (format.wrapping_sub(((8_i32 as u32) as i32)) as u32) <= 2_u32 {
             (t).set_mode0((((t).mode0() & 0xffffff1f_u32) | (160_i32 as u32)));
         } else {
             (t).set_mode0((((t).mode0() & 0xffffff1f_u32) | (192_i32 as u32)));
@@ -321,7 +321,10 @@ pub fn GXInitTexObj<'a>(
                         ((shl_i32(1_i32, ((4_i32) as u32))).wrapping_sub(1_i32)),
                         ((20_i32) as u32),
                     ))) as u32))
-                    | (shl_u32(((format as u32) & (15_i32 as u32)), ((20_i32) as u32)))),
+                    | (shl_u32(
+                        ((format & ((15_i32 as u32) as i32)) as u32),
+                        ((20_i32) as u32),
+                    ))),
             );
         }
         if !(0_i32 != 0) {
@@ -345,7 +348,7 @@ pub fn GXInitTexObj<'a>(
         }
     }
     's17: {
-        let __case = match ((format as u32) & (15_i32 as u32)) {
+        let __case = match ((format & ((15_i32 as u32) as i32)) as u32) {
             0_u32 => 0,
             8_u32 => 0,
             1_u32 => 1,
@@ -498,7 +501,7 @@ pub fn GXInitTexObjLOD<'a>(
                         ((4_i32) as u32),
                     ))) as u32))
                     | (shl_u32(
-                        ((if (mag_filt as u32) == ((enums::GX_LINEAR as i32) as u32) {
+                        ((if mag_filt == (((enums::GX_LINEAR as i32) as u32) as i32) {
                             1_i32
                         } else {
                             0_i32

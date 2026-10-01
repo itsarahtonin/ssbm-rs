@@ -44,8 +44,8 @@ pub fn fn_800D8EC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut unused2: u32 = 0;
     let mut unused3: u32 = 0;
     let mut unused4: u32 = 0;
-    if (((fp).kind() as u32) == ((enums::Ft_Kind_Link as i32) as u32))
-        || (((fp).kind() as u32) == ((enums::Ft_Kind_CLink as i32) as u32))
+    if ((fp).kind() == (((enums::Ft_Kind_Link as i32) as u32) as i32))
+        || ((fp).kind() == (((enums::Ft_Kind_CLink as i32) as u32) as i32))
     {
         attrs = Handle::cast::<ftCo_LinkCatchAttrs<'a>>((fp).dat_attrs());
         (fp).mv()
@@ -93,7 +93,7 @@ pub fn fn_800D8EC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                     ))
                     .joint();
                     inl_HSD_JObjSetupMatrix(ctx, jobj);
-                    if ((fp).kind() as u32) == ((enums::Ft_Kind_Link as i32) as u32) {
+                    if (fp).kind() == (((enums::Ft_Kind_Link as i32) as u32) as i32) {
                         var_f3 = fp::frsp(fp::fmadd(
                             fp::fmul(8.0, (fp).facing_dir()),
                             (fp).x34_scale().y(),
@@ -129,14 +129,14 @@ pub fn fn_800D8EC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                     vel.set_y(0.0);
                     vel.set_z(0.0);
                     fns::it_802A78B8(ctx, item, vel);
-                    if ((fp).kind() as u32) == ((enums::Ft_Kind_CLink as i32) as u32) {
+                    if (fp).kind() == (((enums::Ft_Kind_CLink as i32) as u32) as i32) {
                         fns::ft_PlaySFX(ctx, fp, 0x111b9_i32, (127_i32 as u8), (64_i32 as u8));
                     } else {
                         fns::ft_PlaySFX(ctx, fp, 0x27149_i32, (127_i32 as u8), (64_i32 as u8));
                     }
                 } else if grav == fp::frsp((attrs).x8C() as f64) {
                     fns::it_802A77DC(ctx, item);
-                    if ((fp).kind() as u32) == ((enums::Ft_Kind_CLink as i32) as u32) {
+                    if (fp).kind() == (((enums::Ft_Kind_CLink as i32) as u32) as i32) {
                         fns::ft_PlaySFX(ctx, fp, 0x111bc_i32, (127_i32 as u8), (64_i32 as u8));
                     } else {
                         fns::ft_PlaySFX(ctx, fp, 0x2714c_i32, (127_i32 as u8), (64_i32 as u8));
@@ -158,8 +158,8 @@ pub fn fn_800D9228<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (((fp).kind() as u32) == ((enums::Ft_Kind_Link as i32) as u32))
-        || (((fp).kind() as u32) == ((enums::Ft_Kind_CLink as i32) as u32))
+    if ((fp).kind() == (((enums::Ft_Kind_Link as i32) as u32) as i32))
+        || ((fp).kind() == (((enums::Ft_Kind_CLink as i32) as u32) as i32))
     {
         let mut da: ftCo_LinkCatchAttrs<'a> =
             Handle::cast::<ftCo_LinkCatchAttrs<'a>>((fp).dat_attrs());
@@ -211,14 +211,14 @@ pub fn fn_800D9228<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                 pos_2.set_y(0.0);
                 pos_2.set_z(0.0);
                 fns::it_802A78B8(ctx, tether_gobj, pos_2);
-                if ((fp).kind() as u32) == ((enums::Ft_Kind_CLink as i32) as u32) {
+                if (fp).kind() == (((enums::Ft_Kind_CLink as i32) as u32) as i32) {
                     fns::ft_PlaySFX(ctx, fp, 0x111b9_i32, (127_i32 as u8), (64_i32 as u8));
                 } else {
                     fns::ft_PlaySFX(ctx, fp, 0x27149_i32, (127_i32 as u8), (64_i32 as u8));
                 }
             } else if (fp).mv().co().catch_().x0() == fp::frsp((da).x9C() as f64) {
                 fns::it_802A77DC(ctx, tether_gobj);
-                if ((fp).kind() as u32) == ((enums::Ft_Kind_CLink as i32) as u32) {
+                if (fp).kind() == (((enums::Ft_Kind_CLink as i32) as u32) as i32) {
                     fns::ft_PlaySFX(ctx, fp, 0x111bc_i32, (127_i32 as u8), (64_i32 as u8));
                 } else {
                     fns::ft_PlaySFX(ctx, fp, 0x2714c_i32, (127_i32 as u8), (64_i32 as u8));
@@ -236,8 +236,8 @@ pub fn fn_800D949C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (((fp).kind() as u32) == ((enums::Ft_Kind_Link as i32) as u32))
-        || (((fp).kind() as u32) == ((enums::Ft_Kind_CLink as i32) as u32))
+    if ((fp).kind() == (((enums::Ft_Kind_Link as i32) as u32) as i32))
+        || ((fp).kind() == (((enums::Ft_Kind_CLink as i32) as u32) as i32))
     {
         fns::it_802A2B10(ctx, (fp).u().lk().xC());
     }
@@ -259,7 +259,7 @@ pub fn fn_800D952C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (((fp).kind() as u32) == ((enums::Ft_Kind_Samus as i32) as u32))
+    if ((fp).kind() == (((enums::Ft_Kind_Samus as i32) as u32) as i32))
         && (!Handle::is_null((fp).u().ss().x223C()))
     {
         return 0_i32;

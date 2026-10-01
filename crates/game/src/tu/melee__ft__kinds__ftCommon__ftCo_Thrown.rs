@@ -49,10 +49,10 @@ pub fn ftCo_800DE3FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32, anim_speed
         0.0,
         (fp).victim_gobj(),
     );
-    if ((thrower_fp).kind() as u32) == ((enums::Ft_Kind_Yoshi as i32) as u32) {
+    if (thrower_fp).kind() == (((enums::Ft_Kind_Yoshi as i32) as u32) as i32) {
         fns::ftColl_8007B62C(ctx, gobj, 2_i32);
     }
-    if (((thrower_fp).kind() as u32) != ((enums::Ft_Kind_Kirby as i32) as u32))
+    if ((thrower_fp).kind() != (((enums::Ft_Kind_Kirby as i32) as u32) as i32))
         || ((msid.wrapping_sub((enums::ftCo_MS_ThrownF as i32)) as u32) > 1_u32)
     {
         fns::pl_80040614(
@@ -187,7 +187,7 @@ pub fn ftCo_ThrownHi_Cam<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut victim: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, (fp).victim_gobj())));
-    if (((victim).kind() as u32) == ((enums::Ft_Kind_Kirby as i32) as u32))
+    if ((victim).kind() == (((enums::Ft_Kind_Kirby as i32) as u32) as i32))
         && ((victim).motion_id() == (enums::ftCo_MS_ThrowHi as i32))
     {
         fns::ftCamera_800762F4(ctx, gobj);

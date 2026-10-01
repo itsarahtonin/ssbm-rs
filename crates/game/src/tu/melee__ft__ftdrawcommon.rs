@@ -267,7 +267,7 @@ pub fn ftDrawCommon_800805C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, ar
     }
     if ((fighter).x21FC_flag().x0().b2() as i32) != 0_i32 {
         let mut temp_r24: itPickup<'a> = (fighter).x294_itPickup();
-        if ((fighter).ground_or_air() as u32) == (0_i32 as u32) {
+        if (fighter).ground_or_air() == ((0_i32 as u32) as i32) {
             if (fns::lbGx_8001E2F8(
                 ctx,
                 (temp_r24).gr_light_offset(),

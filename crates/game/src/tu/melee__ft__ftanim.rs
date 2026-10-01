@@ -442,7 +442,7 @@ pub fn ftAnim_8006E7B8<'a>(ctx: &'a Ctx, fp: Fighter<'a>, part: i32) {
                 }
             }
             if (((Handle::add((fp).parts(), i)).xC_u().x0().xC() as i32) <= temp_r27)
-                && ((i as u32) != (part as u32))
+                && (((i as u32) as i32) != part)
             {
                 break 'l1;
             }
@@ -1249,7 +1249,7 @@ pub fn ftAnim_8006F628<'a>(ctx: &'a Ctx, fp: Fighter<'a>, part: i32, do_blending
     cur_track = (tree).tracks();
     kind = ((fp).x594().x0_1().x597_bits() as i32);
     temp_r25 = ((Handle::add((fp).parts(), part)).xC_u().x0().xC() as i32);
-    'l1: while (i as u32) < (part as u32) {
+    'l1: while ((i as u32) as i32) < part {
         'c2: {
             temp_r3 = fns::ftParts_8007506C(ctx, kind, i);
             if (temp_r3 == (0_i32 as u32)) || ((temp_r3 & (x594_bits as u32)) != 0) {
@@ -1278,7 +1278,7 @@ pub fn ftAnim_8006F628<'a>(ctx: &'a Ctx, fp: Fighter<'a>, part: i32, do_blending
                 }
             }
             if (((Handle::add((fp).parts(), i)).xC_u().x0().xC() as i32) <= temp_r25)
-                && ((i as u32) != (part as u32))
+                && (((i as u32) as i32) != part)
             {
                 break 'l3;
             }
@@ -1343,7 +1343,7 @@ pub fn ftAnim_8006F7C8<'a>(
     r27 = ((Handle::add((ft).parts(), part)).xC_u().x0().xC() as i32);
     {
         i = 0_i32;
-        'l3: while (i as u32) < (part as u32) {
+        'l3: while ((i as u32) as i32) < part {
             'c4: {
                 let mut r3: u32 = fns::ftParts_8007506C(ctx, (ft).kind(), i);
                 if (r3 == (0_i32 as u32)) || ((r3 & (r29 as u32)) != 0) {
@@ -1383,7 +1383,7 @@ pub fn ftAnim_8006F7C8<'a>(
                 }
             }
             if (((Handle::add((ft).parts(), r22)).xC_u().x0().xC() as i32) <= r27)
-                && ((i as u32) != (part as u32))
+                && (((i as u32) as i32) != part)
             {
                 break 'l5;
             }
@@ -2406,7 +2406,7 @@ pub fn ftAnim_80070A10<'a>(ctx: &'a Ctx, ft: Fighter<'a>, part: i32, tree: FigaT
     r27 = ((Handle::add((ft).parts(), part)).xC_u().x0().xC() as i32);
     {
         i = 0_i32;
-        'l1: while (i as u32) < (part as u32) {
+        'l1: while ((i as u32) as i32) < part {
             'c2: {
                 let mut r3: u32 = fns::ftParts_8007506C(ctx, (ft).kind(), i);
                 if (r3 == (0_i32 as u32)) || ((r3 & (r29 as u32)) != 0) {
@@ -2446,7 +2446,7 @@ pub fn ftAnim_80070A10<'a>(ctx: &'a Ctx, ft: Fighter<'a>, part: i32, tree: FigaT
                 }
             }
             if (((Handle::add((ft).parts(), r22)).xC_u().x0().xC() as i32) <= r27)
-                && ((i as u32) != (part as u32))
+                && (((i as u32) as i32) != part)
             {
                 break 'l3;
             }

@@ -121,7 +121,7 @@ pub fn it_802790C0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'
     let mut bone_idx: u32 = 0;
     hb = (item).x5D4_hitboxes().get((hitbox_idx as i32));
     hit = (hb).hit();
-    if (((hit).state() as u32) == ((enums::HitCapsule_Disabled as i32) as u32))
+    if ((hit).state() == (((enums::HitCapsule_Disabled as i32) as u32) as i32))
         || ((hit).x4() != x4)
     {
         (hit).set_x4(x4);

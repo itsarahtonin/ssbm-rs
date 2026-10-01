@@ -99,19 +99,19 @@ pub fn ftCo_CatchWait_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (fns::fn_800DA4C0(ctx, gobj) != 0) {
-        if (((fp).kind() as u32) == ((enums::Ft_Kind_Link as i32) as u32))
-            || (((fp).kind() as u32) == ((enums::Ft_Kind_CLink as i32) as u32))
+        if ((fp).kind() == (((enums::Ft_Kind_Link as i32) as u32) as i32))
+            || ((fp).kind() == (((enums::Ft_Kind_CLink as i32) as u32) as i32))
         {
             fns::it_802A7AAC(ctx, gobj);
-        } else if ((fp).kind() as u32) == ((enums::Ft_Kind_Samus as i32) as u32) {
+        } else if (fp).kind() == (((enums::Ft_Kind_Samus as i32) as u32) as i32) {
             fns::it_802BAC3C(ctx, gobj);
         }
     } else if (fns::ftCo_800DD1E4(ctx, gobj) != 0) {
-        if (((fp).kind() as u32) == ((enums::Ft_Kind_Link as i32) as u32))
-            || (((fp).kind() as u32) == ((enums::Ft_Kind_CLink as i32) as u32))
+        if ((fp).kind() == (((enums::Ft_Kind_Link as i32) as u32) as i32))
+            || ((fp).kind() == (((enums::Ft_Kind_CLink as i32) as u32) as i32))
         {
             fns::it_802A7AAC(ctx, gobj);
-        } else if ((fp).kind() as u32) == ((enums::Ft_Kind_Samus as i32) as u32) {
+        } else if (fp).kind() == (((enums::Ft_Kind_Samus as i32) as u32) as i32) {
             fns::it_802BAC3C(ctx, gobj);
         }
     }

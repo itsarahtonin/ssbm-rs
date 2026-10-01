@@ -141,7 +141,7 @@ pub fn ftKp_SpecialAirHi_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .set_middle_anim_frame(fp::fadds((fp).mv().co().walk().middle_anim_frame(), 1.0));
     fns::ftKp_SpecialN_80135780(ctx, gobj);
     if (fp).cmd_vars().at(2_i32).get() == (2_i32 as u32) {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
             fns::ftCommon_8007D60C(ctx, fp);
             fns::efLib_DestroyAll(ctx, gobj);
             (fp).set_x2219_b0((0_i32 as u8));
@@ -226,7 +226,7 @@ pub fn ftKp_SpecialHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCommon_8007D60C(ctx, fp);
         fns::Fighter_ChangeMotionState(
             ctx,
@@ -263,7 +263,7 @@ pub fn ftKp_SpecialAirHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
     }
     if (fp).self_vel().y() >= 0.0 {
-        if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {
+        if fns::ft_80081D0C(ctx, gobj) != (((enums::GA_Ground as i32) as u32) as i32) {
             inl_ftKp_SpecialAirHi_Coll_inline_unfused(ctx, gobj, fp, da);
             inl_Fighter_SetEffectHitlagCallbacks_unfused(ctx, fp);
             (fp).mv().kp().specials().set_x10(1_i32);

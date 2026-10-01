@@ -5181,7 +5181,7 @@ pub fn ftKb_LkSpecialNStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCommon_8007D5D4(ctx, fp);
         {
             let mut msid: i32 = (enums::ftKb_MS_LkSpecialAirNStart as i32);
@@ -5238,7 +5238,7 @@ pub fn ftKb_LkSpecialNLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCommon_8007D5D4(ctx, fp);
         {
             let mut msid: i32 = (enums::ftKb_MS_LkSpecialAirNLoop as i32);
@@ -5296,7 +5296,7 @@ pub fn ftKb_LkSpecialNEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
     }
     fns::ftKb_SpecialNLk800FB6DC(ctx, gobj);
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCommon_8007D5D4(ctx, fp);
         {
             let mut msid: i32 = (enums::ftKb_MS_LkSpecialAirNEnd as i32);
@@ -5353,7 +5353,7 @@ pub fn ftKb_LkSpecialAirNStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if (fns::ft_80081D0C(ctx, gobj) as u32) == ((enums::GA_Air as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) == (((enums::GA_Air as i32) as u32) as i32) {
         fns::ftCommon_8007D7FC(ctx, fp);
         {
             let mut msid: i32 = (enums::ftKb_MS_LkSpecialNStart as i32);
@@ -5410,7 +5410,7 @@ pub fn ftKb_LkSpecialAirNLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if (fns::ft_80081D0C(ctx, gobj) as u32) == ((enums::GA_Air as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) == (((enums::GA_Air as i32) as u32) as i32) {
         fns::ftCommon_8007D7FC(ctx, fp);
         {
             let mut msid: i32 = (enums::ftKb_MS_LkSpecialNLoop as i32);
@@ -5468,7 +5468,7 @@ pub fn ftKb_LkSpecialAirNEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
     }
     fns::ftKb_SpecialNLk800FB6DC(ctx, gobj);
-    if (fns::ft_80081D0C(ctx, gobj) as u32) == ((enums::GA_Air as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) == (((enums::GA_Air as i32) as u32) as i32) {
         fns::ftCommon_8007D7FC(ctx, fp);
         {
             let mut msid: i32 = (enums::ftKb_MS_LkSpecialNEnd as i32);

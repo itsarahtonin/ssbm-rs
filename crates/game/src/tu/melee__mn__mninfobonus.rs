@@ -209,7 +209,7 @@ pub fn fn_80252C50<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (o).set_x4C(null::<HSD_GObj<'a>>(ctx));
         return;
     }
-    if ((((fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32))
+    if (((fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32))
         && (((fns::HSD_PadCopyStatus(ctx).get(0)).button()
             & ((shl_i32(1_i32, (6_i32 as u32))) as u32))
             != 0))

@@ -210,8 +210,8 @@ pub fn fn_80181BFC<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>) -> i32 {
         'l1: while i < 6_i32 {
             'c2: {
                 if (fns::Player_GetFalls(ctx, i) == 0_i32)
-                    && ((fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                        != ((enums::Gm_PKind_NA as i32) as u32))
+                    && (fns::Player_GetPlayerSlotType(ctx, i)
+                        != (((enums::Gm_PKind_NA as i32) as u32) as i32))
                 {
                     count = count.wrapping_add(1_i32);
                 } else if !Handle::is_null(arg0) {
@@ -236,8 +236,8 @@ pub fn fn_80181C80<'a>(ctx: &'a Ctx, arg0: i32) {
     Handle::copy_from(sp10, (data).xC());
     count = inl_fn_80181C80_CountPlayers_unfused(ctx, sp38);
     if (((data).x54().get(arg0).x4() as i32) > count) && ((data).x8() > 90_i32) {
-        if (fns::Player_GetPlayerSlotType(ctx, sp38.get()) as u32)
-            != ((enums::Gm_PKind_NA as i32) as u32)
+        if fns::Player_GetPlayerSlotType(ctx, sp38.get())
+            != (((enums::Gm_PKind_NA as i32) as u32) as i32)
         {
             fns::Player_SetFalls(ctx, sp38.get(), 0_i32);
             fns::Player_SetSelfDestructs(ctx, sp38.get(), (0_i32 as u32));
@@ -1351,8 +1351,8 @@ fn inl_fn_80181C80_CountPlayers_unfused<'a>(ctx: &'a Ctx, out: Val<'a, i32>) -> 
         'l1: while i < 6_i32 {
             'c2: {
                 if (fns::Player_GetFalls(ctx, i) == 0_i32)
-                    && ((fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                        != ((enums::Gm_PKind_NA as i32) as u32))
+                    && (fns::Player_GetPlayerSlotType(ctx, i)
+                        != (((enums::Gm_PKind_NA as i32) as u32) as i32))
                 {
                     count = count.wrapping_add(1);
                 } else {
@@ -1378,8 +1378,8 @@ fn inl_fn_80181BFC_unfused<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>) -> i32 {
         'l1: while i < 6_i32 {
             'c2: {
                 if (fns::Player_GetFalls(ctx, i) == 0_i32)
-                    && ((fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                        != ((enums::Gm_PKind_NA as i32) as u32))
+                    && (fns::Player_GetPlayerSlotType(ctx, i)
+                        != (((enums::Gm_PKind_NA as i32) as u32) as i32))
                 {
                     count = count.wrapping_add(1_i32);
                 } else if !Handle::is_null(arg0) {

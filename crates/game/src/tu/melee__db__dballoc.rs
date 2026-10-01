@@ -39,7 +39,7 @@ pub fn fn_UpdateObjAllocLimiter<'a>(ctx: &'a Ctx, player: i32) {
     let __frame = ctx.stack_frame(0x40);
     let mut player = player;
     let mut peak: i32 = 0;
-    if (fns::DbLevel(ctx).get() as u32) == ((enums::DbLKind_Develop as i32) as u32) {
+    if fns::DbLevel(ctx).get() == (((enums::DbLKind_Develop as i32) as u32) as i32) {
         if ((fns::db_ButtonsDown(ctx, player) & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0)
             && ((fns::db_ButtonsPressed(ctx, player) & ((shl_i32(1_i32, (3_i32 as u32))) as u32))
                 != 0)

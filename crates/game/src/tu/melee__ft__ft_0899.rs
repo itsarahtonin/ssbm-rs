@@ -112,7 +112,7 @@ pub fn ft_80089B08<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     if (!((fp).x2219_b5() != 0))
-        && (((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+        && ((fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32))
     {
         if fns::db_804D4AF8(ctx).get() != 0_i32 {
             let mut scale_y: f64 = (fp).x34_scale().y();

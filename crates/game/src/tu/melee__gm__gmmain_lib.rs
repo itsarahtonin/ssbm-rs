@@ -1675,7 +1675,7 @@ pub fn gmMainLib_8015FA34<'a>(ctx: &'a Ctx, arg0: i32) {
             i = i.wrapping_add(1);
         }
     }
-    if ((fns::DbLevel(ctx).get() as u32) > ((enums::DbLKind_DebugDevelop as i32) as u32))
+    if (fns::DbLevel(ctx).get() > (((enums::DbLKind_DebugDevelop as i32) as u32) as i32))
         && (fns::db_804D6B20(ctx).get() != 0_i32)
     {
         (fns::gmMainLib_804D3EE0(ctx).get())

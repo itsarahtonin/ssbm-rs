@@ -38,7 +38,7 @@ pub fn ftMh_BackAirplane3_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if (fns::Player_GetPlayerSlotType(ctx, ((fp).player_idx() as i32)) as u32) == (0_i32 as u32) {
+    if fns::Player_GetPlayerSlotType(ctx, ((fp).player_idx() as i32)) == ((0_i32 as u32) as i32) {
         fns::ftBossLib_8015BD20(ctx, gobj);
     }
 }
@@ -103,7 +103,7 @@ pub fn ftMh_BackPunch_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::Player_GetPlayerSlotType(ctx, ((fp).player_idx() as i32)) as u32) == (0_i32 as u32) {
+    if fns::Player_GetPlayerSlotType(ctx, ((fp).player_idx() as i32)) == ((0_i32 as u32) as i32) {
         fns::ftBossLib_8015BD20(ctx, gobj);
     }
 }

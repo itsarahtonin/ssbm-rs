@@ -773,7 +773,7 @@ pub fn ft_80089228<'a>(ctx: &'a Ctx, fp: Fighter<'a>, attack_id: i32, arg2: i32,
     let mut arg3 = arg3;
     let mut mul: f64 = 0.0;
     let mut result: f64 = 0.0;
-    if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32) {
+    if fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32) {
         return arg3;
     }
     result = arg3;

@@ -107,7 +107,7 @@ pub fn HSD_SetupChannelMode<'a>(ctx: &'a Ctx, arg0: u32) {
                     .amb_color()
                     .set_a((temp_r3_2).color().a());
                 fns::HSD_SetupChannel(ctx, fns::HSD_State_80405A38_90(ctx));
-            } else if (fns::HSD_State_80405A38_90(ctx).light_mask() as u32) != (0_i32 as u32) {
+            } else if fns::HSD_State_80405A38_90(ctx).light_mask() != ((0_i32 as u32) as i32) {
                 fns::HSD_State_80405A38_90(ctx)
                     .amb_color()
                     .set_a((0_i32 as u8));

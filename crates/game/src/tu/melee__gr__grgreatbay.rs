@@ -1099,7 +1099,7 @@ pub fn grGreatBay_801F60C4<'a>(
     temp_r0 = ((coll).x34_flags().b1234() as i32);
     if (temp_r0 == 1_i32) || (temp_r0 == 3_i32) {
         let mut jobj: HSD_JObj<'a> = null(ctx);
-        if (ground_kind as u32) == (1_i32 as u32) {
+        if ground_kind == ((1_i32 as u32) as i32) {
             coll_x50 = fp::fctiwz(
                 (fp::fmuls(
                     fp::frsp(coll_x50 as f64),
@@ -1431,7 +1431,7 @@ pub fn grGreatBay_801F66A4<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut gp: Ground<'a> = null(ctx);
-    if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_GreatBay as i32) as u32) {
+    if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_GreatBay as i32) as u32) as i32) {
         gobj = fns::Ground_GetMapGObj(ctx, 1_i32);
         if !Handle::is_null(gobj) {
             gp = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

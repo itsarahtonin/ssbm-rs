@@ -169,7 +169,7 @@ pub fn GXSetProjection<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, r#type: i32) {
         .projMtx()
         .at(5_i32)
         .set((Handle::add(mtx, 2_i32)).at(3_i32).get());
-    if (r#type as u32) == ((enums::GX_ORTHOGRAPHIC as i32) as u32) {
+    if r#type == (((enums::GX_ORTHOGRAPHIC as i32) as u32) as i32) {
         (fns::gx(ctx).get())
             .projMtx()
             .at(1_i32)
@@ -556,7 +556,7 @@ pub fn GXLoadTexMtxImm<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, id: u32, r#type:
     } else {
         addr = id.wrapping_mul((4_i32 as u32));
     }
-    count = ((if (r#type as u32) == ((enums::GX_MTX2x4 as i32) as u32) {
+    count = ((if r#type == (((enums::GX_MTX2x4 as i32) as u32) as i32) {
         8_i32
     } else {
         12_i32
@@ -564,7 +564,7 @@ pub fn GXLoadTexMtxImm<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, id: u32, r#type:
     reg = (addr | (shl_u32((count.wrapping_sub((1_i32 as u32))), (16_i32 as u32))));
     (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((16_i32) as u8));
     (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((reg));
-    if (r#type as u32) == ((enums::GX_MTX3x4 as i32) as u32) {
+    if r#type == (((enums::GX_MTX3x4 as i32) as u32) as i32) {
         {
             let __t1 = (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).f32_ref();
             statics::dolphin__gx__GXTransform::WriteMTXPS4x3(ctx, mtx, __t1)
@@ -880,7 +880,7 @@ pub fn GXSetClipMode<'a>(ctx: &'a Ctx, mode: i32) {
 
 pub fn __GXSetMatrixIndex<'a>(ctx: &'a Ctx, matIdxAttr: i32) {
     let mut matIdxAttr = matIdxAttr;
-    if (matIdxAttr as u32) < ((enums::GX_VA_TEX4MTXIDX as i32) as u32) {
+    if matIdxAttr < (((enums::GX_VA_TEX4MTXIDX as i32) as u32) as i32) {
         'l1: loop {
             'c2: {
                 let mut regAddr: i32 = 0;

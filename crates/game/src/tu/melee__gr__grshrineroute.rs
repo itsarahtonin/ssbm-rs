@@ -1794,7 +1794,7 @@ pub fn onJointCollision<'a>(
             break 'l1;
         }
     }
-    if (((coll).x34_flags().b1234() as i32) == 1_i32) && ((ground_kind as u32) == (2_i32 as u32)) {
+    if (((coll).x34_flags().b1234() as i32) == 1_i32) && (ground_kind == ((2_i32 as u32) as i32)) {
         slot = (fns::ftLib_GetPlayerIndex(ctx, (coll).x0_gobj()) as u32);
         if {
             let __t1 = fns::Player_GetEntity(ctx, (slot as i32));

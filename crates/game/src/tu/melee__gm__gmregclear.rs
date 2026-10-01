@@ -966,8 +966,8 @@ pub fn fn_8017FF1C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         i = 0_i32;
         'l1: while i < 6_i32 {
             'c2: {
-                if ((fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                    == ((enums::Gm_PKind_Human as i32) as u32))
+                if (fns::Player_GetPlayerSlotType(ctx, i)
+                    == (((enums::Gm_PKind_Human as i32) as u32) as i32))
                     && ((fns::HSD_PadMasterStatus(ctx)
                         .get(((fns::Player_GetPadPort(ctx, i) as u8) as i32))
                         .trigger()
@@ -987,8 +987,8 @@ pub fn fn_8017FF1C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             i = 0_i32;
             'l3: while i < 6_i32 {
                 'c4: {
-                    if ((fns::Player_GetPlayerSlotType(ctx, i) as u32)
-                        == ((enums::Gm_PKind_Human as i32) as u32))
+                    if (fns::Player_GetPlayerSlotType(ctx, i)
+                        == (((enums::Gm_PKind_Human as i32) as u32) as i32))
                         && ((fns::HSD_PadMasterStatus(ctx)
                             .get(((fns::Player_GetPadPort(ctx, i) as u8) as i32))
                             .trigger()

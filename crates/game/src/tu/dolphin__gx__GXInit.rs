@@ -35,9 +35,9 @@ pub fn __GXDefaultTexRegionCallback<'a>(
     let mut t_obj = t_obj;
     let mut unused = unused;
     let mut fmt: i32 = fns::GXGetTexObjFmt(ctx, t_obj);
-    if (((fmt as u32) != ((enums::GX_TF_C4 as i32) as u32))
-        && ((fmt as u32) != ((enums::GX_TF_C8 as i32) as u32)))
-        && ((fmt as u32) != ((enums::GX_TF_C14X2 as i32) as u32))
+    if ((fmt != (((enums::GX_TF_C4 as i32) as u32) as i32))
+        && (fmt != (((enums::GX_TF_C8 as i32) as u32) as i32)))
+        && (fmt != (((enums::GX_TF_C14X2 as i32) as u32) as i32))
     {
         return (fns::gx(ctx).get()).TexRegions().get(
             (({

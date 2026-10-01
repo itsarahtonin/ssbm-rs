@@ -52,7 +52,7 @@ pub fn ftCo_800DEEB8<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: f64) -> f64 {
     let mut fp = fp;
     let mut arg1 = arg1;
     let mut attrs: _SmashAttr<'a> = (fp).smash_attrs();
-    if ((attrs).state() as u32) != ((enums::SmashState_Release as i32) as u32) {
+    if (attrs).state() != (((enums::SmashState_Release as i32) as u32) as i32) {
         return arg1;
     }
     return fp::fmuls(
@@ -69,8 +69,8 @@ pub fn ftCo_800DEEE8<'a>(ctx: &'a Ctx, fp: Fighter<'a>, shift: Vec2<'a>) -> Vec2
     let mut fp = fp;
     let mut shift = shift;
     let mut temp_r6: _SmashAttr<'a> = (fp).smash_attrs();
-    if (((temp_r6).state() as u32) == ((enums::SmashState_Charging as i32) as u32))
-        || (((temp_r6).state() as u32) == (4_i32 as u32))
+    if ((temp_r6).state() == (((enums::SmashState_Charging as i32) as u32) as i32))
+        || ((temp_r6).state() == ((4_i32 as u32) as i32))
     {
         let mut temp_r5: Vec2<'a> = (Handle::add(
             (fns::Fighter_SmashChargeShakeTable(ctx).get()).x0(),
@@ -89,7 +89,7 @@ pub fn ftCo_800DEF38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: _SmashAttr<'a> = (fp).smash_attrs();
-    if ((attr).state() as u32) == ((enums::SmashState_Charging as i32) as u32) {
+    if (attr).state() == (((enums::SmashState_Charging as i32) as u32) as i32) {
         (attr).set_x2118_frames(fp::fadds((attr).x2118_frames(), fp::frsp(1.0)));
         (attr).set_x212C((attr).x212C().wrapping_add(1));
         if ((attr).x212C() as i32) >= ((attr).x212D() as i32) {
@@ -116,7 +116,7 @@ pub fn ftCo_800DEF38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             fns::ft_PlaySFX(ctx, fp, 123_i32, (127_i32 as u8), (64_i32 as u8));
             (attr).set_x2130_sfxBool(1_i32);
         }
-    } else if ((attr).state() as u32) == (4_i32 as u32) {
+    } else if (attr).state() == ((4_i32 as u32) as i32) {
         (attr).set_x2118_frames(fp::fadds((attr).x2118_frames(), fp::frsp(1.0)));
         (attr).set_x212C((attr).x212C().wrapping_add(1));
         if ((attr).x212C() as i32) >= ((attr).x212D() as i32) {

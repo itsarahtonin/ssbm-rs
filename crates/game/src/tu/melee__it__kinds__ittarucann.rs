@@ -195,7 +195,7 @@ pub fn it_802962E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut var_f1: f64 = 0.0;
     let mut new_var: f64 = 0.0;
     let mut var_f2: f64 = 0.0;
-    if ((ip).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() != (((enums::GA_Air as i32) as u32) as i32) {
         var_f1 = (ip).xDD4_itemVar().tarucann().x14().x();
         temp_f2 = var_f1;
         new_var2 = (temp_f2 < 0.0) as i32;
@@ -675,7 +675,7 @@ pub fn itTarucann_UnkMotion8_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         }
     }
     fns::it_8026D62C(ctx, gobj, fnptr(ctx, 0x802969d8));
-    if ((ip).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() != (((enums::GA_Air as i32) as u32) as i32) {
         if (((coll).env_flags() & 0x18000_i32) != 0) {
             fns::it_80276408(ctx, gobj, coll, (ip).xDD4_itemVar().tarucann().x14());
         } else {

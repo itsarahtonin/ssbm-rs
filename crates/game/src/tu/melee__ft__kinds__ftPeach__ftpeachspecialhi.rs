@@ -273,9 +273,8 @@ pub fn ftPe_SpecialAirHiStart_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftPe_SpecialHiStart_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
-    if ((Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).ground_or_air()
-        as u32)
-        == ((enums::GA_Air as i32) as u32)
+    if (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).ground_or_air()
+        == (((enums::GA_Air as i32) as u32) as i32)
     {
         fns::ft_80085154(ctx, gobj);
     } else {
@@ -359,7 +358,7 @@ pub fn ftPe_SpecialHiEnd_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut ca: ftCo_DatAttrs<'a> = (fp).co_attrs();
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         let mut vel_y: f64 = (fp).self_vel().y();
         fns::ft_80085154(ctx, gobj);
         (fp).self_vel().set_y(vel_y);
@@ -628,7 +627,7 @@ fn inl_doColl_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
     let mut cb = cb;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if (!((fp).cmd_vars().at(0_i32).get() != 0))
             || ((fp).self_vel().y() >= fp::frsp(0_i32 as f64))
         {
@@ -664,7 +663,7 @@ fn inl_doColl_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
     let mut cb = cb;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         if (!((fp).cmd_vars().at(0_i32).get() != 0))
             || ((fp).self_vel().y() >= fp::frsp(0_i32 as f64))
         {

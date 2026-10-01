@@ -291,10 +291,10 @@ pub fn Camera_8002928C<'a>(ctx: &'a Ctx, subject: CmSubject<'a>) -> i32 {
     let mut right: f64 = 0.0;
     let mut bottom: f64 = 0.0;
     let mut top: f64 = 0.0;
-    if (((subject).state() as u32) != ((enums::CmSubjectState_Inactive as i32) as u32))
+    if ((subject).state() != (((enums::CmSubjectState_Inactive as i32) as u32) as i32))
         && (!((subject).force_inactive() != 0))
     {
-        if ((subject).state() as u32) == ((enums::CmSubjectState_Auto as i32) as u32) {
+        if (subject).state() == (((enums::CmSubjectState_Auto as i32) as u32) as i32) {
             if ((subject).state_timer() as i32) != 0_i32 {
                 (subject).set_state_timer((subject).state_timer().wrapping_sub(1));
                 return 0_i32;
@@ -1781,8 +1781,8 @@ pub fn Camera_8002B1F8<'a>(ctx: &'a Ctx, transform: CameraTransformState<'a>) {
         && (fns::Camera_8002928C(ctx, subject) != 0_i32))
         && (fns::Camera_80029124(ctx, (subject).bone_pos(), 0_i32) == (0_i32 as u32)))
         && (!(fns::ftLib_IsDead(ctx, temp_r3) != 0)))
-        || ((((((fns::Player_GetPlayerCharacter(ctx, 1_i32) as u32)
-            == ((enums::ChKind_Sandbag as i32) as u32))
+        || (((((fns::Player_GetPlayerCharacter(ctx, 1_i32)
+            == (((enums::ChKind_Sandbag as i32) as u32) as i32))
             && (({
                 temp_r3_2 = fns::Player_GetEntity(ctx, 1_i32);
                 ((((Handle::is_null(temp_r3_2)) as i32) == 0_i32) as i32)
@@ -3978,7 +3978,7 @@ pub fn Camera_8002CDDC<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
             }),
         )))
         && (fns::Camera_8002928C(ctx, subject) != 0))
-        && (((subject).state() as u32) == ((enums::CmSubjectState_Active as i32) as u32)))
+        && ((subject).state() == (((enums::CmSubjectState_Active as i32) as u32) as i32)))
         && (fns::Camera_80029124(ctx, (subject).bone_pos(), 0_i32) == (0_i32 as u32)))
         && ((if ((subject).bone_pos().z()) < fp::frsp(0_i32 as f64) {
             fp::fneg(((subject).bone_pos().z()))
@@ -6376,8 +6376,8 @@ pub fn Camera_8002E6FC<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x20);
     let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
-    if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
-        != ((enums::CAMERA_BOSS_INTRO as i32) as u32)
+    if statics::melee__cm__camera::game_camera(ctx).mode()
+        != (((enums::CAMERA_BOSS_INTRO as i32) as u32) as i32)
     {
         fns::Camera_8002FE38(ctx);
     }
@@ -6451,8 +6451,8 @@ pub fn Camera_8002E818<'a>(ctx: &'a Ctx, pos: Vec<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut pos = pos;
-    if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
-        != ((enums::CAMERA_BOSS_INTRO as i32) as u32)
+    if statics::melee__cm__camera::game_camera(ctx).mode()
+        != (((enums::CAMERA_BOSS_INTRO as i32) as u32) as i32)
     {
         fns::Camera_8002FE38(ctx);
     }
@@ -6527,8 +6527,8 @@ pub fn Camera_8002E948<'a>(ctx: &'a Ctx, cb: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut cb = cb;
-    if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
-        != ((enums::CAMERA_BOSS_INTRO as i32) as u32)
+    if statics::melee__cm__camera::game_camera(ctx).mode()
+        != (((enums::CAMERA_BOSS_INTRO as i32) as u32) as i32)
     {
         fns::Camera_8002FE38(ctx);
     }
@@ -6602,8 +6602,8 @@ pub fn Camera_8002EA64<'a>(ctx: &'a Ctx, arg0: Vec<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
-    if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
-        != ((enums::CAMERA_BOSS_INTRO as i32) as u32)
+    if statics::melee__cm__camera::game_camera(ctx).mode()
+        != (((enums::CAMERA_BOSS_INTRO as i32) as u32) as i32)
     {
         fns::Camera_8002FE38(ctx);
     }
@@ -6655,8 +6655,8 @@ pub fn Camera_8002EB5C<'a>(ctx: &'a Ctx, arg0: f64) {
     let __frame = ctx.stack_frame(0x28);
     let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
-    if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
-        != ((enums::CAMERA_BOSS_INTRO as i32) as u32)
+    if statics::melee__cm__camera::game_camera(ctx).mode()
+        != (((enums::CAMERA_BOSS_INTRO as i32) as u32) as i32)
     {
         fns::Camera_8002FE38(ctx);
     }
@@ -6723,8 +6723,8 @@ pub fn Camera_8002EC7C<'a>(ctx: &'a Ctx, arg0: f64) {
     let __frame = ctx.stack_frame(0x28);
     let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
-    if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
-        != ((enums::CAMERA_BOSS_INTRO as i32) as u32)
+    if statics::melee__cm__camera::game_camera(ctx).mode()
+        != (((enums::CAMERA_BOSS_INTRO as i32) as u32) as i32)
     {
         fns::Camera_8002FE38(ctx);
     }
@@ -6791,8 +6791,8 @@ pub fn Camera_8002ED9C<'a>(ctx: &'a Ctx, arg0: f64) {
     let __frame = ctx.stack_frame(0x30);
     let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
-    if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
-        != ((enums::CAMERA_BOSS_INTRO as i32) as u32)
+    if statics::melee__cm__camera::game_camera(ctx).mode()
+        != (((enums::CAMERA_BOSS_INTRO as i32) as u32) as i32)
     {
         fns::Camera_8002FE38(ctx);
     }
@@ -6858,8 +6858,8 @@ pub fn Camera_8002ED9C<'a>(ctx: &'a Ctx, arg0: f64) {
 pub fn Camera_8002EEC8<'a>(ctx: &'a Ctx, fov: f64) {
     let __frame = ctx.stack_frame(0x18);
     let mut fov = fov;
-    if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
-        != ((enums::CAMERA_BOSS_INTRO as i32) as u32)
+    if statics::melee__cm__camera::game_camera(ctx).mode()
+        != (((enums::CAMERA_BOSS_INTRO as i32) as u32) as i32)
     {
         fns::Camera_8002FE38(ctx);
     }
@@ -6874,8 +6874,8 @@ pub fn Camera_8002EF14<'a>(ctx: &'a Ctx) {
     let sp8: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let mut sp24: i32 = 0;
     let mut sp14: i32 = 0;
-    if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
-        != ((enums::CAMERA_BOSS_INTRO as i32) as u32)
+    if statics::melee__cm__camera::game_camera(ctx).mode()
+        != (((enums::CAMERA_BOSS_INTRO as i32) as u32) as i32)
     {
         fns::Camera_8002FE38(ctx);
     }
@@ -7016,8 +7016,8 @@ pub fn Camera_8002F0E4<'a>(ctx: &'a Ctx, arg0: i32) {
     let mut sp20: i32 = 0;
     let mut temp_f30: f64 = 0.0;
     let mut temp_f31: f64 = 0.0;
-    if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
-        != ((enums::CAMERA_BOSS_INTRO as i32) as u32)
+    if statics::melee__cm__camera::game_camera(ctx).mode()
+        != (((enums::CAMERA_BOSS_INTRO as i32) as u32) as i32)
     {
         fns::Camera_8002FE38(ctx);
     }
@@ -7124,8 +7124,8 @@ pub fn Camera_8002F260<'a>(ctx: &'a Ctx) -> i32 {
 pub fn Camera_8002F274<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
     let sp8: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
-        != ((enums::CAMERA_BOSS_INTRO as i32) as u32)
+    if statics::melee__cm__camera::game_camera(ctx).mode()
+        != (((enums::CAMERA_BOSS_INTRO as i32) as u32) as i32)
     {
         fns::Camera_8002FE38(ctx);
     }
@@ -7917,8 +7917,8 @@ pub fn Camera_8002FEEC<'a>(ctx: &'a Ctx, arg0: i32) {
     if !Handle::is_null(fns::Player_GetEntity(ctx, arg0)) {
         r#box = fns::ftLib_GetCameraSubject(ctx, fns::Player_GetEntity(ctx, arg0));
         if (!Handle::is_null(r#box))
-            && (((statics::melee__cm__camera::game_camera(ctx).mode()) as u32)
-                != ((enums::CAMERA_DEBUG_FOLLOW as i32) as u32))
+            && ((statics::melee__cm__camera::game_camera(ctx).mode())
+                != (((enums::CAMERA_DEBUG_FOLLOW as i32) as u32) as i32))
         {
             if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
                 <= ((enums::CAMERA_PAUSE as i32) as u32)
@@ -7988,8 +7988,8 @@ pub fn Camera_8002FEEC<'a>(ctx: &'a Ctx, arg0: i32) {
 pub fn Camera_8003006C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
     let mut cobj: HSD_CObj<'a> = null(ctx);
-    if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
-        != ((enums::CAMERA_DEBUG_FREE as i32) as u32)
+    if statics::melee__cm__camera::game_camera(ctx).mode()
+        != (((enums::CAMERA_DEBUG_FREE as i32) as u32) as i32)
     {
         if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
             <= ((enums::CAMERA_PAUSE as i32) as u32)

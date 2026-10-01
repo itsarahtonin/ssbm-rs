@@ -396,7 +396,7 @@ pub fn onUnkHit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .pe()
         .specialn()
         .set_facing_dir(fp::fctiwz((fp).specialn_facing_dir()));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         msid = (enums::ftPe_MS_SpecialNHit as i32);
     } else {
         msid = (enums::ftPe_MS_SpecialAirNHit as i32);

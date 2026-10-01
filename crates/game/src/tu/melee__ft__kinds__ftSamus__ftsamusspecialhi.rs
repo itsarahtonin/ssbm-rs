@@ -255,7 +255,7 @@ pub fn ftSs_SpecialHi_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).self_vel()
             .set_x(fp::fmuls((samus_attr).x38(), (fp).facing_dir()));
     }
-    if ((fp).ground_or_air() as u32) == (1_i32 as u32) {
+    if (fp).ground_or_air() == ((1_i32 as u32) as i32) {
         fns::ft_800851C0(ctx, gobj);
         fns::ftCommon_CalcSelfAccel_DriftSimple(
             ctx,
@@ -289,7 +289,7 @@ pub fn ftSs_SpecialHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> = inl_getFighter_unfused(ctx, gobj);
     let mut samus_attr: _ftSamusAttributes<'a> =
         Handle::cast::<_ftSamusAttributes<'a>>((fp).dat_attrs());
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         let mut direction: i32 = 0;
         if (fp).self_vel().y() >= 0.0 {
             let _ = fns::ft_80081D0C(ctx, gobj);
@@ -322,7 +322,7 @@ pub fn ftSs_SpecialAirHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut samus_attr: _ftSamusAttributes<'a> =
         Handle::cast::<_ftSamusAttributes<'a>>((fp).dat_attrs());
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         let mut direction: i32 = 0;
         if (fp).self_vel().y() >= 0.0 {
             let _ = fns::ft_80081D0C(ctx, gobj);

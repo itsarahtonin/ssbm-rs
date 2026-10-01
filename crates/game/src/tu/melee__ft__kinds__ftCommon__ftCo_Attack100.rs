@@ -442,7 +442,7 @@ pub fn ftCo_800D71D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_800D7268<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut fp = fp;
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Kirby as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Kirby as i32) as u32) as i32) {
         return fns::ftKb_SpecialN_800F1CD8(ctx, (fp).gobj());
     }
     return 0_i32;

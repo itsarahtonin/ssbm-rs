@@ -178,7 +178,7 @@ pub fn ftCa_SpecialLw_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
     }
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             inl_ftCa_SpecialLw_Anim_inline_unfused(ctx, gobj, 0_i32);
         } else {
             inl_ftCa_SpecialLw_Anim_inline_unfused(ctx, gobj, 1_i32);
@@ -252,7 +252,7 @@ pub fn ftCa_SpecialLw_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCommon_8007E5AC(ctx, fp);
         fns::ft_80085088(ctx, gobj);
     } else {
@@ -269,7 +269,7 @@ pub fn ftCa_SpecialLwEnd_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut da: ftCaptain_DatAttrs<'a> = Handle::cast::<ftCaptain_DatAttrs<'a>>((fp).dat_attrs());
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCommon_8007E5AC(ctx, fp);
         if (fp).cmd_vars().at(2_i32).get() != (0_i32 as u32) {
             fns::ftCommon_CalcGroundAccel_Deaccel(
@@ -296,7 +296,7 @@ pub fn ftCa_SpecialLwEndAir_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCommon_8007E5AC(ctx, fp);
         fns::ft_80085088(ctx, gobj);
         return;
@@ -360,10 +360,10 @@ pub fn ftCa_SpecialLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (fp).ground_or_air() == (enums::GA_Ground as i32) {
-        if (fns::ft_80082708(ctx, gobj) as u32) == (0_i32 as u32) {
+        if fns::ft_80082708(ctx, gobj) == ((0_i32 as u32) as i32) {
             fns::ftCommon_8007D5D4(ctx, fp);
         }
-    } else if (fns::ft_80081D0C(ctx, gobj) as u32) != (0_i32 as u32) {
+    } else if fns::ft_80081D0C(ctx, gobj) != ((0_i32 as u32) as i32) {
         fns::ftCommon_8007D7FC(ctx, fp);
     }
     {
@@ -396,7 +396,7 @@ pub fn ftCa_SpecialLwEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         if (fp).cmd_vars().at(1_i32).get() != (0_i32 as u32) {
             if !(fns::ft_800827A0(ctx, gobj) != 0) {
                 fns::ftCommon_8007D5D4(ctx, fp);
@@ -562,7 +562,7 @@ fn inl_ftCa_SpecialLwEnd_Coll_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         if (fp).cmd_vars().at(1_i32).get() != (0_i32 as u32) {
             if !(fns::ft_800827A0(ctx, gobj) != 0) {
                 fns::ftCommon_8007D5D4(ctx, fp);
@@ -595,7 +595,7 @@ fn inl_doColl_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32, __in_call
     let unused: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut msid = msid;
-    if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80081D0C(ctx, gobj) != (((enums::GA_Ground as i32) as u32) as i32) {
         let mut fp: Fighter<'a> =
             (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
         let mut da: ftCaptain_DatAttrs<'a> =

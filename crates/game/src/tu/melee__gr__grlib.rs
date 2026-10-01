@@ -328,13 +328,13 @@ pub fn grLib_801C9CEC<'a>(ctx: &'a Ctx, kind: i32) -> HSD_GObj<'a> {
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut quake_idx: i32 = 0;
-    if (kind as u32) == ((enums::QuakeKind_Loop as i32) as u32) {
+    if kind == (((enums::QuakeKind_Loop as i32) as u32) as i32) {
         quake_idx = 0_i32;
-    } else if (kind as u32) == ((enums::QuakeKind_Small as i32) as u32) {
+    } else if kind == (((enums::QuakeKind_Small as i32) as u32) as i32) {
         quake_idx = 1_i32;
-    } else if (kind as u32) == ((enums::QuakeKind_Medium as i32) as u32) {
+    } else if kind == (((enums::QuakeKind_Medium as i32) as u32) as i32) {
         quake_idx = 2_i32;
-    } else if (kind as u32) == ((enums::QuakeKind_Large as i32) as u32) {
+    } else if kind == (((enums::QuakeKind_Large as i32) as u32) as i32) {
         quake_idx = 3_i32;
     } else {
         return null::<HSD_GObj<'a>>(ctx);
@@ -351,7 +351,7 @@ pub fn grLib_801C9CEC<'a>(ctx: &'a Ctx, kind: i32) -> HSD_GObj<'a> {
         fns::HSD_GObj_JObjKind(ctx).get(),
         Handle::cast::<Addr<'a>>(jobj),
     );
-    if (kind as u32) == ((enums::QuakeKind_Loop as i32) as u32) {
+    if kind == (((enums::QuakeKind_Loop as i32) as u32) as i32) {
         let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x801c9bc8), (1_i32 as u8));
     } else {
         let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x801c9c40), (1_i32 as u8));
@@ -364,7 +364,7 @@ pub fn grLib_801C9CEC<'a>(ctx: &'a Ctx, kind: i32) -> HSD_GObj<'a> {
         null::<HSD_ShapeAnimJoint<'a>>(ctx),
     );
     fns::HSD_JObjReqAnimAll(ctx, jobj, fp::frsp(0_i32 as f64));
-    if (kind as u32) == ((enums::QuakeKind_Loop as i32) as u32) {
+    if kind == (((enums::QuakeKind_Loop as i32) as u32) as i32) {
         fns::HSD_ForeachAnim(
             ctx,
             Handle::cast::<Addr<'a>>(jobj),
@@ -391,15 +391,15 @@ pub fn grLib_801C9E60<'a>(ctx: &'a Ctx, v: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut v = v;
     let mut id: i32 = fns::stage_info(ctx).grkind();
-    if (id as u32) == ((enums::Gr_Kind_RCruise as i32) as u32) {
+    if id == (((enums::Gr_Kind_RCruise as i32) as u32) as i32) {
         fns::grRCruise_80201918(ctx, v);
         return 1_i32;
     }
-    if (id as u32) == ((enums::Gr_Kind_BigBlue as i32) as u32) {
+    if id == (((enums::Gr_Kind_BigBlue as i32) as u32) as i32) {
         fns::grBigBlue_801EF7D8(ctx, v);
         return 1_i32;
     }
-    if (id as u32) == ((enums::Gr_Kind_Icemt as i32) as u32) {
+    if id == (((enums::Gr_Kind_Icemt as i32) as u32) as i32) {
         fns::grIceMt_801FA728(ctx, v);
         return 1_i32;
     }

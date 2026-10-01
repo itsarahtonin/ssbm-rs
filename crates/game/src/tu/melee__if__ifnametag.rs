@@ -147,8 +147,8 @@ pub fn fn_802FCC44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if ((((fns::Player_GetPlayerSlotType(ctx, ((slot).get() as i32)) as u32)
-        != ((enums::Gm_PKind_NA as i32) as u32))
+    if (((fns::Player_GetPlayerSlotType(ctx, ((slot).get() as i32))
+        != (((enums::Gm_PKind_NA as i32) as u32) as i32))
         && (fns::Player_GetPlayerState(ctx, ((slot).get() as i32)) != 0))
         && (fns::Player_GetStocks(ctx, ((slot).get() as i32)) != 0))
         && (((((statics::melee__if__ifnametag::un_804D6D70(ctx)
@@ -432,8 +432,8 @@ pub fn un_802FD4C8<'a>(ctx: &'a Ctx) {
 
 fn inl_has_nametag_unfused<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
     let mut slot = slot;
-    if ((fns::Player_GetPlayerSlotType(ctx, slot) as u32)
-        != ((enums::Gm_PKind_Human as i32) as u32))
+    if (fns::Player_GetPlayerSlotType(ctx, slot)
+        != (((enums::Gm_PKind_Human as i32) as u32) as i32))
         || ((fns::Player_GetNametagSlotID(ctx, slot) as i32) == 120_i32)
     {
         return 0_i32;

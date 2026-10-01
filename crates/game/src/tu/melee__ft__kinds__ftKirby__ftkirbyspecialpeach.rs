@@ -492,7 +492,7 @@ pub fn fn_8010CD88<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         .set_facing_dir(fp::fctiwz((fp).specialn_facing_dir()));
     {
         let mut msid: i32 = 0;
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             msid = (enums::ftKb_MS_PeSpecialLwHit as i32);
         } else {
             msid = (enums::ftKb_MS_PeSpecialAirLwHit as i32);

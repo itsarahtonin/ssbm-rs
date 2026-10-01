@@ -684,7 +684,7 @@ pub fn grCastle_801CDF54<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> i32 {
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut i: i32 = 0;
     i = 0_i32;
-    if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Castle as i32) as u32) {
+    if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Castle as i32) as u32) as i32) {
         {
             i = 0_i32;
             'l1: while i < 9_i32 {
@@ -862,7 +862,7 @@ pub fn grCastle_801CE260<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (gp).u().castle11().xC4().set_b0((0_i32 as u8));
     (gp).u()
         .icemt()
-        .set_x2((((gp).map_id() as u32).wrapping_sub((8_i32 as u32)) as i16));
+        .set_x2(((gp).map_id().wrapping_sub(((8_i32 as u32) as i32)) as i16));
     (gp).u().arwing().set_xCC((0_i32 as u32));
     (gp).u().flatzone().set_xCA(
         (statics::melee__gr__grcastle::yakumono_param(ctx).get())

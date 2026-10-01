@@ -319,7 +319,7 @@ pub fn onJointCollision<'a>(
     let mut delta_y = delta_y;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>(user_data);
     if (((coll).x34_flags().b1234() as i32) == 1_i32)
-        && (((ground_kind as u32).wrapping_sub((1_i32 as u32))) <= 1_u32)
+        && (((ground_kind.wrapping_sub(((1_i32 as u32) as i32))) as u32) <= 1_u32)
     {
         (gp).u().unk().set_xC4(1_i32);
     }

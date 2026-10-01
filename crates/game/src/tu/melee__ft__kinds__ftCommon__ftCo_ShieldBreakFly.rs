@@ -45,7 +45,7 @@ pub fn ftCo_80098B20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).self_vel().set_x(fp::frsp(0_i32 as f64));
     (fp).self_vel()
         .set_y((fp).co_attrs().shield_break_initial_velocity());
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Purin as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Purin as i32) as u32) as i32) {
         (fp).set_x2222_b3((1_i32 as u8));
     }
     inl_ftCo_SpawnEf_unfused(
@@ -134,7 +134,7 @@ fn inl_ftCo_80098B20_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).self_vel().set_x(fp::frsp(0_i32 as f64));
     (fp).self_vel()
         .set_y((fp).co_attrs().shield_break_initial_velocity());
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Purin as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Purin as i32) as u32) as i32) {
         (fp).set_x2222_b3((1_i32 as u8));
     }
     inl_ftCo_SpawnEf_unfused(

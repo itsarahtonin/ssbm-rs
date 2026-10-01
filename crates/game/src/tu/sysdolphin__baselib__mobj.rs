@@ -456,7 +456,7 @@ pub fn MObjMakeTExp<'a>(
                     & (((shl_i32(1_i32, (4_i32 as u32))) | (shl_i32(1_i32, (6_i32 as u32))))
                         as u32))
                     != 0)
-                    && (((tobj_2).id() as u32) != ((enums::GX_TEXMAP_NULL as i32) as u32))
+                    && ((tobj_2).id() != (((enums::GX_TEXMAP_NULL as i32) as u32) as i32))
                 {
                     (Handle::cast::<_HSD_TObjInfo<'a>>(((tobj_2).parent().parent().class_info())))
                         .make_texp()
@@ -585,7 +585,7 @@ pub fn MObjMakeTExp<'a>(
             'l5: while !Handle::is_null(tobj_3) {
                 'c6: {
                     if (((tobj_3).flags() & ((shl_i32(1_i32, (5_i32 as u32))) as u32)) != 0)
-                        && (((tobj_3).id() as u32) != ((enums::GX_TEXMAP_NULL as i32) as u32))
+                        && ((tobj_3).id() != (((enums::GX_TEXMAP_NULL as i32) as u32) as i32))
                     {
                         (Handle::cast::<_HSD_TObjInfo<'a>>(
                             ((tobj_3).parent().parent().class_info()),
@@ -662,7 +662,7 @@ pub fn MObjMakeTExp<'a>(
         'l7: while !Handle::is_null(tobj_4) {
             'c8: {
                 if (((tobj_4).flags() & ((shl_i32(1_i32, (7_i32 as u32))) as u32)) != 0)
-                    && (((tobj_4).id() as u32) != ((enums::GX_TEXMAP_NULL as i32) as u32))
+                    && ((tobj_4).id() != (((enums::GX_TEXMAP_NULL as i32) as u32) as i32))
                 {
                     (Handle::cast::<_HSD_TObjInfo<'a>>(((tobj_4).parent().parent().class_info())))
                         .make_texp()
@@ -680,8 +680,8 @@ pub fn MObjMakeTExp<'a>(
         }
     }
     if ((Handle::addr(ext.get()) != Handle::addr(alpha.get()))
-        || ((fns::HSD_TExpGetType(ctx, ext.get()) as u32) != ((enums::HSD_TE_TEV as i32) as u32)))
-        || ((fns::HSD_TExpGetType(ctx, alpha.get()) as u32) != ((enums::HSD_TE_TEV as i32) as u32))
+        || (fns::HSD_TExpGetType(ctx, ext.get()) != (((enums::HSD_TE_TEV as i32) as u32) as i32)))
+        || (fns::HSD_TExpGetType(ctx, alpha.get()) != (((enums::HSD_TE_TEV as i32) as u32) as i32))
     {
         exp_2 = fns::HSD_TExpTev(ctx, list);
         fns::HSD_TExpColorOp(

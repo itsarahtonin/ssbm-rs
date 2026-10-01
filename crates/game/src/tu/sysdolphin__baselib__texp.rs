@@ -82,9 +82,9 @@ pub fn HSD_TExpUnref<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, sel: u8) {
     let mut sel = sel;
     let mut i: i32 = 0;
     let mut r#type: i32 = inl_HSD_TExpGetType_unfused(ctx, texp);
-    if (r#type as u32) != ((enums::HSD_TE_CNST as i32) as u32) {
-        if ((r#type as u32) >= ((enums::HSD_TE_CNST as i32) as u32))
-            || ((r#type as u32) != ((enums::HSD_TE_TEV as i32) as u32))
+    if r#type != (((enums::HSD_TE_CNST as i32) as u32) as i32) {
+        if (r#type >= (((enums::HSD_TE_CNST as i32) as u32) as i32))
+            || (r#type != (((enums::HSD_TE_TEV as i32) as u32) as i32))
         {
             return;
         }
@@ -147,7 +147,7 @@ pub fn HSD_TExpFreeList<'a>(
     if all != 0_i32 {
         'l1: while !Handle::is_null((handle).get()) {
             'c2: {
-                if ((r#type as u32) == ((enums::HSD_TE_ALL as i32) as u32))
+                if (r#type == (((enums::HSD_TE_ALL as i32) as u32) as i32))
                     || (r#type == ((handle).get()).r#type())
                 {
                     's3: {
@@ -186,8 +186,8 @@ pub fn HSD_TExpFreeList<'a>(
             }
         }
     } else {
-        if ((r#type as u32) == ((enums::HSD_TE_ALL as i32) as u32))
-            || ((r#type as u32) == ((enums::HSD_TE_TEV as i32) as u32))
+        if (r#type == (((enums::HSD_TE_ALL as i32) as u32) as i32))
+            || (r#type == (((enums::HSD_TE_TEV as i32) as u32) as i32))
         {
             {
                 ptr_ = texp_list__slot.get();
@@ -218,7 +218,7 @@ pub fn HSD_TExpFreeList<'a>(
         }
         'l7: while !Handle::is_null((handle).get()) {
             'c8: {
-                if ((r#type as u32) == ((enums::HSD_TE_ALL as i32) as u32))
+                if (r#type == (((enums::HSD_TE_ALL as i32) as u32) as i32))
                     || (r#type == ((handle).get()).r#type())
                 {
                     's9: {
@@ -340,7 +340,7 @@ pub fn HSD_TExpCnst<'a>(
         'c2: {
             'l3: while !Handle::is_null(texp) {
                 'c4: {
-                    if ((((texp).r#type() as u32) == ((enums::HSD_TE_CNST as i32) as u32))
+                    if (((texp).r#type() == (((enums::HSD_TE_CNST as i32) as u32) as i32))
                         && (Handle::addr((texp).cnst().val()) == Handle::addr(val)))
                         && ((texp).cnst().comp() == comp)
                     {
@@ -359,7 +359,7 @@ pub fn HSD_TExpCnst<'a>(
                     texp = (texp).cnst().next();
                 }
             }
-            if (comp as u32) == ((enums::HSD_TE_0 as i32) as u32) {
+            if comp == (((enums::HSD_TE_0 as i32) as u32) as i32) {
                 return null::<HSD_TExp<'a>>(ctx);
             }
             texp = inl_CnstAlloc_unfused(ctx);
@@ -405,7 +405,7 @@ pub fn HSD_TExpColorOp<'a>(
             cstr(ctx, 0x8040775c),
         )
     });
-    (if (inl_HSD_TExpGetType_unfused(ctx, texp) as u32) == ((enums::HSD_TE_TEV as i32) as u32) {
+    (if inl_HSD_TExpGetType_unfused(ctx, texp) == (((enums::HSD_TE_TEV as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -456,7 +456,7 @@ pub fn HSD_TExpAlphaOp<'a>(
             cstr(ctx, 0x8040775c),
         )
     });
-    (if (inl_HSD_TExpGetType_unfused(ctx, texp) as u32) == ((enums::HSD_TE_TEV as i32) as u32) {
+    (if inl_HSD_TExpGetType_unfused(ctx, texp) == (((enums::HSD_TE_TEV as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -652,8 +652,8 @@ pub fn HSD_TExpColorInSub<'a>(
                     if __case <= 1 {
                         {
                             let mut swap: u8 = 0;
-                            (if ((sel as u32) == ((enums::HSD_TE_RGB as i32) as u32))
-                                || ((sel as u32) == ((enums::HSD_TE_A as i32) as u32))
+                            (if (sel == (((enums::HSD_TE_RGB as i32) as u32) as i32))
+                                || (sel == (((enums::HSD_TE_A as i32) as u32) as i32))
                             {
                                 ({ () })
                             } else {
@@ -665,7 +665,7 @@ pub fn HSD_TExpColorInSub<'a>(
                                 )
                             });
                             (if ((idx == 3_i32)
-                                || ((sel as u32) != ((enums::HSD_TE_RGB as i32) as u32)))
+                                || (sel != (((enums::HSD_TE_RGB as i32) as u32) as i32)))
                                 || (((exp).tev().c_clamp() as i32) != 0)
                             {
                                 ({ () })
@@ -678,7 +678,7 @@ pub fn HSD_TExpColorInSub<'a>(
                                 )
                             });
                             (if ((idx == 3_i32)
-                                || ((sel as u32) != ((enums::HSD_TE_A as i32) as u32)))
+                                || (sel != (((enums::HSD_TE_A as i32) as u32) as i32)))
                                 || (((exp).tev().a_clamp() as i32) != 0)
                             {
                                 ({ () })
@@ -1003,7 +1003,7 @@ pub fn HSD_TExpColorIn<'a>(
             cstr(ctx, 0x8040775c),
         )
     });
-    (if (inl_HSD_TExpGetType_unfused(ctx, texp) as u32) == ((enums::HSD_TE_TEV as i32) as u32) {
+    (if inl_HSD_TExpGetType_unfused(ctx, texp) == (((enums::HSD_TE_TEV as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -1165,7 +1165,7 @@ pub fn HSD_TExpAlphaInSub<'a>(
                         break 's3;
                     }
                     if __case <= 1 {
-                        (if (sel as u32) == ((enums::HSD_TE_A as i32) as u32) {
+                        (if sel == (((enums::HSD_TE_A as i32) as u32) as i32) {
                             ({ () })
                         } else {
                             fns::__assert(
@@ -1193,8 +1193,8 @@ pub fn HSD_TExpAlphaInSub<'a>(
                         break 's3;
                     }
                     if __case <= 2 {
-                        (if ((sel as u32) == ((enums::HSD_TE_A as i32) as u32))
-                            || ((sel as u32) == ((enums::HSD_TE_X as i32) as u32))
+                        (if (sel == (((enums::HSD_TE_A as i32) as u32) as i32))
+                            || (sel == (((enums::HSD_TE_X as i32) as u32) as i32))
                         {
                             ({ () })
                         } else {
@@ -1205,7 +1205,7 @@ pub fn HSD_TExpAlphaInSub<'a>(
                                 cstr(ctx, 0x8040775c),
                             )
                         });
-                        (if ((exp).cnst().comp() as u32) == ((enums::HSD_TE_X as i32) as u32) {
+                        (if (exp).cnst().comp() == (((enums::HSD_TE_X as i32) as u32) as i32) {
                             ({ () })
                         } else {
                             fns::__assert(
@@ -1227,7 +1227,7 @@ pub fn HSD_TExpAlphaInSub<'a>(
                         break 's3;
                     }
                     if __case <= 3 {
-                        (if (sel as u32) == ((enums::HSD_TE_A as i32) as u32) {
+                        (if sel == (((enums::HSD_TE_A as i32) as u32) as i32) {
                             ({ () })
                         } else {
                             fns::__assert(
@@ -1244,7 +1244,7 @@ pub fn HSD_TExpAlphaInSub<'a>(
                         break 's3;
                     }
                     if __case <= 4 {
-                        (if (sel as u32) == ((enums::HSD_TE_A as i32) as u32) {
+                        (if sel == (((enums::HSD_TE_A as i32) as u32) as i32) {
                             ({ () })
                         } else {
                             fns::__assert(
@@ -1313,7 +1313,7 @@ pub fn HSD_TExpAlphaIn<'a>(
             cstr(ctx, 0x8040775c),
         )
     });
-    (if (inl_HSD_TExpGetType_unfused(ctx, texp) as u32) == ((enums::HSD_TE_TEV as i32) as u32) {
+    (if inl_HSD_TExpGetType_unfused(ctx, texp) == (((enums::HSD_TE_TEV as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -1345,7 +1345,7 @@ pub fn HSD_TExpOrder<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, tex: HSD_TObj<'a>, ch
             cstr(ctx, 0x8040775c),
         )
     });
-    (if (inl_HSD_TExpGetType_unfused(ctx, texp) as u32) == ((enums::HSD_TE_TEV as i32) as u32) {
+    (if inl_HSD_TExpGetType_unfused(ctx, texp) == (((enums::HSD_TE_TEV as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -1356,7 +1356,7 @@ pub fn HSD_TExpOrder<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, tex: HSD_TObj<'a>, ch
         )
     });
     (texp).tev().set_tex(tex);
-    if (chan as u32) == ((enums::GX_COLOR_NULL as i32) as u32) {
+    if chan == (((enums::GX_COLOR_NULL as i32) as u32) as i32) {
         (texp).tev().set_chan(((enums::GX_COLOR_NULL as i32) as u8));
         return;
     }
@@ -1383,7 +1383,7 @@ pub fn AssignColorReg<'a>(
             .c_in()
             .get(idx)
             .set_type(((enums::HSD_TE_IMM as i32) as u8));
-        if ((cnst).comp() as u32) == ((enums::HSD_TE_X as i32) as u32) {
+        if (cnst).comp() == (((enums::HSD_TE_X as i32) as u32) as i32) {
             (tev).c_in().get(idx).set_arg(
                 (At::new(ctx, 0x80407954)
                     .field::<ArrV<'a, i32, 4>>(0)
@@ -1400,7 +1400,7 @@ pub fn AssignColorReg<'a>(
         }
         return 0_i32;
     } else {
-        if ((cnst).comp() as u32) == ((enums::HSD_TE_X as i32) as u32) {
+        if (cnst).comp() == (((enums::HSD_TE_X as i32) as u32) as i32) {
             {
                 j = 4_i32;
                 'l1: while j < 8_i32 {
@@ -1527,7 +1527,7 @@ pub fn AssignColorKonst<'a>(
         if ((cnst).reg() as i32) >= 4_i32 {
             return 1_i32.wrapping_neg();
         }
-        if ((cnst).comp() as u32) == ((enums::HSD_TE_X as i32) as u32) {
+        if (cnst).comp() == (((enums::HSD_TE_X as i32) as u32) as i32) {
             (tev).set_kcsel(
                 (At::new(ctx, 0x80407984)
                     .field::<Arr<'a, ArrV<'a, i32, 4>, 4>>(0)
@@ -1561,7 +1561,7 @@ pub fn AssignColorKonst<'a>(
         }
         return 0_i32;
     } else {
-        if ((cnst).comp() as u32) == ((enums::HSD_TE_X as i32) as u32) {
+        if (cnst).comp() == (((enums::HSD_TE_X as i32) as u32) as i32) {
             {
                 j = 1_i32;
                 'l1: while j < 4_i32 {
@@ -2023,7 +2023,7 @@ pub fn TExp2TevDesc<'a>(
             cstr(ctx, 0x8040775c),
         )
     });
-    (if (inl_HSD_TExpGetType_unfused(ctx, texp) as u32) == ((enums::HSD_TE_TEV as i32) as u32) {
+    (if inl_HSD_TExpGetType_unfused(ctx, texp) == (((enums::HSD_TE_TEV as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -2184,7 +2184,7 @@ pub fn TExp2TevDesc<'a>(
                 .at(((tev).c_dst() as i32))
                 .get(),
         );
-        if ((tevdesc).u().tevconf().clr_out_reg() as u32) == (0_i32 as u32) {
+        if (tevdesc).u().tevconf().clr_out_reg() == ((0_i32 as u32) as i32) {
             (init_cprev).set(0_i32);
         }
     }
@@ -2288,7 +2288,7 @@ pub fn TExp2TevDesc<'a>(
                 .at(((tev).a_dst() as i32))
                 .get(),
         );
-        if ((tevdesc).u().tevconf().alpha_out_reg() as u32) == (0_i32 as u32) {
+        if (tevdesc).u().tevconf().alpha_out_reg() == ((0_i32 as u32) as i32) {
             (init_aprev).set(0_i32);
         }
     }
@@ -2312,7 +2312,7 @@ pub fn HSD_TExpSetReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>) {
     changed = (0_i32 as u32);
     'l1: while !Handle::is_null(clist) {
         'c2: {
-            (if ((clist).r#type() as u32) == ((enums::HSD_TE_CNST as i32) as u32) {
+            (if (clist).r#type() == (((enums::HSD_TE_CNST as i32) as u32) as i32) {
                 ({ () })
             } else {
                 fns::__assert(
@@ -2324,7 +2324,7 @@ pub fn HSD_TExpSetReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>) {
             });
             if ((clist).reg() as i32) < 8_i32 {
                 changed = (changed | (shl_i32(1_i32, (((clist).reg() as i32) as u32)) as u32));
-                if ((clist).comp() as u32) == ((enums::HSD_TE_RGB as i32) as u32) {
+                if (clist).comp() == (((enums::HSD_TE_RGB as i32) as u32) as i32) {
                     's3: {
                         let __case = match ((clist).ctype() as u32) {
                             0_u32 => 0,

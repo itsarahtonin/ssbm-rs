@@ -165,7 +165,7 @@ pub fn MCCStreamWrite<'a>(ctx: &'a Ctx, chID: i32, data: Addr<'a>, dataBlockSize
     let mut lastBlocks: u32 = 0;
     if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() == 0_i32 {
         statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
-    } else if ((chID as u32) < (1_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+    } else if (chID < ((1_i32 as u32) as i32)) || (chID >= ((16_i32 as u32) as i32)) {
         statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
     } else if statics::dolphin__mcc__mcc::LoadChannelInfo(
         ctx,
@@ -453,7 +453,7 @@ pub fn SearchFreeBlocks<'a>(ctx: &'a Ctx, mode: i32, index: Val<'a, u8>) -> u8 {
     statics::dolphin__mcc__mcc::MakeMemoryMap(ctx, map.at(0));
     fCount = (0_i32 as u8);
     fIndex = (0_i32 as u8);
-    fSize = ((if (mode as u32) == (0_i32 as u32) {
+    fSize = ((if mode == ((0_i32 as u32) as i32) {
         16_i32
     } else {
         0_i32
@@ -464,17 +464,17 @@ pub fn SearchFreeBlocks<'a>(ctx: &'a Ctx, mode: i32, index: Val<'a, u8>) -> u8 {
             'c2: {
                 if ((map.at((iMap as i32)).get() as i32) != 0) || ((iMap as i32) == 16_i32) {
                     if (fCount as i32) != 0_i32 {
-                        if (mode as u32) == (0_i32 as u32) {
+                        if mode == ((0_i32 as u32) as i32) {
                             if (fSize as i32) > (fCount as i32) {
                                 fSize = fCount;
                                 fIndex = ((iMap as i32).wrapping_sub((fCount as i32)) as u8);
                             }
-                        } else if (mode as u32) == (1_i32 as u32) {
+                        } else if mode == ((1_i32 as u32) as i32) {
                             if (fSize as i32) < (fCount as i32) {
                                 fSize = fCount;
                                 fIndex = ((iMap as i32).wrapping_sub((fCount as i32)) as u8);
                             }
-                        } else if (mode as u32) == (2_i32 as u32) {
+                        } else if mode == ((2_i32 as u32) as i32) {
                             fSize = ((fSize as i32).wrapping_add((fCount as i32)) as u8);
                         }
                         fCount = (0_i32 as u8);
@@ -840,8 +840,8 @@ pub fn MCCInit<'a>(ctx: &'a Ctx, exiChannel: i32, timeout: u8, callbackSysEvent:
         inl_SetChannelInfoDirty_unfused(ctx, 1_i32);
         return statics::dolphin__mcc__mcc::mccInitializeCheck(ctx, timeout);
     }
-    if !((((exiChannel as u32) == (0_i32 as u32)) || ((exiChannel as u32) == (1_i32 as u32)))
-        || ((exiChannel as u32) == (2_i32 as u32)))
+    if !(((exiChannel == ((0_i32 as u32) as i32)) || (exiChannel == ((1_i32 as u32) as i32)))
+        || (exiChannel == ((2_i32 as u32) as i32)))
     {
         inl_mccDebugPrint_unfused(ctx, null(ctx));
         statics::dolphin__mcc__mcc::gLastError(ctx).set((4_i32 as u8));
@@ -928,8 +928,8 @@ pub fn MCCGetFreeBlocks<'a>(ctx: &'a Ctx, mode: i32) -> u8 {
     inl_mccDebugPrint_unfused(ctx, null(ctx));
     if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() == 0_i32 {
         statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
-    } else if !((((mode as u32) == (0_i32 as u32)) || ((mode as u32) == (1_i32 as u32)))
-        || ((mode as u32) == (2_i32 as u32)))
+    } else if !(((mode == ((0_i32 as u32) as i32)) || (mode == ((1_i32 as u32) as i32)))
+        || (mode == ((2_i32 as u32) as i32)))
     {
         statics::dolphin__mcc__mcc::gLastError(ctx).set((13_i32 as u8));
     } else {
@@ -965,7 +965,7 @@ pub fn MCCGetChannelInfo<'a>(ctx: &'a Ctx, chID: i32, info: MCC_Info<'a>) -> i32
     inl_mccDebugPrint_unfused(ctx, null(ctx));
     if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() == 0_i32 {
         statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
-    } else if ((chID as u32) <= (0_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+    } else if (chID <= ((0_i32 as u32) as i32)) || (chID >= ((16_i32 as u32) as i32)) {
         statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
     } else if !(!Handle::is_null(info)) {
         inl_mccDebugPrint_unfused(ctx, null(ctx));
@@ -1007,7 +1007,7 @@ pub fn MCCGetConnectionStatus<'a>(ctx: &'a Ctx, chID: i32, connect: Val<'a, i32>
         statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
         return 0_i32;
     }
-    if ((chID as u32) < (1_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+    if (chID < ((1_i32 as u32) as i32)) || (chID >= ((16_i32 as u32) as i32)) {
         statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
         return 0_i32;
     }
@@ -1037,7 +1037,7 @@ pub fn MCCNotify<'a>(ctx: &'a Ctx, chID: i32, notify: u32) -> i32 {
     inl_mccDebugPrint_unfused(ctx, null(ctx));
     if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() == 0_i32 {
         statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
-    } else if ((chID as u32) <= (0_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+    } else if (chID <= ((0_i32 as u32) as i32)) || (chID >= ((16_i32 as u32) as i32)) {
         statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
     } else if statics::dolphin__mcc__mcc::LoadChannelInfo(
         ctx,
@@ -1049,7 +1049,7 @@ pub fn MCCNotify<'a>(ctx: &'a Ctx, chID: i32, notify: u32) -> i32 {
     } else if fns::MCCGetConnectionStatus(ctx, chID, connect) == 0_i32 {
         statics::dolphin__mcc__mcc::gLastError(ctx).set((9_i32 as u8));
     } else {
-        if (connect.get() as u32) != (3_i32 as u32) {
+        if connect.get() != ((3_i32 as u32) as i32) {
             inl_mccDebugPrint_unfused(ctx, null(ctx));
             statics::dolphin__mcc__mcc::gLastError(ctx).set((18_i32 as u8));
         } else {
@@ -1069,7 +1069,7 @@ pub fn MCCSetChannelEventMask<'a>(ctx: &'a Ctx, chID: i32, event: u32) -> u32 {
     oldMask = 0xffffffff_u32;
     if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() == 0_i32 {
         statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
-    } else if ((chID as u32) <= (0_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+    } else if (chID <= ((0_i32 as u32) as i32)) || (chID >= ((16_i32 as u32) as i32)) {
         statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
     } else if statics::dolphin__mcc__mcc::LoadChannelInfo(
         ctx,
@@ -1108,7 +1108,7 @@ pub fn MCCOpen<'a>(ctx: &'a Ctx, chID: i32, blockSize: u8, callbackEvent: FnPtr<
             statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
             return 0_i32;
         }
-        if ((chID as u32) < (1_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+        if (chID < ((1_i32 as u32) as i32)) || (chID >= ((16_i32 as u32) as i32)) {
             statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
             return 0_i32;
         }
@@ -1120,7 +1120,7 @@ pub fn MCCOpen<'a>(ctx: &'a Ctx, chID: i32, blockSize: u8, callbackEvent: FnPtr<
             statics::dolphin__mcc__mcc::gLastError(ctx).set((15_i32 as u8));
             return 0_i32;
         }
-        if ((chID as u32) <= (0_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+        if (chID <= ((0_i32 as u32) as i32)) || (chID >= ((16_i32 as u32) as i32)) {
             inl_mccDebugPrint_unfused(ctx, null(ctx));
             statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
             break 'goto_exit;
@@ -1258,7 +1258,7 @@ pub fn MCCClose<'a>(ctx: &'a Ctx, chID: i32) -> i32 {
             statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
             return 0_i32;
         }
-        if ((chID as u32) < (1_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+        if (chID < ((1_i32 as u32) as i32)) || (chID >= ((16_i32 as u32) as i32)) {
             statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
             return 0_i32;
         }
@@ -1365,11 +1365,11 @@ pub fn MCCRead<'a>(
             statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
             return 0_i32;
         }
-        if ((chID as u32) < (1_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+        if (chID < ((1_i32 as u32) as i32)) || (chID >= ((16_i32 as u32) as i32)) {
             statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
             return 0_i32;
         }
-        if !(((r#async as u32) == (1_i32 as u32)) || ((r#async as u32) == (0_i32 as u32))) {
+        if !((r#async == ((1_i32 as u32) as i32)) || (r#async == ((0_i32 as u32) as i32))) {
             statics::dolphin__mcc__mcc::gLastError(ctx).set((13_i32 as u8));
             return 0_i32;
         }
@@ -1423,7 +1423,7 @@ pub fn MCCRead<'a>(
             statics::dolphin__mcc__mcc::gLastError(ctx).set((15_i32 as u8));
             break 'goto_exit;
         }
-        if (r#async as u32) == (1_i32 as u32) {
+        if r#async == ((1_i32 as u32) as i32) {
             if ctx.call::<_, i32>(0x8032e868, ()) == 0_i32 {
                 inl_mccDebugPrint_unfused(ctx, null(ctx));
                 statics::dolphin__mcc__mcc::gLastError(ctx).set((21_i32 as u8));
@@ -1526,11 +1526,11 @@ pub fn MCCWrite<'a>(
             statics::dolphin__mcc__mcc::gLastError(ctx).set((1_i32 as u8));
             return 0_i32;
         }
-        if ((chID as u32) < (1_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+        if (chID < ((1_i32 as u32) as i32)) || (chID >= ((16_i32 as u32) as i32)) {
             statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
             return 0_i32;
         }
-        if !(((r#async as u32) == (1_i32 as u32)) || ((r#async as u32) == (0_i32 as u32))) {
+        if !((r#async == ((1_i32 as u32) as i32)) || (r#async == ((0_i32 as u32) as i32))) {
             statics::dolphin__mcc__mcc::gLastError(ctx).set((13_i32 as u8));
             return 0_i32;
         }
@@ -1594,7 +1594,7 @@ pub fn MCCWrite<'a>(
             statics::dolphin__mcc__mcc::gLastError(ctx).set((15_i32 as u8));
             break 'goto_exit;
         }
-        if (r#async as u32) == (1_i32 as u32) {
+        if r#async == ((1_i32 as u32) as i32) {
             if ctx.call::<_, i32>(0x8032e868, ()) == 0_i32 {
                 inl_mccDebugPrint_unfused(ctx, null(ctx));
                 statics::dolphin__mcc__mcc::gLastError(ctx).set((21_i32 as u8));
@@ -1774,7 +1774,7 @@ fn inl_IsChannelOpened_unfused<'a>(ctx: &'a Ctx, chID: i32) -> i32 {
     let mut chID = chID;
     let mut connectSide: u8 = 0;
     'goto_exit: {
-        if ((chID as u32) <= (0_i32 as u32)) || ((chID as u32) >= (16_i32 as u32)) {
+        if (chID <= ((0_i32 as u32) as i32)) || (chID >= ((16_i32 as u32) as i32)) {
             statics::dolphin__mcc__mcc::gLastError(ctx).set((14_i32 as u8));
             break 'goto_exit;
         }

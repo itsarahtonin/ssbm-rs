@@ -155,11 +155,10 @@ pub fn ftCo_800BFFD0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32, arg2: i32) ->
     let mut fp = fp;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
-    if (arg1 as u32) >= ((enums::FtColAnim_SpycloakStart as i32) as u32) {
+    if arg1 >= (((enums::FtColAnim_SpycloakStart as i32) as u32) as i32) {
         if ({
             let __t1 = {
-                arg1 = ((arg1 as u32).wrapping_sub(((enums::FtColAnim_SpycloakStart as i32) as u32))
-                    as i32);
+                arg1 = arg1.wrapping_sub((((enums::FtColAnim_SpycloakStart as i32) as u32) as i32));
                 arg1
             };
             fns::lb_800144C8(
@@ -356,11 +355,10 @@ fn inl_ftCo_800BFFD0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32, arg2:
     let mut fp = fp;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
-    if (arg1 as u32) >= ((enums::FtColAnim_SpycloakStart as i32) as u32) {
+    if arg1 >= (((enums::FtColAnim_SpycloakStart as i32) as u32) as i32) {
         if ({
             let __t1 = {
-                arg1 = ((arg1 as u32).wrapping_sub(((enums::FtColAnim_SpycloakStart as i32) as u32))
-                    as i32);
+                arg1 = arg1.wrapping_sub((((enums::FtColAnim_SpycloakStart as i32) as u32) as i32));
                 arg1
             };
             fns::lb_800144C8(

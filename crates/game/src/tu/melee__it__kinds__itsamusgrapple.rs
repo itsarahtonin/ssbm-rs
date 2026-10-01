@@ -54,15 +54,15 @@ pub fn it_802B7160<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, data: itSamusGrapple_Hi
     }
     fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     hit_group = (data).create_hitbox().create_hitbox_0().hit_group();
-    if ((({
+    if (({
         let __t1 = (fp)
             .x914()
             .get(((data).create_hitbox().create_hitbox_0().id() as i32));
         hitbox = __t1;
         __t1
     })
-    .state() as u32)
-        == ((enums::HitCapsule_Disabled as i32) as u32))
+    .state()
+        == (((enums::HitCapsule_Disabled as i32) as u32) as i32))
         || ((hitbox).x4() != hit_group)
     {
         (hitbox).set_x4(hit_group);
@@ -518,7 +518,7 @@ pub fn it_802B7C18<'a>(
         );
         (ip).xDD4_itemVar().samusgrapple().set_x14((0_i32 as u8));
         if ((fp).u().ss().x2240() as i32) >= 4_i32 {
-            if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+            if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
                 (ip).xDD4_itemVar().samusgrapple().set_x16((1_i32 as u8));
             } else {
                 (ip).xDD4_itemVar().samusgrapple().set_x16((2_i32 as u8));
@@ -851,7 +851,7 @@ pub fn fn_802B8684<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fp2 = fp;
     link = (ip).xDD4_itemVar().samusgrapple().x4();
     inl_samus_grapple_setup_pos_unfused(ctx, link, pos, m.get(0));
-    if ((fp2).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (fp2).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         retract_speed = (attrs).x4C();
     } else {
         retract_speed = fp::frsp(fp::fmul(2.0, (attrs).x4C()));
@@ -951,7 +951,7 @@ pub fn fn_802B895C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     fns::it_802A7168(ctx, ip, pos, (fp2).x34_scale().y());
     inl_samus_grapple_anim_unfused(ctx, gobj);
-    if ((fp2).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32) {
+    if (fp2).ground_or_air() != (((enums::GA_Air as i32) as u32) as i32) {
         fns::it_802BAA58(ctx, gobj);
         return;
     }
@@ -1024,7 +1024,7 @@ pub fn fn_802B8B54<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp2).cur_pos().set_y(fp::fadds(pos.y(), dy));
     fns::it_802A7168(ctx, ip, pos, (fp2).x34_scale().y());
     inl_samus_grapple_anim_unfused(ctx, gobj);
-    if ((fp2).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32) {
+    if (fp2).ground_or_air() != (((enums::GA_Air as i32) as u32) as i32) {
         fns::it_802BAA58(ctx, gobj);
     }
 }
@@ -1102,7 +1102,7 @@ pub fn fn_802B8D38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .grapple()
             .set_x4(fp::fadds((fp2).mv().ss().grapple().x4(), 1.0));
     }
-    if ((fp2).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32) {
+    if (fp2).ground_or_air() != (((enums::GA_Air as i32) as u32) as i32) {
         fns::it_802BAA58(ctx, gobj);
         return;
     }
@@ -1292,7 +1292,7 @@ pub fn it_802B9328<'a>(
             inl_it_802B9328_attach(ctx, link, attach_pos_3, m3.get(0));
         }
     }
-    if (((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+    if ((fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32))
         && (((grapple_ip).xDD4_itemVar().samusgrapple().x16() as i32) == 1_i32)
     {
         if (((fp).input().pressed_buttons() & (0x100_i32 as u32)) != 0) {
@@ -1422,7 +1422,7 @@ pub fn it_802B99A0<'a>(
             break 'l1;
         }
     }
-    if (((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+    if ((fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32))
         && (((grapple_ip).xDD4_itemVar().samusgrapple().x16() as i32) == 1_i32)
     {
         if (((fp).input().pressed_buttons() & (0x100_i32 as u32)) != 0) {
@@ -1547,7 +1547,7 @@ pub fn it_802B9CE8<'a>(
         }
     }
     fp2 = fp;
-    if (((fp2).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32))
+    if ((fp2).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32))
         && (((grapple_ip).xDD4_itemVar().samusgrapple().x16() as i32) == 1_i32)
     {
         if (((fp2).input().pressed_buttons() & (0x100_i32 as u32)) != 0) {

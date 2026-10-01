@@ -356,7 +356,7 @@ pub fn grVenom_80203B18<'a>(ctx: &'a Ctx) {
                 }
             }
         }
-        flag = (if (fns::Stage_80225194(ctx) as u32) == (233_i32 as u32) {
+        flag = (if fns::Stage_80225194(ctx) == ((233_i32 as u32) as i32) {
             flag
         } else {
             0_i32
@@ -619,7 +619,7 @@ pub fn fn_802040B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if (fns::Stage_80225194(ctx) as u32) == (228_i32 as u32) {
+    if fns::Stage_80225194(ctx) == ((228_i32 as u32) as i32) {
         (gp).u().venom_platform().set_smash_taunt_timer(1_i32);
     }
 }
@@ -2015,7 +2015,7 @@ pub fn grVenom_80205F30<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     'l6: loop {
                         'c7: {
                             slot = ((slot.wrapping_add(retries)) & 3_i32);
-                            if (fns::Player_GetPlayerSlotType(ctx, slot) as u32) != (3_i32 as u32) {
+                            if fns::Player_GetPlayerSlotType(ctx, slot) != ((3_i32 as u32) as i32) {
                                 break 'l6;
                             }
                             retries = retries.wrapping_add(1);
@@ -2341,7 +2341,7 @@ pub fn grVenom_80206D10<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let mut in_range: i32 = 0;
     let mut result: i32 = 0;
     let mut diff: u32 = 0;
-    if ((fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Venom as i32) as u32))
+    if (fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Venom as i32) as u32) as i32))
         && (arg0 != 1_i32.wrapping_neg())
     {
         result = fns::mpJointFromLine(ctx, arg0);

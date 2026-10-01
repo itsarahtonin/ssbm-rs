@@ -1506,7 +1506,7 @@ pub fn fn_8017A67C<'a>(ctx: &'a Ctx, kind: i32, arg1: i32, arg2: i32) -> HSD_GOb
             }
         }
         Handle::copy_from(pos, (Handle::cast::<Vec<'a>>((config).x74_ref())));
-        if ((kind as u32).wrapping_sub((18_i32 as u32))) <= 1_u32 {
+        if ((kind.wrapping_sub(((18_i32 as u32) as i32))) as u32) <= 1_u32 {
             if ((match_end).player_standings().get(arg2).ftkind() as i32) == 7_i32 {
                 kind = (enums::CKind_Seak as i32);
             } else {
@@ -1523,7 +1523,7 @@ pub fn fn_8017A67C<'a>(ctx: &'a Ctx, kind: i32, arg1: i32, arg2: i32) -> HSD_GOb
         fns::Player_SetCostumeId(ctx, arg2, arg1);
         fns::Player_SetPadPort(ctx, arg2, arg2);
         fns::Player_SetSlottype(ctx, arg2, (enums::Gm_PKind_Demo as i32));
-        if (kind as u32) == ((enums::CKind_GameWatch as i32) as u32) {
+        if kind == (((enums::CKind_GameWatch as i32) as u32) as i32) {
             fns::Player_SetFacingDirection(ctx, arg2, fp::fneg(1.0));
         } else {
             fns::Player_SetFacingDirection(ctx, arg2, 0.0);

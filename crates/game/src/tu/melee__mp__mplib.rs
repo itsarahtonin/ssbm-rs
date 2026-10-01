@@ -48,7 +48,7 @@ pub fn mpPruneEmptyLines<'a>(ctx: &'a Ctx, coll_data: MapCollData<'a>) {
     let mut line: MapLine<'a> = null(ctx);
     let mut verts: Vec2<'a> = (coll_data).verts();
     let mut i: i32 = 0;
-    if (fns::stage_info(ctx).grkind() as u32) == ((enums::Gr_Kind_Pura as i32) as u32) {
+    if fns::stage_info(ctx).grkind() == (((enums::Gr_Kind_Pura as i32) as u32) as i32) {
         return;
     }
     line = (coll_data).lines();
@@ -13973,7 +13973,7 @@ pub fn mpGetSpeed<'a>(ctx: &'a Ctx, line_id: i32, pos: Vec<'a>, speed: Vec<'a>) 
     (speed).set_x(fp::fsubs(new_x.get(), (pos).x()));
     (speed).set_y(fp::fsubs(new_y.get(), (pos).y()));
     (speed).set_z(0.0);
-    if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32) {
+    if fns::DbLevel(ctx).get() >= (((enums::DbLKind_DebugRom as i32) as u32) as i32) {
         if ((if ((speed).x()) < fp::frsp(0_i32 as f64) {
             fp::fneg(((speed).x()))
         } else {
@@ -18169,7 +18169,7 @@ pub fn mpLib_80059E60<'a>(ctx: &'a Ctx) {
         Handle::copy_from(sp28.palette(), fns::mpIsland_TerrainPalette(ctx));
         entry = sp28.palette().x0().get(0);
         line_color = sp28.line_color();
-        'l3: while ((entry).kind() as u32) != (1_i32.wrapping_neg() as u32) {
+        'l3: while (entry).kind() != ((1_i32.wrapping_neg() as u32) as i32) {
             'c4: {
                 Handle::copy_from((line_color), (entry).color());
                 let _ = statics::melee__mp__mplib::mpLib_DrawMatchingLines(

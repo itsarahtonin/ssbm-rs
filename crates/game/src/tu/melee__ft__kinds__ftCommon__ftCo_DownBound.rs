@@ -161,7 +161,7 @@ pub fn ftCo_8009794C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::ftCommon_8007D7FC(ctx, fp);
     }
     {
@@ -258,15 +258,15 @@ pub fn ftCo_80097AF4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     } else {
         (rot1)
     }) {
-        if ((Handle::cast::<Fighter<'a>>(
+        if (Handle::cast::<Fighter<'a>>(
             ({
                 let __t1 = (gobj).user_data();
                 jobj = __t1;
                 __t1
             }),
         ))
-        .ground_or_air() as u32)
-            == ((enums::GA_Air as i32) as u32)
+        .ground_or_air()
+            == (((enums::GA_Air as i32) as u32) as i32)
         {
             fns::ftCommon_8007D7FC(ctx, (Handle::cast::<Fighter<'a>>(jobj)));
         }
@@ -397,7 +397,7 @@ pub fn ftCo_DownBound_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
+    if fns::ft_80082708(ctx, gobj) == (((enums::GA_Ground as i32) as u32) as i32) {
         fns::ftCo_Fall_Enter(ctx, gobj);
     } else {
         'l3: loop {
@@ -417,7 +417,7 @@ pub fn ftCo_80097E8C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         fns::ftCommon_8007D7FC(ctx, fp);
     }
     {

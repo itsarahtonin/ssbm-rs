@@ -6950,7 +6950,7 @@ pub fn fn_801F2B58<'a>(
     if (((b1234.wrapping_sub(2_i32)) as u32) > (1_i32 as u32)) && (b1234 != 5_i32) {
         return;
     }
-    if (ground_kind as u32) != ((enums::mpLib_GroundEnum_Unk2 as i32) as u32) {
+    if ground_kind != (((enums::mpLib_GroundEnum_Unk2 as i32) as u32) as i32) {
         return;
     }
     if Handle::is_null((coll).x0_gobj()) {

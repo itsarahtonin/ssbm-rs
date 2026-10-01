@@ -48,7 +48,7 @@ pub fn grKongo_801D523C<'a>(ctx: &'a Ctx) {
     fns::Ground_801C3BB4(ctx);
     fns::mpLib_80057BC0(ctx, 0_i32);
     fns::mpLib_80057BC0(ctx, 1_i32);
-    if ((fns::Stage_80225194(ctx) as u32) != (61_i32 as u32)) && (fns::gm_8016B238(ctx) == 0_i32) {
+    if (fns::Stage_80225194(ctx) != ((61_i32 as u32) as i32)) && (fns::gm_8016B238(ctx) == 0_i32) {
         fns::Ground_801C53EC(ctx, 0x5a551_u32);
     }
 }
@@ -3102,7 +3102,7 @@ pub fn grKongo_801D6074<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     (temp_r31).u().kongo3().set_xCA((0_i32 as i16));
     (temp_r31).u().kongo2().set_xD0(fp::fneg(99999.0));
     (temp_r31).u().kongo2().set_xD4(3.4028234663852886e+38_f64);
-    if ((temp_r31).map_id() as u32) == ((enums::Gr_Kind_Test as i32) as u32) {
+    if (temp_r31).map_id() == (((enums::Gr_Kind_Test as i32) as u32) as i32) {
         (temp_r31).u().kongo().set_xCC(fp::frsp(
             (fp::fmadd(45.0, fns::HSD_Randf(ctx), fp::fneg(15.0))),
         ));
@@ -3147,7 +3147,7 @@ pub fn grKongo_801D6198<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                     (temp_r3).map_id(),
                 );
                 let _ = fns::Ground_UpdateMapColl(ctx, arg0);
-                if ((temp_r3).map_id() as u32) == ((enums::Gr_Kind_Test as i32) as u32) {
+                if (temp_r3).map_id() == (((enums::Gr_Kind_Test as i32) as u32) as i32) {
                     fns::mpJointListAdd(ctx, 0_i32);
                     fns::mpJointSetCb1(
                         ctx,
@@ -3186,7 +3186,7 @@ pub fn grKongo_801D6198<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 || (fns::grKongo_801D7F78(ctx, arg0) != 0_i32)
             {
                 fns::grAnime_801C8138(ctx, arg0, (temp_r3).map_id(), 1_i32);
-                if ((temp_r3).map_id() as u32) == ((enums::Gr_Kind_Test as i32) as u32) {
+                if (temp_r3).map_id() == (((enums::Gr_Kind_Test as i32) as u32) as i32) {
                     fns::mpLib_80057BC0(ctx, 0_i32);
                     fns::mpJointClearCb1(ctx, 0_i32);
                 } else {
@@ -3228,11 +3228,11 @@ pub fn grKongo_801D637C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     temp_r30 = Handle::cast::<HSD_JObj<'a>>((arg0).hsd_obj());
     fns::grAnime_801C8138(ctx, arg0, (temp_r31).map_id(), 0_i32);
     fns::grAnime_801C78FC(ctx, arg0, 0_i32, (7_i32 as u32));
-    if ((temp_r31).map_id() as u32) == ((enums::Gr_Kind_Shrine as i32) as u32) {
+    if (temp_r31).map_id() == (((enums::Gr_Kind_Shrine as i32) as u32) as i32) {
         (temp_r31).u().kongo().set_xCC(fp::frsp(
             (fp::fmadd(45.0, fns::HSD_Randf(ctx), fp::fneg(15.0))),
         ));
-    } else if ((temp_r31).map_id() as u32) == ((enums::Gr_Kind_Zebes as i32) as u32) {
+    } else if (temp_r31).map_id() == (((enums::Gr_Kind_Zebes as i32) as u32) as i32) {
         (temp_r31).u().kongo().set_xCC(fp::frsp(
             (fp::fmadd(20.0, fns::HSD_Randf(ctx), fp::fneg(10.0))),
         ));
@@ -3890,7 +3890,7 @@ pub fn fn_801D7700<'a>(
     let mut r#type: i32 = ((coll).x34_flags().b1234() as i32);
     let mut segment_size: f64 = 0.0;
     if (r#type == 1_i32) || (r#type == 3_i32) {
-        if (ground_kind as u32) == ((enums::mpLib_GroundEnum_Unk1 as i32) as u32) {
+        if ground_kind == (((enums::mpLib_GroundEnum_Unk1 as i32) as u32) as i32) {
             fns::mpVtxGetPos(ctx, 29_i32, x1, y1);
             fns::mpVtxGetPos(ctx, 26_i32, x2, y2);
             {
@@ -4209,7 +4209,7 @@ pub fn fn_801D7E60<'a>(
     let mut ground_kind = ground_kind;
     let mut delta_y = delta_y;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>(user_data);
-    if (ground_kind as u32) == ((enums::mpLib_GroundEnum_Unk2 as i32) as u32) {
+    if ground_kind == (((enums::mpLib_GroundEnum_Unk2 as i32) as u32) as i32) {
         (gp).u()
             .kongo3()
             .set_xC6((((gp).u().kongo3().xC8() as i32).wrapping_add(1_i32) as i16));
@@ -4230,11 +4230,11 @@ pub fn grKongo_801D7E78<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) -> V
         }
     }
     if !Handle::is_null(gp) {
-        if ((((((gp).map_id() as u32) == ((enums::Gr_Kind_Test as i32) as u32))
-            || (((gp).map_id() as u32) == ((enums::Gr_Kind_Castle as i32) as u32)))
-            || (((gp).map_id() as u32) == ((enums::Gr_Kind_Shrine as i32) as u32)))
-            || (((gp).map_id() as u32) == ((enums::Gr_Kind_Zebes as i32) as u32)))
-            || (((gp).map_id() as u32) == ((enums::Gr_Kind_Kraid as i32) as u32))
+        if (((((gp).map_id() == (((enums::Gr_Kind_Test as i32) as u32) as i32))
+            || ((gp).map_id() == (((enums::Gr_Kind_Castle as i32) as u32) as i32)))
+            || ((gp).map_id() == (((enums::Gr_Kind_Shrine as i32) as u32) as i32)))
+            || ((gp).map_id() == (((enums::Gr_Kind_Zebes as i32) as u32) as i32)))
+            || ((gp).map_id() == (((enums::Gr_Kind_Kraid as i32) as u32) as i32))
         {
             jobj = fns::Ground_801C3FA4(ctx, gobj, 2_i32);
             if !Handle::is_null(jobj) {
@@ -4242,7 +4242,7 @@ pub fn grKongo_801D7E78<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) -> V
             } else {
                 return null::<Vec<'a>>(ctx);
             }
-        } else if ((gp).map_id() as u32) == ((enums::Gr_Kind_Yorster as i32) as u32) {
+        } else if (gp).map_id() == (((enums::Gr_Kind_Yorster as i32) as u32) as i32) {
             jobj = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
             if !Handle::is_null(jobj) {
                 inl_HSD_JObjGetTranslation_unfused(ctx, jobj, pos);

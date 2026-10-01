@@ -89,7 +89,7 @@ pub fn ftCo_8009F834<'a>(
                                                 }
                                                 (fp).set_x2219_b0((1_i32 as u8));
                                             }
-                                            if (part as u32) != (141_i32 as u32) {
+                                            if part != ((141_i32 as u32) as i32) {
                                                 break 'goto_block_5;
                                             }
                                             part = (Handle::add(
@@ -104,7 +104,7 @@ pub fn ftCo_8009F834<'a>(
                                             (fp).set_x2220_b0((0_i32 as u8));
                                             break 'goto_block_9;
                                         }
-                                        if (part as u32) != (142_i32 as u32) {
+                                        if part != ((142_i32 as u32) as i32) {
                                             break 'goto_block_7;
                                         }
                                         part = ((((fp).ft_data()).x8()).x10() as i32);
@@ -312,7 +312,7 @@ pub fn ftCo_8009F834<'a>(
             return;
         }
         sp90.set(0.0);
-        if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+        if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
             floor_angle = fns::atan2f(
                 ctx,
                 fp::fneg((fp).coll_data().floor().normal().x()),
@@ -445,7 +445,7 @@ pub fn ftCo_8009F834<'a>(
         if __case <= 2 {
             {
                 sp80.set(0.0);
-                if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+                if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
                     random_or_angle = fns::atan2f(
                         ctx,
                         fp::fneg((fp).coll_data().floor().normal().x()),
@@ -529,7 +529,7 @@ pub fn ftCo_8009F834<'a>(
         if __case <= 7 {
             {
                 sp7C.set(0.0);
-                if ((fp).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+                if (fp).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
                     random_or_angle = fns::atan2f(
                         ctx,
                         fp::fneg((fp).coll_data().floor().normal().x()),

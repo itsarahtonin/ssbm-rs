@@ -459,7 +459,7 @@ pub fn it_8028EDBC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attrs: itUnkAttributes<'a> =
         Handle::cast::<itUnkAttributes<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
-    if ((ip).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() != (((enums::GA_Air as i32) as u32) as i32) {
         if (if ((ip).xDD4_itemVar().freeze().x4().x()) < fp::frsp(0_i32 as f64) {
             fp::fneg(((ip).xDD4_itemVar().freeze().x4().x()))
         } else {
@@ -556,7 +556,7 @@ pub fn itFreeze_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
     let mut cd: CollData<'a> = (ip).x378_itemColl();
     fns::it_8026D62C(ctx, gobj, fnptr(ctx, 0x8028f1d8));
-    if ((ip).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() != (((enums::GA_Air as i32) as u32) as i32) {
         if (((cd).env_flags() & 0x18000_i32) != 0) {
             fns::it_80276408(ctx, gobj, cd, (ip).xDD4_itemVar().freeze().x4());
         } else {
@@ -619,7 +619,7 @@ pub fn itFreeze_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut it: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut cd: CollData<'a> = (it).x378_itemColl();
     fns::it_8026E414(ctx, gobj, fnptr(ctx, 0x8028ef34));
-    if (((it).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32))
+    if ((it).ground_or_air() != (((enums::GA_Air as i32) as u32) as i32))
         && (((cd).env_flags() & (0x8000_i32 | 0x10000_i32)) != 0)
     {
         fns::it_80276408(ctx, gobj, cd, (it).xDD4_itemVar().freeze().x4());
@@ -813,7 +813,7 @@ pub fn itFreeze_UnkMotion4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         }
     }
     fns::it_8026D62C(ctx, gobj, fnptr(ctx, 0x8028f1d8));
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         inl_itFreeze_ClearLinkedItem_unfused(ctx, gobj);
     } else {
         let mut env: i32 = (cd).env_flags();

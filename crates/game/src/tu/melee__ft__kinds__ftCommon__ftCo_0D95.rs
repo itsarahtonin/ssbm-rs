@@ -49,7 +49,7 @@ pub fn fn_800D9558<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             break 'l1;
         }
     }
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Samus as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Samus as i32) as u32) as i32) {
         attrs = Handle::cast::<_ftSamusAttributes<'a>>((fp).dat_attrs());
         (fp).mv()
             .ca()
@@ -185,7 +185,7 @@ pub fn fn_800D9930<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             break 'l1;
         }
     }
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Samus as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Samus as i32) as u32) as i32) {
         attrs = Handle::cast::<_ftSamusAttributes<'a>>((fp).dat_attrs());
         (fp).mv()
             .ca()
@@ -281,7 +281,7 @@ pub fn fn_800D9C64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).kind() as u32) == ((enums::Ft_Kind_Samus as i32) as u32) {
+    if (fp).kind() == (((enums::Ft_Kind_Samus as i32) as u32) as i32) {
         fns::it_802B7B84(ctx, (fp).u().ss().x223C());
     }
 }

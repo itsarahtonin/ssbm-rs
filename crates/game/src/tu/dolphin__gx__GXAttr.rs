@@ -490,19 +490,19 @@ pub fn GXSetArray<'a>(ctx: &'a Ctx, attr: i32, base_ptr: Addr<'a>, stride: u8) {
     let mut stride = stride;
     let mut cpAttr: i32 = 0;
     let mut phyAddr: u32 = 0;
-    if (attr as u32) == ((enums::GX_VA_NBT as i32) as u32) {
+    if attr == (((enums::GX_VA_NBT as i32) as u32) as i32) {
         attr = (enums::GX_VA_NRM as i32);
     }
-    cpAttr = ((attr as u32).wrapping_sub(((enums::GX_VA_POS as i32) as u32)) as i32);
+    cpAttr = attr.wrapping_sub((((enums::GX_VA_POS as i32) as u32) as i32));
     phyAddr = (Handle::addr(base_ptr) & (0x3fffffff_i32 as u32));
     'l1: loop {
         'c2: {
             let mut regAddr: i32 = 0;
             (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((8_i32) as u8));
             (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
-                .set_u8((((cpAttr as u32) | (160_i32 as u32)) as u8));
+                .set_u8(((cpAttr | ((160_i32 as u32) as i32)) as u8));
             (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((phyAddr));
-            regAddr = ((cpAttr as u32).wrapping_sub((12_i32 as u32)) as i32);
+            regAddr = cpAttr.wrapping_sub(((12_i32 as u32) as i32));
             if (regAddr >= 0_i32) && (regAddr < 4_i32) {
                 (fns::gx(ctx).get()).indexBase().at(regAddr).set(phyAddr);
             }
@@ -516,9 +516,9 @@ pub fn GXSetArray<'a>(ctx: &'a Ctx, attr: i32, base_ptr: Addr<'a>, stride: u8) {
             let mut regAddr_2: i32 = 0;
             (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((8_i32) as u8));
             (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32))
-                .set_u8((((cpAttr as u32) | (176_i32 as u32)) as u8));
+                .set_u8(((cpAttr | ((176_i32 as u32) as i32)) as u8));
             (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32(((stride) as u32));
-            regAddr_2 = ((cpAttr as u32).wrapping_sub((12_i32 as u32)) as i32);
+            regAddr_2 = cpAttr.wrapping_sub(((12_i32 as u32) as i32));
             if (regAddr_2 >= 0_i32) && (regAddr_2 < 4_i32) {
                 (fns::gx(ctx).get())
                     .indexStride()
@@ -1621,7 +1621,7 @@ fn inl_SETVCDATTR_unfused<'a>(ctx: &'a Ctx, Attr: i32, Type: i32) {
             break 's1;
         }
         if __case <= 10 {
-            if (Type as u32) != ((enums::GX_NONE as i32) as u32) {
+            if Type != (((enums::GX_NONE as i32) as u32) as i32) {
                 (fns::gx(ctx).get()).set_hasNrms((1_i32 as u8));
                 (fns::gx(ctx).get()).set_hasBiNrms((0_i32 as u8));
                 (fns::gx(ctx).get()).set_nrmType(Type);
@@ -1631,7 +1631,7 @@ fn inl_SETVCDATTR_unfused<'a>(ctx: &'a Ctx, Attr: i32, Type: i32) {
             break 's1;
         }
         if __case <= 11 {
-            if (Type as u32) != ((enums::GX_NONE as i32) as u32) {
+            if Type != (((enums::GX_NONE as i32) as u32) as i32) {
                 (fns::gx(ctx).get()).set_hasBiNrms((1_i32 as u8));
                 (fns::gx(ctx).get()).set_hasNrms((0_i32 as u8));
                 (fns::gx(ctx).get()).set_nrmType(Type);
@@ -1921,7 +1921,7 @@ fn inl_SETVAT_unfused<'a>(
                     break 'l8;
                 }
             }
-            if (cnt as u32) == ((enums::GX_NRM_NBT3 as i32) as u32) {
+            if cnt == (((enums::GX_NRM_NBT3 as i32) as u32) as i32) {
                 'l10: loop {
                     'c11: {
                         (va).set(

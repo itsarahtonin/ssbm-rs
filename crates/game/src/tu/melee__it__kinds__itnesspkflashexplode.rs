@@ -159,8 +159,8 @@ pub fn itNessPKFlashExplode_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>
     });
     inl_HSD_JObjSetScale(ctx, jobj, scale);
     if ((ip).xDB4_itcmd_var2() == (0_i32 as u32))
-        && (((ip).x5D4_hitboxes().get(0_i32).hit().state() as u32)
-            != ((enums::HitCapsule_Disabled as i32) as u32))
+        && ((ip).x5D4_hitboxes().get(0_i32).hit().state()
+            != (((enums::HitCapsule_Disabled as i32) as u32) as i32))
     {
         fns::it_80272460(
             ctx,

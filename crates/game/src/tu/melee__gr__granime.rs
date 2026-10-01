@@ -1386,13 +1386,13 @@ pub fn grAnime_801C8318<'a>(
         return null::<HSD_AObj<'a>>(ctx);
     }
     if ((arg2 & (1_i32 as u32)) != 0) {
-        var_r30 = (((var_r30 as u32) | (0x220_i32 as u32)) as i32);
+        var_r30 = (var_r30 | ((0x220_i32 as u32) as i32));
     }
     if ((arg2 & (2_i32 as u32)) != 0) {
-        var_r30 = (((var_r30 as u32) | (0x7484_i32 as u32)) as i32);
+        var_r30 = (var_r30 | ((0x7484_i32 as u32) as i32));
     }
     if ((arg2 & (4_i32 as u32)) != 0) {
-        var_r30 = (((var_r30 as u32) | (0x100_i32 as u32)) as i32);
+        var_r30 = (var_r30 | ((0x100_i32 as u32) as i32));
     }
     let __t1 = ctx.setjmp(Handle::addr(fns::grAnime_8049EE40(ctx)), || {
         fns::HSD_ForeachAnim(
@@ -2203,13 +2203,13 @@ fn inl_grAnime_801C8318_unfused<'a>(
         return null::<HSD_AObj<'a>>(ctx);
     }
     if ((arg2 & (1_i32 as u32)) != 0) {
-        var_r30 = (((var_r30 as u32) | (0x220_i32 as u32)) as i32);
+        var_r30 = (var_r30 | ((0x220_i32 as u32) as i32));
     }
     if ((arg2 & (2_i32 as u32)) != 0) {
-        var_r30 = (((var_r30 as u32) | (0x7484_i32 as u32)) as i32);
+        var_r30 = (var_r30 | ((0x7484_i32 as u32) as i32));
     }
     if ((arg2 & (4_i32 as u32)) != 0) {
-        var_r30 = (((var_r30 as u32) | (0x100_i32 as u32)) as i32);
+        var_r30 = (var_r30 | ((0x100_i32 as u32) as i32));
     }
     let __t1 = ctx.setjmp(Handle::addr(fns::grAnime_8049EE40(ctx)), || {
         fns::HSD_ForeachAnim(

@@ -77,7 +77,7 @@ pub fn it_80299D7C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((ip).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() != (((enums::GA_Air as i32) as u32) as i32) {
         fns::it_802762BC(ctx, ip);
     }
     fns::it_8026B390(ctx, gobj);
@@ -119,7 +119,7 @@ pub fn itHammerHead_Logic40_Thrown<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((ip).ground_or_air() as u32) != ((enums::GA_Air as i32) as u32) {
+    if (ip).ground_or_air() != (((enums::GA_Air as i32) as u32) as i32) {
         fns::it_802762BC(ctx, ip);
     }
     fns::it_8026B390(ctx, gobj);

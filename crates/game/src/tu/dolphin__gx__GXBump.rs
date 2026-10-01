@@ -177,7 +177,7 @@ pub fn GXSetTevIndirect<'a>(
                     ((24_i32) as u32),
                 ))) as u32))
                 | (shl_u32(
-                    ((tev_stage as u32).wrapping_add((16_i32 as u32))),
+                    ((tev_stage.wrapping_add(((16_i32 as u32) as i32))) as u32),
                     ((24_i32) as u32),
                 )));
         }
@@ -219,15 +219,15 @@ pub fn GXSetIndTexMtx<'a>(ctx: &'a Ctx, mtx_id: i32, offset: ArrV<'a, F32, 3>, s
             _ => 3,
         };
         if __case <= 0 {
-            id = (mtx_id as u32).wrapping_sub((1_i32 as u32));
+            id = (mtx_id.wrapping_sub(((1_i32 as u32) as i32)) as u32);
             break 's1;
         }
         if __case <= 1 {
-            id = (mtx_id as u32).wrapping_sub((5_i32 as u32));
+            id = (mtx_id.wrapping_sub(((5_i32 as u32) as i32)) as u32);
             break 's1;
         }
         if __case <= 2 {
-            id = (mtx_id as u32).wrapping_sub((9_i32 as u32));
+            id = (mtx_id.wrapping_sub(((9_i32 as u32) as i32)) as u32);
             break 's1;
         }
         if __case <= 3 {

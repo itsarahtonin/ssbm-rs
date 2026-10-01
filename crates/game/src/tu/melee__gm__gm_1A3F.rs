@@ -52,10 +52,10 @@ pub fn preloadState<'a>(ctx: &'a Ctx, state: GameModeState<'a>) {
         }
     }
     preloaded_state = fns::lbDvd_GetPreloadCacheScene(ctx);
-    if (fns::lbHeap_80015BB8(ctx, 2_i32) as u32) == (0_i32 as u32) {
+    if fns::lbHeap_80015BB8(ctx, 2_i32) == ((0_i32 as u32) as i32) {
         (preloaded_state).is_heap_persistent().at(0_i32).set(1_i32);
     }
-    if (fns::lbHeap_80015BB8(ctx, 3_i32) as u32) == (0_i32 as u32) {
+    if fns::lbHeap_80015BB8(ctx, 3_i32) == ((0_i32 as u32) as i32) {
         (preloaded_state).is_heap_persistent().at(1_i32).set(1_i32);
     }
     fns::lbDvd_80018254(ctx);

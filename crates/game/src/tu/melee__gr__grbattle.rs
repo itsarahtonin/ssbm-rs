@@ -39,8 +39,8 @@ pub fn grBattle_OnInit<'a>(ctx: &'a Ctx) {
     fns::stage_info(ctx).unk8C().set_b4((1_i32 as u8));
     fns::stage_info(ctx).unk8C().set_b5((1_i32 as u8));
     let _ = statics::melee__gr__grbattle::grBattle_80219D84(ctx, 0_i32);
-    if ((fns::gm_8016B3D8(ctx) != 0) || ((fns::Stage_80225194(ctx) as u32) == (0x111_i32 as u32)))
-        || ((fns::Stage_80225194(ctx) as u32) == (245_i32 as u32))
+    if ((fns::gm_8016B3D8(ctx) != 0) || (fns::Stage_80225194(ctx) == ((0x111_i32 as u32) as i32)))
+        || (fns::Stage_80225194(ctx) == ((245_i32 as u32) as i32))
     {
         let _ = statics::melee__gr__grbattle::grBattle_80219D84(ctx, 5_i32);
     } else {

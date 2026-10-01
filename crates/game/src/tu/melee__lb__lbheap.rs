@@ -182,7 +182,7 @@ pub fn lbHeap_80015BD0<'a>(ctx: &'a Ctx, heap_id: i32, size: u32) -> Addr<'a> {
     let mut p: Heap<'a> = statics::melee__lb__lbheap::lbHeap_80431FA0(ctx)
         .heap_array()
         .get(heap_id);
-    if ((p).status() as u32) == ((enums::LbHeapStatus_Create as i32) as u32) {
+    if (p).status() == (((enums::LbHeapStatus_Create as i32) as u32) as i32) {
         if (p).r#type() == 0_i32 {
             let mut cur_heap: i32 = fns::HSD_GetHeap(ctx);
             fns::HSD_SetHeap(ctx, (p).id());
@@ -209,7 +209,7 @@ pub fn lbHeap_80015CA8<'a>(ctx: &'a Ctx, arg0: i32, addr: Addr<'a>) {
     let mut p: Heap<'a> = statics::melee__lb__lbheap::lbHeap_80431FA0(ctx)
         .heap_array()
         .get(arg0);
-    (if ((p).status() as u32) == ((enums::LbHeapStatus_Create as i32) as u32) {
+    (if (p).status() == (((enums::LbHeapStatus_Create as i32) as u32) as i32) {
         ({ () })
     } else {
         fns::__assert(
@@ -270,7 +270,7 @@ pub fn lbHeap_80015DF8<'a>(ctx: &'a Ctx) {
                 p = statics::melee__lb__lbheap::lbHeap_80431FA0(ctx)
                     .heap_array()
                     .get(i);
-                if ((p).status() as u32) == ((enums::LbHeapStatus_Create as i32) as u32) {
+                if (p).status() == (((enums::LbHeapStatus_Create as i32) as u32) as i32) {
                     if (p).r#type() == 0_i32 {
                         var_r25 = fns::OSCheckHeap(ctx, (p).id());
                     } else {
@@ -352,7 +352,7 @@ pub fn lbHeap_80015F3C<'a>(ctx: &'a Ctx) {
     );
     {
         kind = 0_i32;
-        'l1: while (kind as u32) < ((enums::LbHeapKind_Count as i32) as u32) {
+        'l1: while kind < (((enums::LbHeapKind_Count as i32) as u32) as i32) {
             'c2: {
                 inl_resetHeap_unfused(ctx, kind);
             }
@@ -445,7 +445,7 @@ fn inl_destroyHeap_unfused<'a>(ctx: &'a Ctx, kind: i32) {
     let mut heap: Heap<'a> = statics::melee__lb__lbheap::lbHeap_80431FA0(ctx)
         .heap_array()
         .get(kind);
-    if ((heap).status() as u32) == ((enums::LbHeapStatus_Create as i32) as u32) {
+    if (heap).status() == (((enums::LbHeapStatus_Create as i32) as u32) as i32) {
         if (heap).r#type() == 0_i32 {
             fns::OSDestroyHeap(ctx, (heap).id());
             (heap).set_id(1_i32.wrapping_neg());
@@ -462,7 +462,7 @@ fn inl_createHeap_unfused<'a>(ctx: &'a Ctx, kind: i32) {
     let mut heap: Heap<'a> = statics::melee__lb__lbheap::lbHeap_80431FA0(ctx)
         .heap_array()
         .get(kind);
-    if ((heap).status() as u32) == ((enums::LbHeapStatus_Destroy as i32) as u32) {
+    if (heap).status() == (((enums::LbHeapStatus_Destroy as i32) as u32) as i32) {
         if (heap).r#type() == 0_i32 {
             (heap).set_id(fns::OSCreateHeap(
                 ctx,

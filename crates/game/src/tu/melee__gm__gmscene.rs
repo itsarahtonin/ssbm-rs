@@ -421,8 +421,8 @@ pub fn gm_801A4D34<'a>(ctx: &'a Ctx, on_frame: FnPtr<'a>, info: GameSceneInfo<'a
                     'c8: {
                         fns::HSD_PerfSetStartTime(ctx);
                         fns::lb_800198E0(ctx);
-                        if (fns::DbLevel(ctx).get() as u32)
-                            >= ((enums::DbLKind_DebugRom as i32) as u32)
+                        if fns::DbLevel(ctx).get()
+                            >= (((enums::DbLKind_DebugRom as i32) as u32) as i32)
                         {
                             fns::gm_801A4970(ctx, (temp_r25).unk_10().db_input());
                         }
@@ -476,8 +476,8 @@ pub fn gm_801A4D34<'a>(ctx: &'a Ctx, on_frame: FnPtr<'a>, info: GameSceneInfo<'a
                                         .get())),
                             );
                         }
-                        if (fns::DbLevel(ctx).get() as u32)
-                            >= ((enums::DbLKind_DebugRom as i32) as u32)
+                        if fns::DbLevel(ctx).get()
+                            >= (((enums::DbLKind_DebugRom as i32) as u32) as i32)
                         {
                             fns::db_CheckScreenshot(ctx);
                         }
@@ -500,8 +500,8 @@ pub fn gm_801A4D34<'a>(ctx: &'a Ctx, on_frame: FnPtr<'a>, info: GameSceneInfo<'a
                             }
                         }
                         fns::HSD_PerfSetCPUTime(ctx);
-                        if (fns::DbLevel(ctx).get() as u32)
-                            >= ((enums::DbLKind_DebugRom as i32) as u32)
+                        if fns::DbLevel(ctx).get()
+                            >= (((enums::DbLKind_DebugRom as i32) as u32) as i32)
                         {
                             let _ = fns::OSCheckActiveThreads(ctx);
                         }

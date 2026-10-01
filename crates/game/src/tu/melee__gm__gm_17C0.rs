@@ -1035,7 +1035,7 @@ pub fn gm_8017CE34<'a>(
         (arg0).rules().set_on_match_start(fnptr(ctx, 0x8017c71c));
         (arg1).xC().set_xC((6_i32 as u8));
     }
-    if (arg7 as u32) == (73_i32 as u32) {
+    if arg7 == ((73_i32 as u32) as i32) {
         (arg1).xC().set_xC((8_i32 as u8));
     }
 }
@@ -1094,7 +1094,7 @@ pub fn gm_8017D7AC<'a>(
     temp_r0 = (arg0).match_end().outcome();
     if (((temp_r0 as i32) == (enums::OUTCOME_NO_CONTEST as i32))
         || ((temp_r0 as i32) == (enums::OUTCOME_RETRY as i32)))
-        && ((fns::DbLevel(ctx).get() as u32) <= ((enums::DbLKind_DebugDevelop as i32) as u32))
+        && (fns::DbLevel(ctx).get() <= (((enums::DbLKind_DebugDevelop as i32) as u32) as i32))
     {
         's1: {
             let __case = match (fns::gm_GetCurrentGameMode(ctx) as i32) {

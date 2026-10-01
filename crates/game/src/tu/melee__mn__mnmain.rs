@@ -131,7 +131,7 @@ pub fn mn_80229938<'a>(ctx: &'a Ctx, menu_kind: i32, selection: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
     let mut menu_kind = menu_kind;
     let mut selection = selection;
-    if ((menu_kind as u32) == ((enums::MENU_KIND_REG as i32) as u32))
+    if (menu_kind == (((enums::MENU_KIND_REG as i32) as u32) as i32))
         && (selection == (enums::SEL_REG_ALLSTAR as i32))
     {
         if (fns::gmMainLib_8015EDD4(ctx) != 0) {
@@ -139,7 +139,7 @@ pub fn mn_80229938<'a>(ctx: &'a Ctx, menu_kind: i32, selection: i32) -> i32 {
         }
         return 0_i32;
     }
-    if ((menu_kind as u32) == ((enums::MENU_KIND_DATA as i32) as u32))
+    if (menu_kind == (((enums::MENU_KIND_DATA as i32) as u32) as i32))
         && (selection == (enums::SEL_DATA_SOUND as i32))
     {
         if (fns::gmMainLib_8015EE90(ctx) != 0) {
@@ -147,17 +147,17 @@ pub fn mn_80229938<'a>(ctx: &'a Ctx, menu_kind: i32, selection: i32) -> i32 {
         }
         return 0_i32;
     }
-    if ((menu_kind as u32) == ((enums::MENU_KIND_SETTINGS as i32) as u32))
+    if (menu_kind == (((enums::MENU_KIND_SETTINGS as i32) as u32) as i32))
         && (selection == (enums::SEL_SETTINGS_3 as i32))
     {
         return 0_i32;
     }
-    if ((menu_kind as u32) == ((enums::MENU_KIND_1P as i32) as u32))
+    if (menu_kind == (((enums::MENU_KIND_1P as i32) as u32) as i32))
         && (selection == (enums::SEL_1P_2 as i32))
     {
         return 0_i32;
     }
-    if (menu_kind as u32) == ((enums::MENU_KIND_TOY as i32) as u32) {
+    if menu_kind == (((enums::MENU_KIND_TOY as i32) as u32) as i32) {
         's1: {
             let __case = match selection {
                 2_i32 => 0,
@@ -514,7 +514,7 @@ pub fn mn_80229F60<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>, root: HSD_JObj<'a>, selec
             fns::mn_803EB6B0(ctx)
                 .get(((flow).cur_menu() as i32))
                 .start_frame(),
-            fp::frsp((selection as u32).wrapping_mul((2_i32 as u32)) as f64),
+            fp::frsp(selection.wrapping_mul(((2_i32 as u32) as i32)) as f64),
         ),
     );
     fns::mn_8022F3D8(ctx, jobj, (12_i32 as u8), (enums::TOBJ_MASK as i32));
@@ -633,7 +633,7 @@ pub fn mn_8022A440<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>, root: HSD_JObj<'a>, selec
             fns::mn_803EB6B0(ctx)
                 .get(((flow).cur_menu() as i32))
                 .start_frame(),
-            fp::frsp((selection as u32).wrapping_mul((2_i32 as u32)) as f64),
+            fp::frsp(selection.wrapping_mul(((2_i32 as u32) as i32)) as f64),
         ),
     );
     fns::mn_8022F3D8(ctx, r29, (12_i32 as u8), (enums::TOBJ_MASK as i32));
@@ -746,18 +746,18 @@ pub fn mn_8022A5D0<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>, selection: i32) {
                         7_i32,
                     );
                     temp_r22_2 =
-                        (((selection as u32) == (var_r26 as u32)) as i32).wrapping_mul(12_i32);
+                        ((selection == ((var_r26 as u32) as i32)) as i32).wrapping_mul(12_i32);
                     let _ = fns::mn_8022ED6C(
                         ctx,
                         sp84.at(0_i32).get(),
                         statics::melee__mn__mnmain::mn_803EB360(ctx)
-                            .get(((var_r26 as u32) == (selection as u32)) as i32),
+                            .get((((var_r26 as u32) as i32) == selection) as i32),
                     );
                     let _ = fns::mn_8022ED6C(
                         ctx,
                         sp84.at(2_i32).get(),
                         statics::melee__mn__mnmain::mn_803EB378(ctx)
-                            .get(((var_r26 as u32) == (selection as u32)) as i32),
+                            .get((((var_r26 as u32) as i32) == selection) as i32),
                     );
                     if fns::mn_8022ED6C(
                         ctx,
@@ -771,7 +771,7 @@ pub fn mn_8022A5D0<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>, selection: i32) {
                             ((shl_i32(1_i32, (4_i32 as u32))) as u32),
                         );
                     }
-                    if (selection as u32) == (var_r26 as u32) {
+                    if selection == ((var_r26 as u32) as i32) {
                         if inl_HSD_JObjGetScaleY_unfused(ctx, sp84.at(6_i32).get()) == 2.0 {
                             fns::lb_8000B1CC(ctx, sp84.at(5_i32).get(), sp68, sp50);
                             fns::lb_8000B1CC(ctx, (data).tree().at(41_i32).get(), sp68, sp5C);
@@ -2441,8 +2441,8 @@ pub fn mn_8022CA54<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>) {
         }
     } else if ((buttons & ((enums::MenuInput_Up as i32) as u32)) != 0) {
         inl_sfxMove_unfused(ctx);
-        if ((fns::mn_804A04F0(ctx).hovered_selection() as i32) as u32)
-            == ((enums::SEL_RECORDS_VS as i32) as u32)
+        if (fns::mn_804A04F0(ctx).hovered_selection() as i32)
+            == (((enums::SEL_RECORDS_VS as i32) as u32) as i32)
         {
             fns::mn_804A04F0(ctx).set_hovered_selection(((enums::SEL_RECORDS_MISC as i32) as u16));
         } else {
@@ -2451,8 +2451,8 @@ pub fn mn_8022CA54<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>) {
         }
     } else if ((buttons & ((enums::MenuInput_Down as i32) as u32)) != 0) {
         inl_sfxMove_unfused(ctx);
-        if ((fns::mn_804A04F0(ctx).hovered_selection() as i32) as u32)
-            == ((enums::SEL_RECORDS_MISC as i32) as u32)
+        if (fns::mn_804A04F0(ctx).hovered_selection() as i32)
+            == (((enums::SEL_RECORDS_MISC as i32) as u32) as i32)
         {
             fns::mn_804A04F0(ctx).set_hovered_selection(((enums::SEL_RECORDS_VS as i32) as u16));
         } else {
@@ -2541,8 +2541,8 @@ pub fn mn_8022CC28<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>) {
         inl_sfxMove_unfused(ctx);
         'l4: loop {
             'c5: {
-                if (fns::mn_804A04F0(ctx).hovered_selection() as u32)
-                    != ((enums::SEL_REG_CLASSIC as i32) as u32)
+                if ((fns::mn_804A04F0(ctx).hovered_selection() as u32) as i32)
+                    != (enums::SEL_REG_CLASSIC as i32)
                 {
                     fns::mn_804A04F0(ctx).set_hovered_selection(
                         fns::mn_804A04F0(ctx).hovered_selection().wrapping_sub(1),
@@ -2565,8 +2565,8 @@ pub fn mn_8022CC28<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>) {
         inl_sfxMove_unfused(ctx);
         'l6: loop {
             'c7: {
-                if ((fns::mn_804A04F0(ctx).hovered_selection() as i32) as u32)
-                    == ((enums::SEL_REG_ALLSTAR as i32) as u32)
+                if (fns::mn_804A04F0(ctx).hovered_selection() as i32)
+                    == (((enums::SEL_REG_ALLSTAR as i32) as u32) as i32)
                 {
                     fns::mn_804A04F0(ctx)
                         .set_hovered_selection(((enums::SEL_REG_CLASSIC as i32) as u16));
@@ -2697,8 +2697,8 @@ pub fn mn_8022CE6C<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>) {
         inl_sfxMove_unfused(ctx);
         'l4: loop {
             'c5: {
-                if (fns::mn_804A04F0(ctx).hovered_selection() as u32)
-                    != ((enums::SEL_DATA_SNAP as i32) as u32)
+                if ((fns::mn_804A04F0(ctx).hovered_selection() as u32) as i32)
+                    != (enums::SEL_DATA_SNAP as i32)
                 {
                     fns::mn_804A04F0(ctx).set_hovered_selection(
                         fns::mn_804A04F0(ctx).hovered_selection().wrapping_sub(1),
@@ -2721,8 +2721,8 @@ pub fn mn_8022CE6C<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>) {
         inl_sfxMove_unfused(ctx);
         'l6: loop {
             'c7: {
-                if ((fns::mn_804A04F0(ctx).hovered_selection() as i32) as u32)
-                    == ((enums::SEL_DATA_SPECIAL as i32) as u32)
+                if (fns::mn_804A04F0(ctx).hovered_selection() as i32)
+                    == (((enums::SEL_DATA_SPECIAL as i32) as u32) as i32)
                 {
                     fns::mn_804A04F0(ctx)
                         .set_hovered_selection(((enums::SEL_DATA_SNAP as i32) as u16));
@@ -2837,8 +2837,8 @@ pub fn mn_8022D104<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>) {
         inl_sfxMove_unfused(ctx);
         'l4: loop {
             'c5: {
-                if (fns::mn_804A04F0(ctx).hovered_selection() as u32)
-                    != ((enums::SEL_SETTINGS_RUMBLE as i32) as u32)
+                if ((fns::mn_804A04F0(ctx).hovered_selection() as u32) as i32)
+                    != (enums::SEL_SETTINGS_RUMBLE as i32)
                 {
                     fns::mn_804A04F0(ctx).set_hovered_selection(
                         fns::mn_804A04F0(ctx).hovered_selection().wrapping_sub(1),
@@ -2965,8 +2965,8 @@ pub fn mn_8022D34C<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>) {
         inl_sfxMove_unfused(ctx);
         'l4: loop {
             'c5: {
-                if (fns::mn_804A04F0(ctx).hovered_selection() as u32)
-                    != ((enums::SEL_TOY_GALLERY as i32) as u32)
+                if ((fns::mn_804A04F0(ctx).hovered_selection() as u32) as i32)
+                    != (enums::SEL_TOY_GALLERY as i32)
                 {
                     fns::mn_804A04F0(ctx).set_hovered_selection(
                         fns::mn_804A04F0(ctx).hovered_selection().wrapping_sub(1),
@@ -2989,8 +2989,8 @@ pub fn mn_8022D34C<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>) {
         inl_sfxMove_unfused(ctx);
         'l6: loop {
             'c7: {
-                if ((fns::mn_804A04F0(ctx).hovered_selection() as i32) as u32)
-                    == ((enums::SEL_TOY_COLLECTION as i32) as u32)
+                if (fns::mn_804A04F0(ctx).hovered_selection() as i32)
+                    == (((enums::SEL_TOY_COLLECTION as i32) as u32) as i32)
                 {
                     fns::mn_804A04F0(ctx)
                         .set_hovered_selection(((enums::SEL_TOY_GALLERY as i32) as u16));
@@ -3125,8 +3125,8 @@ pub fn mn_8022D594<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>) {
         }
     } else if ((buttons & ((enums::MenuInput_Up as i32) as u32)) != 0) {
         inl_sfxMove_unfused(ctx);
-        if ((fns::mn_804A04F0(ctx).hovered_selection() as i32) as u32)
-            == ((enums::SEL_VS_MELEE as i32) as u32)
+        if (fns::mn_804A04F0(ctx).hovered_selection() as i32)
+            == (((enums::SEL_VS_MELEE as i32) as u32) as i32)
         {
             fns::mn_804A04F0(ctx).set_hovered_selection(((enums::SEL_VS_NAME as i32) as u16));
         } else {
@@ -3135,8 +3135,8 @@ pub fn mn_8022D594<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>) {
         }
     } else if ((buttons & ((enums::MenuInput_Down as i32) as u32)) != 0) {
         inl_sfxMove_unfused(ctx);
-        if ((fns::mn_804A04F0(ctx).hovered_selection() as i32) as u32)
-            == ((enums::SEL_VS_NAME as i32) as u32)
+        if (fns::mn_804A04F0(ctx).hovered_selection() as i32)
+            == (((enums::SEL_VS_NAME as i32) as u32) as i32)
         {
             fns::mn_804A04F0(ctx).set_hovered_selection(((enums::SEL_VS_MELEE as i32) as u16));
         } else {
@@ -3280,8 +3280,8 @@ pub fn mn_8022D7F4<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>) {
         inl_sfxMove_unfused(ctx);
         'l4: loop {
             'c5: {
-                if (fns::mn_804A04F0(ctx).hovered_selection() as u32)
-                    != ((enums::SEL_1P_REG as i32) as u32)
+                if ((fns::mn_804A04F0(ctx).hovered_selection() as u32) as i32)
+                    != (enums::SEL_1P_REG as i32)
                 {
                     fns::mn_804A04F0(ctx).set_hovered_selection(
                         fns::mn_804A04F0(ctx).hovered_selection().wrapping_sub(1),

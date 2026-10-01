@@ -137,7 +137,7 @@ pub fn itKirbycutterbeam_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             __t3,
         )
     });
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         if (ip).x40_vel().y() < 0.0 {
             (ip).x40_vel().set_y(fp::fmadds(
                 0.05000000074505806,
@@ -176,7 +176,7 @@ pub fn itKirbycutterbeam_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -
             break 'l1;
         }
     }
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         Handle::copy_from(normal, (ip).x378_itemColl().floor().normal());
         if (fns::it_8026D564(ctx, gobj) != 0) {
             let _ = fns::atan2f(ctx, normal.x(), normal.y());
@@ -249,7 +249,7 @@ pub fn it_2725_Logic7_Reflected<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     (ip).set_facing_dir(fp::fneg((ip).facing_dir()));
     (ip).x40_vel().set_x(fp::fneg((ip).x40_vel().x()));
     (ip).x40_vel().set_y(fp::fneg((ip).x40_vel().y()));
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         (ip).xDD4_itemVar().kirbycutterbeam().set_angle({
             let __t1 = fns::atan2f(
                 ctx,
@@ -341,7 +341,7 @@ pub fn it_2725_Logic7_ShieldBounced<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32
             fp::fneg(1.0)
         }),
     );
-    if ((ip).ground_or_air() as u32) == ((enums::GA_Ground as i32) as u32) {
+    if (ip).ground_or_air() == (((enums::GA_Ground as i32) as u32) as i32) {
         (ip).xDD4_itemVar().kirbycutterbeam().set_angle({
             let __t1 = fns::atan2f(
                 ctx,
