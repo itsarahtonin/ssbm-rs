@@ -2,7 +2,7 @@
 
     python tools/lockstep/coverage.py <decomp root> --coverage FILE... [--ledger FILE...]
         [--bar 0.9] [--dead FILE] [--stand-ins FILE] [--stale CHANGED=FILES]... [--csv OUT]
-        [--done OUT]
+        [--done OUT] [--reviewed FILE]
 
 ssbm-run's LOCKSTEP_COVERAGE bitmaps mark each instruction of the original that ran within a
 check of its own function whose sides agreed. This splits every function of the decomp's
@@ -14,7 +14,9 @@ as no ledger records a mismatch for it; --done lists those, for LOCKSTEP_DONE. F
 reach.py finds can never run (--dead), and those the SDK layer stands in for (--stand-ins, from
 ssbm-run's STAND_INS), are counted apart: no run can check them. Results of a binary built
 before a port last changed say nothing of it: each --stale gives a list of ports, as changed.py
-writes it, that take nothing from the results its glob matches.
+writes it, that take nothing from the results its glob matches. Functions whose mismatches
+with changed inputs were reviewed and found to come from the inputs, not the port (--reviewed,
+one per line with the reason), are no longer to review.
 """
 
 import argparse
@@ -128,6 +130,7 @@ def main():
     ap.add_argument("--stale", action="append", default=[])
     ap.add_argument("--csv")
     ap.add_argument("--done")
+    ap.add_argument("--reviewed")
     args = ap.parse_args()
 
     def names(path):
@@ -135,7 +138,7 @@ def main():
             return set()
         lines = (l.split("#")[0].split() for l in open(path, encoding="utf-8"))
         return {w[-1] if w[0].startswith("0x") else w[0] for w in lines if w}
-    dead, stand_ins = names(args.dead), names(args.stand_ins)
+    dead, stand_ins, reviewed = names(args.dead), names(args.stand_ins), names(args.reviewed)
     stale_lists = []
     for s in args.stale:
         changed, pattern = s.split("=", 1)
@@ -196,7 +199,9 @@ def main():
     print(f"verified at {args.bar:.0%} of their blocks, with no mismatch: {len(verified)}")
     print(f"with mismatches: {len(mismatching)}")
     print(f"with mismatches only from changed inputs (mutations, probes), to review: "
-          f"{sum(1 for r in rows if r[10] > 0 and r[8] == 0)}")
+          f"{sum(1 for r in rows if r[10] > 0 and r[8] == 0 and r[1] not in reviewed)}"
+          f" (and {sum(1 for r in rows if r[10] > 0 and r[8] == 0 and r[1] in reviewed)} "
+          f"reviewed as coming from the inputs)")
     by_area = collections.defaultdict(lambda: [0, 0])
     for r in rows:
         area = "/".join(r[2].split("/")[:2])
