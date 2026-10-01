@@ -216,6 +216,8 @@ pub struct State {
     /// Ports that run as ports even on a mutated check's original side, which otherwise runs
     /// original code throughout.
     pub always_native: RefCell<BTreeSet<u32>>,
+    /// Stand-ins that never return, such as `OSPanic`: a mutated check that calls one ends.
+    pub noreturn: RefCell<BTreeSet<u32>>,
     /// Calls a port under a mutated check may still make, which stops one that would never
     /// return.
     pub(crate) calls_left: Cell<Option<u64>>,
@@ -1133,8 +1135,14 @@ fn interact(ctx: &Ctx, kind: Kind, f: impl FnOnce() -> u32) -> u32 {
                 // journals undo: its original meets hardware that reads as 0 and takes no
                 // writes, stand-ins that return 0 without running, and no interrupts. The port
                 // then replays the same. A hook stands in for a wait, which would never end,
-                // and so would a loop polling hardware for what it never answers.
-                if matches!(kind, Kind::Hook(_)) || state.log.borrow().len() >= NULL_LOG_MAX {
+                // and so would a loop polling hardware for what it never answers; a stand-in
+                // that never returns, such as for a failed assertion, ends the check too.
+                let ends = match kind {
+                    Kind::Hook(_) => true,
+                    Kind::Call(addr) => state.noreturn.borrow().contains(&addr),
+                    _ => false,
+                };
+                if ends || state.log.borrow().len() >= NULL_LOG_MAX {
                     panic_any(Runaway);
                 }
                 if let Kind::Call(_) = kind {
