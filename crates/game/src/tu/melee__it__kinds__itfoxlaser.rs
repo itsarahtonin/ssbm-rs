@@ -52,7 +52,7 @@ pub fn it_8029C504<'a>(
 ) {
     let __frame = ctx.stack_frame(0x90);
     let angle__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x4);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut parent = parent;
     let mut pos = pos;
     let mut msid = msid;
@@ -163,8 +163,8 @@ pub fn itFoxlaser_UnkMotion1_Phys<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn itFoxlaser_UnkMotion1_Coll<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));

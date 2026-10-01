@@ -42,7 +42,7 @@ pub fn CARDProbeEx<'a>(
     sectorSize: Val<'a, i32>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let id: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let id: Val<'a, u32> = frame_at(ctx, &__frame, 0xc);
     let mut chan = chan;
     let mut memSize = memSize;
     let mut sectorSize = sectorSize;
@@ -103,8 +103,8 @@ pub fn CARDProbeEx<'a>(
 
 pub fn DoMount<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let id: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
-    let status: Val<'a, u8> = frame_at(ctx, &__frame, 0x4);
+    let id: Val<'a, u32> = frame_at(ctx, &__frame, 0x10);
+    let status: Val<'a, u8> = frame_at(ctx, &__frame, 0xc);
     let mut chan = chan;
     let mut card: CARDControl<'a> = null(ctx);
     let mut result: i32 = 0;
@@ -398,7 +398,7 @@ pub fn DoUnmount<'a>(ctx: &'a Ctx, chan: i32, result: i32) {
 
 pub fn CARDUnmount<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x0);
+    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x4);
     let mut chan = chan;
     let mut result: i32 = 0;
     result = fns::__CARDGetControlBlock(ctx, chan, card);

@@ -202,11 +202,17 @@ pub fn mnCharSel_8025BD30<'a>(ctx: &'a Ctx) {
 
 pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0xb0);
-    let sp7C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let sp7B: Val<'a, u8> = frame_at(ctx, &__frame, 0x4);
-    let sp7A: Val<'a, u8> = frame_at(ctx, &__frame, 0x8);
-    let sp79: Val<'a, u8> = frame_at(ctx, &__frame, 0xc);
-    let sp78: Val<'a, u8> = frame_at(ctx, &__frame, 0x10);
+    let sp7C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x74);
+    let sp7B: Val<'a, u8> = frame_at(ctx, &__frame, 0x73);
+    let sp7A: Val<'a, u8> = frame_at(ctx, &__frame, 0x72);
+    let sp79: Val<'a, u8> = frame_at(ctx, &__frame, 0x71);
+    let sp78: Val<'a, u8> = frame_at(ctx, &__frame, 0x70);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
+    let __inl_4: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
+    let __inl_5: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x20);
+    let __inl_6: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x28);
     let mut arg0 = arg0;
     let mut i: i32 = (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
         .doors()
@@ -258,6 +264,7 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
                 ctx,
                 66_i32,
                 fp::frsp((fns::gmMainLib_8015D194(ctx, hud_index)).get() as f64),
+                Handle::addr(__inl),
             ));
             if arg0 != 0_i32 {
                 fns::HSD_JObjSetFlags(ctx, sp7C.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
@@ -295,6 +302,7 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
                     ctx,
                     67_i32,
                     fp::frsp(fns::gm_80162D6C(ctx) as f64),
+                    Handle::addr(__inl_2),
                 ));
                 fns::HSD_JObjClearFlags(ctx, sp7C.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
             }
@@ -305,6 +313,7 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
                 ctx,
                 66_i32,
                 fp::frsp((fns::gmMainLib_8015D2BC(ctx, hud_index)).get() as f64),
+                Handle::addr(__inl_3),
             ));
             if arg0 != 0_i32 {
                 fns::HSD_JObjSetFlags(ctx, sp7C.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
@@ -343,6 +352,7 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
                     ctx,
                     67_i32,
                     fp::frsp(fns::gm_80162F68(ctx) as f64),
+                    Handle::addr(__inl_4),
                 ));
                 fns::HSD_JObjClearFlags(ctx, sp7C.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
             }
@@ -353,6 +363,7 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
                 ctx,
                 66_i32,
                 fp::frsp((fns::gmMainLib_8015D3E4(ctx, hud_index)).get() as f64),
+                Handle::addr(__inl_5),
             ));
             if arg0 != 0_i32 {
                 fns::HSD_JObjSetFlags(ctx, sp7C.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
@@ -390,6 +401,7 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
                     ctx,
                     67_i32,
                     fp::frsp(fns::gm_80163164(ctx) as f64),
+                    Handle::addr(__inl_6),
                 ));
                 fns::HSD_JObjClearFlags(ctx, sp7C.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
             }
@@ -958,7 +970,7 @@ pub fn mnCharSel_8025C020<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn mnCharSel_8025D1C4<'a>(ctx: &'a Ctx, port: i32, mode: i32) {
     let __frame = ctx.stack_frame(0x40);
-    let sp10: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
     let mut port = port;
     let mut mode = mode;
     let mut sis_buf: Val<'a, u8> = null(ctx);
@@ -1143,6 +1155,13 @@ pub fn mnCharSel_8025D1C4<'a>(ctx: &'a Ctx, port: i32, mode: i32) {
 
 pub fn mnCharSel_8025D5AC<'a>(ctx: &'a Ctx, door: i32, frame: i32, hidden: i32) {
     let __frame = ctx.stack_frame(0x90);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
+    let __inl_4: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
+    let __inl_5: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x20);
+    let __inl_6: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x28);
+    let __inl_7: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x30);
     let mut door = door;
     let mut frame = frame;
     let mut hidden = hidden;
@@ -1161,6 +1180,7 @@ pub fn mnCharSel_8025D5AC<'a>(ctx: &'a Ctx, door: i32, frame: i32, hidden: i32) 
                 (4_i32 as u8),
                 ((enums::TOBJ_MASK as i32) as u32),
                 fp::frsp(frame as f64),
+                Handle::addr(__inl),
             );
             inl_sethidden_unfused(ctx, sp5C, hidden);
             sp58 = inl_animateJoint_unfused(
@@ -1169,6 +1189,7 @@ pub fn mnCharSel_8025D5AC<'a>(ctx: &'a Ctx, door: i32, frame: i32, hidden: i32) 
                 (6_i32 as u8),
                 ((enums::TOBJ_MASK as i32) as u32),
                 fp::frsp(frame as f64),
+                Handle::addr(__inl_2),
             );
             inl_sethidden_unfused(ctx, sp58, hidden);
             return;
@@ -1179,6 +1200,7 @@ pub fn mnCharSel_8025D5AC<'a>(ctx: &'a Ctx, door: i32, frame: i32, hidden: i32) 
             (43_i32 as u8),
             ((enums::TOBJ_MASK as i32) as u32),
             fp::frsp(frame as f64),
+            Handle::addr(__inl_3),
         );
         inl_sethidden_unfused(ctx, sp54, hidden);
         sp50 = inl_animateJoint_unfused(
@@ -1187,6 +1209,7 @@ pub fn mnCharSel_8025D5AC<'a>(ctx: &'a Ctx, door: i32, frame: i32, hidden: i32) 
             (45_i32 as u8),
             ((enums::TOBJ_MASK as i32) as u32),
             fp::frsp(frame as f64),
+            Handle::addr(__inl_4),
         );
         inl_sethidden_unfused(ctx, sp50, hidden);
         if (hidden != 0) {
@@ -1203,6 +1226,7 @@ pub fn mnCharSel_8025D5AC<'a>(ctx: &'a Ctx, door: i32, frame: i32, hidden: i32) 
                         tmp,
                         ((enums::TOBJ_MASK as i32) as u32),
                         fp::frsp(frame as f64),
+                        Handle::addr(__inl_5),
                     );
                 }
                 i = i.wrapping_add(1);
@@ -1220,6 +1244,7 @@ pub fn mnCharSel_8025D5AC<'a>(ctx: &'a Ctx, door: i32, frame: i32, hidden: i32) 
             .costume_joint(),
         ((enums::TOBJ_MASK as i32) as u32),
         fp::frsp(frame as f64),
+        Handle::addr(__inl_6),
     );
     inl_sethidden_unfused(ctx, sp48, hidden);
     sp44 = inl_animateJoint_unfused(
@@ -1231,6 +1256,7 @@ pub fn mnCharSel_8025D5AC<'a>(ctx: &'a Ctx, door: i32, frame: i32, hidden: i32) 
             .emblem_joint(),
         ((enums::TOBJ_MASK as i32) as u32),
         fp::frsp(frame as f64),
+        Handle::addr(__inl_7),
     );
     inl_sethidden_unfused(ctx, sp44, hidden);
 }
@@ -1290,7 +1316,24 @@ pub fn mnCharSel_8025DAA0<'a>(ctx: &'a Ctx, door: i32) -> i32 {
 pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
     let __frame = ctx.stack_frame(0xe8);
     let team: mnCharSel_8025DB34_team<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp90: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
+    let sp90: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x88);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
+    let __inl_4: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x20);
+    let __inl_5: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x28);
+    let __inl_6: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x38);
+    let __inl_7: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x40);
+    let __inl_8: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x48);
+    let __inl_9: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x50);
+    let __inl_10: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x58);
+    let __inl_11: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x60);
+    let __inl_12: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x68);
+    let __inl_13: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x70);
+    let __inl_14: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x78);
+    let __inl_15: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x80);
+    let __inl_16: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x90);
+    let __inl_17: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x98);
     let mut arg0 = arg0;
     let mut anim_frame: f64 = 0.0;
     let mut joint: u8 = 0;
@@ -1407,6 +1450,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                 (2_i32 as u8),
                 ((enums::TOBJ_MASK as i32) as u32),
                 anim_frame,
+                Handle::addr(__inl),
             );
             anim_frame = fp::frsp(
                 statics::melee__mn__mncharsel::mnCharSel_804D50D8(ctx)
@@ -1419,6 +1463,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                 (4_i32 as u8),
                 ((enums::MOBJ_MASK as i32) as u32),
                 anim_frame,
+                Handle::addr(__inl_2),
             );
         } else {
             anim_frame = fp::frsp(
@@ -1432,6 +1477,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                 (41_i32 as u8),
                 ((enums::TOBJ_MASK as i32) as u32),
                 anim_frame,
+                Handle::addr(__inl_3),
             );
             anim_frame = fp::frsp(
                 statics::melee__mn__mncharsel::mnCharSel_804D50D8(ctx)
@@ -1444,6 +1490,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                 (43_i32 as u8),
                 ((enums::MOBJ_MASK as i32) as u32),
                 anim_frame,
+                Handle::addr(__inl_4),
             );
         }
         if (((statics::melee__mn__mncharsel::mnCharSel_803F0E8C(ctx)
@@ -1648,6 +1695,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                             joint,
                             ((enums::TOBJ_MASK as i32) as u32),
                             anim_frame,
+                            Handle::addr(__inl_5),
                         );
                     }
                     break 's3;
@@ -1711,6 +1759,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                                 joint,
                                 ((enums::TOBJ_MASK as i32) as u32),
                                 anim_frame,
+                                Handle::addr(__inl_6),
                             ));
                             anim_frame = fp::fmuls(
                                 1.25,
@@ -1739,6 +1788,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                                 joint,
                                 ((enums::TOBJ_MASK as i32) as u32),
                                 anim_frame,
+                                Handle::addr(__inl_7),
                             );
                         } else {
                             {
@@ -1771,6 +1821,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                                 joint,
                                 ((enums::TOBJ_MASK as i32) as u32),
                                 anim_frame,
+                                Handle::addr(__inl_8),
                             );
                         }
                         break 's3;
@@ -1845,6 +1896,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                                 joint,
                                 ((enums::TOBJ_MASK as i32) as u32),
                                 anim_frame,
+                                Handle::addr(__inl_9),
                             ));
                             anim_frame = fp::fmuls(
                                 1.25,
@@ -1873,6 +1925,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                                 joint,
                                 ((enums::TOBJ_MASK as i32) as u32),
                                 anim_frame,
+                                Handle::addr(__inl_10),
                             );
                         } else {
                             if (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
@@ -1915,6 +1968,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                                 joint,
                                 ((enums::TOBJ_MASK as i32) as u32),
                                 anim_frame,
+                                Handle::addr(__inl_11),
                             );
                         }
                         break 's3;
@@ -1953,6 +2007,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
             joint,
             ((enums::ALL_TYPE_MASK as i32) as u32),
             anim_frame,
+            Handle::addr(__inl_12),
         );
         let _ = fns::lb_80011E24(
             ctx,
@@ -2001,6 +2056,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                 joint,
                 ((enums::TOBJ_MASK as i32) as u32),
                 anim_frame,
+                Handle::addr(__inl_13),
             );
             anim_frame = fp::frsp(
                 statics::melee__mn__mncharsel::mnCharSel_804D50D8(ctx)
@@ -2017,6 +2073,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                 joint,
                 ((enums::MOBJ_MASK as i32) as u32),
                 anim_frame,
+                Handle::addr(__inl_14),
             );
         } else {
             fns::HSD_JObjClearFlags(ctx, sp90.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
@@ -2041,6 +2098,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                 joint,
                 ((enums::TOBJ_MASK as i32) as u32),
                 anim_frame,
+                Handle::addr(__inl_15),
             );
             if (statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
                 .doors()
@@ -2066,6 +2124,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                     joint,
                     ((enums::TOBJ_MASK as i32) as u32),
                     anim_frame,
+                    Handle::addr(__inl_16),
                 );
                 anim_frame = fp::frsp(
                     statics::melee__mn__mncharsel::mnCharSel_804D50D0(ctx)
@@ -2082,6 +2141,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                     joint,
                     ((enums::MOBJ_MASK as i32) as u32),
                     anim_frame,
+                    Handle::addr(__inl_17),
                 );
             }
             (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
@@ -2199,10 +2259,10 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
 
 pub fn mnCharSel_8025EE8C<'a>(ctx: &'a Ctx, idx: u8) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let sp14: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
-    let result_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
-    let spC: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
+    let sp14: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
+    let result_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
+    let spC: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
     let mut idx = idx;
     let mut mode_frame: f64 = 0.0;
     let mut i: i32 = 0;
@@ -2346,17 +2406,17 @@ pub fn mnCharSel_8025EE8C<'a>(ctx: &'a Ctx, idx: u8) {
 
 pub fn fn_8025F0E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xd0);
-    let sp54: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let sp4C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
-    let sp48: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
-    let sp44: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
-    let sp40: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x10);
-    let sp3C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x14);
-    let sp38: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x18);
-    let sp34: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x1c);
-    let sp30: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x20);
+    let sp54: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4c);
+    let sp4C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x44);
+    let sp48: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x40);
+    let sp44: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x3c);
+    let sp40: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x38);
+    let sp3C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x34);
+    let sp38: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x30);
+    let sp34: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x2c);
+    let sp30: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x28);
     let sp2C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
     let mut hole: i32 = 0;
@@ -3086,7 +3146,7 @@ pub fn fn_8025FB2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnCharSel_8025FB50<'a>(ctx: &'a Ctx, door: u8, arg1: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let icon_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let icon_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x10);
     let mut door = door;
     let mut arg1 = arg1;
     let mut icon_idx: i32 = 0;
@@ -3272,7 +3332,7 @@ pub fn mnCharSel_8025FB50<'a>(ctx: &'a Ctx, door: u8, arg1: i32) {
 
 pub fn mnCharSel_8025FDEC<'a>(ctx: &'a Ctx, door: u8) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let sp10: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
     let mut door = door;
     let mut css: CSSData<'a> = null(ctx);
     let mut player: i32 = 0;
@@ -3550,18 +3610,18 @@ pub fn mnCharSel_CostumeChange<'a>(ctx: &'a Ctx, door: i32, input: u32) {
 
 pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x128);
-    let sp98: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let unk94: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
-    let sp88: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let unk78: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
-    let sp74: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x24);
-    let unk58: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x28);
-    let sp54: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x44);
+    let sp98: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x90);
+    let unk94: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let sp88: Vec<'a> = frame_at(ctx, &__frame, 0x80);
+    let unk78: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
+    let sp74: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x6c);
+    let unk58: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x14);
+    let sp54: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4c);
     let sp50: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x48);
-    let state_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4c);
-    let color_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x50);
-    let dx_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x54);
-    let dy_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x58);
+    let state_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x38);
+    let color_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x34);
+    let dx_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x30);
+    let dy_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x3c);
     let mut gobj = gobj;
     let mut cpu_door: i32 = 0;
     let mut a_press: u32 = 0;
@@ -6705,8 +6765,11 @@ pub fn mnCharSel_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_80262648<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xa8);
-    let sp24: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let carrier: fn_80262648_carrier<'a> = frame_at(ctx, &__frame, 0x4);
+    let sp24: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x1c);
+    let carrier: fn_80262648_carrier<'a> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x20);
     let mut gobj = gobj;
     let mut model: CSSCharModel<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = ({
@@ -6787,16 +6850,18 @@ pub fn fn_80262648<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             ((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32)
                                 .wrapping_mul(4_i32)) as f64,
                         ),
+                        Handle::addr(__inl),
                     );
                 } else {
                     inl_animateCharModel(
                         ctx,
                         jobj,
                         fp::frsp((((model).x4() as i32).wrapping_mul(4_i32)) as f64),
+                        Handle::addr(__inl_2),
                     );
                 }
             } else {
-                inl_animateCharModel(ctx, jobj, 16.0);
+                inl_animateCharModel(ctx, jobj, 16.0, Handle::addr(__inl_3));
             }
             let _ = fns::lb_80011E24(
                 ctx,
@@ -7821,20 +7886,20 @@ pub fn fn_80263354<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xd8);
-    let list_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let arrow_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
-    let unk7C: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
-    let white: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let gray: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
-    let list_origin_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x14);
-    let list_origin: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let gray_copy: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
-    let row_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
-    let used_row_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
-    let white_copy: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
-    let unk34: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x34);
-    let handicap_slider_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x54);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x58);
+    let list_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x7c);
+    let arrow_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x78);
+    let unk7C: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let white: _GXColor<'a> = frame_at(ctx, &__frame, 0x70);
+    let gray: _GXColor<'a> = frame_at(ctx, &__frame, 0x6c);
+    let list_origin_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x68);
+    let list_origin: Vec<'a> = frame_at(ctx, &__frame, 0x5c);
+    let gray_copy: _GXColor<'a> = frame_at(ctx, &__frame, 0x58);
+    let row_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x54);
+    let used_row_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x50);
+    let white_copy: _GXColor<'a> = frame_at(ctx, &__frame, 0x4c);
+    let unk34: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x4);
+    let handicap_slider_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x2c);
     let mut gobj = gobj;
     let mut tag: CSSTagData<'a> = null(ctx);
     let mut port: i32 = 0;
@@ -9192,30 +9257,30 @@ pub fn fn_8026407C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x1e8);
-    let sp108: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let unkF8: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
-    let spEC: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let spE8: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
-    let spE4: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
-    let spE0: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
-    let spDC: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
-    let hard_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
-    let spD4: _GXColor<'a> = frame_at(ctx, &__frame, 0x34);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x38);
-    let color2: _GXColor<'a> = frame_at(ctx, &__frame, 0x3c);
-    let color3: _GXColor<'a> = frame_at(ctx, &__frame, 0x40);
-    let color4: _GXColor<'a> = frame_at(ctx, &__frame, 0x44);
-    let color5: _GXColor<'a> = frame_at(ctx, &__frame, 0x48);
-    let color6: _GXColor<'a> = frame_at(ctx, &__frame, 0x4c);
-    let color7: _GXColor<'a> = frame_at(ctx, &__frame, 0x50);
-    let unkA8: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x54);
-    let spA4: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x64);
-    let unkA0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x68);
-    let tag_name_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x6c);
-    let unk74: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x70);
-    let sp70: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x90);
-    let jobj43: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x94);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x98);
+    let sp108: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x100);
+    let unkF8: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let spEC: Vec<'a> = frame_at(ctx, &__frame, 0xe4);
+    let spE8: _GXColor<'a> = frame_at(ctx, &__frame, 0xe0);
+    let spE4: _GXColor<'a> = frame_at(ctx, &__frame, 0xdc);
+    let spE0: _GXColor<'a> = frame_at(ctx, &__frame, 0xd8);
+    let spDC: _GXColor<'a> = frame_at(ctx, &__frame, 0xd4);
+    let hard_color: _GXColor<'a> = frame_at(ctx, &__frame, 0xd0);
+    let spD4: _GXColor<'a> = frame_at(ctx, &__frame, 0xcc);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0xc8);
+    let color2: _GXColor<'a> = frame_at(ctx, &__frame, 0xc4);
+    let color3: _GXColor<'a> = frame_at(ctx, &__frame, 0xc0);
+    let color4: _GXColor<'a> = frame_at(ctx, &__frame, 0xbc);
+    let color5: _GXColor<'a> = frame_at(ctx, &__frame, 0xb8);
+    let color6: _GXColor<'a> = frame_at(ctx, &__frame, 0xb4);
+    let color7: _GXColor<'a> = frame_at(ctx, &__frame, 0xb0);
+    let unkA8: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
+    let spA4: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x9c);
+    let unkA0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x20);
+    let tag_name_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x94);
+    let unk74: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x24);
+    let sp70: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x68);
+    let jobj43: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x5c);
+    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x6c);
     let mut row_b: i32 = 0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -12963,9 +13028,8 @@ pub fn mnCharSel_Scene_OnExit<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     fns::lbAudioAx_80027168(ctx);
 }
 
-fn inl_inline3_unfused<'a>(ctx: &'a Ctx, i: i32, x: f64) -> HSD_JObj<'a> {
-    let __frame = ctx.stack_frame(0x10);
-    let sp5C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+fn inl_inline3_unfused<'a>(ctx: &'a Ctx, i: i32, x: f64, __in_caller: u32) -> HSD_JObj<'a> {
+    let sp5C: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x0);
     let mut i = i;
     let mut x = x;
     let mut cc0: HSD_JObj<'a> = null(ctx);
@@ -13162,9 +13226,9 @@ fn inl_animateJoint_unfused<'a>(
     joint: u8,
     mask: u32,
     frame: f64,
+    __in_caller: u32,
 ) -> HSD_JObj<'a> {
-    let __frame = ctx.stack_frame(0x10);
-    let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let jobj: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x0);
     let mut root = root;
     let mut joint = joint;
     let mut mask = mask;
@@ -13283,9 +13347,9 @@ fn inl_animateJointPadded_unfused<'a>(
     joint: u8,
     mask: u32,
     frame: f64,
+    __in_caller: u32,
 ) -> HSD_JObj<'a> {
-    let __frame = ctx.stack_frame(0x18);
-    let state: animateJointPadded_state<'a> = frame_at(ctx, &__frame, 0x0);
+    let state: animateJointPadded_state<'a> = ptr(ctx, __in_caller + 0x0);
     let mut root = root;
     let mut joint = joint;
     let mut mask = mask;
@@ -13401,15 +13465,15 @@ fn inl_animateJointLeadingPad_unfused<'a>(
     joint: u8,
     mask: u32,
     frame: f64,
+    __in_caller: u32,
 ) -> HSD_JObj<'a> {
-    let __frame = ctx.stack_frame(0x28);
-    let pad0: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let pad1: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
-    let pad2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
-    let pad3: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
-    let pad4: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x10);
-    let pad5: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x14);
-    let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x18);
+    let pad0: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x0);
+    let pad1: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x4);
+    let pad2: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x8);
+    let pad3: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0xc);
+    let pad4: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x10);
+    let pad5: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x14);
+    let jobj: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x18);
     let mut root = root;
     let mut joint = joint;
     let mut mask = mask;
@@ -14116,9 +14180,8 @@ fn inl_getDoorCount<'a>(ctx: &'a Ctx, css: CSSData<'a>) -> i32 {
     return (statics::melee__mn__mncharsel::mnCharSel_804D6CF5(ctx).get() as i32);
 }
 
-fn inl_animateCharModel<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, frame: f64) {
-    let __frame = ctx.stack_frame(0x10);
-    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+fn inl_animateCharModel<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, frame: f64, __in_caller: u32) {
+    let child: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x0);
     let mut jobj = jobj;
     let mut frame = frame;
     let _ = fns::lb_80011E24(

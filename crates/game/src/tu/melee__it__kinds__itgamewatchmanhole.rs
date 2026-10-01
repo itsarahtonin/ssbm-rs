@@ -34,7 +34,7 @@ pub fn it_802C65E4<'a>(
     arg3: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x80);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut vec = vec;
     let mut arg2 = arg2;
@@ -116,7 +116,7 @@ pub fn itGameWatchManhole_Logic72_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>)
 
 pub fn itGamewatchmanhole_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut pad: i32 = 0;

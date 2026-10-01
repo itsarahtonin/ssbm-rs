@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn ftAction_80071028<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let range: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut cmd = cmd;
@@ -2502,13 +2502,13 @@ pub fn ftAction_80072CB0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
 
 pub fn ftAction_80072CD8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x78);
-    let sp64: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let sp60: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
-    let gfx_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
-    let _cmd: CommandInfo<'a> = frame_at(ctx, &__frame, 0xc);
-    let cmd_words: ArrV<'a, u32, 3> = frame_at(ctx, &__frame, 0x30);
-    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let range: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let sp64: Val<'a, i32> = frame_at(ctx, &__frame, 0x5c);
+    let sp60: Val<'a, i32> = frame_at(ctx, &__frame, 0x58);
+    let gfx_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x54);
+    let _cmd: CommandInfo<'a> = frame_at(ctx, &__frame, 0x30);
+    let cmd_words: ArrV<'a, u32, 3> = frame_at(ctx, &__frame, 0x24);
+    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let range: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut cmd = cmd;
     let mut part: u32 = 0;
@@ -2590,13 +2590,13 @@ pub fn ftAction_80072E24<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
 
 pub fn ftAction_80072E4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x78);
-    let sp64: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let sp60: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
-    let gfx_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
-    let _cmd: CommandInfo<'a> = frame_at(ctx, &__frame, 0xc);
-    let cmd_words: ArrV<'a, u32, 3> = frame_at(ctx, &__frame, 0x30);
-    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let range: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let sp64: Val<'a, i32> = frame_at(ctx, &__frame, 0x5c);
+    let sp60: Val<'a, i32> = frame_at(ctx, &__frame, 0x58);
+    let gfx_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x54);
+    let _cmd: CommandInfo<'a> = frame_at(ctx, &__frame, 0x30);
+    let cmd_words: ArrV<'a, u32, 3> = frame_at(ctx, &__frame, 0x24);
+    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let range: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut cmd = cmd;
     let mut fp: Fighter<'a> = null(ctx);

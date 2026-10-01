@@ -49,7 +49,7 @@ pub fn it_8029CD18<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: i32) {
 
 pub fn it_8029CD78<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> HSD_JObj<'a> {
     let __frame = ctx.stack_frame(0x38);
-    let quat: Quaternion<'a> = frame_at(ctx, &__frame, 0x0);
+    let quat: Quaternion<'a> = frame_at(ctx, &__frame, 0xc);
     let mut item_gobj = item_gobj;
     let mut temp_r30: HSD_JObj<'a> = null(ctx);
     let mut temp_r29: HSD_JObj<'a> = null(ctx);
@@ -77,7 +77,7 @@ pub fn it_8029CEB4<'a>(
     dir: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x70);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x10);
     let mut parent = parent;
     let mut pos = pos;
     let mut kind = kind;
@@ -150,6 +150,7 @@ pub fn it_8029CFF0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn itFoxillusion_UnkMotion0_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut temp_r31: Item<'a> = null(ctx);
     let mut item: Item<'a> = null(ctx);
@@ -161,7 +162,7 @@ pub fn itFoxillusion_UnkMotion0_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) 
         (temp_r31)
             .xDD4_itemVar()
             .foxillusion()
-            .set_xDDC(inl_it_8029CD78_unfused(ctx, item_gobj));
+            .set_xDDC(inl_it_8029CD78_unfused(ctx, item_gobj, Handle::addr(__inl)));
     }
     item = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
     if ((if !Handle::is_null((item).owner()) {
@@ -182,7 +183,7 @@ pub fn itFoxillusion_UnkMotion0_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) 
 
 pub fn itFoxillusion_UnkMotion0_Phys<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let ghost_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let ghost_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut item_gobj = item_gobj;
     inl_itFoxillusion_Phys_unfused(ctx, item_gobj, ghost_pos);
 }
@@ -200,8 +201,8 @@ pub fn itFoxillusion_UnkMotion1_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) 
 
 pub fn itFoxillusion_UnkMotion1_Phys<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let ghost_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let ghost_pos: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     'l1: loop {
         'c2: {
@@ -257,7 +258,7 @@ pub fn itFoxillusion_UnkMotion2_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) 
 
 pub fn itFoxillusion_UnkMotion2_Phys<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
@@ -415,9 +416,12 @@ fn inl_Item_InitSpawnCommonFields_unfused<'a>(
     (spawn).set_x40(0_i32);
 }
 
-fn inl_it_8029CD78_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> HSD_JObj<'a> {
-    let __frame = ctx.stack_frame(0x18);
-    let quat: Quaternion<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_it_8029CD78_unfused<'a>(
+    ctx: &'a Ctx,
+    item_gobj: HSD_GObj<'a>,
+    __in_caller: u32,
+) -> HSD_JObj<'a> {
+    let quat: Quaternion<'a> = ptr(ctx, __in_caller + 0x0);
     let mut item_gobj = item_gobj;
     let mut temp_r30: HSD_JObj<'a> = null(ctx);
     let mut temp_r29: HSD_JObj<'a> = null(ctx);

@@ -240,8 +240,8 @@ pub fn ftAnim_GetNextJointInTree<'a>(
 
 pub fn ftAnim_8006DF0C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x14);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut fp = fp;
     let mut temp_r31: HSD_JObj<'a> = null(ctx);
     let mut temp_r30: HSD_JObj<'a> = null(ctx);
@@ -276,11 +276,11 @@ pub fn ftAnim_8006E054<'a>(
     arg3: HSD_JObj<'a>,
 ) {
     let __frame = ctx.stack_frame(0x88);
-    let sp5C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp5C: Vec<'a> = frame_at(ctx, &__frame, 0x54);
+    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let mut fp = fp;
     let mut jobj = jobj;
     let mut arg2 = arg2;
@@ -1683,8 +1683,8 @@ fn asm_ftAnim_8006F994(ctx: &Ctx) {
 
 pub fn ftAnim_8006FA58<'a>(ctx: &'a Ctx, fp: Fighter<'a>, part: i32, joint: HSD_Joint<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let joint__slot: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x0);
-    let depth: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let joint__slot: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x8);
+    let depth: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
     let mut fp = fp;
     let mut part = part;
     joint__slot.set(joint);
@@ -1735,8 +1735,8 @@ pub fn ftAnim_8006FA58<'a>(ctx: &'a Ctx, fp: Fighter<'a>, part: i32, joint: HSD_
 
 pub fn ftAnim_8006FB88<'a>(ctx: &'a Ctx, fp: Fighter<'a>, part: i32, joint: HSD_Joint<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let joint__slot: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x0);
-    let depth: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let joint__slot: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x8);
+    let depth: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
     let mut fp = fp;
     let mut part = part;
     joint__slot.set(joint);
@@ -1943,8 +1943,8 @@ pub fn ftAnim_80070010<'a>(
     joint: HSD_Joint<'a>,
 ) {
     let __frame = ctx.stack_frame(0x40);
-    let joint__slot: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x0);
-    let sp1C: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let joint__slot: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x10);
+    let sp1C: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
     let mut fp = fp;
     let mut start = start;
     let mut t = t;
@@ -1994,8 +1994,8 @@ pub fn ftAnim_80070108<'a>(
     joint: HSD_Joint<'a>,
 ) {
     let __frame = ctx.stack_frame(0x40);
-    let joint__slot: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x0);
-    let sp1C: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let joint__slot: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x10);
+    let sp1C: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
     let mut fp = fp;
     let mut start = start;
     let mut t = t;
@@ -2350,8 +2350,8 @@ pub fn ftAnim_80070904<'a>(
     animjoint: HSD_AnimJoint<'a>,
 ) {
     let __frame = ctx.stack_frame(0x28);
-    let animjoint__slot: Ptr<'a, HSD_AnimJoint<'a>> = frame_at(ctx, &__frame, 0x0);
-    let sp14: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let animjoint__slot: Ptr<'a, HSD_AnimJoint<'a>> = frame_at(ctx, &__frame, 0x8);
+    let sp14: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
     let mut fp = fp;
     let mut start = start;
     animjoint__slot.set(animjoint);
@@ -2509,6 +2509,8 @@ pub fn ftAnim_80070C48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
 
 pub fn ftAnim_80070CC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x40);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> =
@@ -2525,6 +2527,7 @@ pub fn ftAnim_80070CC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
         fp,
         ((r28).x0() as i32),
         (Handle::add((r28).x8(), ((r30).x11() as i32))).get(),
+        Handle::addr(__inl),
     );
     (r30).set_x11((1_i32.wrapping_neg() as i8));
     if !Handle::is_null((fp).x590()) {
@@ -2544,6 +2547,7 @@ pub fn ftAnim_80070CC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
             fp,
             (Handle::add((fp).parts(), ((r28).x0() as i32))).joint(),
             (fp).x108_costume_joint(),
+            Handle::addr(__inl_2),
         );
         fns::ftAnim_8006FA58(ctx, fp, ((r28).x0() as i32), __t1)
     };
@@ -2997,10 +3001,10 @@ fn inl_some_inline_unfused<'a>(
     fp: Fighter<'a>,
     start: i32,
     animjoint: HSD_AnimJoint<'a>,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x10);
-    let animjoint__slot: Ptr<'a, HSD_AnimJoint<'a>> = frame_at(ctx, &__frame, 0x0);
-    let depth: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let animjoint__slot: Ptr<'a, HSD_AnimJoint<'a>> = ptr(ctx, __in_caller + 0x0);
+    let depth: Val<'a, i32> = ptr(ctx, __in_caller + 0x4);
     let mut fp = fp;
     let mut start = start;
     animjoint__slot.set(animjoint);
@@ -3030,10 +3034,10 @@ fn inl_ftAnim_8006F994_unfused<'a>(
     fp: Fighter<'a>,
     jobj: HSD_JObj<'a>,
     joint: HSD_Joint<'a>,
+    __in_caller: u32,
 ) -> HSD_Joint<'a> {
-    let __frame = ctx.stack_frame(0x10);
-    let joint__slot: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x0);
-    let depth: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let joint__slot: Ptr<'a, HSD_Joint<'a>> = ptr(ctx, __in_caller + 0x0);
+    let depth: Val<'a, i32> = ptr(ctx, __in_caller + 0x4);
     let mut fp = fp;
     let mut jobj = jobj;
     joint__slot.set(joint);

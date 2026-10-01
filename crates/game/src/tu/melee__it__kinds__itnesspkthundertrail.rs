@@ -36,8 +36,8 @@ pub fn it_802AC43C<'a>(
     facing_dir: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x90);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4c);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ball = ball;
     let mut pos = pos;
@@ -153,8 +153,8 @@ pub fn itNesspkthundertrail_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>
 
 pub fn itNesspkthundertrail_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let radius: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let next_pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let radius: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
+    let next_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> =

@@ -28,10 +28,10 @@ use crate::support::*;
 
 pub fn ftKb_SpecialNKp_800FA588<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let offset: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut da: ftKb_DatAttrs<'a> = Handle::cast::<ftKb_DatAttrs<'a>>((fp).dat_attrs());

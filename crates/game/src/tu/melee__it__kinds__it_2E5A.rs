@@ -28,12 +28,12 @@ use crate::support::*;
 
 pub fn it_802E5AC4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg_check: i32) -> i32 {
     let __frame = ctx.stack_frame(0x78);
-    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let sqrt_0: Val<'a, F32> = frame_at(ctx, &__frame, 0x24);
-    let sqrt_1: Val<'a, F32> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x2c);
+    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let sqrt_0: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
+    let sqrt_1: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg_check = arg_check;
     let mut item: Item<'a> = null(ctx);
@@ -383,8 +383,8 @@ pub fn it_802E5F00<'a>(
     arg3: i32,
 ) {
     let __frame = ctx.stack_frame(0x90);
-    let vars: it_802E5FXX_struct<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp1C: SpawnItem<'a> = frame_at(ctx, &__frame, 0x1c);
+    let vars: it_802E5FXX_struct<'a> = frame_at(ctx, &__frame, 0x60);
+    let sp1C: SpawnItem<'a> = frame_at(ctx, &__frame, 0x14);
     let mut item_gobj = item_gobj;
     let mut pos = pos;
     let mut vel = vel;
@@ -422,9 +422,9 @@ pub fn it_802E5F8C<'a>(
     arg5: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0xb8);
-    let vars: it_802E5FXX_struct<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp2C: SpawnItem<'a> = frame_at(ctx, &__frame, 0x1c);
-    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x68);
+    let vars: it_802E5FXX_struct<'a> = frame_at(ctx, &__frame, 0x70);
+    let sp2C: SpawnItem<'a> = frame_at(ctx, &__frame, 0x24);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut item_gobj = item_gobj;
     let mut pos = pos;
     let mut arg2 = arg2;

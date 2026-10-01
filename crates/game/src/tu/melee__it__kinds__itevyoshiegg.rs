@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn itEvYoshiEgg_Spawn<'a>(ctx: &'a Ctx, pos: Vec<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0xc);
     let mut pos = pos;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut it: Item<'a> = null(ctx);
@@ -215,7 +215,7 @@ pub fn it_3F14_Logic42_Reflected<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itEvYoshiEgg_Logic42_DmgReceived<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let val: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let val: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itEvYoshiEgg_DatAttrs<'a> =

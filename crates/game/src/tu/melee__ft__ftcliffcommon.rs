@@ -66,8 +66,8 @@ pub fn ftCliffCommon_80081298<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn ftCliffCommon_80081370<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     ctx.fill(Handle::addr(unused), 0, 0x10);
@@ -159,8 +159,8 @@ pub fn ftCo_CliffCatch_IASA<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn ftCo_CliffCatch_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     if fns::mpLib_80054ED8(ctx, (fp).mv().co().cliff().ledge_id()) != 0_i32 {

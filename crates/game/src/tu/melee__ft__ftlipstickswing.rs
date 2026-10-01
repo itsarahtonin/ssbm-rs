@@ -67,9 +67,9 @@ pub fn ftCo_LipstickSwing_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ft_800CDB9C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let v2: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let f: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
+    let v2: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let f: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

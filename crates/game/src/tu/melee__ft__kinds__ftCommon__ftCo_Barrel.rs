@@ -152,9 +152,9 @@ pub fn ftCo_800C92E4<'a>(
     kb_angle: f64,
 ) {
     let __frame = ctx.stack_frame(0x198);
-    let hit: SmallerHitCapsule<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp_vec1: Vec<'a> = frame_at(ctx, &__frame, 0x130);
-    let sp_vec2: Vec<'a> = frame_at(ctx, &__frame, 0x13c);
+    let hit: SmallerHitCapsule<'a> = frame_at(ctx, &__frame, 0x34);
+    let sp_vec1: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let sp_vec2: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

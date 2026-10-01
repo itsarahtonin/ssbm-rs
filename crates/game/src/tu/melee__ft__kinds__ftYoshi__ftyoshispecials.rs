@@ -114,7 +114,7 @@ pub fn fn_8012EC7C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_8012EDE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -480,8 +480,8 @@ pub fn ftYs_SpecialAirSStart_0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftYs_SpecialAirSLoop_0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0xc);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attributes: _ftYoshiAttributes<'a> =
@@ -582,9 +582,10 @@ pub fn ftYs_SpecialAirSLoop_0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftYs_SpecialAirSLoop_1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let angle: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x4);
-    let dir: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
+    let angle: Val<'a, F32> = frame_at(ctx, &__frame, 0x3c);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
+    let dir: Val<'a, F32> = frame_at(ctx, &__frame, 0x2c);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attributes: _ftYoshiAttributes<'a> =
@@ -596,7 +597,7 @@ pub fn ftYs_SpecialAirSLoop_1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
     }
     fns::ftYs_SpecialS_8012EB48(ctx, gobj);
-    inl_ftYs_SpecialS_UpdateScale2(ctx, gobj);
+    inl_ftYs_SpecialS_UpdateScale2(ctx, gobj, Handle::addr(__inl));
     (fp).mv().ys().specials().set_x14(fp::frsp(fp::fmadd(
         fp::fdiv(fp::fmul(2.0, 3.141592653589793), 25.0),
         (attributes).xA0(),
@@ -662,8 +663,8 @@ pub fn ftYs_SpecialAirSLoop_1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftYs_SpecialAirSEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -730,8 +731,8 @@ pub fn ftYs_SpecialAirSStart_1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftYs_SpecialAirSLoop_2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attributes: _ftYoshiAttributes<'a> =
@@ -766,8 +767,8 @@ pub fn ftYs_SpecialAirSLoop_2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftYs_SpecialAirSLoop_3_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0xc);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attributes: _ftYoshiAttributes<'a> =
@@ -865,9 +866,9 @@ pub fn ftYs_SpecialAirSLoop_3_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftYs_SpecialAirSLanding_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1443,6 +1444,8 @@ pub fn ftYs_SpecialAirSStart_0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftYs_SpecialAirSLoop_0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attributes: _ftYoshiAttributes<'a> =
@@ -1460,7 +1463,13 @@ pub fn ftYs_SpecialAirSLoop_0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             __t1
         }) != 0)
         {
-            inl_ftYs_SpecialS_SpawnWallBounceEffect(ctx, gobj, (fp).coll_data(), 1_i32);
+            inl_ftYs_SpecialS_SpawnWallBounceEffect(
+                ctx,
+                gobj,
+                (fp).coll_data(),
+                1_i32,
+                Handle::addr(__inl),
+            );
         }
     } else {
         if (({
@@ -1469,7 +1478,13 @@ pub fn ftYs_SpecialAirSLoop_0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             __t2
         }) != 0)
         {
-            inl_ftYs_SpecialS_SpawnWallBounceEffect(ctx, gobj, (fp).coll_data(), 0_i32);
+            inl_ftYs_SpecialS_SpawnWallBounceEffect(
+                ctx,
+                gobj,
+                (fp).coll_data(),
+                0_i32,
+                Handle::addr(__inl_2),
+            );
         }
     }
     if (wall_hit != 0) {
@@ -1501,6 +1516,8 @@ pub fn ftYs_SpecialAirSLoop_0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftYs_SpecialAirSLoop_1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attributes: _ftYoshiAttributes<'a> =
@@ -1532,7 +1549,13 @@ pub fn ftYs_SpecialAirSLoop_1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             __t1
         }) != 0)
         {
-            inl_ftYs_SpecialS_SpawnWallBounceEffect(ctx, gobj, (fp).coll_data(), 1_i32);
+            inl_ftYs_SpecialS_SpawnWallBounceEffect(
+                ctx,
+                gobj,
+                (fp).coll_data(),
+                1_i32,
+                Handle::addr(__inl),
+            );
         }
     } else {
         if (({
@@ -1541,7 +1564,13 @@ pub fn ftYs_SpecialAirSLoop_1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             __t2
         }) != 0)
         {
-            inl_ftYs_SpecialS_SpawnWallBounceEffect(ctx, gobj, (fp).coll_data(), 0_i32);
+            inl_ftYs_SpecialS_SpawnWallBounceEffect(
+                ctx,
+                gobj,
+                (fp).coll_data(),
+                0_i32,
+                Handle::addr(__inl_2),
+            );
         }
     }
     if (wall_hit != 0) {
@@ -1612,6 +1641,8 @@ pub fn ftYs_SpecialAirSStart_1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftYs_SpecialAirSLoop_2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x98);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut coll_result: i32 = 0;
     let mut wall_hit: i32 = 0;
@@ -1632,7 +1663,13 @@ pub fn ftYs_SpecialAirSLoop_2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             __t1
         }) != 0)
         {
-            inl_ftYs_SpecialS_SpawnWallBounceEffect(ctx, gobj, (fp).coll_data(), 1_i32);
+            inl_ftYs_SpecialS_SpawnWallBounceEffect(
+                ctx,
+                gobj,
+                (fp).coll_data(),
+                1_i32,
+                Handle::addr(__inl),
+            );
         }
     } else {
         if (({
@@ -1641,7 +1678,13 @@ pub fn ftYs_SpecialAirSLoop_2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             __t2
         }) != 0)
         {
-            inl_ftYs_SpecialS_SpawnWallBounceEffect(ctx, gobj, (fp).coll_data(), 0_i32);
+            inl_ftYs_SpecialS_SpawnWallBounceEffect(
+                ctx,
+                gobj,
+                (fp).coll_data(),
+                0_i32,
+                Handle::addr(__inl_2),
+            );
         }
     }
     if (wall_hit != 0) {
@@ -1771,6 +1814,8 @@ pub fn ftYs_SpecialAirSLoop_2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftYs_SpecialAirSLoop_3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x78);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attributes: _ftYoshiAttributes<'a> =
@@ -1790,7 +1835,13 @@ pub fn ftYs_SpecialAirSLoop_3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             __t1
         }) != 0_i32
         {
-            inl_ftYs_SpecialS_SpawnWallBounceEffect(ctx, gobj, (fp).coll_data(), 1_i32);
+            inl_ftYs_SpecialS_SpawnWallBounceEffect(
+                ctx,
+                gobj,
+                (fp).coll_data(),
+                1_i32,
+                Handle::addr(__inl),
+            );
         }
     } else {
         if ({
@@ -1799,7 +1850,13 @@ pub fn ftYs_SpecialAirSLoop_3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             __t2
         }) != 0_i32
         {
-            inl_ftYs_SpecialS_SpawnWallBounceEffect(ctx, gobj, (fp).coll_data(), 0_i32);
+            inl_ftYs_SpecialS_SpawnWallBounceEffect(
+                ctx,
+                gobj,
+                (fp).coll_data(),
+                0_i32,
+                Handle::addr(__inl_2),
+            );
         }
     }
     if wall_hit != 0_i32 {
@@ -2220,9 +2277,8 @@ fn inl_ftYs_SpecialS_WrapAndSetRotX<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ftPartSetRotX(ctx, fp, 3_i32, (fp).mv().ys().specials().x14());
 }
 
-fn inl_ftYs_SpecialS_UpdateScale2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftYs_SpecialS_UpdateScale2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let scale: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -2481,10 +2537,10 @@ fn inl_ftYs_SpecialS_SpawnWallBounceEffect<'a>(
     gobj: HSD_GObj<'a>,
     cd: CollData<'a>,
     facing_right: i32,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x18);
-    let angle: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let angle: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x4);
     let mut gobj = gobj;
     let mut cd = cd;
     let mut facing_right = facing_right;

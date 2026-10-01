@@ -276,8 +276,8 @@ pub fn ftCo_Ottotto_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_Ottotto_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     {
@@ -355,8 +355,8 @@ pub fn ftCo_OttottoWait_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_OttottoWait_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused_2: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x10);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused_2: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     {

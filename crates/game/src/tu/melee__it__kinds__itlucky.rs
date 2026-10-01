@@ -99,9 +99,9 @@ pub fn it_802D5124<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802D51C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itLuckyAttributes<'a> =
@@ -303,13 +303,14 @@ pub fn it_802D5710<'a>(
     facing: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x68);
+    let __inl: ArrV<'a, u8, 80> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut vel = vel;
     let mut facing = facing;
     let mut result: HSD_GObj<'a> = null::<HSD_GObj<'a>>(ctx);
     if !Handle::is_null(gobj) {
-        result = inl_it_802D5710_inline_unfused(ctx, gobj, pos, vel, facing);
+        result = inl_it_802D5710_inline_unfused(ctx, gobj, pos, vel, facing, Handle::addr(__inl));
     }
     return result;
 }
@@ -502,9 +503,9 @@ fn inl_it_802D5710_inline_unfused<'a>(
     pos: Vec<'a>,
     vel: Vec<'a>,
     facing: f64,
+    __in_caller: u32,
 ) -> HSD_GObj<'a> {
-    let __frame = ctx.stack_frame(0x58);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut vel = vel;

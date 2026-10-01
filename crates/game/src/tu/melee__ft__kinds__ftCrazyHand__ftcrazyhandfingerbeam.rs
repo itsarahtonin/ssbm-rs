@@ -88,8 +88,8 @@ pub fn ftCh_FingerBeamLoop_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCh_FingerBeamLoop_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let sp28_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vel: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp28_pos: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut da: _ftCrazyHandAttributes<'a> =

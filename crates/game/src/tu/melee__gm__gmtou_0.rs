@@ -404,10 +404,10 @@ pub fn fn_80191154<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn fn_80191240<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let tm: Ptr<'a, TmData<'a>> = frame_at(ctx, &__frame, 0x0);
-    let val: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
-    let jobj_copy: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
-    let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
-    let first_child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x10);
+    let val: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let jobj_copy: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
+    let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let first_child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     inl_fn_80191240_get_menu_state_unfused(ctx, gobj, tm, val);
     jobj.set(Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()));
@@ -592,8 +592,8 @@ pub fn fn_80191678<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_8019175C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let jobjs: ArrP<'a, HSD_JObj<'a>, 3> = frame_at(ctx, &__frame, 0x8);
+    let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
+    let jobjs: ArrP<'a, HSD_JObj<'a>, 3> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut first_child: HSD_JObj<'a> = null(ctx);
     let mut option_a: HSD_JObj<'a> = null(ctx);
@@ -1913,8 +1913,8 @@ pub fn fn_80193230<'a>(ctx: &'a Ctx) {
 
 pub fn fn_80193308<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x90);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x4);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
     let mut created_text2: HSD_Text<'a> = null(ctx);
     let mut text_color_word: Val<'a, i32> = null(ctx);
     let mut tm: TmData<'a> = null(ctx);

@@ -34,7 +34,7 @@ pub fn CARDRenameAsync<'a>(
     callback: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x0);
+    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x10);
     let mut chan = chan;
     let mut old = old;
     let mut new = new;

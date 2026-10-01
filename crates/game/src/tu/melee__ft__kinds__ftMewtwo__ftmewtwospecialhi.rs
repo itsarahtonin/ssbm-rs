@@ -37,7 +37,7 @@ pub fn ftMt_SpecialHi_CreateGFX<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMt_SpecialHi_SetStartGFX<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp0: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -59,7 +59,7 @@ pub fn ftMt_SpecialHi_SetStartGFX<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMt_SpecialHi_SetEndGFX<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp0: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -396,7 +396,7 @@ pub fn ftMt_SpecialAirHi_AirToGround<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMt_SpecialHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let stickVec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let stickVec: Vec<'a> = frame_at(ctx, &__frame, 0x34);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));

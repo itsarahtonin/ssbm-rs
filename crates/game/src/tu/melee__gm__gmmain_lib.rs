@@ -1415,6 +1415,7 @@ pub fn gmMainLib_8015F150<'a>(ctx: &'a Ctx) {
 pub fn gmMainLib_8015F260<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x40);
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut i: i32 = 0;
     'l1: loop {
         'c2: {}
@@ -1426,7 +1427,7 @@ pub fn gmMainLib_8015F260<'a>(ctx: &'a Ctx) {
         i = 0_i32;
         'l3: while i < 120_i32 {
             'c4: {
-                inl_InitializePersistentNameData_unfused(ctx, i);
+                inl_InitializePersistentNameData_unfused(ctx, i, Handle::addr(__inl));
             }
             i = i.wrapping_add(1);
         }
@@ -1514,6 +1515,7 @@ pub fn gmMainLib_8015F588<'a>(ctx: &'a Ctx, deflicker: i32) {
 pub fn gmMainLib_8015F600<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
     let __frame = ctx.stack_frame(0xb0);
     let unused: ArrV<'a, u8, 80> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x50);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut lang: i32 = 0;
@@ -1594,7 +1596,7 @@ pub fn gmMainLib_8015F600<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
                     let mut bank: NameTagDataBank<'a> = null(ctx);
                     let mut idx: i32 = 0;
                     idx = j.wrapping_add(bank_offset);
-                    inl_InitializePersistentNameData_unfused(ctx, idx);
+                    inl_InitializePersistentNameData_unfused(ctx, idx, Handle::addr(__inl));
                     bank = (fns::gmMainLib_804D3EE0(ctx).get())
                         .thing()
                         .nametag_banks()
@@ -1972,9 +1974,8 @@ fn inl_ResetPersistentFighterData_unfused<'a>(ctx: &'a Ctx, i: i32) {
     fns::gmMainLib_8015EF30(ctx, (Handle::add(base, ((i as u8) as i32))).stats());
 }
 
-fn inl_InitializePersistentNameData_unfused<'a>(ctx: &'a Ctx, arg0: i32) {
-    let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+fn inl_InitializePersistentNameData_unfused<'a>(ctx: &'a Ctx, arg0: i32, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
     let mut arg0 = arg0;
     let mut data: NameTagData<'a> = null(ctx);
     let mut bank: NameTagDataBank<'a> = null(ctx);

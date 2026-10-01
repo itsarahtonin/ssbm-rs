@@ -210,9 +210,9 @@ pub fn ftCo_800C8540<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ft_800C85B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let sp20: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x0);
-    let sp1C: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x8);
+    let sp20: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x18);
+    let sp1C: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut part_idx: u32 = 0;

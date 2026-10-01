@@ -126,8 +126,8 @@ pub fn ftCo_TurnRun_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_TurnRun_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
-    let accel: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let target_vel: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let accel: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let target_vel: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut co_attrs: ftCo_DatAttrs<'a> = (fp).co_attrs();

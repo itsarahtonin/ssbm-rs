@@ -52,14 +52,14 @@ pub fn ftNs_SpecialHiStopGFX<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 }
 
 pub fn ftNs_SpecialHi_ItemPKThunder_CheckNessCollide<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x78);
+    let __frame = ctx.stack_frame(0x90);
     let unused0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let pair: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused1: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
-    let pair2: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let pos2: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let unused2: ArrV<'a, u8, 36> = frame_at(ctx, &__frame, 0x3c);
+    let pair: Vec<'a> = frame_at(ctx, &__frame, 0x58);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let unused1: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
+    let pair2: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let pos2: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let unused2: ArrV<'a, u8, 36> = frame_at(ctx, &__frame, 0x64);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut ret: i32 = 0_i32;
@@ -174,7 +174,7 @@ pub fn ftNs_SpecialAirHi_CollisionModVel<'a>(
     coll_data: CollData<'a>,
 ) {
     let __frame = ctx.stack_frame(0x28);
-    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut coll_data = coll_data;
     let mut fp: Fighter<'a> = null(ctx);
@@ -441,9 +441,9 @@ pub fn ftNs_SpecialAirHiStart_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftNs_SpecialHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x14);
+    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ness_attr2: ftNessAttributes<'a> = null(ctx);
     let mut fighter_data2: Fighter<'a> = null(ctx);
@@ -638,8 +638,8 @@ pub fn ftNs_SpecialAirHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftNs_SpecialHiStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let pkt_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0xc);
+    let pkt_pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
@@ -775,8 +775,8 @@ pub fn ftNs_SpecialHi_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftNs_SpecialAirHiStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let pkt_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0xc);
+    let pkt_pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut pkt_ptr: HSD_GObj<'a> = null(ctx);
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -1550,10 +1550,10 @@ pub fn ftNs_SpecialAirHiEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftNs_SpecialAirHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xe8);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let rot: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let rot_2: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let rot_3: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused_2: ArrV<'a, u8, 144> = frame_at(ctx, &__frame, 0x28);
+    let rot: Vec<'a> = frame_at(ctx, &__frame, 0xbc);
+    let rot_2: Vec<'a> = frame_at(ctx, &__frame, 0xb0);
+    let rot_3: Vec<'a> = frame_at(ctx, &__frame, 0xa4);
+    let unused_2: ArrV<'a, u8, 144> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut ness_attr: ftNessAttributes<'a> =

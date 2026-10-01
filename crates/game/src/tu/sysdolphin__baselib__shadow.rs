@@ -517,7 +517,7 @@ pub fn HSD_ShadowDeleteObject<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>, jobj: HS
 
 pub fn makeMatrix<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let Mprj: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x4);
+    let Mprj: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x14);
     let mut shadow = shadow;
     's1: {
         let __case = match fns::HSD_CObjGetProjectionType(ctx, (shadow).camera()) {
@@ -601,6 +601,14 @@ pub fn HSD_ShadowSetViewingRect<'a>(
     right: f64,
 ) {
     let __frame = ctx.stack_frame(0xb0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
+    let __inl_4: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
+    let __inl_5: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x20);
+    let __inl_6: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x28);
+    let __inl_7: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x30);
+    let __inl_8: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x38);
     let mut shadow = shadow;
     let mut top = top;
     let mut bottom = bottom;
@@ -642,20 +650,20 @@ pub fn HSD_ShadowSetViewingRect<'a>(
                 let mut width: f64 = 0.0;
                 let mut height: f64 = 0.0;
                 if {
-                    let __t1 = inl_fabsf_bitwise_unfused(ctx, bottom);
-                    inl_fabsf_bitwise_unfused(ctx, top) > __t1
+                    let __t1 = inl_fabsf_bitwise_unfused(ctx, bottom, Handle::addr(__inl_2));
+                    inl_fabsf_bitwise_unfused(ctx, top, Handle::addr(__inl)) > __t1
                 } {
-                    width = inl_fabsf_bitwise_unfused(ctx, top);
+                    width = inl_fabsf_bitwise_unfused(ctx, top, Handle::addr(__inl_3));
                 } else {
-                    width = inl_fabsf_bitwise_unfused(ctx, bottom);
+                    width = inl_fabsf_bitwise_unfused(ctx, bottom, Handle::addr(__inl_4));
                 }
                 if {
-                    let __t2 = inl_fabsf_bitwise_unfused(ctx, right);
-                    inl_fabsf_bitwise_unfused(ctx, left) > __t2
+                    let __t2 = inl_fabsf_bitwise_unfused(ctx, right, Handle::addr(__inl_6));
+                    inl_fabsf_bitwise_unfused(ctx, left, Handle::addr(__inl_5)) > __t2
                 } {
-                    height = inl_fabsf_bitwise_unfused(ctx, left);
+                    height = inl_fabsf_bitwise_unfused(ctx, left, Handle::addr(__inl_7));
                 } else {
-                    height = inl_fabsf_bitwise_unfused(ctx, right);
+                    height = inl_fabsf_bitwise_unfused(ctx, right, Handle::addr(__inl_8));
                 }
                 fns::HSD_CObjSetAspect(ctx, cobj, fp::fdivs(height, width));
                 fns::HSD_CObjSetFov(ctx, cobj, fns::atan2f(ctx, height, distance));
@@ -714,7 +722,7 @@ pub fn HSD_ViewingRectInit<'a>(
     perspective: i32,
 ) {
     let __frame = ctx.stack_frame(0x40);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut rect = rect;
     let mut position = position;
     let mut interest = interest;
@@ -776,8 +784,8 @@ pub fn HSD_ViewingRectAddRect<'a>(
     right: f64,
 ) {
     let __frame = ctx.stack_frame(0x88);
-    let o2p: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let e2p: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let o2p: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let e2p: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let tmp: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut rect = rect;
     let mut position = position;
@@ -943,9 +951,8 @@ fn inl_HSD_CObjGetViewingMtxPtrDirect_unfused<'a>(
     return (cobj).view_mtx().get(0);
 }
 
-fn inl_fabsf_bitwise_unfused<'a>(ctx: &'a Ctx, v: f64) -> f64 {
-    let __frame = ctx.stack_frame(0x10);
-    let v__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+fn inl_fabsf_bitwise_unfused<'a>(ctx: &'a Ctx, v: f64, __in_caller: u32) -> f64 {
+    let v__slot: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
     v__slot.set(v);
     (Handle::cast::<Val<'a, u32>>(v__slot))
         .set(((Handle::cast::<Val<'a, u32>>(v__slot)).get() & (!0x80000000_u32)));

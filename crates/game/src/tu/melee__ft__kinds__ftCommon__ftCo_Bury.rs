@@ -53,8 +53,8 @@ pub fn ftCo_800C08A0<'a>(
     arg3: i32,
 ) {
     let __frame = ctx.stack_frame(0x178);
-    let f: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let hit: SmallerHitCapsule<'a> = frame_at(ctx, &__frame, 0x4);
+    let f: Val<'a, F32> = frame_at(ctx, &__frame, 0x148);
+    let hit: SmallerHitCapsule<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -229,8 +229,8 @@ pub fn ftCo_800C0A98<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800C0B20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x168);
-    let hit: HitCapsule<'a> = frame_at(ctx, &__frame, 0x0);
-    let f: Val<'a, F32> = frame_at(ctx, &__frame, 0x138);
+    let hit: HitCapsule<'a> = frame_at(ctx, &__frame, 0x10);
+    let f: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -322,7 +322,7 @@ pub fn ftCo_800C0CB8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn ftCo_800C0D0C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let joint_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let joint_pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let hip_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
@@ -449,8 +449,8 @@ pub fn ftCo_Bury_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800C0FCC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let offset: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> =
@@ -566,6 +566,7 @@ pub fn ftCo_BuryWait_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_BuryWait_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -573,7 +574,7 @@ pub fn ftCo_BuryWait_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    inl_ftCo_Bury_Coll_unfused(ctx, gobj);
+    inl_ftCo_Bury_Coll_unfused(ctx, gobj, Handle::addr(__inl));
 }
 
 pub fn ftCo_800C13BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -855,9 +856,8 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     }
 }
 
-fn inl_ftCo_Bury_Coll_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftCo_Bury_Coll_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     'l1: loop {

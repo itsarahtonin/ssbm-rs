@@ -153,7 +153,7 @@ pub fn it_802E89D0<'a>(
     max_vy: f64,
 ) {
     let __frame = ctx.stack_frame(0x50);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut horiz_speed = horiz_speed;
     let mut min_vy = min_vy;
@@ -207,7 +207,7 @@ pub fn it_802E8ADC<'a>(
     max_vy: f64,
 ) {
     let __frame = ctx.stack_frame(0x98);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut dir = dir;

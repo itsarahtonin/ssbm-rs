@@ -43,7 +43,7 @@ pub fn ftCo_8009EF68<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn ftCo_8009EFA4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     (fp).x2210().set_throw_flags((0_i32 as u32));

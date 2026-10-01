@@ -99,8 +99,8 @@ pub fn ftNs_AttackHi4_YoyoCheckEnvColl<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0x1e0);
     let pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let coll: CollData<'a> = frame_at(ctx, &__frame, 0x4);
-    let ecb: ftCollisionBox<'a> = frame_at(ctx, &__frame, 0x1a0);
+    let coll: CollData<'a> = frame_at(ctx, &__frame, 0x2c);
+    let ecb: ftCollisionBox<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut ECBUnk = ECBUnk;
     let mut ECBUnk2 = ECBUnk2;
@@ -151,7 +151,7 @@ pub fn ftNs_AttackHi4_YoyoCheckEnvColl<'a>(
 
 pub fn ftNs_AttackHi4_YoyoSetUnkPos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut pos = pos;
@@ -196,10 +196,10 @@ pub fn ftNs_AttackHi4_YoyoSetUnkPos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: V
 
 pub fn ftNs_AttackHi4_YoyoSetHitPos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x24);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut collData: CollData<'a> = null(ctx);
     let mut fp: Fighter<'a> =
@@ -244,11 +244,11 @@ pub fn ftNs_AttackHi4_YoyoSetHitPos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftNs_AttackHi4_YoyoSetHitPosUnk<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos_unk: f64) {
     let __frame = ctx.stack_frame(0x58);
-    let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x30);
+    let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut pos_unk = pos_unk;
     let mut pos_update: f64 = 0.0;
@@ -307,7 +307,7 @@ pub fn ftNs_AttackHi4_YoyoSetHitPosUnk<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos
 
 pub fn ftNs_AttackHi4_YoyoCheckNoObstruct<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ECB_MUL_Y: f64 = 0.0;
@@ -360,7 +360,7 @@ pub fn ftNs_AttackHi4_YoyoSetVarAll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftNs_AttackHi4_YoyoApplySmash<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut yoyo_GObj: HSD_GObj<'a> = null(ctx);
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -410,7 +410,7 @@ pub fn ftNs_AttackHi4_YoyoApplySmash<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftNs_AttackHi4_YoyoSetChargeDamage<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x28);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut yoyo_gobj: HSD_GObj<'a> = null(ctx);
@@ -436,8 +436,8 @@ pub fn ftNs_AttackHi4_YoyoSetChargeDamage<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
 
 pub fn ftNs_AttackHi4_YoyoThink_IsRemove<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut msid: i32 = 0;
     let mut yoyoSmashFrameCurr: i32 = 0;
@@ -558,7 +558,7 @@ pub fn ftNs_AttackHi4_YoyoSetUnkRate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftNs_AttackHi4_YoyoCreateItem<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -682,9 +682,9 @@ pub fn ftNs_AttackHi4_YoyoStartTimedRehit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
 
 pub fn ftNs_AttackHi4_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
+    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fighter_data2: Fighter<'a> = null(ctx);
     let mut fp: Fighter<'a> = null(ctx);
@@ -777,9 +777,10 @@ pub fn ftNs_AttackHi4_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftNs_AttackHi4_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     fns::ft_80084F3C(ctx, gobj);
-    inl_updateYoyoHitPos_unfused(ctx, gobj);
+    inl_updateYoyoHitPos_unfused(ctx, gobj, Handle::addr(__inl));
 }
 
 pub fn ftNs_AttackHi4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -999,6 +1000,8 @@ pub fn ftNs_AttackHi4Release_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftNs_AttackHi4Release_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut frame: i32 = 0;
@@ -1015,10 +1018,10 @@ pub fn ftNs_AttackHi4Release_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         } else if t <= 0.0 {
             t = 0.0;
         }
-        inl_lerpYoyoHitPos(ctx, gobj, t);
+        inl_lerpYoyoHitPos(ctx, gobj, t, Handle::addr(__inl));
         return;
     }
-    inl_updateYoyoHitPos(ctx, gobj);
+    inl_updateYoyoHitPos(ctx, gobj, Handle::addr(__inl_2));
 }
 
 pub fn ftNs_AttackHi4Release_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -1048,6 +1051,7 @@ pub fn ftNs_AttackHi4Release_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftNs_AttackHi4Release_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x2c);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1062,7 +1066,7 @@ pub fn ftNs_AttackHi4Release_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         null::<HSD_GObj<'a>>(ctx),
     );
     fns::ftAnim_8006EBA4(ctx, gobj);
-    inl_ftNs_AttackHi4_YoyoSetChargeDamage_unfused(ctx, gobj);
+    inl_ftNs_AttackHi4_YoyoSetChargeDamage_unfused(ctx, gobj, Handle::addr(__inl));
     (fp).set_x2222_b2((1_i32 as u8));
     (fp).set_deal_dmg_cb(fnptr(ctx, 0x80115c74));
     (fp).set_accessory4_cb(fnptr(ctx, 0x80114eb8));
@@ -1131,9 +1135,8 @@ fn inl_getFighter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
     return Handle::cast::<Fighter<'a>>((gobj).user_data());
 }
 
-fn inl_updateYoyoHitPos_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_updateYoyoHitPos_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1170,10 +1173,9 @@ fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
     return Handle::cast::<Fighter<'a>>((gobj).user_data());
 }
 
-fn inl_lerpYoyoHitPos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, t: f64) {
-    let __frame = ctx.stack_frame(0x20);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let prev: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+fn inl_lerpYoyoHitPos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, t: f64, __in_caller: u32) {
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let prev: Vec<'a> = ptr(ctx, __in_caller + 0xc);
     let mut gobj = gobj;
     let mut t = t;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
@@ -1195,9 +1197,8 @@ fn inl_lerpYoyoHitPos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, t: f64) {
         .set_z(fp::fmadds(pos.z(), t, fp::fmuls(prev.z(), u)));
 }
 
-fn inl_updateYoyoHitPos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_updateYoyoHitPos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     fns::ftNs_AttackHi4_YoyoSetUnkPos(ctx, gobj, pos);
@@ -1215,9 +1216,12 @@ fn inl_getSmashChargeFrames_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
     return (fp).smash_attrs().x2118_frames();
 }
 
-fn inl_ftNs_AttackHi4_YoyoSetChargeDamage_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftNs_AttackHi4_YoyoSetChargeDamage_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    __in_caller: u32,
+) {
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

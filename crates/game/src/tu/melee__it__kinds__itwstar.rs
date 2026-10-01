@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn it_80294364<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_AnimJoint<'a> {
     let __frame = ctx.stack_frame(0x40);
-    let candidates: ArrV<'a, i32, 7> = frame_at(ctx, &__frame, 0x0);
+    let candidates: ArrV<'a, i32, 7> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itWstarAttributes<'a> =
@@ -230,11 +230,11 @@ pub fn itWStar_Logic29_Dropped<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn it_802947CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let item_pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let saved_xD90: Struct2070<'a> = frame_at(ctx, &__frame, 0x14);
-    let saved_xD9C: Struct207C<'a> = frame_at(ctx, &__frame, 0x18);
-    let saved_xD94: S32Vec2<'a> = frame_at(ctx, &__frame, 0x20);
-    let _pad2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x28);
+    let item_pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let saved_xD90: Struct2070<'a> = frame_at(ctx, &__frame, 0x20);
+    let saved_xD9C: Struct207C<'a> = frame_at(ctx, &__frame, 0x14);
+    let saved_xD94: S32Vec2<'a> = frame_at(ctx, &__frame, 0xc);
+    let _pad2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());

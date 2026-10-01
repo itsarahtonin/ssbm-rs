@@ -28,12 +28,13 @@ use crate::support::*;
 
 pub fn HSD_MtxInverse<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: ArrV<'a, F32, 4>) {
     let __frame = ctx.stack_frame(0x60);
-    let tempMatrix: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let tempMatrix: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x14);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut src = src;
     let mut dest = dest;
     let mut m: Arr<'a, ArrV<'a, F32, 4>, 3> = null(ctx);
     let mut det: f64 = inl_HSD_CalcDeterminantMatrix3x4(ctx, src);
-    if inl_fabsf_bitwise(ctx, det) < 1.000000013351432e-10_f64 {
+    if inl_fabsf_bitwise(ctx, det, Handle::addr(__inl)) < 1.000000013351432e-10_f64 {
         fns::PSMTXIdentity(ctx, dest);
         return;
     }
@@ -188,7 +189,8 @@ pub fn HSD_MtxInverseConcat<'a>(
     dest: ArrV<'a, F32, 4>,
 ) {
     let __frame = ctx.stack_frame(0x80);
-    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x18);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut inv = inv;
     let mut src = src;
     let mut dest = dest;
@@ -207,7 +209,7 @@ pub fn HSD_MtxInverseConcat<'a>(
     let mut temp12: f64 = 0.0;
     let mut new_var: f64 = 0.0;
     det = inl_HSD_CalcDeterminantMatrix3x4(ctx, inv);
-    if inl_fabsf_bitwise(ctx, det) < 1.000000013351432e-10_f64 {
+    if inl_fabsf_bitwise(ctx, det, Handle::addr(__inl)) < 1.000000013351432e-10_f64 {
         if Handle::addr(src) != Handle::addr(dest) {
             fns::PSMTXCopy(ctx, src, dest);
         }
@@ -581,13 +583,14 @@ pub fn HSD_MtxInverseConcat<'a>(
 
 pub fn HSD_MtxInverseTranspose<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: ArrV<'a, F32, 4>) {
     let __frame = ctx.stack_frame(0x60);
-    let tempMatrix: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let tempMatrix: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x14);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut src = src;
     let mut dest = dest;
     let mut m: Arr<'a, ArrV<'a, F32, 4>, 3> = null(ctx);
     let mut det: f64 = inl_HSD_CalcDeterminantMatrix3x4(ctx, src);
     m = Handle::cast::<Arr<'a, ArrV<'a, F32, 4>, 3>>(src);
-    if inl_fabsf_bitwise(ctx, det) < 1.000000013351432e-10_f64 {
+    if inl_fabsf_bitwise(ctx, det, Handle::addr(__inl)) < 1.000000013351432e-10_f64 {
         if Handle::addr((m).get(0)) != Handle::addr(dest) {
             fns::PSMTXCopy(ctx, (m).get(0), dest);
         }
@@ -710,6 +713,9 @@ pub fn HSD_MtxInverseTranspose<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: Ar
 
 pub fn HSD_MtxGetRotation<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, vec: Vec<'a>) {
     let __frame = ctx.stack_frame(0x68);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let mut m = m;
     let mut vec = vec;
     let mut length0: f64 = 0.0;
@@ -792,11 +798,17 @@ pub fn HSD_MtxGetRotation<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, vec: Vec<'a>) {
                         fp::fdivs((Handle::add(m, 2_i32)).at(2_i32).get(), length2);
                     let mut testVal_3_pre: f64 =
                         fp::fdivs((Handle::add(m, 2_i32)).at(1_i32).get(), length1);
-                    (vec).set_x(inl_calcVal(ctx, testVal_2_pre, testVal_3_pre));
+                    (vec).set_x(inl_calcVal(
+                        ctx,
+                        testVal_2_pre,
+                        testVal_3_pre,
+                        Handle::addr(__inl),
+                    ));
                     (vec).set_z(inl_calcVal(
                         ctx,
                         (Handle::add(m, 0_i32)).at(0_i32).get(),
                         (Handle::add(m, 1_i32)).at(0_i32).get(),
+                        Handle::addr(__inl_2),
                     ));
                     return;
                 }
@@ -804,6 +816,7 @@ pub fn HSD_MtxGetRotation<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, vec: Vec<'a>) {
                     ctx,
                     (Handle::add(m, 1_i32)).at(1_i32).get(),
                     (Handle::add(m, 0_i32)).at(1_i32).get(),
+                    Handle::addr(__inl_3),
                 ));
                 (vec).set_z(fp::frsp(0_i32 as f64));
                 return;
@@ -826,10 +839,10 @@ pub fn HSD_MtxGetTranslate<'a>(ctx: &'a Ctx, mat: ArrV<'a, F32, 4>, vec: Vec<'a>
 pub fn HSD_MtxGetScale<'a>(ctx: &'a Ctx, arg0: ArrV<'a, F32, 4>, arg1: Vec<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let vec3: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let vec4: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let vec3: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let vec4: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut scale: f64 = 0.0;
@@ -1038,7 +1051,7 @@ pub fn HSD_MtxSRTQuat<'a>(
     arg4: Vec<'a>,
 ) {
     let __frame = ctx.stack_frame(0x60);
-    let temp: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let temp: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x14);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1456,9 +1469,8 @@ fn inl_HSD_CalcDeterminantMatrix3x4<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>) -> f6
     );
 }
 
-fn inl_fabsf_bitwise<'a>(ctx: &'a Ctx, v: f64) -> f64 {
-    let __frame = ctx.stack_frame(0x10);
-    let v__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+fn inl_fabsf_bitwise<'a>(ctx: &'a Ctx, v: f64, __in_caller: u32) -> f64 {
+    let v__slot: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
     v__slot.set(v);
     (Handle::cast::<Val<'a, u32>>(v__slot))
         .set(((Handle::cast::<Val<'a, u32>>(v__slot)).get() & (!0x80000000_u32)));
@@ -1488,10 +1500,11 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return x;
 }
 
-fn inl_calcVal<'a>(ctx: &'a Ctx, x: f64, y: f64) -> f64 {
+fn inl_calcVal<'a>(ctx: &'a Ctx, x: f64, y: f64, __in_caller: u32) -> f64 {
+    let __inl: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut x = x;
     let mut y = y;
-    if inl_fabsf_bitwise(ctx, x) <= 1.1754943508222875e-38_f64 {
+    if inl_fabsf_bitwise(ctx, x, Handle::addr(__inl)) <= 1.1754943508222875e-38_f64 {
         if y >= fp::frsp(0_i32 as f64) {
             return fp::frsp(fp::fdiv(3.141592653589793, (2_i32 as f64)));
         } else {

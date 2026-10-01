@@ -32,10 +32,10 @@ pub fn lb_80014638<'a>(
     arg1: lb_80014638_arg1_t<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x24);
+    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     'l1: loop {

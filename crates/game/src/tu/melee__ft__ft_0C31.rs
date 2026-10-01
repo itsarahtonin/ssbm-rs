@@ -119,9 +119,9 @@ pub fn ftCo_Entry_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800C6408<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let sp48: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp2C: Quaternion<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let sp48: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let sp2C: Quaternion<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut temp_r29_3: Fighter<'a> = null(ctx);
     let mut temp_r31: Fighter<'a> = null(ctx);
@@ -218,7 +218,7 @@ pub fn ftCo_EntryStart_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_EntryStart_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut temp_r31: Fighter<'a> = null(ctx);
     let mut temp_f1: f64 = 0.0;
@@ -320,7 +320,7 @@ pub fn ftCo_EntryStart_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn fn_800C69F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut temp_r31: Fighter<'a> = null(ctx);
     let mut temp_r31_2: Fighter<'a> = null(ctx);
@@ -428,7 +428,7 @@ pub fn ftCo_EntryEnd_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_EntryEnd_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut temp_f31: f64 = 0.0;
@@ -511,7 +511,7 @@ pub fn ftCo_EntryEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn fn_800C6F34<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut temp_r3: HSD_GObj<'a> = null(ctx);

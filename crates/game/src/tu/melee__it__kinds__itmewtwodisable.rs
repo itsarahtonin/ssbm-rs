@@ -53,7 +53,7 @@ pub fn itMewtwoDisable_Logic67_SpawnMewtwoDisable<'a>(
     facing_dir: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x88);
-    let spawnitem: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawnitem: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
     let mut fighter_gobj = fighter_gobj;
     let mut offset = offset;
     let mut facing_dir = facing_dir;

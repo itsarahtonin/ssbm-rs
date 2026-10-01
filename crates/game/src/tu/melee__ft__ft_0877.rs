@@ -386,9 +386,9 @@ pub fn ft_80087C70<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
 
 pub fn ft_80087D0C<'a>(ctx: &'a Ctx, fighter: Fighter<'a>, sfx_id: i32) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let sfx_offset: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let unused_output: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, i32, 1> = frame_at(ctx, &__frame, 0x8);
+    let sfx_offset: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
+    let unused_output: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, i32, 1> = frame_at(ctx, &__frame, 0x0);
     let mut fighter = fighter;
     let mut sfx_id = sfx_id;
     let mut sfx: i32 = fns::lbAudioAx_800233EC(ctx, sfx_id);

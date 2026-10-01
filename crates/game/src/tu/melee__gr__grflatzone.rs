@@ -144,7 +144,7 @@ pub fn grFlatzone_802171CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grFlatzone_802171D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let vals: ArrV<'a, i16, 2> = frame_at(ctx, &__frame, 0x0);
+    let vals: ArrV<'a, i16, 2> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut sp24: i32 = 0;
     let mut temp_r3: i16 = 0;
@@ -385,10 +385,10 @@ pub fn grFlatzone_802176B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grFlatzone_802176BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
-    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let ret: Val<'a, i32> = frame_at(ctx, &__frame, 0x24);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
+    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let ret: Val<'a, i32> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
@@ -730,7 +730,7 @@ pub fn grFlatzone_80217EE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grFlatzone_80217EF0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut spawn_left: i32 = 0;
     let mut item_kind: i32 = 0;

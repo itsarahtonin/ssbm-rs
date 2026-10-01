@@ -205,7 +205,7 @@ pub fn HSD_RObjGetGlobalPosition<'a>(
     p: Vec<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut robj = robj;
     let mut r#type = r#type;
     let mut p = p;
@@ -282,8 +282,8 @@ pub fn set_dirup_matrix<'a>(
     update_func: FnPtr<'a>,
 ) {
     let __frame = ctx.stack_frame(0x58);
-    let z_vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let z_vec: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut dir_ptr = dir_ptr;
     let mut uv_ptr = uv_ptr;
     let mut scale_ptr = scale_ptr;
@@ -337,10 +337,11 @@ pub fn resolveCnsDirUp<'a>(
     update_func: FnPtr<'a>,
 ) {
     let __frame = ctx.stack_frame(0x60);
-    let this_scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let up: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let this_pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let dir: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let this_scale: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let up: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let this_pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let dir: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut robj = robj;
     let mut obj = obj;
     let mut update_func = update_func;
@@ -378,7 +379,7 @@ pub fn resolveCnsDirUp<'a>(
             fns::PSVECSubtract(ctx, up, dir, up);
         } else {
             k = fp::fsubs(1.0, fns::PSVECDotProduct(ctx, this_pos, up));
-            if inl_fabsf_bitwise_unfused(ctx, k) < 1.000000013351432e-10_f64 {
+            if inl_fabsf_bitwise_unfused(ctx, k, Handle::addr(__inl)) < 1.000000013351432e-10_f64 {
                 up.set_x(0.0);
                 up.set_y(0.0);
                 up.set_z(fp::frsp(1.0));
@@ -405,10 +406,10 @@ pub fn resolveCnsOrientation<'a>(
     update_func: FnPtr<'a>,
 ) {
     let __frame = ctx.stack_frame(0xf8);
-    let mtx0: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x30);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x34);
-    let mtx1: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x40);
+    let mtx0: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x78);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x68);
+    let mtx1: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x38);
     let mut robj = robj;
     let mut obj = obj;
     let mut update_func = update_func;
@@ -694,7 +695,7 @@ pub fn HSD_RObjUpdateAll<'a>(
     update_func: FnPtr<'a>,
 ) {
     let __frame = ctx.stack_frame(0x30);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut robj = robj;
     let mut obj = obj;
     let mut update_func = update_func;
@@ -910,10 +911,10 @@ pub fn expEvaluate<'a>(
     update_func: FnPtr<'a>,
 ) {
     let __frame = ctx.stack_frame(0x98);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
-    let sp1C: HSD_ObjData<'a> = frame_at(ctx, &__frame, 0x1c);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let sp1C: HSD_ObjData<'a> = frame_at(ctx, &__frame, 0x14);
     let mut exp = exp;
     let mut r#type = r#type;
     let mut obj = obj;
@@ -1242,6 +1243,7 @@ pub fn HSD_RvalueRemoveAll<'a>(ctx: &'a Ctx, rvalue: HSD_Rvalue<'a>) {
 
 pub fn expLoadDesc<'a>(ctx: &'a Ctx, exp: HSD_Exp<'a>, desc: HSD_ExpDesc<'a>) {
     let __frame = ctx.stack_frame(0x38);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let mut exp = exp;
     let mut desc = desc;
     let _ = fns::memset(ctx, Handle::cast::<Addr<'a>>(exp), 0_i32, 16_u32);
@@ -1251,13 +1253,18 @@ pub fn expLoadDesc<'a>(ctx: &'a Ctx, exp: HSD_Exp<'a>, desc: HSD_ExpDesc<'a>) {
         } else {
             (exp).expr().set_func(fnptr(ctx, 0x8037c950));
         }
-        (exp).set_rvalue(inl_loadRvalue_unfused(ctx, (desc).rvalue()));
+        (exp).set_rvalue(inl_loadRvalue_unfused(
+            ctx,
+            (desc).rvalue(),
+            Handle::addr(__inl),
+        ));
         (exp).set_nb_args((1_i32.wrapping_neg() as u32));
     }
 }
 
 pub fn bcexpLoadDesc<'a>(ctx: &'a Ctx, exp: HSD_Exp<'a>, desc: HSD_ByteCodeExpDesc<'a>) {
     let __frame = ctx.stack_frame(0x38);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let mut exp = exp;
     let mut desc = desc;
     let _ = fns::memset(ctx, Handle::cast::<Addr<'a>>(exp), 0_i32, 16_u32);
@@ -1267,7 +1274,11 @@ pub fn bcexpLoadDesc<'a>(ctx: &'a Ctx, exp: HSD_Exp<'a>, desc: HSD_ByteCodeExpDe
         } else {
             (exp).expr().set_bytecode(null::<Val<'a, u8>>(ctx));
         }
-        (exp).set_rvalue(inl_loadRvalue_unfused(ctx, (desc).rvalue()));
+        (exp).set_rvalue(inl_loadRvalue_unfused(
+            ctx,
+            (desc).rvalue(),
+            Handle::addr(__inl),
+        ));
         (exp).set_nb_args((1_i32.wrapping_neg() as u32));
         (exp).set_is_bytecode((1_i32 as u8));
     }
@@ -1502,9 +1513,8 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return x;
 }
 
-fn inl_fabsf_bitwise_unfused<'a>(ctx: &'a Ctx, v: f64) -> f64 {
-    let __frame = ctx.stack_frame(0x10);
-    let v__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+fn inl_fabsf_bitwise_unfused<'a>(ctx: &'a Ctx, v: f64, __in_caller: u32) -> f64 {
+    let v__slot: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
     v__slot.set(v);
     (Handle::cast::<Val<'a, u32>>(v__slot))
         .set(((Handle::cast::<Val<'a, u32>>(v__slot)).get() & (!0x80000000_u32)));
@@ -1886,9 +1896,12 @@ fn inl_HSD_RvalueAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_Rvalue<'a> {
     return rvalue;
 }
 
-fn inl_loadRvalue_unfused<'a>(ctx: &'a Ctx, list: HSD_RvalueList<'a>) -> HSD_Rvalue<'a> {
-    let __frame = ctx.stack_frame(0x10);
-    let rv: _HSD_SList<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_loadRvalue_unfused<'a>(
+    ctx: &'a Ctx,
+    list: HSD_RvalueList<'a>,
+    __in_caller: u32,
+) -> HSD_Rvalue<'a> {
+    let rv: _HSD_SList<'a> = ptr(ctx, __in_caller + 0x0);
     let mut list = list;
     let mut rp: HSD_Rvalue<'a> = null(ctx);
     rv.set_next(null::<_HSD_SList<'a>>(ctx));

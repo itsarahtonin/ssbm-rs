@@ -29,7 +29,7 @@ use ssbm_rt::cpu as c;
 
 pub fn ftGw_SpecialS_ItemJudgementSetup<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =

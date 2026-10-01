@@ -50,7 +50,7 @@ pub fn it_802D5CF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802D5D7C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (ip).xDAC_itcmd_var0() != (0_i32 as u32) {
@@ -218,7 +218,7 @@ pub fn it_802D61A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ref_gobj: HSD_GObj<'a>)
 
 pub fn it_802D61C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, coll: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut coll = coll;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -369,7 +369,7 @@ pub fn it_802D6310<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, coll: i32) {
 
 pub fn it_802D64B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>, arg2: u32, facing_dir: f64) {
     let __frame = ctx.stack_frame(0x90);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut arg2 = arg2;
@@ -466,7 +466,7 @@ pub fn it_802D64B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>, arg2: u32
 
 pub fn it_802D6674<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let scale: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let scale: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

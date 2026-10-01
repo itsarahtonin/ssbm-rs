@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn ifStock_802F7EFC<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut stock: ifStock_804A1378_t<'a> = null(ctx);
@@ -213,10 +213,10 @@ pub fn ifStock_802F7EFC<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) -> i32 {
 
 pub fn ifStock_802F8298<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x88);
-    let vecA: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vecB: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let vecC: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let vecD: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let vecA: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let vecB: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let vecC: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let vecD: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
     let mut stock: ifStock_804A1378_t<'a> = statics::melee__if__ifstock::ifStock_804A1378(ctx);
@@ -752,8 +752,8 @@ pub fn fn_802F8E08<'a>(ctx: &'a Ctx, _gobj: HSD_GObj<'a>) {
 
 pub fn fn_802F916C<'a>(ctx: &'a Ctx, _gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let b: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let a: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let b: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
+    let a: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
     let mut _gobj = _gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut i: i32 = 0;
@@ -879,7 +879,7 @@ pub fn fn_802F9680<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, renderpass: i32) {
 
 pub fn ifStock_802F96D0<'a>(ctx: &'a Ctx, a: i32, b: i32, x: f64, y: f64) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x48);
-    let jobj2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let jobj2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x10);
     let mut a = a;
     let mut b = b;
     let mut x = x;
@@ -932,8 +932,8 @@ pub fn ifStock_802F96D0<'a>(ctx: &'a Ctx, a: i32, b: i32, x: f64, y: f64) -> HSD
 
 pub fn ifStock_802F98E8<'a>(ctx: &'a Ctx, player: u8, b: u8) {
     let __frame = ctx.stack_frame(0x98);
-    let c2: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
-    let c1: _GXColor<'a> = frame_at(ctx, &__frame, 0x34);
+    let c2: _GXColor<'a> = frame_at(ctx, &__frame, 0x54);
+    let c1: _GXColor<'a> = frame_at(ctx, &__frame, 0x50);
     let mut player = player;
     let mut b = b;
     let mut stock: ifStock_804A1378_t<'a> = statics::melee__if__ifstock::ifStock_804A1378(ctx);
@@ -1371,7 +1371,7 @@ pub fn ifStock_802F98E8<'a>(ctx: &'a Ctx, player: u8, b: u8) {
 
 pub fn ifStock_802F9F48<'a>(ctx: &'a Ctx, arg: i32) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x20);
-    let jobj2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let jobj2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
     let mut arg = arg;
     let mut q: ifStock_804A1378_t<'a> = statics::melee__if__ifstock::ifStock_804A1378(ctx);
     let mut gobj: HSD_GObj<'a> =
@@ -1434,7 +1434,7 @@ pub fn ifStock_802F9F48<'a>(ctx: &'a Ctx, arg: i32) -> HSD_GObj<'a> {
 
 pub fn ifStock_802FA118<'a>(ctx: &'a Ctx, arg: i32) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x20);
-    let jobj2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let jobj2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
     let mut arg = arg;
     let mut q: ifStock_804A1378_t<'a> = statics::melee__if__ifstock::ifStock_804A1378(ctx);
     let mut gobj: HSD_GObj<'a> =
@@ -1926,7 +1926,7 @@ pub fn fn_802FAC34<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn ifStock_802FAEC4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
-    let scene_models: Ptr<'a, Ptr<'a, DynamicModelDesc<'a>>> = frame_at(ctx, &__frame, 0x4);
+    let scene_models: Ptr<'a, Ptr<'a, DynamicModelDesc<'a>>> = frame_at(ctx, &__frame, 0x10);
     let mut stock: ifStock_804A1378_t<'a> = statics::melee__if__ifstock::ifStock_804A1378(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     fns::memzero(ctx, Handle::cast::<Addr<'a>>(stock), (0x204_u32 as i32));

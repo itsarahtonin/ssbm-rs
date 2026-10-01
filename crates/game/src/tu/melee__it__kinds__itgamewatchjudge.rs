@@ -35,8 +35,8 @@ pub fn it_802C7774<'a>(
     arg4: u32,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x88);
-    let si: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4c);
+    let si: SpawnItem<'a> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut facing_dir = facing_dir;
     let mut parent_gobj = parent_gobj;
     let mut pos = pos;

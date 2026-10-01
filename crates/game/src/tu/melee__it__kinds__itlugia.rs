@@ -284,7 +284,7 @@ pub fn itLugia_UnkMotion4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802D1A44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itLugiaAttributes<'a> =
@@ -453,8 +453,8 @@ pub fn it_802D1E64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802D1E8C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, kind: i32, param: f64) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x88);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let __ret_tmp: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x1c);
+    let __ret_tmp: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut kind = kind;
     let mut param = param;
@@ -531,7 +531,7 @@ pub fn it_802D1F64<'a>(ctx: &'a Ctx, __ret: Vec<'a>, gobj: HSD_GObj<'a>, param: 
 
 pub fn it_802D208C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x88);
-    let target: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let target: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attrs: itLugiaAttributes<'a> =

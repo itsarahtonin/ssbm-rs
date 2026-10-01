@@ -346,7 +346,7 @@ pub fn it_802D8EC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802D9168<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut zero: f64 = 0.0;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -562,9 +562,16 @@ pub fn it_802D98AC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn it_802D98C4<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: Item<'a>) {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut jobj = jobj;
     let mut arg1 = arg1;
-    inl_itUpdateVelocityFromBone_unfused(ctx, jobj, arg1, (arg1).xDD4_itemVar().heiho().x3C());
+    inl_itUpdateVelocityFromBone_unfused(
+        ctx,
+        jobj,
+        arg1,
+        (arg1).xDD4_itemVar().heiho().x3C(),
+        Handle::addr(__inl),
+    );
 }
 
 pub fn it_802D9A0C<'a>(ctx: &'a Ctx, jobj: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
@@ -871,10 +878,10 @@ fn inl_itUpdateVelocityFromBone_unfused<'a>(
     jobj: HSD_JObj<'a>,
     ip: Item<'a>,
     previous_pos: Vec<'a>,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x20);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let zero: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let zero: Vec<'a> = ptr(ctx, __in_caller + 0xc);
     let mut jobj = jobj;
     let mut ip = ip;
     let mut previous_pos = previous_pos;

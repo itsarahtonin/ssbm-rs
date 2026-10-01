@@ -176,9 +176,9 @@ pub fn gm_801B6428<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
 
 pub fn gm_801B65D4<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let sp14: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let sp10: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let sp14: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
+    let sp10: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_r25: i32 = 0;
     let mut temp_r25_2: u8 = 0;

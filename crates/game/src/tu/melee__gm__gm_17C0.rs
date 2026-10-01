@@ -296,8 +296,8 @@ pub fn fn_8017C7EC<'a>(ctx: &'a Ctx) {
 
 pub fn gm_8017C838<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let sp10: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
+    let sp10: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut temp_r3: VsSceneController<'a> = null(ctx);
     let mut i: i32 = 0;
     let mut var_r3: i8 = 0;
@@ -606,8 +606,8 @@ pub fn gm_8017CE34<'a>(
     arg9: i32,
 ) {
     let __frame = ctx.stack_frame(0xd0);
-    let colors: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x34);
+    let colors: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x50);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x24);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1152,6 +1152,7 @@ pub fn gm_8017D7AC<'a>(
 
 pub fn fn_8017D9C0<'a>(ctx: &'a Ctx, used_ckinds: Val<'a, u8>, preset_ckinds: Val<'a, u8>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut used_ckinds = used_ckinds;
     let mut preset_ckinds = preset_ckinds;
     return inl_pick_random_ckind_unfused(
@@ -1159,6 +1160,7 @@ pub fn fn_8017D9C0<'a>(ctx: &'a Ctx, used_ckinds: Val<'a, u8>, preset_ckinds: Va
         ptr::<ArrV<'a, u8, 0>>(ctx, 0x803d79f0).at(0),
         used_ckinds,
         preset_ckinds,
+        Handle::addr(__inl),
     );
 }
 
@@ -1235,9 +1237,9 @@ fn inl_pick_random_ckind_unfused<'a>(
     arr: Val<'a, u8>,
     used_ckinds: Val<'a, u8>,
     preset_ckinds: Val<'a, u8>,
+    __in_caller: u32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let scan: pick_random_ckind_scan<'a> = frame_at(ctx, &__frame, 0x0);
+    let scan: pick_random_ckind_scan<'a> = ptr(ctx, __in_caller + 0x0);
     let mut arr = arr;
     let mut used_ckinds = used_ckinds;
     let mut preset_ckinds = preset_ckinds;

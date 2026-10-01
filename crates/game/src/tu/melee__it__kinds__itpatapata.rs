@@ -745,7 +745,7 @@ pub fn itPatapata_UnkMotion4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802E15B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut new_gobj: HSD_GObj<'a> = null(ctx);
     let mut new_ip: Item<'a> = null(ctx);
@@ -816,8 +816,8 @@ pub fn it_802E16D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ref_gobj: HSD_GObj<'a>)
 
 pub fn it_802E16F8<'a>(ctx: &'a Ctx, arg0: i32, pos: Vec<'a>, facing: i32) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x48);
-    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut pos = pos;
     let mut facing = facing;

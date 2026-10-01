@@ -70,8 +70,8 @@ pub fn ftCo_8009F578<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ftCo_8009F5AC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let position: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let position: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut fp = fp;
     let mut data: ColorOverlay<'a> = fns::ftCo_800C0658(ctx, fp);
     if !((data).x7C_flag2() != 0) {

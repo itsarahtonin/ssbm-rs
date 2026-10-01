@@ -151,8 +151,8 @@ pub fn mnDiagram2_UpdateHeader<'a>(
     entity_idx: u8,
 ) {
     let __frame = ctx.stack_frame(0x38);
-    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut is_name_mode = is_name_mode;
     let mut entity_idx = entity_idx;
@@ -1652,8 +1652,8 @@ pub fn mnDiagram2_CreateStatRow<'a>(
     entity_idx: u8,
 ) {
     let __frame = ctx.stack_frame(0x88);
-    let str: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let position: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let str: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x24);
+    let position: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut is_name_mode = is_name_mode;
     let mut stat_type = stat_type;
@@ -2260,8 +2260,8 @@ pub fn mnDiagram2_Init<'a>(ctx: &'a Ctx) {
 
 pub fn mnDiagram2_GetRankedFighter<'a>(ctx: &'a Ctx, stat_type: u8, rank: u8) -> u8 {
     let __frame = ctx.stack_frame(0x1d8);
-    let entries: Arr<'a, mnDiagram2_SortEntry<'a>, 25> = frame_at(ctx, &__frame, 0x0);
-    let temp: mnDiagram2_SortEntry<'a> = frame_at(ctx, &__frame, 0x190);
+    let entries: Arr<'a, mnDiagram2_SortEntry<'a>, 25> = frame_at(ctx, &__frame, 0x18);
+    let temp: mnDiagram2_SortEntry<'a> = frame_at(ctx, &__frame, 0x8);
     let mut stat_type = stat_type;
     let mut rank = rank;
     let mut j: i32 = 0;
@@ -2340,8 +2340,8 @@ pub fn mnDiagram2_GetRankedFighter<'a>(ctx: &'a Ctx, stat_type: u8, rank: u8) ->
 
 pub fn mnDiagram2_GetRankedName<'a>(ctx: &'a Ctx, stat_type: u8, rank: u8) -> u8 {
     let __frame = ctx.stack_frame(0x7c0);
-    let entries: Arr<'a, mnDiagram2_SortEntry<'a>, 120> = frame_at(ctx, &__frame, 0x0);
-    let temp: mnDiagram2_SortEntry<'a> = frame_at(ctx, &__frame, 0x780);
+    let entries: Arr<'a, mnDiagram2_SortEntry<'a>, 120> = frame_at(ctx, &__frame, 0x18);
+    let temp: mnDiagram2_SortEntry<'a> = frame_at(ctx, &__frame, 0x8);
     let mut stat_type = stat_type;
     let mut rank = rank;
     let mut base: mnDiagram2_SortEntry<'a> = null(ctx);
@@ -2415,8 +2415,8 @@ pub fn mnDiagram2_GetAggregatedFighterRank<'a>(
     idx: u8,
 ) {
     let __frame = ctx.stack_frame(0x1e0);
-    let entries: Arr<'a, mnDiagram2_SortEntry<'a>, 25> = frame_at(ctx, &__frame, 0x0);
-    let temp: mnDiagram2_SortEntry<'a> = frame_at(ctx, &__frame, 0x190);
+    let entries: Arr<'a, mnDiagram2_SortEntry<'a>, 25> = frame_at(ctx, &__frame, 0x20);
+    let temp: mnDiagram2_SortEntry<'a> = frame_at(ctx, &__frame, 0x10);
     let mut out = out;
     let mut r#type = r#type;
     let mut idx = idx;

@@ -56,7 +56,7 @@ pub fn __AXGetCommandListAddress<'a>(ctx: &'a Ctx) -> u32 {
 
 pub fn __AXNextFrame<'a>(ctx: &'a Ctx, sbuffer: Addr<'a>, buffer: Addr<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let data: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let data: Val<'a, u32> = frame_at(ctx, &__frame, 0x20);
     let mut sbuffer = sbuffer;
     let mut buffer = buffer;
     let mut pCommandList: Val<'a, u16> = null(ctx);

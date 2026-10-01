@@ -484,26 +484,30 @@ pub fn ftKp_SpecialAirSWait_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKp_SpecialSEndF_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
-    inl_doEndFAnim_unfused(ctx, gobj, fnptr(ctx, 0x8008a2bc));
+    inl_doEndFAnim_unfused(ctx, gobj, fnptr(ctx, 0x8008a2bc), Handle::addr(__inl));
 }
 
 pub fn ftKp_SpecialSEndB_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
-    inl_doEndBAnim_unfused(ctx, gobj, fnptr(ctx, 0x8008a2bc));
+    inl_doEndBAnim_unfused(ctx, gobj, fnptr(ctx, 0x8008a2bc), Handle::addr(__inl));
 }
 
 pub fn ftKp_SpecialAirSEndF_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
-    inl_doEndFAnim_unfused_2(ctx, gobj, fnptr(ctx, 0x800cc730));
+    inl_doEndFAnim_unfused_2(ctx, gobj, fnptr(ctx, 0x800cc730), Handle::addr(__inl));
 }
 
 pub fn ftKp_SpecialAirSEndB_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
-    inl_doEndBAnim_unfused_2(ctx, gobj, fnptr(ctx, 0x800cc730));
+    inl_doEndBAnim_unfused_2(ctx, gobj, fnptr(ctx, 0x800cc730), Handle::addr(__inl));
 }
 
 pub fn ftKp_SpecialSHit_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -858,9 +862,8 @@ fn inl_ftCheckThrowB4_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     return 0;
 }
 
-fn inl_doEndFAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_doEndFAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut cb = cb;
     let mut fp: Fighter<'a> =
@@ -892,9 +895,8 @@ fn inl_doEndFAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
     }
 }
 
-fn inl_doEndBAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_doEndBAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut cb = cb;
     'l1: loop {
@@ -912,9 +914,8 @@ fn inl_doEndBAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
     }
 }
 
-fn inl_doEndFAnim_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_doEndFAnim_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut cb = cb;
     let mut fp: Fighter<'a> =
@@ -946,9 +947,8 @@ fn inl_doEndFAnim_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>)
     }
 }
 
-fn inl_doEndBAnim_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_doEndBAnim_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut cb = cb;
     'l1: loop {

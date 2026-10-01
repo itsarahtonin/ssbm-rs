@@ -88,7 +88,7 @@ pub fn itThunder_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802CCBF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
-    let out: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let out: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     out.set(1.0);

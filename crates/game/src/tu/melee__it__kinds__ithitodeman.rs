@@ -151,8 +151,8 @@ pub fn it_802D4510<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802D4564<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let target_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let target_pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (ip).xDAC_itcmd_var0() != (0_i32 as u32) {
@@ -198,8 +198,8 @@ pub fn it_802D4564<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802D472C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let target_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let dir: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let target_pos: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let dir: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attrs: itHitodemanAttributes<'a> = Handle::cast::<itHitodemanAttributes<'a>>(
@@ -432,7 +432,7 @@ pub fn itHitodeman_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
 
 pub fn it_802D4C74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x78);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x8);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attrs: itHitodemanAttributes<'a> =
@@ -561,7 +561,7 @@ pub fn it_802D4F58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ref_gobj: HSD_GObj<'a>)
 
 pub fn it_802D4F78<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let f: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let f: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);

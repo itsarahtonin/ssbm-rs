@@ -226,8 +226,8 @@ pub fn fn_80181BFC<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>) -> i32 {
 
 pub fn fn_80181C80<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x50);
-    let sp38: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let sp10: PlayerInitData<'a> = frame_at(ctx, &__frame, 0x4);
+    let sp38: Val<'a, i32> = frame_at(ctx, &__frame, 0x30);
+    let sp10: PlayerInitData<'a> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut data: lbl_80472ED8_t<'a> = fns::lbl_80472ED8(ctx);
     let mut count: i32 = 0;

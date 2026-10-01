@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn ft_8008521C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -421,10 +421,10 @@ pub fn ftData_800859A8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ftData_80085A14<'a>(ctx: &'a Ctx, kind: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let sp18: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let sp18: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let sp10: Val<'a, u32> = frame_at(ctx, &__frame, 0x8);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut kind = kind;
     let mut a_head: Addr<'a> = null(ctx);
     let mut temp_r27: ftData<'a> = fns::gFtDataList(ctx).at(kind).get();
@@ -591,7 +591,7 @@ pub fn ftData_80085B98<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32, arg2: i32) 
 
 pub fn ftData_80085CD8<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Fighter<'a>, msid: i32) {
     let __frame = ctx.stack_frame(0x70);
-    let sp14: HSD_Archive<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp14: HSD_Archive<'a> = frame_at(ctx, &__frame, 0xc);
     let mut fp = fp;
     let mut arg1 = arg1;
     let mut msid = msid;
@@ -704,7 +704,7 @@ pub fn ftData_80085CD8<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Fighter<'a>, msi
 
 pub fn ftData_80085E50<'a>(ctx: &'a Ctx, arg0: Fighter<'a>, msid: i32) -> FigaTree<'a> {
     let __frame = ctx.stack_frame(0x70);
-    let sp10: HSD_Archive<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: HSD_Archive<'a> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut msid = msid;
     let mut temp_r3_3: Fighter<'a> = null(ctx);

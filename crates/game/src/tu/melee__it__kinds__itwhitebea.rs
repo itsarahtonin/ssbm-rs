@@ -179,8 +179,8 @@ pub fn itOldottosea_UnkMotion11_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i3
 
 pub fn it_802E35CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0xc);
+    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attrs: itOldottoseaAttributes<'a> = Handle::cast::<itOldottoseaAttributes<'a>>(
@@ -443,8 +443,8 @@ pub fn it_802E3AC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itWhitebea_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let local: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
+    let local: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut sfx: Val<'a, i32> = null(ctx);

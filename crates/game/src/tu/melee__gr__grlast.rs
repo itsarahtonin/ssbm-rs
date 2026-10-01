@@ -375,7 +375,7 @@ pub fn grLast_8021AC2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grLast_8021AC30<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut grLast_804DBB80: f64 = fp::frsp(fp::fdiv(
         (fp::fdiv(3.141592653589793, (180_i32 as f64))),
@@ -437,10 +437,10 @@ pub fn grLast_8021ADC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grLast_8021ADD0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut grLast_804DBB80: f64 = fp::frsp(fp::fdiv(
         (fp::fdiv(3.141592653589793, (180_i32 as f64))),
@@ -651,8 +651,8 @@ pub fn grLast_8021B2E4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grLast_8021B2E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let sp30: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp2C: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let sp30: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
+    let sp2C: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = null(ctx);
     let mut temp_f1: f64 = 0.0;
@@ -946,8 +946,8 @@ pub fn grLast_8021B5C4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grLast_8021B920<'a>(ctx: &'a Ctx, gobj_: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x70);
-    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj_ = gobj_;
     let mut arg1 = arg1;
     let mut gobj: HSD_GObj<'a> = gobj_;
@@ -1424,7 +1424,7 @@ pub fn grLast_8021B920<'a>(ctx: &'a Ctx, gobj_: HSD_GObj<'a>, arg1: i32) {
 
 pub fn grLast_8021C40C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, color: _GXColor<'a>, arg2: f64) {
     let __frame = ctx.stack_frame(0x60);
-    let sp18: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp18: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut arg2 = arg2;
     let mut gp: Ground<'a> =
@@ -1442,7 +1442,7 @@ pub fn grLast_8021C40C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, color: _GXColor<'a>
 
 pub fn grLast_8021C500<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let sp10: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1506,12 +1506,12 @@ pub fn grLast_8021C640<'a>(ctx: &'a Ctx) {
 
 pub fn grLast_8021C6AC<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let sp1C: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp18: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let sp14: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let sp10: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let spC: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
-    let sp8: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
+    let sp1C: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
+    let sp18: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let sp14: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp10: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let spC: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let sp8: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     sp1C.set_r((140_i32 as u8));
     sp1C.set_g((180_i32 as u8));
     sp1C.set_b((190_i32 as u8));

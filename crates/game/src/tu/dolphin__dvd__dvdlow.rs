@@ -38,7 +38,7 @@ pub fn __DVDInitWA<'a>(ctx: &'a Ctx) {
 
 pub fn __DVDInterruptHandler<'a>(ctx: &'a Ctx, unused: i16, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x2e8);
-    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x8);
     let mut unused = unused;
     let mut context = context;
     let mut cause: u32 = 0;
@@ -160,7 +160,7 @@ pub fn AlarmHandler<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>, context: OSContext<'a>
 
 pub fn AlarmHandlerForTimeout<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x2e0);
-    let tmpContext: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+    let tmpContext: OSContext<'a> = frame_at(ctx, &__frame, 0x8);
     let mut alarm = alarm;
     let mut context = context;
     let mut callback: FnPtr<'a> = null(ctx);

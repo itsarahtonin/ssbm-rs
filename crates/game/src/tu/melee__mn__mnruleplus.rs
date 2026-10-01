@@ -194,7 +194,7 @@ pub fn mn_80232458<'a>(ctx: &'a Ctx, option: u8, value: u8, direction: u8) -> An
 
 pub fn mn_802324E4<'a>(ctx: &'a Ctx, time_limit: u8, data: _MenuRulesPlusData<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let local_indices: JObjIndices<'a> = frame_at(ctx, &__frame, 0x0);
+    let local_indices: JObjIndices<'a> = frame_at(ctx, &__frame, 0x8);
     let mut time_limit = time_limit;
     let mut data = data;
     let mut i: i32 = 0;
@@ -313,12 +313,12 @@ pub fn mn_80232660<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, jobj: HSD_JObj<'a>, opt
 pub fn mn_802327A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u32, arg2: u32) {
     let __frame = ctx.stack_frame(0xe0);
     let pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let option_roots: ArrP<'a, HSD_JObj<'a>, 6> = frame_at(ctx, &__frame, 0x4);
-    let jobj_parts: ArrP<'a, HSD_JObj<'a>, 17> = frame_at(ctx, &__frame, 0x1c);
-    let jobj_map: ArrV<'a, u16, 17> = frame_at(ctx, &__frame, 0x60);
-    let i: Val<'a, i32> = frame_at(ctx, &__frame, 0x84);
-    let selected: Val<'a, u16> = frame_at(ctx, &__frame, 0x88);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8c);
+    let option_roots: ArrP<'a, HSD_JObj<'a>, 6> = frame_at(ctx, &__frame, 0x88);
+    let jobj_parts: ArrP<'a, HSD_JObj<'a>, 17> = frame_at(ctx, &__frame, 0x44);
+    let jobj_map: ArrV<'a, u16, 17> = frame_at(ctx, &__frame, 0x20);
+    let i: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let selected: Val<'a, u16> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

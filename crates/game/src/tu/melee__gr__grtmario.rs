@@ -143,7 +143,7 @@ pub fn grTMario_8021FB4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn lbl_8021FB50<'a>(ctx: &'a Ctx, unk: i32, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let current: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let current: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let previous: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut unk = unk;
     let mut gobj = gobj;

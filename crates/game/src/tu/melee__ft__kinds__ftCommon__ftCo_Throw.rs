@@ -586,10 +586,10 @@ pub fn ftCo_ThrowLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800DDDE4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, gobj2: HSD_GObj<'a>, arg: i32) {
     let __frame = ctx.stack_frame(0x90);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let damage: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
-    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x1c);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x44);
+    let damage: Val<'a, F32> = frame_at(ctx, &__frame, 0x40);
+    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gobj2 = gobj2;
     let mut arg = arg;
@@ -736,9 +736,9 @@ pub fn ftCo_800DE2CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, other: HSD_GObj<'a>) 
 
 pub fn ftCo_800DE2F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x170);
-    let hit: HitCapsule<'a> = frame_at(ctx, &__frame, 0x0);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x138);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x144);
+    let hit: HitCapsule<'a> = frame_at(ctx, &__frame, 0x18);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

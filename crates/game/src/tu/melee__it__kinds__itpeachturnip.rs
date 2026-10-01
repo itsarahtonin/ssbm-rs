@@ -95,7 +95,7 @@ pub fn it_802BD4AC<'a>(
     fdir: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x90);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut item_gobj = item_gobj;
     let mut pos = pos;
     let mut part = part;

@@ -960,7 +960,7 @@ pub fn taskReadHeader<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn taskListSnapshots<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0xb8);
-    let head: Ptr<'a, SnapshotNode<'a>> = frame_at(ctx, &__frame, 0x0);
+    let head: Ptr<'a, SnapshotNode<'a>> = frame_at(ctx, &__frame, 0x70);
     let stat: Arr<'a, CARDStat<'a>, 1> = frame_at(ctx, &__frame, 0x4);
     let mut node: SnapshotNode<'a> = null(ctx);
     let mut company: Val<'a, i8> = null(ctx);
@@ -1081,7 +1081,7 @@ pub fn taskListSnapshots<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn taskFindFile<'a>(ctx: &'a Ctx, filename: Val<'a, i8>) -> i32 {
     let __frame = ctx.stack_frame(0x98);
-    let card_stat: CARDStat<'a> = frame_at(ctx, &__frame, 0x0);
+    let card_stat: CARDStat<'a> = frame_at(ctx, &__frame, 0x4);
     let mut filename = filename;
     let mut fileno: i32 = 0;
     fileno = 0_i32;
@@ -1824,7 +1824,7 @@ pub fn lb_8001C2D8<'a>(
 
 pub fn lbCardNew_ProbeEx<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let memsize: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let memsize: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
     let sectorsize: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
     let mut chan = chan;
     return inl_convertSdkResult_unfused(ctx, fns::CARDProbeEx(ctx, chan, memsize, sectorsize));

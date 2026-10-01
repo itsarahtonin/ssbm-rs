@@ -402,7 +402,7 @@ pub fn efLib_RemoveLast<'a>(ctx: &'a Ctx) {
 
 pub fn efLib_Update<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut effect: EF_Effect<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
@@ -666,7 +666,7 @@ pub fn efLib_Create_Attach<'a>(
     jobj: HSD_JObj<'a>,
 ) -> EF_Effect<'a> {
     let __frame = ctx.stack_frame(0x38);
-    let translate: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let translate: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gfx_id = gfx_id;
     let mut gobj = gobj;
     let mut jobj = jobj;
@@ -702,13 +702,20 @@ pub fn efLib_Create_AttachChild<'a>(
     jobj: HSD_JObj<'a>,
 ) -> EF_Effect<'a> {
     let __frame = ctx.stack_frame(0x40);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x1c);
     let mut gfx_id = gfx_id;
     let mut gobj = gobj;
     let mut jobj = jobj;
     let mut effect: EF_Effect<'a> = null(ctx);
     if !Handle::is_null(
         ({
-            let __t1 = inl_eflib_create_effect_and_attach_unfused(ctx, (gfx_id as i32), gobj, jobj);
+            let __t1 = inl_eflib_create_effect_and_attach_unfused(
+                ctx,
+                (gfx_id as i32),
+                gobj,
+                jobj,
+                Handle::addr(__inl),
+            );
             effect = __t1;
             __t1
         }),
@@ -729,14 +736,21 @@ pub fn efLib_Create_Attach_Scale<'a>(
     jobj: HSD_JObj<'a>,
 ) -> EF_Effect<'a> {
     let __frame = ctx.stack_frame(0x50);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
     let mut gfx_id = gfx_id;
     let mut gobj = gobj;
     let mut jobj = jobj;
     let mut effect: EF_Effect<'a> = null(ctx);
     if !Handle::is_null(
         ({
-            let __t1 = inl_eflib_create_effect_and_attach_unfused(ctx, (gfx_id as i32), gobj, jobj);
+            let __t1 = inl_eflib_create_effect_and_attach_unfused(
+                ctx,
+                (gfx_id as i32),
+                gobj,
+                jobj,
+                Handle::addr(__inl),
+            );
             effect = __t1;
             __t1
         }),
@@ -767,8 +781,8 @@ pub fn efLib_Create_AttachChild_Scale<'a>(
     jobj: HSD_JObj<'a>,
 ) -> EF_Effect<'a> {
     let __frame = ctx.stack_frame(0x48);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gfx_id = gfx_id;
     let mut gobj = gobj;
     let mut jobj = jobj;
@@ -814,7 +828,7 @@ pub fn efLib_Create_Attach_Scale_FacingDir<'a>(
 ) -> EF_Effect<'a> {
     let __frame = ctx.stack_frame(0x38);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gfx_id = gfx_id;
     let mut gobj = gobj;
     let mut jobj = jobj;
@@ -1084,8 +1098,8 @@ pub fn efLib_CreateGenerator_Attach_Scale<'a>(
     gobj: HSD_GObj<'a>,
 ) -> HSD_Generator<'a> {
     let __frame = ctx.stack_frame(0x30);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let generator: Ptr<'a, HSD_Generator<'a>> = frame_at(ctx, &__frame, 0xc);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let generator: Ptr<'a, HSD_Generator<'a>> = frame_at(ctx, &__frame, 0x0);
     let mut gfx_id = gfx_id;
     let mut vlist = vlist;
     let mut gobj = gobj;
@@ -1532,9 +1546,9 @@ pub fn efLib_Cb_DPtcl<'a>(ctx: &'a Ctx, linkNo: i32, bank: i32, gfx_id: i32, job
 
 pub fn efLib_Cb_ParticleRender<'a>(ctx: &'a Ctx, particle: HSD_Particle<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let translate: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0x18);
+    let translate: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0x4);
     let mut particle = particle;
     let mut appsrt: HSD_psAppSRT<'a> = null(ctx);
     if (!Handle::is_null(particle)) && (!Handle::is_null((particle).appsrt())) {
@@ -1619,7 +1633,7 @@ pub fn efLib_Cb_PtclAppSRTHook<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) {
 
 pub fn efLib_Cb_SetOffsetY_FromParamY<'a>(ctx: &'a Ctx, effect: EF_Effect<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut effect = effect;
     let mut eff_jobj: HSD_JObj<'a> = null(ctx);
     eff_jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, (effect).gobj())));
@@ -1814,9 +1828,9 @@ pub fn efLib_Cb_LifetimeEndSpawn<'a>(ctx: &'a Ctx, effect: EF_Effect<'a>) {
 
 pub fn efLib_Cb_SetScaleRotY_FromFighter<'a>(ctx: &'a Ctx, effect: EF_Effect<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let scale_1: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let scale_2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x18);
+    let scale_1: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let scale_2: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut effect = effect;
     let mut half_pi: f64 = 0.0;
     let mut jobj_2: HSD_JObj<'a> = null(ctx);
@@ -2226,7 +2240,7 @@ pub fn efLib_Cb_ApplyStoredAlpha<'a>(ctx: &'a Ctx, effect: EF_Effect<'a>) {
 
 pub fn efLib_Cb_AccumOffset_FromParams<'a>(ctx: &'a Ctx, effect: EF_Effect<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let translate: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let translate: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut effect = effect;
     fns::lb_8000B1CC(ctx, (effect).attach_jobj(), null::<Vec<'a>>(ctx), translate);
     translate.set_x(fp::fadds(translate.x(), (effect).params().x()));
@@ -2431,9 +2445,9 @@ fn inl_eflib_create_effect_and_attach_unfused<'a>(
     gfx_id: i32,
     gobj: HSD_GObj<'a>,
     jobj: HSD_JObj<'a>,
+    __in_caller: u32,
 ) -> EF_Effect<'a> {
-    let __frame = ctx.stack_frame(0x18);
-    let translate: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let translate: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gfx_id = gfx_id;
     let mut gobj = gobj;
     let mut jobj = jobj;

@@ -140,7 +140,7 @@ pub fn HSD_FObjStopAnimAll<'a>(
 
 pub fn parseFloat<'a>(ctx: &'a Ctx, pos: Ptr<'a, Val<'a, u8>>, frac: u8) -> f64 {
     let __frame = ctx.stack_frame(0x20);
-    let u: parseFloat_u<'a> = frame_at(ctx, &__frame, 0x0);
+    let u: parseFloat_u<'a> = frame_at(ctx, &__frame, 0x8);
     let mut pos = pos;
     let mut frac = frac;
     let mut numer: f64 = 0.0;
@@ -291,7 +291,7 @@ pub fn FObjLaunchKeyData<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) {
 
 pub fn FObjUpdateAnim<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>, obj: Addr<'a>, obj_update: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let fobjdata: HSD_ObjData<'a> = frame_at(ctx, &__frame, 0x0);
+    let fobjdata: HSD_ObjData<'a> = frame_at(ctx, &__frame, 0xc);
     let mut fobj = fobj;
     let mut obj = obj;
     let mut obj_update = obj_update;

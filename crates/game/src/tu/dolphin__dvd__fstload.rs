@@ -84,7 +84,7 @@ pub fn cb<'a>(ctx: &'a Ctx, result: i32, block: DVDCommandBlock<'a>) {
 
 pub fn __fstLoad<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x60);
-    let idTmpBuf: ArrV<'a, u8, 63> = frame_at(ctx, &__frame, 0x0);
+    let idTmpBuf: ArrV<'a, u8, 63> = frame_at(ctx, &__frame, 0x4);
     let mut bootInfo: OSBootInfo_s<'a> = null(ctx);
     let mut id: DVDDiskID<'a> = null(ctx);
     let mut state: i32 = 0;

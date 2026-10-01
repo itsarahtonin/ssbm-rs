@@ -160,7 +160,7 @@ pub fn it_802CA014<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802CA074<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> =
         Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj));
@@ -178,6 +178,7 @@ pub fn it_802CA074<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itKabigon_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     if (ip).xDAC_itcmd_var0() == (0_i32 as u32) {
@@ -200,7 +201,7 @@ pub fn itKabigon_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     } {
         return 1_i32;
     }
-    inl_itKabigon_UnkMotion1_Anim_inline_unfused(ctx, gobj, ip);
+    inl_itKabigon_UnkMotion1_Anim_inline_unfused(ctx, gobj, ip, Handle::addr(__inl));
     return 0_i32;
 }
 
@@ -240,7 +241,7 @@ pub fn itKabigon_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802CA3F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attr: itKabigonAttributes<'a> =
@@ -335,9 +336,9 @@ fn inl_itKabigon_UnkMotion1_Anim_inline_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
     ip: Item<'a>,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x18);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut ip = ip;
     if !(fns::it_80272C6C(ctx, gobj) != 0) {

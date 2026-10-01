@@ -37,7 +37,7 @@ pub fn ftZd_SpecialHi_801396AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftZd_SpecialHi_801396E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -70,7 +70,7 @@ pub fn ftZd_SpecialHi_801396E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftZd_SpecialHi_8013979C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -92,6 +92,7 @@ pub fn ftZd_SpecialHi_8013979C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftZd_SpecialHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = inl_getFighterPlus_unfused(ctx, gobj);
     (fp).set_gr_vel(fp::frsp(0_i32 as f64));
@@ -111,14 +112,14 @@ pub fn ftZd_SpecialHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fp = inl_getFighterPlus_unfused(ctx, gobj);
     (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
     (fp).mv().zd().specialhi().set_xC(0_i32);
-    inl_ftZelda_SpecialHi_StartAction_Helper_unfused(ctx, fp);
+    inl_ftZelda_SpecialHi_StartAction_Helper_unfused(ctx, fp, Handle::addr(__inl));
     (fp).set_accessory4_cb(fnptr(ctx, 0x801396ac));
 }
 
 pub fn ftZd_SpecialAirHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     {
         let mut fp: Fighter<'a> =
@@ -404,8 +405,8 @@ pub fn ftZd_SpecialHi_80139FE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftZd_SpecialHi_8013A058<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let inputVector: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
+    let inputVector: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut groundVector: Vec<'a> = null(ctx);
     let mut y: f64 = 0.0;
@@ -850,10 +851,13 @@ fn inl_getFighterPlus_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'
     return fp;
 }
 
-fn inl_ftZelda_SpecialHi_StartAction_Helper_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+fn inl_ftZelda_SpecialHi_StartAction_Helper_unfused<'a>(
+    ctx: &'a Ctx,
+    fp: Fighter<'a>,
+    __in_caller: u32,
+) {
+    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0x0);
+    let vec: Vec<'a> = ptr(ctx, __in_caller + 0x4);
     let mut fp = fp;
     unused.at(0_i32).set((0_i32 as u8));
     {

@@ -311,7 +311,7 @@ pub fn grVenom_80203B14<'a>(ctx: &'a Ctx, arg: i32) {
 pub fn grVenom_80203B18<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x60);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let position: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let position: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -626,7 +626,7 @@ pub fn fn_802040B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grVenom_802040F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let pos1: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos1: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let pos2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut temp: HSD_JObj<'a> = null(ctx);
@@ -685,7 +685,7 @@ pub fn grVenom_8020427C<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 
 pub fn grVenom_80204284<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = null(ctx);
     let mut tmp_gp: Ground<'a> = null(ctx);
@@ -803,7 +803,7 @@ pub fn grVenom_80204544<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 pub fn grVenom_8020454C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let position: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let position: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -1013,10 +1013,10 @@ pub fn grVenom_80204B84<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn grVenom_80204B88<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let color_set1: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let color_set2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let color_neutral1: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let color_neutral2: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let color_set1: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
+    let color_set2: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let color_neutral1: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let color_neutral2: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1244,7 +1244,7 @@ pub fn grVenom_802052D8<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 
 pub fn grVenom_802052E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let jobj_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let jobj_pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut new_var2: Val<'a, u8> = null(ctx);
@@ -1290,9 +1290,9 @@ pub fn grVenom_802052E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
 
 pub fn grVenom_802053B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
+    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ptr_: Val<'a, i32> = null(ctx);
     let mut gp2: Ground<'a> = null(ctx);
@@ -1630,13 +1630,13 @@ pub fn grVenom_80205E84<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> i32 {
 
 pub fn grVenom_80205F30<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xc8);
-    let sp94: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp88: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let pad70: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x18);
-    let sp64: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let pad5C: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x3c);
-    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x44);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x50);
+    let sp94: Vec<'a> = frame_at(ctx, &__frame, 0x8c);
+    let sp88: Vec<'a> = frame_at(ctx, &__frame, 0x80);
+    let pad70: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let sp64: Vec<'a> = frame_at(ctx, &__frame, 0x5c);
+    let pad5C: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
+    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x20);
     let mut gobj = gobj;
     let mut padA8: u64 = 0;
     let mut gp: Ground<'a> = null(ctx);
@@ -2364,7 +2364,7 @@ pub fn grVenom_80206D74<'a>(ctx: &'a Ctx, arg: i32) -> DynamicsDesc<'a> {
 
 pub fn grVenom_80206D7C<'a>(ctx: &'a Ctx, pos: Vec<'a>, arg1: i32, arg2: HSD_JObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut pos = pos;
     let mut arg1 = arg1;

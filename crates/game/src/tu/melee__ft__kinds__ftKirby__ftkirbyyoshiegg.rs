@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn fn_8010AA64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let vec0: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -78,9 +78,9 @@ pub fn fn_8010AA64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_SpecialNYs_8010AC78<'a>(ctx: &'a Ctx, victim: HSD_GObj<'a>, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x78);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x34);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut victim = victim;
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =

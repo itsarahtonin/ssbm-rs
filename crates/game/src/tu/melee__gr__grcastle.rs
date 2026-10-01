@@ -187,7 +187,7 @@ pub fn grCastle_801CD610<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grCastle_801CD658<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let entries_s: grCastle_DynEntries<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
@@ -729,7 +729,7 @@ pub fn grCastle_801CDFD8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grCastle_801CE054<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let arr: ArrV<'a, i16, 9> = frame_at(ctx, &__frame, 0x0);
+    let arr: ArrV<'a, i16, 9> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut new_var3: Val<'a, i16> = null(ctx);
     let mut count: i32 = 0_i32;
@@ -924,9 +924,9 @@ pub fn grCastle_801CE3A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grCastle_801CE3AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0x28);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut gp: Ground<'a> =
@@ -969,10 +969,10 @@ pub fn grCastle_801CE3AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grCastle_801CE578<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let jpos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
-    let unused_2: ArrV<'a, u8, 44> = frame_at(ctx, &__frame, 0x1c);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let jpos: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let unused_2: ArrV<'a, u8, 44> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut new_var2: Ground<'a> = null(ctx);
     let mut new_var4: i32 = 0;
@@ -1261,8 +1261,8 @@ pub fn grCastle_801CE9E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grCastle_801CE9E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut tmp: Ground<'a> = null(ctx);
     let mut gp: Ground<'a> =
@@ -1808,10 +1808,10 @@ pub fn grCastle_801CF300<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grCastle_801CF308<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x98);
-    let tbl: grCastle_BlinkTable<'a> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let quat: Quaternion<'a> = frame_at(ctx, &__frame, 0x34);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x44);
+    let tbl: grCastle_BlinkTable<'a> = frame_at(ctx, &__frame, 0x48);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let quat: Quaternion<'a> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut var_r6: i32 = 0_i32;
     let mut user_data: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
@@ -2083,7 +2083,8 @@ pub fn grCastle_801CF7B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grCastle_801CF868<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x90);
-    let weights: grCastle_WeightTable<'a> = frame_at(ctx, &__frame, 0x0);
+    let weights: grCastle_WeightTable<'a> = frame_at(ctx, &__frame, 0x68);
+    let __inl: ArrV<'a, u8, 96> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -2138,7 +2139,7 @@ pub fn grCastle_801CF868<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 ));
             }
             wp = weights.w().at(0);
-            inl_grCastle_PickSatellite_unfused(ctx, gp, wp);
+            inl_grCastle_PickSatellite_unfused(ctx, gp, wp, Handle::addr(__inl));
         }
     }
 }
@@ -2189,11 +2190,11 @@ pub fn fn_801CFB68<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, gp: Ground<'a>, go
 
 pub fn grCastle_801CFBD4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) -> i32 {
     let __frame = ctx.stack_frame(0xc0);
-    let cb1: grCastle_CallbackTable<'a> = frame_at(ctx, &__frame, 0x0);
-    let cb2: grCastle_CallbackTable2<'a> = frame_at(ctx, &__frame, 0x14);
+    let cb1: grCastle_CallbackTable<'a> = frame_at(ctx, &__frame, 0x48);
+    let cb2: grCastle_CallbackTable2<'a> = frame_at(ctx, &__frame, 0x34);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let target_pos: Vec<'a> = frame_at(ctx, &__frame, 0x34);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x40);
+    let target_pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut i: i32 = 0_i32;
@@ -2422,9 +2423,9 @@ pub fn grCastle_801D0298<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) -> i32
 
 pub fn grCastle_801D02B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x80);
-    let offsets: grCastle_YOffsets<'a> = frame_at(ctx, &__frame, 0x0);
-    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let offsets: grCastle_YOffsets<'a> = frame_at(ctx, &__frame, 0x20);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -2647,9 +2648,9 @@ pub fn grCastle_801D08AC<'a>(
 
 pub fn fn_801D0924<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, renderpass: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let color1: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let color2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let color1: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let color2: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut renderpass = renderpass;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
@@ -2698,9 +2699,9 @@ pub fn grCastle_801D09B8<'a>(
     arg2: Vec<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut unused = unused;
     let mut gobj = gobj;
     let mut arg2 = arg2;
@@ -2749,7 +2750,7 @@ pub fn grCastle_801D0B04<'a>(ctx: &'a Ctx, arg: i32) -> DynamicsDesc<'a> {
 
 pub fn grCastle_801D0B0C<'a>(ctx: &'a Ctx, v: Vec<'a>, arg1: i32, jobj: HSD_JObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut v = v;
     let mut arg1 = arg1;
     let mut jobj = jobj;
@@ -2841,11 +2842,11 @@ pub fn grCastle_801D0D24<'a>(ctx: &'a Ctx) {
 
 pub fn grCastle_801D0D84<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let dir: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let fwd: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let cross: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0x30);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let dir: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let fwd: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let cross: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0x4);
     let mut jobj = jobj;
     let mut rot_y: f64 = 0.0;
     let mut len: f64 = 0.0;
@@ -3274,10 +3275,14 @@ fn inl_grCastle_ResetSatelliteTimer_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>) {
     (gp).u().castle3().set_xD2((base as i16));
 }
 
-fn inl_grCastle_PickSatellite_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>, wp: Val<'a, i32>) {
-    let __frame = ctx.stack_frame(0x68);
-    let pad: ArrV<'a, u8, 52> = frame_at(ctx, &__frame, 0x0);
-    let targets: grCastle_TargetTable<'a> = frame_at(ctx, &__frame, 0x34);
+fn inl_grCastle_PickSatellite_unfused<'a>(
+    ctx: &'a Ctx,
+    gp: Ground<'a>,
+    wp: Val<'a, i32>,
+    __in_caller: u32,
+) {
+    let pad: ArrV<'a, u8, 52> = ptr(ctx, __in_caller + 0x0);
+    let targets: grCastle_TargetTable<'a> = ptr(ctx, __in_caller + 0x34);
     let mut gp = gp;
     let mut wp = wp;
     let mut total: i32 = 0;

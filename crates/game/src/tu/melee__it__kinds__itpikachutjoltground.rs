@@ -46,9 +46,9 @@ pub fn itPikachuThunderJolt_Spawn<'a>(
     kind: i32,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x98);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4c);
-    let coll_normal: Vec<'a> = frame_at(ctx, &__frame, 0x50);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x24);
+    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let coll_normal: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut owner = owner;
     let mut pos = pos;
     let mut facing_dir = facing_dir;

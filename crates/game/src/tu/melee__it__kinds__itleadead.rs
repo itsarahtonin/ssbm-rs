@@ -870,7 +870,7 @@ pub fn itLeadead_Logic1_Destroyed<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802EA478<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let ecb: _itECB<'a> = frame_at(ctx, &__frame, 0x0);
+    let ecb: _itECB<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -935,8 +935,8 @@ pub fn it_802EA478<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i32) {
 pub fn it_802EA674<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut result: i32 = 0_i32;
@@ -971,8 +971,8 @@ pub fn it_802EA674<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802EA6F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
     let mut attr: itLeadeadAttributes<'a> = null(ctx);
@@ -1022,10 +1022,10 @@ pub fn it_802EA6F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802EA804<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, range: f64) -> i32 {
     let __frame = ctx.stack_frame(0x68);
-    let v1: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let v2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let v3: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x24);
+    let v1: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let v2: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let v3: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut range = range;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
@@ -1087,7 +1087,7 @@ pub fn it_802EA804<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, range: f64) -> i32 {
 
 pub fn it_802EA988<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, x_offset: f64, y_offset: f64) -> i32 {
     let __frame = ctx.stack_frame(0x1b8);
-    let cd: CollData<'a> = frame_at(ctx, &__frame, 0x0);
+    let cd: CollData<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut x_offset = x_offset;
     let mut y_offset = y_offset;
@@ -1152,7 +1152,7 @@ pub fn it_802EAAEC<'a>(
     ignored: f64,
 ) {
     let __frame = ctx.stack_frame(0x50);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut fobj = fobj;
     let mut part = part;
@@ -1193,8 +1193,8 @@ pub fn it_802EAAEC<'a>(
 
 pub fn it_802EAC8C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let offset: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itLeadeadAttributes<'a> =

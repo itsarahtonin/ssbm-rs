@@ -349,7 +349,7 @@ pub fn lb_800100B0<'a>(ctx: &'a Ctx, arg0: lb_80011A50_t<'a>, arg1: f64) -> lb_8
 
 pub fn lb_800101C8<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: Vec<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x60);
-    let delta: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let delta: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut var_r30: lb_80011A50_t<'a> = statics::melee__lb__lb_00F9::lb_804D63B0(ctx).get();
@@ -5712,8 +5712,8 @@ pub fn lb_800117F4<'a>(
     arg4: u32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x88);
-    let view_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x30);
+    let view_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x38);
+    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -5791,7 +5791,7 @@ pub fn lb_800117F4<'a>(
 
 pub fn lb_800119DC<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: i32, arg2: f64, arg3: f64, arg4: f64) {
     let __frame = ctx.stack_frame(0x58);
-    let sp1C: lb_80011A50_t<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp1C: lb_80011A50_t<'a> = frame_at(ctx, &__frame, 0x14);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -5824,7 +5824,7 @@ pub fn lb_80011A50<'a>(
     arg8: f64,
 ) -> lb_80011A50_t<'a> {
     let __frame = ctx.stack_frame(0x68);
-    let x2C: lb_80011A50_t<'a> = frame_at(ctx, &__frame, 0x0);
+    let x2C: lb_80011A50_t<'a> = frame_at(ctx, &__frame, 0x24);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

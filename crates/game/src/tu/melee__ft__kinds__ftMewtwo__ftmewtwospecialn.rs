@@ -190,7 +190,8 @@ pub fn ftMt_SpecialN_OnDeath<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftMt_SpecialN_ReleaseShadowBall<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x78);
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp2: Fighter<'a> = null(ctx);
     let mut fp: Fighter<'a> = null(ctx);
@@ -212,7 +213,7 @@ pub fn ftMt_SpecialN_ReleaseShadowBall<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         && (!Handle::is_null((fp).u().mt().x2230_shadowHeldGObj()))
     {
         (fp).cmd_vars().at(1_i32).set((2_i32 as u32));
-        inl_ftMewtwo_SpecialN_GetPos_unfused(ctx, fp, sp38);
+        inl_ftMewtwo_SpecialN_GetPos_unfused(ctx, fp, sp38, Handle::addr(__inl));
         shadowBallGObj = (fp).item_gobj();
         if 1.0 == (fp).facing_dir() {
             facingDir = 0.0;
@@ -373,9 +374,9 @@ pub fn ftMt_SpecialAirN_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMt_SpecialNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x18);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = inl_getFighter_unfused(ctx, gobj);
@@ -446,11 +447,11 @@ pub fn ftMt_SpecialNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMt_SpecialNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let shadowBallPos: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let shadowBallPos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     shadowBallPos.set_x(0.0);
     shadowBallPos.set_y(7.0);
@@ -548,9 +549,9 @@ pub fn ftMt_SpecialNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMt_SpecialAirNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x18);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = inl_getFighter_unfused(ctx, gobj);
@@ -622,11 +623,11 @@ pub fn ftMt_SpecialAirNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMt_SpecialAirNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let shadowBallPos: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let shadowBallPos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     shadowBallPos.set_x(0.0);
     shadowBallPos.set_y(7.0);
@@ -1212,8 +1213,9 @@ pub fn ftMt_SpecialAirNEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftMt_SpecialN_Shoot<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
-    inl_ftMewtwo_SpecialN_LaunchShadowBall_unfused(ctx, gobj);
+    inl_ftMewtwo_SpecialN_LaunchShadowBall_unfused(ctx, gobj, Handle::addr(__inl));
 }
 
 fn inl_getFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'a> {
@@ -1276,9 +1278,13 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
-fn inl_ftMewtwo_SpecialN_GetPos_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, sp38: Vec<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftMewtwo_SpecialN_GetPos_unfused<'a>(
+    ctx: &'a Ctx,
+    fp: Fighter<'a>,
+    sp38: Vec<'a>,
+    __in_caller: u32,
+) {
+    let sp2C: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut fp = fp;
     let mut sp38 = sp38;
     sp2C.set_z(2.0);
@@ -1511,10 +1517,13 @@ fn inl_ftGetKind_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     return (fp).kind();
 }
 
-fn inl_ftMewtwo_SpecialN_LaunchShadowBall_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x20);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+fn inl_ftMewtwo_SpecialN_LaunchShadowBall_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    __in_caller: u32,
+) {
+    let sp20: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let sp2C: Vec<'a> = ptr(ctx, __in_caller + 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = inl_getFighter_unfused(ctx, gobj);
     if inl_ftGetKind_unfused(ctx, fp) == (enums::Ft_Kind_Mewtwo as i32) {

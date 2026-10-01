@@ -903,7 +903,7 @@ pub fn itFreeze_Logic17_EvtUnk<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ref_gobj: H
 
 pub fn it_8028F8E4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     (ip).xDCC_flag().set_b3((1_i32 as u8));

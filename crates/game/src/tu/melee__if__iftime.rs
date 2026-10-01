@@ -314,6 +314,7 @@ pub fn ifTime_UpdateTimers<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn ifTime_CreateTimers<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut rules: StartMeleeRules<'a> = fns::gm_GetStartMeleeRules(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -326,7 +327,7 @@ pub fn ifTime_CreateTimers<'a>(ctx: &'a Ctx) {
         statics::melee__if__iftime::ifTime_data(ctx).set_match_timer(null::<HSD_GObj<'a>>(ctx));
         return;
     }
-    if (inl_ifTime_LoadModels_unfused(ctx) != 0) {
+    if (inl_ifTime_LoadModels_unfused(ctx, Handle::addr(__inl)) != 0) {
         statics::melee__if__iftime::ifTime_data(ctx).set_countdown_timer(fns::GObj_Create(
             ctx,
             (14_i32 as u16),
@@ -551,10 +552,8 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     }
 }
 
-fn inl_ifTime_LoadModels_unfused<'a>(ctx: &'a Ctx) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let ScInfTim_scene_models: Ptr<'a, Ptr<'a, DynamicModelDesc<'a>>> =
-        frame_at(ctx, &__frame, 0x0);
+fn inl_ifTime_LoadModels_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) -> i32 {
+    let ScInfTim_scene_models: Ptr<'a, Ptr<'a, DynamicModelDesc<'a>>> = ptr(ctx, __in_caller + 0x0);
     fns::lbArchive_LoadSections(
         ctx,
         (fns::ifAll_GetArchive(ctx)).get(),

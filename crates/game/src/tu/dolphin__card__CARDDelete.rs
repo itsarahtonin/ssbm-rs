@@ -58,8 +58,8 @@ pub fn CARDDeleteAsync<'a>(
     callback: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x0);
-    let fileNo: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x10);
+    let fileNo: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
     let mut chan = chan;
     let mut fileName = fileName;
     let mut callback = callback;

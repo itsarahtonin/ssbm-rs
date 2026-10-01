@@ -28,9 +28,9 @@ use crate::support::*;
 
 pub fn MatToQuat<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, q: Quaternion<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let q3: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0x0);
-    let nxt: ArrV<'a, i32, 3> = frame_at(ctx, &__frame, 0xc);
-    let lenCol: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0x18);
+    let q3: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0x34);
+    let nxt: ArrV<'a, i32, 3> = frame_at(ctx, &__frame, 0x28);
+    let lenCol: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0x1c);
     let mut m = m;
     let mut q = q;
     nxt.at(0).set(1_i32);

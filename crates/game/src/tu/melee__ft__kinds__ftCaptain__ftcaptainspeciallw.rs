@@ -28,8 +28,8 @@ use crate::support::*;
 
 pub fn ftCa_SpecialHi_800E3EAC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let sp1C: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x4);
+    let sp1C: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut var_r29: i32 = 0;
     let mut fp: Fighter<'a> =
@@ -418,6 +418,7 @@ pub fn ftCa_SpecialLwEndAir_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCa_SpecialAirLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -425,7 +426,12 @@ pub fn ftCa_SpecialAirLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    inl_doColl_unfused(ctx, gobj, (enums::ftCa_MS_SpecialAirLwEnd as i32));
+    inl_doColl_unfused(
+        ctx,
+        gobj,
+        (enums::ftCa_MS_SpecialAirLwEnd as i32),
+        Handle::addr(__inl),
+    );
 }
 
 pub fn ftCa_SpecialAirLwEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -437,6 +443,7 @@ pub fn ftCa_SpecialAirLwEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCa_SpecialAirLwEndAir_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -444,7 +451,12 @@ pub fn ftCa_SpecialAirLwEndAir_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    inl_doColl_unfused(ctx, gobj, (enums::ftCa_MS_SpecialAirLwEnd as i32));
+    inl_doColl_unfused(
+        ctx,
+        gobj,
+        (enums::ftCa_MS_SpecialAirLwEnd as i32),
+        Handle::addr(__inl),
+    );
 }
 
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
@@ -579,9 +591,8 @@ fn inl_resetCmdAndThrow_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).x2210().set_throw_flags((0_i32 as u32));
 }
 
-fn inl_doColl_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
-    let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+fn inl_doColl_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut msid = msid;
     if (fns::ft_80081D0C(ctx, gobj) as u32) != ((enums::GA_Ground as i32) as u32) {

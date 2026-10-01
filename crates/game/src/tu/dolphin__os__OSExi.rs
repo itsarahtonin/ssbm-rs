@@ -388,7 +388,7 @@ pub fn __EXIProbe<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
 
 pub fn EXIProbe<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let id: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let id: Val<'a, u32> = frame_at(ctx, &__frame, 0x4);
     let mut chan = chan;
     let mut var_r3: i32 = 0;
     let mut exi: EXIControl<'a> = statics::dolphin__os__OSExi::Ecb(ctx).get(chan);
@@ -411,8 +411,9 @@ pub fn EXIProbe<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
 
 pub fn EXIProbeEx<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let mut chan = chan;
-    if (inl_EXIProbe_unfused(ctx, chan) != 0) {
+    if (inl_EXIProbe_unfused(ctx, chan, Handle::addr(__inl)) != 0) {
         return 1_i32;
     }
     if ((Handle::add((ptr::<Val<'a, i32>>(ctx, 0x800030c0_u32 as u32)), chan)).get() != 0) {
@@ -423,13 +424,14 @@ pub fn EXIProbeEx<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
 
 pub fn EXIAttach<'a>(ctx: &'a Ctx, chan: i32, extCallback: FnPtr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x14);
     let mut chan = chan;
     let mut extCallback = extCallback;
     let mut exi: EXIControl<'a> = null(ctx);
     let mut enabled: i32 = 0;
     let mut result: i32 = 0;
     exi = statics::dolphin__os__OSExi::Ecb(ctx).get(chan);
-    let _ = inl_EXIProbe_unfused(ctx, chan);
+    let _ = inl_EXIProbe_unfused(ctx, chan, Handle::addr(__inl));
     enabled = fns::OSDisableInterrupts(ctx);
     if (exi).idTime() == 0_i32 {
         let _ = fns::OSRestoreInterrupts(ctx, enabled);
@@ -572,7 +574,7 @@ pub fn EXIDeselect<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
 
 pub fn EXIIntrruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x2f8);
-    let old: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+    let old: OSContext<'a> = frame_at(ctx, &__frame, 0x10);
     let mut interrupt = interrupt;
     let mut context = context;
     let mut chan: i32 = 0;
@@ -593,7 +595,7 @@ pub fn EXIIntrruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'
 
 pub fn TCIntrruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x2f8);
-    let old: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+    let old: OSContext<'a> = frame_at(ctx, &__frame, 0x18);
     let mut interrupt = interrupt;
     let mut context = context;
     let mut chan: i32 = 0;
@@ -617,7 +619,7 @@ pub fn TCIntrruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a
 
 pub fn EXTIntrruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x2f0);
-    let old: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+    let old: OSContext<'a> = frame_at(ctx, &__frame, 0x8);
     let mut interrupt = interrupt;
     let mut context = context;
     let mut chan: i32 = 0;
@@ -751,7 +753,7 @@ pub fn EXIGetState<'a>(ctx: &'a Ctx, chan: i32) -> u32 {
 
 pub fn UnlockedHandler<'a>(ctx: &'a Ctx, chan: i32, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x18);
-    let id: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let id: Val<'a, u32> = frame_at(ctx, &__frame, 0x8);
     let mut chan = chan;
     let mut context = context;
     let _ = fns::EXIGetID(ctx, chan, (0_i32 as u32), id);
@@ -759,7 +761,7 @@ pub fn UnlockedHandler<'a>(ctx: &'a Ctx, chan: i32, context: OSContext<'a>) {
 
 pub fn EXIGetID<'a>(ctx: &'a Ctx, chan: i32, dev: u32, id: Val<'a, u32>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x14);
     let mut chan = chan;
     let mut dev = dev;
     let mut id = id;
@@ -921,9 +923,8 @@ fn inl_EXIClearInterrupts_unfused<'a>(ctx: &'a Ctx, chan: i32, exi: i32, tc: i32
     return cpr;
 }
 
-fn inl_EXIProbe_unfused<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let id: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+fn inl_EXIProbe_unfused<'a>(ctx: &'a Ctx, chan: i32, __in_caller: u32) -> i32 {
+    let id: Val<'a, u32> = ptr(ctx, __in_caller + 0x0);
     let mut chan = chan;
     let mut var_r3: i32 = 0;
     let mut exi: EXIControl<'a> = statics::dolphin__os__OSExi::Ecb(ctx).get(chan);

@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn it_802988E4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vec: Vec<'a>, arg2: i32, arg3: f64) {
     let __frame = ctx.stack_frame(0x88);
-    let si: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let si: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut vec = vec;
     let mut arg2 = arg2;

@@ -28,8 +28,9 @@ use crate::support::*;
 
 pub fn ftDemo_CreateFighter<'a>(ctx: &'a Ctx, alloc_info: plAllocInfo2<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x30);
-    let a: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let b: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
+    let a: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
+    let b: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
     let mut alloc_info = alloc_info;
     let mut gobj: HSD_GObj<'a> =
         fns::GObj_Create(ctx, (4_i32 as u16), (8_i32 as u8), (0_i32 as u8));
@@ -55,7 +56,7 @@ pub fn ftDemo_CreateFighter<'a>(ctx: &'a Ctx, alloc_info: plAllocInfo2<'a>) -> H
             Handle::cast::<Addr<'a>>(fp),
         );
         fns::ftData_8008572C(ctx, (alloc_info).internal_id());
-        inl_initFighter_unfused(ctx, gobj, alloc_info);
+        inl_initFighter_unfused(ctx, gobj, alloc_info, Handle::addr(__inl));
         (fp).set_x18(14_i32);
         (fp).set_x1C_actionStateList(fns::ftData_803C52A0(ctx).get(0));
         (fp).set_x20_actionStateList(fns::ftData_UnkMotionStates0(ctx).at((fp).kind()).get());
@@ -239,9 +240,13 @@ pub fn ftDemo_SetFacingDirection<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, facing_di
     );
 }
 
-fn inl_initFighter_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, alloc_info: plAllocInfo2<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let temp1: plAllocInfo<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_initFighter_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    alloc_info: plAllocInfo2<'a>,
+    __in_caller: u32,
+) {
+    let temp1: plAllocInfo<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut alloc_info = alloc_info;
     temp1.set_internal_id((alloc_info).internal_id());

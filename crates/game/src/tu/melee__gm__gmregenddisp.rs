@@ -232,8 +232,8 @@ pub fn gm_801A85E4<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: i32, arg2: i32) {
 
 pub fn gm_801A8D54<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>) {
     let __frame = ctx.stack_frame(0x100);
-    let sp84: ArrV<'a, i32, 26> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 104> = frame_at(ctx, &__frame, 0x68);
+    let sp84: ArrV<'a, i32, 26> = frame_at(ctx, &__frame, 0x7c);
+    let unused: ArrV<'a, u8, 104> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -340,8 +340,8 @@ pub fn gm_801A8D54<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>) {
 
 pub fn gm_801A9094<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x148);
-    let sp8C: ArrV<'a, i32, 26> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 132> = frame_at(ctx, &__frame, 0x68);
+    let sp8C: ArrV<'a, i32, 26> = frame_at(ctx, &__frame, 0x84);
+    let unused: ArrV<'a, u8, 132> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
     let mut dsp: TyDspEntry<'a> = null(ctx);
     let mut joint: HSD_Joint<'a> = null(ctx);
@@ -515,12 +515,13 @@ pub fn fn_801A94BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn gm_801A9630<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
     let randoms: Ptr<'a, Val<'a, i32>> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut i: i32 = 0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut child: HSD_JObj<'a> = null(ctx);
     let mut target: HSD_JObj<'a> = null(ctx);
-    inl_gm_801A9630_init_unfused(ctx, randoms);
+    inl_gm_801A9630_init_unfused(ctx, randoms, Handle::addr(__inl));
     inl_gm_801A9630_fog_unfused(ctx);
     inl_gm_801A9630_light_unfused(ctx);
     child = null::<HSD_JObj<'a>>(ctx);
@@ -994,9 +995,12 @@ fn inl_gm_801A9094_create_gobj_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     return fns::GObj_Create(ctx, (14_i32 as u16), (15_i32 as u8), (0_i32 as u8));
 }
 
-fn inl_gm_801A9630_init_unfused<'a>(ctx: &'a Ctx, randoms: Ptr<'a, Val<'a, i32>>) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_gm_801A9630_init_unfused<'a>(
+    ctx: &'a Ctx,
+    randoms: Ptr<'a, Val<'a, i32>>,
+    __in_caller: u32,
+) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut randoms = randoms;
     let mut i: i32 = 0;
     'l1: loop {

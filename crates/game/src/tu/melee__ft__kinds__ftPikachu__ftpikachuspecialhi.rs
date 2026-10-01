@@ -216,9 +216,9 @@ pub fn ftPk_SpecialHi_ChangeMotion_Unk01<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPk_SpecialHiStart1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     (fp).mv()
@@ -276,9 +276,9 @@ pub fn ftPk_SpecialHiStart1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPk_SpecialAirHiStart1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     (fp).mv()
@@ -344,7 +344,7 @@ pub fn ftPk_SpecialAirHiStart1_IASA<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn ftPk_SpecialHi_8012642C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let scl: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scl: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let velocity_vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -441,8 +441,8 @@ pub fn ftPk_SpecialAirHiStart1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPk_SpecialHiStart1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let scl: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0xc);
+    let scl: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fighter2: Fighter<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -560,8 +560,8 @@ pub fn ftPk_SpecialHi_ChangeMotion_Unk02<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPk_SpecialHi_ChangeMotion_Unk03<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let scl: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
+    let scl: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut collData: CollData<'a> = null(ctx);
     let mut pika_attr: _ftPikachuAttributes<'a> = null(ctx);
@@ -613,7 +613,8 @@ pub fn ftPk_SpecialHi_ChangeMotion_Unk03<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPk_SpecialHi_80126C0C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let lstick_direction: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
+    let lstick_direction: Vec<'a> = frame_at(ctx, &__frame, 0x34);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut collData: CollData<'a> = (fp).coll_data();
@@ -633,7 +634,7 @@ pub fn ftPk_SpecialHi_80126C0C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         ),
     );
     if stick_mag > 0.9990000128746033 {
-        stick_mag = inl_get_max_and_fill_stack(ctx);
+        stick_mag = inl_get_max_and_fill_stack(ctx, Handle::addr(__inl));
     }
     if !(stick_mag < (pika_attr).x8C()) {
         lstick_direction.set_x((fp).input().lstick().get(0_i32).x());
@@ -693,6 +694,7 @@ pub fn ftPk_SpecialHi_80126C0C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPk_SpecialHi_80126E1C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
+    let __inl: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_f2_2: f64 = 0.0;
     let mut some_angle: f64 = 0.0;
@@ -716,7 +718,7 @@ pub fn ftPk_SpecialHi_80126E1C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     );
     final_stick_mag = temp_stick_mag;
     if temp_stick_mag > 0.9990000128746033 {
-        final_stick_mag = inl_get_max_and_fill_stack(ctx);
+        final_stick_mag = inl_get_max_and_fill_stack(ctx, Handle::addr(__inl));
     }
     if final_stick_mag > (pika_attr).x8C() {
         if (if ((fp).input().lstick().get(0_i32).x()) < fp::frsp(0_i32 as f64) {
@@ -807,9 +809,10 @@ pub fn ftPk_SpecialHi_80126E1C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPk_SpecialHi_80127064<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut pika_attr: _ftPikachuAttributes<'a> =
@@ -828,7 +831,7 @@ pub fn ftPk_SpecialHi_80127064<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         ),
     );
     if stick_mag < (pika_attr).x8C() {
-        return inl_return_and_fill_stack(ctx);
+        return inl_return_and_fill_stack(ctx, Handle::addr(__inl));
     }
     if !((fp).mv().pk().specialhi().x8() != 0) {
         let mut tempf: f64 = 0.0;
@@ -1230,16 +1233,14 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return x;
 }
 
-fn inl_get_max_and_fill_stack<'a>(ctx: &'a Ctx) -> f64 {
-    let __frame = ctx.stack_frame(0x28);
-    let stack: ArrV<'a, F32, 7> = frame_at(ctx, &__frame, 0x0);
+fn inl_get_max_and_fill_stack<'a>(ctx: &'a Ctx, __in_caller: u32) -> f64 {
+    let stack: ArrV<'a, F32, 7> = ptr(ctx, __in_caller + 0x0);
     stack.at(0_i32).set(0.9990000128746033);
     return 0.9990000128746033;
 }
 
-fn inl_return_and_fill_stack<'a>(ctx: &'a Ctx) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let stack: ArrV<'a, F32, 1> = frame_at(ctx, &__frame, 0x0);
+fn inl_return_and_fill_stack<'a>(ctx: &'a Ctx, __in_caller: u32) -> i32 {
+    let stack: ArrV<'a, F32, 1> = ptr(ctx, __in_caller + 0x0);
     stack.at(0_i32).set(0.9990000128746033);
     return 0_i32;
 }

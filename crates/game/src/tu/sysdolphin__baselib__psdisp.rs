@@ -355,7 +355,7 @@ pub fn particleSort<'a>(
     arg3: Ptr<'a, HSD_Particle<'a>>,
 ) -> HSD_Particle<'a> {
     let __frame = ctx.stack_frame(0xb0);
-    let buckets: Arr<'a, psdisp_ParticleSortBucket<'a>, 16> = frame_at(ctx, &__frame, 0x0);
+    let buckets: Arr<'a, psdisp_ParticleSortBucket<'a>, 16> = frame_at(ctx, &__frame, 0x10);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -501,13 +501,20 @@ pub fn particleSort<'a>(
 
 pub fn psDispParticles<'a>(ctx: &'a Ctx, target_link: u32, sw: u32) {
     let __frame = ctx.stack_frame(0x9a0);
-    let tlut_obj: psdisp_Tlut<'a> = frame_at(ctx, &__frame, 0x4);
-    let sp764: _GXTexObj<'a> = frame_at(ctx, &__frame, 0x10);
-    let sorted_particles: Ptr<'a, HSD_Particle<'a>> = frame_at(ctx, &__frame, 0x30);
-    let non_edge_particles: Ptr<'a, HSD_Particle<'a>> = frame_at(ctx, &__frame, 0x34);
-    let billboard_mtx: psdisp_Mtx<'a> = frame_at(ctx, &__frame, 0x38);
-    let gx_tlut_obj: _GXTlutObj<'a> = frame_at(ctx, &__frame, 0x68);
-    let temp_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x74);
+    let tlut_obj: psdisp_Tlut<'a> = frame_at(ctx, &__frame, 0x780);
+    let sp764: _GXTexObj<'a> = frame_at(ctx, &__frame, 0x75c);
+    let sorted_particles: Ptr<'a, HSD_Particle<'a>> = frame_at(ctx, &__frame, 0x758);
+    let non_edge_particles: Ptr<'a, HSD_Particle<'a>> = frame_at(ctx, &__frame, 0x754);
+    let billboard_mtx: psdisp_Mtx<'a> = frame_at(ctx, &__frame, 0x724);
+    let gx_tlut_obj: _GXTlutObj<'a> = frame_at(ctx, &__frame, 0x714);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
+    let __inl_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
+    let temp_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x6dc);
+    let __inl_3: ArrV<'a, u8, 88> = frame_at(ctx, &__frame, 0x24);
+    let __inl_4: ArrV<'a, u8, 552> = frame_at(ctx, &__frame, 0x7c);
+    let __inl_5: ArrV<'a, u8, 192> = frame_at(ctx, &__frame, 0x2a4);
+    let __inl_6: ArrV<'a, u8, 136> = frame_at(ctx, &__frame, 0x364);
+    let __inl_7: ArrV<'a, u8, 144> = frame_at(ctx, &__frame, 0x3ec);
     let mut target_link = target_link;
     let mut sw = sw;
     let mut sp7B4: i32 = 0;
@@ -1078,8 +1085,8 @@ pub fn psDispParticles<'a>(ctx: &'a Ctx, target_link: u32, sw: u32) {
                             }
                             fns::psSetupTev(ctx, pp);
                             inl_setupChanCtrl(ctx, pp);
-                            inl_setupChanReg(ctx, pp);
-                            inl_setupTevReg(ctx, pp);
+                            inl_setupChanReg(ctx, pp, Handle::addr(__inl));
+                            inl_setupTevReg(ctx, pp, Handle::addr(__inl_2));
                             if ((pp).kind() & ((enums::TexEdge as i32) as u32)) != sp7AC {
                                 sp7AC = ((pp).kind() & ((enums::TexEdge as i32) as u32));
                                 if (sp7AC as i32) != 0_i32 {
@@ -1384,18 +1391,19 @@ pub fn psDispParticles<'a>(ctx: &'a Ctx, target_link: u32, sw: u32) {
                             }
                             if (((pp).kind() & ((enums::DispPoint as i32) as u32)) != 0) {
                                 if !Handle::is_null((pp).appsrt()) {
-                                    inl_psDispSubAPPSRTPoint(ctx, pp);
+                                    inl_psDispSubAPPSRTPoint(ctx, pp, Handle::addr(__inl_3));
                                 } else {
                                     if (((pp).kind() & ((enums::Trail as i32) as u32)) != 0) {
-                                        pp = inl_psDispSubPointTrail(ctx, pp);
+                                        pp =
+                                            inl_psDispSubPointTrail(ctx, pp, Handle::addr(__inl_4));
                                     } else {
-                                        pp = inl_psDispSubPoint(ctx, pp);
+                                        pp = inl_psDispSubPoint(ctx, pp, Handle::addr(__inl_5));
                                     }
                                 }
                             } else if !Handle::is_null((pp).appsrt()) {
-                                inl_psDispSubAppSRT(ctx, pp, form);
+                                inl_psDispSubAppSRT(ctx, pp, form, Handle::addr(__inl_6));
                             } else {
-                                inl_psDispSub(ctx, pp, form);
+                                inl_psDispSub(ctx, pp, form, Handle::addr(__inl_7));
                             }
                         }
                         prev_kind = (pp).kind();
@@ -1644,11 +1652,10 @@ fn inl_setupChanCtrl<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) {
     }
 }
 
-fn inl_setupChanReg<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let prim_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let amb_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let mat_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+fn inl_setupChanReg<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, __in_caller: u32) {
+    let prim_color: _GXColor<'a> = ptr(ctx, __in_caller + 0x0);
+    let amb_color: _GXColor<'a> = ptr(ctx, __in_caller + 0x4);
+    let mat_color: _GXColor<'a> = ptr(ctx, __in_caller + 0x8);
     let mut pp = pp;
     let mut lobj: HSD_LObj<'a> = null(ctx);
     if (((pp).kind() & ((enums::DispLighting as i32) as u32)) != 0) {
@@ -1735,12 +1742,11 @@ fn inl_setupChanReg<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) {
     }
 }
 
-fn inl_setupTevReg<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let prim_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let env_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let mat_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let amb_color: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+fn inl_setupTevReg<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, __in_caller: u32) {
+    let prim_color: _GXColor<'a> = ptr(ctx, __in_caller + 0x0);
+    let env_color: _GXColor<'a> = ptr(ctx, __in_caller + 0x4);
+    let mat_color: _GXColor<'a> = ptr(ctx, __in_caller + 0x8);
+    let amb_color: _GXColor<'a> = ptr(ctx, __in_caller + 0xc);
     let mut pp = pp;
     statics::sysdolphin__baselib__psdisp::getColorPrimEnv(ctx, pp, prim_color, env_color);
     if (((pp).kind() & ((enums::PrimEnv as i32) as u32)) != 0)
@@ -1887,9 +1893,8 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return x;
 }
 
-fn inl_getClrTrail<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, color: _GXColor<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let env_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_getClrTrail<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, color: _GXColor<'a>, __in_caller: u32) {
+    let env_color: _GXColor<'a> = ptr(ctx, __in_caller + 0x0);
     let mut pp = pp;
     let mut color = color;
     's1: {
@@ -1950,14 +1955,14 @@ fn inl_GXTexCoord1x8<'a>(ctx: &'a Ctx, x: u8) {
     (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(x);
 }
 
-fn inl_psDispSubAPPSRTPoint<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) {
-    let __frame = ctx.stack_frame(0x58);
-    let scratch_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let scratch_scale: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x3c);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x40);
-    let z: Val<'a, F32> = frame_at(ctx, &__frame, 0x44);
-    let draw_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x48);
+fn inl_psDispSubAPPSRTPoint<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, __in_caller: u32) {
+    let scratch_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x0);
+    let scratch_scale: Vec<'a> = ptr(ctx, __in_caller + 0x30);
+    let x: Val<'a, F32> = ptr(ctx, __in_caller + 0x3c);
+    let y: Val<'a, F32> = ptr(ctx, __in_caller + 0x40);
+    let z: Val<'a, F32> = ptr(ctx, __in_caller + 0x44);
+    let draw_color: _GXColor<'a> = ptr(ctx, __in_caller + 0x48);
+    let __inl: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x50);
     let mut pp = pp;
     let mut cur_x: f64 = 0.0;
     let mut cur_y: f64 = 0.0;
@@ -2175,7 +2180,7 @@ fn inl_psDispSubAPPSRTPoint<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) {
             statics::sysdolphin__baselib__psdisp::prevLineWidth(ctx).set((w as i32));
             fns::GXSetLineWidth(ctx, w, (enums::GX_TO_ONE as i32));
         }
-        inl_getClrTrail(ctx, pp, draw_color);
+        inl_getClrTrail(ctx, pp, draw_color, Handle::addr(__inl));
         if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
             fns::setVtxDesc(ctx, 2_i32);
             fns::GXBegin(
@@ -2244,16 +2249,21 @@ fn inl_psDispSubAPPSRTPoint<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) {
     }
 }
 
-fn inl_psDispSubPointTrail<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) -> HSD_Particle<'a> {
-    let __frame = ctx.stack_frame(0x220);
-    let vbuf: Arr<'a, Vec<'a>, 32> = frame_at(ctx, &__frame, 0x0);
-    let cbuf: Arr<'a, _GXColor<'a>, 32> = frame_at(ctx, &__frame, 0x180);
-    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x200);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x204);
-    let z: Val<'a, F32> = frame_at(ctx, &__frame, 0x208);
-    let x_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x20c);
-    let y_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x210);
-    let z_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x214);
+fn inl_psDispSubPointTrail<'a>(
+    ctx: &'a Ctx,
+    pp: HSD_Particle<'a>,
+    __in_caller: u32,
+) -> HSD_Particle<'a> {
+    let vbuf: Arr<'a, Vec<'a>, 32> = ptr(ctx, __in_caller + 0x0);
+    let cbuf: Arr<'a, _GXColor<'a>, 32> = ptr(ctx, __in_caller + 0x180);
+    let x: Val<'a, F32> = ptr(ctx, __in_caller + 0x200);
+    let y: Val<'a, F32> = ptr(ctx, __in_caller + 0x204);
+    let z: Val<'a, F32> = ptr(ctx, __in_caller + 0x208);
+    let __inl: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x210);
+    let x_2: Val<'a, F32> = ptr(ctx, __in_caller + 0x20c);
+    let y_2: Val<'a, F32> = ptr(ctx, __in_caller + 0x218);
+    let z_2: Val<'a, F32> = ptr(ctx, __in_caller + 0x21c);
+    let __inl_2: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x220);
     let mut pp = pp;
     let mut p: Vec<'a> = null(ctx);
     let mut c: _GXColor<'a> = null(ctx);
@@ -2298,7 +2308,7 @@ fn inl_psDispSubPointTrail<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) -> HSD_Partic
         (p).set_z(fp::fsubs((pp).pos().z(), (pp).vel().z()));
         p = Handle::add(p, 1);
     }
-    inl_getClrTrail(ctx, pp, c);
+    inl_getClrTrail(ctx, pp, c, Handle::addr(__inl));
     Handle::copy_from((Handle::add(c, 1_i32)), (Handle::add(c, 0_i32)));
     count = 1_i32;
     (Handle::add(c, 1_i32)).set_a(
@@ -2335,7 +2345,7 @@ fn inl_psDispSubPointTrail<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) -> HSD_Partic
                     (p).set_z(fp::fsubs((q).pos().z(), (q).vel().z()));
                     p = Handle::add(p, 1);
                 }
-                inl_getClrTrail(ctx, q, c);
+                inl_getClrTrail(ctx, q, c, Handle::addr(__inl_2));
                 Handle::copy_from((Handle::add(c, 1_i32)), (Handle::add(c, 0_i32)));
                 count = count.wrapping_add(1);
                 (Handle::add(c, 1_i32)).set_a(
@@ -2484,9 +2494,12 @@ fn inl_psDispSubPointTrail<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) -> HSD_Partic
     return last;
 }
 
-fn inl_psDispSubPoint<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>) -> HSD_Particle<'a> {
-    let __frame = ctx.stack_frame(0xc8);
-    let buf: Arr<'a, Vec<'a>, 16> = frame_at(ctx, &__frame, 0x0);
+fn inl_psDispSubPoint<'a>(
+    ctx: &'a Ctx,
+    pp: HSD_Particle<'a>,
+    __in_caller: u32,
+) -> HSD_Particle<'a> {
+    let buf: Arr<'a, Vec<'a>, 16> = ptr(ctx, __in_caller + 0x0);
     let mut pp = pp;
     let mut p: Vec<'a> = null(ctx);
     let mut last: HSD_Particle<'a> = null(ctx);
@@ -2667,39 +2680,44 @@ fn inl_psMaskAbsF32<'a>(ctx: &'a Ctx, value: Val<'a, F32>) {
         .set(((Handle::cast::<Val<'a, i32>>(value)).get() & 0x7fffffff_i32));
 }
 
-fn inl_psMaskAbsLtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let value__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+fn inl_psMaskAbsLtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64, __in_caller: u32) -> i32 {
+    let value__slot: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
     value__slot.set(value);
     let mut limit = limit;
     inl_psMaskAbsF32(ctx, value__slot);
     return (value__slot.get() < limit) as i32;
 }
 
-fn inl_psMaskAbsGtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let value__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+fn inl_psMaskAbsGtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64, __in_caller: u32) -> i32 {
+    let value__slot: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
     value__slot.set(value);
     let mut limit = limit;
     inl_psMaskAbsF32(ctx, value__slot);
     return (value__slot.get() > limit) as i32;
 }
 
-fn inl_psDispSubAppSRT<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, texform: Val<'a, u8>) {
-    let __frame = ctx.stack_frame(0x78);
-    let draw_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let pad: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let scratch_scale: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x48);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x4c);
-    let z: Val<'a, F32> = frame_at(ctx, &__frame, 0x50);
-    let prev_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x54);
-    let prev_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x58);
-    let prev_z: Val<'a, F32> = frame_at(ctx, &__frame, 0x5c);
-    let tx: Val<'a, F32> = frame_at(ctx, &__frame, 0x60);
-    let ty: Val<'a, F32> = frame_at(ctx, &__frame, 0x64);
-    let tz: Val<'a, F32> = frame_at(ctx, &__frame, 0x68);
-    let draw_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x6c);
+fn inl_psDispSubAppSRT<'a>(
+    ctx: &'a Ctx,
+    pp: HSD_Particle<'a>,
+    texform: Val<'a, u8>,
+    __in_caller: u32,
+) {
+    let draw_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x0);
+    let pad: Vec<'a> = ptr(ctx, __in_caller + 0x30);
+    let scratch_scale: Vec<'a> = ptr(ctx, __in_caller + 0x3c);
+    let x: Val<'a, F32> = ptr(ctx, __in_caller + 0x48);
+    let y: Val<'a, F32> = ptr(ctx, __in_caller + 0x4c);
+    let z: Val<'a, F32> = ptr(ctx, __in_caller + 0x50);
+    let prev_x: Val<'a, F32> = ptr(ctx, __in_caller + 0x54);
+    let prev_y: Val<'a, F32> = ptr(ctx, __in_caller + 0x58);
+    let prev_z: Val<'a, F32> = ptr(ctx, __in_caller + 0x5c);
+    let tx: Val<'a, F32> = ptr(ctx, __in_caller + 0x60);
+    let ty: Val<'a, F32> = ptr(ctx, __in_caller + 0x64);
+    let tz: Val<'a, F32> = ptr(ctx, __in_caller + 0x68);
+    let __inl: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x70);
+    let __inl_2: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x78);
+    let draw_color: _GXColor<'a> = ptr(ctx, __in_caller + 0x6c);
+    let __inl_3: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x80);
     let mut pp = pp;
     let mut texform = texform;
     let mut x_extent: f64 = 0.0;
@@ -3240,7 +3258,7 @@ fn inl_psDispSubAppSRT<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, texform: Val<'a, 
                 vf2 = fp::fmadds(f20b, vz, (fp::fmadds(f17, vx, fp::fmuls(f18, vy))));
             }
         }
-        if (inl_psMaskAbsLtF32(ctx, vf2, 1.1754943508222875e-38_f64) != 0) {
+        if (inl_psMaskAbsLtF32(ctx, vf2, 1.1754943508222875e-38_f64, Handle::addr(__inl)) != 0) {
             angle = (if fp::fneg(vf1) >= 0.0 {
                 1.5707963705062866
             } else {
@@ -3255,7 +3273,7 @@ fn inl_psDispSubAppSRT<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, texform: Val<'a, 
     } else {
         angle = (pp).rotate();
     }
-    if (inl_psMaskAbsGtF32(ctx, angle, 0.01) != 0) {
+    if (inl_psMaskAbsGtF32(ctx, angle, 0.01, Handle::addr(__inl_2)) != 0) {
         let mut c: f64 = fns::cosf(ctx, angle);
         let mut s: f64 = fns::sinf(ctx, angle);
         let mut old_x: f64 = ax;
@@ -3270,7 +3288,7 @@ fn inl_psDispSubAppSRT<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, texform: Val<'a, 
         let mut xl: f64 = 0.0;
         let mut yl: f64 = 0.0;
         let mut zl: f64 = 0.0;
-        inl_getClrTrail(ctx, pp, draw_color);
+        inl_getClrTrail(ctx, pp, draw_color, Handle::addr(__inl_3));
         if Handle::is_null(it) {
             if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
                 fns::setVtxDesc(ctx, 2_i32);
@@ -3579,9 +3597,8 @@ fn inl_psDispSubAppSRT<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, texform: Val<'a, 
     }
 }
 
-fn inl_psAbsLtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let value__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+fn inl_psAbsLtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64, __in_caller: u32) -> i32 {
+    let value__slot: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
     value__slot.set(value);
     let mut limit = limit;
     (Handle::cast::<Val<'a, i32>>(value__slot))
@@ -3589,15 +3606,15 @@ fn inl_psAbsLtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64) -> i32 {
     return (value__slot.get() < limit) as i32;
 }
 
-fn inl_psDispSubAbsLtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64) -> i32 {
+fn inl_psDispSubAbsLtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64, __in_caller: u32) -> i32 {
+    let __inl: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut value = value;
     let mut limit = limit;
-    return inl_psAbsLtF32(ctx, value, limit);
+    return inl_psAbsLtF32(ctx, value, limit, Handle::addr(__inl));
 }
 
-fn inl_psAbsGtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let value__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+fn inl_psAbsGtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64, __in_caller: u32) -> i32 {
+    let value__slot: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
     value__slot.set(value);
     let mut limit = limit;
     (Handle::cast::<Val<'a, i32>>(value__slot))
@@ -3605,10 +3622,11 @@ fn inl_psAbsGtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64) -> i32 {
     return (value__slot.get() > limit) as i32;
 }
 
-fn inl_psDispSubAbsGtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64) -> i32 {
+fn inl_psDispSubAbsGtF32<'a>(ctx: &'a Ctx, value: f64, limit: f64, __in_caller: u32) -> i32 {
+    let __inl: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut value = value;
     let mut limit = limit;
-    return inl_psAbsGtF32(ctx, value, limit);
+    return inl_psAbsGtF32(ctx, value, limit, Handle::addr(__inl));
 }
 
 fn inl_psDispSubMakePolygon<'a>(
@@ -3628,10 +3646,11 @@ fn inl_psDispSubMakePolygon<'a>(
     prev_x: Val<'a, F32>,
     prev_y: Val<'a, F32>,
     prev_z: Val<'a, F32>,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x18);
-    let right: Vec2<'a> = frame_at(ctx, &__frame, 0x0);
-    let up: Vec2<'a> = frame_at(ctx, &__frame, 0x8);
+    let right: Vec2<'a> = ptr(ctx, __in_caller + 0x0);
+    let up: Vec2<'a> = ptr(ctx, __in_caller + 0x8);
+    let __inl: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x10);
     let mut pp = pp;
     let mut texform = texform;
     let mut x = x;
@@ -3668,7 +3687,7 @@ fn inl_psDispSubMakePolygon<'a>(
             (prev_y).set(fp::fsubs(y, (pp).vel().y()));
             (prev_z).set(fp::fsubs(z, (pp).vel().z()));
         }
-        inl_getClrTrail(ctx, pp, color);
+        inl_getClrTrail(ctx, pp, color, Handle::addr(__inl));
         if Handle::is_null(it) {
             if (((pp).kind() & ((enums::DispTexture as i32) as u32)) != 0) {
                 fns::setVtxDesc(ctx, 2_i32);
@@ -4030,20 +4049,22 @@ fn inl_psDispSubMakePolygon<'a>(
     }
 }
 
-fn inl_psDispSub<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, texform: Val<'a, u8>) {
-    let __frame = ctx.stack_frame(0x70);
-    let prev_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let prev_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
-    let prev_z: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
-    let prev_x_2: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
-    let prev_y_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
-    let prev_z_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
-    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x18);
-    let axis: Vec<'a> = frame_at(ctx, &__frame, 0x48);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x54);
-    let prev_x_3: Val<'a, F32> = frame_at(ctx, &__frame, 0x58);
-    let prev_y_3: Val<'a, F32> = frame_at(ctx, &__frame, 0x5c);
-    let prev_z_3: Val<'a, F32> = frame_at(ctx, &__frame, 0x60);
+fn inl_psDispSub<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, texform: Val<'a, u8>, __in_caller: u32) {
+    let prev_x: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
+    let prev_y: Val<'a, F32> = ptr(ctx, __in_caller + 0x4);
+    let prev_z: Val<'a, F32> = ptr(ctx, __in_caller + 0x8);
+    let prev_x_2: Val<'a, F32> = ptr(ctx, __in_caller + 0xc);
+    let prev_y_2: Val<'a, F32> = ptr(ctx, __in_caller + 0x10);
+    let prev_z_2: Val<'a, F32> = ptr(ctx, __in_caller + 0x14);
+    let __inl: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x18);
+    let __inl_2: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x20);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x28);
+    let axis: Vec<'a> = ptr(ctx, __in_caller + 0x58);
+    let color: _GXColor<'a> = ptr(ctx, __in_caller + 0x64);
+    let prev_x_3: Val<'a, F32> = ptr(ctx, __in_caller + 0x68);
+    let prev_y_3: Val<'a, F32> = ptr(ctx, __in_caller + 0x6c);
+    let prev_z_3: Val<'a, F32> = ptr(ctx, __in_caller + 0x70);
+    let __inl_3: ArrV<'a, u8, 24> = ptr(ctx, __in_caller + 0x78);
     let mut pp = pp;
     let mut texform = texform;
     let mut right_y: f64 = 0.0;
@@ -4433,7 +4454,7 @@ fn inl_psDispSub<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, texform: Val<'a, u8>) {
                 )),
             );
         }
-        if (inl_psDispSubAbsLtF32(ctx, y_2, 1.1754943508222875e-38_f64) != 0) {
+        if (inl_psDispSubAbsLtF32(ctx, y_2, 1.1754943508222875e-38_f64, Handle::addr(__inl)) != 0) {
             angle = (if x_2 >= 0.0 {
                 1.5707963705062866
             } else {
@@ -4448,7 +4469,7 @@ fn inl_psDispSub<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, texform: Val<'a, u8>) {
     } else {
         angle = (pp).rotate();
     }
-    if (inl_psDispSubAbsGtF32(ctx, angle, 0.01) != 0) {
+    if (inl_psDispSubAbsGtF32(ctx, angle, 0.01, Handle::addr(__inl_2)) != 0) {
         let mut rx: f64 = right_x;
         let mut ry: f64 = right_y;
         let mut rz: f64 = right_z;
@@ -4525,8 +4546,23 @@ fn inl_psDispSub<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, texform: Val<'a, u8>) {
     }
     {
         inl_psDispSubMakePolygon(
-            ctx, pp, texform, x, y, z, right_x, right_y, right_z, up_x, up_y, up_z, color,
-            prev_x_3, prev_y_3, prev_z_3,
+            ctx,
+            pp,
+            texform,
+            x,
+            y,
+            z,
+            right_x,
+            right_y,
+            right_z,
+            up_x,
+            up_y,
+            up_z,
+            color,
+            prev_x_3,
+            prev_y_3,
+            prev_z_3,
+            Handle::addr(__inl_3),
         );
     }
 }

@@ -206,9 +206,9 @@ pub fn ftKb_SpecialNMt_80107130<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_SpecialNMt_801071FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x78);
-    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
+    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut _pad1: f64 = 0.0;
     let mut _pad2: f64 = 0.0;
@@ -423,9 +423,9 @@ pub fn ftKb_SpecialNMt_80107638<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_MtSpecialNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -492,11 +492,11 @@ pub fn ftKb_MtSpecialNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_MtSpecialNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x30);
+    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -618,9 +618,9 @@ pub fn ftKb_MtSpecialNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_MtSpecialAirNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -687,11 +687,11 @@ pub fn ftKb_MtSpecialAirNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_MtSpecialAirNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x30);
+    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

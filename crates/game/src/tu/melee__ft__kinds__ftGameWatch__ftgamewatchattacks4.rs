@@ -28,8 +28,8 @@ use crate::support::*;
 
 pub fn ftGw_ItemTorchSetup<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = inl_getFighter_unfused(ctx, gobj);

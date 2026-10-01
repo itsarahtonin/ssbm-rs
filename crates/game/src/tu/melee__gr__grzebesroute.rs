@@ -163,7 +163,7 @@ pub fn grZebesRoute_8020B424<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 
 pub fn grZebesRoute_8020B42C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -232,14 +232,14 @@ pub fn fn_8020B4D8<'a>(
 
 pub fn grZebesRoute_8020B548<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0xb8);
-    let current_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let color_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
-    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
-    let color_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x38);
-    let pos_3: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let current_pos: Vec<'a> = frame_at(ctx, &__frame, 0x54);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x44);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let color_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let color_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let pos_3: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj: HSD_GObj<'a> = (Handle::add(fns::HSD_GObjGXLinkHead(ctx).get(), 4_i32)).get();
     (if !Handle::is_null((gobj)) {
         ({ () })

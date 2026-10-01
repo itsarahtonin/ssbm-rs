@@ -34,8 +34,8 @@ pub fn it_802AD478<'a>(
     facing_dir: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x80);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4c);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut part = part;
@@ -69,9 +69,9 @@ pub fn it_802AD478<'a>(
 
 pub fn it_802AD590<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, part: i32) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x80);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x58);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x1c);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut part = part;
     let mut bat: HSD_GObj<'a> = null(ctx);
@@ -185,7 +185,7 @@ pub fn itNessbat_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itNessbat_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     if !Handle::is_null(gobj) {
         let mut ip: Item<'a> =

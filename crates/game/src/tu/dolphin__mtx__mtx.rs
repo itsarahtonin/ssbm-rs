@@ -1853,9 +1853,9 @@ pub fn C_MTXLookAt<'a>(
     target: Vec<'a>,
 ) {
     let __frame = ctx.stack_frame(0x50);
-    let vLook: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vRight: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let vUp: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let vLook: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let vRight: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let vUp: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut m = m;
     let mut camPos = camPos;
     let mut camUp = camUp;

@@ -28,8 +28,8 @@ use crate::support::*;
 
 pub fn it_8028B8D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itGShell_Attrs<'a> =
@@ -512,6 +512,7 @@ pub fn it_8028C3A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itGshell_UnkMotion6_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (ip).xDD4_itemVar().gshell().xDD8() <= 0.0 {
@@ -525,7 +526,7 @@ pub fn itGshell_UnkMotion6_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     }
     inl_it_8028B988_unfused(ctx, gobj);
     if ((ip).msid() == 6_i32) || ((ip).msid() == 5_i32) {
-        inl_it_8028B8D8_unfused(ctx, gobj);
+        inl_it_8028B8D8_unfused(ctx, gobj, Handle::addr(__inl));
     }
     if (ip).xDD4_itemVar().gshell().xDD4() <= 0.0 {
         return 1_i32;
@@ -921,10 +922,9 @@ fn inl_itGshell_UnkMotion3_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) ->
     return 0_i32;
 }
 
-fn inl_it_8028B8D8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+fn inl_it_8028B8D8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let v: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itGShell_Attrs<'a> =

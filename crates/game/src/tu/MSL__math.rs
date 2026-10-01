@@ -29,9 +29,9 @@ use crate::support::*;
 pub fn logf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     let __frame = ctx.stack_frame(0x28);
     let x__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let raw_fm: Val<'a, u32> = frame_at(ctx, &__frame, 0x4);
-    let raw_fM: Val<'a, u32> = frame_at(ctx, &__frame, 0x8);
-    let coef: ArrV<'a, u32, 2> = frame_at(ctx, &__frame, 0xc);
+    let raw_fm: Val<'a, u32> = frame_at(ctx, &__frame, 0x14);
+    let raw_fM: Val<'a, u32> = frame_at(ctx, &__frame, 0x10);
+    let coef: ArrV<'a, u32, 2> = frame_at(ctx, &__frame, 0x8);
     x__slot.set(x);
     's1: {
         let __case = match ((Handle::cast::<Val<'a, u32>>(x__slot)).get() & (0x7f800000_i32 as u32))

@@ -29,7 +29,7 @@ use ssbm_rt::cpu as c;
 
 pub fn mnStageSw_8023593C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut i: i32 = 0;
     let mut user_data: Val<'a, u8> = Handle::cast::<Val<'a, u8>>((gobj).user_data());
@@ -774,6 +774,7 @@ pub fn mnStageSw_80235DC8<'a>(ctx: &'a Ctx, user_data: Val<'a, u8>, buttons: i32
 pub fn fn_80235F80<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut enabled: i32 = 0;
     let mut result: i32 = 0;
@@ -839,6 +840,7 @@ pub fn fn_80235F80<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     inl_mnStageSw_8023593C_unfused(
                         ctx,
                         statics::melee__mn__mnstagesw::mnStageSw_804D6BF0(ctx).get(),
+                        Handle::addr(__inl),
                     );
                     return;
                 }
@@ -945,8 +947,8 @@ pub fn mnStageSw_802364A0<'a>(ctx: &'a Ctx, data: MnStageSwData<'a>, idx: u8) ->
 
 pub fn mnStageSw_80236548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u8, arg2: u8) {
     let __frame = ctx.stack_frame(0x80);
-    let hover_anim_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let sp3C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
+    let hover_anim_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x3c);
+    let sp3C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x34);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1075,8 +1077,8 @@ pub fn mnStageSw_80236548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u8, arg2: 
 
 pub fn fn_80236998<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut current_data: MnStageSwData<'a> = Handle::cast::<MnStageSwData<'a>>((gobj).user_data());
@@ -1226,6 +1228,7 @@ pub fn fn_80236998<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnStageSw_80236CBC<'a>(ctx: &'a Ctx, arg0: i8) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x98);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -1310,7 +1313,8 @@ pub fn mnStageSw_80236CBC<'a>(ctx: &'a Ctx, arg0: i8) -> HSD_GObj<'a> {
         'l3: while i < 29_i32 {
             'c4: {
                 let mut cursor_jobj: HSD_JObj<'a> = null(ctx);
-                cursor_jobj = inl_mnStageSw_CreateCursor(ctx, user_data, i, anims);
+                cursor_jobj =
+                    inl_mnStageSw_CreateCursor(ctx, user_data, i, anims, Handle::addr(__inl));
                 if i < 15_i32 {
                     fns::HSD_JObjAddChild(ctx, (user_data).x2C(), cursor_jobj);
                     inl_HSD_JObjAddTranslationY(ctx, cursor_jobj, y_spacing, fp::frsp(i as f64));
@@ -1418,9 +1422,8 @@ fn inl_sfxMove_unfused<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80024030(ctx, 2_i32);
 }
 
-fn inl_mnStageSw_8023593C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_mnStageSw_8023593C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let pad: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut i: i32 = 0;
     let mut user_data: Val<'a, u8> = Handle::cast::<Val<'a, u8>>((gobj).user_data());
@@ -1709,11 +1712,11 @@ fn inl_mnStageSw_CreateCursor<'a>(
     user_data: MnStageSwData<'a>,
     index: i32,
     anims: AnimLoopSettings<'a>,
+    __in_caller: u32,
 ) -> HSD_JObj<'a> {
-    let __frame = ctx.stack_frame(0x18);
-    let cursor_anim_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let hover_anim_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
-    let idx: Val<'a, u32> = frame_at(ctx, &__frame, 0x8);
+    let cursor_anim_jobj: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x0);
+    let hover_anim_jobj: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x4);
+    let idx: Val<'a, u32> = ptr(ctx, __in_caller + 0x8);
     let mut user_data = user_data;
     let mut index = index;
     let mut anims = anims;

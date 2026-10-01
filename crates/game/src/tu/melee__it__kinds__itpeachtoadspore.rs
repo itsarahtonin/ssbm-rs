@@ -34,7 +34,7 @@ pub fn it_802BE214<'a>(
     facing_dir: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x70);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x10);
     let mut item_gobj = item_gobj;
     let mut pos = pos;
     let mut kind = kind;

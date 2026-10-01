@@ -28,8 +28,8 @@ use crate::support::*;
 
 pub fn it_802EEFA8<'a>(ctx: &'a Ctx, pos: Vec<'a>, arg1: i32, facing_dir: f64) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x78);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x4c);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut pos = pos;
     let mut arg1 = arg1;
     let mut facing_dir = facing_dir;
@@ -219,7 +219,7 @@ pub fn itTools_UnkMotion9_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802EF548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let fighter_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let fighter_pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itToolsAttributes<'a> =

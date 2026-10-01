@@ -98,7 +98,7 @@ pub fn it_802A2568<'a>(
     arg8: f64,
 ) -> HSD_JObj<'a> {
     let __frame = ctx.stack_frame(0x90);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -305,8 +305,8 @@ pub fn it_802A2BA4<'a>(
     arg3: i32,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0xb0);
-    let spawn_item: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let pad: ArrV<'a, F32, 8> = frame_at(ctx, &__frame, 0x4c);
+    let spawn_item: SpawnItem<'a> = frame_at(ctx, &__frame, 0x40);
+    let pad: ArrV<'a, F32, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -439,8 +439,9 @@ pub fn itLinkhookshot_UnkMotion0_Phys<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn it_802A2EE4<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x78);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let __inl: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut kind: i32 = 0;
     let mut temp_r26_2: HSD_GObj<'a> = null(ctx);
@@ -457,7 +458,7 @@ pub fn it_802A2EE4<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         fns::it_802A2B10(ctx, arg0);
         return;
     }
-    inl_it_802A2EE4_inline_alt_unfused(ctx, item_link, pos);
+    inl_it_802A2EE4_inline_alt_unfused(ctx, item_link, pos, Handle::addr(__inl));
     's1: {
         let __case = match fns::it_802A4BFC(ctx, item_link, pos, attr, fp) {
             1_i32 => 0,
@@ -519,8 +520,9 @@ pub fn itLinkhookshot_UnkMotion1_Phys<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn fn_802A3110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg0)));
     let mut attr: itLinkHookshotAttributes<'a> = null(ctx);
@@ -531,7 +533,7 @@ pub fn fn_802A3110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     );
     fp = Handle::cast::<Fighter<'a>>(((item).owner()).user_data());
     item_link = (item).xDD4_itemVar().linkhookshot().x0();
-    inl_fn_802A3110_inline_unfused(ctx, item_link, vec);
+    inl_fn_802A3110_inline_unfused(ctx, item_link, vec, Handle::addr(__inl));
     's1: {
         let __case = match fns::it_802A5320(ctx, item_link, vec, attr, fp) {
             1_i32 => 0,
@@ -563,8 +565,9 @@ pub fn itLinkhookshot_UnkMotion2_Phys<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn it_802A3254<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let _padB: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let _padB: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg0)));
     let mut attr: itLinkHookshotAttributes<'a> = null(ctx);
@@ -575,7 +578,7 @@ pub fn it_802A3254<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     );
     fp = Handle::cast::<Fighter<'a>>(((item).owner()).user_data());
     item_link = (item).xDD4_itemVar().linkhookshot().x4();
-    inl_it_802A2EE4_inline_alt_unfused(ctx, item_link, pos);
+    inl_it_802A2EE4_inline_alt_unfused(ctx, item_link, pos, Handle::addr(__inl));
     fns::it_802A5770(ctx, item_link, pos, attr, fp);
     fns::it_802A7168(ctx, item, pos, (fp).x34_scale().y());
     if inl_link_fighter_compare_unfused(ctx, fp) == 0_i32 {
@@ -594,10 +597,10 @@ pub fn itLinkhookshot_UnkMotion3_Phys<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn fn_802A33A0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let _padA: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
-    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x10);
-    let _padB: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x40);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let _padA: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xc);
+    let _padB: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut item: Item<'a> = null(ctx);
     let mut attr: itLinkHookshotAttributes<'a> = null(ctx);
@@ -631,10 +634,10 @@ pub fn itLinkhookshot_UnkMotion4_Phys<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn it_802A3500<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let _padA: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x44);
+    let _padA: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x10);
-    let _padB: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x40);
+    let _padB: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg0)));
     let mut attr: itLinkHookshotAttributes<'a> = Handle::cast::<itLinkHookshotAttributes<'a>>(
@@ -666,8 +669,9 @@ pub fn itLinkhookshot_UnkMotion5_Phys<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn it_802A3630<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg0)));
     let mut attr: itLinkHookshotAttributes<'a> = Handle::cast::<itLinkHookshotAttributes<'a>>(
@@ -677,7 +681,7 @@ pub fn it_802A3630<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let mut item_link: ItemLink<'a> = (item).xDD4_itemVar().linkhookshot().x4();
     let mut fp2: Fighter<'a> = null(ctx);
     fp2 = fp;
-    inl_it_802A2EE4_inline_alt_unfused(ctx, item_link, pos);
+    inl_it_802A2EE4_inline_alt_unfused(ctx, item_link, pos, Handle::addr(__inl));
     if (inl_itGrappleCheckCollision_unfused(
         ctx,
         (item).xDD4_itemVar().linkhookshot().x0(),
@@ -715,9 +719,9 @@ pub fn itLinkhookshot_UnkMotion6_Phys<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn it_802A3828<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x98);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let _padA: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
-    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x1c);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x54);
+    let _padA: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itLinkHookshotAttributes<'a> = Handle::cast::<itLinkHookshotAttributes<'a>>(
@@ -777,10 +781,10 @@ pub fn itLinkhookshot_UnkMotion7_Phys<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn it_802A39FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x98);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let _padA: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
-    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x28);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x58);
+    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let _padA: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x3c);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut item: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut fp: Fighter<'a> = null(ctx);
@@ -1148,8 +1152,8 @@ pub fn it_802A4420<'a>(ctx: &'a Ctx, item_link: ItemLink<'a>) {
 pub fn it_802A4454<'a>(ctx: &'a Ctx, item_link: ItemLink<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let _padA: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut item_link = item_link;
     'l1: loop {
         'c2: {}
@@ -1234,8 +1238,8 @@ pub fn it_802A4758<'a>(
     arg8: f64,
 ) {
     let __frame = ctx.stack_frame(0x50);
-    let arg8__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let arg8__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let _padA: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let mut link_0 = link_0;
     let mut arg1 = arg1;
@@ -1319,15 +1323,20 @@ pub fn it_802A4BFC<'a>(
     attr: itLinkHookshotAttributes<'a>,
     fp: Fighter<'a>,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x158);
+    let __frame = ctx.stack_frame(0x160);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let frame_pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
-    let pos0: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let pad0: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x20);
-    let pos1: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let pad1: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x34);
-    let pos2: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x48);
+    let pos0: Vec<'a> = frame_at(ctx, &__frame, 0x10c);
+    let pad0: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x14);
+    let pos1: Vec<'a> = frame_at(ctx, &__frame, 0xf8);
+    let pad1: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
+    let pos2: Vec<'a> = frame_at(ctx, &__frame, 0xe4);
+    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x24);
+    let __inl: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x40);
+    let __inl_2: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x70);
+    let __inl_3: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0xa0);
+    let __inl_4: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x118);
+    let __inl_5: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x138);
     let mut link_0 = link_0;
     let mut arg1 = arg1;
     let mut attr = attr;
@@ -1345,7 +1354,7 @@ pub fn it_802A4BFC<'a>(
     }
     if (fp).motion_id() == 212_i32 {
         if (fp).mv().ca().specials().grav() == fp::frsp((lk_attr).x88() as f64) {
-            inl_it_802A2EE4_inline_alt(ctx, link_0, pos0);
+            inl_it_802A2EE4_inline_alt(ctx, link_0, pos0, Handle::addr(__inl));
             Handle::copy_from((link_0).pos(), pos0);
             Handle::copy_from((link_0).coll_data().cur_pos(), (link_0).pos());
             Handle::copy_from(
@@ -1356,7 +1365,7 @@ pub fn it_802A4BFC<'a>(
         }
     } else if (fp).motion_id() == 214_i32 {
         if (fp).mv().ca().specials().grav() == fp::frsp((lk_attr).x98() as f64) {
-            inl_it_802A2EE4_inline_alt(ctx, link_0, pos1);
+            inl_it_802A2EE4_inline_alt(ctx, link_0, pos1, Handle::addr(__inl_2));
             Handle::copy_from((link_0).pos(), pos1);
             Handle::copy_from((link_0).coll_data().cur_pos(), (link_0).pos());
             Handle::copy_from(
@@ -1367,7 +1376,7 @@ pub fn it_802A4BFC<'a>(
         }
     } else if (fp).motion_id() == 0x168_i32 {
         if (fp).mv().ca().specials().grav() == fp::frsp((lk_attr).xA8() as f64) {
-            inl_it_802A2EE4_inline_alt_pad(ctx, link_0, pos2);
+            inl_it_802A2EE4_inline_alt_pad(ctx, link_0, pos2, Handle::addr(__inl_3));
             Handle::copy_from((link_0).pos(), pos2);
             Handle::copy_from((link_0).coll_data().cur_pos(), (link_0).pos());
             Handle::copy_from(
@@ -1396,7 +1405,13 @@ pub fn it_802A4BFC<'a>(
     'l3: while !Handle::is_null(link_1) {
         'c4: {
             if ((link_1).x2C_b0() != 0) {
-                len = inl_it_802A4BFC_normalize_diff(ctx, (link_1).pos(), (link_0).pos(), vec);
+                len = inl_it_802A4BFC_normalize_diff(
+                    ctx,
+                    (link_1).pos(),
+                    (link_0).pos(),
+                    vec,
+                    Handle::addr(__inl_4),
+                );
                 if len > (attr).x30() {
                     (link_1)
                         .pos()
@@ -1414,7 +1429,13 @@ pub fn it_802A4BFC<'a>(
                 );
                 Handle::copy_from((link_1).coll_data().cur_pos(), (link_1).pos());
             } else {
-                len = inl_it_802A4BFC_normalize_diff(ctx, arg1, (link_0).pos(), vec);
+                len = inl_it_802A4BFC_normalize_diff(
+                    ctx,
+                    arg1,
+                    (link_0).pos(),
+                    vec,
+                    Handle::addr(__inl_5),
+                );
                 if len > (attr).x30() {
                     (link_1)
                         .pos()
@@ -1688,7 +1709,7 @@ pub fn it_802A5AE0<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0x88);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x28);
     let mut link_0 = link_0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1824,8 +1845,8 @@ pub fn it_802A5FE0<'a>(
     let __frame = ctx.stack_frame(0xa8);
     let _padA: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let speed: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x5c);
+    let speed: Vec<'a> = frame_at(ctx, &__frame, 0x50);
     let mut link_0 = link_0;
     let mut link_0_2 = link_0_2;
     let mut arg2 = arg2;
@@ -1918,8 +1939,8 @@ pub fn it_802A6474<'a>(
 ) {
     let __frame = ctx.stack_frame(0x70);
     let dir: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let saved_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let speed: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let saved_pos: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let speed: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
     let mut tail = tail;
     let mut head = head;
     let mut pos = pos;
@@ -2028,8 +2049,8 @@ pub fn it_802A678C<'a>(
 
 pub fn it_802A6944<'a>(ctx: &'a Ctx, item: Item<'a>, scl: f64) {
     let __frame = ctx.stack_frame(0x60);
-    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let pad: ArrV<'a, F32, 2> = frame_at(ctx, &__frame, 0x30);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x14);
+    let pad: ArrV<'a, F32, 2> = frame_at(ctx, &__frame, 0x0);
     let mut item = item;
     let mut scl = scl;
     let mut zero: f64 = 0.0;
@@ -2151,9 +2172,9 @@ pub fn it_802A6A78<'a>(
 
 pub fn it_802A6DC8<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>, arg1: Vec<'a>, arg2: Vec<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let vec0: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x24);
+    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let vec0: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -2199,10 +2220,10 @@ pub fn it_802A6DC8<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>, arg1: Vec<'a>, arg2: Ve
 
 pub fn it_802A6F80<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>, arg1: Vec<'a>, arg2: Vec<'a>, arg3: f64) {
     let __frame = ctx.stack_frame(0xa8);
-    let m1: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let m0: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
-    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x60);
-    let vec0: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
+    let m1: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x58);
+    let m0: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x28);
+    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let vec0: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -2254,11 +2275,11 @@ pub fn it_802A6F80<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>, arg1: Vec<'a>, arg2: Ve
 
 pub fn it_802A7168<'a>(ctx: &'a Ctx, arg0: Item<'a>, arg1: Vec<'a>, arg8: f64) {
     let __frame = ctx.stack_frame(0x78);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vec_2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let vec_3: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let vec_2: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let vec_3: Vec<'a> = frame_at(ctx, &__frame, 0x30);
     let vec_4: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x30);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg8 = arg8;
@@ -2315,11 +2336,11 @@ pub fn it_802A7168<'a>(ctx: &'a Ctx, arg0: Item<'a>, arg1: Vec<'a>, arg8: f64) {
 
 pub fn it_802A7384<'a>(ctx: &'a Ctx, item: Item<'a>, arg1: Vec<'a>, arg8: f64) {
     let __frame = ctx.stack_frame(0x78);
-    let next_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let prev_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let cur_pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let dir: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x30);
+    let next_pos: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let prev_pos: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let cur_pos: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let dir: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut item = item;
     let mut arg1 = arg1;
     let mut arg8 = arg8;
@@ -2515,7 +2536,9 @@ pub fn it_802A7AF0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn it_802A7B34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb0);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x84);
+    let __inl: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x4c);
+    let __inl_2: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x1c);
     let mut arg0 = arg0;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg0)));
@@ -2526,9 +2549,9 @@ pub fn it_802A7B34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             ((item).xC4_article_data()).x4_specialAttributes(),
         );
         let mut item_link: ItemLink<'a> = (item).xDD4_itemVar().linkhookshot().x0();
-        inl_it_802A2EE4_inline_alt_mtx_first_unfused(ctx, item_link, vec);
+        inl_it_802A2EE4_inline_alt_mtx_first_unfused(ctx, item_link, vec, Handle::addr(__inl));
         if fns::it_802A6A78(ctx, item_link, vec, attr, fp) != 0_i32 {
-            inl_it_802A7B34_6944_inline_unfused(ctx, item);
+            inl_it_802A7B34_6944_inline_unfused(ctx, item, Handle::addr(__inl_2));
         } else {
             fns::it_802A7168(ctx, item, vec, (fp).x34_scale().y());
         }
@@ -2767,9 +2790,13 @@ fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
     fns::HSD_JObjSetupMatrixSub(ctx, jobj);
 }
 
-fn inl_it_802A2EE4_inline_alt_unfused<'a>(ctx: &'a Ctx, item_link: ItemLink<'a>, pos: Vec<'a>) {
-    let __frame = ctx.stack_frame(0x38);
-    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+fn inl_it_802A2EE4_inline_alt_unfused<'a>(
+    ctx: &'a Ctx,
+    item_link: ItemLink<'a>,
+    pos: Vec<'a>,
+    __in_caller: u32,
+) {
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x0);
     let mut item_link = item_link;
     let mut pos = pos;
     let mut zero: f64 = 0.0;
@@ -2807,9 +2834,13 @@ fn inl_vec3_eq_mtx_unfused<'a>(ctx: &'a Ctx, vec: Vec<'a>, m: ArrV<'a, F32, 4>) 
     (vec).set_z((Handle::add(m, 2_i32)).at(3_i32).get());
 }
 
-fn inl_fn_802A3110_inline_unfused<'a>(ctx: &'a Ctx, item_link: ItemLink<'a>, pos: Vec<'a>) {
-    let __frame = ctx.stack_frame(0x38);
-    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+fn inl_fn_802A3110_inline_unfused<'a>(
+    ctx: &'a Ctx,
+    item_link: ItemLink<'a>,
+    pos: Vec<'a>,
+    __in_caller: u32,
+) {
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x0);
     let mut item_link = item_link;
     let mut pos = pos;
     fns::PSMTXIdentity(ctx, m.get(0));
@@ -3022,9 +3053,13 @@ fn inl_HSD_JObjSetupMatrix<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
     fns::HSD_JObjSetupMatrixSub(ctx, jobj);
 }
 
-fn inl_it_802A2EE4_inline_alt<'a>(ctx: &'a Ctx, item_link: ItemLink<'a>, pos: Vec<'a>) {
-    let __frame = ctx.stack_frame(0x38);
-    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+fn inl_it_802A2EE4_inline_alt<'a>(
+    ctx: &'a Ctx,
+    item_link: ItemLink<'a>,
+    pos: Vec<'a>,
+    __in_caller: u32,
+) {
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x0);
     let mut item_link = item_link;
     let mut pos = pos;
     let mut zero: f64 = 0.0;
@@ -3044,9 +3079,13 @@ fn inl_it_802A2EE4_inline_alt<'a>(ctx: &'a Ctx, item_link: ItemLink<'a>, pos: Ve
     (pos).set_z(m.get(2_i32).at(3_i32).get());
 }
 
-fn inl_it_802A2EE4_inline_alt_pad<'a>(ctx: &'a Ctx, item_link: ItemLink<'a>, pos: Vec<'a>) {
-    let __frame = ctx.stack_frame(0x38);
-    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+fn inl_it_802A2EE4_inline_alt_pad<'a>(
+    ctx: &'a Ctx,
+    item_link: ItemLink<'a>,
+    pos: Vec<'a>,
+    __in_caller: u32,
+) {
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x0);
     let mut item_link = item_link;
     let mut pos = pos;
     let mut zero: f64 = 0.0;
@@ -3067,9 +3106,8 @@ fn inl_it_802A2EE4_inline_alt_pad<'a>(ctx: &'a Ctx, item_link: ItemLink<'a>, pos
     (pos).set_z(m.get(2_i32).at(3_i32).get());
 }
 
-fn inl_it_802A4BFC_sqrtf_offset<'a>(ctx: &'a Ctx, x: f64) -> f64 {
-    let __frame = ctx.stack_frame(0x28);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+fn inl_it_802A4BFC_sqrtf_offset<'a>(ctx: &'a Ctx, x: f64, __in_caller: u32) -> f64 {
+    let y: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
     let mut x = x;
     if x > 0.0 {
         let mut guess: f64 = fp::frsqrte(x);
@@ -3091,7 +3129,14 @@ fn inl_it_802A4BFC_sqrtf_offset<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return x;
 }
 
-fn inl_it_802A4BFC_normalize_diff<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, vec: Vec<'a>) -> f64 {
+fn inl_it_802A4BFC_normalize_diff<'a>(
+    ctx: &'a Ctx,
+    a: Vec<'a>,
+    b: Vec<'a>,
+    vec: Vec<'a>,
+    __in_caller: u32,
+) -> f64 {
+    let __inl: ArrV<'a, u8, 32> = ptr(ctx, __in_caller + 0x0);
     let mut a = a;
     let mut b = b;
     let mut vec = vec;
@@ -3107,6 +3152,7 @@ fn inl_it_802A4BFC_normalize_diff<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, vec:
             (vec).z(),
             fp::fmadds((vec).x(), (vec).x(), fp::fmuls((vec).y(), (vec).y())),
         ),
+        Handle::addr(__inl),
     );
     if len == 0.0 {
         inv = 0.0;
@@ -3303,9 +3349,9 @@ fn inl_it_802A2EE4_inline_alt_mtx_first_unfused<'a>(
     ctx: &'a Ctx,
     item_link: ItemLink<'a>,
     pos: Vec<'a>,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x38);
-    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x0);
     let mut item_link = item_link;
     let mut pos = pos;
     let mut zero: f64 = 0.0;
@@ -3325,9 +3371,8 @@ fn inl_it_802A2EE4_inline_alt_mtx_first_unfused<'a>(
     (pos).set_z(m.get(2_i32).at(3_i32).get());
 }
 
-fn inl_it_802A7B34_6944_inline_unfused<'a>(ctx: &'a Ctx, item: Item<'a>) {
-    let __frame = ctx.stack_frame(0x38);
-    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+fn inl_it_802A7B34_6944_inline_unfused<'a>(ctx: &'a Ctx, item: Item<'a>, __in_caller: u32) {
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x0);
     let mut item = item;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut item_link: ItemLink<'a> = (item).xDD4_itemVar().linkhookshot().x0();

@@ -116,7 +116,7 @@ pub fn fn_801AA7F8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_801AA854<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
     let __frame = ctx.stack_frame(0x60);
-    let sp10: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut code = code;
     let mut i: i32 = 0;
@@ -355,8 +355,8 @@ pub fn fn_801AAB18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_801AAB74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xa8);
-    let bsort_temp: SortBufEntry<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x3c);
+    let bsort_temp: SortBufEntry<'a> = frame_at(ctx, &__frame, 0x2c);
+    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> =
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
@@ -843,13 +843,16 @@ pub fn fn_801AAB74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_801AB200<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x150);
-    let cursor_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let jobj_pair: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x4);
-    let temp_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
-    let xform_result: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let proj: ArrV<'a, F32, 8> = frame_at(ctx, &__frame, 0x1c);
-    let tally_color2: _GXColor<'a> = frame_at(ctx, &__frame, 0x3c);
-    let tally_color_copy: _GXColor<'a> = frame_at(ctx, &__frame, 0x40);
+    let cursor_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xbc);
+    let jobj_pair: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0xb4);
+    let temp_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xb0);
+    let xform_result: Vec<'a> = frame_at(ctx, &__frame, 0xa0);
+    let proj: ArrV<'a, F32, 8> = frame_at(ctx, &__frame, 0x80);
+    let tally_color2: _GXColor<'a> = frame_at(ctx, &__frame, 0x78);
+    let tally_color_copy: _GXColor<'a> = frame_at(ctx, &__frame, 0x74);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut leaf: HSD_GObj<'a> = null(ctx);
     let mut tally_color: i32 = 0;
@@ -964,6 +967,7 @@ pub fn fn_801AB200<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         ctx,
                         entry_idx,
                         statics::melee__gm__gmstaffroll::gm_804D42C4(ctx),
+                        Handle::addr(__inl),
                     );
                 }
             }
@@ -1157,6 +1161,7 @@ pub fn fn_801AB200<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                         ctx,
                                         entry_idx,
                                         statics::melee__gm__gmstaffroll::gm_804D42CC(ctx),
+                                        Handle::addr(__inl_2),
                                     );
                                     ((Handle::add(
                                         statics::melee__gm__gmstaffroll::staffInfo(ctx).get(),
@@ -1479,6 +1484,7 @@ pub fn fn_801AB200<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         ctx,
                         selected,
                         statics::melee__gm__gmstaffroll::gm_804D42C8(ctx),
+                        Handle::addr(__inl_3),
                     );
                 }
                 statics::melee__gm__gmstaffroll::gm_804D6828(ctx).set(fp::fmadds(
@@ -1813,8 +1819,8 @@ pub fn fn_801AC67C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn gm_Scene_StaffRoll_OnEnter<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let jobj_arr: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x0);
-    let unused_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
+    let jobj_arr: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x14);
+    let unused_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut unused = unused;
     let mut cobj: HSD_CObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -2371,9 +2377,8 @@ fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     }
 }
 
-fn inl_gm_801AB200_ptcl<'a>(ctx: &'a Ctx, idx: i32, color: _GXColor<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+fn inl_gm_801AB200_ptcl<'a>(ctx: &'a Ctx, idx: i32, color: _GXColor<'a>, __in_caller: u32) {
+    let jobj: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x0);
     let mut idx = idx;
     let mut color = color;
     let mut p: StaffRollPtclNode<'a> = null(ctx);

@@ -35,8 +35,8 @@ pub fn it_802F0F6C<'a>(
     facing_dir: f64,
 ) {
     let __frame = ctx.stack_frame(0x80);
-    let spawnitem: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x4c);
+    let spawnitem: SpawnItem<'a> = frame_at(ctx, &__frame, 0x20);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut owner = owner;
     let mut prev_pos = prev_pos;
     let mut pos = pos;
@@ -126,7 +126,7 @@ pub fn itCrazyhandbomb_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> 
 
 pub fn itCrazyhandbomb_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0x0);
+    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attrs: itCrazyHandBombAttributes<'a> = Handle::cast::<itCrazyHandBombAttributes<'a>>(

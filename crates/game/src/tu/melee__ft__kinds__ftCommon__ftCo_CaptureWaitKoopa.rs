@@ -96,8 +96,9 @@ pub fn ftCo_800BCD00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_CaptureWaitKoopaAir_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
-    inl_ftCo_CaptureWaitKoopa_Anim_unfused(ctx, gobj);
+    inl_ftCo_CaptureWaitKoopa_Anim_unfused(ctx, gobj, Handle::addr(__inl));
 }
 
 pub fn ftCo_CaptureWaitKoopaAir_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -117,9 +118,8 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
-fn inl_ftCo_CaptureWaitKoopa_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftCo_CaptureWaitKoopa_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     ctx.fill(Handle::addr(unused), 0, 0x8);
     unused.at(0).set((0_i32 as u8));

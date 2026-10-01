@@ -91,10 +91,10 @@ pub fn un_8031F9D8<'a>(ctx: &'a Ctx, char_index: i32, costume_id: i32) {
 
 pub fn fn_8031FAA8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let scale_x: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
-    let scale_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
-    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x14);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let scale_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
+    let scale_y: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     fns::HSD_JObjAnimAll(

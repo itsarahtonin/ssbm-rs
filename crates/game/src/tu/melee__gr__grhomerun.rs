@@ -527,11 +527,11 @@ pub fn grHomeRun_8021D678<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 
 pub fn grHomeRun_8021D680<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb0);
-    let pos0: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let pos1: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let pos2: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let cam_interest: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x30);
+    let pos0: Vec<'a> = frame_at(ctx, &__frame, 0x58);
+    let pos1: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let pos2: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let cam_interest: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fighter: HSD_GObj<'a> = null(ctx);
     let mut subject: CmSubject<'a> = null(ctx);
@@ -885,7 +885,7 @@ pub fn grHomeRun_8021DF48<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 
 pub fn grHomeRun_8021DF50<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     if ((gp).u().unk().xCC() as u32) != (0_i32 as u32) {
@@ -990,7 +990,7 @@ pub fn grHomeRun_8021E0CC<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 
 pub fn grHomeRun_8021E0D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     if ((gp).u().unk().xCC() as u32) != (0_i32 as u32) {
@@ -1095,7 +1095,7 @@ pub fn grHomeRun_8021E250<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 
 pub fn grHomeRun_8021E258<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     if ((gp).u().unk().xCC() as u32) != (0_i32 as u32) {
@@ -1200,7 +1200,7 @@ pub fn grHomeRun_8021E3D4<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 
 pub fn grHomeRun_8021E3DC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     if ((gp).u().unk().xCC() as u32) != (0_i32 as u32) {
@@ -1550,11 +1550,11 @@ pub fn grHomeRun_8021EAF8<'a>(ctx: &'a Ctx) {
 
 pub fn fn_8021EB10<'a>(ctx: &'a Ctx, target_cam_gobj: HSD_GObj<'a>, code: i32) {
     let __frame = ctx.stack_frame(0x50);
-    let fov: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let aspect: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
-    let viewport: _HSD_RectF32<'a> = frame_at(ctx, &__frame, 0x8);
+    let fov: Val<'a, F32> = frame_at(ctx, &__frame, 0x34);
+    let aspect: Val<'a, F32> = frame_at(ctx, &__frame, 0x30);
+    let viewport: _HSD_RectF32<'a> = frame_at(ctx, &__frame, 0x20);
     let scissor: _Scissor<'a> = frame_at(ctx, &__frame, 0x18);
-    let position: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let position: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut target_cam_gobj = target_cam_gobj;
     let mut code = code;
     let mut main_cam_gobj: HSD_GObj<'a> = null(ctx);
@@ -1610,7 +1610,7 @@ pub fn fn_8021EB10<'a>(ctx: &'a Ctx, target_cam_gobj: HSD_GObj<'a>, code: i32) {
 
 pub fn grHomeRun_8021EC58<'a>(ctx: &'a Ctx, arg: i32) -> HSD_Text<'a> {
     let __frame = ctx.stack_frame(0x30);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg = arg;
     color.set_r((255_i32 as u8));
     color.set_g((255_i32 as u8));
@@ -1730,7 +1730,7 @@ pub fn grHomeRun_8021EEB4<'a>(ctx: &'a Ctx, arg: i32) -> DynamicsDesc<'a> {
 
 pub fn grHomeRun_8021EEBC<'a>(ctx: &'a Ctx, a: Vec<'a>, b: i32, jobj: HSD_JObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut a = a;
     let mut b = b;
     let mut jobj = jobj;

@@ -98,8 +98,8 @@ pub fn grFigureGet_802196EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grFigureGet_802196F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let sp14: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
+    let sp14: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
     let mut i0: i32 = 0;
@@ -212,7 +212,7 @@ pub fn grFigureGet_80219890<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grFigureGet_80219898<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut pad2: u32 = 0;
     let mut var_r28: HSD_GObj<'a> = null(ctx);

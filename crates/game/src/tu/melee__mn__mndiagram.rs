@@ -551,9 +551,9 @@ pub fn mnDiagram_GetRankedFighterForName<'a>(
     func: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x118);
-    let _pad: ArrV<'a, i32, 2> = frame_at(ctx, &__frame, 0x0);
-    let entries: Arr<'a, RankEntry<'a>, 25> = frame_at(ctx, &__frame, 0x8);
-    let temp: RankEntry<'a> = frame_at(ctx, &__frame, 0xd0);
+    let _pad: ArrV<'a, i32, 2> = frame_at(ctx, &__frame, 0xdc);
+    let entries: Arr<'a, RankEntry<'a>, 25> = frame_at(ctx, &__frame, 0x14);
+    let temp: RankEntry<'a> = frame_at(ctx, &__frame, 0xc);
     let mut rank = rank;
     let mut name_idx = name_idx;
     let mut func = func;
@@ -760,8 +760,8 @@ pub fn mnDiagram_GetLeastPlayedFighter<'a>(ctx: &'a Ctx, name_idx: u8) -> u8 {
 
 pub fn mnDiagram_SortFightersByKOs<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0xa0);
-    let totals: ArrV<'a, u32, 25> = frame_at(ctx, &__frame, 0x0);
-    let sp: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x64);
+    let totals: ArrV<'a, u32, 25> = frame_at(ctx, &__frame, 0x10);
+    let sp: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut dst: Val<'a, u8> = fns::mnDiagram_FighterDisplayOrder(ctx).at(0);
     let mut dst_iter: Val<'a, u8> = null(ctx);
     let mut candidate: Val<'a, u8> = null(ctx);
@@ -854,7 +854,7 @@ pub fn mnDiagram_SortFightersByKOs<'a>(ctx: &'a Ctx) {
 
 pub fn mnDiagram_SortNamesByKOs<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x218);
-    let totals: ArrV<'a, u32, 120> = frame_at(ctx, &__frame, 0x0);
+    let totals: ArrV<'a, u32, 120> = frame_at(ctx, &__frame, 0x10);
     let mut j: i32 = 0;
     let mut max_idx: i32 = 0;
     let mut dst_iter: Val<'a, u8> = null(ctx);
@@ -1382,7 +1382,7 @@ pub fn mnDiagram_PopupCleanup<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
 
 pub fn mnDiagram_PopupAnimProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut arg0 = arg0;
     let mut data: mnDiagram_PopupData<'a> =
         Handle::cast::<mnDiagram_PopupData<'a>>((arg0).user_data());
@@ -1489,8 +1489,8 @@ pub fn mnDiagram_CreatePopupTexts<'a>(
     use_nametag: i32,
 ) {
     let __frame = ctx.stack_frame(0x78);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let buf: ArrV<'a, i8, 8> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let buf: ArrV<'a, i8, 8> = frame_at(ctx, &__frame, 0x28);
     let mut arg0 = arg0;
     let mut selkind_or_nametag_slot_id = selkind_or_nametag_slot_id;
     let mut arg2 = arg2;
@@ -3359,7 +3359,7 @@ pub fn mnDiagram_DrawNameHeaders<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32
 
 pub fn mnDiagram_CreateFighterIcon<'a>(ctx: &'a Ctx, idx: i32, arg1: i32) -> HSD_JObj<'a> {
     let __frame = ctx.stack_frame(0x30);
-    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
     let mut idx = idx;
     let mut arg1 = arg1;
     let mut model: StaticModelDesc<'a> = fns::MenMainFaceB_Top(ctx);
@@ -3392,8 +3392,8 @@ pub fn mnDiagram_DrawFighterHeaders<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: 
     let __frame = ctx.stack_frame(0xa8);
     let row_fighter: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
     let col_fighter: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
-    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
-    let row_child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
+    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x44);
+    let row_child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x3c);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -3492,7 +3492,7 @@ pub fn mnDiagram_DrawFighterHeaders<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: 
 
 pub fn mnDiagram_CursorProc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let sp_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let sp_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x28);
     let mut gobj = gobj;
     let mut selection: Val<'a, u16> = null(ctx);
     let mut col: i32 = 0;
@@ -3619,6 +3619,7 @@ pub fn mnDiagram_CreateCursor<'a>(ctx: &'a Ctx) {
 
 pub fn mnDiagram_CreateScreen<'a>(ctx: &'a Ctx, arg0: u8) {
     let __frame = ctx.stack_frame(0x48);
+    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut col_idx: i32 = 0;
     let mut row_idx: i32 = 0;
@@ -3724,7 +3725,7 @@ pub fn mnDiagram_CreateScreen<'a>(ctx: &'a Ctx, arg0: u8) {
             statics::melee__mn__mndiagram::mnDiagram_IntroAnim(ctx).end_frame(),
         );
         fns::HSD_JObjAnimAll(ctx, anim_jobj);
-        inl_mnDiagram_CreateCursor_unfused(ctx);
+        inl_mnDiagram_CreateCursor_unfused(ctx, Handle::addr(__inl));
         count = inl_getEntryCount_unfused(ctx, user_data);
         inl_updateScrollArrowVisibility_unfused(
             ctx,
@@ -4885,9 +4886,8 @@ fn inl_getRowReferenceY<'a>(ctx: &'a Ctx, data: Diagram<'a>) -> f64 {
     return inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(9_i32).get());
 }
 
-fn inl_mnDiagram_CreateCursor_unfused<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
+fn inl_mnDiagram_CreateCursor_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 40> = ptr(ctx, __in_caller + 0x0);
     let mut model: StaticModelDesc<'a> = null(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);

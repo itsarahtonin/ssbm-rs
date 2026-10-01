@@ -259,7 +259,7 @@ pub fn DrawASCII<'a>(ctx: &'a Ctx, chr: i32, x: f64, y: f64, color: _GXColor<'a>
 
 pub fn hsd_80391A04<'a>(ctx: &'a Ctx, scale_x: f64, scale_y: f64, line_width: i32) {
     let __frame = ctx.stack_frame(0x48);
-    let view_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let view_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xc);
     let mut scale_x = scale_x;
     let mut scale_y = scale_y;
     let mut line_width = line_width;
@@ -311,7 +311,7 @@ pub fn hsd_80391AC8<'a>(
     y: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let col: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let col: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
     let mut str = str;
     let mut color = color;
     let mut x = x;
@@ -395,8 +395,8 @@ pub fn hsd_80391AC8<'a>(
 
 pub fn hsd_80391E18<'a>(ctx: &'a Ctx, list: Val<'a, u8>, x1: f64, y1: f64, x2: f64, y2: f64) {
     let __frame = ctx.stack_frame(0x70);
-    let color: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
+    let color: Val<'a, u32> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut list = list;
     let mut x1 = x1;
     let mut y1 = y1;

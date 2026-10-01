@@ -182,7 +182,7 @@ pub fn ARGetSize<'a>(ctx: &'a Ctx) -> u32 {
 
 pub fn __ARHandler<'a>(ctx: &'a Ctx, exception: i16, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x2e0);
-    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x8);
     let mut exception = exception;
     let mut context = context;
     let mut tmp: u16 = 0;
@@ -202,9 +202,9 @@ pub fn __ARHandler<'a>(ctx: &'a Ctx, exception: i16, context: OSContext<'a>) {
 
 pub fn __ARChecksize<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x140);
-    let test_data_pad: ArrV<'a, u8, 63> = frame_at(ctx, &__frame, 0x0);
-    let dummy_data_pad: ArrV<'a, u8, 63> = frame_at(ctx, &__frame, 0x40);
-    let buffer_pad: ArrV<'a, u8, 63> = frame_at(ctx, &__frame, 0x80);
+    let test_data_pad: ArrV<'a, u8, 63> = frame_at(ctx, &__frame, 0x8c);
+    let dummy_data_pad: ArrV<'a, u8, 63> = frame_at(ctx, &__frame, 0x4c);
+    let buffer_pad: ArrV<'a, u8, 63> = frame_at(ctx, &__frame, 0xc);
     let mut test_data: Val<'a, u32> = null(ctx);
     let mut dummy_data: Val<'a, u32> = null(ctx);
     let mut buffer: Val<'a, u32> = null(ctx);

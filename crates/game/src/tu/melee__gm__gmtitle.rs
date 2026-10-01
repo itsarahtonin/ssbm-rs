@@ -135,8 +135,8 @@ pub fn gmTitle_801A1630<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn gmTitle_801A165C<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x28);
-    let result: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let time: datetime<'a> = frame_at(ctx, &__frame, 0x4);
+    let result: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
+    let time: datetime<'a> = frame_at(ctx, &__frame, 0x0);
     let mut gobj: HSD_GObj<'a> =
         fns::GObj_Create(ctx, (14_i32 as u16), (15_i32 as u8), (0_i32 as u8));
     let mut jobj: HSD_JObj<'a> =
@@ -231,7 +231,7 @@ pub fn gmTitle_801A185C<'a>(ctx: &'a Ctx) {
 
 pub fn gmTitle_801A18D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let erase_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let erase_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut unused = unused;
     Handle::copy_from(
@@ -338,8 +338,8 @@ pub fn gmTitle_801A1A3C<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
 
 pub fn gmTitle_801A1AC0<'a>(ctx: &'a Ctx) -> HSD_Archive<'a> {
     let __frame = ctx.stack_frame(0x78);
-    let dat: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0x48);
-    let usd: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0x54);
+    let dat: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0x54);
+    let usd: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0x48);
     ctx.write_bytes(
         Handle::addr(dat),
         b"\x47\x6d\x54\x74\x41\x6c\x6c\x2e\x64\x61\x74\x00",
@@ -485,6 +485,8 @@ pub fn gmTitle_801A1D38<'a>(ctx: &'a Ctx, src: Val<'a, i8>, dst: Val<'a, i8>) ->
 
 pub fn gm_Scene_Title_OnEnter<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     let __frame = ctx.stack_frame(0x98);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x5c);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x50);
     let mut unused = unused;
     let mut text: HSD_Text<'a> = null(ctx);
     let mut scale: i32 = 0;
@@ -492,7 +494,7 @@ pub fn gm_Scene_Title_OnEnter<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     let _ = fns::lbAudioAx_800236DC(ctx);
     statics::melee__gm__gmtitle::countdown_timer(ctx).set(20_i32);
     statics::melee__gm__gmtitle::frame_count(ctx).set((0_i32 as u32));
-    archive = inl_gmTitle_801A1AC0_unfused(ctx);
+    archive = inl_gmTitle_801A1AC0_unfused(ctx, Handle::addr(__inl));
     fns::lbAudioAx_80026F2C(
         ctx,
         (((shl_i32(1_i32, (1_i32 as u32))) | (shl_i32(1_i32, (4_i32 as u32)))) as u32),
@@ -500,7 +502,7 @@ pub fn gm_Scene_Title_OnEnter<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     fns::lbAudioAx_8002702C(ctx, (2_i32 as u32), (4_i32 as u64));
     fns::lbAudioAx_80027168(ctx);
     let _ = inl_gmTitle_801A1A3C_unfused(ctx);
-    inl_gmTitle_801A19AC_unfused(ctx);
+    inl_gmTitle_801A19AC_unfused(ctx, Handle::addr(__inl_2));
     inl_gmTitle_801A1944_unfused(ctx);
     inl_gmTitle_801A185C_unfused(ctx);
     let _ = fns::gmTitle_801A165C(ctx);
@@ -661,10 +663,9 @@ fn inl_sfxForward_unfused<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80024030(ctx, 1_i32);
 }
 
-fn inl_gmTitle_801A1AC0_unfused<'a>(ctx: &'a Ctx) -> HSD_Archive<'a> {
-    let __frame = ctx.stack_frame(0x68);
-    let dat: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0x48);
-    let usd: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0x54);
+fn inl_gmTitle_801A1AC0_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) -> HSD_Archive<'a> {
+    let dat: ArrV<'a, i8, 12> = ptr(ctx, __in_caller + 0x0);
+    let usd: ArrV<'a, i8, 12> = ptr(ctx, __in_caller + 0xc);
     ctx.write_bytes(
         Handle::addr(dat),
         b"\x47\x6d\x54\x74\x41\x6c\x6c\x2e\x64\x61\x74\x00",
@@ -746,9 +747,8 @@ fn inl_gmTitle_801A1A3C_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     return gobj;
 }
 
-fn inl_gmTitle_801A19AC_unfused<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+fn inl_gmTitle_801A19AC_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0x0);
     let mut gobj: HSD_GObj<'a> =
         fns::GObj_Create(ctx, (11_i32 as u16), (3_i32 as u8), (128_i32 as u8));
     let mut lobj: HSD_LObj<'a> =

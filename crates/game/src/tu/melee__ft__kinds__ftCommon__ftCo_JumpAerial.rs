@@ -97,8 +97,8 @@ pub fn ftCo_800CB8E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn ftCo_JumpAerial_CheckInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) -> i32 {
     let __frame = ctx.stack_frame(0x40);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x14);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut co_attrs: ftCo_DatAttrs<'a> = null(ctx);
@@ -239,8 +239,8 @@ pub fn ftCo_JumpAerial_Enter_Basic<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftNs_JumpAerial_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut co_attrs_r31: ftCo_DatAttrs<'a> = null(ctx);
     let mut fp: Fighter<'a> =

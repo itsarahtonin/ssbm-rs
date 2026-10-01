@@ -422,7 +422,7 @@ pub fn lbMemory_800155A4<'a>(ctx: &'a Ctx) {
 
 pub fn lbMemory_8001564C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let freed_size: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let freed_size: Val<'a, u32> = frame_at(ctx, &__frame, 0xc);
     let mut i: i32 = 0;
     fns::lbMemory_804318B0(ctx).set_a_arenaLo(fns::ARAlloc(ctx, (32_i32 as u32)));
     let _ = fns::ARFree(ctx, freed_size);

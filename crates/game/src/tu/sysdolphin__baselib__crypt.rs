@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn HSD_Checksum<'a>(ctx: &'a Ctx, src: Val<'a, u8>, len: i32, dest: Addr<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let md5_init: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let md5_init: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut src = src;
     let mut len = len;
     let mut dest = dest;
@@ -308,7 +308,7 @@ pub fn decryptByte<'a>(ctx: &'a Ctx, prev: u32, cur: u32) -> i32 {
 
 pub fn HSD_Decrypt<'a>(ctx: &'a Ctx, data: Val<'a, u8>, len: i32) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let check: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let check: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
     let mut data = data;
     let mut len = len;
     let mut prev: u32 = 0;

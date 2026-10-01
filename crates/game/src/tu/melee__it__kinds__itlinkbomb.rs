@@ -93,7 +93,7 @@ pub fn it_8029DD58<'a>(
     arg4: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0xa8);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
     let mut fighter_gobj = fighter_gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -172,12 +172,13 @@ pub fn fn_8029E21C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itLinkbomb_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x48);
     let pad: ArrV<'a, F32, 2> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut item: Item<'a> = null(ctx);
     let mut article: Article<'a> = null(ctx);
     let mut sa: itLinkBombAttributes<'a> = null(ctx);
     if !(fns::it_80272C6C(ctx, gobj) != 0) {
-        inl_fn_8029E21C_unfused(ctx, gobj);
+        inl_fn_8029E21C_unfused(ctx, gobj, Handle::addr(__inl));
     }
     item = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     article = (item).xC4_article_data();
@@ -259,7 +260,7 @@ pub fn itLinkbomb_UnkMotion2_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLinkbomb_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut item: Item<'a> = null(ctx);
     let mut temp_r3: i32 = 0;
@@ -299,6 +300,7 @@ pub fn it_8029EC34<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itLinkbomb_UnkMotion3_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
     let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut attrs: itLinkBombAttributes<'a> = Handle::cast::<itLinkBombAttributes<'a>>(
         ((Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).xC4_article_data())
@@ -314,7 +316,7 @@ pub fn itLinkbomb_UnkMotion3_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         inl_itLinkbomb_UnkMotion3_Anim_inline1_unfused(ctx, gobj);
     }
     if !Handle::is_null(attrs) {}
-    inl_itLinkbomb_UnkMotion3_Anim_inline2_unfused(ctx, gobj);
+    inl_itLinkbomb_UnkMotion3_Anim_inline2_unfused(ctx, gobj, Handle::addr(__inl));
     return 0_i32;
 }
 
@@ -326,8 +328,9 @@ pub fn itLinkbomb_UnkMotion3_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLinkbomb_UnkMotion3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
-    let _ = inl_itLinkbomb_UnkMotion2_Coll_unfused(ctx, gobj);
+    let _ = inl_itLinkbomb_UnkMotion2_Coll_unfused(ctx, gobj, Handle::addr(__inl));
     return 0_i32;
 }
 
@@ -428,8 +431,8 @@ pub fn itLinkbomb_UnkMotion4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn it_8029F69C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x78);
     let pad: ArrV<'a, i32, 2> = frame_at(ctx, &__frame, 0x0);
-    let item_pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let const_vec: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let item_pos: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let const_vec: Vec<'a> = frame_at(ctx, &__frame, 0x30);
     let mut gobj = gobj;
     let mut temp_r0: HSD_GObj<'a> = null(ctx);
     let mut temp_r3: HSD_GObj<'a> = null(ctx);
@@ -1002,9 +1005,8 @@ fn inl_it_8029DB5C_Inline_Matching_unfused<'a>(
     inl_it_8029DB5C_Inline_AnimAddWithMtxDirty_unfused(ctx, gobj);
 }
 
-fn inl_fn_8029E21C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let pad: ArrV<'a, i32, 2> = frame_at(ctx, &__frame, 0x0);
+fn inl_fn_8029E21C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let pad: ArrV<'a, i32, 2> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     fns::it_8029D9A4(ctx, gobj, 1_i32, 0_i32);
 }
@@ -1094,17 +1096,25 @@ fn inl_itLinkbomb_UnkMotion3_Anim_inline1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GO
     }
 }
 
-fn inl_itLinkbomb_UnkMotion3_Anim_inline2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+fn inl_itLinkbomb_UnkMotion3_Anim_inline2_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    __in_caller: u32,
+) {
+    let __inl: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     if !(fns::it_80272C6C(ctx, gobj) != 0) {
-        inl_fn_8029E21C_unfused(ctx, gobj);
+        inl_fn_8029E21C_unfused(ctx, gobj, Handle::addr(__inl));
     }
     fns::it_8029DB5C(ctx, gobj);
 }
 
-fn inl_itLinkbomb_UnkMotion2_Coll_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x18);
-    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_itLinkbomb_UnkMotion2_Coll_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    __in_caller: u32,
+) -> i32 {
+    let vel: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut item: Item<'a> = null(ctx);
     let mut temp_r3: i32 = 0;

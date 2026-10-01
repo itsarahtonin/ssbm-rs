@@ -29,12 +29,12 @@ use ssbm_rt::cpu as c;
 
 pub fn it_802E70BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x68);
-    let sp44: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let sp40: Val<'a, u32> = frame_at(ctx, &__frame, 0x4);
-    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let sp44: Val<'a, i32> = frame_at(ctx, &__frame, 0x3c);
+    let sp40: Val<'a, u32> = frame_at(ctx, &__frame, 0x38);
+    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
     let mut i: i32 = 0;
@@ -154,8 +154,8 @@ pub fn it_802E72E0<'a>(
     scale_mult: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0xb8);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x28);
+    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut parent = parent;
     let mut bone = bone;
     let mut r#type = r#type;
@@ -1502,7 +1502,7 @@ pub fn itArwinglaser_UnkMotion3_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itArwinglaser_UnkMotion2_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let scale_vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale_vec: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut f0: f64 = 0.0;
     let mut jobj: HSD_JObj<'a> =
@@ -1558,7 +1558,7 @@ pub fn itArwinglaser_UnkMotion2_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itArwinglaser_UnkMotion3_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let scale_vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale_vec: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let corneria_offset: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut pad: u32 = 0;
@@ -1632,12 +1632,12 @@ pub fn itArwinglaser_UnkMotion3_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itArwinglaser_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x60);
-    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let prev_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let curr_pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let sp18: Val<'a, u32> = frame_at(ctx, &__frame, 0x30);
-    let sp14: Val<'a, i32> = frame_at(ctx, &__frame, 0x34);
+    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let prev_pos: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let curr_pos: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let sp18: Val<'a, u32> = frame_at(ctx, &__frame, 0x10);
+    let sp14: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip2: Item<'a> = null(ctx);
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1674,7 +1674,7 @@ pub fn itArwinglaser_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i3
 
 pub fn itArwinglaser_UnkMotion3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     fns::lb_8000B1CC(
@@ -1711,9 +1711,9 @@ pub fn itArwinglaser_UnkMotion3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i3
 
 pub fn itArwinglaser_UnkMotion5_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let trans: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let scale_vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0x18);
+    let trans: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let scale_vec: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
     let mut parent_ip: Item<'a> = null(ctx);
@@ -1783,7 +1783,7 @@ pub fn itArwinglaser_UnkMotion5_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i3
 
 pub fn it_802E838C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     fns::lb_8000B1CC(
@@ -1805,7 +1805,7 @@ pub fn it_802E8418<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802E8420<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut pad: u8 = 0;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
@@ -1865,7 +1865,7 @@ pub fn it_802E8420<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802E85F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut jobj: HSD_JObj<'a> =

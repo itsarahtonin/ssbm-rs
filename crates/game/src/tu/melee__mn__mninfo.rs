@@ -168,13 +168,13 @@ pub fn mnInfo_80251D58<'a>(
     arg3: u32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x60);
-    let sp34: ArrV<'a, i8, 5> = frame_at(ctx, &__frame, 0x0);
-    let sp30: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x8);
-    let sp2C: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0xc);
-    let sp28: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x10);
-    let sp24: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x14);
+    let sp34: ArrV<'a, i8, 5> = frame_at(ctx, &__frame, 0x2c);
+    let sp30: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x28);
+    let sp2C: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x24);
+    let sp28: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x20);
+    let sp24: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x1c);
     let sp20: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x18);
-    let sp18: datetime<'a> = frame_at(ctx, &__frame, 0x1c);
+    let sp18: datetime<'a> = frame_at(ctx, &__frame, 0x10);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -265,7 +265,7 @@ pub fn mnInfo_80251D58<'a>(
 
 pub fn mnInfo_80251F04<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32, arg2: u32) {
     let __frame = ctx.stack_frame(0x30);
-    let sp16: Val<'a, u16> = frame_at(ctx, &__frame, 0x0);
+    let sp16: Val<'a, u16> = frame_at(ctx, &__frame, 0xe);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -376,8 +376,8 @@ pub fn fn_80251FE4<'a>(ctx: &'a Ctx) {
 
 pub fn mnInfo_802522B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut count: i32 = 0;
     let mut data: MnInfoData<'a> = null(ctx);
@@ -435,6 +435,7 @@ pub fn fn_802523B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn fn_802523D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut data: MnInfoData<'a> =
         (Handle::cast::<MnInfoData<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -444,12 +445,13 @@ pub fn fn_802523D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    inl_fn_802523D8_inline_unfused(ctx, data, gobj);
+    inl_fn_802523D8_inline_unfused(ctx, data, gobj, Handle::addr(__inl));
 }
 
 pub fn fn_80252548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut data: MnInfoData<'a> =
         (Handle::cast::<MnInfoData<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -459,7 +461,7 @@ pub fn fn_80252548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    inl_fn_80252548_inline_unfused(ctx, data, gobj);
+    inl_fn_80252548_inline_unfused(ctx, data, gobj, Handle::addr(__inl));
 }
 
 pub fn mnInfo_80252720<'a>(ctx: &'a Ctx, data: MnInfoData<'a>) {
@@ -708,10 +710,14 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
-fn inl_fn_802523D8_inline_unfused<'a>(ctx: &'a Ctx, data: MnInfoData<'a>, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x10);
+fn inl_fn_802523D8_inline_unfused<'a>(
+    ctx: &'a Ctx,
+    data: MnInfoData<'a>,
+    gobj: HSD_GObj<'a>,
+    __in_caller: u32,
+) {
+    let unused: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
+    let child: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x10);
     let mut data = data;
     let mut gobj = gobj;
     let mut proc: HSD_GObjProc<'a> = null(ctx);
@@ -792,9 +798,13 @@ fn inl_fn_802523D8_inline_unfused<'a>(ctx: &'a Ctx, data: MnInfoData<'a>, gobj: 
     }
 }
 
-fn inl_fn_80252548_inline_unfused<'a>(ctx: &'a Ctx, data: MnInfoData<'a>, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+fn inl_fn_80252548_inline_unfused<'a>(
+    ctx: &'a Ctx,
+    data: MnInfoData<'a>,
+    gobj: HSD_GObj<'a>,
+    __in_caller: u32,
+) {
+    let unused: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
     let mut data = data;
     let mut gobj = gobj;
     let mut proc: HSD_GObjProc<'a> = null(ctx);

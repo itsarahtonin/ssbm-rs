@@ -141,14 +141,14 @@ pub fn hsd_80392528<'a>(ctx: &'a Ctx, event: FnPtr<'a>) {
 
 pub fn hsd_8039254C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0xd0);
-    let default_col: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
-    let bg_col0: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let bg_col1: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let txt_col: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
-    let bg_col2: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
-    let bg_col3: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
-    let bar_col: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
+    let default_col: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let bg_col0: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
+    let bg_col1: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let txt_col: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let bg_col2: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let bg_col3: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let bar_col: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut line: f64 = 0.0;
     let mut bar_y: f64 = 0.0;
     let mut bar_x: f64 = 0.0;

@@ -152,6 +152,7 @@ pub fn ftLk_SpecialN_ProcessFv14<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftLk_SpecialN_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x3c);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -178,7 +179,7 @@ pub fn ftLk_SpecialN_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     inl_Fighter_SetDamageCallback_unfused(ctx, gobj, fnptr(ctx, 0x800eaf58));
     fns::ftAnim_SetAnimRate(ctx, gobj, (da).specialn_anim_rate());
     fns::ftAnim_8006EBA4(ctx, gobj);
-    if inl_isDrawback_unfused(ctx, gobj) == 1_i32 {
+    if inl_isDrawback_unfused(ctx, gobj, Handle::addr(__inl)) == 1_i32 {
         inl_ftLk_SpecialN_UnsetArrow_unfused(ctx, gobj);
         inl_ftLk_SpecialN_UnsetFv14_unfused(ctx, gobj);
         fns::ft_8008A2BC(ctx, gobj);
@@ -187,6 +188,7 @@ pub fn ftLk_SpecialN_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftLk_SpecialAirN_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x3c);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -211,7 +213,7 @@ pub fn ftLk_SpecialAirN_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     inl_Fighter_SetDamageCallback_unfused(ctx, gobj, fnptr(ctx, 0x800eaf58));
     fns::ftAnim_SetAnimRate(ctx, gobj, (da).specialn_anim_rate());
     fns::ftAnim_8006EBA4(ctx, gobj);
-    if inl_isDrawback_unfused(ctx, gobj) == 1_i32 {
+    if inl_isDrawback_unfused(ctx, gobj, Handle::addr(__inl)) == 1_i32 {
         inl_ftLk_SpecialN_UnsetArrow_unfused(ctx, gobj);
         inl_ftLk_SpecialN_UnsetFv14_unfused(ctx, gobj);
         if (da).x8() == fp::frsp(0_i32 as f64) {
@@ -224,6 +226,8 @@ pub fn ftLk_SpecialAirN_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftLk_SpecialNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x88);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -235,8 +239,8 @@ pub fn ftLk_SpecialNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).cmd_vars().at(2_i32).set((0_i32 as u32));
     }
     fns::ftAnim_SetAnimRate(ctx, gobj, (da).specialn_anim_rate());
-    if !(inl_isDrawn_unfused(ctx, gobj) != 0) {
-        inl_animate_unfused(ctx, gobj);
+    if !(inl_isDrawn_unfused(ctx, gobj, Handle::addr(__inl)) != 0) {
+        inl_animate_unfused(ctx, gobj, Handle::addr(__inl_2));
         if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
             fns::Fighter_ChangeMotionState(
                 ctx,
@@ -260,8 +264,9 @@ pub fn ftLk_SpecialNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftLk_SpecialNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
+    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
-    inl_animate_nopad_unfused(ctx, gobj);
+    inl_animate_nopad_unfused(ctx, gobj, Handle::addr(__inl));
 }
 
 pub fn ftLk_SpecialNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -286,6 +291,8 @@ pub fn ftLk_SpecialNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftLk_SpecialAirNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x90);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -296,8 +303,8 @@ pub fn ftLk_SpecialAirNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).mv().lk().specialn().x0().set_x(1.0);
         (fp).cmd_vars().at(2_i32).set((0_i32 as u32));
     }
-    if !(inl_isDrawn_unfused(ctx, gobj) != 0) {
-        inl_animate_unfused(ctx, gobj);
+    if !(inl_isDrawn_unfused(ctx, gobj, Handle::addr(__inl)) != 0) {
+        inl_animate_unfused(ctx, gobj, Handle::addr(__inl_2));
         if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
             fns::Fighter_ChangeMotionState(
                 ctx,
@@ -333,8 +340,9 @@ pub fn ftLk_SpecialAirNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftLk_SpecialAirNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
+    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
-    inl_animate_nopad_unfused(ctx, gobj);
+    inl_animate_nopad_unfused(ctx, gobj, Handle::addr(__inl));
 }
 
 pub fn ftLk_SpecialAirNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -525,10 +533,11 @@ pub fn ftLk_SpecialNLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftLk_SpecialNEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    inl_doEndColl_unfused(ctx, gobj);
+    inl_doEndColl_unfused(ctx, gobj, Handle::addr(__inl));
     if (fns::ft_80082708(ctx, gobj) as u32) == ((enums::GA_Ground as i32) as u32) {
         inl_ftCommon_GroundToAirStateChange_unfused(
             ctx,
@@ -556,10 +565,11 @@ pub fn ftLk_SpecialAirNLoop_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftLk_SpecialAirNEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    inl_doEndColl_unfused(ctx, gobj);
+    inl_doEndColl_unfused(ctx, gobj, Handle::addr(__inl));
     if (fns::ft_80081D0C(ctx, gobj) as u32) == ((enums::GA_Air as i32) as u32) {
         inl_ftCommon_AirToGroundStateChange_unfused(
             ctx,
@@ -595,9 +605,8 @@ fn inl_Fighter_SetDamageCallback_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, c
     (fp).set_death2_cb(fnptr(ctx, 0x800eaf58));
 }
 
-fn inl_isDrawback_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x18);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_isDrawback_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) -> i32 {
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -688,9 +697,8 @@ fn inl_ftLk_SpecialN_UnsetFv14_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
-fn inl_isDrawn_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x18);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_isDrawn_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) -> i32 {
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -724,11 +732,10 @@ fn inl_isDrawn_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     return 0_i32;
 }
 
-fn inl_animate_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x30);
-    let lpos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let rpos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let root: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+fn inl_animate_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let lpos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let rpos: Vec<'a> = ptr(ctx, __in_caller + 0xc);
+    let root: Vec<'a> = ptr(ctx, __in_caller + 0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -813,11 +820,10 @@ fn inl_animate_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
-fn inl_animate_nopad_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x30);
-    let lpos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let rpos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let root: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+fn inl_animate_nopad_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let lpos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let rpos: Vec<'a> = ptr(ctx, __in_caller + 0xc);
+    let root: Vec<'a> = ptr(ctx, __in_caller + 0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -959,10 +965,9 @@ fn inl_doColl_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
     }
 }
 
-fn inl_doEndColl_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x20);
-    let rpos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let lpos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+fn inl_doEndColl_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let rpos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let lpos: Vec<'a> = ptr(ctx, __in_caller + 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

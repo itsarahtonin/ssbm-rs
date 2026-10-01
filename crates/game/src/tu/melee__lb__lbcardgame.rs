@@ -37,7 +37,7 @@ pub fn lb_8001C600<'a>(ctx: &'a Ctx) {
 
 pub fn lb_8001C658<'a>(ctx: &'a Ctx) -> Val<'a, i8> {
     let __frame = ctx.stack_frame(0x40);
-    let time: OSCalendarTime<'a> = frame_at(ctx, &__frame, 0x0);
+    let time: OSCalendarTime<'a> = frame_at(ctx, &__frame, 0x8);
     let mut title: Val<'a, i8> = null(ctx);
     let mut i: i32 = 0;
     let mut ticks: i64 = fns::OSGetTime(ctx);
@@ -129,6 +129,7 @@ pub fn lb_8001C87C<'a>(ctx: &'a Ctx) -> u32 {
 
 pub fn lb_8001C8BC<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x48);
+    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x8);
     (if ((statics::melee__lb__lbcardgame::state(ctx).enable()) != 0) {
         ({ () })
     } else {
@@ -141,7 +142,7 @@ pub fn lb_8001C8BC<'a>(ctx: &'a Ctx) -> i32 {
     });
     return {
         let __t1 = inl_getCurrentIcon_unfused(ctx);
-        let __t2 = inl_lb_8001C658_unfused(ctx);
+        let __t2 = inl_lb_8001C658_unfused(ctx, Handle::addr(__inl));
         fns::lb_8001BC18(
             ctx,
             0_i32,
@@ -517,9 +518,8 @@ pub fn lbCardGame_Init<'a>(ctx: &'a Ctx) {
     }
 }
 
-fn inl_lb_8001C658_unfused<'a>(ctx: &'a Ctx) -> Val<'a, i8> {
-    let __frame = ctx.stack_frame(0x30);
-    let time: OSCalendarTime<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_lb_8001C658_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) -> Val<'a, i8> {
+    let time: OSCalendarTime<'a> = ptr(ctx, __in_caller + 0x0);
     let mut title: Val<'a, i8> = null(ctx);
     let mut i: i32 = 0;
     let mut ticks: i64 = fns::OSGetTime(ctx);

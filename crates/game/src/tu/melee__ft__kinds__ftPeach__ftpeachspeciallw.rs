@@ -105,9 +105,9 @@ pub fn ftPe_SpecialLw_8011CFA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn spawnVeg<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let p1: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let p2: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let p1: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let p2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

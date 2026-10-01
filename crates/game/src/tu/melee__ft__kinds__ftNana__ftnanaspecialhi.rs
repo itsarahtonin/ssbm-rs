@@ -29,8 +29,8 @@ use crate::support::*;
 pub fn ftNn_Init_801230D0<'a>(ctx: &'a Ctx, nana_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
     let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
-    let popo_vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let nana_vec: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let popo_vec: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let nana_vec: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut nana_gobj = nana_gobj;
     let mut nana_fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, nana_gobj)));
@@ -88,8 +88,8 @@ pub fn ftNn_Init_801230D0<'a>(ctx: &'a Ctx, nana_gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn fn_80123218<'a>(ctx: &'a Ctx, nana_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let nana_vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let nana_vec: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut nana_gobj = nana_gobj;
     let mut nana_fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, nana_gobj)));

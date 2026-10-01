@@ -1651,7 +1651,7 @@ fn asm_OSInitContext(ctx: &Ctx) {
 
 pub fn OSDumpContext<'a>(ctx: &'a Ctx, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x2f8);
-    let fpuContext: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+    let fpuContext: OSContext<'a> = frame_at(ctx, &__frame, 0x8);
     let mut context = context;
     let mut i: u32 = 0;
     let mut p: Val<'a, u32> = null(ctx);

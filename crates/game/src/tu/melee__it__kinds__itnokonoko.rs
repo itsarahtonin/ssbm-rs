@@ -360,7 +360,7 @@ pub fn it_802DCEC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802DCFBC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let r#box: _itECB<'a> = frame_at(ctx, &__frame, 0x0);
+    let r#box: _itECB<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     fns::it_802756D0(ctx, gobj);
@@ -382,7 +382,7 @@ pub fn it_802DCFBC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itNokonoko_UnkMotion5_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut var_f2: f64 = 0.0;
     let mut ip_2: HSD_GObj<'a> = null(ctx);
@@ -550,6 +550,7 @@ pub fn it_802DD4F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itNokonoko_UnkMotion9_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
     let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -558,7 +559,7 @@ pub fn itNokonoko_UnkMotion9_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         }
     }
     if fns::it_80272C6C(ctx, gobj) == 0_i32 {
-        inl_it_802DD4F4_unfused(ctx, gobj);
+        inl_it_802DD4F4_unfused(ctx, gobj, Handle::addr(__inl));
     }
     return 0_i32;
 }
@@ -805,9 +806,8 @@ fn inl_it_802DD290_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, val: i32
     fns::it_802DD4A8(ctx, gobj, 3_i32, val);
 }
 
-fn inl_it_802DD4F4_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+fn inl_it_802DD4F4_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}

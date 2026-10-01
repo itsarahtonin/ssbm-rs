@@ -223,9 +223,9 @@ pub fn __strtoul<'a>(
 
 pub fn strtoul<'a>(ctx: &'a Ctx, str: Val<'a, i8>, end: Ptr<'a, Val<'a, i8>>, base: i32) -> u32 {
     let __frame = ctx.stack_frame(0x30);
-    let count: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let negative: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
-    let overflow: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
+    let count: Val<'a, i32> = frame_at(ctx, &__frame, 0x1c);
+    let negative: Val<'a, i32> = frame_at(ctx, &__frame, 0x18);
+    let overflow: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
     let isc: __InStrCtrl<'a> = frame_at(ctx, &__frame, 0xc);
     let mut str = str;
     let mut end = end;

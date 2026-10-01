@@ -53,9 +53,9 @@ pub fn it_80293DCC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_80293E34<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let result: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let result: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut temp_r31: Item<'a> = null(ctx);
     let mut temp_r3: i32 = 0;

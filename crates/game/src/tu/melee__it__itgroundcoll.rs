@@ -645,11 +645,12 @@ pub fn it_8026E0F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_8026E15C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 22> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 22> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut res2: i32 = 0;
-    let mut res: i32 = inl_it_8026E_inline_unfused(ctx, gobj);
+    let mut res: i32 = inl_it_8026E_inline_unfused(ctx, gobj, Handle::addr(__inl));
     if ((res & 15_i32) != 0) {
         fns::it_80276FC4(ctx, gobj, res);
         if ((res & 1_i32) != 0) {
@@ -670,10 +671,11 @@ pub fn it_8026E15C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
 
 pub fn it_8026E248<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 18> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 18> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut arg1 = arg1;
-    let mut res: i32 = inl_it_8026E_inline_unfused(ctx, gobj);
+    let mut res: i32 = inl_it_8026E_inline_unfused(ctx, gobj, Handle::addr(__inl));
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -692,10 +694,11 @@ pub fn it_8026E248<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
 
 pub fn it_8026E32C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x18);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
-    let mut res: i32 = inl_it_8026E_inline_unfused(ctx, item_gobj);
+    let mut res: i32 = inl_it_8026E_inline_unfused(ctx, item_gobj, Handle::addr(__inl));
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -984,8 +987,8 @@ pub fn it_8026E9A4<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0x38);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let p: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
+    let p: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1026,8 +1029,8 @@ pub fn it_8026EA20<'a>(
     flags_out: Val<'a, u32>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let p: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let p: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1072,8 +1075,8 @@ pub fn it_8026EA9C<'a>(
     arg6: i32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let p: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let p: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1125,9 +1128,8 @@ fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
     });
 }
 
-fn inl_it_8026E_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+fn inl_it_8026E_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) -> i32 {
+    let unused: ArrV<'a, u8, 24> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut cond: i32 = 0;

@@ -161,7 +161,7 @@ pub fn fn_801695BC<'a>(
     arg4: Val<'a, i8>,
 ) {
     let __frame = ctx.stack_frame(0x40);
-    let colors: ArrV<'a, i8, 6> = frame_at(ctx, &__frame, 0x0);
+    let colors: ArrV<'a, i8, 6> = frame_at(ctx, &__frame, 0x14);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -530,7 +530,7 @@ pub fn fn_80169A84<'a>(ctx: &'a Ctx, arg0: u8, arg1: Val<'a, i8>, arg2: Val<'a, 
 
 pub fn fn_80169C54<'a>(ctx: &'a Ctx, arg0: i8, arg1: i8) {
     let __frame = ctx.stack_frame(0x58);
-    let costumes: ArrV<'a, i32, 7> = frame_at(ctx, &__frame, 0x0);
+    let costumes: ArrV<'a, i32, 7> = frame_at(ctx, &__frame, 0x10);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut character: Val<'a, i8> = null(ctx);
@@ -998,8 +998,8 @@ pub fn fn_8016A488<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn fn_8016A4C8<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x118);
-    let spawn_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 196> = frame_at(ctx, &__frame, 0xc);
+    let spawn_pos: Vec<'a> = frame_at(ctx, &__frame, 0xd4);
+    let unused: ArrV<'a, u8, 196> = frame_at(ctx, &__frame, 0x0);
     let mut gp: lbl_8046B488_t<'a> = null(ctx);
     let mut has_active_spawn: i32 = 0;
     let mut spawn_enabled: i32 = 0;

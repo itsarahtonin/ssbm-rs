@@ -34,9 +34,9 @@ pub fn grDisplay_801C5B90<'a>(
     rendermode: u32,
 ) {
     let __frame = ctx.stack_frame(0x90);
-    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let fighter_pos: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let unused: ArrV<'a, u32, 6> = frame_at(ctx, &__frame, 0x3c);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x34);
+    let fighter_pos: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u32, 6> = frame_at(ctx, &__frame, 0x0);
     let mut jobj = jobj;
     let mut vmtx = vmtx;
     let mut flags = flags;

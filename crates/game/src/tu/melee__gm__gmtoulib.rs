@@ -547,8 +547,8 @@ pub fn fn_8018AA74<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, entry_idx: i32, slot_id
 
 pub fn fn_8018B090<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xd0);
-    let sp: lbl_803B7C80_t<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x28);
+    let sp: lbl_803B7C80_t<'a> = frame_at(ctx, &__frame, 0x4c);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut entries: BracketEntry<'a> = fns::lbl_80473AB8(ctx).get(0);
     let mut tm: TmData<'a> = fns::gm_GetTournamentData(ctx);
@@ -1303,40 +1303,40 @@ pub fn fn_8018C8D4<'a>(
     arg5: i32,
 ) {
     let __frame = ctx.stack_frame(0x198);
-    let c0: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let c1: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let c2: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let c3: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let c4: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
-    let c5: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
-    let c6: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
-    let c7: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
-    let c8: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
-    let c9: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
-    let c10: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
-    let c11: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
-    let c12: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
-    let c13: _GXColor<'a> = frame_at(ctx, &__frame, 0x34);
-    let c14: _GXColor<'a> = frame_at(ctx, &__frame, 0x38);
-    let c15: _GXColor<'a> = frame_at(ctx, &__frame, 0x3c);
-    let c16: _GXColor<'a> = frame_at(ctx, &__frame, 0x40);
-    let c17: _GXColor<'a> = frame_at(ctx, &__frame, 0x44);
-    let c18: _GXColor<'a> = frame_at(ctx, &__frame, 0x48);
-    let c19: _GXColor<'a> = frame_at(ctx, &__frame, 0x4c);
-    let c20: _GXColor<'a> = frame_at(ctx, &__frame, 0x50);
-    let c21: _GXColor<'a> = frame_at(ctx, &__frame, 0x54);
-    let c22: _GXColor<'a> = frame_at(ctx, &__frame, 0x58);
-    let c23: _GXColor<'a> = frame_at(ctx, &__frame, 0x5c);
-    let c24: _GXColor<'a> = frame_at(ctx, &__frame, 0x60);
-    let c25: _GXColor<'a> = frame_at(ctx, &__frame, 0x64);
-    let c26: _GXColor<'a> = frame_at(ctx, &__frame, 0x68);
-    let c27: _GXColor<'a> = frame_at(ctx, &__frame, 0x6c);
-    let c28: _GXColor<'a> = frame_at(ctx, &__frame, 0x70);
-    let c29: _GXColor<'a> = frame_at(ctx, &__frame, 0x74);
-    let c30: _GXColor<'a> = frame_at(ctx, &__frame, 0x78);
-    let c31: _GXColor<'a> = frame_at(ctx, &__frame, 0x7c);
-    let c32: _GXColor<'a> = frame_at(ctx, &__frame, 0x80);
-    let c33: _GXColor<'a> = frame_at(ctx, &__frame, 0x84);
+    let c0: _GXColor<'a> = frame_at(ctx, &__frame, 0x9c);
+    let c1: _GXColor<'a> = frame_at(ctx, &__frame, 0x98);
+    let c2: _GXColor<'a> = frame_at(ctx, &__frame, 0x94);
+    let c3: _GXColor<'a> = frame_at(ctx, &__frame, 0x90);
+    let c4: _GXColor<'a> = frame_at(ctx, &__frame, 0x8c);
+    let c5: _GXColor<'a> = frame_at(ctx, &__frame, 0x88);
+    let c6: _GXColor<'a> = frame_at(ctx, &__frame, 0x84);
+    let c7: _GXColor<'a> = frame_at(ctx, &__frame, 0x80);
+    let c8: _GXColor<'a> = frame_at(ctx, &__frame, 0x7c);
+    let c9: _GXColor<'a> = frame_at(ctx, &__frame, 0x78);
+    let c10: _GXColor<'a> = frame_at(ctx, &__frame, 0x74);
+    let c11: _GXColor<'a> = frame_at(ctx, &__frame, 0x70);
+    let c12: _GXColor<'a> = frame_at(ctx, &__frame, 0x6c);
+    let c13: _GXColor<'a> = frame_at(ctx, &__frame, 0x68);
+    let c14: _GXColor<'a> = frame_at(ctx, &__frame, 0x64);
+    let c15: _GXColor<'a> = frame_at(ctx, &__frame, 0x60);
+    let c16: _GXColor<'a> = frame_at(ctx, &__frame, 0x5c);
+    let c17: _GXColor<'a> = frame_at(ctx, &__frame, 0x58);
+    let c18: _GXColor<'a> = frame_at(ctx, &__frame, 0x54);
+    let c19: _GXColor<'a> = frame_at(ctx, &__frame, 0x50);
+    let c20: _GXColor<'a> = frame_at(ctx, &__frame, 0x4c);
+    let c21: _GXColor<'a> = frame_at(ctx, &__frame, 0x48);
+    let c22: _GXColor<'a> = frame_at(ctx, &__frame, 0x44);
+    let c23: _GXColor<'a> = frame_at(ctx, &__frame, 0x40);
+    let c24: _GXColor<'a> = frame_at(ctx, &__frame, 0x3c);
+    let c25: _GXColor<'a> = frame_at(ctx, &__frame, 0x38);
+    let c26: _GXColor<'a> = frame_at(ctx, &__frame, 0x34);
+    let c27: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let c28: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
+    let c29: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
+    let c30: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
+    let c31: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let c32: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
+    let c33: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1830,26 +1830,26 @@ pub fn fn_8018D50C<'a>(
     arg5: i32,
 ) {
     let __frame = ctx.stack_frame(0x108);
-    let c0: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let c1: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let c2: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let c3: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let c4: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
-    let c5: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
-    let c6: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
-    let c7: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
-    let c8: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
-    let c9: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
-    let c10: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
-    let c11: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
-    let c12: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let c0: _GXColor<'a> = frame_at(ctx, &__frame, 0x68);
+    let c1: _GXColor<'a> = frame_at(ctx, &__frame, 0x64);
+    let c2: _GXColor<'a> = frame_at(ctx, &__frame, 0x60);
+    let c3: _GXColor<'a> = frame_at(ctx, &__frame, 0x5c);
+    let c4: _GXColor<'a> = frame_at(ctx, &__frame, 0x58);
+    let c5: _GXColor<'a> = frame_at(ctx, &__frame, 0x54);
+    let c6: _GXColor<'a> = frame_at(ctx, &__frame, 0x50);
+    let c7: _GXColor<'a> = frame_at(ctx, &__frame, 0x4c);
+    let c8: _GXColor<'a> = frame_at(ctx, &__frame, 0x48);
+    let c9: _GXColor<'a> = frame_at(ctx, &__frame, 0x44);
+    let c10: _GXColor<'a> = frame_at(ctx, &__frame, 0x40);
+    let c11: _GXColor<'a> = frame_at(ctx, &__frame, 0x3c);
+    let c12: _GXColor<'a> = frame_at(ctx, &__frame, 0x38);
     let c13: _GXColor<'a> = frame_at(ctx, &__frame, 0x34);
-    let c14: _GXColor<'a> = frame_at(ctx, &__frame, 0x38);
-    let c15: _GXColor<'a> = frame_at(ctx, &__frame, 0x3c);
-    let c16: _GXColor<'a> = frame_at(ctx, &__frame, 0x40);
-    let c17: _GXColor<'a> = frame_at(ctx, &__frame, 0x44);
-    let c18: _GXColor<'a> = frame_at(ctx, &__frame, 0x48);
-    let c19: _GXColor<'a> = frame_at(ctx, &__frame, 0x4c);
+    let c14: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let c15: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
+    let c16: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
+    let c17: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
+    let c18: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let c19: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut data = data;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -2146,16 +2146,16 @@ pub fn fn_8018DC18<'a>(
     arg5: i32,
 ) {
     let __frame = ctx.stack_frame(0xe8);
-    let c0: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let c1: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let c2: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let c3: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let c4: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
-    let c5: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
-    let c6: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
-    let c7: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
+    let c0: _GXColor<'a> = frame_at(ctx, &__frame, 0x40);
+    let c1: _GXColor<'a> = frame_at(ctx, &__frame, 0x3c);
+    let c2: _GXColor<'a> = frame_at(ctx, &__frame, 0x38);
+    let c3: _GXColor<'a> = frame_at(ctx, &__frame, 0x34);
+    let c4: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let c5: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
+    let c6: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
+    let c7: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
     let c8: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
-    let c9: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
+    let c9: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut data = data;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -2301,20 +2301,20 @@ pub fn fn_8018DF68<'a>(
     arg5: i32,
 ) {
     let __frame = ctx.stack_frame(0x118);
-    let line_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let first_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let right_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let left_third_color: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let right_third_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
-    let horizontal_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
-    let slot0_vertical_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
-    let slot0_horizontal_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
-    let slot1_vertical_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
-    let slot1_horizontal_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
+    let line_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x50);
+    let first_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x4c);
+    let right_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x48);
+    let left_third_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x44);
+    let right_third_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x40);
+    let horizontal_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x3c);
+    let slot0_vertical_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x38);
+    let slot0_horizontal_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x34);
+    let slot1_vertical_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let slot1_horizontal_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
     let slot2_vertical_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
-    let slot2_horizontal_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
-    let slot3_vertical_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
-    let slot3_horizontal_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x34);
+    let slot2_horizontal_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
+    let slot3_vertical_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let slot3_horizontal_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -2597,8 +2597,8 @@ pub fn fn_8018E46C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
 
 pub fn fn_8018E618<'a>(ctx: &'a Ctx, arg0: i32, farg0: f64, arg1: i32) {
     let __frame = ctx.stack_frame(0x78);
-    let cam: HSD_CameraDescPerspective<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x38);
+    let cam: HSD_CameraDescPerspective<'a> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut farg0 = farg0;
     let mut arg1 = arg1;
@@ -2891,8 +2891,8 @@ pub fn fn_8018ECA8<'a>(
     jobj_idx2: i32,
 ) {
     let __frame = ctx.stack_frame(0x58);
-    let hmn_texts: ArrP<'a, Val<'a, i8>, 2> = frame_at(ctx, &__frame, 0x0);
-    let cpu_texts: ArrP<'a, Val<'a, i8>, 2> = frame_at(ctx, &__frame, 0x8);
+    let hmn_texts: ArrP<'a, Val<'a, i8>, 2> = frame_at(ctx, &__frame, 0x20);
+    let cpu_texts: ArrP<'a, Val<'a, i8>, 2> = frame_at(ctx, &__frame, 0x18);
     let mut char_id = char_id;
     let mut name_type = name_type;
     let mut jobj_idx1 = jobj_idx1;
@@ -3062,7 +3062,7 @@ pub fn fn_8018ECA8<'a>(
 
 pub fn fn_8018F00C<'a>(ctx: &'a Ctx, dest: Val<'a, i8>, slot_id: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let templates_800: ArrP<'a, Val<'a, i8>, 2> = frame_at(ctx, &__frame, 0x0);
+    let templates_800: ArrP<'a, Val<'a, i8>, 2> = frame_at(ctx, &__frame, 0x10);
     let templates_900: ArrP<'a, Val<'a, i8>, 2> = frame_at(ctx, &__frame, 0x8);
     let mut dest = dest;
     let mut slot_id = slot_id;
@@ -3806,7 +3806,7 @@ pub fn fn_801904D0<'a>(ctx: &'a Ctx) {
 
 pub fn fn_80190520<'a>(ctx: &'a Ctx, x: f64, y: f64, z: f64) {
     let __frame = ctx.stack_frame(0x38);
-    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut x = x;
     let mut y = y;
     let mut z = z;
@@ -3837,7 +3837,7 @@ pub fn fn_80190520<'a>(ctx: &'a Ctx, x: f64, y: f64, z: f64) {
 pub fn gm_801905F0<'a>(ctx: &'a Ctx, arg0: StartMeleeData<'a>) {
     let __frame = ctx.stack_frame(0x88);
     let _padA: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let sp18: TmVsData<'a> = frame_at(ctx, &__frame, 0x8);
+    let sp18: TmVsData<'a> = frame_at(ctx, &__frame, 0x10);
     let mut arg0 = arg0;
     let mut i: i32 = 0;
     let mut tm: TmData<'a> = fns::gm_804771C4(ctx);

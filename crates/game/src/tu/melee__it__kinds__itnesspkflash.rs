@@ -73,8 +73,8 @@ pub fn it_802AA8C0<'a>(
     facing_dir: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x88);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4c);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut kind = kind;
@@ -818,6 +818,7 @@ fn asm_itNesspkflash_UnkMotion0_Anim(ctx: &Ctx) {
 
 pub fn itNesspkflash_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
@@ -871,18 +872,19 @@ pub fn itNesspkflash_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i3
             }
         }
     }
-    inl_itNesspkflash_SetScale(ctx, jobj, ip, attr);
+    inl_itNesspkflash_SetScale(ctx, jobj, ip, attr, Handle::addr(__inl));
     return fns::it_80273130(ctx, gobj);
 }
 
 pub fn itNesspkflash_UnkMotion2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
     let mut attr: itFlashAttributes<'a> =
         Handle::cast::<itFlashAttributes<'a>>(((ip).xC4_article_data()).x4_specialAttributes());
-    inl_itNesspkflash_SetScale(ctx, jobj, ip, attr);
+    inl_itNesspkflash_SetScale(ctx, jobj, ip, attr, Handle::addr(__inl));
     return fns::it_80273130(ctx, gobj);
 }
 
@@ -1369,6 +1371,7 @@ pub fn itNesspkflash_UnkMotion2_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itNesspkflash_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attr: itFlashAttributes<'a> =
@@ -1380,7 +1383,7 @@ pub fn itNesspkflash_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i3
         fns::Item_8026B074(ctx, ip);
         fns::Item_8026AE84(ctx, ip, 134_i32, (127_i32 as u8), (64_i32 as u8));
     }
-    inl_itNesspkflash_SetScale(ctx, jobj, ip, attr);
+    inl_itNesspkflash_SetScale(ctx, jobj, ip, attr, Handle::addr(__inl));
     return 0_i32;
 }
 
@@ -1568,9 +1571,9 @@ fn inl_itNesspkflash_SetScale<'a>(
     jobj: HSD_JObj<'a>,
     ip: Item<'a>,
     attr: itFlashAttributes<'a>,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x18);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut jobj = jobj;
     let mut ip = ip;
     let mut attr = attr;

@@ -124,9 +124,9 @@ pub fn Callback<'a>(ctx: &'a Ctx, result: i32, block: DVDCommandBlock<'a>) {
 
 pub fn __OSReboot<'a>(ctx: &'a Ctx, resetCode: u32, bootDol: u32) {
     let __frame = ctx.stack_frame(0x348);
-    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
-    let dvdCmd: DVDCommandBlock<'a> = frame_at(ctx, &__frame, 0x2c8);
-    let dvdCmd2: DVDCommandBlock<'a> = frame_at(ctx, &__frame, 0x2f8);
+    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x68);
+    let dvdCmd: DVDCommandBlock<'a> = frame_at(ctx, &__frame, 0x38);
+    let dvdCmd2: DVDCommandBlock<'a> = frame_at(ctx, &__frame, 0x8);
     let mut resetCode = resetCode;
     let mut bootDol = bootDol;
     let mut numBytes: u32 = 0;

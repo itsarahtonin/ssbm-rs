@@ -136,7 +136,7 @@ pub fn it_802AB58C<'a>(
     facing_dir: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0xa0);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x28);
     let mut owner = owner;
     let mut pos = pos;
     let mut facing_dir = facing_dir;
@@ -404,9 +404,9 @@ pub fn itNesspkthunderball_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>)
 
 pub fn itNesspkthunderball_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let stick: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let stick: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let cross: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attr: itPKThunderAttributes<'a> =

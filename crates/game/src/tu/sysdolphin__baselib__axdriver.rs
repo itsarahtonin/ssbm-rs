@@ -169,7 +169,7 @@ pub fn HSD_AudioSFXKeyOffTrack<'a>(ctx: &'a Ctx, track: i32) {
 
 pub fn AXDriverExec<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) {
     let __frame = ctx.stack_frame(0xc0);
-    let sqrt_tmp: ArrV<'a, F32, 8> = frame_at(ctx, &__frame, 0x0);
+    let sqrt_tmp: ArrV<'a, F32, 8> = frame_at(ctx, &__frame, 0x8);
     let mut v = v;
     let mut flag: u32 = 0;
     let mut i: i32 = 0;
@@ -1398,7 +1398,7 @@ pub fn fn_8038DA5C<'a>(ctx: &'a Ctx, result: i32, fileInfo: DVDFileInfo<'a>) {
 
 pub fn AXDriver_8038DA70<'a>(ctx: &'a Ctx, path: Val<'a, i8>, callback: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let fileInfo: DVDFileInfo<'a> = frame_at(ctx, &__frame, 0x0);
+    let fileInfo: DVDFileInfo<'a> = frame_at(ctx, &__frame, 0x8);
     let mut path = path;
     let mut callback = callback;
     let mut entrynum: i32 = 0;
@@ -1838,7 +1838,7 @@ pub fn AXDriverSetupAux<'a>(ctx: &'a Ctx, channel: i32, r#type: i32, param: Addr
 
 pub fn HSD_AudioGetAuxHeapSize<'a>(ctx: &'a Ctx, r#type: i32, param: Addr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x70);
-    let dims: ArrV<'a, i32, 8> = frame_at(ctx, &__frame, 0x0);
+    let dims: ArrV<'a, i32, 8> = frame_at(ctx, &__frame, 0x30);
     let dims_2: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x20);
     let mut r#type = r#type;
     let mut param = param;

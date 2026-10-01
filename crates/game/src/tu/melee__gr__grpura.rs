@@ -253,10 +253,10 @@ pub fn stageGObj1_Callback1<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
 
 pub fn stageGObj1_GObjProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x78);
-    let spilC: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp18: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let _pad4: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let spilC: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
+    let sp18: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let _pad4: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((arg0).user_data());
     let mut t: f64 = 0.0;
@@ -364,9 +364,9 @@ pub fn stageGObj2_Callback1<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
 
 pub fn stageGObj2_GObjProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let quat: Quaternion<'a> = frame_at(ctx, &__frame, 0x18);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let quat: Quaternion<'a> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut pad2: u32 = 0;
     let mut gp: Ground<'a> =
@@ -504,7 +504,7 @@ pub fn grPura_802125F0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn grPura_80212CD4<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let subject_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let subject_pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((arg0).user_data());
     let mut gp2: Ground<'a> = gp;
@@ -587,7 +587,7 @@ pub fn grPura_80212CD4<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn grPura_80212EF4<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut i: i32 = 0;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((arg0).user_data());
@@ -665,7 +665,7 @@ pub fn grPura_80212FC0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn grPura_80213030<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut unused1: u32 = 0;
     let mut var_r30: u32 = 0;

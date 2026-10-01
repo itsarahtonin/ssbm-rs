@@ -55,9 +55,9 @@ pub fn mnVibration_GetNameRowJObj<'a>(ctx: &'a Ctx, count: i32) -> HSD_JObj<'a> 
 
 pub fn mnVibration_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x118);
-    let panel_jobj2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let panel_jobj3: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 96> = frame_at(ctx, &__frame, 0x8);
+    let panel_jobj2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc8);
+    let panel_jobj3: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc4);
+    let unused: ArrV<'a, u8, 96> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut data: MnVibrationData<'a> =
         Handle::cast::<MnVibrationData<'a>>((fns::mnVibration_804D6C28(ctx).get()).user_data());
@@ -411,8 +411,8 @@ pub fn mnVibration_CursorThink<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnVibration_UpdatePortPanel<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>, arg1: u8, arg2: u8) {
     let __frame = ctx.stack_frame(0x38);
-    let sp14: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let sp10: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
+    let sp14: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
+    let sp10: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -546,7 +546,7 @@ pub fn mnVibration_CreatePortPanels<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn mnVibration_CreateNameRow<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: u8, arg2: u8) {
     let __frame = ctx.stack_frame(0x68);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -676,8 +676,8 @@ pub fn mnVibration_OnAnimComplete<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnVibration_Think<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x80);
-    let port_anim_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x4);
+    let port_anim_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x3c);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut data: MnVibrationData<'a> = Handle::cast::<MnVibrationData<'a>>((gobj).user_data());
     let mut panel_jobj: HSD_JObj<'a> = null(ctx);

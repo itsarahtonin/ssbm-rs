@@ -478,8 +478,8 @@ pub fn fn_8016FAD4<'a>(
     player: u8,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let rankings: ArrV<'a, u8, 7> = frame_at(ctx, &__frame, 0x0);
-    let scores: ArrV<'a, i32, 6> = frame_at(ctx, &__frame, 0x8);
+    let rankings: ArrV<'a, u8, 7> = frame_at(ctx, &__frame, 0x28);
+    let scores: ArrV<'a, i32, 6> = frame_at(ctx, &__frame, 0x10);
     let mut rules = rules;
     let mut kind = kind;
     let mut flags = flags;
@@ -716,15 +716,15 @@ pub fn fn_801701B8<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn fn_801701C0<'a>(ctx: &'a Ctx, rules: MatchEnd<'a>, arg1: i32, arg2: i32) -> i32 {
     let __frame = ctx.stack_frame(0xf0);
-    let scores: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x0);
-    let rankings: ArrV<'a, u8, 7> = frame_at(ctx, &__frame, 0x10);
-    let vals: ArrV<'a, i32, 6> = frame_at(ctx, &__frame, 0x18);
-    let vals_2: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x30);
-    let vals_3: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x40);
-    let vals_4: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x50);
-    let vals_5: ArrV<'a, F32, 4> = frame_at(ctx, &__frame, 0x60);
-    let vals_6: ArrV<'a, u32, 4> = frame_at(ctx, &__frame, 0x70);
-    let vals_7: ArrV<'a, u32, 4> = frame_at(ctx, &__frame, 0x80);
+    let scores: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0xac);
+    let rankings: ArrV<'a, u8, 7> = frame_at(ctx, &__frame, 0xa4);
+    let vals: ArrV<'a, i32, 6> = frame_at(ctx, &__frame, 0x88);
+    let vals_2: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x74);
+    let vals_3: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x60);
+    let vals_4: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x4c);
+    let vals_5: ArrV<'a, F32, 4> = frame_at(ctx, &__frame, 0x38);
+    let vals_6: ArrV<'a, u32, 4> = frame_at(ctx, &__frame, 0x20);
+    let vals_7: ArrV<'a, u32, 4> = frame_at(ctx, &__frame, 0xc);
     let mut rules = rules;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1935,7 +1935,7 @@ pub fn fn_80171B64<'a>(ctx: &'a Ctx, arg0: lbl_804D65A8_t<'a>) {
 
 pub fn fn_80171BA4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let scores: ArrV<'a, i32, 6> = frame_at(ctx, &__frame, 0x0);
+    let scores: ArrV<'a, i32, 6> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut player: i32 = 0;
     let mut j: i32 = 0;

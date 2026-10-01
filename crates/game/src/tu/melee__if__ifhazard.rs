@@ -84,7 +84,7 @@ pub fn un_802FD704<'a>(ctx: &'a Ctx) {}
 
 pub fn un_802FD708<'a>(ctx: &'a Ctx, desc: DynamicModelDesc<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut desc = desc;
     let mut arg1 = arg1;
     let mut gobj: HSD_GObj<'a> =

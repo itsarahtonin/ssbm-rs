@@ -126,8 +126,8 @@ pub fn ftLib_FindNearestOpponent<'a>(
     gobj: HSD_GObj<'a>,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x50);
-    let cur_v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
+    let cur_v: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut pos = pos;
     let mut gobj = gobj;
     let mut dist: f64 = 0.0;
@@ -180,8 +180,8 @@ pub fn ftLib_FindNearestOpponentInDir<'a>(
     facing_dir: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x68);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
+    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut v = v;
     let mut gobj = gobj;
     let mut facing_dir = facing_dir;
@@ -235,8 +235,8 @@ pub fn ftLib_FindNearestOpponentInDir<'a>(
 
 pub fn ftLib_GetOpponentsDir<'a>(ctx: &'a Ctx, v: Vec<'a>, gobj: HSD_GObj<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x50);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut v = v;
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);

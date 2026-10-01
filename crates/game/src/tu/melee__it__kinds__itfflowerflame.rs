@@ -34,8 +34,8 @@ pub fn it_8029A748<'a>(
     arg3: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x90);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let temp_pos: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x20);
+    let temp_pos: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -104,7 +104,7 @@ pub fn it_8029A89C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: f64) {
 
 pub fn it_8029A8F4<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: Vec<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let temp_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let temp_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut jobj: HSD_JObj<'a> = null(ctx);

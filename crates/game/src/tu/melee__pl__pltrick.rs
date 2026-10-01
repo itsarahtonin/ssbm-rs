@@ -255,9 +255,9 @@ pub fn pl_80037BC0<'a>(ctx: &'a Ctx, stats: plAttackStats<'a>, ev: Struct2070<'a
 
 pub fn pl_80037C60<'a>(ctx: &'a Ctx, fgp: HSD_GObj<'a>, prev2070_int: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let prev2070_int__slot: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let prev_union: Struct2070<'a> = frame_at(ctx, &__frame, 0x4);
-    let ev: Struct2070<'a> = frame_at(ctx, &__frame, 0x8);
+    let prev2070_int__slot: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let prev_union: Struct2070<'a> = frame_at(ctx, &__frame, 0x10);
+    let ev: Struct2070<'a> = frame_at(ctx, &__frame, 0xc);
     let mut fgp = fgp;
     prev2070_int__slot.set(prev2070_int);
     let mut fp: Fighter<'a> = null(ctx);
@@ -344,7 +344,7 @@ pub fn pl_80037C60<'a>(ctx: &'a Ctx, fgp: HSD_GObj<'a>, prev2070_int: i32) {
 
 pub fn pl_80037DF4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ev: Struct2070<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let local_ev: Struct2070<'a> = frame_at(ctx, &__frame, 0x0);
+    let local_ev: Struct2070<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ev = ev;
     let mut ft: Fighter<'a> =
@@ -491,12 +491,12 @@ pub fn pl_80038144<'a>(
     source_ply: i32,
 ) {
     let __frame = ctx.stack_frame(0x78);
-    let x18d4_int__slot: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let ev: Struct2070<'a> = frame_at(ctx, &__frame, 0x4);
-    let ev_reload: Struct2070<'a> = frame_at(ctx, &__frame, 0x8);
-    let ev_best: Struct2070<'a> = frame_at(ctx, &__frame, 0xc);
-    let ev_hits: Struct2070<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
+    let x18d4_int__slot: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
+    let ev: Struct2070<'a> = frame_at(ctx, &__frame, 0x44);
+    let ev_reload: Struct2070<'a> = frame_at(ctx, &__frame, 0x40);
+    let ev_best: Struct2070<'a> = frame_at(ctx, &__frame, 0x3c);
+    let ev_hits: Struct2070<'a> = frame_at(ctx, &__frame, 0x38);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
     let mut attacker_gobj = attacker_gobj;
     let mut victim_gobj = victim_gobj;
     x18d4_int__slot.set(x18d4_int);
@@ -725,12 +725,12 @@ pub fn pl_80038144<'a>(
 
 pub fn pl_800384DC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: Addr<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let arg1__slot: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let ev: Struct2070<'a> = frame_at(ctx, &__frame, 0x4);
-    let ev2: Struct2070<'a> = frame_at(ctx, &__frame, 0x8);
-    let ev4: Struct2070<'a> = frame_at(ctx, &__frame, 0xc);
-    let ev3: Struct2070<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x14);
+    let arg1__slot: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let ev: Struct2070<'a> = frame_at(ctx, &__frame, 0x30);
+    let ev2: Struct2070<'a> = frame_at(ctx, &__frame, 0x2c);
+    let ev4: Struct2070<'a> = frame_at(ctx, &__frame, 0x28);
+    let ev3: Struct2070<'a> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     arg1__slot.set(arg1);
     let mut arg2 = arg2;

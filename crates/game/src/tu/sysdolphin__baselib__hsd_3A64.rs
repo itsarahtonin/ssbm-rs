@@ -233,7 +233,7 @@ pub fn HSD_SisLib_803A6754<'a>(ctx: &'a Ctx, font_idx: i32, context_id: i32) -> 
 pub fn HSD_SisLib_803A67EC<'a>(ctx: &'a Ctx, data: Val<'a, u8>, string: Val<'a, u8>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
     let out_idx: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let has_kerning: ArrV<'a, i32, 1> = frame_at(ctx, &__frame, 0x4);
+    let has_kerning: ArrV<'a, i32, 1> = frame_at(ctx, &__frame, 0x8);
     let mut data = data;
     let mut string = string;
     let mut str_cursor: Val<'a, u8> = null(ctx);
@@ -863,7 +863,7 @@ pub fn HSD_SisLib_803A7548<'a>(
 
 pub fn HSD_SisLib_803A75E0<'a>(ctx: &'a Ctx, text: HSD_Text<'a>, entry_idx: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
     let mut text = text;
     let mut entry_idx = entry_idx;
     let mut entry: Val<'a, u8> = null(ctx);

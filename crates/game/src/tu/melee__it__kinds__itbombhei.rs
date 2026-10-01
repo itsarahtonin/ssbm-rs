@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn it_8027D670<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x60);
-    let data: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let data: SpawnItem<'a> = frame_at(ctx, &__frame, 0x4);
     let mut pos = pos;
     let mut igp: HSD_GObj<'a> = null::<HSD_GObj<'a>>(ctx);
     data.set_kind((enums::It_Kind_BombHei as i32));
@@ -746,9 +746,9 @@ pub fn itBombhei_UnkMotion10_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_80280B60<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x78);
-    let sp48: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
+    let sp48: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r29: HSD_JObj<'a> = null(ctx);
     let mut temp_r30: Item<'a> = null(ctx);

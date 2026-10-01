@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn it_802F2F34<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, attr: itYoshiEggLay_DatAttrs<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut attr = attr;
     let mut item: Item<'a> = null(ctx);
@@ -64,8 +64,8 @@ pub fn it_802F3020<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn it_27CF_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let sp1C: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 10> = frame_at(ctx, &__frame, 0x4);
+    let sp1C: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 10> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
     let mut item_jobj: HSD_JObj<'a> = null(ctx);
@@ -130,8 +130,8 @@ pub fn it_802F317C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn it_27CF_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let sp1C: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 10> = frame_at(ctx, &__frame, 0x4);
+    let sp1C: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 10> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
     let mut item_jobj: HSD_JObj<'a> = null(ctx);

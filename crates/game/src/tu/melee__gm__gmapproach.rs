@@ -152,8 +152,8 @@ pub fn fn_801AD920<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn gm_801ADB04<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    let spC: Ptr<'a, SceneDesc<'a>> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let spC: Ptr<'a, SceneDesc<'a>> = frame_at(ctx, &__frame, 0x4);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut cobj: HSD_CObj<'a> = null(ctx);

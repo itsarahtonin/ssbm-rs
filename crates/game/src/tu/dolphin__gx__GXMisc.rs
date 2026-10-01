@@ -400,7 +400,7 @@ pub fn GXPokeZMode<'a>(ctx: &'a Ctx, compare_enable: u8, func: i32, update_enabl
 
 pub fn GXTokenInterruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x2e0);
-    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x8);
     let mut interrupt = interrupt;
     let mut context = context;
     let mut token: u16 = 0;
@@ -446,7 +446,7 @@ pub fn GXSetDrawDoneCallback<'a>(ctx: &'a Ctx, cb: FnPtr<'a>) -> FnPtr<'a> {
 
 pub fn GXFinishInterruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x2e0);
-    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x8);
     let mut interrupt = interrupt;
     let mut context = context;
     let mut reg: u32 = 0;

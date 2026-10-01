@@ -70,14 +70,14 @@ pub fn ftDrawCommon_8008051C<'a>(
 
 pub fn ftDrawCommon_800805C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i32) {
     let __frame = ctx.stack_frame(0xd8);
-    let spAC: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let spA8: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let sp78: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x8);
-    let sp18: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x38);
-    let _pad: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x68);
-    let sp54: Vec<'a> = frame_at(ctx, &__frame, 0x74);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x80);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x8c);
+    let spAC: _GXColor<'a> = frame_at(ctx, &__frame, 0xa4);
+    let spA8: _GXColor<'a> = frame_at(ctx, &__frame, 0xa0);
+    let sp78: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x70);
+    let sp18: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x40);
+    let _pad: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
+    let sp54: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -388,11 +388,11 @@ pub fn ftDrawCommon_800805C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, ar
 
 pub fn ftDrawCommon_80080C28<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flag_index: i32) {
     let __frame = ctx.stack_frame(0xc0);
-    let sp70: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let sp18: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
-    let v1: Vec<'a> = frame_at(ctx, &__frame, 0x60);
-    let v2: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x78);
+    let sp70: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x68);
+    let sp18: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x38);
+    let v1: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let v2: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut flag_index = flag_index;
     let mut unused: Val<'a, F32> = null(ctx);
@@ -467,6 +467,8 @@ pub fn ftDrawCommon_80080C28<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flag_index: i
 
 pub fn ftDrawCommon_80080E18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0xa0);
+    let __inl: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x4c);
+    let __inl_2: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -482,9 +484,14 @@ pub fn ftDrawCommon_80080E18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
                     inl_ftDrawCommon_80080E18_inline2_unfused(ctx, gobj, fp);
                 }
                 if !Handle::is_null((fp).x5AC().xC().at(4_i32).get()) {
-                    inl_ftDrawCommon_80080E18_inline0_unfused(ctx, gobj, arg1);
+                    inl_ftDrawCommon_80080E18_inline0_unfused(ctx, gobj, arg1, Handle::addr(__inl));
                     fns::ftDrawCommon_800805C8(ctx, gobj, arg1, 1_i32);
-                    inl_ftDrawCommon_80080E18_inline1_unfused(ctx, gobj, arg1);
+                    inl_ftDrawCommon_80080E18_inline1_unfused(
+                        ctx,
+                        gobj,
+                        arg1,
+                        Handle::addr(__inl_2),
+                    );
                 }
                 break 's1;
             }
@@ -730,9 +737,9 @@ fn inl_ftDrawCommon_80080E18_inline0_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
     flag_index: i32,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x38);
-    let sp54: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let sp54: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut flag_index = flag_index;
     let mut fp: Fighter<'a> =
@@ -761,9 +768,9 @@ fn inl_ftDrawCommon_80080E18_inline1_unfused<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
     flag_index: i32,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x38);
-    let sp24: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let sp24: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut flag_index = flag_index;
     let mut fp: Fighter<'a> = null(ctx);

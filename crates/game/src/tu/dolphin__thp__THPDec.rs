@@ -175,11 +175,11 @@ pub fn __THPPrepBitStream<'a>(ctx: &'a Ctx, info: _THPFileInfo<'a>) {
 
 pub fn THPDec_8032F8D4<'a>(ctx: &'a Ctx, data: Val<'a, u8>, out: THPDec_8032FD40_Data<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let hSample: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let vSample: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
-    let componentId: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
-    let quantizationSelector: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
-    let tag: ArrV<'a, u8, 5> = frame_at(ctx, &__frame, 0x10);
+    let hSample: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x28);
+    let vSample: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x24);
+    let componentId: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let quantizationSelector: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let tag: ArrV<'a, u8, 5> = frame_at(ctx, &__frame, 0x14);
     let mut data = data;
     let mut out = out;
     let mut marker: u8 = 0;
@@ -601,7 +601,7 @@ pub fn THPDec_803300E0<'a>(ctx: &'a Ctx, info: _THPFileInfo<'a>) {
 
 pub fn THPDec_80330158<'a>(ctx: &'a Ctx, info: _THPFileInfo<'a>) -> u8 {
     let __frame = ctx.stack_frame(0x20);
-    let tag: ArrV<'a, u8, 5> = frame_at(ctx, &__frame, 0x0);
+    let tag: ArrV<'a, u8, 5> = frame_at(ctx, &__frame, 0xc);
     let mut info = info;
     ctx.write_bytes(Handle::addr(tag), b"\x4a\x46\x49\x46\x00");
     let mut length: u16 = 0;
@@ -852,7 +852,7 @@ pub fn __THPReadFrameHeader<'a>(ctx: &'a Ctx, info: _THPFileInfo<'a>) -> u8 {
 
 pub fn __THPReadQuantizationTable<'a>(ctx: &'a Ctx, info: _THPFileInfo<'a>) -> u8 {
     let __frame = ctx.stack_frame(0x190);
-    let q_temp: ArrV<'a, F32, 64> = frame_at(ctx, &__frame, 0x0);
+    let q_temp: ArrV<'a, F32, 64> = frame_at(ctx, &__frame, 0x10);
     let mut info = info;
     let mut length: u16 = 0;
     let mut id: u16 = 0;

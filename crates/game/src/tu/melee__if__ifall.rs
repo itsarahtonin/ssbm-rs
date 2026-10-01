@@ -65,7 +65,7 @@ pub fn ifAll_GetPlayerHUDPosition<'a>(ctx: &'a Ctx, idx: i32) -> Vec<'a> {
 
 pub fn ifAll_802F343C<'a>(ctx: &'a Ctx, count: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
     let mut count = count;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut i: i32 = 0;
@@ -278,7 +278,7 @@ pub fn fn_802F36B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
 
 pub fn ifAll_802F370C<'a>(ctx: &'a Ctx, scene: SceneDesc<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
     let mut scene = scene;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -428,7 +428,7 @@ pub fn ifAll_802F370C<'a>(ctx: &'a Ctx, scene: SceneDesc<'a>) {
 
 pub fn ifAll_802F390C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let scene: Ptr<'a, SceneDesc<'a>> = frame_at(ctx, &__frame, 0x0);
+    let scene: Ptr<'a, SceneDesc<'a>> = frame_at(ctx, &__frame, 0xc);
     inl_ifAll_ShowHUD_unfused(ctx);
     inl_loadScene_unfused(ctx, scene);
     statics::melee__if__ifall::ifAll_802F370C(ctx, scene.get());

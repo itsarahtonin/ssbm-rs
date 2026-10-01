@@ -77,9 +77,9 @@ pub fn it_802ADEF0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn it_802ADF10<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let ft_cur_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let ft_hold_joint_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let it_hold_joint_pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let ft_cur_pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let ft_hold_joint_pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let it_hold_joint_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
@@ -499,7 +499,7 @@ pub fn it_802AE8A8<'a>(
     it_kind: i32,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x80);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut facing_dir = facing_dir;
     let mut fighter_gobj = fighter_gobj;
     let mut arg2 = arg2;
@@ -532,8 +532,8 @@ pub fn it_802AE994<'a>(
     it_kind: i32,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x80);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x1c);
+    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut owner_gobj = owner_gobj;
     let mut ft_part = ft_part;
     let mut it_kind = it_kind;
@@ -813,7 +813,7 @@ pub fn itFoxblaster_UnkMotion9_Coll<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -
 
 pub fn itFoxblaster_UnkMotion10_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut item_gobj = item_gobj;
     if !Handle::is_null(item_gobj) {
         let mut it: Item<'a> =

@@ -132,8 +132,8 @@ pub fn itHassam_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itHassam_802CDE1C<'a>(ctx: &'a Ctx, vec: Vec<'a>, gobj: HSD_GObj<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x50);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut vec = vec;
     let mut gobj = gobj;
     let mut cur_fp: Fighter<'a> = null(ctx);
@@ -189,8 +189,8 @@ pub fn itHassam_802CDE1C<'a>(ctx: &'a Ctx, vec: Vec<'a>, gobj: HSD_GObj<'a>) -> 
 
 pub fn itHassam_802CDF28<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut var_r3: HSD_GObj<'a> = null(ctx);
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -359,8 +359,8 @@ pub fn itHassam_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itHassam_802CE400<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let cam_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let cam_pos: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);

@@ -100,8 +100,8 @@ pub fn grMuteCity_801EFD0C<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
 
 pub fn grMuteCity_801EFDF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -780,9 +780,12 @@ pub fn grMuteCity_801F094C<'a>(
     var_f29: f64,
 ) -> f64 {
     let __frame = ctx.stack_frame(0xe8);
-    let sp78: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp6C: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp60: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let sp78: Vec<'a> = frame_at(ctx, &__frame, 0x70);
+    let sp6C: Vec<'a> = frame_at(ctx, &__frame, 0x64);
+    let sp60: Vec<'a> = frame_at(ctx, &__frame, 0x58);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x18);
+    let __inl_3: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x30);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -791,13 +794,13 @@ pub fn grMuteCity_801F094C<'a>(
     let mut var_f1: f64 = 0.0;
     let mut var_f31: f64 = 0.0;
     let mut var_f30: f64 = 0.0;
-    inl_grMc_SplineEvalWrapped_unfused(ctx, sp78, arg1, var_f29);
+    inl_grMc_SplineEvalWrapped_unfused(ctx, sp78, arg1, var_f29, Handle::addr(__inl));
     fns::lb_8000B1CC(ctx, arg0, sp78, sp6C);
     var_f1 = fp::fsubs(var_f29, 0.00039999998989515007);
     if var_f1 < 0.0 {
         var_f1 = fp::fadds(var_f1, 1.0);
     }
-    inl_grMc_SplineEvalWrapped_unfused(ctx, sp78, arg1, var_f1);
+    inl_grMc_SplineEvalWrapped_unfused(ctx, sp78, arg1, var_f1, Handle::addr(__inl_2));
     fns::lb_8000B1CC(ctx, arg0, sp78, sp60);
     if sp6C.z() > sp60.z() {
         var_f30 = 0.00039999998989515007;
@@ -819,7 +822,7 @@ pub fn grMuteCity_801F094C<'a>(
                 var_f29 = fp::fadds(var_f29, 1.0);
             }
             Handle::copy_from(sp60, sp6C);
-            inl_grMc_SplineEvalWrapped_unfused(ctx, sp78, arg1, var_f29);
+            inl_grMc_SplineEvalWrapped_unfused(ctx, sp78, arg1, var_f29, Handle::addr(__inl_3));
             fns::lb_8000B1CC(ctx, arg0, sp78, sp6C);
         }
     }
@@ -829,9 +832,9 @@ pub fn grMuteCity_801F094C<'a>(
 
 pub fn grMuteCity_801F0D20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -2153,16 +2156,20 @@ pub fn grMuteCity_801F1A0C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, gp: Ground<'a>)
 
 pub fn grMuteCity_801F1A34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x200);
-    let car_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let spE8: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let spD8: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let spCC: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let spC0: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let spB4: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let spA8: Vec<'a> = frame_at(ctx, &__frame, 0x48);
-    let sp9C: Vec<'a> = frame_at(ctx, &__frame, 0x54);
-    let sp90: Vec<'a> = frame_at(ctx, &__frame, 0x60);
-    let spawn_pos: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
+    let car_pos: Vec<'a> = frame_at(ctx, &__frame, 0xec);
+    let spE8: Vec<'a> = frame_at(ctx, &__frame, 0xe0);
+    let spD8: Vec<'a> = frame_at(ctx, &__frame, 0xd0);
+    let spCC: Vec<'a> = frame_at(ctx, &__frame, 0xc4);
+    let spC0: Vec<'a> = frame_at(ctx, &__frame, 0xb8);
+    let spB4: Vec<'a> = frame_at(ctx, &__frame, 0xac);
+    let spA8: Vec<'a> = frame_at(ctx, &__frame, 0xa0);
+    let sp9C: Vec<'a> = frame_at(ctx, &__frame, 0x94);
+    let sp90: Vec<'a> = frame_at(ctx, &__frame, 0x88);
+    let spawn_pos: Vec<'a> = frame_at(ctx, &__frame, 0x7c);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x18);
+    let __inl_3: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x30);
+    let __inl_4: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x48);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut track_mid: f64 = 0.0;
@@ -2236,6 +2243,7 @@ pub fn grMuteCity_801F1A34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<
                 spD8,
                 ((gp).u().mutecity().xE0()).u().spline(),
                 spline_t,
+                Handle::addr(__inl),
             );
             fns::lb_8000B1CC(ctx, (gp).u().mutecity().xE0(), spD8, spCC);
             inl_grMc_SplineEvalWrapped(
@@ -2243,6 +2251,7 @@ pub fn grMuteCity_801F1A34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<
                 spD8,
                 ((gp).u().mutecity().xDC()).u().spline(),
                 spline_t,
+                Handle::addr(__inl_2),
             );
             fns::lb_8000B1CC(ctx, (gp).u().mutecity().xDC(), spD8, spC0);
             let _ = fns::lbVector_Diff(ctx, spC0, spCC, spB4);
@@ -2255,6 +2264,7 @@ pub fn grMuteCity_801F1A34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<
                 spA8,
                 ((gp).u().mutecity().xE0()).u().spline(),
                 spline_t,
+                Handle::addr(__inl_3),
             );
             fns::lb_8000B1CC(ctx, (gp).u().mutecity().xE0(), spA8, spA8);
             fns::lb_8000B1CC(ctx, (gp).u().mutecity().xE0(), null::<Vec<'a>>(ctx), spD8);
@@ -2265,6 +2275,7 @@ pub fn grMuteCity_801F1A34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<
                 sp9C,
                 ((gp).u().mutecity().xDC()).u().spline(),
                 spline_t,
+                Handle::addr(__inl_4),
             );
             fns::lb_8000B1CC(ctx, (gp).u().mutecity().xDC(), sp9C, sp9C);
             fns::lb_8000B1CC(ctx, (gp).u().mutecity().xDC(), null::<Vec<'a>>(ctx), spD8);
@@ -3199,10 +3210,10 @@ fn inl_grMc_SplineEvalWrapped_unfused<'a>(
     result: Vec<'a>,
     spline: HSD_Spline<'a>,
     t: f64,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x20);
-    let a: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let b: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let a: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let b: Vec<'a> = ptr(ctx, __in_caller + 0xc);
     let mut result = result;
     let mut spline = spline;
     let mut t = t;
@@ -3252,10 +3263,15 @@ fn inl_grMc_GetTrackMidpoint<'a>(ctx: &'a Ctx, gp: Ground<'a>) -> f64 {
     );
 }
 
-fn inl_grMc_SplineEvalWrapped<'a>(ctx: &'a Ctx, result: Vec<'a>, spline: HSD_Spline<'a>, t: f64) {
-    let __frame = ctx.stack_frame(0x20);
-    let a: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let b: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+fn inl_grMc_SplineEvalWrapped<'a>(
+    ctx: &'a Ctx,
+    result: Vec<'a>,
+    spline: HSD_Spline<'a>,
+    t: f64,
+    __in_caller: u32,
+) {
+    let a: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let b: Vec<'a> = ptr(ctx, __in_caller + 0xc);
     let mut result = result;
     let mut spline = spline;
     let mut t = t;
@@ -3285,10 +3301,10 @@ fn inl_grMc_SplineTangentWrapped<'a>(
     result: Vec<'a>,
     spline: HSD_Spline<'a>,
     t: f64,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x20);
-    let a: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let b: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let a: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let b: Vec<'a> = ptr(ctx, __in_caller + 0xc);
     let mut result = result;
     let mut spline = spline;
     let mut t = t;

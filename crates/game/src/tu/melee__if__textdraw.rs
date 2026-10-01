@@ -149,10 +149,10 @@ pub fn DevText_Remove<'a>(ctx: &'a Ctx, ptext: Ptr<'a, DevText<'a>>) {
 
 pub fn DevText_SetupCObj<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x58);
-    let viewport: _HSD_RectS16<'a> = frame_at(ctx, &__frame, 0x0);
-    let scissor: _Scissor<'a> = frame_at(ctx, &__frame, 0x8);
-    let eyepos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let viewport: _HSD_RectS16<'a> = frame_at(ctx, &__frame, 0x20);
+    let scissor: _Scissor<'a> = frame_at(ctx, &__frame, 0x18);
+    let eyepos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     if Handle::is_null(fns::devtext_cobj(ctx).get()) {
         eyepos.set_x(fp::frsp(0_i32 as f64));
         eyepos.set_y(fp::frsp(0_i32 as f64));
@@ -192,10 +192,10 @@ pub fn DevText_SetupCObj<'a>(ctx: &'a Ctx) {
 pub fn DevText_Draw<'a>(ctx: &'a Ctx, text: DevText<'a>) {
     let __frame = ctx.stack_frame(0x90);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let color_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let color_3: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let color_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let color_2: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let color_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let color_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
     let mut text = text;
     let mut index: i32 = 0;
     'l1: loop {

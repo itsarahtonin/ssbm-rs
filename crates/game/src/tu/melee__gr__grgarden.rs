@@ -440,7 +440,7 @@ pub fn grGarden_80203498<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, gp: Ground<'
 
 pub fn grGarden_8020349C<'a>(ctx: &'a Ctx, unk: u32, player: HSD_GObj<'a>, water: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let current: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let current: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let previous: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut unk = unk;
     let mut player = player;
@@ -487,7 +487,7 @@ pub fn grGarden_802035C8<'a>(ctx: &'a Ctx, arg: i32) -> DynamicsDesc<'a> {
 
 pub fn grGarden_802035D0<'a>(ctx: &'a Ctx, a: Vec<'a>, b: i32, jobj: HSD_JObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut a = a;
     let mut b = b;
     let mut jobj = jobj;

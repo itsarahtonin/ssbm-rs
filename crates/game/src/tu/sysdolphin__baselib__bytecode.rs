@@ -33,8 +33,9 @@ pub fn HSD_ByteCodeEval<'a>(
     nb_args: i32,
 ) -> f64 {
     let __frame = ctx.stack_frame(0xb0);
-    let fv: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let f0: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let fv: Val<'a, F32> = frame_at(ctx, &__frame, 0x28);
+    let f0: Val<'a, F32> = frame_at(ctx, &__frame, 0x24);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut bytecode = bytecode;
     let mut args = args;
     let mut nb_args = nb_args;
@@ -1116,7 +1117,7 @@ pub fn HSD_ByteCodeEval<'a>(
                         f0.set((Handle::cast::<ByteCodeVal<'a>>((stack).data_ref())).f());
                         stack = fns::HSD_SListRemove(ctx, stack);
                         f1 = (Handle::cast::<ByteCodeVal<'a>>((stack).data_ref())).f();
-                        if inl_fabsf_bitwise(ctx, f0.get()) == 0.0 {
+                        if inl_fabsf_bitwise(ctx, f0.get(), Handle::addr(__inl)) == 0.0 {
                             fv.set((if f1 >= 0.0 { 90.0 } else { fp::fneg(90.0) }));
                         } else {
                             fv.set(fp::frsp(
@@ -1743,9 +1744,8 @@ fn inl_fmodf<'a>(ctx: &'a Ctx, a: f64, b: f64) -> f64 {
     return fp::fnmsubs(b, fns::__cvt_sll_flt(ctx, quotient), a);
 }
 
-fn inl_fabsf_bitwise<'a>(ctx: &'a Ctx, v: f64) -> f64 {
-    let __frame = ctx.stack_frame(0x10);
-    let v__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+fn inl_fabsf_bitwise<'a>(ctx: &'a Ctx, v: f64, __in_caller: u32) -> f64 {
+    let v__slot: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
     v__slot.set(v);
     (Handle::cast::<Val<'a, u32>>(v__slot))
         .set(((Handle::cast::<Val<'a, u32>>(v__slot)).get() & (!0x80000000_u32)));

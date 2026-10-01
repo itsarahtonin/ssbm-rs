@@ -1039,8 +1039,8 @@ pub fn ftCommon_GrabMash<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: f64) -> i32 {
 pub fn ftCommon_8007DD7C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, v: Vec<'a>) {
     let __frame = ctx.stack_frame(0x68);
     let unused0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused1: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x10);
+    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let unused1: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut v = v;
     let mut temp_r31: Vec2<'a> = null(ctx);
@@ -1149,8 +1149,8 @@ pub fn ftCommon_8007DD7C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, v: Vec<'a>) {
 pub fn ftCommon_8007DFD0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: Vec<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let unused0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused1: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x10);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused1: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut temp_r31: Vec2<'a> = null(ctx);
@@ -1202,8 +1202,8 @@ pub fn ftCommon_8007DFD0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: Vec<'a>) {
 
 pub fn ftCommon_8007E0E4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut phi_f0: f64 = 0.0;
@@ -1318,8 +1318,8 @@ pub fn ftCommon_8007E358<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCommon_8007E3EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut jobj: HSD_JObj<'a> =
@@ -1589,7 +1589,7 @@ pub fn ftGetParasolStatus<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn ftCommon_8007EA90<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut fp = fp;
     let mut arg1 = arg1;
     let mut temp_r31: i32 = 0;
@@ -2010,7 +2010,7 @@ pub fn ftCommon_GetModelScale<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
 
 pub fn ftCommon_8007F6A4<'a>(ctx: &'a Ctx, fp: Fighter<'a>, jobj: HSD_JObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut fp = fp;
     let mut jobj = jobj;
     let mut val: f64 = fp::fdivs(1.0, (((fp).ft_data()).x0()).model_scaling());
@@ -2169,8 +2169,9 @@ pub fn ftCommon_8007FA00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCommon_8007FA58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -2194,7 +2195,7 @@ pub fn ftCommon_8007FA58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: HSD_GObj<'a
     fns::ft_PlaySFX(ctx, fp, 0x117_i32, (127_i32 as u8), (64_i32 as u8));
     inl_ftCommon_8007EBAC_unfused(ctx, fp, (16_i32 as u32), (0_i32 as u32));
     fns::it_8026BCF4(ctx, arg1);
-    inl_ftCommon_8007FA00_unfused(ctx, gobj);
+    inl_ftCommon_8007FA00_unfused(ctx, gobj, Handle::addr(__inl));
 }
 
 pub fn ftCommon_8007FC7C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg8: f64) {
@@ -2233,8 +2234,8 @@ pub fn ftCommon_8007FC7C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg8: f64) {
 
 pub fn ftCommon_8007FDA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut temp_f1: f64 = 0.0;
@@ -2406,8 +2407,8 @@ pub fn ftCommon_80080174<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ftCommon_8008021C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let shift: Vec2<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let shift: Vec2<'a> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut result: Vec2<'a> = null(ctx);
@@ -3037,9 +3038,8 @@ fn inl_ftCommon_8007F948_unfused<'a>(
     inl__func_8007F948_inline_unfused(ctx, gobj);
 }
 
-fn inl_ftCommon_8007FA00_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftCommon_8007FA00_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut vec: Vec<'a> = (fp).co_attrs().x114();

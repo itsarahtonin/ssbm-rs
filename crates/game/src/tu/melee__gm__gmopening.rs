@@ -35,10 +35,10 @@ pub fn gm_801A9DD0<'a>(
     arg4: i32,
 ) {
     let __frame = ctx.stack_frame(0x90);
-    let viewport: _Scissor<'a> = frame_at(ctx, &__frame, 0x0);
-    let scissor: _Scissor<'a> = frame_at(ctx, &__frame, 0x8);
-    let eye: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let viewport: _Scissor<'a> = frame_at(ctx, &__frame, 0x30);
+    let scissor: _Scissor<'a> = frame_at(ctx, &__frame, 0x28);
+    let eye: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

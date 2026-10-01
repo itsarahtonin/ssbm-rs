@@ -76,7 +76,7 @@ pub fn ft_8007C6DC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ft_8007C77C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let sp18: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let sp18: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut temp_r29: i32 = 0;

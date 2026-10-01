@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn it_802ADA1C<'a>(ctx: &'a Ctx, pos: Vec<'a>, vel: Vec<'a>, facing_dir: f64) {
     let __frame = ctx.stack_frame(0x70);
-    let spawnitem: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawnitem: SpawnItem<'a> = frame_at(ctx, &__frame, 0x14);
     let mut pos = pos;
     let mut vel = vel;
     let mut facing_dir = facing_dir;

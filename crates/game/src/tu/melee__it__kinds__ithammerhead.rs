@@ -34,7 +34,7 @@ pub fn it_80299C48<'a>(
     facing_dir: f64,
 ) {
     let __frame = ctx.stack_frame(0x88);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x14);
     let mut parent_gobj = parent_gobj;
     let mut pos = pos;
     let mut velocity = velocity;

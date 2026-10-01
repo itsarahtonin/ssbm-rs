@@ -648,7 +648,7 @@ pub fn ftFx_SpecialHi_GroundToAir<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftFx_SpecialAirHi_AirToGround<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut da: ftFox_DatAttrs<'a> = null(ctx);
     let mut fp: Fighter<'a> = null(ctx);
@@ -1006,6 +1006,7 @@ pub fn ftFx_SpecialHiBound_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftFx_SpecialHiBound_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut da: ftFox_DatAttrs<'a> = Handle::cast::<ftFox_DatAttrs<'a>>((fp).dat_attrs());
@@ -1026,7 +1027,7 @@ pub fn ftFx_SpecialHiBound_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (da).x84_FOX_FIREFOX_BOUND_VEL_X(),
     ));
     (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
-    inl_ftFox_SpecialHiBound_SetVars_unfused(ctx, gobj);
+    inl_ftFox_SpecialHiBound_SetVars_unfused(ctx, gobj, Handle::addr(__inl));
 }
 
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
@@ -1150,9 +1151,12 @@ fn inl_ftGetGroundAir_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     return (fp).ground_or_air();
 }
 
-fn inl_ftFox_SpecialHiBound_SetVars_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let f: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftFox_SpecialHiBound_SetVars_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    __in_caller: u32,
+) {
+    let f: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = Handle::cast::<Fighter<'a>>((gobj).user_data());

@@ -163,8 +163,8 @@ pub fn fn_80177920<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_80177B7C<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let abs_stick_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
+    let abs_stick_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     {
         let mut stick_y: f64 = fns::HSD_PadCopyStatus(ctx)
@@ -700,7 +700,7 @@ pub fn fn_80178050<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn fn_801785B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
     let mut node: HSD_JObj<'a> = null(ctx);
@@ -1165,6 +1165,7 @@ pub fn fn_801791E4<'a>(ctx: &'a Ctx) -> i32 {
 pub fn fn_80179350<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut data: ResultsData<'a> = fns::lbl_8046DBE8(ctx);
     let mut match_end: MatchEnd<'a> = null(ctx);
@@ -1192,7 +1193,7 @@ pub fn fn_80179350<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             i = i.wrapping_add(1);
         }
     }
-    inl_fn_80179350_update_unfused(ctx, data, match_end, arg0);
+    inl_fn_80179350_update_unfused(ctx, data, match_end, arg0, Handle::addr(__inl));
     if ((data).x8() as u32) < (1_i32.wrapping_neg() as u32) {
         (data).set_x8((data).x8().wrapping_add(1));
     }
@@ -1742,9 +1743,9 @@ fn inl_fn_80179350_update_unfused<'a>(
     data: ResultsData<'a>,
     match_end: MatchEnd<'a>,
     arg0: HSD_GObj<'a>,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut data = data;
     let mut match_end = match_end;
     let mut arg0 = arg0;

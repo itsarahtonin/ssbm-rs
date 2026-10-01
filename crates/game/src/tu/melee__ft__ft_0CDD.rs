@@ -110,7 +110,7 @@ pub fn ftCo_800CDE74<'a>(ctx: &'a Ctx, fighter_gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800CDE94<'a>(ctx: &'a Ctx, fighter: Fighter<'a>, arg1: Vec<'a>, arg2: Vec<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut fighter = fighter;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

@@ -149,7 +149,7 @@ pub fn __CARDGetFileNo<'a>(
 
 pub fn CARDFastOpen<'a>(ctx: &'a Ctx, chan: i32, fileNo: i32, fileInfo: CARDFileInfo<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x0);
+    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0xc);
     let mut chan = chan;
     let mut fileNo = fileNo;
     let mut fileInfo = fileInfo;
@@ -192,8 +192,8 @@ pub fn CARDOpen<'a>(
     fileInfo: CARDFileInfo<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x0);
-    let fileNo: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0xc);
+    let fileNo: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
     let mut chan = chan;
     let mut fileName = fileName;
     let mut fileInfo = fileInfo;
@@ -225,7 +225,7 @@ pub fn CARDOpen<'a>(
 
 pub fn CARDClose<'a>(ctx: &'a Ctx, fileInfo: CARDFileInfo<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x0);
+    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x4);
     let mut fileInfo = fileInfo;
     let mut result: i32 = 0;
     result = fns::__CARDGetControlBlock(ctx, (fileInfo).chan(), card);

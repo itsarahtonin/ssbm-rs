@@ -36,8 +36,8 @@ pub fn GXSetFog<'a>(
     color: _GXColor<'a>,
 ) {
     let __frame = ctx.stack_frame(0x48);
-    let a: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let c: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let a: Val<'a, F32> = frame_at(ctx, &__frame, 0x24);
+    let c: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
     let mut r#type = r#type;
     let mut startz = startz;
     let mut endz = endz;

@@ -76,8 +76,8 @@ pub fn mnEvent_8024CE74<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn mnEvent_8024D014<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
+    let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut data: MnEventData<'a> = Handle::cast::<MnEventData<'a>>((gobj).user_data());
     let mut tree: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
@@ -122,7 +122,7 @@ pub fn mnEvent_8024D014<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnEvent_8024D0CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ckind: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ckind = ckind;
     let mut tree: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
@@ -155,14 +155,14 @@ pub fn mnEvent_8024D0CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ckind: i32) {
 
 pub fn mnEvent_8024D15C<'a>(ctx: &'a Ctx, idx: i32, event_id: i32) {
     let __frame = ctx.stack_frame(0xc8);
-    let jobj_0A: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let jobj_0C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x14);
-    let icon_pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let icon_jobj_0C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x28);
-    let icon_jobj_0A: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x2c);
-    let unused_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x30);
+    let jobj_0A: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x84);
+    let jobj_0C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x80);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x74);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let icon_pos: Vec<'a> = frame_at(ctx, &__frame, 0x60);
+    let icon_jobj_0C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x5c);
+    let icon_jobj_0A: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x58);
+    let unused_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x8);
     let mut idx = idx;
     let mut event_id = event_id;
     'l1: loop {
@@ -305,8 +305,8 @@ pub fn mnEvent_8024D4E0<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>
 
 pub fn mnEvent_8024D5B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, event: u8) {
     let __frame = ctx.stack_frame(0x48);
-    let sp18: ArrV<'a, i8, 4> = frame_at(ctx, &__frame, 0x0);
-    let sp14: ArrV<'a, i8, 4> = frame_at(ctx, &__frame, 0x4);
+    let sp18: ArrV<'a, i8, 4> = frame_at(ctx, &__frame, 0x10);
+    let sp14: ArrV<'a, i8, 4> = frame_at(ctx, &__frame, 0xc);
     let sp10: ArrV<'a, i8, 4> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut event = event;
@@ -462,21 +462,21 @@ pub fn mnEvent_8024D7E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, idx: i32) {
 
 pub fn mnEvent_8024D864<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xd8);
-    let up_jobj_0B: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let up_jobj_0C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
-    let up_jobj_0A: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
-    let down_jobj_0B: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
-    let down_jobj_0C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x10);
-    let down_jobj_0A: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x14);
-    let jobj_09: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x18);
-    let jobj_09_2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x20);
-    let jobj_09_3: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x24);
-    let jobj_09_4: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x28);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x2c);
-    let jobj_09_5: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x30);
-    let jobj_09_6: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x34);
-    let unused_3: ArrV<'a, u8, 52> = frame_at(ctx, &__frame, 0x38);
+    let up_jobj_0B: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x90);
+    let up_jobj_0C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8c);
+    let up_jobj_0A: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x88);
+    let down_jobj_0B: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x80);
+    let down_jobj_0C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x7c);
+    let down_jobj_0A: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x78);
+    let jobj_09: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x74);
+    let jobj_09_2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x70);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let jobj_09_3: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x68);
+    let jobj_09_4: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x64);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let jobj_09_5: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x5c);
+    let jobj_09_6: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x58);
+    let unused_3: ArrV<'a, u8, 52> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut page: u8 = 0;
     let mut data: MnEventData<'a> = null(ctx);
@@ -663,8 +663,8 @@ pub fn mnEvent_8024E1B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnEvent_8024E2A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
+    let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut proc: HSD_GObjProc<'a> = null(ctx);
     let mut tree: HSD_JObj<'a> = null(ctx);
@@ -765,10 +765,10 @@ pub fn mnEvent_8024E420<'a>(ctx: &'a Ctx, data: MnEventData<'a>, event_idx: i32)
 
 pub fn mnEvent_8024E524<'a>(ctx: &'a Ctx, event_idx: i32) {
     let __frame = ctx.stack_frame(0x60);
-    let jobj_0B: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let jobj_0C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
-    let jobj_0A: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
-    let jobj_09: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
+    let jobj_0B: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x20);
+    let jobj_0C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x1c);
+    let jobj_0A: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x18);
+    let jobj_09: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x14);
     let mut event_idx = event_idx;
     let mut page: u8 = 0;
     let mut gobj: HSD_GObj<'a> = null(ctx);

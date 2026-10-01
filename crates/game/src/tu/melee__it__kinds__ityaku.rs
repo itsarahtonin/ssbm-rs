@@ -39,8 +39,8 @@ pub fn it_802E6AEC<'a>(
     arg8: FnPtr<'a>,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0xb0);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x34);
+    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x28);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -117,9 +117,9 @@ pub fn it_802E6AEC<'a>(
 
 pub fn it_2E6A_UnkMotion19_Phys<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let sp14: Quaternion<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut jobj1: HSD_JObj<'a> = null(ctx);
     let mut jobj2: HSD_JObj<'a> = null(ctx);
@@ -181,7 +181,7 @@ pub fn it_2E6A_Logic117_DmgDealt<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i
 
 pub fn it_2E6A_Logic117_DmgReceived<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));

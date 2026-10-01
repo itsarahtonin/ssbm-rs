@@ -28,8 +28,8 @@ use crate::support::*;
 
 pub fn ftCo_800C7CA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let ef_offset: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let ef_offset: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -91,10 +91,10 @@ pub fn fn_800C7DC4<'a>(
     offset: Vec<'a>,
 ) {
     let __frame = ctx.stack_frame(0x60);
-    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let spawn_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let spawn_pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let angle: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut motion_state = motion_state;
     let mut normal = normal;

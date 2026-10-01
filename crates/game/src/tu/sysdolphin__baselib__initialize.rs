@@ -28,8 +28,8 @@ use crate::support::*;
 
 pub fn HSD_InitComponent<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x68);
-    let vi_status: _HSD_VIStatus<'a> = frame_at(ctx, &__frame, 0x0);
-    let black: _GXColor<'a> = frame_at(ctx, &__frame, 0x54);
+    let vi_status: _HSD_VIStatus<'a> = frame_at(ctx, &__frame, 0x4);
+    let black: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     statics::sysdolphin__baselib__initialize::HSD_OSInit(ctx);
     {
         black.set_r((0_i32 as u8));
@@ -206,7 +206,7 @@ pub fn HSD_AllocateFifo<'a>(ctx: &'a Ctx, size: u32) -> GXFifoObj<'a> {
 
 pub fn HSD_GXInit<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x58);
-    let lightobj: _GXLightObj<'a> = frame_at(ctx, &__frame, 0x0);
+    let lightobj: _GXLightObj<'a> = frame_at(ctx, &__frame, 0x4);
     let mut i: i32 = 0;
     fns::GXInitLightPos(
         ctx,
@@ -442,7 +442,7 @@ pub fn HSD_ObjInit<'a>(ctx: &'a Ctx) {
 
 pub fn HSD_ObjDumpStat<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0xa0);
-    let types: Arr<'a, HSD_ObjDumpStat_types<'a>, 14> = frame_at(ctx, &__frame, 0x0);
+    let types: Arr<'a, HSD_ObjDumpStat_types<'a>, 14> = frame_at(ctx, &__frame, 0xc);
     types.get(0).set_func(fnptr(ctx, 0x80363ff8));
     types.get(0).set_label(cstr(ctx, 0x804d5e20));
     types.get(1).set_func(fnptr(ctx, 0x8036a938));

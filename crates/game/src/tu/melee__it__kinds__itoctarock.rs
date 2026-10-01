@@ -233,8 +233,8 @@ pub fn it_802E503C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itOctarock_UnkMotion4_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itOctarockAttributes<'a> =
@@ -315,8 +315,8 @@ pub fn itOctarock_UnkMotion4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802E52E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itOctarockAttributes<'a> =
@@ -563,9 +563,16 @@ pub fn it_802E5944<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802E595C<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, ip: Item<'a>) {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut jobj = jobj;
     let mut ip = ip;
-    inl_itUpdateVelocityFromBone_unfused(ctx, jobj, ip, (ip).xDD4_itemVar().octarock().x20());
+    inl_itUpdateVelocityFromBone_unfused(
+        ctx,
+        jobj,
+        ip,
+        (ip).xDD4_itemVar().octarock().x20(),
+        Handle::addr(__inl),
+    );
 }
 
 pub fn it_802E5AA4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ref_gobj: HSD_GObj<'a>) {
@@ -737,10 +744,10 @@ fn inl_itUpdateVelocityFromBone_unfused<'a>(
     jobj: HSD_JObj<'a>,
     ip: Item<'a>,
     previous_pos: Vec<'a>,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x20);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let zero: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let zero: Vec<'a> = ptr(ctx, __in_caller + 0xc);
     let mut jobj = jobj;
     let mut ip = ip;
     let mut previous_pos = previous_pos;

@@ -124,10 +124,10 @@ pub fn fn_800DC8FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800DC920<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let sp4C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp48: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
-    let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let tmp: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let sp4C: Vec<'a> = frame_at(ctx, &__frame, 0x44);
+    let sp48: Val<'a, F32> = frame_at(ctx, &__frame, 0x40);
+    let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let tmp: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut gobj = gobj;
     let mut var_r31: Fighter<'a> = null(ctx);
@@ -278,7 +278,7 @@ pub fn ftCo_800DCE34<'a>(ctx: &'a Ctx, gobj0: HSD_GObj<'a>, gobj1: HSD_GObj<'a>)
 
 pub fn ftCo_800DCFD4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

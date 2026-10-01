@@ -697,10 +697,10 @@ pub fn gmClassic_801B3A34<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
 
 pub fn gmClassic_801B3B40<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
     let sp18: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
-    let sp14: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let sp14: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut mei: MatchExitInfo<'a> = null(ctx);
     let mut asd: UnkAllstarData<'a> = null(ctx);

@@ -525,8 +525,9 @@ pub fn ftYs_SpecialAirN1_1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftYs_SpecialN2_1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xc8);
+    let __inl: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x78);
     let mut gobj = gobj;
-    inl_inlineB0_unfused(ctx, gobj, fnptr(ctx, 0x8008a2bc));
+    inl_inlineB0_unfused(ctx, gobj, fnptr(ctx, 0x8008a2bc), Handle::addr(__inl));
 }
 
 pub fn ftYs_SpecialN2_0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -537,8 +538,9 @@ pub fn ftYs_SpecialN2_0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftYs_SpecialAirN2_1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xc8);
+    let __inl: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x78);
     let mut gobj = gobj;
-    inl_inlineB0_unfused_2(ctx, gobj, fnptr(ctx, 0x800cc730));
+    inl_inlineB0_unfused_2(ctx, gobj, fnptr(ctx, 0x800cc730), Handle::addr(__inl));
 }
 
 pub fn ftYs_SpecialAirN2_0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -945,9 +947,13 @@ fn inl_ftYs_SpecialN_8012CDB4_unfused<'a>(ctx: &'a Ctx) -> f64 {
     return fp::fdivs((ea).x44(), (ea).x18());
 }
 
-fn inl_inlineB0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, on_anim_end: FnPtr<'a>) {
-    let __frame = ctx.stack_frame(0x38);
-    let item_attrs: itYoshiEggLay_DatAttrs<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_inlineB0_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    on_anim_end: FnPtr<'a>,
+    __in_caller: u32,
+) {
+    let item_attrs: itYoshiEggLay_DatAttrs<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut on_anim_end = on_anim_end;
     let mut fp: Fighter<'a> =
@@ -1062,9 +1068,13 @@ fn inl_inlineA1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, anim_end_cb: FnPtr
     }
 }
 
-fn inl_inlineB0_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, on_anim_end: FnPtr<'a>) {
-    let __frame = ctx.stack_frame(0x38);
-    let item_attrs: itYoshiEggLay_DatAttrs<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_inlineB0_unfused_2<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    on_anim_end: FnPtr<'a>,
+    __in_caller: u32,
+) {
+    let item_attrs: itYoshiEggLay_DatAttrs<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut on_anim_end = on_anim_end;
     let mut fp: Fighter<'a> =

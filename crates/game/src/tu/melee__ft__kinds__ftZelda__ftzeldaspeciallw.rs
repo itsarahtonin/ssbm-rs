@@ -77,6 +77,7 @@ pub fn ftZd_SpecialLw_8013AEAC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftZd_SpecialLw_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     fns::Fighter_ChangeMotionState(
         ctx,
@@ -89,11 +90,12 @@ pub fn ftZd_SpecialLw_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         null::<HSD_GObj<'a>>(ctx),
     );
     fns::ftAnim_8006EBA4(ctx, gobj);
-    inl_ftZelda_SpecialLw_StartAction_Helper_unfused(ctx, gobj);
+    inl_ftZelda_SpecialLw_StartAction_Helper_unfused(ctx, gobj, Handle::addr(__inl));
 }
 
 pub fn ftZd_SpecialAirLw_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     fns::Fighter_ChangeMotionState(
         ctx,
@@ -106,7 +108,7 @@ pub fn ftZd_SpecialAirLw_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         null::<HSD_GObj<'a>>(ctx),
     );
     fns::ftAnim_8006EBA4(ctx, gobj);
-    inl_ftZelda_SpecialLw_StartAction_Helper_unfused(ctx, gobj);
+    inl_ftZelda_SpecialLw_StartAction_Helper_unfused(ctx, gobj, Handle::addr(__inl));
 }
 
 pub fn ftZd_SpecialLw_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -381,9 +383,12 @@ fn inl_getFtSpecialAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> 
     return fighter_attr;
 }
 
-fn inl_ftZelda_SpecialLw_StartAction_Helper_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftZelda_SpecialLw_StartAction_Helper_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    __in_caller: u32,
+) {
+    let sp20: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut attributes: ftZelda_DatAttrs<'a> = null(ctx);

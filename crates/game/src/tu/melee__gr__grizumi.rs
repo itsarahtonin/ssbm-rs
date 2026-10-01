@@ -178,11 +178,11 @@ pub fn grIzumi_801CBE60<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grIzumi_801CBE64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let x: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let y: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
-    let x38: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x28);
+    let x: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let y: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let x38: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut tobj: HSD_TObj<'a> = null(ctx);
     let mut gp: Ground<'a> =
@@ -298,7 +298,7 @@ pub fn grIzumi_801CC0CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grIzumi_801CC0D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x28);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -735,9 +735,9 @@ pub fn grIzumi_801CCBDC<'a>(
     jobj: HSD_JObj<'a>,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x58);
-    let aa: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let aa: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut height = height;
     let mut a = a;
     let mut b = b;
@@ -855,9 +855,9 @@ pub fn grIzumi_801CCD98<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
 
 pub fn grIzumi_801CCEA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, renderpass: i32) {
     let __frame = ctx.stack_frame(0x80);
-    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x3c);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x2c);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut renderpass = renderpass;
     let mut src: HSD_CObj<'a> = null(ctx);
@@ -1028,7 +1028,7 @@ pub fn grIzumi_801CD278<'a>(ctx: &'a Ctx, x: i32) -> DynamicsDesc<'a> {
 
 pub fn grIzumi_801CD280<'a>(ctx: &'a Ctx, a: Vec<'a>, b: i32, jobj: HSD_JObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut a = a;
     let mut b = b;
     let mut jobj = jobj;

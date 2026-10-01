@@ -94,8 +94,8 @@ pub fn ftCo_800BDA74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, normal: Vec<'a>) {
 
 pub fn ftCo_800BDB58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, thrower_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 36> = frame_at(ctx, &__frame, 0xc);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let unused: ArrV<'a, u8, 36> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut thrower_gobj = thrower_gobj;
     let mut fp: Fighter<'a> =
@@ -154,8 +154,8 @@ pub fn ftCo_ThrownKirbyStar_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_ThrownKirbyStar_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let self_vel: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let normal: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let self_vel: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     fns::ftCo_800BDA74(ctx, gobj, normal);
@@ -182,8 +182,8 @@ pub fn ftCo_ThrownKirbyStar_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800BE000<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, thrower_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut thrower_gobj = thrower_gobj;
     let mut fp: Fighter<'a> =
@@ -241,8 +241,8 @@ pub fn ftCo_ThrownCopyStar_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_ThrownCopyStar_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let self_vel: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let normal: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let self_vel: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     fns::ftCo_800BDA74(ctx, gobj, normal);
@@ -269,7 +269,7 @@ pub fn ftCo_ThrownCopyStar_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800BE494<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let self_vel: Vec2<'a> = frame_at(ctx, &__frame, 0x0);
+    let self_vel: Vec2<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut unused1: u32 = 0;
     let mut unused2: u32 = 0;
@@ -369,7 +369,7 @@ pub fn ftCo_ThrownKirby_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800BE6AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

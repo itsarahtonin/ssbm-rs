@@ -115,7 +115,7 @@ pub fn grGreens_80213524<'a>(ctx: &'a Ctx, id: i32) -> HSD_GObj<'a> {
 
 pub fn grGreens_8021360C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -300,8 +300,8 @@ pub fn fn_80213B1C<'a>(
     vec: Vec<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut ground_gobj = ground_gobj;
     let mut fighter_gobj = fighter_gobj;
     let mut vec = vec;
@@ -367,10 +367,10 @@ pub fn fn_80213B1C<'a>(
 pub fn grGreens_80213C10<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xc8);
     let pad0: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let apple_pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let pos2: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x3c);
+    let apple_pos: Vec<'a> = frame_at(ctx, &__frame, 0x70);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x64);
+    let pos2: Vec<'a> = frame_at(ctx, &__frame, 0x54);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut bg_gobj: HSD_GObj<'a> = fns::Ground_GetMapGObj(ctx, 4_i32);
     let mut gp: Ground<'a> = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
@@ -989,7 +989,7 @@ pub fn grGreens_80214804<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grGreens_8021483C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x98);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut j: i32 = 0;
     let mut left_max: f64 = fp::fneg(3.4028234663852886e+38_f64);
@@ -1455,10 +1455,10 @@ pub fn grGreens_80215358<'a>(
     arg4: i32,
 ) {
     let __frame = ctx.stack_frame(0x90);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let arr: ArrV<'a, u8, 30> = frame_at(ctx, &__frame, 0xc);
-    let grMaterial_801C8DE0_paramA: Val<'a, F32> = frame_at(ctx, &__frame, 0x2c);
-    let grMaterial_801C8DE0_paramB: Val<'a, F32> = frame_at(ctx, &__frame, 0x30);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let arr: ArrV<'a, u8, 30> = frame_at(ctx, &__frame, 0x1c);
+    let grMaterial_801C8DE0_paramA: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let grMaterial_801C8DE0_paramB: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut col = col;
     let mut row = row;
@@ -1674,9 +1674,9 @@ pub fn fn_802159B4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, gp: Ground<'a>) {
 pub fn grGreens_802159B8<'a>(ctx: &'a Ctx, gp: Ground<'a>, i: i32, j: i32, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
     let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let f: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let f: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
     let mut gp = gp;
     let mut i = i;
     let mut j = j;
@@ -1800,7 +1800,7 @@ pub fn fn_80215D50<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, gp: Ground<'a>, go
 
 pub fn grGreens_80215D54<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i32) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let temp: grGreens_BlockVars<'a> = frame_at(ctx, &__frame, 0x0);
+    let temp: grGreens_BlockVars<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1873,8 +1873,8 @@ pub fn grGreens_80215D54<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: 
 
 pub fn grGreens_80215ED8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, col: i32, row: i32) {
     let __frame = ctx.stack_frame(0x78);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut col = col;
     let mut row = row;
@@ -2246,8 +2246,8 @@ pub fn grGreens_80215ED8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, col: i32, row: i3
 
 pub fn grGreens_802166C4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let weights: ArrV<'a, u8, 6> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let weights: ArrV<'a, u8, 6> = frame_at(ctx, &__frame, 0x20);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

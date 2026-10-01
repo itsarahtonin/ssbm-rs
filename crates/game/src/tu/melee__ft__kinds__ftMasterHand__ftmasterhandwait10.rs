@@ -240,8 +240,8 @@ pub fn ifStage251<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftMh_Wait1_0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused_2: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x10);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let unused_2: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     if (fns::Player_GetPlayerSlotType(ctx, ((fp).player_idx() as i32)) as u32) == (0_i32 as u32) {
@@ -499,7 +499,7 @@ pub fn ftMh_Wait1_0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMh_MS_341_80150894<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut da: ftMasterHand_SpecialAttrs<'a> =

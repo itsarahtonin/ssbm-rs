@@ -126,9 +126,9 @@ pub fn grKinokoRoute_8020754C<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
 
 pub fn grKinokoRoute_80207634<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let origin: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let operand_pad: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
-    let cam_offset: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let origin: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let operand_pad: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x10);
+    let cam_offset: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -436,15 +436,15 @@ pub fn grKinokoRoute_80207C80<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 
 pub fn grKinokoRoute_80207C88<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xa0);
-    let fighter_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let zone_point: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let cam_target: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let cam_offset: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x30);
-    let spawn_point: Vec<'a> = frame_at(ctx, &__frame, 0x34);
-    let boundary_point: Vec<'a> = frame_at(ctx, &__frame, 0x40);
-    let translate: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
-    let diff: Vec<'a> = frame_at(ctx, &__frame, 0x58);
+    let fighter_pos: Vec<'a> = frame_at(ctx, &__frame, 0x64);
+    let zone_point: Vec<'a> = frame_at(ctx, &__frame, 0x58);
+    let cam_target: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let cam_offset: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let spawn_point: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let boundary_point: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let translate: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let diff: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut reb0_jobj: HSD_JObj<'a> = null(ctx);
     let mut scale: f64 = 0.0;
@@ -734,8 +734,8 @@ pub fn grKinokoRoute_80208480<'a>(ctx: &'a Ctx, arg: i32) -> i32 {
 
 pub fn grKinokoRoute_802084B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let sp_vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0xc);
+    let sp_vec: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gobj2: HSD_GObj<'a> = null(ctx);
     let mut gp: grKinokoRoute_802084B4_gp<'a> =
@@ -767,7 +767,7 @@ pub fn grKinokoRoute_802084B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grKinokoRoute_80208564<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x90);
-    let depths: grNKr_Depths<'a> = frame_at(ctx, &__frame, 0x0);
+    let depths: grNKr_Depths<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -805,9 +805,9 @@ pub fn grKinokoRoute_80208564<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grKinokoRoute_80208660<'a>(ctx: &'a Ctx, unused: i32, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vel: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut unused = unused;
     let mut gobj = gobj;
     fns::ftLib_GetPos(ctx, gobj, pos);
@@ -847,7 +847,7 @@ pub fn grKinokoRoute_80208754<'a>(ctx: &'a Ctx, arg: i32) -> DynamicsDesc<'a> {
 
 pub fn grKinokoRoute_8020875C<'a>(ctx: &'a Ctx, a: Vec<'a>, b: i32, jobj: HSD_JObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut a = a;
     let mut b = b;
     let mut jobj = jobj;

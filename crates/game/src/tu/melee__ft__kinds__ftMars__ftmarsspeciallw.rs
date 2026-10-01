@@ -300,8 +300,8 @@ pub fn ftMs_SpecialLw_801390E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftMs_SpecialLw_80139140<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let unused0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused1: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
+    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused1: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut temp_r0: i32 = 0;
     {

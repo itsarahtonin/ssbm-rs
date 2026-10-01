@@ -343,9 +343,9 @@ pub fn lb_800122C8<'a>(
 
 pub fn lb_800122F0<'a>(ctx: &'a Ctx, img: HSD_ImageDesc<'a>, tex: _GXTexObj<'a>, factor: f64) {
     let __frame = ctx.stack_frame(0x88);
-    let color0: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let color1: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let color2: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let color0: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let color1: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
+    let color2: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
     let mut img = img;
     let mut tex = tex;
     let mut factor = factor;
@@ -752,8 +752,29 @@ pub fn lb_80012994<'a>(
     color_factor: f64,
 ) {
     let __frame = ctx.stack_frame(0x2b8);
-    let tex: _GXTexObj<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x20);
+    let tex: _GXTexObj<'a> = frame_at(ctx, &__frame, 0xcc);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc0);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xb8);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xb0);
+    let __inl_4: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xa8);
+    let __inl_5: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xa0);
+    let __inl_6: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x98);
+    let __inl_7: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x90);
+    let __inl_8: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x88);
+    let __inl_9: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x80);
+    let __inl_10: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x78);
+    let __inl_11: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x70);
+    let __inl_12: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x68);
+    let __inl_13: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x60);
+    let __inl_14: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x58);
+    let __inl_15: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x50);
+    let __inl_16: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x48);
+    let __inl_17: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x40);
+    let __inl_18: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x38);
+    let __inl_19: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x30);
+    let __inl_20: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x28);
+    let __inl_21: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x20);
     let mut img = img;
     let mut alpha = alpha;
     let mut blur_size = blur_size;
@@ -781,7 +802,7 @@ pub fn lb_80012994<'a>(
             break 'l1;
         }
     }
-    inl_setTevAlpha_unfused(ctx, alpha);
+    inl_setTevAlpha_unfused(ctx, alpha, Handle::addr(__inl));
     fns::lb_8001271C(
         ctx,
         tex,
@@ -792,7 +813,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (127_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (127_i32 as u8), Handle::addr(__inl_2));
     x_p1 = fp::fadds(x, off1);
     fns::lb_8001271C(
         ctx,
@@ -804,7 +825,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (169_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (169_i32 as u8), Handle::addr(__inl_3));
     x_m1 = fp::fsubs(x, off1);
     fns::lb_8001271C(
         ctx,
@@ -816,7 +837,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (191_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (191_i32 as u8), Handle::addr(__inl_4));
     y_p1 = fp::fadds(y, off1);
     fns::lb_8001271C(
         ctx,
@@ -828,7 +849,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (204_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (204_i32 as u8), Handle::addr(__inl_5));
     y_m1 = fp::fsubs(y, off1);
     fns::lb_8001271C(
         ctx,
@@ -840,7 +861,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (212_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (212_i32 as u8), Handle::addr(__inl_6));
     fns::lb_8001271C(
         ctx,
         tex,
@@ -851,7 +872,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (218_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (218_i32 as u8), Handle::addr(__inl_7));
     fns::lb_8001271C(
         ctx,
         tex,
@@ -862,7 +883,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (223_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (223_i32 as u8), Handle::addr(__inl_8));
     fns::lb_8001271C(
         ctx,
         tex,
@@ -873,7 +894,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (226_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (226_i32 as u8), Handle::addr(__inl_9));
     fns::lb_8001271C(
         ctx,
         tex,
@@ -884,7 +905,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (229_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (229_i32 as u8), Handle::addr(__inl_10));
     x_p2 = fp::fadds(x, off2);
     fns::lb_8001271C(
         ctx,
@@ -896,7 +917,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (231_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (231_i32 as u8), Handle::addr(__inl_11));
     x_m2 = fp::fsubs(x, off2);
     fns::lb_8001271C(
         ctx,
@@ -908,7 +929,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (233_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (233_i32 as u8), Handle::addr(__inl_12));
     fns::lb_8001271C(
         ctx,
         tex,
@@ -919,7 +940,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (235_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (235_i32 as u8), Handle::addr(__inl_13));
     fns::lb_8001271C(
         ctx,
         tex,
@@ -930,7 +951,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (236_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (236_i32 as u8), Handle::addr(__inl_14));
     fns::lb_8001271C(
         ctx,
         tex,
@@ -941,7 +962,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (238_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (238_i32 as u8), Handle::addr(__inl_15));
     fns::lb_8001271C(
         ctx,
         tex,
@@ -952,7 +973,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (239_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (239_i32 as u8), Handle::addr(__inl_16));
     y_p2 = fp::fadds(y, off2);
     fns::lb_8001271C(
         ctx,
@@ -964,7 +985,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (240_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (240_i32 as u8), Handle::addr(__inl_17));
     y_m2 = fp::fsubs(y, off2);
     fns::lb_8001271C(
         ctx,
@@ -976,7 +997,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (240_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (240_i32 as u8), Handle::addr(__inl_18));
     fns::lb_8001271C(
         ctx,
         tex,
@@ -987,7 +1008,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (241_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (241_i32 as u8), Handle::addr(__inl_19));
     fns::lb_8001271C(
         ctx,
         tex,
@@ -998,7 +1019,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (242_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (242_i32 as u8), Handle::addr(__inl_20));
     fns::lb_8001271C(
         ctx,
         tex,
@@ -1009,7 +1030,7 @@ pub fn lb_80012994<'a>(
         scale_x,
         scale_y,
     );
-    inl_setTevAlpha_unfused(ctx, (242_i32 as u8));
+    inl_setTevAlpha_unfused(ctx, (242_i32 as u8), Handle::addr(__inl_21));
     fns::lb_8001271C(
         ctx,
         tex,
@@ -1026,9 +1047,10 @@ pub fn lb_80012994<'a>(
 pub fn fn_80013614<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xf0);
     let pad8: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let view_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x8);
+    let view_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x68);
     let view_mtx2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x38);
-    let tex_obj: _GXTexObj<'a> = frame_at(ctx, &__frame, 0x68);
+    let tex_obj: _GXTexObj<'a> = frame_at(ctx, &__frame, 0x18);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut data: CameraBlurData<'a> =
         Handle::cast::<CameraBlurData<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj));
@@ -1128,7 +1150,7 @@ pub fn fn_80013614<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         width = (efb_copy_2).width();
         height = (efb_copy_2).height();
         fns::lb_8001285C(ctx, efb_copy_2, tex_obj);
-        inl_setTevAlpha_unfused(ctx, base_alpha_2);
+        inl_setTevAlpha_unfused(ctx, base_alpha_2, Handle::addr(__inl));
         fns::lb_8001271C(
             ctx,
             tex_obj,
@@ -1798,7 +1820,7 @@ fn asm_lb_800138EC(ctx: &Ctx) {
 
 pub fn lb_80013B14<'a>(ctx: &'a Ctx, desc: HSD_CameraDescPerspective<'a>) -> HSD_CObj<'a> {
     let __frame = ctx.stack_frame(0x20);
-    let scissor: _Scissor<'a> = frame_at(ctx, &__frame, 0x0);
+    let scissor: _Scissor<'a> = frame_at(ctx, &__frame, 0x4);
     let mut desc = desc;
     let mut cobj: HSD_CObj<'a> = fns::HSD_CObjLoadDesc(ctx, Handle::cast::<HSD_CObjDesc<'a>>(desc));
     if (fns::HSD_CObjGetProjectionType(ctx, cobj) == 1_i32)
@@ -1931,9 +1953,8 @@ fn inl_GXTexCoord2f32_unfused<'a>(ctx: &'a Ctx, x: f64, y: f64) {
 
 fn inl_GXEnd_unfused<'a>(ctx: &'a Ctx) {}
 
-fn inl_setTevAlpha_unfused<'a>(ctx: &'a Ctx, alpha: u8) {
-    let __frame = ctx.stack_frame(0x10);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_setTevAlpha_unfused<'a>(ctx: &'a Ctx, alpha: u8, __in_caller: u32) {
+    let color: _GXColor<'a> = ptr(ctx, __in_caller + 0x0);
     let mut alpha = alpha;
     color.set_a(alpha);
     fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), color);

@@ -35,7 +35,7 @@ pub fn vi0401_8031D020<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
 
 pub fn un_8031D030<'a>(ctx: &'a Ctx, char_kind: i32, costume: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut char_kind = char_kind;
     let mut costume = costume;
     inl_Stage_InitScene_unfused(

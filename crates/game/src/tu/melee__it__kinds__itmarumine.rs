@@ -183,7 +183,7 @@ pub fn itMarumine_UnkMotion3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802D0DBC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let sp10: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut attr: itPokemonAttributes<'a> = null(ctx);
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -263,7 +263,7 @@ pub fn itMarumine_UnkMotion4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn fn_802D0F98<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let sp10: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if {
@@ -340,7 +340,7 @@ pub fn itMarumine_UnkMotion5_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802D1140<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let sp10: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
     let mut attr: itPokemonAttributes<'a> = null(ctx);
@@ -387,7 +387,7 @@ pub fn it_802D1140<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn it_802D1204<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> =

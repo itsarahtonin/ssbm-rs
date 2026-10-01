@@ -79,9 +79,9 @@ pub fn lbColl_80005C44<'a>(
     arg9: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let d1: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let d1: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -198,10 +198,10 @@ pub fn lbColl_80005EBC<'a>(
     arg3: Val<'a, F32>,
 ) -> f64 {
     let __frame = ctx.stack_frame(0x60);
-    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let d1: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let d2: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let d1: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let d2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -251,10 +251,10 @@ pub fn lbColl_80005FC0<'a>(
     arg3: Val<'a, F32>,
 ) -> f64 {
     let __frame = ctx.stack_frame(0x60);
-    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let d1: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let d2: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let d1: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let d2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -297,20 +297,20 @@ pub fn lbColl_80006094<'a>(
     arg7: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x188);
-    let arg4_offset: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let arg5_offset: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 60> = frame_at(ctx, &__frame, 0x18);
-    let candidate0_arg5_scl: Val<'a, F32> = frame_at(ctx, &__frame, 0x54);
-    let candidate1_arg4_scl: Val<'a, F32> = frame_at(ctx, &__frame, 0x58);
-    let a2: Vec<'a> = frame_at(ctx, &__frame, 0x5c);
-    let d1: Vec<'a> = frame_at(ctx, &__frame, 0x68);
-    let c3: Vec<'a> = frame_at(ctx, &__frame, 0x74);
-    let mid: Vec<'a> = frame_at(ctx, &__frame, 0x80);
-    let b0: Vec<'a> = frame_at(ctx, &__frame, 0x8c);
-    let d2: Vec<'a> = frame_at(ctx, &__frame, 0x98);
-    let c2: Vec<'a> = frame_at(ctx, &__frame, 0xa4);
-    let arg2_copy: Vec<'a> = frame_at(ctx, &__frame, 0xb0);
-    let vec4: Vec<'a> = frame_at(ctx, &__frame, 0xbc);
+    let arg4_offset: Vec<'a> = frame_at(ctx, &__frame, 0xe8);
+    let arg5_offset: Vec<'a> = frame_at(ctx, &__frame, 0xdc);
+    let unused: ArrV<'a, u8, 60> = frame_at(ctx, &__frame, 0xa0);
+    let candidate0_arg5_scl: Val<'a, F32> = frame_at(ctx, &__frame, 0x9c);
+    let candidate1_arg4_scl: Val<'a, F32> = frame_at(ctx, &__frame, 0x98);
+    let a2: Vec<'a> = frame_at(ctx, &__frame, 0x80);
+    let d1: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let c3: Vec<'a> = frame_at(ctx, &__frame, 0x68);
+    let mid: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let b0: Vec<'a> = frame_at(ctx, &__frame, 0x50);
+    let d2: Vec<'a> = frame_at(ctx, &__frame, 0x44);
+    let c2: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let arg2_copy: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let vec4: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -729,22 +729,22 @@ pub fn lbColl_800067F8<'a>(
     q: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x168);
-    let a1: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let c1: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let diff_ba: Vec2<'a> = frame_at(ctx, &__frame, 0x18);
-    let diff_dc: Vec2<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x28);
-    let out0: Val<'a, F32> = frame_at(ctx, &__frame, 0x44);
-    let out1: Val<'a, F32> = frame_at(ctx, &__frame, 0x48);
-    let a2: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
-    let d1: Vec<'a> = frame_at(ctx, &__frame, 0x58);
-    let c3: Vec<'a> = frame_at(ctx, &__frame, 0x64);
-    let mid: Vec<'a> = frame_at(ctx, &__frame, 0x70);
-    let b0: Vec<'a> = frame_at(ctx, &__frame, 0x7c);
-    let d2: Vec<'a> = frame_at(ctx, &__frame, 0x88);
-    let c2: Vec<'a> = frame_at(ctx, &__frame, 0x94);
-    let c0: Vec<'a> = frame_at(ctx, &__frame, 0xa0);
-    let a0: Vec<'a> = frame_at(ctx, &__frame, 0xac);
+    let a1: Vec<'a> = frame_at(ctx, &__frame, 0xe8);
+    let c1: Vec<'a> = frame_at(ctx, &__frame, 0xdc);
+    let diff_ba: Vec2<'a> = frame_at(ctx, &__frame, 0x0);
+    let diff_dc: Vec2<'a> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0xa0);
+    let out0: Val<'a, F32> = frame_at(ctx, &__frame, 0x9c);
+    let out1: Val<'a, F32> = frame_at(ctx, &__frame, 0x98);
+    let a2: Vec<'a> = frame_at(ctx, &__frame, 0x80);
+    let d1: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let c3: Vec<'a> = frame_at(ctx, &__frame, 0x68);
+    let mid: Vec<'a> = frame_at(ctx, &__frame, 0x44);
+    let b0: Vec<'a> = frame_at(ctx, &__frame, 0x50);
+    let d2: Vec<'a> = frame_at(ctx, &__frame, 0x5c);
+    let c2: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let c0: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let a0: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let mut a = a;
     let mut b = b;
     let mut c = c;
@@ -1080,26 +1080,26 @@ pub fn lbColl_80006E58<'a>(
     broadphase_scale: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x1b0);
-    let hit_start_copy: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let hurt_start_copy: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let hit_delta: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let axis: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let midpoint: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let separation: Vec<'a> = frame_at(ctx, &__frame, 0x48);
-    let candidate_hurt_param: Val<'a, F32> = frame_at(ctx, &__frame, 0x54);
-    let candidate_hit_param: Val<'a, F32> = frame_at(ctx, &__frame, 0x58);
-    let inv_hurt_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x5c);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8c);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x90);
-    let unused_3: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x94);
-    let a2: Vec<'a> = frame_at(ctx, &__frame, 0x98);
-    let d1: Vec<'a> = frame_at(ctx, &__frame, 0xa4);
-    let c3: Vec<'a> = frame_at(ctx, &__frame, 0xb0);
-    let unused_4: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xbc);
-    let b0: Vec<'a> = frame_at(ctx, &__frame, 0xc0);
-    let d1_2: Vec<'a> = frame_at(ctx, &__frame, 0xcc);
-    let c2: Vec<'a> = frame_at(ctx, &__frame, 0xd8);
+    let hit_start_copy: Vec<'a> = frame_at(ctx, &__frame, 0x114);
+    let hurt_start_copy: Vec<'a> = frame_at(ctx, &__frame, 0x108);
+    let hit_delta: Vec<'a> = frame_at(ctx, &__frame, 0xfc);
+    let axis: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let offset: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let midpoint: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let separation: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let candidate_hurt_param: Val<'a, F32> = frame_at(ctx, &__frame, 0xc8);
+    let candidate_hit_param: Val<'a, F32> = frame_at(ctx, &__frame, 0xc4);
+    let inv_hurt_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x94);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x30);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x40);
+    let unused_3: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x44);
+    let a2: Vec<'a> = frame_at(ctx, &__frame, 0x7c);
+    let d1: Vec<'a> = frame_at(ctx, &__frame, 0x58);
+    let c3: Vec<'a> = frame_at(ctx, &__frame, 0x64);
+    let unused_4: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x48);
+    let b0: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let d1_2: Vec<'a> = frame_at(ctx, &__frame, 0x70);
+    let c2: Vec<'a> = frame_at(ctx, &__frame, 0x34);
     let mut hit_start = hit_start;
     let mut hit_end = hit_end;
     let mut hurt_start = hurt_start;
@@ -1544,12 +1544,12 @@ pub fn lbColl_800077A0<'a>(
     dist_offset: f64,
 ) {
     let __frame = ctx.stack_frame(0xa0);
-    let diff_cb: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let diff_ba: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let normalize_e: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let normal_x: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let diff_cb: Vec<'a> = frame_at(ctx, &__frame, 0x60);
+    let diff_ba: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let normalize_e: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let normal_x: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
     let multi_mtx: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let sqrt_tmp: ArrV<'a, F32, 2> = frame_at(ctx, &__frame, 0x3c);
+    let sqrt_tmp: ArrV<'a, F32, 2> = frame_at(ctx, &__frame, 0x28);
     let mut a = a;
     let mut arg1 = arg1;
     let mut b = b;
@@ -1720,9 +1720,9 @@ pub fn lbColl_80007BCC<'a>(
     arg6: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0xa8);
-    let sp74: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let sp68: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let sp38: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x1c);
+    let sp74: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
+    let sp68: Vec<'a> = frame_at(ctx, &__frame, 0x60);
+    let sp38: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
     let mut arg0 = arg0;
     let mut shield_hit = shield_hit;
     let mut arg2 = arg2;
@@ -1794,8 +1794,8 @@ pub fn lbColl_80007DD8<'a>(
     scale: f64,
 ) {
     let __frame = ctx.stack_frame(0x88);
-    let unused_result: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let transformed_hit: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xc);
+    let unused_result: Vec<'a> = frame_at(ctx, &__frame, 0x54);
+    let transformed_hit: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x24);
     let mut capsule = capsule;
     let mut hit = hit;
     let mut hit_transform = hit_transform;
@@ -1846,9 +1846,9 @@ pub fn lbColl_80007ECC<'a>(
     hurt_pos_z: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0xa8);
-    let sp70: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let sp64: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let sp34: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x1c);
+    let sp70: Vec<'a> = frame_at(ctx, &__frame, 0x68);
+    let sp64: Vec<'a> = frame_at(ctx, &__frame, 0x5c);
+    let sp34: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x2c);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1919,9 +1919,9 @@ pub fn lbColl_8000805C<'a>(
     arg6: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0xa8);
-    let sp74: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let sp68: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let sp38: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x1c);
+    let sp74: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
+    let sp68: Vec<'a> = frame_at(ctx, &__frame, 0x60);
+    let sp38: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -2008,9 +2008,9 @@ pub fn lbColl_80008248<'a>(
     arg5: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0xa8);
-    let sp70: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let sp64: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let sp34: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x1c);
+    let sp70: Vec<'a> = frame_at(ctx, &__frame, 0x68);
+    let sp64: Vec<'a> = frame_at(ctx, &__frame, 0x5c);
+    let sp34: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x2c);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -2406,7 +2406,7 @@ pub fn lbColl_80008D30<'a>(ctx: &'a Ctx, arg0: HitCapsule<'a>, arg1: lbColl_8000
 
 pub fn lbColl_80008DA4<'a>(ctx: &'a Ctx, arg0: _GXColor<'a>, arg1: _GXColor<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let sp10: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut var_r3: i32 = 0;
@@ -2529,14 +2529,14 @@ pub fn lbColl_80008FC8<'a>(
     arg4: f64,
 ) {
     let __frame = ctx.stack_frame(0x160);
-    let sp104: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let spD4: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
-    let spA4: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x60);
-    let sp74: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x90);
-    let sp44: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xc0);
-    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0xf0);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0xfc);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x108);
+    let sp104: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xfc);
+    let spD4: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xcc);
+    let spA4: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x9c);
+    let sp74: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x6c);
+    let sp44: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x3c);
+    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut arg2 = arg2;
     let mut arg3 = arg3;
     let mut arg4 = arg4;
@@ -2763,14 +2763,14 @@ pub fn lbColl_800096B4<'a>(
     arg5: f64,
 ) {
     let __frame = ctx.stack_frame(0x160);
-    let sp108: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let spD8: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
-    let spA8: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x60);
-    let sp78: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x90);
-    let sp48: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xc0);
-    let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0xf0);
-    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0xfc);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x108);
+    let sp108: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x100);
+    let spD8: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xd0);
+    let spA8: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xa0);
+    let sp78: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x70);
+    let sp48: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x40);
+    let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut arg0 = arg0;
     let mut arg3 = arg3;
     let mut arg4 = arg4;
@@ -2993,8 +2993,8 @@ pub fn lbColl_800096B4<'a>(
 
 pub fn lbColl_80009DD4<'a>(ctx: &'a Ctx, v0: Vec<'a>, v1: Vec<'a>, clr: _GXColor<'a>) {
     let __frame = ctx.stack_frame(0x78);
-    let viewMtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x30);
+    let viewMtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x2c);
+    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut v0 = v0;
     let mut v1 = v1;
     let mut clr = clr;
@@ -3225,9 +3225,10 @@ pub fn lbColl_8000A244<'a>(
     arg3: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0xe8);
-    let sp9C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let sp90: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let sp9C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x94);
+    let sp90: Vec<'a> = frame_at(ctx, &__frame, 0x88);
+    let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x7c);
+    let __inl: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x0);
     let mut hurt = hurt;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -3274,7 +3275,16 @@ pub fn lbColl_8000A244<'a>(
         } else {
             var_r28 = inl_HSD_JObjGetMtxPtr_unfused(ctx, (hurt).bone());
         }
-        inl_lbColl_DrawHitResult_unfused(ctx, var_r28, sp90, sp84, temp_r3, temp_r31_2, temp_f31);
+        inl_lbColl_DrawHitResult_unfused(
+            ctx,
+            var_r28,
+            sp90,
+            sp84,
+            temp_r3,
+            temp_r31_2,
+            temp_f31,
+            Handle::addr(__inl),
+        );
         return 1_i32;
     }
     return 0_i32;
@@ -3318,9 +3328,10 @@ pub fn lbColl_8000A584<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0xf8);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let spA0: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x4);
-    let sp94: Vec<'a> = frame_at(ctx, &__frame, 0x34);
-    let sp88: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let spA0: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x98);
+    let sp94: Vec<'a> = frame_at(ctx, &__frame, 0x8c);
+    let sp88: Vec<'a> = frame_at(ctx, &__frame, 0x80);
+    let __inl: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x8);
     let mut hurt = hurt;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -3392,6 +3403,7 @@ pub fn lbColl_8000A584<'a>(
                 temp_r3,
                 temp_r31_2,
                 temp_f31,
+                Handle::addr(__inl),
             );
             return 1_i32;
         }
@@ -3409,9 +3421,10 @@ pub fn lbColl_8000A78C<'a>(
     pos_z: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0xe8);
-    let sp9C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let sp90: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let sp9C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x94);
+    let sp90: Vec<'a> = frame_at(ctx, &__frame, 0x88);
+    let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x7c);
+    let __inl: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x0);
     let mut hit = hit;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -3427,6 +3440,7 @@ pub fn lbColl_8000A78C<'a>(
         sp9C.get(0),
         sp90,
         sp84,
+        Handle::addr(__inl),
     );
 }
 
@@ -3438,9 +3452,10 @@ pub fn lbColl_8000A95C<'a>(
     pos_z: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0xe8);
-    let sp9C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let sp90: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let sp9C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x94);
+    let sp90: Vec<'a> = frame_at(ctx, &__frame, 0x88);
+    let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x7c);
+    let __inl: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x0);
     let mut hit = hit;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -3456,6 +3471,7 @@ pub fn lbColl_8000A95C<'a>(
         sp9C.get(0),
         sp90,
         sp84,
+        Handle::addr(__inl),
     );
 }
 
@@ -3467,9 +3483,10 @@ pub fn lbColl_8000AB2C<'a>(
     pos_z: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0xe8);
-    let sp9C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let sp90: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let sp9C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x94);
+    let sp90: Vec<'a> = frame_at(ctx, &__frame, 0x88);
+    let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x7c);
+    let __inl: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x0);
     let mut hit = hit;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -3485,6 +3502,7 @@ pub fn lbColl_8000AB2C<'a>(
         sp9C.get(0),
         sp90,
         sp84,
+        Handle::addr(__inl),
     );
 }
 
@@ -3842,11 +3860,11 @@ fn inl_lbColl_DrawHitResult_unfused<'a>(
     c0: _GXColor<'a>,
     c1: _GXColor<'a>,
     size: f64,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x50);
-    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp3C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x18);
+    let sp30: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let sp24: Vec<'a> = ptr(ctx, __in_caller + 0xc);
+    let sp3C: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x18);
     let mut mtx = mtx;
     let mut a = a;
     let mut b = b;
@@ -3870,7 +3888,9 @@ fn inl_lbColl_DrawHit_unfused<'a>(
     hit_mtx: ArrV<'a, F32, 4>,
     pos_a: Vec<'a>,
     pos_b: Vec<'a>,
+    __in_caller: u32,
 ) -> i32 {
+    let __inl: ArrV<'a, u8, 72> = ptr(ctx, __in_caller + 0x0);
     let mut hit = hit;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -3920,6 +3940,7 @@ fn inl_lbColl_DrawHit_unfused<'a>(
             color,
             secondary_color,
             temp_f31,
+            Handle::addr(__inl),
         );
         return 1_i32;
     }

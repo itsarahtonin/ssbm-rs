@@ -34,7 +34,7 @@ pub fn itRabbitC_Logic30_ShieldBounced<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>
 
 pub fn it_80294DC0<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x60);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x4);
     let mut pos = pos;
     let mut item_gobj: HSD_GObj<'a> = null(ctx);
     spawn.set_kind((enums::It_Kind_RabbitC as i32));
@@ -74,8 +74,8 @@ pub fn it_80294EB0<'a>(
     input_pos2: Vec<'a>,
 ) {
     let __frame = ctx.stack_frame(0x38);
-    let pos_var: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let pos_var: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut input_pos1 = input_pos1;
     let mut input_pos2 = input_pos2;

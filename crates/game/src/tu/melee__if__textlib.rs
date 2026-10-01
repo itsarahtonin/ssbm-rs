@@ -36,7 +36,7 @@ pub fn DevText_Create<'a>(
     buf: Addr<'a>,
 ) -> DevText<'a> {
     let __frame = ctx.stack_frame(0x60);
-    let bg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let bg: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
     let mut id = id;
     let mut x = x;
     let mut y = y;
@@ -217,7 +217,7 @@ pub fn DevText_SetTextColor<'a>(
     color: _GXColor<'a>,
 ) {
     let __frame = ctx.stack_frame(0x18);
-    let old: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let old: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
     let mut text = text;
     let mut index: i32 = ((text).current_color() as i32);
     Handle::copy_from(old, (text).text_colors().get(index));
@@ -233,7 +233,7 @@ pub fn DevText_SetBGColor<'a>(
     color: _GXColor<'a>,
 ) {
     let __frame = ctx.stack_frame(0x18);
-    let old: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let old: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
     let mut text = text;
     Handle::copy_from(old, (text).bg_color());
     Handle::copy_from((text).bg_color(), color);
@@ -283,7 +283,7 @@ pub fn DevText_Print<'a>(ctx: &'a Ctx, text: DevText<'a>, str: Val<'a, i8>) {
 
 pub fn DevText_PrintInt<'a>(ctx: &'a Ctx, text: DevText<'a>, num: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let str: ArrV<'a, i8, 16> = frame_at(ctx, &__frame, 0x0);
+    let str: ArrV<'a, i8, 16> = frame_at(ctx, &__frame, 0x8);
     let mut text = text;
     let mut num = num;
     fns::DevText_NumToStr(ctx, num, str.at(0));

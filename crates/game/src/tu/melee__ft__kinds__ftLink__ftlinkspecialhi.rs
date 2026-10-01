@@ -180,11 +180,12 @@ pub fn ftLk_SpecialAirHi_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftLk_SpecialHi_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
-        inl_ftLk_SpecialAirHi_Phys_unfused(ctx, gobj);
+        inl_ftLk_SpecialAirHi_Phys_unfused(ctx, gobj, Handle::addr(__inl));
     } else {
         fns::ft_80084F3C(ctx, gobj);
     }
@@ -277,9 +278,8 @@ fn inl_Fighter_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a
     (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
 }
 
-fn inl_ftLk_SpecialAirHi_Phys_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftLk_SpecialAirHi_Phys_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

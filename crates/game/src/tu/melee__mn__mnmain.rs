@@ -259,8 +259,8 @@ pub fn mn_80229B2C<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
 
 pub fn fn_80229BF4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let sp20: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let sp1C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
+    let sp20: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x18);
+    let sp1C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x14);
     let sp10: AnimLoopSettings<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut temp_f1: f64 = 0.0;
@@ -369,8 +369,8 @@ pub fn fn_80229BF4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mn_80229DC0<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x20);
-    let spC: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let sp8: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
+    let spC: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
+    let sp8: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
     let mut temp_r31: HSD_GObj<'a> = null(ctx);
     let mut temp_r3: HSD_JObj<'a> = null(ctx);
     let mut user_data: _MainMenuPanelData<'a> = null(ctx);
@@ -472,13 +472,13 @@ pub fn mn_80229DC0<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
 
 pub fn mn_80229F60<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>, root: HSD_JObj<'a>, selection: i32) {
     let __frame = ctx.stack_frame(0x98);
-    let sp54: ArrP<'a, HSD_JObj<'a>, 7> = frame_at(ctx, &__frame, 0x0);
-    let pad_50: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x1c);
-    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x38);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x44);
-    let pad2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x50);
+    let sp54: ArrP<'a, HSD_JObj<'a>, 7> = frame_at(ctx, &__frame, 0x4c);
+    let pad_50: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let pad2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x4);
     let mut gp = gp;
     let mut root = root;
     let mut selection = selection;
@@ -601,8 +601,8 @@ pub fn mn_80229F60<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>, root: HSD_JObj<'a>, selec
 
 pub fn mn_8022A440<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>, root: HSD_JObj<'a>, selection: i32) {
     let __frame = ctx.stack_frame(0x58);
-    let sp24: ArrP<'a, HSD_JObj<'a>, 7> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x1c);
+    let sp24: ArrP<'a, HSD_JObj<'a>, 7> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gp = gp;
     let mut root = root;
     let mut selection = selection;
@@ -681,12 +681,12 @@ pub fn mn_8022A440<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>, root: HSD_JObj<'a>, selec
 pub fn mn_8022A5D0<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>, selection: i32) {
     let __frame = ctx.stack_frame(0x118);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let spA0: ArrP<'a, HSD_JObj<'a>, 7> = frame_at(ctx, &__frame, 0x8);
-    let sp84: ArrP<'a, HSD_JObj<'a>, 7> = frame_at(ctx, &__frame, 0x24);
-    let sp74: Vec<'a> = frame_at(ctx, &__frame, 0x40);
-    let sp68: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
-    let sp5C: Vec<'a> = frame_at(ctx, &__frame, 0x58);
-    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x64);
+    let spA0: ArrP<'a, HSD_JObj<'a>, 7> = frame_at(ctx, &__frame, 0x98);
+    let sp84: ArrP<'a, HSD_JObj<'a>, 7> = frame_at(ctx, &__frame, 0x7c);
+    let sp74: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
+    let sp68: Vec<'a> = frame_at(ctx, &__frame, 0x60);
+    let sp5C: Vec<'a> = frame_at(ctx, &__frame, 0x54);
+    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x48);
     let mut gp = gp;
     let mut selection = selection;
     let mut sp80: HSD_JObj<'a> = null(ctx);
@@ -948,8 +948,8 @@ pub fn fn_8022AF10<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>) {
 
 pub fn fn_8022AFEC<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x78);
-    let sp20: ArrP<'a, HSD_JObj<'a>, 12> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 18> = frame_at(ctx, &__frame, 0x30);
+    let sp20: ArrP<'a, HSD_JObj<'a>, 12> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 18> = frame_at(ctx, &__frame, 0x0);
     let mut gp = gp;
     let mut think: HSD_GObjProc<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -1199,10 +1199,10 @@ pub fn fn_8022AFEC<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>) {
 
 pub fn mn_8022B3A0<'a>(ctx: &'a Ctx, state: u8) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0xe0);
-    let option_jobjs: ArrP<'a, HSD_JObj<'a>, 12> = frame_at(ctx, &__frame, 0x0);
-    let cursor_parts: ArrP<'a, HSD_JObj<'a>, 7> = frame_at(ctx, &__frame, 0x30);
-    let jobj: mn_8022B3A0_jobj<'a> = frame_at(ctx, &__frame, 0x4c);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x50);
+    let option_jobjs: ArrP<'a, HSD_JObj<'a>, 12> = frame_at(ctx, &__frame, 0x40);
+    let cursor_parts: ArrP<'a, HSD_JObj<'a>, 7> = frame_at(ctx, &__frame, 0x24);
+    let jobj: mn_8022B3A0_jobj<'a> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
     let mut state = state;
     let mut i: i32 = 0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
@@ -1498,12 +1498,12 @@ pub fn mn_8022B3A0<'a>(ctx: &'a Ctx, state: u8) -> HSD_GObj<'a> {
 pub fn mn_8022BA1C<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb0);
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let sp54: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x10);
+    let sp54: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x4c);
     let sp48: Vec<'a> = frame_at(ctx, &__frame, 0x40);
-    let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
-    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x58);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x64);
-    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x70);
+    let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let _2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x7c);
     let mut gp = gp;
     let mut var_f0: f64 = 0.0;
@@ -3465,8 +3465,8 @@ pub fn mnMain_Scene_OnFrame<'a>(ctx: &'a Ctx) {
 
 pub fn mnMain_Scene_OnEnter<'a>(ctx: &'a Ctx, user_data: Addr<'a>) {
     let __frame = ctx.stack_frame(0x450);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x280);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x28c);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x2a0);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x280);
     let mut user_data = user_data;
     let mut hovered_selection: Val<'a, u16> = null(ctx);
     let mut temp_r3_8: HSD_GObj<'a> = null(ctx);

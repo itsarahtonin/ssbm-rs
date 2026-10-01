@@ -686,13 +686,14 @@ pub fn ftKb_SpecialN_800EF040<'a>(
 
 pub fn ftKb_SpecialN_800EF0E4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: Val<'a, u8>) {
     let __frame = ctx.stack_frame(0x60);
-    let current_joint: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x0);
-    let joint_idx: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
-    let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
-    let total_dobjs: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
-    let insert_part_idx: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
-    let arg2_idx: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
-    let byte_base: Val<'a, i32> = frame_at(ctx, &__frame, 0x18);
+    let current_joint: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x20);
+    let joint_idx: Val<'a, i32> = frame_at(ctx, &__frame, 0x1c);
+    let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
+    let total_dobjs: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
+    let insert_part_idx: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let arg2_idx: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let byte_base: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -825,14 +826,14 @@ pub fn ftKb_SpecialN_800EF0E4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, a
             fns::ftAnim_GetNextJointInTree(ctx, current_joint, joint_idx);
         }
     }
-    inl_ftKb_SpecialN_800EF0E4_finish_unfused(ctx, fp, total_dobjs.get());
+    inl_ftKb_SpecialN_800EF0E4_finish_unfused(ctx, fp, total_dobjs.get(), Handle::addr(__inl));
 }
 
 pub fn ftKb_SpecialN_800EF35C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: Val<'a, u8>) {
     let __frame = ctx.stack_frame(0x38);
-    let matanimjoint: Ptr<'a, HSD_MatAnimJoint<'a>> = frame_at(ctx, &__frame, 0x0);
-    let idx: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let matanimjoint: Ptr<'a, HSD_MatAnimJoint<'a>> = frame_at(ctx, &__frame, 0x18);
+    let idx: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -873,12 +874,12 @@ pub fn ftKb_SpecialN_800EF35C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, a
 
 pub fn ftKb_SpecialN_800EF438<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, hat: KirbyHatStruct<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let current_joint: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x0);
-    let joint_idx: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
-    let total_dobjs: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
-    let insert_part_idx: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
-    let byte_base: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
+    let current_joint: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x1c);
+    let joint_idx: Val<'a, i32> = frame_at(ctx, &__frame, 0x18);
+    let total_dobjs: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let insert_part_idx: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let byte_base: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut hat = hat;
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -1716,6 +1717,7 @@ pub fn ftKb_SpecialN_800F0F5C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_SpecialN_800F0FC0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb8);
+    let __inl: ArrV<'a, u8, 144> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1724,7 +1726,7 @@ pub fn ftKb_SpecialN_800F0FC0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .hats()
             .at((enums::Ft_Kind_Captain as i32))
             .get();
-        inl_ftKb_LoadHatParts_unfused(ctx, gobj, 3_i32, hat);
+        inl_ftKb_LoadHatParts_unfused(ctx, gobj, 3_i32, hat, Handle::addr(__inl));
     }
 }
 
@@ -1744,6 +1746,7 @@ pub fn ftKb_SpecialN_800F10A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_SpecialN_800F10D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb8);
+    let __inl: ArrV<'a, u8, 144> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1752,7 +1755,7 @@ pub fn ftKb_SpecialN_800F10D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .hats()
             .at((enums::Ft_Kind_Yoshi as i32))
             .get();
-        inl_ftKb_LoadHatParts_unfused(ctx, gobj, 15_i32, hat);
+        inl_ftKb_LoadHatParts_unfused(ctx, gobj, 15_i32, hat, Handle::addr(__inl));
         fns::ftCo_8009D81C(ctx, fp);
     }
 }
@@ -1773,6 +1776,7 @@ pub fn ftKb_SpecialN_800F11AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_SpecialN_800F11F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb8);
+    let __inl: ArrV<'a, u8, 144> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1781,7 +1785,7 @@ pub fn ftKb_SpecialN_800F11F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .hats()
             .at((enums::Ft_Kind_Purin as i32))
             .get();
-        inl_ftKb_LoadHatParts_unfused(ctx, gobj, 16_i32, hat);
+        inl_ftKb_LoadHatParts_unfused(ctx, gobj, 16_i32, hat, Handle::addr(__inl));
         fns::ftCo_8009DB50(ctx, fp);
     }
 }
@@ -1805,6 +1809,7 @@ pub fn ftKb_SpecialN_800F12C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_SpecialN_800F130C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb8);
+    let __inl: ArrV<'a, u8, 144> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1813,7 +1818,7 @@ pub fn ftKb_SpecialN_800F130C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .hats()
             .at((enums::Ft_Kind_DrMario as i32))
             .get();
-        inl_ftKb_LoadHatParts_unfused(ctx, gobj, 22_i32, hat);
+        inl_ftKb_LoadHatParts_unfused(ctx, gobj, 22_i32, hat, Handle::addr(__inl));
     }
 }
 
@@ -1884,6 +1889,7 @@ pub fn ftKb_SpecialN_800F1420<'a>(
 
 pub fn ftKb_SpecialN_800F14B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb0);
+    let __inl: ArrV<'a, u8, 144> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1893,7 +1899,7 @@ pub fn ftKb_SpecialN_800F14B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .at((enums::Ft_Kind_Pichu as i32))
             .get();
         let mut lookup: FtPartsVisLookup<'a> = null(ctx);
-        inl_ftKb_LoadHatParts_unfused(ctx, gobj, 24_i32, hat);
+        inl_ftKb_LoadHatParts_unfused(ctx, gobj, 24_i32, hat, Handle::addr(__inl));
         lookup = Handle::cast::<FtPartsVisLookup<'a>>((hat).hat_dynamics().at(3_i32).get());
         (fp).u().kb().hat().x24().xC().at(4_i32).set(lookup);
         (fp).x5AC().xC().at(4_i32).set(lookup);
@@ -2550,8 +2556,8 @@ pub fn ftKb_SpecialN_800F1D24<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_SpecialN_800F1DAC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -2837,9 +2843,13 @@ fn inl_ftKb_SpecialN_800EF0E4_find_bone_unfused<'a>(
     (jobj).set((Handle::add(parts, (part_idx).get())).joint());
 }
 
-fn inl_ftKb_SpecialN_800EF0E4_finish_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, total_dobjs: i32) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftKb_SpecialN_800EF0E4_finish_unfused<'a>(
+    ctx: &'a Ctx,
+    fp: Fighter<'a>,
+    total_dobjs: i32,
+    __in_caller: u32,
+) {
+    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0x0);
     let mut fp = fp;
     let mut total_dobjs = total_dobjs;
     (fp).u().kb().hat().x14().set_count((total_dobjs as u32));
@@ -2945,9 +2955,9 @@ fn inl_ftKb_LoadHatParts_unfused<'a>(
     gobj: HSD_GObj<'a>,
     arg1: i32,
     hat: KirbyHatStruct<'a>,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x98);
-    let part_dobj_indices: ArrV<'a, u8, 140> = frame_at(ctx, &__frame, 0x0);
+    let part_dobj_indices: ArrV<'a, u8, 140> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut hat = hat;

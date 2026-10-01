@@ -71,7 +71,7 @@ pub fn ftCo_800DE3FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32, anim_speed
 
 pub fn ftCo_800DE508<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     fns::lb_8000B1CC(
@@ -243,7 +243,7 @@ pub fn ftCo_800DE7C0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, victim: HSD_GObj<'a>,
 
 pub fn ftCo_800DE854<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let collpos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let collpos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

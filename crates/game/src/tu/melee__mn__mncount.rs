@@ -57,8 +57,8 @@ pub fn mnCount_GetDisasterMaster<'a>(ctx: &'a Ctx, selkind: i32) -> u32 {
 pub fn mnCount_8025035C<'a>(ctx: &'a Ctx, skip_count: i32, get_val_func: FnPtr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x108);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let sp18: Arr<'a, CountEntry<'a>, 25> = frame_at(ctx, &__frame, 0x4);
-    let temp: CountEntry<'a> = frame_at(ctx, &__frame, 0xcc);
+    let sp18: Arr<'a, CountEntry<'a>, 25> = frame_at(ctx, &__frame, 0x10);
+    let temp: CountEntry<'a> = frame_at(ctx, &__frame, 0x8);
     let mut skip_count = skip_count;
     let mut get_val_func = get_val_func;
     'l1: loop {
@@ -374,8 +374,8 @@ pub fn mnCount_8025072C<'a>(
 pub fn mnCount_8025092C<'a>(ctx: &'a Ctx, rank: i32, getVal: FnPtr<'a>, mode: i32) -> i32 {
     let __frame = ctx.stack_frame(0x118);
     let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
-    let entries: Arr<'a, CountEntry<'a>, 25> = frame_at(ctx, &__frame, 0xc);
-    let tmp: CountEntry<'a> = frame_at(ctx, &__frame, 0xd4);
+    let entries: Arr<'a, CountEntry<'a>, 25> = frame_at(ctx, &__frame, 0x14);
+    let tmp: CountEntry<'a> = frame_at(ctx, &__frame, 0xc);
     let mut rank = rank;
     let mut getVal = getVal;
     let mut mode = mode;
@@ -704,7 +704,7 @@ pub fn mnCount_GetRowValue_Number<'a>(ctx: &'a Ctx, row: i32) -> u32 {
 
 pub fn mnCount_CreateRow<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, visible_row: i32, data_row: i32) {
     let __frame = ctx.stack_frame(0x50);
-    let buf: ArrV<'a, i8, 4> = frame_at(ctx, &__frame, 0x0);
+    let buf: ArrV<'a, i8, 4> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut visible_row = visible_row;
     let mut data_row = data_row;
@@ -878,7 +878,7 @@ pub fn mnCount_HandleUserInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnCount_UpdateArrowIndicators<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut userdata: MnCountData<'a> =
         (Handle::cast::<MnCountData<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -927,6 +927,7 @@ pub fn fn_802514B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn fn_802514D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut userdata: MnCountData<'a> =
         (Handle::cast::<MnCountData<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -936,7 +937,7 @@ pub fn fn_802514D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    inl_fn_802514D8_inline_unfused(ctx, userdata, gobj);
+    inl_fn_802514D8_inline_unfused(ctx, userdata, gobj, Handle::addr(__inl));
 }
 
 pub fn fn_80251640<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -1270,10 +1271,14 @@ fn inl_inline_update_entries_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
-fn inl_fn_802514D8_inline_unfused<'a>(ctx: &'a Ctx, userdata: MnCountData<'a>, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x10);
+fn inl_fn_802514D8_inline_unfused<'a>(
+    ctx: &'a Ctx,
+    userdata: MnCountData<'a>,
+    gobj: HSD_GObj<'a>,
+    __in_caller: u32,
+) {
+    let unused: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
+    let child: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x10);
     let mut userdata = userdata;
     let mut gobj = gobj;
     let mut proc: HSD_GObjProc<'a> = null(ctx);

@@ -34,9 +34,9 @@ pub fn assign_reg<'a>(
     order: Val<'a, i32>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let color_refs: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let alpha_refs: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let color_refs: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let alpha_refs: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut num = num;
     let mut arg1 = arg1;
     let mut list = list;
@@ -342,8 +342,8 @@ pub fn CalcDistance<'a>(
 
 pub fn HSD_TExpMakeDag<'a>(ctx: &'a Ctx, root: HSD_TExp<'a>, list: HSD_TExpDag<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x140);
-    let sp94: ArrP<'a, HSD_TExp<'a>, 32> = frame_at(ctx, &__frame, 0x0);
-    let sp14: ArrV<'a, i32, 32> = frame_at(ctx, &__frame, 0x80);
+    let sp94: ArrP<'a, HSD_TExp<'a>, 32> = frame_at(ctx, &__frame, 0x8c);
+    let sp14: ArrV<'a, i32, 32> = frame_at(ctx, &__frame, 0xc);
     let mut root = root;
     let mut list = list;
     let mut n: i32 = 0;
@@ -724,11 +724,11 @@ pub fn HSD_TExpSchedule<'a>(
     resource: HSD_TExpRes<'a>,
 ) {
     let __frame = ctx.stack_frame(0x258);
-    let dep_mtx: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0xc);
-    let full_dep_matrix: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0x8c);
-    let order: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0x10c);
-    let min_order: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0x18c);
-    let min: Val<'a, i32> = frame_at(ctx, &__frame, 0x20c);
+    let dep_mtx: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0x1a4);
+    let full_dep_matrix: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0x124);
+    let order: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0xa4);
+    let min_order: ArrV<'a, u32, 32> = frame_at(ctx, &__frame, 0x24);
+    let min: Val<'a, i32> = frame_at(ctx, &__frame, 0x20);
     let mut num = num;
     let mut list = list;
     let mut result = result;
@@ -1882,7 +1882,7 @@ pub fn SimplifyThis<'a>(ctx: &'a Ctx, arg0: HSD_TExp<'a>) -> i32 {
 
 pub fn SimplifyByMerge<'a>(ctx: &'a Ctx, arg0: HSD_TExp<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let tmp_arg: _HSD_TEArg<'a> = frame_at(ctx, &__frame, 0x0);
+    let tmp_arg: _HSD_TEArg<'a> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut child: HSD_TExp<'a> = null(ctx);
     let mut bias: i32 = 0;

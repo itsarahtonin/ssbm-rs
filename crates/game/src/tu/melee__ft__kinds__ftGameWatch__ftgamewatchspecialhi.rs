@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn ftGw_SpecialHi_ItemRescueSetup<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut rescueGObj: HSD_GObj<'a> = null(ctx);

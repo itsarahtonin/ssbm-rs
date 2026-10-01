@@ -34,7 +34,7 @@ pub fn it_80288C88<'a>(
     dir: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x80);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut vel = vel;
@@ -79,7 +79,7 @@ pub fn itEgg_Logic3_Spawned<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_80288DC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itEgg_ItemVars<'a> =
@@ -291,12 +291,13 @@ pub fn itEgg_UnkMotion6_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itEgg_Logic3_DmgDealt<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     if ((ip).xDD4_itemVar().egg().x0() != 0) {
         return 0_i32;
     }
-    if (inl_it_80288DC4_unfused(ctx, gobj) != 0) {
+    if (inl_it_80288DC4_unfused(ctx, gobj, Handle::addr(__inl)) != 0) {
         inl_it_80289094_unfused(ctx, gobj);
         return 0_i32;
     }
@@ -449,9 +450,8 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
     return (gobj).hsd_obj();
 }
 
-fn inl_it_80288DC4_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x18);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_it_80288DC4_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) -> i32 {
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itEgg_ItemVars<'a> =

@@ -168,8 +168,8 @@ pub fn lbMthp8001F928<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
 
 pub fn lbMthp8001FAA0<'a>(ctx: &'a Ctx, filename: Val<'a, i8>, width: i32, height: i32) {
     let __frame = ctx.stack_frame(0x58);
-    let header: lbMthp8001FAA0_header<'a> = frame_at(ctx, &__frame, 0x0);
-    let output: Val<'a, i32> = frame_at(ctx, &__frame, 0x1c);
+    let header: lbMthp8001FAA0_header<'a> = frame_at(ctx, &__frame, 0x10);
+    let output: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
     let mut filename = filename;
     let mut width = width;
     let mut height = height;

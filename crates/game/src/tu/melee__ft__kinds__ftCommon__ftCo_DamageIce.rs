@@ -55,8 +55,8 @@ pub fn ftCo_80090984<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_800909D0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x20);
     let mut fp = fp;
     {
@@ -123,7 +123,7 @@ pub fn ftCo_800909D0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ftCo_80090AC0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let param: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let param: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
     let mut fp = fp;
     let mut joint: HSD_JObj<'a> = (Handle::add(
         (fp).parts(),
@@ -148,21 +148,21 @@ pub fn ftCo_DamageIce_OnHit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_DamageIce_Init<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x1d0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp17C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xc);
-    let sp14C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x3c);
-    let sp11C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x6c);
-    let spEC: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x9c);
-    let rot_y: Quaternion<'a> = frame_at(ctx, &__frame, 0xcc);
-    let rot_mtx_y: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xdc);
-    let _p4: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10c);
-    let rot_x: Quaternion<'a> = frame_at(ctx, &__frame, 0x110);
-    let rot_mtx_x: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x120);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x150);
-    let param: Val<'a, F32> = frame_at(ctx, &__frame, 0x158);
-    let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x15c);
-    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x184);
-    let _q: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x190);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x1a4);
+    let sp17C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x174);
+    let sp14C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x144);
+    let sp11C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x114);
+    let spEC: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xe4);
+    let rot_y: Quaternion<'a> = frame_at(ctx, &__frame, 0xd4);
+    let rot_mtx_y: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xa4);
+    let _p4: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let rot_x: Quaternion<'a> = frame_at(ctx, &__frame, 0x90);
+    let rot_mtx_x: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x60);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
+    let param: Val<'a, F32> = frame_at(ctx, &__frame, 0x54);
+    let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x2c);
+    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let _q: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut xrotn: HSD_JObj<'a> = null(ctx);
     let mut yrotn: HSD_JObj<'a> = null(ctx);
@@ -312,9 +312,9 @@ pub fn ftCo_DamageIce_Init<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_DamageIce_HitWhileFrozen<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let param: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
-    let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0xc);
-    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let param: Val<'a, F32> = frame_at(ctx, &__frame, 0x4c);
+    let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x24);
+    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut effect_joint: HSD_JObj<'a> = null(ctx);
     let mut ice_size: Val<'a, F32> = null(ctx);
@@ -497,8 +497,8 @@ pub fn ftCo_DamageIce_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_DamageIce_InAirUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut coll_data: CollData<'a> = null(ctx);
@@ -561,7 +561,8 @@ pub fn ftCo_DamageIce_InAirUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_DamageIce_Collide<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, normal: Vec<'a>, vec: Vec<'a>) {
     let __frame = ctx.stack_frame(0x60);
     let _s: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let next_pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let next_pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut normal = normal;
     let mut vec = vec;
@@ -575,6 +576,7 @@ pub fn ftCo_DamageIce_Collide<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, normal: Vec<
         gobj,
         next_pos,
         fns::atan2f(ctx, fp::fneg((normal).x()), (normal).y()),
+        Handle::addr(__inl),
     );
     fns::Camera_RequestQuake(ctx, (enums::QuakeKind_Small as i32), next_pos);
     fns::ftCommon_8007EBAC(ctx, fp, (7_i32 as u32), (0_i32 as u32));
@@ -613,9 +615,9 @@ pub fn ftCo_DamageIce_Collide<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, normal: Vec<
 
 pub fn ftCo_80091854<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp24: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x10);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let sp24: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut fp: Fighter<'a> = null(ctx);
@@ -892,9 +894,14 @@ fn inl_HSD_JObjAddRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64
     }
 }
 
-fn inl_ftCo_SpawnEffect_x406<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vec: Vec<'a>, f: f64) {
-    let __frame = ctx.stack_frame(0x10);
-    let f__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftCo_SpawnEffect_x406<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    vec: Vec<'a>,
+    f: f64,
+    __in_caller: u32,
+) {
+    let f__slot: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut vec = vec;
     f__slot.set(f);

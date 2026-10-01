@@ -564,8 +564,8 @@ pub fn fioPacketWrite<'a>(ctx: &'a Ctx, fd: i32, buffer: Addr<'a>, size: i32, r#
 
 pub fn fioPacketResultWrite<'a>(ctx: &'a Ctx, buffer: Addr<'a>, dataSize: u32) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let state: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let state_2: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let state: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
+    let state_2: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
     let mut buffer = buffer;
     let mut dataSize = dataSize;
     let mut nResult: i32 = 0;

@@ -37,7 +37,7 @@ pub fn ftCo_800BBC88<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800BBCC0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let vec0: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -90,7 +90,8 @@ pub fn ftCo_800BBCC0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800BBED4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x78);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x24);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     {
@@ -137,7 +138,7 @@ pub fn ftCo_800BBED4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
             let __t4 = inl_HSD_JObjGetChild_unfused(ctx, (fp).x20A0_accessory());
             fns::lb_8000C2F8(ctx, __t4, __t3)
         };
-        inl_inlineA0_unfused(ctx, gobj);
+        inl_inlineA0_unfused(ctx, gobj, Handle::addr(__inl));
         fns::ftYs_SpecialN_SetupItemVel(ctx, arg1, (fp).self_vel());
         (fp).set_facing_dir(fns::ftYs_SpecialN_GetFacingDir(ctx, arg1));
         (fp).dmg()
@@ -374,9 +375,8 @@ fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JOb
     return null(ctx);
 }
 
-fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x30);
-    let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let hurt: ftHurtboxInit<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {

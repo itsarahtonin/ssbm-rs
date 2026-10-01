@@ -36,8 +36,8 @@ pub fn it_802AF1A4<'a>(
     arg4: i32,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x88);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let pad: ArrV<'a, F32, 1> = frame_at(ctx, &__frame, 0x4c);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x1c);
+    let pad: ArrV<'a, F32, 1> = frame_at(ctx, &__frame, 0x0);
     let mut facing_dir = facing_dir;
     let mut owner_gobj = owner_gobj;
     let mut vec = vec;
@@ -1172,7 +1172,7 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
 
 pub fn itLinkbow_UnkMotion5_Anim<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut item: Item<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -1248,7 +1248,7 @@ pub fn itLinkbow_UnkMotion5_Phys<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn itLinkbow_UnkMotion5_Coll<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut item: Item<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);

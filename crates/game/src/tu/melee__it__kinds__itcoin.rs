@@ -476,7 +476,7 @@ pub fn it_802F2094<'a>(
     arg3: i32,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x90);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x14);
     let mut arg0 = arg0;
     let mut pos = pos;
     let mut arg2 = arg2;

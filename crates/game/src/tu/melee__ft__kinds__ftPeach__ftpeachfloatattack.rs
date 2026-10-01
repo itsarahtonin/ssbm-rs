@@ -91,6 +91,7 @@ pub fn ftPe_FloatAttackAir_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPe_FloatAttackAir_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -100,7 +101,7 @@ pub fn ftPe_FloatAttackAir_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     if (((fp).allow_interrupt() as i32) != 0)
         && (!(fns::ftCo_80095328(ctx, gobj, null::<Val<'a, i32>>(ctx)) != 0))
     {
-        if !(inl_ftPe_8011BE80_unfused(ctx, gobj) != 0) {
+        if !(inl_ftPe_8011BE80_unfused(ctx, gobj, Handle::addr(__inl)) != 0) {
             if (fns::ftCo_800CB870(ctx, gobj) != 0) {
                 return;
             }
@@ -160,9 +161,8 @@ fn inl_ftPe_8011BF34_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     );
 }
 
-fn inl_ftPe_8011BE80_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftPe_8011BE80_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) -> i32 {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

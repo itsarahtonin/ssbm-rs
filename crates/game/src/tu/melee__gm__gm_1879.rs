@@ -28,8 +28,8 @@ use crate::support::*;
 
 pub fn fn_80187910<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut data: gm_1832_804736C0_t<'a> = null(ctx);
     let mut cobj: HSD_CObj<'a> = null(ctx);

@@ -50,9 +50,9 @@ pub fn it_80277D08<'a>(ctx: &'a Ctx) {
 
 pub fn fn_80277D8C<'a>(ctx: &'a Ctx, mobj: HSD_MObj<'a>, rendermode_arg: u32, unused_arg: u32) {
     let __frame = ctx.stack_frame(0xb8);
-    let tobj2: Ptr<'a, HSD_TObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let sp38: HSD_TExp<'a> = frame_at(ctx, &__frame, 0x4);
-    let pe_desc: HSD_PEDesc<'a> = frame_at(ctx, &__frame, 0x70);
+    let tobj2: Ptr<'a, HSD_TObj<'a>> = frame_at(ctx, &__frame, 0x9c);
+    let sp38: HSD_TExp<'a> = frame_at(ctx, &__frame, 0x30);
+    let pe_desc: HSD_PEDesc<'a> = frame_at(ctx, &__frame, 0x24);
     let mut mobj = mobj;
     let mut rendermode_arg = rendermode_arg;
     let mut unused_arg = unused_arg;
@@ -138,7 +138,7 @@ pub fn it_80277F90<'a>(
     arg2: HSD_TExp<'a>,
 ) -> HSD_TExp<'a> {
     let __frame = ctx.stack_frame(0x98);
-    let desc: _HSD_TevDesc<'a> = frame_at(ctx, &__frame, 0x0);
+    let desc: _HSD_TevDesc<'a> = frame_at(ctx, &__frame, 0xc);
     let mut item = item;
     let mut mobj = mobj;
     let mut arg2 = arg2;
@@ -194,13 +194,13 @@ pub fn it_80277F90<'a>(
 
 pub fn it_80278108<'a>(ctx: &'a Ctx, item: Item<'a>, mobj: HSD_MObj<'a>, texp: HSD_TExp<'a>) {
     let __frame = ctx.stack_frame(0x188);
-    let sp168: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let _padA: ArrV<'a, u8, 84> = frame_at(ctx, &__frame, 0x4);
-    let spFC: _HSD_TECnst<'a> = frame_at(ctx, &__frame, 0x58);
-    let _padB: ArrV<'a, u8, 84> = frame_at(ctx, &__frame, 0x70);
-    let sp90: _HSD_TECnst<'a> = frame_at(ctx, &__frame, 0xc4);
-    let sp1C: _HSD_TevDesc<'a> = frame_at(ctx, &__frame, 0xdc);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x150);
+    let sp168: _GXColor<'a> = frame_at(ctx, &__frame, 0x160);
+    let _padA: ArrV<'a, u8, 84> = frame_at(ctx, &__frame, 0xa0);
+    let spFC: _HSD_TECnst<'a> = frame_at(ctx, &__frame, 0xf4);
+    let _padB: ArrV<'a, u8, 84> = frame_at(ctx, &__frame, 0x10c);
+    let sp90: _HSD_TECnst<'a> = frame_at(ctx, &__frame, 0x88);
+    let sp1C: _HSD_TevDesc<'a> = frame_at(ctx, &__frame, 0x14);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
     let mut item = item;
     let mut mobj = mobj;
     let mut texp = texp;

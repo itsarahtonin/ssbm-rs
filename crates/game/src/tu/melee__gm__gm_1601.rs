@@ -785,7 +785,7 @@ pub fn fn_80161004<'a>(ctx: &'a Ctx, match_end: MatchEnd<'a>) -> i32 {
 
 pub fn fn_80161154<'a>(ctx: &'a Ctx, arg0: MatchEnd<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let spC: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
+    let spC: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut best_player: MatchPlayerData<'a> = null(ctx);
     let mut idx: i32 = 0;
@@ -4128,9 +4128,9 @@ pub fn fn_801661E0<'a>(ctx: &'a Ctx, arg0: MatchEnd<'a>) -> i32 {
 
 pub fn gm_80166378<'a>(ctx: &'a Ctx, arg0_raw: MatchEnd<'a>) {
     let __frame = ctx.stack_frame(0xb0);
-    let sp48_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let sp48_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 60> = frame_at(ctx, &__frame, 0x8);
+    let sp48_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x44);
+    let sp48_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x40);
+    let unused: ArrV<'a, u8, 60> = frame_at(ctx, &__frame, 0x0);
     let mut arg0_raw = arg0_raw;
     let mut i: i32 = 0;
     let mut arg0: MatchEnd<'a> = arg0_raw;
@@ -4948,8 +4948,8 @@ pub fn fn_80167194<'a>(ctx: &'a Ctx, me: MatchEnd<'a>) -> i32 {
 
 pub fn fn_8016719C<'a>(ctx: &'a Ctx, slot: i32, subchar: i32) {
     let __frame = ctx.stack_frame(0x40);
-    let respawn_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let offset: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let respawn_pos: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut slot = slot;
     let mut subchar = subchar;
     let mut scene_state: VsSceneState<'a> = null(ctx);
@@ -5140,8 +5140,8 @@ pub fn fn_8016758C<'a>(ctx: &'a Ctx) {
 pub fn fn_80167638<'a>(ctx: &'a Ctx, arg0: i32, arg1: Vec<'a>, arg2: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x58);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let sp: ArrV<'a, F32, 6> = frame_at(ctx, &__frame, 0x8);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x20);
+    let sp: ArrV<'a, F32, 6> = frame_at(ctx, &__frame, 0x14);
+    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -5675,7 +5675,7 @@ pub fn gm_801685D4<'a>(ctx: &'a Ctx, arg0: u8, arg1: u8) -> i8 {
 
 pub fn gm_80168638<'a>(ctx: &'a Ctx, arg0: MatchEnd<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let spC: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let spC: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut i: i32 = 0;
     let mut temp_r3: Val<'a, i8> = null(ctx);
@@ -5722,7 +5722,7 @@ pub fn gm_80168638<'a>(ctx: &'a Ctx, arg0: MatchEnd<'a>) {
 
 pub fn gm_80168710<'a>(ctx: &'a Ctx, arg0: MatchEnd<'a>, arg1: VsModeData<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let buf: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let buf: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut count: i32 = 0;
@@ -6107,8 +6107,8 @@ pub fn gm_LoadAnnouncer<'a>(ctx: &'a Ctx) {
 pub fn fn_80169000<'a>(ctx: &'a Ctx, arg0: MatchEnd<'a>, arg1: Val<'a, u8>) {
     let __frame = ctx.stack_frame(0x30);
     let operand_pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let handicaps: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
-    let positions: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let handicaps: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x1c);
+    let positions: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut p: MatchEnd<'a> = arg0;
@@ -6281,7 +6281,7 @@ pub fn gm_801692BC<'a>(ctx: &'a Ctx, ckind: u8) -> u8 {
 
 pub fn gm_801692E8<'a>(ctx: &'a Ctx, secs: u32, datetime_: datetime<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let tm: OSCalendarTime<'a> = frame_at(ctx, &__frame, 0x0);
+    let tm: OSCalendarTime<'a> = frame_at(ctx, &__frame, 0x8);
     let mut secs = secs;
     let mut datetime_ = datetime_;
     fns::lbTime_8000B028(ctx, tm, secs);

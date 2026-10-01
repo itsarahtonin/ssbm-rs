@@ -28,19 +28,19 @@ use crate::support::*;
 
 pub fn _tyDisplay_8031830C<'a>(ctx: &'a Ctx, base_: TySortElem<'a>, lo: i32, hi: i32) {
     let __frame = ctx.stack_frame(0x80);
-    let tmp0: TySortElem<'a> = frame_at(ctx, &__frame, 0x0);
-    let tmp1: TySortElem<'a> = frame_at(ctx, &__frame, 0x8);
-    let tmp2: TySortElem<'a> = frame_at(ctx, &__frame, 0x10);
-    let tmp3: TySortElem<'a> = frame_at(ctx, &__frame, 0x18);
-    let tmp4: TySortElem<'a> = frame_at(ctx, &__frame, 0x20);
-    let pad0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x28);
-    let tmp5: TySortElem<'a> = frame_at(ctx, &__frame, 0x2c);
-    let pad1: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x34);
-    let tmp6: TySortElem<'a> = frame_at(ctx, &__frame, 0x38);
-    let tmp7: TySortElem<'a> = frame_at(ctx, &__frame, 0x40);
-    let pad2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x48);
-    let tmp8: TySortElem<'a> = frame_at(ctx, &__frame, 0x4c);
-    let pad6C: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x54);
+    let tmp0: TySortElem<'a> = frame_at(ctx, &__frame, 0x5c);
+    let tmp1: TySortElem<'a> = frame_at(ctx, &__frame, 0x54);
+    let tmp2: TySortElem<'a> = frame_at(ctx, &__frame, 0x4c);
+    let tmp3: TySortElem<'a> = frame_at(ctx, &__frame, 0x44);
+    let tmp4: TySortElem<'a> = frame_at(ctx, &__frame, 0x3c);
+    let pad0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let tmp5: TySortElem<'a> = frame_at(ctx, &__frame, 0x30);
+    let pad1: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let tmp6: TySortElem<'a> = frame_at(ctx, &__frame, 0x24);
+    let tmp7: TySortElem<'a> = frame_at(ctx, &__frame, 0x1c);
+    let pad2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let tmp8: TySortElem<'a> = frame_at(ctx, &__frame, 0x10);
+    let pad6C: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
     let mut base_ = base_;
     let mut lo = lo;
     let mut hi = hi;
@@ -218,19 +218,19 @@ pub fn _tyDisplay_8031830C<'a>(ctx: &'a Ctx, base_: TySortElem<'a>, lo: i32, hi:
 
 pub fn _tyDisplay_80318714<'a>(ctx: &'a Ctx, base_: TySortElem<'a>, lo: i32, hi: i32) {
     let __frame = ctx.stack_frame(0x80);
-    let tmp0: TySortElemInt<'a> = frame_at(ctx, &__frame, 0x0);
-    let tmp1: TySortElemInt<'a> = frame_at(ctx, &__frame, 0x8);
-    let tmp2: TySortElemInt<'a> = frame_at(ctx, &__frame, 0x10);
-    let tmp3: TySortElemInt<'a> = frame_at(ctx, &__frame, 0x18);
-    let tmp4: TySortElemInt<'a> = frame_at(ctx, &__frame, 0x20);
-    let pad0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x28);
-    let tmp5: TySortElemInt<'a> = frame_at(ctx, &__frame, 0x2c);
-    let pad1: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x34);
-    let tmp6: TySortElemInt<'a> = frame_at(ctx, &__frame, 0x38);
-    let tmp7: TySortElemInt<'a> = frame_at(ctx, &__frame, 0x40);
-    let pad2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x48);
-    let tmp8: TySortElemInt<'a> = frame_at(ctx, &__frame, 0x4c);
-    let pad6C: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x54);
+    let tmp0: TySortElemInt<'a> = frame_at(ctx, &__frame, 0x5c);
+    let tmp1: TySortElemInt<'a> = frame_at(ctx, &__frame, 0x54);
+    let tmp2: TySortElemInt<'a> = frame_at(ctx, &__frame, 0x4c);
+    let tmp3: TySortElemInt<'a> = frame_at(ctx, &__frame, 0x44);
+    let tmp4: TySortElemInt<'a> = frame_at(ctx, &__frame, 0x3c);
+    let pad0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let tmp5: TySortElemInt<'a> = frame_at(ctx, &__frame, 0x30);
+    let pad1: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let tmp6: TySortElemInt<'a> = frame_at(ctx, &__frame, 0x24);
+    let tmp7: TySortElemInt<'a> = frame_at(ctx, &__frame, 0x1c);
+    let pad2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let tmp8: TySortElemInt<'a> = frame_at(ctx, &__frame, 0x10);
+    let pad6C: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
     let mut base_ = base_;
     let mut lo = lo;
     let mut hi = hi;
@@ -489,7 +489,9 @@ pub fn _tyDisplay_80318B1C<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn _tyDisplay_80318CB4<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x170);
-    let rounded: _tyDisplay_80318CB4_rounded<'a> = frame_at(ctx, &__frame, 0x0);
+    let rounded: _tyDisplay_80318CB4_rounded<'a> = frame_at(ctx, &__frame, 0x5c);
+    let __inl: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x20);
     let mut arg0 = arg0;
     let mut sort_end: i32 = 0;
     let mut grid: TyDspGrid<'a> = statics::melee__ty__tydisplay::_tyDisplay_804D6F14(ctx).get();
@@ -717,16 +719,17 @@ pub fn _tyDisplay_80318CB4<'a>(ctx: &'a Ctx, arg0: i32) {
         sort_end = count.wrapping_sub(1_i32);
         base = grid;
         if sort_end > 0_i32 {
-            inl__tyDisplay_80318CB4_sort_pos(ctx, base, sort_end);
+            inl__tyDisplay_80318CB4_sort_pos(ctx, base, sort_end, Handle::addr(__inl));
         }
     }
-    inl__tyDisplay_80318CB4_sort(ctx, cfg, grid);
+    inl__tyDisplay_80318CB4_sort(ctx, cfg, grid, Handle::addr(__inl_2));
     inl__tyDisplay_80318CB4_place_toys(ctx, grid, cfg);
 }
 
 pub fn _tyDisplay_80319540<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x78);
     let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x18);
     let mut arg0 = arg0;
     let mut cfg: TyDspConfig<'a> = statics::melee__ty__tydisplay::_tyDisplay_804D6F18(ctx).get();
     let mut cur: TyDspGrid<'a> = null(ctx);
@@ -817,7 +820,7 @@ pub fn _tyDisplay_80319540<'a>(ctx: &'a Ctx, arg0: i32) {
             }
         }
     }
-    inl__tyDisplay_80319540_sort_unfused(ctx, cfg, grid);
+    inl__tyDisplay_80319540_sort_unfused(ctx, cfg, grid, Handle::addr(__inl));
     {
         {
             cur = ptr::<TyDspGrid<'a>>(
@@ -875,6 +878,8 @@ pub fn _tyDisplay_80319540<'a>(ctx: &'a Ctx, arg0: i32) {
 pub fn _tyDisplay_80319994<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0xa0);
     let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x20);
+    let __inl_2: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x40);
     let mut arg0 = arg0;
     let mut cfg: TyDspConfig<'a> = statics::melee__ty__tydisplay::_tyDisplay_804D6F18(ctx).get();
     let mut grid: TyDspGrid<'a> = statics::melee__ty__tydisplay::_tyDisplay_804D6F14(ctx).get();
@@ -975,10 +980,10 @@ pub fn _tyDisplay_80319994<'a>(ctx: &'a Ctx, arg0: i32) {
                 }
             }
             if pivot != 0_i32 {
-                inl__tyDisplay_80319994_sort_pos(ctx, grid, count);
+                inl__tyDisplay_80319994_sort_pos(ctx, grid, count, Handle::addr(__inl));
             }
         }
-        inl__tyDisplay_80319994_sort(ctx, cfg, grid);
+        inl__tyDisplay_80319994_sort(ctx, cfg, grid, Handle::addr(__inl_2));
     }
     {
         {
@@ -1037,10 +1042,10 @@ pub fn _tyDisplay_80319994<'a>(ctx: &'a Ctx, arg0: i32) {
 pub fn _tyDisplay_80319EF0<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x80);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let eyepos: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused_2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x2c);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let eyepos: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused_2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x8);
     let mut grid: TyDspGrid<'a> = statics::melee__ty__tydisplay::_tyDisplay_804D6F14(ctx).get();
     let mut cfg: TyDspConfig<'a> = statics::melee__ty__tydisplay::_tyDisplay_804D6F18(ctx).get();
     let mut cobj: HSD_CObj<'a> = Handle::cast::<HSD_CObj<'a>>(((cfg).x00()).hsd_obj());
@@ -1237,14 +1242,14 @@ pub fn _tyDisplay_80319EF0<'a>(ctx: &'a Ctx) {
 
 pub fn _tyDisplay_8031A4EC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x88);
-    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let eye: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let _1: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
-    let interest2: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x58);
+    let eye: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let _1: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let interest2: Vec<'a> = frame_at(ctx, &__frame, 0x38);
     let tempvec1: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
-    let eye2: Vec<'a> = frame_at(ctx, &__frame, 0x38);
-    let tempvec2: Vec<'a> = frame_at(ctx, &__frame, 0x44);
-    let _2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x50);
+    let eye2: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let tempvec2: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let _2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x64);
     let mut arg0 = arg0;
     let mut zero: f64 = 0.0;
     let mut cobj: HSD_CObj<'a> = Handle::cast::<HSD_CObj<'a>>((arg0).hsd_obj());
@@ -1405,14 +1410,14 @@ pub fn _tyDisplay_8031A4EC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 pub fn _tyDisplay_8031A94C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb0);
     let _1: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let sp7C: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let sp70: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let _3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
-    let interest2: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let tempvec1: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp7C: Vec<'a> = frame_at(ctx, &__frame, 0x74);
+    let sp70: Vec<'a> = frame_at(ctx, &__frame, 0x68);
+    let _3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
+    let interest2: Vec<'a> = frame_at(ctx, &__frame, 0x54);
+    let tempvec1: Vec<'a> = frame_at(ctx, &__frame, 0x48);
     let eye2: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let tempvec2: Vec<'a> = frame_at(ctx, &__frame, 0x48);
-    let _2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x54);
+    let tempvec2: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let _2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut cfg: TyDspConfig<'a> = statics::melee__ty__tydisplay::_tyDisplay_804D6F18(ctx).get();
     let mut cobj: HSD_CObj<'a> = (Handle::cast::<HSD_CObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, arg0)));
@@ -1861,8 +1866,8 @@ pub fn _tyDisplay_8031B328<'a>(ctx: &'a Ctx) {
 
 pub fn tyDisplay_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let sp18: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
+    let sp18: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut cfg: TyDspConfig<'a> = null(ctx);
     let mut data: TyDspBgData<'a> = null(ctx);
@@ -2171,7 +2176,7 @@ pub fn tyDisplay_8031B9DC<'a>(ctx: &'a Ctx, id: i32) -> TyDspEntry<'a> {
 
 pub fn _tyDisplay_8031BA78<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, farg0: f64) {
     let __frame = ctx.stack_frame(0x40);
-    let buf: ArrV<'a, i8, 24> = frame_at(ctx, &__frame, 0x0);
+    let buf: ArrV<'a, i8, 24> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut farg0 = farg0;
@@ -2223,7 +2228,7 @@ pub fn _tyDisplay_8031BA78<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, farg0: f64) {
 
 pub fn tyDisplay_8031BB34<'a>(ctx: &'a Ctx, idx: i8) -> i32 {
     let __frame = ctx.stack_frame(0xb8);
-    let table: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0x0);
+    let table: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0x4);
     let mut idx = idx;
     Handle::copy_from(
         table,
@@ -2237,7 +2242,7 @@ pub fn tyDisplay_8031BB34<'a>(ctx: &'a Ctx, idx: i8) -> i32 {
 
 pub fn tyDisplay_8031BB94<'a>(ctx: &'a Ctx, idx: i8) -> Val<'a, i8> {
     let __frame = ctx.stack_frame(0xb8);
-    let table: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0x0);
+    let table: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0x4);
     let mut idx = idx;
     Handle::copy_from(
         table,
@@ -2251,7 +2256,7 @@ pub fn tyDisplay_8031BB94<'a>(ctx: &'a Ctx, idx: i8) -> Val<'a, i8> {
 
 pub fn _tyDisplay_8031BBF4<'a>(ctx: &'a Ctx, arg0: i8) -> i32 {
     let __frame = ctx.stack_frame(0xb8);
-    let table: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0x0);
+    let table: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     Handle::copy_from(
         table,
@@ -2265,9 +2270,9 @@ pub fn _tyDisplay_8031BBF4<'a>(ctx: &'a Ctx, arg0: i8) -> i32 {
 
 pub fn _tyDisplay_8031BC54<'a>(ctx: &'a Ctx, arg0: i32) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x1b0);
-    let buf: ArrV<'a, i8, 44> = frame_at(ctx, &__frame, 0x0);
-    let jobj_names: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0x2c);
-    let matanim_names: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0xd8);
+    let buf: ArrV<'a, i8, 44> = frame_at(ctx, &__frame, 0x15c);
+    let jobj_names: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0xb0);
+    let matanim_names: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut id: i32 = arg0;
@@ -2441,11 +2446,11 @@ pub fn _tyDisplay_8031BF34<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn _tyDisplay_8031C1D0<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x38);
-    let savedColor: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let bgColor: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let savedColor: Val<'a, i32> = frame_at(ctx, &__frame, 0x28);
+    let bgColor: Val<'a, i32> = frame_at(ctx, &__frame, 0x24);
     let buf: ArrV<'a, i8, 28> = frame_at(ctx, &__frame, 0x8);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
-    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     savedColor.set(
         (Handle::cast::<Val<'a, i32>>(statics::melee__ty__tydisplay::_tyDisplay_804DE024(ctx)))
@@ -2615,10 +2620,10 @@ pub fn tyDisplay_8031C354<'a>(
 
 pub fn tyDisplay_8031C454<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x230);
-    let names1: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0x0);
-    let names2: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0xac);
-    let names3: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0x158);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x204);
+    let names1: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0x164);
+    let names2: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0xb8);
+    let names3: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp2: HSD_Archive<'a> = null(ctx);
     let mut temp: TyDspNameTables<'a> = null(ctx);
@@ -2692,13 +2697,13 @@ pub fn tyDisplay_8031C454<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 
 pub fn tyDisplay_8031C5E4<'a>(ctx: &'a Ctx, arg0: i32) -> HSD_JObj<'a> {
     let __frame = ctx.stack_frame(0x2f0);
-    let _1: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
-    let jobj_names1: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0xc);
-    let matanim_names1: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0xb8);
-    let jobj_names2: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0x164);
-    let _2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x210);
-    let jobj_names3: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0x214);
-    let _3: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x2c0);
+    let _1: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x2bc);
+    let jobj_names1: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0x210);
+    let matanim_names1: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0x164);
+    let jobj_names2: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0xb8);
+    let _2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let jobj_names3: TyDspArchNames<'a> = frame_at(ctx, &__frame, 0x8);
+    let _3: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut temp: Val<'a, i8> = null(ctx);
     let mut entry: TyDspEntry<'a> = null(ctx);
@@ -2864,9 +2869,13 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return x;
 }
 
-fn inl__tyDisplay_80318CB4_sort_pos<'a>(ctx: &'a Ctx, grid: TyDspGrid<'a>, n2: i32) {
-    let __frame = ctx.stack_frame(0x28);
-    let temps: _tyDisplay_80318CB4_sort_pos_temps<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl__tyDisplay_80318CB4_sort_pos<'a>(
+    ctx: &'a Ctx,
+    grid: TyDspGrid<'a>,
+    n2: i32,
+    __in_caller: u32,
+) {
+    let temps: _tyDisplay_80318CB4_sort_pos_temps<'a> = ptr(ctx, __in_caller + 0x0);
     let mut grid = grid;
     let mut n2 = n2;
     let mut pivot: i32 = 0;
@@ -2943,9 +2952,13 @@ fn inl_tyDisplay_GetGridSortElem<'a>(
     );
 }
 
-fn inl__tyDisplay_80318CB4_sort<'a>(ctx: &'a Ctx, cfg: TyDspConfig<'a>, grid: TyDspGrid<'a>) {
-    let __frame = ctx.stack_frame(0x28);
-    let temps: _tyDisplay_80318CB4_sort_temps<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl__tyDisplay_80318CB4_sort<'a>(
+    ctx: &'a Ctx,
+    cfg: TyDspConfig<'a>,
+    grid: TyDspGrid<'a>,
+    __in_caller: u32,
+) {
+    let temps: _tyDisplay_80318CB4_sort_temps<'a> = ptr(ctx, __in_caller + 0x0);
     let mut cfg = cfg;
     let mut grid = grid;
     let mut n2: i32 = 0;
@@ -3144,9 +3157,9 @@ fn inl__tyDisplay_80319540_sort_unfused<'a>(
     ctx: &'a Ctx,
     cfg: TyDspConfig<'a>,
     grid: TyDspGrid<'a>,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x28);
-    let temps: _tyDisplay_80319540_sort_temps<'a> = frame_at(ctx, &__frame, 0x0);
+    let temps: _tyDisplay_80319540_sort_temps<'a> = ptr(ctx, __in_caller + 0x0);
     let mut cfg = cfg;
     let mut grid = grid;
     let mut n2: i32 = 0;
@@ -3279,9 +3292,13 @@ fn inl_HSD_JObjSetTranslateZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f6
     }
 }
 
-fn inl__tyDisplay_80319994_sort_pos<'a>(ctx: &'a Ctx, grid: TyDspGrid<'a>, count: i32) {
-    let __frame = ctx.stack_frame(0x28);
-    let temps: _tyDisplay_80319994_sort_pos_temps<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl__tyDisplay_80319994_sort_pos<'a>(
+    ctx: &'a Ctx,
+    grid: TyDspGrid<'a>,
+    count: i32,
+    __in_caller: u32,
+) {
+    let temps: _tyDisplay_80319994_sort_pos_temps<'a> = ptr(ctx, __in_caller + 0x0);
     let mut grid = grid;
     let mut count = count;
     if count > 1_i32 {
@@ -3347,9 +3364,13 @@ fn inl__tyDisplay_80319994_sort_pos<'a>(ctx: &'a Ctx, grid: TyDspGrid<'a>, count
     }
 }
 
-fn inl__tyDisplay_80319994_sort<'a>(ctx: &'a Ctx, cfg: TyDspConfig<'a>, grid: TyDspGrid<'a>) {
-    let __frame = ctx.stack_frame(0x28);
-    let temps: _tyDisplay_80319994_sort_temps<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl__tyDisplay_80319994_sort<'a>(
+    ctx: &'a Ctx,
+    cfg: TyDspConfig<'a>,
+    grid: TyDspGrid<'a>,
+    __in_caller: u32,
+) {
+    let temps: _tyDisplay_80319994_sort_temps<'a> = ptr(ctx, __in_caller + 0x0);
     let mut cfg = cfg;
     let mut grid = grid;
     let mut pivot: i32 = 0;

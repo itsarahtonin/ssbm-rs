@@ -227,8 +227,11 @@ class FnCtx:
         self.cursor = cursor
         self.locals = {}  # USR or name -> (rust name, type, on_stack)
         self.names = set()
-        self.frame = []  # (rust name, handle type, size, align)
-        self.frame_size = 0
+        self.frame = []  # (rust name, handle type, size, align, offset in the original's frame)
+        self.frame_size = 0  # bytes kept at the frame's start, past the outgoing arguments
+        # Locals the original's frame holds: vkey -> offset from r1.
+        self.placed = {}
+        self.inline_regions = 0  # regions this frame keeps for inline copies' locals
         # Bytes at 8(r1) that calls from this frame pass arguments in, past the registers.
         self.outgoing = 0
         self.labels = 0
@@ -274,6 +277,10 @@ class Program:
     def __init__(self, root, types_path):
         self.root = root
         self.data = json.load(open(types_path))
+        # Where MWCC puts each function's locals, from tools/c2rs/frames.py: unit -> function
+        # -> {"params": [[name, where]], "locals": [[name, where]]}.
+        frames = os.path.join(os.path.dirname(types_path), "frames.json")
+        self.frames = json.load(open(frames)) if os.path.exists(frames) else {}
         self.gen = Gen(self.data)
         self.functions_by_name = defaultdict(list)
         self.functions_by_symbol = defaultdict(list)
@@ -365,6 +372,8 @@ class Unit:
         self.inline_variants = {}  # base Rust name -> [(Rust name, inlining decisions)]
         self.inline_active = {}  # base Rust name -> Rust name, while translating it
         self.inline_outgoing = {}  # inline copy -> bytes at 8(r1) it needs of its caller's frame
+        self.inline_frames = {}  # inline copy -> bytes of its caller's frame its locals take
+        self.inline_recursive = set()  # inline copies that call themselves
         self.data_ranges = self.read_data_ranges()
         self.static_addrs = {}
         self.skipped = []
@@ -400,6 +409,7 @@ class Unit:
         self.fused_ops = {}
         self.calls = {}
         self.frame_sizes = {}
+        self.stack_addresses = {}  # function -> offsets from r1 its code takes the address of
         self.listing = ""
         if not os.path.exists(path):
             return ranges
@@ -415,6 +425,7 @@ class Unit:
                 current = m.group(1)
                 self.fused_ops[current] = 0
                 self.calls[current] = {}  # callee -> number of calls in the asm
+                self.stack_addresses[current] = set()
                 continue
             if line.startswith(".endfn"):
                 current = None
@@ -427,6 +438,9 @@ class Unit:
             m = re.search(r"\tstwu r1, -0x([0-9a-fA-F]+)\(r1\)", line)
             if current and m and current not in self.frame_sizes:
                 self.frame_sizes[current] = int(m.group(1), 16)
+            m = re.search(r"\taddi r(\d+), r1, 0x([0-9a-fA-F]+)$", line.rstrip())
+            if current and m and m.group(1) != "1":
+                self.stack_addresses[current].add(int(m.group(2), 16))
         return ranges
 
     def string_addr(self, data):
@@ -649,6 +663,8 @@ class Translator:
             raise Unsupported("no body")
         body = body[0]
         self.scan(body)
+        if not self.inline and not ft["variadic"]:
+            self.place_locals(c, body)
         params = []
         pre = []
         if ft["ret"]["k"] == "rec":
@@ -679,7 +695,7 @@ class Translator:
                 continue
             params.append(f"{ident(rname)}: {self.u.rust_value_ty(pt)}")
             if key in self.f.escaping:
-                slot = self.stack_slot(rname + "__slot", pt)
+                slot = self.stack_slot(rname + "__slot", pt, key)
                 pre.append(f"{slot}.set({ident(rname)});")
                 self.f.locals[key] = (slot, pt, "stack")
             else:
@@ -695,7 +711,23 @@ class Translator:
         else:
             stmts = self.cfg_body(body) if self.f.cfg else self.stmts(kids)
         ret = "" if self.f.ret["k"] == "void" or self.f.sret else " -> " + self.u.rust_value_ty(self.f.ret)
+        if self.inline and self.f.frame:
+            # MWCC's inlined code keeps its locals in the caller's frame, alive until the
+            # caller returns, as pointers to them may need: the caller passes where.
+            params.append("__in_caller: u32")
         lines = [f"pub fn {ident(name)}<'a>(ctx: &'a Ctx{''.join(', ' + p for p in params)}){ret} {{"]
+        if self.inline:
+            offsets = self.frame_layout(0)
+            self.region = (max([0] + [off + slot[2] for off, slot in zip(offsets, self.f.frame)]) + 7) & ~7
+            for (rname, hty, *_), off in zip(self.f.frame, offsets):
+                lines.append(f"    let {ident(rname)}: {hty} = ptr(ctx, __in_caller + {off:#x});")
+            lines += ["    " + p for p in pre]
+            lines += ["    " + s for s in stmts]
+            if self.f.ret["k"] != "void" and not self.f.sret and not self.ends_in_return(body):
+                lines.append("    #[allow(unreachable_code)]")
+                lines.append(f"    return {self.zero(self.f.ret)};")
+            lines.append("}")
+            return "\n".join(lines)
         # The port takes the original's frame size, so functions it calls run at the same
         # stack addresses as under the original, and see the same stack leftovers.
         original = self.u.frame_sizes.get(name, 0) if not self.inline and (
@@ -706,8 +738,11 @@ class Translator:
         out = self.f.outgoing
         if self.f.variadic and out:
             raise Unsupported("variadic function that passes arguments on the stack")
-        has_frame = bool(self.f.frame) or (out and not self.inline)
-        needed = (8 + out + self.f.frame_size + 7) & ~7 if has_frame else 0
+        has_frame = bool(self.f.frame) or out
+        self.place_inline_regions(name)
+        offsets = self.frame_layout(out)
+        top = max([self.f.frame_size] + [off + slot[2] for off, slot in zip(offsets, self.f.frame)])
+        needed = (8 + out + top + 7) & ~7 if has_frame else 0
         size = max(original, needed)
         if self.f.variadic:
             size = max(size, (8 + VA_SAVE_SIZE + 7) & ~7)
@@ -715,7 +750,7 @@ class Translator:
             lines.append(f"    let __frame = ctx.stack_frame({size:#x});")
             if self.f.variadic:
                 lines.append("    __frame.save_varargs();")
-            for rname, hty, off in self.f.frame:
+            for (rname, hty, *_), off in zip(self.f.frame, offsets):
                 lines.append(f"    let {ident(rname)}: {hty} = frame_at(ctx, &__frame, {out + off:#x});")
         lines += ["    " + p for p in pre]
         lines += ["    " + s for s in stmts]
@@ -878,14 +913,86 @@ class Translator:
 
     # Stack slots.
 
-    def stack_slot(self, name, t, key=None):
+    def stack_slot(self, name, t, key=None, align=None):
         size = max(self.u.size_of(t), self.f.reach.get(key, 0), 1)
-        align = max(self.u.align_of(t), 4)
-        off = (self.f.frame_size + align - 1) & ~(align - 1)
-        self.f.frame_size = off + size
+        align = align or max(self.u.align_of(t), 4)
         rname = self.f.fresh(name)
-        self.f.frame.append((rname, self.u.storage_ty(t), off))
+        at = self.f.placed.get(key) if key is not None else None
+        self.f.frame.append((rname, self.u.storage_ty(t), max(self.u.size_of(t), 1) if at is not None else size,
+                             align, at))
         return rname
+
+    def place_locals(self, fn, body):
+        """Where the original's frame holds this function's locals, as MWCC's debug info lists
+        them: each C local matches the entry of its name in order, where both have as many."""
+        info = self.u.prog.frames.get(self.u.name, {}).get(fn.spelling)
+        if not info:
+            return
+        where = defaultdict(list)
+        for name, w in info["locals"]:
+            where[name].append(w)
+        decls = defaultdict(list)
+        for d in body.walk_preorder():
+            if d.kind == CK.VAR_DECL and d.storage_class not in (ci.StorageClass.STATIC, ci.StorageClass.EXTERN):
+                decls[d.spelling].append(vkey(d))
+        params = dict(info["params"])
+        for a in (x for x in children(fn) if x.kind == CK.PARM_DECL):
+            if a.spelling and a.spelling in params:
+                decls[a.spelling].append(vkey(a, a.spelling))
+                where[a.spelling].insert(0, params[a.spelling])
+        for name, keys in decls.items():
+            if len(keys) != len(where.get(name, ())):
+                continue
+            for key, w in zip(keys, where[name]):
+                m = re.fullmatch(r"r1\+0x([0-9A-Fa-f]+)", w)
+                if m:
+                    self.f.placed[key] = int(m.group(1), 16)
+
+    def place_inline_regions(self, name):
+        """Where the original keeps the locals of code MWCC inlined here, which its debug info
+        leaves out: the frame addresses its code takes that none of its own locals covers. Each
+        region goes at one of them, the first inlined call at the highest, as MWCC lays locals
+        out last declared lowest, where there are as many as regions and each fits."""
+        regions = [(i, slot) for i, slot in enumerate(self.f.frame) if slot[0].startswith("__inl")]
+        taken = self.u.stack_addresses.get(self.f.cursor.spelling)
+        if not regions or not taken:
+            return
+        own = [(at, at + size) for _, _, size, _, at in self.f.frame if at is not None]
+        free = sorted((k for k in taken if not any(lo <= k < hi for lo, hi in own)), reverse=True)
+        if len(free) != len(regions):
+            return
+        top = self.u.frame_sizes.get(name, 0)
+        spans = sorted(own + [(k, k + slot[2]) for k, (_, slot) in zip(free, regions)])
+        if any(k + slot[2] > top for k, (_, slot) in zip(free, regions)) or \
+                any(a[1] > b[0] for a, b in zip(spans, spans[1:])):
+            return
+        for k, (i, slot) in zip(free, regions):
+            self.f.frame[i] = slot[:4] + (k,)
+
+    def frame_layout(self, out):
+        """Each frame slot's offset past the outgoing arguments: a local the original's frame
+        holds at its own offset there, the rest in order after the bytes the frame keeps at
+        its start, each at the first place it fits around those, so the frame grows past the
+        original's no more than it must."""
+        fixed = [(at - 8 - out, at - 8 - out + size) for _, _, size, _, at in self.f.frame if at is not None]
+        if any(lo < self.f.frame_size for lo, _ in fixed):
+            # In the port's outgoing arguments or kept bytes: the original's layout does not fit.
+            fixed = []
+        taken = list(fixed)
+        offsets = []
+        for _, _, size, align, at in self.f.frame:
+            if at is not None and fixed:
+                offsets.append(at - 8 - out)
+                continue
+            off = (self.f.frame_size + align - 1) & ~(align - 1)
+            while True:
+                clash = [hi for lo, hi in taken if off < hi and lo < off + size]
+                if not clash:
+                    break
+                off = (max(clash) + align - 1) & ~(align - 1)
+            offsets.append(off)
+            taken.append((off, off + size))
+        return offsets
 
     # Statements.
 
@@ -2602,7 +2709,7 @@ class Translator:
                     argv = self.forwarding(self.call_args(ft, args, inlined=True,
                                                           unread=unread_params(defn) | self.fn_arg_slots(defn, fnargs),
                                                           fwd=fwd),
-                                           fwd)
+                                           fwd) + self.inline_region(rname)
                     if t["k"] == "rec":
                         return self.sret_call(rname, argv, t)
                     return Expr(f"{rname}(ctx{''.join(', ' + a for a in argv)})", t, False)
@@ -2639,6 +2746,7 @@ class Translator:
             rname = self.u.request_inline(defn, self.fuse, self, self.reg_ptr_args(defn, args),
                                           {pn: neg for pn, (_, _, neg) in fwd.values()},
                                           self.same_args(defn, args), fnargs)
+            argv += self.inline_region(rname)
             if t["k"] == "rec":
                 return self.sret_call(rname, argv, t)
             return Expr(f"{rname}(ctx{''.join(', ' + a for a in argv)})", t, False)
@@ -3083,6 +3191,19 @@ class Translator:
             return Expr(f"ctx.call_variadic::<_, {rty}>({addr:#x}, ({''.join(a + ', ' for a in fixed)}), "
                         f"&[{', '.join(extra)}])", t, False)
         return Expr(f"ctx.call::<_, {rty}>({addr:#x}, ({''.join(a + ', ' for a in argv)}))", t, False)
+
+    def inline_region(self, rname):
+        """Where an inline copy called here keeps its locals: a region of this frame, as MWCC's
+        inlined code keeps them in the caller's."""
+        if rname in self.u.inline_active.values():
+            return []  # recursion: a copy with locals is refused once translated
+        size = self.u.inline_frames.get(rname, 0)
+        if not size:
+            return []
+        self.f.inline_regions += 1
+        slot = self.stack_slot("__inl", {"k": "arr", "of": {"k": "int", "size": 1, "signed": False}, "n": size},
+                               key=("inline", self.f.inline_regions), align=8)
+        return [f"Handle::addr({ident(slot)})"]
 
     def sret_call(self, path, argv, t):
         slot = self.stack_slot("__ret_tmp", t)
@@ -3557,8 +3678,6 @@ FROM_MACHINE_CODE = {
     "__va_arg": "register it leaves that other code reads",
     # MWCC drops its second, dead read of a video interface register, volatile as it is.
     "__VIRetraceHandler": "dead read of a hardware register that MWCC drops",
-    # Reads a Vec3 local as a Quaternion: its w is the local MWCC's stack layout puts next.
-    "fn_8002113C": "read past a local into the one the original's frame puts next",
 }
 
 
@@ -3769,6 +3888,7 @@ def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None
     name = defn.spelling
     base = "inl_" + name + ("" if fuse else "_unfused")
     if base in self.inline_active:
+        self.inline_recursive.add(self.inline_active[base])
         return self.inline_active[base]  # recursion: the copy being translated
     asm = caller.asm
 
@@ -3817,7 +3937,11 @@ def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None
     finally:
         del self.inline_active[base]
     self.inlines[rname] = code.replace(f"pub fn {ident(name)}<'a>", f"fn {rname}<'a>", 1)
-    self.inline_outgoing[rname] = 0 if tr.f.frame else tr.f.outgoing
+    if tr.f.frame and rname in self.inline_recursive:
+        self.inlines, self.inline_variants = inlines, all_variants
+        raise Unsupported(f"inline {name}: calls itself and keeps locals in its caller's frame")
+    self.inline_outgoing[rname] = tr.f.outgoing
+    self.inline_frames[rname] = tr.region if tr.f.frame else 0
     variants.append((rname, tr.decisions))
     inherit(tr.decisions)
     return holding(rname)

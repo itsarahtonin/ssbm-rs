@@ -56,7 +56,7 @@ pub fn grDatFiles_801C5FC0<'a>(
 
 pub fn grDatFiles_801C6038<'a>(ctx: &'a Ctx, arg0: Addr<'a>, arg1: i32, arg2: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let sp14: Ptr<'a, HSD_Archive<'a>> = frame_at(ctx, &__frame, 0x0);
+    let sp14: Ptr<'a, HSD_Archive<'a>> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

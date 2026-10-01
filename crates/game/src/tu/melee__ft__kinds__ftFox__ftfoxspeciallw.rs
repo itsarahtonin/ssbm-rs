@@ -535,10 +535,11 @@ pub fn ftFx_SpecialLw_Turn<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftFx_SpecialLwTurn_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     inl_updateRelease(ctx, gobj);
-    inl_ftFx_SpecialLw_Turn(ctx, gobj);
+    inl_ftFx_SpecialLw_Turn(ctx, gobj, Handle::addr(__inl));
     if (fp).mv().fx().SpecialLw().turnFrames() <= 0_i32 {
         let _ = fns::ftFx_SpecialLwHit_Check(ctx, gobj);
     }
@@ -547,10 +548,11 @@ pub fn ftFx_SpecialLwTurn_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftFx_SpecialAirLwTurn_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     inl_updateRelease(ctx, gobj);
-    inl_ftFx_SpecialLw_Turn(ctx, gobj);
+    inl_ftFx_SpecialLw_Turn(ctx, gobj, Handle::addr(__inl));
     if (fp).mv().fx().SpecialLw().turnFrames() <= 0_i32 {
         let _ = fns::ftFx_SpecialLwHit_Check(ctx, gobj);
     }
@@ -802,7 +804,7 @@ pub fn ftFx_SpecialLwHit_SetCall<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftFx_SpecialLwHit_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1130,9 +1132,8 @@ fn inl_updateRelease<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
-fn inl_ftFx_SpecialLw_Turn<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftFx_SpecialLw_Turn<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut da: ftFox_DatAttrs<'a> = Handle::cast::<ftFox_DatAttrs<'a>>((fp).dat_attrs());

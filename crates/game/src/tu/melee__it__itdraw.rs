@@ -28,9 +28,9 @@ use crate::support::*;
 
 pub fn it_8026EB18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: Vec<'a>) {
     let __frame = ctx.stack_frame(0x88);
-    let m2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x60);
+    let m2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x40);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -224,7 +224,7 @@ pub fn it_8026ECE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u32) -> u32 {
 
 pub fn it_8026EECC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x60);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x38);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

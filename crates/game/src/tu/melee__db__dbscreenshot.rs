@@ -80,7 +80,7 @@ pub fn db_CheckScreenshot<'a>(ctx: &'a Ctx) {
 
 pub fn db_TakeScreenshotIfPending<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x38);
-    let spC: ArrV<'a, i8, 32> = frame_at(ctx, &__frame, 0x0);
+    let spC: ArrV<'a, i8, 32> = frame_at(ctx, &__frame, 0x4);
     let mut temp_r3: i32 = 0;
     let mut temp_r5: i32 = 0;
     let mut temp_ret: i32 = 0;

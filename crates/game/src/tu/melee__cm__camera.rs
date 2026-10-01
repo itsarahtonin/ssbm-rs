@@ -249,7 +249,7 @@ pub fn Camera_800290D4<'a>(ctx: &'a Ctx, subject: CmSubject<'a>) {
 pub fn Camera_80029124<'a>(ctx: &'a Ctx, subject_pos: Vec<'a>, distance: i32) -> u32 {
     let __frame = ctx.stack_frame(0x50);
     let _PAD: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let slope: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let slope: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
     let intercept: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
     let mut subject_pos = subject_pos;
     let mut distance = distance;
@@ -416,19 +416,19 @@ pub fn Camera_8002958C<'a>(
     transform: CameraTransformState<'a>,
 ) {
     let __frame = ctx.stack_frame(0xb0);
-    let base_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let test_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let default_offset: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let base_ground_intercept: Val<'a, F32> = frame_at(ctx, &__frame, 0x24);
+    let base_pos: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let test_pos: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let default_offset: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let base_ground_intercept: Val<'a, F32> = frame_at(ctx, &__frame, 0x2c);
     let base_ground: Val<'a, F32> = frame_at(ctx, &__frame, 0x28);
-    let x_extent_intercept: Val<'a, F32> = frame_at(ctx, &__frame, 0x2c);
-    let x_extent_ground: Val<'a, F32> = frame_at(ctx, &__frame, 0x30);
-    let alt_x_intercept: Val<'a, F32> = frame_at(ctx, &__frame, 0x34);
-    let alt_x_ground: Val<'a, F32> = frame_at(ctx, &__frame, 0x38);
-    let y_extent_intercept: Val<'a, F32> = frame_at(ctx, &__frame, 0x3c);
-    let y_extent_ground: Val<'a, F32> = frame_at(ctx, &__frame, 0x40);
-    let alt_y_intercept: Val<'a, F32> = frame_at(ctx, &__frame, 0x44);
-    let alt_y_ground: Val<'a, F32> = frame_at(ctx, &__frame, 0x48);
+    let x_extent_intercept: Val<'a, F32> = frame_at(ctx, &__frame, 0x24);
+    let x_extent_ground: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
+    let alt_x_intercept: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
+    let alt_x_ground: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
+    let y_extent_intercept: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
+    let y_extent_ground: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
+    let alt_y_intercept: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let alt_y_ground: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
     let mut bounds = bounds;
     let mut transform = transform;
     let mut z_pos: f64 = 0.0;
@@ -820,8 +820,8 @@ pub fn Camera_80029CF8<'a>(
 ) {
     let __frame = ctx.stack_frame(0x80);
     let _pad: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut bounds = bounds;
     let mut transform = transform;
     let mut x_center: f64 = 0.0;
@@ -1201,7 +1201,7 @@ pub fn Camera_UpdateQuakes<'a>(ctx: &'a Ctx, bounds: CameraBounds<'a>) {
 
 pub fn Camera_8002A4AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut floor_height: f64 = 0.0;
     let mut cobj: HSD_CObj<'a> = null(ctx);
@@ -1293,13 +1293,13 @@ pub fn Camera_8002A4AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn Camera_8002A768<'a>(ctx: &'a Ctx, transform: CameraTransformState<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0xa0);
-    let dist: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let forward: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let top_left: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let top_right: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let bottom_right: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let bottom_left: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let cam_correction: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let dist: Vec<'a> = frame_at(ctx, &__frame, 0x50);
+    let forward: Vec<'a> = frame_at(ctx, &__frame, 0x44);
+    let top_left: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let top_right: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let bottom_right: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let bottom_left: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let cam_correction: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut transform = transform;
     let mut arg1 = arg1;
     let mut half_fov: f64 = 0.0;
@@ -1636,8 +1636,8 @@ pub fn Camera_8002A768<'a>(ctx: &'a Ctx, transform: CameraTransformState<'a>, ar
 pub fn Camera_8002AF68<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, transform: CameraTransformState<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let _1: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let _2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let _2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut cobj = cobj;
     let mut transform = transform;
     let mut eye_y_bound: f64 = 0.0;
@@ -1757,7 +1757,7 @@ pub fn Camera_8002B0E0<'a>(ctx: &'a Ctx) {
 
 pub fn Camera_8002B1F8<'a>(ctx: &'a Ctx, transform: CameraTransformState<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut transform = transform;
     let mut temp_r3: HSD_GObj<'a> = null(ctx);
     let mut temp_r3_2: HSD_GObj<'a> = null(ctx);
@@ -1828,8 +1828,10 @@ pub fn Camera_8002B1F8<'a>(ctx: &'a Ctx, transform: CameraTransformState<'a>) {
 
 pub fn Camera_8002B3D4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x88);
-    let bounds: CameraBounds<'a> = frame_at(ctx, &__frame, 0x0);
-    let bounds_copy: CameraBounds<'a> = frame_at(ctx, &__frame, 0x18);
+    let bounds: CameraBounds<'a> = frame_at(ctx, &__frame, 0x3c);
+    let bounds_copy: CameraBounds<'a> = frame_at(ctx, &__frame, 0x24);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
+    let __inl_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     fns::Camera_80030DF8(ctx);
     fns::Camera_800293E0(ctx);
@@ -1838,11 +1840,13 @@ pub fn Camera_8002B3D4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
         ctx,
         bounds,
         statics::melee__cm__camera::game_camera(ctx).transform(),
+        Handle::addr(__inl),
     );
     inl_update_transform(
         ctx,
         bounds_copy,
         statics::melee__cm__camera::game_camera(ctx).transform_copy(),
+        Handle::addr(__inl_2),
     );
     inl_update_zoom_distance(ctx);
     inl_update_bounds(ctx, bounds, bounds_copy);
@@ -1984,7 +1988,7 @@ pub fn Camera_8002BA00<'a>(ctx: &'a Ctx, slot: i32, arg1: i32) -> i32 {
 
 pub fn Camera_8002BAA8<'a>(ctx: &'a Ctx, zoom_amt: f64) {
     let __frame = ctx.stack_frame(0x38);
-    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut zoom_amt = zoom_amt;
     let mut offset_len: f64 = 0.0;
     let mut dist: f64 = 0.0;
@@ -2069,10 +2073,10 @@ pub fn Camera_8002BC78<'a>(ctx: &'a Ctx, forward: Vec<'a>, up: Vec<'a>, right: V
 
 pub fn Camera_8002BD88<'a>(ctx: &'a Ctx, x: f64, y: f64) {
     let __frame = ctx.stack_frame(0x60);
-    let up: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let forward: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let right: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let up: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let forward: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let right: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut x = x;
     let mut y = y;
     let mut scale: f64 = 0.0;
@@ -2149,9 +2153,9 @@ pub fn Camera_8002BD88<'a>(ctx: &'a Ctx, x: f64, y: f64) {
 
 pub fn Camera_8002C010<'a>(ctx: &'a Ctx, farg0: f64, farg1: f64) {
     let __frame = ctx.stack_frame(0x58);
-    let up: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let forward: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let right: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let up: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let forward: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let right: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut farg0 = farg0;
     let mut farg1 = farg1;
     let mut eye_dist: f64 = 0.0;
@@ -2208,7 +2212,7 @@ pub fn Camera_8002C010<'a>(ctx: &'a Ctx, farg0: f64, farg1: f64) {
 
 pub fn Camera_8002C1A8<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x68);
-    let inputs: CameraInputs<'a> = frame_at(ctx, &__frame, 0x0);
+    let inputs: CameraInputs<'a> = frame_at(ctx, &__frame, 0x8);
     let mut stick_x: f64 = 0.0;
     let mut stick_y: f64 = 0.0;
     let mut zoom_dir: f64 = 0.0;
@@ -2400,9 +2404,9 @@ pub fn Camera_8002C1A8<'a>(ctx: &'a Ctx) {
 
 pub fn Camera_8002C5B4<'a>(ctx: &'a Ctx, arg0: Camera_x2D0<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let temp_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let cross1: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let cross2: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let temp_pos: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let cross1: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let cross2: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut arg0 = arg0;
     let mut len: f64 = 0.0;
     let mut cam: Camera<'a> = null(ctx);
@@ -2546,10 +2550,10 @@ pub fn Camera_8002C5B4<'a>(ctx: &'a Ctx, arg0: Camera_x2D0<'a>) {
 
 pub fn Camera_8002C908<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let bounds: CameraBounds<'a> = frame_at(ctx, &__frame, 0x0);
-    let pad: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x18);
-    let eye_diff: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let interest_diff: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let bounds: CameraBounds<'a> = frame_at(ctx, &__frame, 0x38);
+    let pad: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x20);
+    let eye_diff: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let interest_diff: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut transform: CameraTransformState<'a> = null(ctx);
     let mut slot_ptr: Val<'a, i8> = null(ctx);
@@ -2640,7 +2644,7 @@ pub fn Camera_8002C908<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
 
 pub fn Camera_8002CB0C<'a>(ctx: &'a Ctx, bounds: CameraBounds<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let inputs: CameraInputs<'a> = frame_at(ctx, &__frame, 0x0);
+    let inputs: CameraInputs<'a> = frame_at(ctx, &__frame, 0x10);
     let mut bounds = bounds;
     let mut camera: Camera<'a> = null(ctx);
     let mut entity: HSD_GObj<'a> = null(ctx);
@@ -2751,11 +2755,13 @@ pub fn Camera_8002CB0C<'a>(ctx: &'a Ctx, bounds: CameraBounds<'a>) {
 
 pub fn Camera_8002CDDC<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     let __frame = ctx.stack_frame(0xb8);
-    let bounds: CameraBounds<'a> = frame_at(ctx, &__frame, 0x0);
-    let eye_diff: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let interest_diff: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let bounds_copy: CameraBounds<'a> = frame_at(ctx, &__frame, 0x30);
-    let bounds2: CameraBounds<'a> = frame_at(ctx, &__frame, 0x48);
+    let bounds: CameraBounds<'a> = frame_at(ctx, &__frame, 0x70);
+    let eye_diff: Vec<'a> = frame_at(ctx, &__frame, 0x64);
+    let interest_diff: Vec<'a> = frame_at(ctx, &__frame, 0x58);
+    let bounds_copy: CameraBounds<'a> = frame_at(ctx, &__frame, 0x3c);
+    let bounds2: CameraBounds<'a> = frame_at(ctx, &__frame, 0x24);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
+    let __inl_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
     let mut unused = unused;
     let mut slot_ptr: Val<'a, i8> = null(ctx);
     let mut transform: CameraTransformState<'a> = null(ctx);
@@ -2847,11 +2853,13 @@ pub fn Camera_8002CDDC<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
         ctx,
         bounds2,
         statics::melee__cm__camera::game_camera(ctx).transform(),
+        Handle::addr(__inl),
     );
     inl_update_transform(
         ctx,
         bounds_copy,
         statics::melee__cm__camera::game_camera(ctx).transform_copy(),
+        Handle::addr(__inl_2),
     );
     inl_update_zoom_distance(ctx);
     inl_update_bounds(ctx, bounds2, bounds_copy);
@@ -2860,9 +2868,11 @@ pub fn Camera_8002CDDC<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
 
 pub fn Camera_8002D318<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     let __frame = ctx.stack_frame(0xb0);
-    let _pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let bounds_copy: CameraBounds<'a> = frame_at(ctx, &__frame, 0x10);
-    let bounds: CameraBounds<'a> = frame_at(ctx, &__frame, 0x28);
+    let _pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x54);
+    let bounds_copy: CameraBounds<'a> = frame_at(ctx, &__frame, 0x3c);
+    let bounds: CameraBounds<'a> = frame_at(ctx, &__frame, 0x24);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
+    let __inl_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
     let mut unused = unused;
     let mut pos: Vec<'a> = null(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);
@@ -3185,11 +3195,13 @@ pub fn Camera_8002D318<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
         ctx,
         bounds,
         statics::melee__cm__camera::game_camera(ctx).transform(),
+        Handle::addr(__inl),
     );
     inl_update_transform(
         ctx,
         bounds_copy,
         statics::melee__cm__camera::game_camera(ctx).transform_copy(),
+        Handle::addr(__inl_2),
     );
     inl_update_zoom_distance(ctx);
     inl_update_bounds(ctx, bounds, bounds_copy);
@@ -3198,9 +3210,11 @@ pub fn Camera_8002D318<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
 
 pub fn Camera_8002D85C<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     let __frame = ctx.stack_frame(0xb0);
-    let _pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let bounds2: CameraBounds<'a> = frame_at(ctx, &__frame, 0x10);
-    let bounds: CameraBounds<'a> = frame_at(ctx, &__frame, 0x28);
+    let _pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x54);
+    let bounds2: CameraBounds<'a> = frame_at(ctx, &__frame, 0x3c);
+    let bounds: CameraBounds<'a> = frame_at(ctx, &__frame, 0x24);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
+    let __inl_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
     let mut unused = unused;
     let mut subject: CmSubject<'a> = null(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);
@@ -3529,11 +3543,13 @@ pub fn Camera_8002D85C<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
         ctx,
         bounds,
         statics::melee__cm__camera::game_camera(ctx).transform(),
+        Handle::addr(__inl),
     );
     inl_update_transform(
         ctx,
         bounds2,
         statics::melee__cm__camera::game_camera(ctx).transform_copy(),
+        Handle::addr(__inl_2),
     );
     inl_update_zoom_distance(ctx);
     inl_update_bounds(ctx, bounds, bounds2);
@@ -3542,9 +3558,10 @@ pub fn Camera_8002D85C<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
 
 pub fn Camera_8002DDC4<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let bounds: CameraBounds<'a> = frame_at(ctx, &__frame, 0x0);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
-    let _pad1: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x1c);
+    let bounds: CameraBounds<'a> = frame_at(ctx, &__frame, 0x28);
+    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let _pad1: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x14);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
     let mut unused = unused;
     let mut target_interest: Vec<'a> = null(ctx);
     let mut transform: CameraTransformState<'a> = null(ctx);
@@ -3682,14 +3699,20 @@ pub fn Camera_8002DDC4<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
             (cam).transform_copy().position().z(),
         ));
     }
-    inl_set_bounds_z(ctx, bounds, target_interest, target_position);
+    inl_set_bounds_z(
+        ctx,
+        bounds,
+        target_interest,
+        target_position,
+        Handle::addr(__inl),
+    );
     fns::Camera_UpdateQuakes(ctx, bounds);
     fns::Camera_ApplyQuake(ctx, bounds, (cam).transform());
 }
 
 pub fn Camera_8002DFE4<'a>(ctx: &'a Ctx, start: Vec<'a>, end: Vec<'a>, out: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut start = start;
     let mut end = end;
     let mut out = out;
@@ -4510,8 +4533,8 @@ fn asm_Camera_8002E234(ctx: &Ctx) {
 
 pub fn Camera_8002E490<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut unused = unused;
     let mut var_r29: i32 = 0;
     fns::Camera_80030DF8(ctx);
@@ -4696,7 +4719,7 @@ pub fn Camera_8002E490<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
 
 pub fn Camera_8002E6FC<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
         != ((enums::CAMERA_BOSS_INTRO as i32) as u32)
@@ -4771,7 +4794,7 @@ pub fn Camera_8002E6FC<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn Camera_8002E818<'a>(ctx: &'a Ctx, pos: Vec<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut pos = pos;
     if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
         != ((enums::CAMERA_BOSS_INTRO as i32) as u32)
@@ -4847,7 +4870,7 @@ pub fn Camera_8002E818<'a>(ctx: &'a Ctx, pos: Vec<'a>) {
 
 pub fn Camera_8002E948<'a>(ctx: &'a Ctx, cb: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut cb = cb;
     if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
         != ((enums::CAMERA_BOSS_INTRO as i32) as u32)
@@ -4922,7 +4945,7 @@ pub fn Camera_8002E948<'a>(ctx: &'a Ctx, cb: FnPtr<'a>) {
 
 pub fn Camera_8002EA64<'a>(ctx: &'a Ctx, arg0: Vec<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
         != ((enums::CAMERA_BOSS_INTRO as i32) as u32)
@@ -4975,7 +4998,7 @@ pub fn Camera_8002EA64<'a>(ctx: &'a Ctx, arg0: Vec<'a>) {
 
 pub fn Camera_8002EB5C<'a>(ctx: &'a Ctx, arg0: f64) {
     let __frame = ctx.stack_frame(0x28);
-    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
         != ((enums::CAMERA_BOSS_INTRO as i32) as u32)
@@ -5043,7 +5066,7 @@ pub fn Camera_8002EB5C<'a>(ctx: &'a Ctx, arg0: f64) {
 
 pub fn Camera_8002EC7C<'a>(ctx: &'a Ctx, arg0: f64) {
     let __frame = ctx.stack_frame(0x28);
-    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
         != ((enums::CAMERA_BOSS_INTRO as i32) as u32)
@@ -5111,7 +5134,7 @@ pub fn Camera_8002EC7C<'a>(ctx: &'a Ctx, arg0: f64) {
 
 pub fn Camera_8002ED9C<'a>(ctx: &'a Ctx, arg0: f64) {
     let __frame = ctx.stack_frame(0x30);
-    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
         != ((enums::CAMERA_BOSS_INTRO as i32) as u32)
@@ -5192,8 +5215,8 @@ pub fn Camera_8002EEC8<'a>(ctx: &'a Ctx, fov: f64) {
 
 pub fn Camera_8002EF14<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
-    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp8: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let sp8: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let mut sp24: i32 = 0;
     let mut sp14: i32 = 0;
     if (statics::melee__cm__camera::game_camera(ctx).mode() as u32)
@@ -5332,7 +5355,7 @@ pub fn Camera_8002EF14<'a>(ctx: &'a Ctx) {
 
 pub fn Camera_8002F0E4<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x40);
-    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut sp24: i32 = 0;
     let mut sp20: i32 = 0;
@@ -6225,8 +6248,8 @@ pub fn Camera_8002FE38<'a>(ctx: &'a Ctx) {
 
 pub fn Camera_8002FEEC<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x48);
-    let target: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let eye: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let target: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let eye: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut arg0 = arg0;
     let mut cobj: HSD_CObj<'a> = null(ctx);
     let mut r#box: CmSubject<'a> = null(ctx);
@@ -6579,9 +6602,9 @@ pub fn Camera_800307D0<'a>(
     right: Val<'a, F32>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x80);
-    let forward: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let interest_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let eye_pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let forward: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let interest_pos: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let eye_pos: Vec<'a> = frame_at(ctx, &__frame, 0x28);
     let mut left = left;
     let mut center = center;
     let mut right = right;
@@ -6766,8 +6789,8 @@ pub fn Camera_80030BA8<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn Camera_80030BBC<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: S32Vec2<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let point: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let scissor: _Scissor<'a> = frame_at(ctx, &__frame, 0xc);
+    let point: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let scissor: _Scissor<'a> = frame_at(ctx, &__frame, 0x18);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut cobj: HSD_CObj<'a> = null(ctx);
@@ -6811,11 +6834,11 @@ pub fn Camera_80030CD8<'a>(ctx: &'a Ctx, arg0: CmSubject<'a>, arg1: S32Vec2<'a>)
 
 pub fn Camera_80030CFC<'a>(ctx: &'a Ctx, cam_box: CmSubject<'a>, tolerance: f64) -> i32 {
     let __frame = ctx.stack_frame(0x70);
-    let eye_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let interest: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let _PAD: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x24);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let eye_pos: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let _PAD: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut cam_box = cam_box;
     let mut tolerance = tolerance;
     let mut cobj: HSD_CObj<'a> = null(ctx);
@@ -7831,9 +7854,13 @@ fn inl_fighter_z_out_of_range<'a>(ctx: &'a Ctx, fighter_pos: Vec<'a>) -> i32 {
     return 0_i32;
 }
 
-fn inl_update_transform<'a>(ctx: &'a Ctx, bounds: CameraBounds<'a>, ts: CameraTransformState<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let fighter_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_update_transform<'a>(
+    ctx: &'a Ctx,
+    bounds: CameraBounds<'a>,
+    ts: CameraTransformState<'a>,
+    __in_caller: u32,
+) {
+    let fighter_pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut bounds = bounds;
     let mut ts = ts;
     let mut delta: f64 = 0.0;
@@ -8341,9 +8368,9 @@ fn inl_set_bounds_z<'a>(
     bounds: CameraBounds<'a>,
     interest: Vec<'a>,
     position: Vec<'a>,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x18);
-    let diff: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let diff: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut bounds = bounds;
     let mut interest = interest;
     let mut position = position;

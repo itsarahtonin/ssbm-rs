@@ -3966,6 +3966,7 @@ pub fn mnSnap_80257F24<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x190);
     let jobj2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x90);
     let text: Ptr<'a, HSD_Text<'a>> = frame_at(ctx, &__frame, 0x94);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x98);
     let mut page_name: Val<'a, i8> = null(ctx);
     let mut snap: mnSnap_State<'a> = statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -4266,6 +4267,7 @@ pub fn mnSnap_80257F24<'a>(ctx: &'a Ctx) {
         sub_animjoint,
         sub_matanim,
         sub_shapeanim,
+        Handle::addr(__inl),
     );
     inl_mnSnap_LoadPageIndicator(ctx, page_joint, snap, thumb_root_ptr, jobj2);
     fns::HSD_JObjSetFlagsAll(ctx, jobj2.get(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
@@ -5110,10 +5112,10 @@ fn inl_mnSnap_CreateThumbnails<'a>(
     sub_animjoint: Ptr<'a, HSD_AnimJoint<'a>>,
     sub_matanim: Ptr<'a, HSD_MatAnimJoint<'a>>,
     sub_shapeanim: Ptr<'a, HSD_ShapeAnimJoint<'a>>,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x20);
-    let end_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let start_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let end_pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let start_pos: Vec<'a> = ptr(ctx, __in_caller + 0xc);
     let mut snap = snap;
     let mut thumb_root_ptr = thumb_root_ptr;
     let mut photo_joint = photo_joint;

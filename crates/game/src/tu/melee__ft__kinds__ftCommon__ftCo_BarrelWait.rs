@@ -87,8 +87,8 @@ pub fn ftCo_BarrelWait_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_8009EC44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
-    let param: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let param: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -111,7 +111,7 @@ pub fn ftCo_8009EC70<'a>(
     kb_angle: f64,
 ) {
     let __frame = ctx.stack_frame(0x170);
-    let hit: SmallerHitCapsule<'a> = frame_at(ctx, &__frame, 0x0);
+    let hit: SmallerHitCapsule<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut arg2 = arg2;

@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn ft_800892D4<'a>(ctx: &'a Ctx, arg0: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x10);
-    let zero: Struct2070<'a> = frame_at(ctx, &__frame, 0x0);
+    let zero: Struct2070<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     zero.set_x2070_int(0_i32);
     Handle::copy_from((arg0).dmg().x18d4(), zero);
@@ -118,11 +118,11 @@ pub fn ft_80089460<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ft_800895E0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let arg1__slot: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let val: Struct2070<'a> = frame_at(ctx, &__frame, 0x4);
-    let sp18: Struct2070<'a> = frame_at(ctx, &__frame, 0x8);
+    let arg1__slot: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let val: Struct2070<'a> = frame_at(ctx, &__frame, 0x14);
+    let sp18: Struct2070<'a> = frame_at(ctx, &__frame, 0x10);
     let sp14: Struct2070<'a> = frame_at(ctx, &__frame, 0xc);
-    let spC: Struct2070<'a> = frame_at(ctx, &__frame, 0x10);
+    let spC: Struct2070<'a> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     arg1__slot.set(arg1);
     Handle::copy_from(val, (Handle::cast::<Struct2070<'a>>(arg1__slot)));
@@ -194,7 +194,7 @@ pub fn ft_80089768<'a>(ctx: &'a Ctx, ptr_: S32Vec2<'a>) {
 
 pub fn ft_80089824<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let val: Struct2070<'a> = frame_at(ctx, &__frame, 0x0);
+    let val: Struct2070<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

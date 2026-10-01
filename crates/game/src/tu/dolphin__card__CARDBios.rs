@@ -69,7 +69,7 @@ pub fn __CARDExtHandler<'a>(ctx: &'a Ctx, chan: i32, context: OSContext<'a>) {
 
 pub fn __CARDExiHandler<'a>(ctx: &'a Ctx, chan: i32, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let status: Val<'a, u8> = frame_at(ctx, &__frame, 0x0);
+    let status: Val<'a, u8> = frame_at(ctx, &__frame, 0x8);
     let mut chan = chan;
     let mut context = context;
     let mut card: CARDControl<'a> = null(ctx);
@@ -175,7 +175,7 @@ pub fn __CARDUnlockedHandler<'a>(ctx: &'a Ctx, chan: i32, context: OSContext<'a>
 
 pub fn __CARDEnableInterrupt<'a>(ctx: &'a Ctx, chan: i32, enable: i32) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x8);
     let mut chan = chan;
     let mut enable = enable;
     let mut err: i32 = 0;
@@ -210,7 +210,7 @@ pub fn __CARDEnableInterrupt<'a>(ctx: &'a Ctx, chan: i32, enable: i32) -> i32 {
 
 pub fn __CARDReadStatus<'a>(ctx: &'a Ctx, chan: i32, status: Val<'a, u8>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x8);
     let mut chan = chan;
     let mut status = status;
     let mut err: i32 = 0;
@@ -249,7 +249,7 @@ pub fn __CARDReadStatus<'a>(ctx: &'a Ctx, chan: i32, status: Val<'a, u8>) -> i32
 
 pub fn __CARDClearStatus<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x4);
     let mut chan = chan;
     let mut err: i32 = 0;
     if !(fns::EXISelect(ctx, chan, (0_i32 as u32), (4_i32 as u32)) != 0) {
@@ -742,7 +742,7 @@ pub fn CARDFreeBlocks<'a>(
     filesNotUsed: Val<'a, i32>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x0);
+    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x10);
     let mut chan = chan;
     let mut byteNotUsed = byteNotUsed;
     let mut filesNotUsed = filesNotUsed;

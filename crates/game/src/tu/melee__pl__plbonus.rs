@@ -101,7 +101,7 @@ pub fn pl_80038914<'a>(ctx: &'a Ctx) -> pl_804D6470_t<'a> {
 
 pub fn pl_8003891C<'a>(ctx: &'a Ctx, player: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let zero: Struct2070<'a> = frame_at(ctx, &__frame, 0x0);
+    let zero: Struct2070<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut player = player;
     let mut i: i32 = 0;
     let mut temp_r31: pl_StaleMoveTableExt_t<'a> = null(ctx);

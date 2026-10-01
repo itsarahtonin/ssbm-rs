@@ -472,8 +472,8 @@ pub fn lbRefract_8002219C<'a>(
 
 pub fn lbRefract_800222A4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x58);
-    let cb: lbRefract_CallbackData<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x20);
+    let cb: lbRefract_CallbackData<'a> = frame_at(ctx, &__frame, 0x4);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut image_width: i32 = 0x140_i32;
     let mut image_height: i32 = 240_i32;
     let mut data: lbRefract_DataLayout<'a> =

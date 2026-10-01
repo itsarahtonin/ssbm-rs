@@ -134,9 +134,9 @@ pub fn un_802FCBA0<'a>(ctx: &'a Ctx) {
 
 pub fn fn_802FCC44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let vec2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut slot: Val<'a, u8> =
         Handle::cast::<Val<'a, u8>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj));

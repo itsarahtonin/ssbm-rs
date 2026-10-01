@@ -508,9 +508,9 @@ pub fn ftCo_Damage_CalcVel<'a>(ctx: &'a Ctx, fp: Fighter<'a>, x: f64, y: f64) {
 pub fn ftCo_8008DCE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, facing_dir: f64) {
     let __frame = ctx.stack_frame(0xc8);
     let scaled_kb: ftCo_8008DCE0_scaled_kb<'a> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let sp40: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x14);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let sp40: Val<'a, F32> = frame_at(ctx, &__frame, 0x38);
+    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut facing_dir = facing_dir;
@@ -884,7 +884,7 @@ pub fn ftCo_Damage_OnEveryHitlag<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_8008E5A4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let lstick_vec3: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let lstick_vec3: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let kb_vel_cross_lstick: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut fp = fp;
     if ((fp).input().lstick().get(0_i32).x() != 0.0)
@@ -1451,10 +1451,11 @@ pub fn ftCo_Damage_SetMv8FromKbThreshold<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ftCo_DamageFly_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x20);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    inl_inlineD0_unfused(ctx, gobj);
+    inl_inlineD0_unfused(ctx, gobj, Handle::addr(__inl));
     inl_ftCo_8008F744_unfused(ctx, gobj);
     if (!(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0)) && (!((fp).x221C_b6() != 0)) {
         if !(inl_inlineC0_unfused(ctx, gobj) != 0) {
@@ -1590,6 +1591,7 @@ pub fn ftCo_80090184<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_DamageFlyRoll_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1599,7 +1601,7 @@ pub fn ftCo_DamageFlyRoll_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    inl_inlineD0_unfused(ctx, gobj);
+    inl_inlineD0_unfused(ctx, gobj, Handle::addr(__inl));
     inl_ftCo_8008F744_unfused(ctx, gobj);
     if !((fp).x221C_b6() != 0) {
         fns::ftCo_80090780(ctx, gobj);
@@ -2107,10 +2109,9 @@ fn inl_sqrtf_unfused<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return x;
 }
 
-fn inl_inlineD0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
-    let trajectory: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+fn inl_inlineD0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 12> = ptr(ctx, __in_caller + 0x0);
+    let trajectory: Val<'a, F32> = ptr(ctx, __in_caller + 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

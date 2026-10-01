@@ -188,7 +188,7 @@ pub fn lbFileGetFullName<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> Val<'a, i8>
 
 pub fn lbFile_8001634C<'a>(ctx: &'a Ctx, fileno: i32) -> u32 {
     let __frame = ctx.stack_frame(0x50);
-    let info: DVDFileInfo<'a> = frame_at(ctx, &__frame, 0x0);
+    let info: DVDFileInfo<'a> = frame_at(ctx, &__frame, 0x4);
     let mut fileno = fileno;
     let mut length: u32 = 0;
     let mut intr: i32 = fns::OSDisableInterrupts(ctx);
@@ -213,6 +213,7 @@ pub fn lbFile_8001634C<'a>(ctx: &'a Ctx, fileno: i32) -> u32 {
 
 pub fn lbFileGetSize<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> u32 {
     let __frame = ctx.stack_frame(0x58);
+    let __inl: ArrV<'a, u8, 64> = frame_at(ctx, &__frame, 0x4);
     let mut basename = basename;
     let mut entry_num: i32 = 0;
     let mut filename: Val<'a, i8> = fns::lbFileGetFullName(ctx, basename);
@@ -237,7 +238,7 @@ pub fn lbFileGetSize<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> u32 {
             )
         })
     });
-    return inl_lbFile_8001634C_unfused(ctx, entry_num);
+    return inl_lbFile_8001634C_unfused(ctx, entry_num, Handle::addr(__inl));
 }
 
 pub fn lbFile_800164A4<'a>(
@@ -250,6 +251,7 @@ pub fn lbFile_800164A4<'a>(
     args: u32,
 ) {
     let __frame = ctx.stack_frame(0x80);
+    let __inl: ArrV<'a, u8, 64> = frame_at(ctx, &__frame, 0x18);
     let mut file = file;
     let mut dst = dst;
     let mut size = size;
@@ -257,7 +259,7 @@ pub fn lbFile_800164A4<'a>(
     let mut callback = callback;
     let mut args = args;
     let mut r#type: i32 = 0;
-    (size).set(inl_lbFile_8001634C_unfused(ctx, file));
+    (size).set(inl_lbFile_8001634C_unfused(ctx, file, Handle::addr(__inl)));
     r#type = (if dst >= 0x80000000_u32 {
         33_i32
     } else {
@@ -289,6 +291,7 @@ pub fn lbFile_80016580<'a>(
 ) {
     let __frame = ctx.stack_frame(0x80);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 64> = frame_at(ctx, &__frame, 0x14);
     let mut basename = basename;
     let mut dst = dst;
     let mut size = size;
@@ -330,11 +333,13 @@ pub fn lbFile_80016580<'a>(
         1_i32,
         callback,
         args,
+        Handle::addr(__inl),
     );
 }
 
 pub fn lbFile_8001668C<'a>(ctx: &'a Ctx, basename: Val<'a, i8>, dst: Addr<'a>, size: Val<'a, u32>) {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut basename = basename;
     let mut dst = dst;
     let mut size = size;
@@ -346,6 +351,7 @@ pub fn lbFile_8001668C<'a>(ctx: &'a Ctx, basename: Val<'a, i8>, dst: Addr<'a>, s
         size,
         fnptr(ctx, 0x8001615c),
         (0_i32 as u32),
+        Handle::addr(__inl),
     );
     inl_waitForDisc_unfused(ctx);
 }
@@ -357,11 +363,12 @@ pub fn lbFile_80016760<'a>(
     size: Val<'a, u32>,
 ) {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut basename = basename;
     let mut dst = dst;
     let mut size = size;
     statics::melee__lb__lbfile::cancel(ctx).set(0_i32);
-    inl_loadFile_unfused(ctx, 0_i32, basename, dst, size);
+    inl_loadFile_unfused(ctx, 0_i32, basename, dst, size, Handle::addr(__inl));
 }
 
 pub fn lbFile_800168A0<'a>(
@@ -372,6 +379,7 @@ pub fn lbFile_800168A0<'a>(
     size: Val<'a, u32>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x40);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut heap_id = heap_id;
     let mut basename = basename;
     let mut dst = dst;
@@ -387,7 +395,7 @@ pub fn lbFile_800168A0<'a>(
         return 1_i32;
     } else {
         statics::melee__lb__lbfile::cancel(ctx).set(0_i32);
-        inl_loadFile_unfused(ctx, heap_id, basename, dst, size);
+        inl_loadFile_unfused(ctx, heap_id, basename, dst, size, Handle::addr(__inl));
         return 0_i32;
     }
     #[allow(unreachable_code)]
@@ -403,9 +411,8 @@ fn inl_waitForDisc_unfused<'a>(ctx: &'a Ctx) {
     }
 }
 
-fn inl_lbFile_8001634C_unfused<'a>(ctx: &'a Ctx, fileno: i32) -> u32 {
-    let __frame = ctx.stack_frame(0x48);
-    let info: DVDFileInfo<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_lbFile_8001634C_unfused<'a>(ctx: &'a Ctx, fileno: i32, __in_caller: u32) -> u32 {
+    let info: DVDFileInfo<'a> = ptr(ctx, __in_caller + 0x0);
     let mut fileno = fileno;
     let mut length: u32 = 0;
     let mut intr: i32 = fns::OSDisableInterrupts(ctx);
@@ -436,7 +443,9 @@ fn inl_lbFile_800164A4_unfused<'a>(
     pri: i32,
     callback: FnPtr<'a>,
     args: u32,
+    __in_caller: u32,
 ) {
+    let __inl: ArrV<'a, u8, 64> = ptr(ctx, __in_caller + 0x0);
     let mut file = file;
     let mut dst = dst;
     let mut size = size;
@@ -444,7 +453,7 @@ fn inl_lbFile_800164A4_unfused<'a>(
     let mut callback = callback;
     let mut args = args;
     let mut r#type: i32 = 0;
-    (size).set(inl_lbFile_8001634C_unfused(ctx, file));
+    (size).set(inl_lbFile_8001634C_unfused(ctx, file, Handle::addr(__inl)));
     r#type = (if dst >= 0x80000000_u32 {
         33_i32
     } else {
@@ -511,9 +520,9 @@ fn inl_lbFile_80016580_unfused<'a>(
     size: Val<'a, u32>,
     callback: FnPtr<'a>,
     args: u32,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0x0);
     let mut basename = basename;
     let mut dst = dst;
     let mut size = size;
@@ -592,7 +601,9 @@ fn inl_loadFile_unfused<'a>(
     basename: Val<'a, i8>,
     dst: Ptr<'a, Addr<'a>>,
     size: Val<'a, u32>,
+    __in_caller: u32,
 ) {
+    let __inl: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut heap_id = heap_id;
     let mut basename = basename;
     let mut dst = dst;
@@ -613,6 +624,7 @@ fn inl_loadFile_unfused<'a>(
         size,
         fnptr(ctx, 0x8001615c),
         (0_i32 as u32),
+        Handle::addr(__inl),
     );
     inl_waitForDisc_unfused(ctx);
 }

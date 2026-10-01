@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn gmCamera_801A33BC<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let sp10: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
     let spC: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
     let mut text: HSD_Text<'a> = null(ctx);
     fns::gmCamera_801A25C8(ctx);

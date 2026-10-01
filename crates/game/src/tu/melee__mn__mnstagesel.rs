@@ -499,8 +499,8 @@ pub fn fn_8025A090<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_8025A310<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut temp_f1: f64 = 0.0;
     let mut temp_f2: f64 = 0.0;
@@ -587,7 +587,7 @@ pub fn fn_8025A310<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_8025A560<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut temp_r30: Val<'a, i32> = null(ctx);
     let mut jobj: HSD_JObj<'a> =
@@ -674,12 +674,12 @@ pub fn fn_8025A974<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
 
 pub fn mnStageSel_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x160);
-    let spDC: ArrP<'a, HSD_JObj<'a>, 19> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4c);
-    let spCC: Vec<'a> = frame_at(ctx, &__frame, 0x50);
-    let unused_2: ArrV<'a, u8, 140> = frame_at(ctx, &__frame, 0x5c);
-    let temp_r22_4: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xe8);
-    let temp_r22_6: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xec);
+    let spDC: ArrP<'a, HSD_JObj<'a>, 19> = frame_at(ctx, &__frame, 0xd4);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let spCC: Vec<'a> = frame_at(ctx, &__frame, 0xc4);
+    let unused_2: ArrV<'a, u8, 140> = frame_at(ctx, &__frame, 0x4);
+    let temp_r22_4: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x90);
+    let temp_r22_6: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x94);
     let mut arg0 = arg0;
     let mut i: i32 = 0;
     let mut sss_data_table: MnSelectStageDataTable<'a> = null(ctx);

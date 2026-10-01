@@ -359,8 +359,8 @@ pub fn TRKTargetAccessFP<'a>(
     read: i32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let value: Val<'a, u64> = frame_at(ctx, &__frame, 0x0);
-    let savedException: TRKExceptionStatus<'a> = frame_at(ctx, &__frame, 0x8);
+    let value: Val<'a, u64> = frame_at(ctx, &__frame, 0x10);
+    let savedException: TRKExceptionStatus<'a> = frame_at(ctx, &__frame, 0x0);
     let mut firstRegister = firstRegister;
     let mut lastRegister = lastRegister;
     let mut b = b;
@@ -492,9 +492,9 @@ pub fn TRKTargetAccessExtended2<'a>(
     read: i32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let value_buf: ArrV<'a, u32, 2> = frame_at(ctx, &__frame, 0x0);
-    let savedException: TRKExceptionStatus<'a> = frame_at(ctx, &__frame, 0x8);
-    let value_buf0: ArrV<'a, u32, 1> = frame_at(ctx, &__frame, 0x18);
+    let value_buf: ArrV<'a, u32, 2> = frame_at(ctx, &__frame, 0x14);
+    let savedException: TRKExceptionStatus<'a> = frame_at(ctx, &__frame, 0x4);
+    let value_buf0: ArrV<'a, u32, 1> = frame_at(ctx, &__frame, 0x0);
     let mut firstRegister = firstRegister;
     let mut lastRegister = lastRegister;
     let mut b = b;
@@ -1022,8 +1022,8 @@ fn asm_TRKInterruptHandler(ctx: &Ctx) {
 
 pub fn TRKPostInterruptEvent<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    let event: NubEvent<'a> = frame_at(ctx, &__frame, 0x0);
-    let inst: Val<'a, u32> = frame_at(ctx, &__frame, 0xc);
+    let event: NubEvent<'a> = frame_at(ctx, &__frame, 0x4);
+    let inst: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
     let mut eventType: i32 = 0;
     if (fns::gTRKState(ctx).inputActivated() != 0) {
         fns::gTRKState(ctx).set_inputActivated(0_i32);
@@ -1563,8 +1563,8 @@ pub fn TRKTargetGetPC<'a>(ctx: &'a Ctx) -> u32 {
 
 pub fn TRKTargetSupportRequest<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let event: NubEvent<'a> = frame_at(ctx, &__frame, 0x0);
-    let io_result: Val<'a, u8> = frame_at(ctx, &__frame, 0xc);
+    let event: NubEvent<'a> = frame_at(ctx, &__frame, 0x4);
+    let io_result: Val<'a, u8> = frame_at(ctx, &__frame, 0x0);
     let mut err: i32 = (enums::kNoError as i32);
     let mut length: Val<'a, u32> = null(ctx);
     let mut command: u8 = 0;

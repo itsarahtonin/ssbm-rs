@@ -114,7 +114,7 @@ pub fn grKraid_801FE1E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grKraid_801FE1EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
     scale.set_x({
@@ -224,7 +224,7 @@ pub fn grKraid_801FE438<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grKraid_801FE440<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fVar2: f64 = 0.0;
     let mut fVar3: f64 = 0.0;
@@ -309,7 +309,7 @@ pub fn grKraid_801FE6D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grKraid_801FE6D8<'a>(ctx: &'a Ctx, hand: HSD_JObj<'a>, param2: f64) {
     let __frame = ctx.stack_frame(0x38);
-    let handpos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let handpos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut hand = hand;
     let mut param2 = param2;
     let mut map: Ground<'a> =

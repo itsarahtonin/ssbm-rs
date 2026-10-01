@@ -34,7 +34,7 @@ pub fn it_802B62D0<'a>(
     facing_dir: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x80);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut is_smash_missile = is_smash_missile;
@@ -104,10 +104,10 @@ pub fn it_802B63F8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802B64FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let vec3: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let vec0: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let vec3: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let vec0: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut temp_r3: HSD_GObj<'a> = null(ctx);
     let mut temp_ret: HSD_GObj<'a> = null(ctx);
@@ -225,8 +225,8 @@ pub fn itSamusmissile_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i
 
 pub fn itSamusmissile_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut sa0: itSamusMissileAttributes<'a> = Handle::cast::<itSamusMissileAttributes<'a>>(

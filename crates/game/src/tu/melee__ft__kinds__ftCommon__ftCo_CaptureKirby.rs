@@ -51,6 +51,7 @@ pub fn ftCo_800BD19C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) -> f64 
 pub fn ftCo_800BD1DC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, victim_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut victim_gobj = victim_gobj;
     let mut fp: Fighter<'a> =
@@ -80,7 +81,7 @@ pub fn ftCo_800BD1DC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, victim_gobj: HSD_GObj
         null::<HSD_GObj<'a>>(ctx),
     );
     fns::ftCommon_8007D5D4(ctx, fp);
-    inl_inlineA0_unfused(ctx, gobj);
+    inl_inlineA0_unfused(ctx, gobj, Handle::addr(__inl));
     fns::ftCommon_InitGrab(
         ctx,
         fp,
@@ -112,8 +113,9 @@ pub fn ftCo_CaptureKirby_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800BD39C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -126,7 +128,7 @@ pub fn ftCo_800BD39C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     pos.set_x((fp).mv().co().capturekirby().pos_offset().x());
     pos.set_y((fp).mv().co().capturekirby().pos_offset().y());
     pos.set_z(fp::frsp(0_i32 as f64));
-    inl_inlineB0_unfused(ctx, gobj, pos);
+    inl_inlineB0_unfused(ctx, gobj, pos, Handle::addr(__inl));
     inl_inlineB1_unfused(ctx, gobj, pos);
 }
 
@@ -173,10 +175,9 @@ fn inl_HSD_JObjGetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     Handle::copy_from((scale), (jobj).scale());
 }
 
-fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x20);
-    let vec0: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vec1: Vec2<'a> = frame_at(ctx, &__frame, 0xc);
+fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let vec0: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let vec1: Vec2<'a> = ptr(ctx, __in_caller + 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -303,9 +304,8 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     }
 }
 
-fn inl_inlineB0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
-    let __frame = ctx.stack_frame(0x20);
-    let scale_pad: inlineB0_scale_pad<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_inlineB0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>, __in_caller: u32) {
+    let scale_pad: inlineB0_scale_pad<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut fp: Fighter<'a> =

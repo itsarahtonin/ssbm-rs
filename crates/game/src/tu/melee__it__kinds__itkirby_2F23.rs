@@ -56,6 +56,7 @@ pub fn it_802F23EC<'a>(
 ) {
     let __frame = ctx.stack_frame(0x58);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut owner_gobj = owner_gobj;
     let mut facing_dir = facing_dir;
@@ -74,7 +75,7 @@ pub fn it_802F23EC<'a>(
     (ip).set_xBC_itemStateContainer(fns::it_803F9450(ctx).get(0));
     fns::Item_80268E5C(ctx, gobj, 0_i32, 0_i32);
     fns::it_802762BC(ctx, ip);
-    inl_it_802F23EC_inline_unfused(ctx, gobj);
+    inl_it_802F23EC_inline_unfused(ctx, gobj, Handle::addr(__inl));
     fns::it_802756D0(ctx, gobj);
     fns::it_80274ECC(ctx, gobj, 1_i32);
     fns::it_80274C88(ctx, gobj);
@@ -99,8 +100,9 @@ pub fn itKirby_2F23_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32
 
 pub fn it_802F258C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -112,7 +114,7 @@ pub fn it_802F258C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     offset.set_x((ip).xDD4_itemVar().kirby2f23().x1C8());
     offset.set_y((ip).xDD4_itemVar().kirby2f23().x1CC());
     offset.set_z(0.0);
-    inl_it_802F258C_scale_unfused(ctx, gobj, offset);
+    inl_it_802F258C_scale_unfused(ctx, gobj, offset, Handle::addr(__inl));
     inl_it_802F258C_update_unfused(ctx, gobj, offset);
 }
 
@@ -186,10 +188,9 @@ fn inl_HSD_JObjGetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     Handle::copy_from((scale), (jobj).scale());
 }
 
-fn inl_it_802F23EC_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x20);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let limits: Vec2<'a> = frame_at(ctx, &__frame, 0xc);
+fn inl_it_802F23EC_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let limits: Vec2<'a> = ptr(ctx, __in_caller + 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> =
@@ -308,9 +309,13 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     }
 }
 
-fn inl_it_802F258C_scale_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, offset: Vec<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_it_802F258C_scale_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    offset: Vec<'a>,
+    __in_caller: u32,
+) {
+    let scale: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut offset = offset;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

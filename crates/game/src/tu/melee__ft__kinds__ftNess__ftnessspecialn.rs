@@ -189,6 +189,7 @@ pub fn ftNs_SpecialAirNStart_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftNs_SpecialNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
+    let __inl: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x20);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     if (fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
@@ -204,7 +205,7 @@ pub fn ftNs_SpecialNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         0.0,
         null::<HSD_GObj<'a>>(ctx),
     );
-    inl_ftNs_PKFlash_Init(ctx, gobj);
+    inl_ftNs_PKFlash_Init(ctx, gobj, Handle::addr(__inl));
     (fp).set_x1968_jumpsUsed(((fp).co_attrs().max_jumps() as u8));
 }
 
@@ -298,6 +299,7 @@ pub fn ftNs_SpecialNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftNs_SpecialAirNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
+    let __inl: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x20);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     if (fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
@@ -313,7 +315,7 @@ pub fn ftNs_SpecialAirNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         0.0,
         null::<HSD_GObj<'a>>(ctx),
     );
-    inl_ftNs_PKFlash_Init(ctx, gobj);
+    inl_ftNs_PKFlash_Init(ctx, gobj, Handle::addr(__inl));
     (fp).set_x1968_jumpsUsed(((fp).co_attrs().max_jumps() as u8));
 }
 
@@ -776,10 +778,9 @@ fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     return (gobj).user_data();
 }
 
-fn inl_ftNs_PKFlash_Init<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+fn inl_ftNs_PKFlash_Init<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 20> = ptr(ctx, __in_caller + 0x0);
+    let vec: Vec<'a> = ptr(ctx, __in_caller + 0x14);
     let mut gobj = gobj;
     let mut fighter_data2: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));

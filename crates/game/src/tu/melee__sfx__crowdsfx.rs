@@ -76,8 +76,8 @@ pub fn un_80321A00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn un_80321AF4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut r#box: mpCollisionBox<'a> = fns::mpLib_80458868(ctx).get(0);
     let mut cur: HSD_GObj<'a> = null(ctx);

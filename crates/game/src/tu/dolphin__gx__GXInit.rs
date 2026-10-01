@@ -820,10 +820,10 @@ pub fn GXInit<'a>(ctx: &'a Ctx, base: Addr<'a>, size: u32) -> GXFifoObj<'a> {
 
 pub fn __GXInitGX<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x78);
-    let identity_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let clear: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
-    let black: _GXColor<'a> = frame_at(ctx, &__frame, 0x34);
-    let white: _GXColor<'a> = frame_at(ctx, &__frame, 0x38);
+    let identity_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x24);
+    let clear: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let black: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
+    let white: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
     clear.set_r((64_i32 as u8));
     clear.set_g((64_i32 as u8));
     clear.set_b((64_i32 as u8));

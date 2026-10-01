@@ -529,9 +529,9 @@ fn asm_fn_80174920(ctx: &Ctx) {
 
 pub fn fn_801749B8<'a>(ctx: &'a Ctx, unused: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut unused = unused;
     let mut new_var2: ResultsData<'a> = null(ctx);
     let mut new_var: u16 = 0;
@@ -609,8 +609,9 @@ pub fn fn_80174B4C<'a>(ctx: &'a Ctx, data: ResultsData<'a>, slot: i32) {
     let pdata: Ptr<'a, ResultsPlayerData<'a>> = frame_at(ctx, &__frame, 0x0);
     let list_base: Ptr<'a, StatsList<'a>> = frame_at(ctx, &__frame, 0x4);
     let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x1c);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x10);
+    let __inl: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x48);
     let mut data = data;
     let mut slot = slot;
     let mut list: StatsList<'a> = null(ctx);
@@ -629,7 +630,7 @@ pub fn fn_80174B4C<'a>(ctx: &'a Ctx, data: ResultsData<'a>, slot: i32) {
             break 'l1;
         }
     }
-    inl_fn_80174B4C_blk14829(ctx, data, slot, pdata, list_base);
+    inl_fn_80174B4C_blk14829(ctx, data, slot, pdata, list_base, Handle::addr(__inl));
     list = list_base.get();
     if ((pdata.get()).page() as i32) != 2_i32 {
         'l3: while ((list).mode() as i32) != ((pdata.get()).page() as i32) {
@@ -769,9 +770,9 @@ pub fn fn_80175038<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flag: i32) {
 
 pub fn fn_8017507C<'a>(ctx: &'a Ctx, __ret: _GXColor<'a>, slot: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
     let __ret_tmp_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
     let __ret_tmp_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
@@ -876,15 +877,15 @@ pub fn fn_8017507C<'a>(ctx: &'a Ctx, __ret: _GXColor<'a>, slot: i32) {
 
 pub fn fn_80175240<'a>(ctx: &'a Ctx, slot: i32) {
     let __frame = ctx.stack_frame(0x58);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let first_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let second_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let third_color: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let empty_first_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
+    let first_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
+    let second_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let third_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
+    let empty_first_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
     let empty_second_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
-    let empty_third_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
+    let empty_third_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
     let mut slot = slot;
     let mut color_ptr: _GXColor<'a> = null(ctx);
     let mut ko_count: HSD_Text<'a> = null(ctx);
@@ -1099,9 +1100,9 @@ pub fn fn_80175240<'a>(ctx: &'a Ctx, slot: i32) {
 
 pub fn fn_8017556C<'a>(ctx: &'a Ctx, slot: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let sp10: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
     let spC: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut me: MatchEnd<'a> = null(ctx);
     let mut var_r28: i32 = 0;
@@ -1184,9 +1185,9 @@ pub fn fn_8017556C<'a>(ctx: &'a Ctx, slot: i32) {
 
 pub fn fn_801756E0<'a>(ctx: &'a Ctx, slot: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
     let color_copy: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut me: MatchEnd<'a> = null(ctx);
     let mut line_num: i32 = 0;
@@ -1271,9 +1272,9 @@ pub fn fn_801756E0<'a>(ctx: &'a Ctx, slot: i32) {
 
 pub fn fn_80175880<'a>(ctx: &'a Ctx, slot: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
     let color_copy: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut me: MatchEnd<'a> = null(ctx);
     let mut line_num: i32 = 0;
@@ -1368,12 +1369,12 @@ pub fn fn_80175880<'a>(ctx: &'a Ctx, slot: i32) {
 
 pub fn fn_80175A94<'a>(ctx: &'a Ctx, slot: i32, position: Vec<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
-    let sp18: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
-    let sp14: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused_3: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x1c);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let sp18: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let sp14: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused_3: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
     let mut slot = slot;
     let mut position = position;
     let mut player: u32 = (slot as u32);
@@ -1584,34 +1585,34 @@ pub fn fn_80175D34<'a>(ctx: &'a Ctx) {
 pub fn fn_80175DC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x140);
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let sp108: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x10);
-    let sp104: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x14);
-    let sp100: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x18);
-    let spFC: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x1c);
-    let player_jobj0: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x20);
-    let player_jobj1: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x28);
-    let player_jobj2: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x30);
-    let player_jobj3: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x38);
-    let player_jobj5: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x40);
-    let player_jobj4: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x48);
-    let player_jobj6: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x50);
-    let player_jobj7: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x58);
-    let player_jobj8: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x60);
-    let player_jobj9: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x68);
-    let player_jobj10: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x70);
-    let player_jobj11: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x78);
-    let player_jobj12: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x80);
-    let player_jobj13: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x88);
-    let player_jobj14: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x90);
-    let sp78: Vec<'a> = frame_at(ctx, &__frame, 0x98);
-    let sp6C: Vec<'a> = frame_at(ctx, &__frame, 0xa4);
-    let sp60: Vec<'a> = frame_at(ctx, &__frame, 0xb0);
-    let sp54: Vec<'a> = frame_at(ctx, &__frame, 0xbc);
-    let sp48: Vec<'a> = frame_at(ctx, &__frame, 0xc8);
-    let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0xd4);
-    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0xe0);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0xec);
-    let unused_2: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0xf8);
+    let sp108: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x100);
+    let sp104: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xfc);
+    let sp100: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xf8);
+    let spFC: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xf4);
+    let player_jobj0: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0xec);
+    let player_jobj1: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0xe4);
+    let player_jobj2: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0xdc);
+    let player_jobj3: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0xd4);
+    let player_jobj5: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0xcc);
+    let player_jobj4: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0xc4);
+    let player_jobj6: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0xbc);
+    let player_jobj7: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0xb4);
+    let player_jobj8: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0xac);
+    let player_jobj9: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0xa4);
+    let player_jobj10: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x9c);
+    let player_jobj11: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x94);
+    let player_jobj12: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x8c);
+    let player_jobj13: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x84);
+    let player_jobj14: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x7c);
+    let sp78: Vec<'a> = frame_at(ctx, &__frame, 0x70);
+    let sp6C: Vec<'a> = frame_at(ctx, &__frame, 0x64);
+    let sp60: Vec<'a> = frame_at(ctx, &__frame, 0x58);
+    let sp54: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let sp48: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let unused_2: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x104);
     let mut gobj = gobj;
     let mut me: MatchEnd<'a> = null(ctx);
     let mut data_iter: ResultsData<'a> = null(ctx);
@@ -2884,7 +2885,7 @@ pub fn fn_80176BCC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_80176BF0<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>, arg1: u8, arg2: i32) -> HSD_JObj<'a> {
     let __frame = ctx.stack_frame(0x28);
-    let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -2940,8 +2941,8 @@ pub fn fn_80176D18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn fn_80176D3C<'a>(ctx: &'a Ctx, positions: Vec<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let models: ArrP<'a, DynamicModelDesc<'a>, 3> = frame_at(ctx, &__frame, 0x8);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x14);
+    let models: ArrP<'a, DynamicModelDesc<'a>, 3> = frame_at(ctx, &__frame, 0xc);
+    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
     let mut positions = positions;
     let mut data: ResultsData<'a> = fns::lbl_8046DBE8(ctx);
     let mut me: MatchEnd<'a> = null(ctx);
@@ -3453,9 +3454,9 @@ fn inl_fn_80174B4C_blk14829<'a>(
     slot: i32,
     pdata: Ptr<'a, ResultsPlayerData<'a>>,
     list: Ptr<'a, StatsList<'a>>,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 56> = ptr(ctx, __in_caller + 0x0);
     let mut data = data;
     let mut slot = slot;
     let mut pdata = pdata;

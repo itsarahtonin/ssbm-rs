@@ -375,7 +375,7 @@ pub fn ftSk_SpecialS_80110AEC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftSk_SpecialS_80110BCC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let sums_of_squares: ArrV<'a, F32, 4> = frame_at(ctx, &__frame, 0x0);
+    let sums_of_squares: ArrV<'a, F32, 4> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut item_gobj: HSD_GObj<'a> = (fp).u().sk().x8();
@@ -604,7 +604,8 @@ pub fn ftSk_SpecialAirS_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftSk_SpecialS_CheckInitChain<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = inl_getFighterPlus_unfused(ctx, gobj);
     let mut da: _ftSeakAttributes<'a> = Handle::cast::<_ftSeakAttributes<'a>>((fp).dat_attrs());
@@ -613,7 +614,7 @@ pub fn ftSk_SpecialS_CheckInitChain<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32
         .specials()
         .set_x0((fp).mv().sk().specials().x0().wrapping_add(1_i32));
     if fp::frsp((fp).mv().sk().specials().x0() as f64) == (da).x1C() {
-        inl_ftSk_SpecialS_SpawnChain_unfused(ctx, gobj);
+        inl_ftSk_SpecialS_SpawnChain_unfused(ctx, gobj, Handle::addr(__inl));
         (fp).mv().sk().specials().set_x1C(fp::fctiwz((da).x18()));
         if Handle::is_null((fp).u().sk().x8()) {
             if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
@@ -877,7 +878,7 @@ pub fn ftSk_SpecialAirS_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftSk_SpecialS_80111830<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let vec0: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec0: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let vec1: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp2: Fighter<'a> = null(ctx);
@@ -1400,9 +1401,8 @@ fn inl_getFighterPlus_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'
     return fp;
 }
 
-fn inl_ftSk_SpecialS_SpawnChain_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftSk_SpecialS_SpawnChain_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = inl_getFighterPlus_unfused(ctx, gobj);
     fns::lb_8000B1CC(

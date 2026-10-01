@@ -292,17 +292,18 @@ pub fn lbShadow_8000F214<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
 
 pub fn lbShadow_8000F38C<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x148);
-    let rect: HSD_ViewingRect<'a> = frame_at(ctx, &__frame, 0x0);
-    let lightPos: Vec<'a> = frame_at(ctx, &__frame, 0x54);
-    let lightDir: Vec<'a> = frame_at(ctx, &__frame, 0x60);
-    let upVec: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
-    let lightVec: Vec<'a> = frame_at(ctx, &__frame, 0x78);
-    let rightVec: Vec<'a> = frame_at(ctx, &__frame, 0x84);
-    let normDir: Vec<'a> = frame_at(ctx, &__frame, 0x90);
-    let eyePos: Vec<'a> = frame_at(ctx, &__frame, 0x9c);
-    let interestPos: Vec<'a> = frame_at(ctx, &__frame, 0xa8);
-    let camPos: Vec<'a> = frame_at(ctx, &__frame, 0xb4);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc0);
+    let rect: HSD_ViewingRect<'a> = frame_at(ctx, &__frame, 0xc4);
+    let lightPos: Vec<'a> = frame_at(ctx, &__frame, 0xb8);
+    let lightDir: Vec<'a> = frame_at(ctx, &__frame, 0xac);
+    let upVec: Vec<'a> = frame_at(ctx, &__frame, 0xa0);
+    let lightVec: Vec<'a> = frame_at(ctx, &__frame, 0x94);
+    let rightVec: Vec<'a> = frame_at(ctx, &__frame, 0x88);
+    let normDir: Vec<'a> = frame_at(ctx, &__frame, 0x7c);
+    let eyePos: Vec<'a> = frame_at(ctx, &__frame, 0x70);
+    let interestPos: Vec<'a> = frame_at(ctx, &__frame, 0x64);
+    let camPos: Vec<'a> = frame_at(ctx, &__frame, 0x58);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x10);
     let mut arg0 = arg0;
     let mut dist: f64 = 0.0;
     let mut noLight: i32 = 0;
@@ -418,7 +419,7 @@ pub fn lbShadow_8000F38C<'a>(ctx: &'a Ctx, arg0: i32) {
             });
             fp::fadds((fp::fmuls(lightVec.z(), lightVec.z())), __t3)
         };
-        dist = inl_my_sqrtf(ctx, dist);
+        dist = inl_my_sqrtf(ctx, dist, Handle::addr(__inl));
         if dist < 0.0010000000474974513 {
             noLight = 1_i32;
             lightPos.set_x(fns::lbShadow_804D7B70(ctx).get());
@@ -823,9 +824,8 @@ fn inl_GXPosition3f32_unfused<'a>(ctx: &'a Ctx, x: f64, y: f64, z: f64) {
 
 fn inl_GXEnd_unfused<'a>(ctx: &'a Ctx) {}
 
-fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
-    let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
+fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64, __in_caller: u32) -> f64 {
+    let unused: ArrV<'a, u8, 56> = ptr(ctx, __in_caller + 0x0);
     let mut x = x;
     ctx.fill(Handle::addr(unused), 0, 0x38);
     unused.at(0).set((0_i32 as u8));

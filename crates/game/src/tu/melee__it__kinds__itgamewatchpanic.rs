@@ -34,7 +34,7 @@ pub fn it_802C7D60<'a>(
     dir: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x80);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
     let mut parent = parent;
     let mut pos = pos;
     let mut arg2 = arg2;

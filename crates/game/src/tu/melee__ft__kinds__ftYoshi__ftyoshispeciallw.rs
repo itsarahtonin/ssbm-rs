@@ -28,9 +28,9 @@ use crate::support::*;
 
 pub fn fn_8012E644<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let transn_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let transn_pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let star_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut da: ftYs_DatAttrs<'a> = Handle::cast::<ftYs_DatAttrs<'a>>((fp).dat_attrs());

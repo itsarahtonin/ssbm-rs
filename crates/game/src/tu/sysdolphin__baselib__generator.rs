@@ -318,9 +318,9 @@ pub fn hsd_8039D688<'a>(
 
 pub fn hsd_8039D71C<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) {
     let __frame = ctx.stack_frame(0x90);
-    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let col: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x3c);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x20);
+    let col: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut r#gen = r#gen;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut col0_x: f64 = 0.0;
@@ -518,17 +518,23 @@ pub fn hsd_8039D9C8<'a>(ctx: &'a Ctx) -> HSD_Generator<'a> {
 
 pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x230);
-    let vel_copy: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let emit_pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let tmpvec: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let rot_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x34);
-    let jobj_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x64);
-    let look_dir: Vec<'a> = frame_at(ctx, &__frame, 0x94);
-    let cam_up: Vec<'a> = frame_at(ctx, &__frame, 0xa0);
-    let cross1: Vec<'a> = frame_at(ctx, &__frame, 0xac);
-    let vel_norm: Vec<'a> = frame_at(ctx, &__frame, 0xb8);
-    let trig_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xc4);
+    let vel_copy: Vec<'a> = frame_at(ctx, &__frame, 0x160);
+    let emit_pos: Vec<'a> = frame_at(ctx, &__frame, 0x150);
+    let tmpvec: Vec<'a> = frame_at(ctx, &__frame, 0x144);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x138);
+    let rot_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x108);
+    let jobj_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xd8);
+    let look_dir: Vec<'a> = frame_at(ctx, &__frame, 0xcc);
+    let cam_up: Vec<'a> = frame_at(ctx, &__frame, 0xc0);
+    let cross1: Vec<'a> = frame_at(ctx, &__frame, 0xb4);
+    let vel_norm: Vec<'a> = frame_at(ctx, &__frame, 0xa8);
+    let trig_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x78);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x14);
+    let __inl_4: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
+    let __inl_5: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x24);
+    let __inl_6: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x2c);
     let mut r#gen = r#gen;
     let mut tmp: f64 = 0.0;
     let mut eps: f64 = 0.0;
@@ -639,7 +645,7 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
         vel_norm.set_y((r#gen).vel().y());
         vel_norm.set_z((r#gen).vel().z());
         fns::PSVECNormalize(ctx, vel_norm, vel_norm);
-        if inl_fabsf_bitwise(ctx, vel_norm.z()) < 1.1754943508222875e-38_f64 {
+        if inl_fabsf_bitwise(ctx, vel_norm.z(), Handle::addr(__inl)) < 1.1754943508222875e-38_f64 {
             if vel_norm.y() >= 0.0 {
                 sin_az = 1.5707963705062866;
             } else {
@@ -653,7 +659,9 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
         {
             let mut projected_z: f64 =
                 fp::fmadds(vel_norm.y(), cos_az, fp::fmuls(vel_norm.z(), sin_az));
-            if inl_fabsf_bitwise(ctx, projected_z) < 1.1754943508222875e-38_f64 {
+            if inl_fabsf_bitwise(ctx, projected_z, Handle::addr(__inl_2))
+                < 1.1754943508222875e-38_f64
+            {
                 if vel_norm.x() >= 0.0 {
                     elevation = 1.5707963705062866;
                 } else {
@@ -690,7 +698,12 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
     }
     elevation = vel_mag_sq;
     if (((r#gen).r#type() as i32) & 15_i32) == 2_i32 {
-        if inl_fabsf_bitwise(ctx, rot_mtx.get(2_i32).at(2_i32).get()) < 1.1754943508222875e-38_f64 {
+        if inl_fabsf_bitwise(
+            ctx,
+            rot_mtx.get(2_i32).at(2_i32).get(),
+            Handle::addr(__inl_3),
+        ) < 1.1754943508222875e-38_f64
+        {
             if rot_mtx.get(1_i32).at(2_i32).get() >= 0.0 {
                 angle1 = 1.5707963705062866;
             } else {
@@ -713,7 +726,7 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
                 fns::sinf(ctx, angle1),
                 first,
             );
-            if inl_fabsf_bitwise(ctx, comb) < 1.1754943508222875e-38_f64 {
+            if inl_fabsf_bitwise(ctx, comb, Handle::addr(__inl_4)) < 1.1754943508222875e-38_f64 {
                 if rot_mtx.get(0_i32).at(2_i32).get() >= 0.0 {
                     angle3 = 1.5707963705062866;
                 } else {
@@ -823,7 +836,9 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
                                 if (r#gen).angle() < 0.0 {
                                     tmp = fp::fadds(cur_angle, angle_step);
                                     cur_angle = tmp;
-                                    if inl_fabsf_bitwise(ctx, sin_az) < 1.1754943508222875e-38_f64 {
+                                    if inl_fabsf_bitwise(ctx, sin_az, Handle::addr(__inl_5))
+                                        < 1.1754943508222875e-38_f64
+                                    {
                                         if (r#gen).aux().cone().height() >= 0.0 {
                                             cone_angle = fp::fneg((r#gen).angle());
                                         } else {
@@ -858,7 +873,9 @@ pub fn hsd_8039DAD4<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) -> f64 {
                                         cur_angle = fp::fmadds(cone_angle, rnd_4, cur_angle);
                                         cone_angle = fp::fmuls(radius, (r#gen).angle());
                                     }
-                                    if inl_fabsf_bitwise(ctx, sin_az) < 1.1754943508222875e-38_f64 {
+                                    if inl_fabsf_bitwise(ctx, sin_az, Handle::addr(__inl_6))
+                                        < 1.1754943508222875e-38_f64
+                                    {
                                         if (r#gen).aux().cone().height() >= 0.0 {
                                             cone_angle = (r#gen).angle();
                                         } else {
@@ -1480,6 +1497,7 @@ pub fn hsd_8039EFAC<'a>(
 
 pub fn hsd_8039F05C<'a>(ctx: &'a Ctx, linkNo: i32, bank: i32, idx: i32) -> HSD_Generator<'a> {
     let __frame = ctx.stack_frame(0x40);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut linkNo = linkNo;
     let mut bank = bank;
     let mut idx = idx;
@@ -1738,7 +1756,9 @@ pub fn hsd_8039F05C<'a>(ctx: &'a Ctx, linkNo: i32, bank: i32, idx: i32) -> HSD_G
                             .sphere()
                             .set_latMid(fns::atan2f(ctx, (r#gen).vel().y(), mag));
                     }
-                    if inl_fabsf_bitwise(ctx, (r#gen).vel().x()) < 1.1754943508222875e-38_f64 {
+                    if inl_fabsf_bitwise(ctx, (r#gen).vel().x(), Handle::addr(__inl))
+                        < 1.1754943508222875e-38_f64
+                    {
                         if (r#gen).vel().z() >= 0.0 {
                             (r#gen).aux().sphere().set_lonMid(1.5707963705062866);
                         } else {
@@ -1957,9 +1977,8 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return x;
 }
 
-fn inl_fabsf_bitwise<'a>(ctx: &'a Ctx, v: f64) -> f64 {
-    let __frame = ctx.stack_frame(0x10);
-    let v__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+fn inl_fabsf_bitwise<'a>(ctx: &'a Ctx, v: f64, __in_caller: u32) -> f64 {
+    let v__slot: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
     v__slot.set(v);
     (Handle::cast::<Val<'a, u32>>(v__slot))
         .set(((Handle::cast::<Val<'a, u32>>(v__slot)).get() & (!0x80000000_u32)));

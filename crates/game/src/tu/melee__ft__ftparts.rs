@@ -33,7 +33,7 @@ pub fn ftParts_JObjMakePositionMtx<'a>(
     rmtx: ArrV<'a, F32, 4>,
 ) {
     let __frame = ctx.stack_frame(0x80);
-    let temp_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let temp_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x24);
     let mut jobj = jobj;
     let mut mtx = mtx;
     let mut rmtx = rmtx;
@@ -138,9 +138,10 @@ pub fn ftPartsSetupRigidMtx<'a>(
     rendermode: u32,
 ) {
     let __frame = ctx.stack_frame(0x98);
-    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let mark_obj: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x30);
-    let mark: Val<'a, u32> = frame_at(ctx, &__frame, 0x34);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x4c);
+    let mark_obj: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x48);
+    let mark: Val<'a, u32> = frame_at(ctx, &__frame, 0x44);
+    let __inl: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x10);
     let mut pobj = pobj;
     let mut vmtx = vmtx;
     let mut pmtx = pmtx;
@@ -160,7 +161,7 @@ pub fn ftPartsSetupRigidMtx<'a>(
         inl_HSD_PerfCountMtxLoad_unfused(ctx);
         flags = inl_ftPartsGetSetupFlags_unfused(ctx, jobj, rendermode);
         if (((flags as u32) & ((enums::SETUP_NORMAL as i32) as u32)) != 0) {
-            inl_ftPartsSetupZScaleMtx_unfused(ctx, tmp, mtx.get(0));
+            inl_ftPartsSetupZScaleMtx_unfused(ctx, tmp, mtx.get(0), Handle::addr(__inl));
             inl_ftPartsSetupNrmMtx_unfused(ctx, jobj, mtx.get(0), (enums::GX_PNMTX0 as i32));
             if (((flags as u32) & ((enums::SETUP_NORMAL_PROJECTION as i32) as u32)) != 0) {
                 inl_ftPartsSetupTexMtx_unfused(ctx, mtx.get(0), (enums::GX_TEXMTX0 as i32));
@@ -177,11 +178,13 @@ pub fn ftPartsSetupSharedVtxMtx<'a>(
     rendermode: u32,
 ) {
     let __frame = ctx.stack_frame(0x138);
-    let mtx0: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let mtx1: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
-    let tmp: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x60);
-    let mark_obj: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x90);
-    let mark: Val<'a, u32> = frame_at(ctx, &__frame, 0x94);
+    let mtx0: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xdc);
+    let mtx1: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xac);
+    let tmp: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x7c);
+    let mark_obj: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x78);
+    let mark: Val<'a, u32> = frame_at(ctx, &__frame, 0x74);
+    let __inl: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x40);
+    let __inl_2: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x10);
     let mut pobj = pobj;
     let mut vmtx = vmtx;
     let mut pmtx = pmtx;
@@ -217,7 +220,7 @@ pub fn ftPartsSetupSharedVtxMtx<'a>(
         fns::GXLoadPosMtxImm(ctx, pmtx, ((enums::GX_PNMTX0 as i32) as u32));
         inl_HSD_PerfCountMtxLoad_unfused(ctx);
         if (((flags as u32) & ((enums::SETUP_NORMAL as i32) as u32)) != 0) {
-            inl_ftPartsSetupZScaleMtx_unfused(ctx, pmtx, mtx0.get(0));
+            inl_ftPartsSetupZScaleMtx_unfused(ctx, pmtx, mtx0.get(0), Handle::addr(__inl));
             inl_ftPartsSetupNrmMtx_unfused(ctx, jobj, mtx0.get(0), (enums::GX_PNMTX0 as i32));
             if (((flags as u32) & ((enums::SETUP_NORMAL_PROJECTION as i32) as u32)) != 0) {
                 inl_ftPartsSetupTexMtx_unfused(ctx, mtx0.get(0), (enums::GX_TEXMTX0 as i32));
@@ -230,7 +233,7 @@ pub fn ftPartsSetupSharedVtxMtx<'a>(
         fns::GXLoadPosMtxImm(ctx, tmp.get(0), ((enums::GX_PNMTX1 as i32) as u32));
         inl_HSD_PerfCountMtxLoad_unfused(ctx);
         if (((flags as u32) & ((enums::SETUP_NORMAL as i32) as u32)) != 0) {
-            inl_ftPartsSetupZScaleMtx_unfused(ctx, tmp.get(0), mtx1.get(0));
+            inl_ftPartsSetupZScaleMtx_unfused(ctx, tmp.get(0), mtx1.get(0), Handle::addr(__inl_2));
             inl_ftPartsSetupNrmMtx_unfused(ctx, jobj, mtx1.get(0), (enums::GX_PNMTX1 as i32));
             if (((flags as u32) & ((enums::SETUP_NORMAL_PROJECTION as i32) as u32)) != 0) {
                 inl_ftPartsSetupTexMtx_unfused(ctx, mtx1.get(0), (enums::GX_TEXMTX1 as i32));
@@ -247,9 +250,10 @@ pub fn ftPartsSetupEnvelopeMtx<'a>(
     rendermode: u32,
 ) {
     let __frame = ctx.stack_frame(0x130);
-    let spAC: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
-    let tmp: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x60);
+    let spAC: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xa4);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x74);
+    let tmp: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x44);
+    let __inl: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x10);
     let mut pobj = pobj;
     let mut vmtx = vmtx;
     let mut pmtx = pmtx;
@@ -406,7 +410,12 @@ pub fn ftPartsSetupEnvelopeMtx<'a>(
                 fns::GXLoadPosMtxImm(ctx, tmp.get(0), mtx_id);
                 inl_HSD_PerfCountMtxLoad_unfused(ctx);
                 if (((flags as u32) & ((enums::SETUP_NORMAL as i32) as u32)) != 0) {
-                    inl_ftPartsSetupZScaleMtx_unfused(ctx, tmp.get(0), mtx.get(0));
+                    inl_ftPartsSetupZScaleMtx_unfused(
+                        ctx,
+                        tmp.get(0),
+                        mtx.get(0),
+                        Handle::addr(__inl),
+                    );
                     inl_ftPartsSetupNrmMtx_unfused(ctx, jobj, mtx.get(0), (mtx_id as i32));
                     if (((flags as u32) & ((enums::SETUP_NORMAL_PROJECTION as i32) as u32)) != 0) {
                         {
@@ -642,7 +651,7 @@ pub fn ftParts_80074194<'a>(
 
 pub fn ftParts_SetupParts<'a>(ctx: &'a Ctx, fighter_obj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let dobj_count: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let dobj_count: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
     let mut fighter_obj = fighter_obj;
     let mut jobj: HSD_JObj<'a> =
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, fighter_obj)));
@@ -1569,10 +1578,10 @@ pub fn ftParts_800753D4<'a>(
     arg2: HSD_Joint<'a>,
 ) {
     let __frame = ctx.stack_frame(0x80);
-    let sp6C: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x0);
-    let sp2C: HSD_Joint<'a> = frame_at(ctx, &__frame, 0x4);
-    let dobj_index: Val<'a, i32> = frame_at(ctx, &__frame, 0x44);
-    let depth: Val<'a, i32> = frame_at(ctx, &__frame, 0x48);
+    let sp6C: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x64);
+    let sp2C: HSD_Joint<'a> = frame_at(ctx, &__frame, 0x24);
+    let dobj_index: Val<'a, i32> = frame_at(ctx, &__frame, 0x20);
+    let depth: Val<'a, i32> = frame_at(ctx, &__frame, 0x1c);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1983,9 +1992,9 @@ fn inl_ftPartsSetupZScaleMtx_unfused<'a>(
     ctx: &'a Ctx,
     src: ArrV<'a, F32, 4>,
     dst: ArrV<'a, F32, 4>,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x38);
-    let scale_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let scale_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x0);
     let mut src = src;
     let mut dst = dst;
     if (fns::ft_jobj_scale(ctx).has_z_scale() != 0) {

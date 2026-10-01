@@ -84,7 +84,7 @@ pub fn gmVsMelee_WasAnyPlayerHuman<'a>(ctx: &'a Ctx, end: MatchEnd<'a>) -> i32 {
 
 pub fn findSmallestLoser<'a>(ctx: &'a Ctx, end: MatchEnd<'a>) -> u8 {
     let __frame = ctx.stack_frame(0x38);
-    let losers: ArrV<'a, i32, 6> = frame_at(ctx, &__frame, 0x0);
+    let losers: ArrV<'a, i32, 6> = frame_at(ctx, &__frame, 0x14);
     let mut end = end;
     let mut loser: i32 = 0xffff_i32;
     let mut i: i32 = 0;

@@ -358,10 +358,10 @@ pub fn it_802D2D04<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn it_802D2D2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x98);
     let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x8);
-    let hit_pos: Vec<'a> = frame_at(ctx, &__frame, 0x54);
-    let tmp: Vec<'a> = frame_at(ctx, &__frame, 0x60);
-    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x6c);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x28);
+    let hit_pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let tmp: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut new_gobj: HSD_GObj<'a> = null(ctx);
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -468,7 +468,7 @@ pub fn it_802D2F3C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802D2F70<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (fns::mpLib_80054ED8(ctx, (ip).xDD4_itemVar().houou().timer()) != 0) {

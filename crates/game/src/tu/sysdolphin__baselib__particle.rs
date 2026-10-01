@@ -1726,9 +1726,9 @@ pub fn hsd_80398F0C<'a>(
 
 pub fn hsd_80398F8C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, angle: f64) {
     let __frame = ctx.stack_frame(0x80);
-    let abs_z: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let abs_temp: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
+    let abs_z: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
+    let abs_temp: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut pp = pp;
     let mut angle = angle;
     let mut vx: f64 = (pp).vel().x();

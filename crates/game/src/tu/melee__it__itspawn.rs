@@ -175,9 +175,10 @@ pub fn it_8026C75C<'a>(ctx: &'a Ctx, table: ItemPickTable<'a>) -> i32 {
 
 pub fn fn_8026C88C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x98);
+    let __inl: ArrV<'a, u8, 80> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut alloc: RandomItemSpawner<'a> = fns::it_804A0E30(ctx);
-    inl_it_8026C88C_inline(ctx, alloc);
+    inl_it_8026C88C_inline(ctx, alloc, Handle::addr(__inl));
 }
 
 pub fn it_8026CA4C<'a>(
@@ -460,7 +461,7 @@ pub fn it_8026D018<'a>(ctx: &'a Ctx) {
 
 pub fn it_8026D258<'a>(ctx: &'a Ctx, pos: Vec<'a>, kind: i32) -> i32 {
     let __frame = ctx.stack_frame(0x60);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x8);
     let mut pos = pos;
     let mut kind = kind;
     let mut item_spawn_chk: i32 = 0;
@@ -554,9 +555,8 @@ fn inl_it_8026C65C_unfused<'a>(ctx: &'a Ctx, table: ItemPickTable<'a>) -> i32 {
     .get() as i32);
 }
 
-fn inl_it_8026C88C_inline<'a>(ctx: &'a Ctx, alloc: RandomItemSpawner<'a>) {
-    let __frame = ctx.stack_frame(0x58);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_it_8026C88C_inline<'a>(ctx: &'a Ctx, alloc: RandomItemSpawner<'a>, __in_caller: u32) {
+    let spawn: SpawnItem<'a> = ptr(ctx, __in_caller + 0x0);
     let mut alloc = alloc;
     let mut pos: Vec<'a> = null(ctx);
     let mut chk: i32 = 0;

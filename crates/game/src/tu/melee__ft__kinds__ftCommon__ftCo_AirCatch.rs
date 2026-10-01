@@ -28,8 +28,8 @@ use crate::support::*;
 
 pub fn ftCo_800C3A14<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x1c0);
-    let coll: CollData<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x19c);
+    let coll: CollData<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -97,7 +97,7 @@ pub fn ftCo_800C3B10<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn ftCo_800C3BE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let anim_vel: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let anim_vel: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -177,12 +177,12 @@ pub fn ftCo_800C3CC0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_AirCatch_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x90);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x18);
-    let pos_3: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let pos_4: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let unused_2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x3c);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x5c);
+    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
+    let pos_3: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let pos_4: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let unused_2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     if (((fp).kind() as u32) == ((enums::Ft_Kind_Link as i32) as u32))

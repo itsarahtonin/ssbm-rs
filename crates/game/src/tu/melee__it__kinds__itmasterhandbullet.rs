@@ -38,7 +38,7 @@ pub fn it_802F0AE0<'a>(
     vel_y: f64,
 ) {
     let __frame = ctx.stack_frame(0x80);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x20);
     let mut gobj = gobj;
     let mut prev_pos = prev_pos;
     let mut pos = pos;
@@ -73,7 +73,7 @@ pub fn itMasterHandBullet_Logic85_EvtUnk<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, a
 
 pub fn it_802F0BE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let quad: Quaternion<'a> = frame_at(ctx, &__frame, 0x0);
+    let quad: Quaternion<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> =
@@ -94,7 +94,7 @@ pub fn it_802F0BE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802F0D2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let quad: Quaternion<'a> = frame_at(ctx, &__frame, 0x0);
+    let quad: Quaternion<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> =

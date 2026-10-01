@@ -406,9 +406,9 @@ pub fn gm_IsCurrently1PMode<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn fn_8016B4BC<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
     let spC: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
-    let sp8: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
+    let sp8: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -1001,8 +1001,8 @@ pub fn gm_GetFFAOutcome<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn gm_GetTeamBattleOutcome<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let teamStocks: ArrV<'a, i16, 5> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let teamStocks: ArrV<'a, i16, 5> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
     let mut isSingleplayer: i32 = 0;
     let mut var_r0_2: i32 = 0;
@@ -1346,6 +1346,7 @@ pub fn gm_GetMatchEndPlayerScore<'a>(ctx: &'a Ctx, pl_slot: i32) -> i32 {
 pub fn gm_8016C6C0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let mut arg0 = arg0;
     'l1: loop {
         'c2: {}
@@ -1353,7 +1354,11 @@ pub fn gm_8016C6C0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
             break 'l1;
         }
     }
-    return inl_gm_8016C5C0_unfused(ctx, (fns::ftLib_GetPlayerIndex(ctx, arg0) as i32));
+    return inl_gm_8016C5C0_unfused(
+        ctx,
+        (fns::ftLib_GetPlayerIndex(ctx, arg0) as i32),
+        Handle::addr(__inl),
+    );
 }
 
 pub fn gm_8016C75C<'a>(ctx: &'a Ctx, player: HSD_GObj<'a>) -> i32 {
@@ -1389,9 +1394,9 @@ pub fn fn_8016C7D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_8016C7F0<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x38);
-    let sp24: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let sp20: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x8);
+    let sp24: Val<'a, i32> = frame_at(ctx, &__frame, 0x1c);
+    let sp20: Val<'a, i32> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut temp_r30_2: Val<'a, u32> = null(ctx);
     let mut var_r29: i32 = 0;
     let mut var_r29_2: u8 = 0;
@@ -2545,8 +2550,8 @@ pub fn fn_8016DCC0<'a>(ctx: &'a Ctx, arg0: StartMeleeData<'a>) {
 
 pub fn fn_8016DEEC<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x98);
-    let sp18: ArrV<'a, F32, 6> = frame_at(ctx, &__frame, 0x0);
-    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let sp18: ArrV<'a, F32, 6> = frame_at(ctx, &__frame, 0x10);
+    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut tmp: VsSceneController<'a> = statics::melee__gm__gmvs::controller(ctx);
     let mut tmp2: VsSceneController<'a> = statics::melee__gm__gmvs::controller(ctx);
     let mut temp_f0: f64 = 0.0;
@@ -2647,7 +2652,7 @@ pub fn fn_8016DEEC<'a>(ctx: &'a Ctx) {
 
 pub fn fn_8016E124<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x48);
-    let sp10: ArrV<'a, i32, 7> = frame_at(ctx, &__frame, 0x0);
+    let sp10: ArrV<'a, i32, 7> = frame_at(ctx, &__frame, 0x8);
     let mut var_r27: i32 = 0_i32;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -2735,9 +2740,9 @@ pub fn fn_8016E124<'a>(ctx: &'a Ctx) {
 pub fn fn_8016E2BC<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x60);
     let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x20);
+    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x28);
     let mut var_f1_2: f64 = 0.0;
     let mut var_r0: i32 = 0;
     let mut i: i32 = 0;
@@ -3199,8 +3204,8 @@ pub fn gm_8016ECE8<'a>(ctx: &'a Ctx) -> f64 {
 
 pub fn gm_8016EDDC<'a>(ctx: &'a Ctx, arg0: i32, arg1: PlayerInitData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut tmp: VsSceneController<'a> = statics::melee__gm__gmvs::controller(ctx);
@@ -3413,9 +3418,8 @@ fn inl_gm_8016B774_unfused<'a>(ctx: &'a Ctx) -> MatchEnd<'a> {
     return statics::melee__gm__gmvs::controller(ctx).state().x24C();
 }
 
-fn inl_gm_8016C5C0_unfused<'a>(ctx: &'a Ctx, pl_slot: i32) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_gm_8016C5C0_unfused<'a>(ctx: &'a Ctx, pl_slot: i32, __in_caller: u32) -> i32 {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut pl_slot = pl_slot;
     let mut tmp: MatchEnd<'a> = inl_gm_8016B774_unfused(ctx);
     'l1: loop {

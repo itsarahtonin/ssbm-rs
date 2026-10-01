@@ -33,10 +33,10 @@ pub fn efAsync_Dispatch<'a>(
     vlist: __va_list_t<'a>,
 ) -> Addr<'a> {
     let __frame = ctx.stack_frame(0x218);
-    let translate: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let state: efAsync_Dispatch_state<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x1c);
+    let translate: Vec<'a> = frame_at(ctx, &__frame, 0x1c4);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x1b8);
+    let state: efAsync_Dispatch_state<'a> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut gfx_id = gfx_id;
     let mut gobj = gobj;
     let mut vlist = vlist;
@@ -4265,7 +4265,7 @@ pub fn efAsync_OnLoad<'a>(
 
 pub fn efAsync_LoadSync<'a>(ctx: &'a Ctx, idx: i32) {
     let __frame = ctx.stack_frame(0x18);
-    let spC: Ptr<'a, EF_DAT_Entry<'a>> = frame_at(ctx, &__frame, 0x0);
+    let spC: Ptr<'a, EF_DAT_Entry<'a>> = frame_at(ctx, &__frame, 0x4);
     let mut idx = idx;
     let mut lookup: EF_DAT_Entry<'a> = null(ctx);
     lookup = fns::efAsync_DatEntries(ctx).get(idx);
@@ -4331,12 +4331,12 @@ pub fn efAsync_QueueProcessDeferred<'a>(
     queued_effect: EF_QueuedEffect<'a>,
 ) {
     let __frame = ctx.stack_frame(0x68);
-    let sp4C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let sp4C: Vec<'a> = frame_at(ctx, &__frame, 0x44);
+    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut queued_effect = queued_effect;
     let mut jobj: HSD_JObj<'a> = null(ctx);

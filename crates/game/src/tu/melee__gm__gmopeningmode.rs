@@ -57,8 +57,8 @@ pub fn onExitTitle<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
 
 pub fn gm_SetupTitleDemo<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x148);
-    let character_pool: ArrV<'a, i32, 29> = frame_at(ctx, &__frame, 0x0);
-    let stage_pool: ArrV<'a, i32, 30> = frame_at(ctx, &__frame, 0x74);
+    let character_pool: ArrV<'a, i32, 29> = frame_at(ctx, &__frame, 0xb0);
+    let stage_pool: ArrV<'a, i32, 30> = frame_at(ctx, &__frame, 0x38);
     let mut pool: Val<'a, i32> = null(ctx);
     let mut c: i32 = 0;
     let mut count: i32 = 0;

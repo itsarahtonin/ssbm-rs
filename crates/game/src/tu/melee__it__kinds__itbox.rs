@@ -28,8 +28,8 @@ use crate::support::*;
 
 pub fn it_80286088<'a>(ctx: &'a Ctx, parent_gobj: HSD_GObj<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x80);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut parent_gobj = parent_gobj;
     let mut result: HSD_GObj<'a> = null::<HSD_GObj<'a>>(ctx);
     let mut spawned_ip: Item<'a> = null(ctx);
@@ -120,9 +120,9 @@ pub fn it_80286248<'a>(
     arg4: i32,
 ) {
     let __frame = ctx.stack_frame(0x68);
-    let pad1: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let zero: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let pad2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x24);
+    let pad1: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x28);
+    let zero: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let pad2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -211,8 +211,8 @@ pub fn it_80286340<'a>(
 
 pub fn it_802863BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let dir: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unit: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let dir: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unit: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut coll: CollData<'a> = (ip).x378_itemColl();
@@ -295,7 +295,7 @@ pub fn itBox_UnkMotion4_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itBox_UnkMotion1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0x0);
+    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> =
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
@@ -436,7 +436,7 @@ pub fn itBox_UnkMotion4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_80286AA4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     fns::it_8026BB44(ctx, gobj);
@@ -687,7 +687,7 @@ pub fn itBox_UnkMotion8_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itBox_UnkMotion8_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0x0);
+    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
@@ -751,8 +751,8 @@ pub fn itBox_UnkMotion8_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_8028733C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let target_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vel: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let target_pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut spawned_jobj: HSD_JObj<'a> = null(ctx);
     let mut ip: Item<'a> = null(ctx);

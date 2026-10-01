@@ -34,7 +34,7 @@ pub fn fwrite<'a>(
     file: _IO_FILE<'a>,
 ) -> u32 {
     let __frame = ctx.stack_frame(0x48);
-    let num_bytes: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let num_bytes: Val<'a, u32> = frame_at(ctx, &__frame, 0x18);
     let mut buffer = buffer;
     let mut memb_size = memb_size;
     let mut num_memb = num_memb;

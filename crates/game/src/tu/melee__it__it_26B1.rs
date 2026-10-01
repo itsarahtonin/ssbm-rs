@@ -586,7 +586,7 @@ pub fn it_8026B960<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
 
 pub fn it_8026B9A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: HSD_GObj<'a>, arg2: i32) {
     let __frame = ctx.stack_frame(0x40);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

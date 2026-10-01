@@ -29,13 +29,13 @@ use ssbm_rt::cpu as c;
 
 pub fn ftCo_800C2600<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u32) {
     let __frame = ctx.stack_frame(0xb10);
-    let cumDist: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0x0);
-    let vtx_buf: Arr<'a, AfterimageVtx<'a>, 152> = frame_at(ctx, &__frame, 0xc);
-    let prevPos: Vec<'a> = frame_at(ctx, &__frame, 0x98c);
-    let delta: Vec<'a> = frame_at(ctx, &__frame, 0x998);
-    let crossProd: Vec<'a> = frame_at(ctx, &__frame, 0x9a4);
-    let tempDir: Vec<'a> = frame_at(ctx, &__frame, 0x9b0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x9bc);
+    let cumDist: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0x9ec);
+    let vtx_buf: Arr<'a, AfterimageVtx<'a>, 152> = frame_at(ctx, &__frame, 0x6c);
+    let prevPos: Vec<'a> = frame_at(ctx, &__frame, 0x60);
+    let delta: Vec<'a> = frame_at(ctx, &__frame, 0x54);
+    let crossProd: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let tempDir: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> = null(ctx);

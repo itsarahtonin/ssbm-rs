@@ -199,9 +199,9 @@ pub fn Stage_GetCamAngleRadiansRight<'a>(ctx: &'a Ctx) -> f64 {
 
 pub fn Stage_80224CAC<'a>(ctx: &'a Ctx, arg0: Vec<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let another_vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let rot_vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let last_vec: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let another_vec: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let rot_vec: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let last_vec: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     another_vec.set_x(fp::frsp(0_i32 as f64));
     another_vec.set_y(fp::frsp(0_i32 as f64));
@@ -251,7 +251,7 @@ pub fn Stage_80224E38<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: i32) {
 
 pub fn Stage_80224E64<'a>(ctx: &'a Ctx, arg0: i32, arg_vec: Vec<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let internal_vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let internal_vec: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut arg_vec = arg_vec;
     let mut bool1: i32 = 0;
@@ -367,7 +367,7 @@ pub fn Stage_80224FDC<'a>(ctx: &'a Ctx, arg0: Vec<'a>) -> i32 {
 
 pub fn Stage_80225074<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let spC: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let spC: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut r31: i32 = 0;
     let mut tmp: i32 = 0;
@@ -429,7 +429,7 @@ pub fn Stage_802251B4<'a>(ctx: &'a Ctx, stkind: i32) {
 
 pub fn Stage_802251E8<'a>(ctx: &'a Ctx, stkind: i32, unused: Val<'a, i32>) {
     let __frame = ctx.stack_frame(0x18);
-    let local_data: StageIdPair<'a> = frame_at(ctx, &__frame, 0x0);
+    let local_data: StageIdPair<'a> = frame_at(ctx, &__frame, 0x8);
     let mut stkind = stkind;
     let mut unused = unused;
     fns::selected_stage(ctx).set_stkind(stkind);
@@ -460,7 +460,7 @@ pub fn Stage_80225298<'a>(ctx: &'a Ctx) {
 
 pub fn Stage_802252E4<'a>(ctx: &'a Ctx, stkind: i32, unused: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
-    let local_data: StageIdPair<'a> = frame_at(ctx, &__frame, 0x0);
+    let local_data: StageIdPair<'a> = frame_at(ctx, &__frame, 0x8);
     let mut stkind = stkind;
     let mut unused = unused;
     Handle::copy_from(local_data, fns::default_stage_pair(ctx));
@@ -471,7 +471,7 @@ pub fn Stage_802252E4<'a>(ctx: &'a Ctx, stkind: i32, unused: HSD_GObj<'a>) {
 
 pub fn Stage_8022532C<'a>(ctx: &'a Ctx, stkind: i32, arg1: i32) {
     let __frame = ctx.stack_frame(0x18);
-    let local_data: StageIdPair<'a> = frame_at(ctx, &__frame, 0x0);
+    let local_data: StageIdPair<'a> = frame_at(ctx, &__frame, 0x8);
     let mut stkind = stkind;
     let mut arg1 = arg1;
     Handle::copy_from(local_data, fns::default_stage_pair(ctx));

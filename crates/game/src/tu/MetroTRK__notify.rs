@@ -28,9 +28,9 @@ use crate::support::*;
 
 pub fn TRKDoNotifyStopped<'a>(ctx: &'a Ctx, cmdId: u8) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let sp8: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let sp8: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
     let buffer: Ptr<'a, MessageBuffer<'a>> = frame_at(ctx, &__frame, 0x4);
-    let spC: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
+    let spC: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
     let mut cmdId = cmdId;
     let mut result: i32 = 0;
     result = fns::TRKGetFreeBuffer(ctx, spC, buffer);

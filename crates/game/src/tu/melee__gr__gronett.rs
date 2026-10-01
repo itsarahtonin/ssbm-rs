@@ -678,12 +678,12 @@ pub fn grOnett_801E43D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grOnett_801E43E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
-    let cam_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
-    let cam_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
-    let cam_z: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x1c);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x74);
+    let pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let cam_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x6c);
+    let cam_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x68);
+    let cam_z: Val<'a, F32> = frame_at(ctx, &__frame, 0x64);
+    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut saved_car: i8 = (gp).u().onettcar().curr_car();
@@ -1083,7 +1083,7 @@ pub fn grOnett_801E5030<'a>(ctx: &'a Ctx, igobj: HSD_GObj<'a>, gp: Ground<'a>) {
 
 pub fn grOnett_801E5140<'a>(ctx: &'a Ctx, idx: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let table: ArrV<'a, u32, 4> = frame_at(ctx, &__frame, 0x0);
+    let table: ArrV<'a, u32, 4> = frame_at(ctx, &__frame, 0x4);
     let mut idx = idx;
     table.at(0).set((0x5f370_i32 as u32));
     table.at(1).set((0x5f370_i32 as u32));
@@ -1094,7 +1094,7 @@ pub fn grOnett_801E5140<'a>(ctx: &'a Ctx, idx: i32) {
 
 pub fn grOnett_801E5194<'a>(ctx: &'a Ctx, gp: Ground<'a>, car_idx: i32, sound_type: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let sfx_table: Arr<'a, ArrV<'a, i32, 2>, 4> = frame_at(ctx, &__frame, 0x0);
+    let sfx_table: Arr<'a, ArrV<'a, i32, 2>, 4> = frame_at(ctx, &__frame, 0xc);
     let mut gp = gp;
     let mut car_idx = car_idx;
     let mut sound_type = sound_type;
@@ -1326,8 +1326,8 @@ pub fn grOnett_801E54B4<'a>(
 
 pub fn grOnett_801E5538<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let rot: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let rot: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut new_var2: i32 = 0;
     let mut gp: Ground<'a> =
@@ -1400,7 +1400,7 @@ pub fn grOnett_801E5760<'a>(ctx: &'a Ctx, arg: i32) -> DynamicsDesc<'a> {
 
 pub fn grOnett_801E5768<'a>(ctx: &'a Ctx, a: Vec<'a>, b: i32, jobj: HSD_JObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut a = a;
     let mut b = b;
     let mut jobj = jobj;

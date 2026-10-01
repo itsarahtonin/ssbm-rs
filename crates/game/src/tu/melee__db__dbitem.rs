@@ -375,10 +375,10 @@ pub fn db_HandleItemPokemonMenuInput<'a>(ctx: &'a Ctx, player: i32) {
 
 pub fn fn_ShowOrCreateItemAndPokemonMenu<'a>(ctx: &'a Ctx, player: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let bg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let fg: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let bg: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let fg: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
     let mut player = player;
     let mut temp_r30: HSD_GObj<'a> = null(ctx);
     temp_r30 = fns::DevText_GetGObj(ctx);
@@ -527,7 +527,7 @@ pub fn fn_UpdateItemAndPokemonMenu<'a>(ctx: &'a Ctx, player: i32) {
 
 pub fn db_CheckAndSpawnItem<'a>(ctx: &'a Ctx, player: i32) {
     let __frame = ctx.stack_frame(0x68);
-    let spawnItem: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawnItem: SpawnItem<'a> = frame_at(ctx, &__frame, 0x8);
     let mut player = player;
     let mut mask: i32 = (((((((((((shl_i32(1_i32, (0_i32 as u32)))
         | (shl_i32(1_i32, (1_i32 as u32))))

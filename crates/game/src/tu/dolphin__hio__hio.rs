@@ -51,7 +51,7 @@ pub fn ExiHandler<'a>(ctx: &'a Ctx, chan: i32, context: OSContext<'a>) {
 
 pub fn DbgHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x2e0);
-    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x8);
     let mut interrupt = interrupt;
     let mut context = context;
     (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc003000_u32 as u32)), 0_i32))
@@ -95,7 +95,7 @@ pub fn RxHandler<'a>(ctx: &'a Ctx, chan: i32, context: OSContext<'a>) {
 
 pub fn HIOEnumDevices<'a>(ctx: &'a Ctx, callback: FnPtr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let id: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let id: Val<'a, u32> = frame_at(ctx, &__frame, 0x4);
     let mut callback = callback;
     let mut chan: i32 = 0;
     if (statics::dolphin__hio__hio::Chan(ctx).get() != 1_i32.wrapping_neg())
@@ -132,8 +132,8 @@ pub fn HIOEnumDevices<'a>(ctx: &'a Ctx, callback: FnPtr<'a>) -> i32 {
 
 pub fn HIOInit<'a>(ctx: &'a Ctx, chan: i32, callback: FnPtr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
-    let id: Val<'a, u32> = frame_at(ctx, &__frame, 0x4);
+    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0xc);
+    let id: Val<'a, u32> = frame_at(ctx, &__frame, 0x8);
     let mut chan = chan;
     let mut callback = callback;
     let mut err: i32 = 0;
@@ -244,7 +244,7 @@ pub fn HIOInit<'a>(ctx: &'a Ctx, chan: i32, callback: FnPtr<'a>) -> i32 {
 
 pub fn HIOReadMailbox<'a>(ctx: &'a Ctx, word: Val<'a, u32>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x4);
     let mut word = word;
     let mut err: i32 = 0;
     if (statics::dolphin__hio__hio::Chan(ctx).get() == 1_i32.wrapping_neg())
@@ -301,7 +301,7 @@ pub fn HIOReadMailbox<'a>(ctx: &'a Ctx, word: Val<'a, u32>) -> i32 {
 
 pub fn HIOWriteMailbox<'a>(ctx: &'a Ctx, word: u32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x4);
     let mut word = word;
     let mut err: i32 = 0;
     if (statics::dolphin__hio__hio::Chan(ctx).get() == 1_i32.wrapping_neg())
@@ -348,7 +348,7 @@ pub fn HIOWriteMailbox<'a>(ctx: &'a Ctx, word: u32) -> i32 {
 
 pub fn HIORead<'a>(ctx: &'a Ctx, addr: u32, buffer: Addr<'a>, size: i32) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0xc);
     let mut addr = addr;
     let mut buffer = buffer;
     let mut size = size;
@@ -407,7 +407,7 @@ pub fn HIORead<'a>(ctx: &'a Ctx, addr: u32, buffer: Addr<'a>, size: i32) -> i32 
 
 pub fn HIOWrite<'a>(ctx: &'a Ctx, addr: u32, buffer: Addr<'a>, size: i32) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0xc);
     let mut addr = addr;
     let mut buffer = buffer;
     let mut size = size;
@@ -472,7 +472,7 @@ pub fn HIOReadAsync<'a>(
     callback: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x10);
     let mut addr = addr;
     let mut buffer = buffer;
     let mut size = size;
@@ -535,7 +535,7 @@ pub fn HIOWriteAsync<'a>(
     callback: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x10);
     let mut addr = addr;
     let mut buffer = buffer;
     let mut size = size;
@@ -592,7 +592,7 @@ pub fn HIOWriteAsync<'a>(
 
 pub fn HIOReadStatus<'a>(ctx: &'a Ctx, status: Val<'a, u32>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x4);
     let mut status = status;
     let mut err: i32 = 0;
     if (statics::dolphin__hio__hio::Chan(ctx).get() == 1_i32.wrapping_neg())

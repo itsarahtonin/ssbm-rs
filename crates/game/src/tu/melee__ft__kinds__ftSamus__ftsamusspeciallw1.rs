@@ -28,8 +28,8 @@ use crate::support::*;
 
 pub fn ftSs_SpecialLw_8012ADF0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut samus_attr: _ftSamusAttributes<'a> =
@@ -61,7 +61,7 @@ pub fn ftSs_SpecialLw_8012ADF0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftSs_SpecialLw_8012AEBC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x0);
+    let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -161,6 +161,7 @@ pub fn ftSs_SpecialAirLw_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftSs_SpecialLwBomb_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
+    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -169,7 +170,7 @@ pub fn ftSs_SpecialLwBomb_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::ftSs_SpecialLw_8012B5F0(ctx, gobj);
         return;
     }
-    inl_checkStateVar1_unfused(ctx, gobj);
+    inl_checkStateVar1_unfused(ctx, gobj, Handle::addr(__inl));
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
         fns::ft_8008A2BC(ctx, gobj);
     }
@@ -177,10 +178,11 @@ pub fn ftSs_SpecialLwBomb_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftSs_SpecialAirLwBomb_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
+    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    inl_checkStateVar1_unfused(ctx, gobj);
+    inl_checkStateVar1_unfused(ctx, gobj, Handle::addr(__inl));
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
         fns::ftCo_Fall_Enter(ctx, gobj);
     }
@@ -348,9 +350,8 @@ fn inl_ftSamus_SpecialLw_StartAction_inner_unfused<'a>(ctx: &'a Ctx, gobj: HSD_G
     (fp).set_accessory4_cb(fnptr(ctx, 0x8012adf0));
 }
 
-fn inl_ftSs_SpecialLw_8012AEBC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x30);
-    let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftSs_SpecialLw_8012AEBC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let hurt: ftHurtboxInit<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -386,12 +387,13 @@ fn inl_setSamusBits_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, val: i32) {
     (fp).mv().ss().unk6().set_x0(val);
 }
 
-fn inl_checkStateVar1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+fn inl_checkStateVar1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let __inl: ArrV<'a, u8, 40> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (((fp).cmd_vars().at(0_i32).get()) != 0) && (!((fp).mv().ss().unk6().x0() != 0)) {
-        inl_ftSs_SpecialLw_8012AEBC_unfused(ctx, gobj);
+        inl_ftSs_SpecialLw_8012AEBC_unfused(ctx, gobj, Handle::addr(__inl));
         inl_setSamusBits_unfused(ctx, fp, 1_i32);
     }
     if (!((fp).cmd_vars().at(0_i32).get() != 0)) && (((fp).mv().ss().unk6().x0()) != 0) {

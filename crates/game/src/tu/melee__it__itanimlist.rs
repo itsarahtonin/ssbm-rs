@@ -28,9 +28,9 @@ use crate::support::*;
 
 pub fn it_80278F2C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x78);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut cmd = cmd;
     let mut arg2: i32 = 0;

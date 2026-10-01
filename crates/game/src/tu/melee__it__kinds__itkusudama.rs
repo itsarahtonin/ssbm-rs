@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn it_802896CC<'a>(ctx: &'a Ctx, arg0: Vec<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x60);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     spawn.set_kind((enums::It_Kind_Kusudama as i32));
@@ -169,15 +169,15 @@ pub fn it_80289B50<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
 
 pub fn it_80289BE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, food_weight: i32, arg3: i32) {
     let __frame = ctx.stack_frame(0x128);
-    let spawned: ArrV<'a, i32, 15> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x48);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x54);
-    let vel_2: Vec<'a> = frame_at(ctx, &__frame, 0x58);
-    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x64);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x70);
-    let vel_3: Vec<'a> = frame_at(ctx, &__frame, 0x78);
-    let pos_3: Vec<'a> = frame_at(ctx, &__frame, 0x84);
+    let spawned: ArrV<'a, i32, 15> = frame_at(ctx, &__frame, 0x98);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8c);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x80);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let vel_2: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
+    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x60);
+    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
+    let vel_3: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let pos_3: Vec<'a> = frame_at(ctx, &__frame, 0x40);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut food_weight = food_weight;

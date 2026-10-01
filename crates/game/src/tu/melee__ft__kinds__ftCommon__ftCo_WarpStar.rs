@@ -81,14 +81,16 @@ pub fn ftCo_800C4724<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800C4858<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
-    inl_inlineA0_unfused(ctx, gobj);
+    inl_inlineA0_unfused(ctx, gobj, Handle::addr(__inl));
 }
 
 pub fn ftCo_800C48AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
-    inl_inlineA0_unfused(ctx, gobj);
+    inl_inlineA0_unfused(ctx, gobj, Handle::addr(__inl));
 }
 
 pub fn ftCo_WarpStarJump_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -115,7 +117,7 @@ pub fn ftCo_WarpStarJump_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_WarpStarJump_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let self_vel: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let self_vel: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> =
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
@@ -149,7 +151,7 @@ pub fn ftCo_WarpStarJump_Cam<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800C4A38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0x0);
+    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -247,8 +249,8 @@ pub fn ftCo_WarpStarFall_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_800C4C60<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let param: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let param: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -388,9 +390,8 @@ fn inl_Fighter_SetDamageCallbacks_unfused<'a>(
     (fp).set_death2_cb(fnptr(ctx, 0x800c48ac));
 }
 
-fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

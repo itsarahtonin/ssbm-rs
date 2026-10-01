@@ -187,8 +187,8 @@ pub fn IsNameUnique<'a>(ctx: &'a Ctx, name: Val<'a, i8>) -> i32 {
 
 pub fn DeleteName<'a>(ctx: &'a Ctx, arg0: u8) {
     let __frame = ctx.stack_frame(0x1d0);
-    let _2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let temp: NameTagData<'a> = frame_at(ctx, &__frame, 0x8);
+    let _2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1a8);
+    let temp: NameTagData<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut i: i32 = 0;
     let mut longpos: u64 = 0;
@@ -1436,7 +1436,7 @@ pub fn mnName_80238A04<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, target: u8, flag: u
 
 pub fn mnName_80238AE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, index: u8, arg2: u8) {
     let __frame = ctx.stack_frame(0x38);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut index = index;
     let mut arg2 = arg2;
@@ -1502,6 +1502,11 @@ pub fn mnName_80238AE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, index: u8, arg2: u8
 
 pub fn mnName_80238C34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: u8, arg2: u8) {
     let __frame = ctx.stack_frame(0xc0);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x6c);
+    let __inl_2: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x54);
+    let __inl_3: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x3c);
+    let __inl_4: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x24);
+    let __inl_5: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1524,6 +1529,7 @@ pub fn mnName_80238C34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: u8, arg2: u8)
                 ctx,
                 statics::melee__mn__mnname::mnName_803B8510(ctx).at(0),
                 __t1,
+                Handle::addr(__inl),
             )
         });
     }
@@ -1538,6 +1544,7 @@ pub fn mnName_80238C34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: u8, arg2: u8)
             ctx,
             statics::melee__mn__mnname::mnName_803B8510(ctx).at(0),
             __t2,
+            Handle::addr(__inl_2),
         )
     });
     jobj3 = inl_mnName_802388D4_noinline_unfused(
@@ -1551,6 +1558,7 @@ pub fn mnName_80238C34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: u8, arg2: u8)
             ctx,
             statics::melee__mn__mnname::mnName_803B8510(ctx).at(0),
             __t3,
+            Handle::addr(__inl_3),
         )
     });
     {
@@ -1562,10 +1570,15 @@ pub fn mnName_80238C34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: u8, arg2: u8)
                 ctx,
                 statics::melee__mn__mnname::mnName_803B8510(ctx).at(0),
                 __t4,
+                Handle::addr(__inl_4),
             )
         });
-        if Handle::addr(inl_mnName_FindAnimLoop_unfused(ctx, tableBase, result))
-            == Handle::addr(Handle::add(base, 5_i32))
+        if Handle::addr(inl_mnName_FindAnimLoop_unfused(
+            ctx,
+            tableBase,
+            result,
+            Handle::addr(__inl_5),
+        )) == Handle::addr(Handle::add(base, 5_i32))
         {
             if result >= inl_mnName_80238C34_inline_unfused(ctx, (Handle::add(base, 5_i32))) {
                 fns::HSD_GObjFree(ctx, arg0);
@@ -2021,9 +2034,9 @@ pub fn mnName_80239878<'a>(ctx: &'a Ctx, arg0: u8, gobj: HSD_GObj<'a>) {
 
 pub fn mnName_80239A24<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xd0);
-    let text_position: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let text_color: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
+    let text_position: Vec<'a> = frame_at(ctx, &__frame, 0x64);
+    let text_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x58);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut text_row_height: f64 = 0.0;
     let mut row: i32 = 0;
@@ -2322,9 +2335,9 @@ pub fn mnName_8023A058<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_8023A0BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let sp2C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let sp28: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
-    let sp18: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
+    let sp2C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x24);
+    let sp28: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x20);
+    let sp18: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x10);
     let sp14: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut end_frame: Val<'a, F32> = null(ctx);
@@ -2535,9 +2548,10 @@ pub fn fn_8023A0BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnName_8023A290<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x50);
-    let sp28: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let sp24: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
-    let sp20: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
+    let sp28: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x20);
+    let sp24: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x1c);
+    let sp20: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x18);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut archive: StaticModelDesc<'a> = statics::melee__mn__mnname::mnName_804A06D0(ctx);
@@ -2584,6 +2598,7 @@ pub fn mnName_8023A290<'a>(ctx: &'a Ctx) {
         ctx,
         (fns::mn_804A04F0(ctx).confirmed_selection() as i32),
         jobj,
+        Handle::addr(__inl),
     );
     if (fns::lbLang_IsSavedLanguageUS(ctx) != 0) {
         let _ = fns::lb_80011E24(
@@ -2785,6 +2800,7 @@ pub fn mnName_8023A59C<'a>(ctx: &'a Ctx, arg0: u8) -> HSD_GObj<'a> {
 
 pub fn mnName_8023A9B4<'a>(ctx: &'a Ctx, arg0: u8) {
     let __frame = ctx.stack_frame(0x28);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut i: u32 = 0;
     let mut gobj2: MnName_GObj<'a> = null(ctx);
@@ -2797,7 +2813,7 @@ pub fn mnName_8023A9B4<'a>(ctx: &'a Ctx, arg0: u8) {
             __t1
         }) as u8),
     );
-    inl_mnName_8023A9B4_ResetDisplayOrder_unfused(ctx);
+    inl_mnName_8023A9B4_ResetDisplayOrder_unfused(ctx, Handle::addr(__inl));
     gobj2 = ({ inl_mnName_8023A9B4_GetGObj_unfused(ctx) });
     if (fns::mn_804A04F0(ctx).x10() as i32) == 1_i32 {
         let mut p: mn_80231634_t<'a> = inl_mnName_8023A9B4_GetUserData_unfused(ctx, gobj2);
@@ -3283,9 +3299,9 @@ fn inl_mnName_FindAnimLoop_unfused<'a>(
     ctx: &'a Ctx,
     tableBase: Ptr<'a, AnimLoopSettings<'a>>,
     frame: f64,
+    __in_caller: u32,
 ) -> AnimLoopSettings<'a> {
-    let __frame = ctx.stack_frame(0x20);
-    let table: AnimTable<'a> = frame_at(ctx, &__frame, 0x0);
+    let table: AnimTable<'a> = ptr(ctx, __in_caller + 0x0);
     let mut tableBase = tableBase;
     let mut frame = frame;
     let mut i: i32 = 0;
@@ -3392,10 +3408,14 @@ fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f6
     }
 }
 
-fn inl_mnName_SetupDeleteCursor_unfused<'a>(ctx: &'a Ctx, sel: i32, jobj: HSD_JObj<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let yes: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let no: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
+fn inl_mnName_SetupDeleteCursor_unfused<'a>(
+    ctx: &'a Ctx,
+    sel: i32,
+    jobj: HSD_JObj<'a>,
+    __in_caller: u32,
+) {
+    let yes: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x0);
+    let no: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x4);
     let mut sel = sel;
     let mut jobj = jobj;
     let _ = fns::lb_80011E24(
@@ -3487,9 +3507,8 @@ fn inl_mnName_SetupScrollbarAndText_unfused<'a>(
     }
 }
 
-fn inl_mnName_8023A9B4_ResetDisplayOrder_unfused<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_mnName_8023A9B4_ResetDisplayOrder_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut i: u32 = 0;
     'l1: loop {
         'c2: {}

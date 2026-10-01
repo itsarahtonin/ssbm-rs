@@ -51,8 +51,8 @@ pub fn it_802ADC54<'a>(
     dir: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x98);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x4c);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut parent = parent;
     let mut pos = pos;
     let mut sfx = sfx;

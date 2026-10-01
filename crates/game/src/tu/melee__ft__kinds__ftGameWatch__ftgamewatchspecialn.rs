@@ -28,12 +28,12 @@ use crate::support::*;
 
 pub fn ftGw_SpecialN_CreateSausage<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let vec0: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
-    let chefStruct: ftGameWatchChef<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x34);
-    let unused_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x38);
+    let vec0: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let chefStruct: ftGameWatchChef<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let unused_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     {
         let mut i: i32 = 0;

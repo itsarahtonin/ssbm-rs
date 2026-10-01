@@ -173,7 +173,7 @@ pub fn fn_801A6844<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_801A6868<'a>(ctx: &'a Ctx, unused: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
-    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut unused = unused;
     fns::Player_LoadPlayerCoords(ctx, 0_i32, spC);
     if spC.y() >= fns::gm_803DB2D4(ctx).y() {

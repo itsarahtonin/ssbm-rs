@@ -28,10 +28,10 @@ use crate::support::*;
 
 pub fn fn_SetupCpuHandicapInfo<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let bg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let fg: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let bg: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let fg: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
     let mut gobj: HSD_GObj<'a> = fns::DevText_GetGObj(ctx);
     fns::db_ShowCpuHandicapInfo(ctx).x0().set_b0((0_i32 as u8));
     statics::melee__db__dbcpu::db_CpuHandicapInfo(ctx).set_text(fns::DevText_Create(

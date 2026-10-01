@@ -87,8 +87,9 @@ pub fn lbArchive_LoadSections<'a>(ctx: &'a Ctx, archive: HSD_Archive<'a>, symbol
 
 pub fn lbArchive_LoadArchive<'a>(ctx: &'a Ctx, filename: Val<'a, i8>) -> HSD_Archive<'a> {
     let __frame = ctx.stack_frame(0x20);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let mut filename = filename;
-    return inl_loadArchive_unfused(ctx, filename);
+    return inl_loadArchive_unfused(ctx, filename, Handle::addr(__inl));
 }
 
 pub fn lbArchive_LoadSymbols<'a>(
@@ -99,11 +100,12 @@ pub fn lbArchive_LoadSymbols<'a>(
     let __frame = ctx.stack_frame(0xa0);
     __frame.save_varargs();
     let sections: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x70);
     let mut filename = filename;
     let mut symbols = symbols;
     let mut archive: HSD_Archive<'a> = null(ctx);
     __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(sections)), 2, 0);
-    archive = inl_loadArchive_unfused(ctx, filename);
+    archive = inl_loadArchive_unfused(ctx, filename, Handle::addr(__inl));
     inl_vLoadSectionsFatal_unfused(
         ctx,
         archive,
@@ -121,11 +123,12 @@ pub fn lbArchive_80016DBC<'a>(
     let __frame = ctx.stack_frame(0xa0);
     __frame.save_varargs();
     let sections: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x70);
     let mut filename = filename;
     let mut symbols = symbols;
     let mut archive: HSD_Archive<'a> = null(ctx);
     __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(sections)), 2, 0);
-    archive = inl_loadArchive_unfused(ctx, filename);
+    archive = inl_loadArchive_unfused(ctx, filename, Handle::addr(__inl));
     inl_vLoadSections_unfused(
         ctx,
         archive,
@@ -175,6 +178,7 @@ pub fn lbArchive_80016F80<'a>(
     filename: Val<'a, i8>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let mut dst = dst;
     let mut filename = filename;
     let mut archive: HSD_Archive<'a> = null(ctx);
@@ -183,7 +187,7 @@ pub fn lbArchive_80016F80<'a>(
     if !Handle::is_null(archive) {
         preloaded = 1_i32;
     } else {
-        archive = inl_loadArchive_unfused(ctx, filename);
+        archive = inl_loadArchive_unfused(ctx, filename, Handle::addr(__inl));
         preloaded = 0_i32;
     }
     if !Handle::is_null(dst) {
@@ -201,6 +205,7 @@ pub fn lbArchive_80017040<'a>(
     let __frame = ctx.stack_frame(0xb0);
     __frame.save_varargs();
     let args: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x70);
     let mut dst = dst;
     let mut filename = filename;
     let mut symbols = symbols;
@@ -211,7 +216,7 @@ pub fn lbArchive_80017040<'a>(
     if !Handle::is_null(archive) {
         preloaded = 1_i32;
     } else {
-        archive = inl_loadArchive_unfused(ctx, filename);
+        archive = inl_loadArchive_unfused(ctx, filename, Handle::addr(__inl));
         preloaded = 0_i32;
     }
     inl_vLoadSectionsFatal_unfused(
@@ -235,6 +240,7 @@ pub fn lbArchive_800171CC<'a>(
     let __frame = ctx.stack_frame(0xb0);
     __frame.save_varargs();
     let args: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x70);
     let mut dst = dst;
     let mut filename = filename;
     let mut symbols = symbols;
@@ -245,7 +251,7 @@ pub fn lbArchive_800171CC<'a>(
     if !Handle::is_null(archive) {
         preloaded = 1_i32;
     } else {
-        archive = inl_loadArchive_unfused(ctx, filename);
+        archive = inl_loadArchive_unfused(ctx, filename, Handle::addr(__inl));
         preloaded = 0_i32;
     }
     inl_vLoadSections_unfused(
@@ -369,9 +375,9 @@ fn inl_readArchive_unfused<'a>(
     filename: Val<'a, i8>,
     data: Addr<'a>,
     archive: HSD_Archive<'a>,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x10);
-    let length: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let length: Val<'a, u32> = ptr(ctx, __in_caller + 0x0);
     let mut filename = filename;
     let mut data = data;
     let mut archive = archive;
@@ -379,7 +385,12 @@ fn inl_readArchive_unfused<'a>(
     fns::lbArchive_InitializeDAT(ctx, archive, data, length.get());
 }
 
-fn inl_loadArchive_unfused<'a>(ctx: &'a Ctx, filename: Val<'a, i8>) -> HSD_Archive<'a> {
+fn inl_loadArchive_unfused<'a>(
+    ctx: &'a Ctx,
+    filename: Val<'a, i8>,
+    __in_caller: u32,
+) -> HSD_Archive<'a> {
+    let __inl: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut filename = filename;
     let mut archive: HSD_Archive<'a> = null(ctx);
     let mut data: Addr<'a> = null(ctx);
@@ -392,7 +403,7 @@ fn inl_loadArchive_unfused<'a>(ctx: &'a Ctx, filename: Val<'a, i8>) -> HSD_Archi
             & ((!(32_i32.wrapping_sub(1_i32))) as u32)),
     );
     archive = Handle::cast::<HSD_Archive<'a>>(fns::lbHeap_80015BD0(ctx, 0_i32, 68_u32));
-    inl_readArchive_unfused(ctx, filename, data, archive);
+    inl_readArchive_unfused(ctx, filename, data, archive, Handle::addr(__inl));
     return archive;
 }
 

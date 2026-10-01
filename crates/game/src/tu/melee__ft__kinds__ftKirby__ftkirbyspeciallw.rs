@@ -144,9 +144,9 @@ pub fn ftKb_SpecialHi_800F346C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_SpecialHi_800F3570<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let pad: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let pad2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x24);
+    let pad: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x20);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let pad2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut pos: f64 = 0.0;
     let mut slide_speed: f64 = 0.0;

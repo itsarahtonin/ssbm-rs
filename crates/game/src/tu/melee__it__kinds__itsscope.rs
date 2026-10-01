@@ -29,7 +29,7 @@ use ssbm_rt::cpu as c;
 
 pub fn it_80291BE0<'a>(ctx: &'a Ctx, arg0: Vec<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x60);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     spawn.set_kind((enums::It_Kind_S_Scope as i32));
@@ -844,6 +844,7 @@ pub fn it_80291FA8<'a>(
 ) {
     let __frame = ctx.stack_frame(0x40);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut charge_level = charge_level;
@@ -855,7 +856,7 @@ pub fn it_80291FA8<'a>(
             break 'l1;
         }
     }
-    inl_it_80291F14_unfused(ctx, gobj, charge_level);
+    inl_it_80291F14_unfused(ctx, gobj, charge_level, Handle::addr(__inl));
     fns::it_80298DEC(ctx, (ip).owner(), pos, charge_level, scale);
 }
 
@@ -1094,9 +1095,13 @@ fn inl_it_80291D38_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, charge_level: i
     return 0;
 }
 
-fn inl_it_80291F14_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, charge_level: i32) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_it_80291F14_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    charge_level: i32,
+    __in_caller: u32,
+) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut charge_level = charge_level;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

@@ -73,6 +73,7 @@ pub fn ftCo_HammerFall_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800C5DDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -83,7 +84,7 @@ pub fn ftCo_800C5DDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             != 0))
         && (((fp).x683() as i32) >= (fns::p_ftCommonData(ctx).get()).x1C())
     {
-        inl_inlineA0_unfused(ctx, gobj);
+        inl_inlineA0_unfused(ctx, gobj, Handle::addr(__inl));
         return 1_i32;
     }
     return 0_i32;
@@ -91,8 +92,9 @@ pub fn ftCo_800C5DDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn ftCo_HammerFall_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
-    let _ = inl_ftCo_800C5DDC_unfused(ctx, gobj);
+    let _ = inl_ftCo_800C5DDC_unfused(ctx, gobj, Handle::addr(__inl));
 }
 
 pub fn ftCo_HammerFall_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -112,9 +114,8 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
-fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -137,7 +138,8 @@ fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     );
 }
 
-fn inl_ftCo_800C5DDC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+fn inl_ftCo_800C5DDC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) -> i32 {
+    let __inl: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -148,7 +150,7 @@ fn inl_ftCo_800C5DDC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             != 0))
         && (((fp).x683() as i32) >= (fns::p_ftCommonData(ctx).get()).x1C())
     {
-        inl_inlineA0_unfused(ctx, gobj);
+        inl_inlineA0_unfused(ctx, gobj, Handle::addr(__inl));
         return 1_i32;
     }
     return 0_i32;

@@ -305,7 +305,7 @@ pub fn _tyFigupon_803153EC<'a>(
     arg4: i32,
 ) {
     let __frame = ctx.stack_frame(0x60);
-    let digits_s: TyFiguponDigitInit<'a> = frame_at(ctx, &__frame, 0x0);
+    let digits_s: TyFiguponDigitInit<'a> = frame_at(ctx, &__frame, 0x14);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -925,12 +925,12 @@ pub fn _tyFigupon_80316420<'a>(ctx: &'a Ctx, arg0: i32) {
 pub fn _tyFigupon_803168DC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb0);
     let _padA: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let eye_pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let up_copy: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let cross: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x70);
+    let eye_pos: Vec<'a> = frame_at(ctx, &__frame, 0x64);
+    let up_copy: Vec<'a> = frame_at(ctx, &__frame, 0x58);
+    let cross: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
     let eye_vec: Vec<'a> = frame_at(ctx, &__frame, 0x40);
-    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x4c);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x10);
     let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x7c);
     let mut arg0 = arg0;
     let mut data: ToyAnimState<'a> = fns::Toy_804A2AA8(ctx);
@@ -1321,9 +1321,9 @@ pub fn _tyFigupon_80316C24<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 pub fn _tyFigupon_8031753C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x60);
     let remaining: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let panel: _tyFigupon_8031753C_panel<'a> = frame_at(ctx, &__frame, 0x4);
-    let _padA: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
-    let digits_s: TyFiguponDigitInit<'a> = frame_at(ctx, &__frame, 0x18);
+    let panel: _tyFigupon_8031753C_panel<'a> = frame_at(ctx, &__frame, 0x10);
+    let _padA: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
+    let digits_s: TyFiguponDigitInit<'a> = frame_at(ctx, &__frame, 0x0);
     let mut count: i32 = 0;
     let mut joint: HSD_Joint<'a> = null(ctx);
     let mut bet_joint: HSD_Joint<'a> = null(ctx);
@@ -1796,8 +1796,8 @@ pub fn _tyFigupon_80317A60<'a>(ctx: &'a Ctx) {
 pub fn tyFigupon_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let ef4_2: Ptr<'a, un_804D6EF4_t<'a>> = frame_at(ctx, &__frame, 0x0);
-    let sp20: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
+    let sp20: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut data: TyFiguponData<'a> = null(ctx);
     let mut ef4: un_804D6EF4_t<'a> = null(ctx);

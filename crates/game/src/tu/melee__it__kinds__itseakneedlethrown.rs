@@ -35,8 +35,8 @@ pub fn it_802AFD8C<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x88);
     let _padA: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x4);
-    let _padB: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x50);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
+    let _padB: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut parent = parent;
     let mut pos = pos;
     let mut kind = kind;
@@ -301,7 +301,8 @@ pub fn itSeakneedlethrown_UnkMotion4_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
 
 pub fn itSeakneedlethrown_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut attr: itSeakNeedleThrownAttributes<'a> = Handle::cast::<itSeakNeedleThrownAttributes<'a>>(
@@ -324,7 +325,7 @@ pub fn itSeakneedlethrown_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
         fp::fmuls(fp::fneg((ip).facing_dir()), __t1)
     };
     inl_HSD_JObjSetRotationX_unfused(ctx, child, rot);
-    if (inl_itSeakNeedleThrown_CheckGroundHit_unfused(ctx, gobj) != 0) {
+    if (inl_itSeakNeedleThrown_CheckGroundHit_unfused(ctx, gobj, Handle::addr(__inl)) != 0) {
         's1: {
             let __case = match fns::HSD_Randi(ctx, 5_i32) {
                 0_i32 => 0,
@@ -380,12 +381,13 @@ pub fn itSeakneedlethrown_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
 
 pub fn itSeakneedlethrown_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x48);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut attr: itSeakNeedleThrownAttributes<'a> = Handle::cast::<itSeakNeedleThrownAttributes<'a>>(
         ((ip).xC4_article_data()).x4_specialAttributes(),
     );
-    if (inl_itSeakNeedleThrown_CheckGroundHit_unfused(ctx, gobj) != 0) {
+    if (inl_itSeakNeedleThrown_CheckGroundHit_unfused(ctx, gobj, Handle::addr(__inl)) != 0) {
         fns::it_80275158(ctx, gobj, (attr).x4());
         (ip).x40_vel().set_y(
             (if ((ip).x40_vel().y()) < fp::frsp(0_i32 as f64) {
@@ -405,6 +407,7 @@ pub fn itSeakneedlethrown_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
 pub fn itSeakneedlethrown_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut child: HSD_JObj<'a> =
@@ -421,6 +424,7 @@ pub fn itSeakneedlethrown_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
         ctx,
         null(ctx),
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))),
+        Handle::addr(__inl),
     );
     inl_itSeakNeedleThrown_Coll2_Rotate_unfused(ctx, ip, child);
     return 0_i32;
@@ -434,6 +438,7 @@ pub fn itSeakneedlethrown_UnkMotion3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
 pub fn itSeakneedlethrown_UnkMotion4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itSeakNeedleThrownAttributes<'a> = Handle::cast::<itSeakNeedleThrownAttributes<'a>>(
@@ -447,7 +452,7 @@ pub fn itSeakneedlethrown_UnkMotion4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
             break 'l1;
         }
     }
-    if inl_itSeakNeedleThrown_CheckGroundHit4_unfused(ctx, gobj) != 0_i32 {
+    if inl_itSeakNeedleThrown_CheckGroundHit4_unfused(ctx, gobj, Handle::addr(__inl)) != 0_i32 {
         fns::it_80275158(ctx, gobj, (attr).x4());
         (ip).xDD4_itemVar()
             .seakneedlethrown()
@@ -985,10 +990,13 @@ fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64
     }
 }
 
-fn inl_itSeakNeedleThrown_CheckGroundHit_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x18);
-    let line_id: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
-    let hit_pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+fn inl_itSeakNeedleThrown_CheckGroundHit_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    __in_caller: u32,
+) -> i32 {
+    let line_id: Val<'a, u32> = ptr(ctx, __in_caller + 0x0);
+    let hit_pos: Vec<'a> = ptr(ctx, __in_caller + 0x4);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut coll: CollData<'a> = (ip).x378_itemColl();
@@ -1057,9 +1065,13 @@ fn inl_itSeakNeedleThrown_SetupBounce_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'
     );
 }
 
-fn inl_itSeakNeedleThrown_Coll2_Inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ip: Item<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_itSeakNeedleThrown_Coll2_Inline_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    ip: Item<'a>,
+    __in_caller: u32,
+) {
+    let normal: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut ip = ip;
     let mut coll: CollData<'a> = (ip).x378_itemColl();
@@ -1109,10 +1121,13 @@ fn inl_itSeakNeedleThrown_Coll2_Rotate_unfused<'a>(
     }
 }
 
-fn inl_itSeakNeedleThrown_CheckGroundHit4_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x18);
-    let line_id: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
-    let hit_pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+fn inl_itSeakNeedleThrown_CheckGroundHit4_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    __in_caller: u32,
+) -> i32 {
+    let line_id: Val<'a, u32> = ptr(ctx, __in_caller + 0x0);
+    let hit_pos: Vec<'a> = ptr(ctx, __in_caller + 0x4);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut coll: CollData<'a> = (ip).x378_itemColl();

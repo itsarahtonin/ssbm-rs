@@ -28,9 +28,9 @@ use crate::support::*;
 
 pub fn mnLanguage_8024BFE0<'a>(ctx: &'a Ctx, unused: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let result: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
-    let result_2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
+    let result: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x24);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let result_2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x1c);
     let mut unused = unused;
     let mut temp_r3: u64 = 0;
     let mut lang: u8 = 0;
@@ -232,8 +232,8 @@ pub fn fn_8024C2E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn mnLanguage_8024C3C4<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let sp1C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let sp1C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x14);
+    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut gobjproc: HSD_GObjProc<'a> = null(ctx);

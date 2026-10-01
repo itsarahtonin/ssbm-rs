@@ -299,7 +299,7 @@ pub fn Toy_80304A58<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn Toy_80304B0C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let s: Val<'a, u16> = frame_at(ctx, &__frame, 0x0);
+    let s: Val<'a, u16> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut v: Val<'a, u16> = null(ctx);
     if (fns::gm_IsCurrently1PMode(ctx) != 0)
@@ -436,8 +436,11 @@ pub fn Toy_80304CC8<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 
 pub fn _Toy_80304D30<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x60);
-    let sp14: ArrV<'a, i32, 9> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x24);
+    let sp14: ArrV<'a, i32, 9> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x30);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x38);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x40);
     let mut i: i32 = 0;
     let mut x: i32 = 0;
     let mut count: i32 = 0;
@@ -487,7 +490,7 @@ pub fn _Toy_80304D30<'a>(ctx: &'a Ctx) -> i32 {
                     'l7: while i < idk {
                         'c8: {
                             if ((1_i32 as u32) < (i as u32)) && (i != 3_i32) {
-                                if !(inl_Toy_80304B0C_unfused(ctx, i) != 0) {
+                                if !(inl_Toy_80304B0C_unfused(ctx, i, Handle::addr(__inl)) != 0) {
                                     (Handle::cast::<Val<'a, u8>>(fns::Toy_804A284C(ctx).at(0)))
                                         .set((2_i32 as u8));
                                     fns::Toy_80305918(ctx, (i as i8), 0_i32, 0_i32);
@@ -504,7 +507,7 @@ pub fn _Toy_80304D30<'a>(ctx: &'a Ctx) -> i32 {
                     }
                 }
                 if (4_i32 <= i) && (i <= 6_i32) {
-                    if !(inl_Toy_80304B0C_unfused(ctx, i) != 0) {
+                    if !(inl_Toy_80304B0C_unfused(ctx, i, Handle::addr(__inl_2)) != 0) {
                         (Handle::cast::<Val<'a, u8>>(fns::Toy_804A284C(ctx).at(0)))
                             .set((2_i32 as u8));
                         fns::Toy_80305918(ctx, (i as i8), 0_i32, 0_i32);
@@ -523,7 +526,7 @@ pub fn _Toy_80304D30<'a>(ctx: &'a Ctx) -> i32 {
         'l11: while i < 8_i32 {
             'c12: {
                 if (x != 8_i32) && (x != 1_i32) {
-                    if (inl_Toy_80304B0C_unfused(ctx, i) != 0) {
+                    if (inl_Toy_80304B0C_unfused(ctx, i, Handle::addr(__inl_3)) != 0) {
                         count2 = count2.wrapping_add(fns::Toy_80304B94(ctx, i));
                     }
                 }
@@ -536,9 +539,9 @@ pub fn _Toy_80304D30<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn Toy_80305058<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32, farg0: f64) -> i32 {
     let __frame = ctx.stack_frame(0x9b0);
-    let obtained_arr: ArrV<'a, i32, 293> = frame_at(ctx, &__frame, 0x0);
-    let new_arr: ArrV<'a, i32, 293> = frame_at(ctx, &__frame, 0x494);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x928);
+    let obtained_arr: ArrV<'a, i32, 293> = frame_at(ctx, &__frame, 0x4b8);
+    let new_arr: ArrV<'a, i32, 293> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -2403,7 +2406,7 @@ pub fn Toy_803062BC<'a>(ctx: &'a Ctx, trophyId: i32) -> i16 {
 
 pub fn _Toy_803062EC<'a>(ctx: &'a Ctx, arg0: i32, arg1: u32, farg0: f64) {
     let __frame = ctx.stack_frame(0x68);
-    let sp14: ArrV<'a, i8, 72> = frame_at(ctx, &__frame, 0x0);
+    let sp14: ArrV<'a, i8, 72> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut farg0 = farg0;
@@ -3050,9 +3053,9 @@ pub fn Toy_80306D14<'a>(ctx: &'a Ctx) {
 
 pub fn Toy_80306D70<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let framepad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let sp14: Ptr<'a, Ptr<'a, LightList<'a>>> = frame_at(ctx, &__frame, 0x8);
-    let spC: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
+    let framepad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
+    let sp14: Ptr<'a, Ptr<'a, LightList<'a>>> = frame_at(ctx, &__frame, 0xc);
+    let spC: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     {
         let mut data: ToyCameraControl<'a> = null(ctx);
@@ -3209,8 +3212,8 @@ pub fn Toy_LoadLObjList<'a>(
 
 pub fn _Toy_80307018<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x38);
-    let _pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let fog_desc: HSD_FogDesc<'a> = frame_at(ctx, &__frame, 0x10);
+    let _pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
+    let fog_desc: HSD_FogDesc<'a> = frame_at(ctx, &__frame, 0x0);
     let mut fog: HSD_Fog<'a> = null(ctx);
     let mut lights: Ptr<'a, LightList<'a>> = null(ctx);
     let mut obj: Addr<'a> = null(ctx);
@@ -3284,16 +3287,16 @@ pub fn _Toy_80307018<'a>(ctx: &'a Ctx) {
 
 pub fn _Toy_8030715C<'a>(ctx: &'a Ctx, cstick_x: f64, cstick_y: f64) {
     let __frame = ctx.stack_frame(0x110);
-    let euler: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let light_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let new_interest: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
-    let midpad: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x60);
-    let up_vec: Vec<'a> = frame_at(ctx, &__frame, 0x90);
-    let left_vec: Vec<'a> = frame_at(ctx, &__frame, 0x9c);
-    let angles: Vec<'a> = frame_at(ctx, &__frame, 0xa8);
-    let unused: ArrV<'a, u8, 36> = frame_at(ctx, &__frame, 0xb4);
+    let euler: Vec<'a> = frame_at(ctx, &__frame, 0xd4);
+    let light_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc8);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0xbc);
+    let new_interest: Vec<'a> = frame_at(ctx, &__frame, 0xb0);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x80);
+    let midpad: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x50);
+    let up_vec: Vec<'a> = frame_at(ctx, &__frame, 0x44);
+    let left_vec: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let angles: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let unused: ArrV<'a, u8, 36> = frame_at(ctx, &__frame, 0x0);
     let mut cstick_x = cstick_x;
     let mut cstick_y = cstick_y;
     let mut data: TyCameraData_<'a> = null(ctx);
@@ -3672,8 +3675,8 @@ pub fn _Toy_803075E8<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn _Toy_80307828<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut data: TyCameraData_<'a> = null(ctx);
     let mut data2: ToyCameraControl<'a> = null(ctx);
@@ -3717,9 +3720,9 @@ pub fn _Toy_80307828<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn _Toy_803078E4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0xf0);
-    let syms: ArrP<'a, HSD_SObjDesc<'a>, 7> = frame_at(ctx, &__frame, 0x20);
-    let pos_en: PosArrayFull<'a> = frame_at(ctx, &__frame, 0x3c);
-    let pos_jp: PosArrayFull<'a> = frame_at(ctx, &__frame, 0x74);
+    let syms: ArrP<'a, HSD_SObjDesc<'a>, 7> = frame_at(ctx, &__frame, 0x90);
+    let pos_en: PosArrayFull<'a> = frame_at(ctx, &__frame, 0x58);
+    let pos_jp: PosArrayFull<'a> = frame_at(ctx, &__frame, 0x20);
     let mut data: tyLightData<'a> = null(ctx);
     let mut sobj: HSD_SObj<'a> = null(ctx);
     let mut i: i32 = 0;
@@ -3812,7 +3815,7 @@ pub fn _Toy_803078E4<'a>(ctx: &'a Ctx) {
 
 pub fn _Toy_80307BA0<'a>(ctx: &'a Ctx, parent_jobj: HSD_JObj<'a>, arg1: i16) -> HSD_JObj<'a> {
     let __frame = ctx.stack_frame(0x30);
-    let joint_data: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x0);
+    let joint_data: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x8);
     let mut parent_jobj = parent_jobj;
     let mut arg1 = arg1;
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -4100,7 +4103,7 @@ pub fn Toy_8030813C<'a>(ctx: &'a Ctx, trophy_id: i32) -> ToyModelFile<'a> {
 
 pub fn Toy_80308250<'a>(ctx: &'a Ctx, arg0: ToyListEntry<'a>, arg1: i16, arg2: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let sym: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x0);
+    let sym: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -4210,8 +4213,8 @@ pub fn Toy_803083D8<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: i32) {
 
 pub fn _Toy_803084A0<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x70);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x4);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x50);
+    let unused: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut display: tyDispData<'a> = null(ctx);
     let mut text: HSD_Text<'a> = null(ctx);
@@ -4388,9 +4391,9 @@ pub fn _Toy_803084A0<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn Toy_803087F4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0xa8);
-    let pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let buf: ArrV<'a, i8, 72> = frame_at(ctx, &__frame, 0x10);
-    let spC: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x58);
+    let pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x50);
+    let buf: ArrV<'a, i8, 72> = frame_at(ctx, &__frame, 0x8);
+    let spC: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut entry: ToyEntryData<'a> = null(ctx);
     let mut anim: ToyAnimState<'a> = null(ctx);
@@ -4535,8 +4538,8 @@ pub fn Toy_803087F4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> HSD_GObj<'a> {
 
 pub fn _Toy_80308DC8<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let eye_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let eye_pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut cobj = cobj;
     let mut temp_r30: un_804D6E68_t<'a> = null(ctx);
     let mut temp_r31: ToyAnimState<'a> = null(ctx);
@@ -4598,8 +4601,8 @@ pub fn _Toy_80308DC8<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
 pub fn _Toy_80308F04<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
     let __frame = ctx.stack_frame(0x90);
     let interest_pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x1c);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x40);
     let mut cobj = cobj;
     let mut data: Toy26B8<'a> = null(ctx);
     let mut state: Toy6E68<'a> = null(ctx);
@@ -4768,8 +4771,8 @@ pub fn _Toy_80308F04<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
 
 pub fn _Toy_80309338<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: Vec<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, F64, 2> = frame_at(ctx, &__frame, 0x0);
-    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, F64, 2> = frame_at(ctx, &__frame, 0x18);
+    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut sp10: f64 = 0.0;
@@ -4816,15 +4819,34 @@ pub fn _Toy_80309338<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: Vec<'a>) -> f64 {
 
 pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x268);
-    let unused_eye: _Toy_80309404_unused_eye<'a> = frame_at(ctx, &__frame, 0x0);
-    let transition_eye: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let transition_interest: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let eye_pos: _Toy_80309404_eye_pos<'a> = frame_at(ctx, &__frame, 0x34);
-    let archive_symbols: _Toy_80309404_archive_symbols<'a> = frame_at(ctx, &__frame, 0x54);
-    let unused: ArrV<'a, u8, 172> = frame_at(ctx, &__frame, 0xe0);
-    let btn3: Val<'a, u32> = frame_at(ctx, &__frame, 0x18c);
-    let btn: Val<'a, u32> = frame_at(ctx, &__frame, 0x190);
-    let btn2: Val<'a, u32> = frame_at(ctx, &__frame, 0x194);
+    let unused_eye: _Toy_80309404_unused_eye<'a> = frame_at(ctx, &__frame, 0x1ec);
+    let transition_eye: Vec<'a> = frame_at(ctx, &__frame, 0x1e0);
+    let transition_interest: Vec<'a> = frame_at(ctx, &__frame, 0x1d4);
+    let eye_pos: _Toy_80309404_eye_pos<'a> = frame_at(ctx, &__frame, 0x1b4);
+    let archive_symbols: _Toy_80309404_archive_symbols<'a> = frame_at(ctx, &__frame, 0x120);
+    let unused: ArrV<'a, u8, 172> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xb0);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xb8);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc0);
+    let __inl_4: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc8);
+    let __inl_5: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xd0);
+    let __inl_6: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xd8);
+    let __inl_7: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xe0);
+    let __inl_8: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xe8);
+    let __inl_9: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xf0);
+    let __inl_10: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xf8);
+    let __inl_11: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x100);
+    let __inl_12: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x108);
+    let __inl_13: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x110);
+    let __inl_14: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x118);
+    let __inl_15: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x208);
+    let __inl_16: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x210);
+    let __inl_17: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x218);
+    let __inl_18: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x220);
+    let __inl_19: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x228);
+    let btn3: Val<'a, u32> = frame_at(ctx, &__frame, 0xac);
+    let btn: Val<'a, u32> = frame_at(ctx, &__frame, 0x1ac);
+    let btn2: Val<'a, u32> = frame_at(ctx, &__frame, 0x1b0);
     let mut gobj = gobj;
     let mut ed4: ToyCameraControl<'a> = null(ctx);
     let mut cobj: HSD_CObj<'a> = null(ctx);
@@ -5160,7 +5182,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = 56;
             }
             59 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl)) as u32);
                 __state = if ((trigger & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0) {
                     66
                 } else {
@@ -5176,7 +5198,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = 63;
             }
             62 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl_4)) as u32);
                 __state = if ((trigger & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
                     115
                 } else {
@@ -5248,7 +5270,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = 81;
             }
             79 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl_2)) as u32);
                 __state = if ((trigger
                     & (((((shl_i32(1_i32, (0_i32 as u32))) | (shl_i32(1_i32, (1_i32 as u32))))
                         | (shl_i32(1_i32, (2_i32 as u32))))
@@ -5359,7 +5381,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 };
             }
             104 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl_3)) as u32);
                 __state = if ((trigger
                     & (((shl_i32(1_i32, (8_i32 as u32)))
                         | ((shl_i32(1_i32, (10_i32 as u32))) | (shl_i32(1_i32, (11_i32 as u32)))))
@@ -5424,7 +5446,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 };
             }
             116 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl_5)) as u32);
                 __state = if ((trigger & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0)
                     || (fp::frsp((state).x5C() as f64) > 7200.0)
                 {
@@ -5514,7 +5536,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = 135;
             }
             133 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl_6)) as u32);
                 tmp = fp::fadds(
                     (state).x44(),
                     (fp::fadds((state).x40(), (fp::fadds((state).x30(), (state).x34())))),
@@ -5578,7 +5600,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = 141;
             }
             141 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
+                button = (inl_Toy_80305C44(ctx, Handle::addr(__inl_7)) as u32);
                 __state = if ((button & ((shl_i32(1_i32, (0_i32 as u32))) as u32)) != 0) {
                     144
                 } else {
@@ -5598,7 +5620,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = 145;
             }
             145 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
+                button = (inl_Toy_80305C44(ctx, Handle::addr(__inl_8)) as u32);
                 __state = if ((button & ((shl_i32(1_i32, (1_i32 as u32))) as u32)) != 0) {
                     147
                 } else {
@@ -5613,7 +5635,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = 148;
             }
             148 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
+                button = (inl_Toy_80305C44(ctx, Handle::addr(__inl_9)) as u32);
                 __state = if ((button & ((shl_i32(1_i32, (3_i32 as u32))) as u32)) != 0) {
                     150
                 } else {
@@ -5628,7 +5650,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = 151;
             }
             151 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
+                button = (inl_Toy_80305C44(ctx, Handle::addr(__inl_10)) as u32);
                 __state = if ((button & ((shl_i32(1_i32, (2_i32 as u32))) as u32)) != 0) {
                     153
                 } else {
@@ -5644,7 +5666,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = 154;
             }
             154 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
+                button = (inl_Toy_80305C44(ctx, Handle::addr(__inl_11)) as u32);
                 __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
                     156
                 } else {
@@ -5663,7 +5685,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 };
             }
             157 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
+                button = (inl_Toy_80305C44(ctx, Handle::addr(__inl_12)) as u32);
                 __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
                     162
                 } else {
@@ -5694,7 +5716,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 };
             }
             163 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
+                button = (inl_Toy_80305C44(ctx, Handle::addr(__inl_13)) as u32);
                 __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
                     168
                 } else {
@@ -5725,7 +5747,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 };
             }
             169 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
+                button = (inl_Toy_80305C44(ctx, Handle::addr(__inl_14)) as u32);
                 __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
                     174
                 } else {
@@ -5757,7 +5779,9 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             }
             175 => {
                 __state = if (((state).x50() != 0.0) || ((state).x54() != 0.0))
-                    || ((inl_Toy_80305C44(ctx) & (shl_i32(1_i32, (8_i32 as u32)))) != 0)
+                    || ((inl_Toy_80305C44(ctx, Handle::addr(__inl_15))
+                        & (shl_i32(1_i32, (8_i32 as u32))))
+                        != 0)
                 {
                     180
                 } else {
@@ -5808,7 +5832,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 unreachable!();
             }
             187 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
+                button = (inl_Toy_80305C44(ctx, Handle::addr(__inl_16)) as u32);
                 __state = if ((button & ((shl_i32(1_i32, (11_i32 as u32))) as u32)) != 0) {
                     190
                 } else {
@@ -5831,7 +5855,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = if (state).x20() < 5.0 { 201 } else { 202 };
             }
             192 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
+                button = (inl_Toy_80305C44(ctx, Handle::addr(__inl_17)) as u32);
                 __state = if ((button & ((shl_i32(1_i32, (10_i32 as u32))) as u32)) != 0) {
                     194
                 } else {
@@ -6039,7 +6063,7 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 unreachable!();
             }
             239 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl_18)) as u32);
                 __state = if !((trigger
                     & (((shl_i32(1_i32, (6_i32 as u32))) | (shl_i32(1_i32, (5_i32 as u32))))
                         as u32))
@@ -6052,7 +6076,9 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             }
             240 => {
                 display = fns::Toy_sbss_804D6EE0(ctx).get();
-                __state = if ((state).x30() < 0.0) || ((inl_Toy_80305B88(ctx) & 0x441_i32) != 0) {
+                __state = if ((state).x30() < 0.0)
+                    || ((inl_Toy_80305B88(ctx, Handle::addr(__inl_19)) & 0x441_i32) != 0)
+                {
                     247
                 } else {
                     249
@@ -6590,12 +6616,40 @@ pub fn _Toy_80309404<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x2b8);
     let unused: ArrV<'a, u8, 68> = frame_at(ctx, &__frame, 0x0);
-    let abs_x2: _Toy_8030B530_abs_x2<'a> = frame_at(ctx, &__frame, 0x44);
-    let abs_y2: _Toy_8030B530_abs_y2<'a> = frame_at(ctx, &__frame, 0x48);
-    let abs_x3: _Toy_8030B530_abs_x3<'a> = frame_at(ctx, &__frame, 0x4c);
-    let abs_y3: _Toy_8030B530_abs_y3<'a> = frame_at(ctx, &__frame, 0x50);
-    let archive_symbols: _Toy_8030B530_archive_symbols<'a> = frame_at(ctx, &__frame, 0x54);
-    let unused_2: ArrV<'a, u8, 188> = frame_at(ctx, &__frame, 0x8c);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x48);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x50);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x58);
+    let __inl_4: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x60);
+    let __inl_5: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x68);
+    let __inl_6: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x70);
+    let __inl_7: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x78);
+    let __inl_8: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x80);
+    let __inl_9: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x88);
+    let __inl_10: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x90);
+    let __inl_11: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x98);
+    let abs_x2: _Toy_8030B530_abs_x2<'a> = frame_at(ctx, &__frame, 0x1d8);
+    let abs_y2: _Toy_8030B530_abs_y2<'a> = frame_at(ctx, &__frame, 0x1d4);
+    let abs_x3: _Toy_8030B530_abs_x3<'a> = frame_at(ctx, &__frame, 0x1d0);
+    let abs_y3: _Toy_8030B530_abs_y3<'a> = frame_at(ctx, &__frame, 0x1cc);
+    let __inl_12: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xa0);
+    let __inl_13: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xa8);
+    let __inl_14: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xb0);
+    let __inl_15: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xb8);
+    let __inl_16: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc0);
+    let __inl_17: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc8);
+    let __inl_18: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xd0);
+    let __inl_19: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xd8);
+    let __inl_20: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xe0);
+    let __inl_21: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xe8);
+    let __inl_22: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xf0);
+    let __inl_23: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xf8);
+    let __inl_24: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x100);
+    let archive_symbols: _Toy_8030B530_archive_symbols<'a> = frame_at(ctx, &__frame, 0x17c);
+    let unused_2: ArrV<'a, u8, 188> = frame_at(ctx, &__frame, 0x1dc);
+    let __inl_25: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x108);
+    let __inl_26: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x110);
+    let __inl_27: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x118);
+    let __inl_28: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x120);
     let mut arg0 = arg0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut base: Toy26B8<'a> = null(ctx);
@@ -6933,7 +6987,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 return;
             }
             55 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl)) as u32);
                 __state = if ((trigger & ((shl_i32(1_i32, (4_i32 as u32))) as u32)) != 0) {
                     58
                 } else {
@@ -7002,7 +7056,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 return;
             }
             70 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl_2)) as u32);
                 __state = if ((trigger & ((shl_i32(1_i32, (10_i32 as u32))) as u32)) != 0) {
                     73
                 } else {
@@ -7023,7 +7077,9 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 fns::OSReport(
                     ctx,
                     cstr(ctx, 0x803fe578),
-                    &[VarArg::Int(inl_Toy_80305B88(ctx) as u32)],
+                    &[VarArg::Int(
+                        inl_Toy_80305B88(ctx, Handle::addr(__inl_3)) as u32
+                    )],
                 );
                 (state).set_x5C(0_i32);
                 mode_2 = ((state).x61() as u8);
@@ -7084,7 +7140,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = 81;
             }
             84 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
+                button = (inl_Toy_80305C44(ctx, Handle::addr(__inl_4)) as u32);
                 __state = if ((button & ((shl_i32(1_i32, (10_i32 as u32))) as u32)) != 0) {
                     86
                 } else {
@@ -7095,7 +7151,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = 74;
             }
             86 => {
-                btn2 = (inl_Toy_80305C44(ctx) as u32);
+                btn2 = (inl_Toy_80305C44(ctx, Handle::addr(__inl_5)) as u32);
                 __state = if ((btn2 & (2_i32 as u32)) != 0) {
                     90
                 } else {
@@ -7106,7 +7162,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = 212;
             }
             88 => {
-                btn3 = (inl_Toy_80305C44(ctx) as u32);
+                btn3 = (inl_Toy_80305C44(ctx, Handle::addr(__inl_7)) as u32);
                 __state = if ((btn3 & (0x100_i32 as u32)) != 0) {
                     105
                 } else {
@@ -7122,7 +7178,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = 91;
             }
             91 => {
-                btn2 = (inl_Toy_80305C44(ctx) as u32);
+                btn2 = (inl_Toy_80305C44(ctx, Handle::addr(__inl_6)) as u32);
                 __state = if ((btn2 & (1_i32 as u32)) != 0) {
                     93
                 } else {
@@ -7190,7 +7246,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 unreachable!();
             }
             105 => {
-                btn4 = (inl_Toy_80305C44(ctx) as u32);
+                btn4 = (inl_Toy_80305C44(ctx, Handle::addr(__inl_8)) as u32);
                 __state = if ((btn4 & (2_i32 as u32)) != 0) {
                     109
                 } else {
@@ -7201,7 +7257,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = 87;
             }
             107 => {
-                btn5 = (inl_Toy_80305C44(ctx) as u32);
+                btn5 = (inl_Toy_80305C44(ctx, Handle::addr(__inl_12)) as u32);
                 __state = if ((btn5 & (0x200_i32 as u32)) != 0) {
                     137
                 } else {
@@ -7217,7 +7273,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = 110;
             }
             110 => {
-                btn4 = (inl_Toy_80305C44(ctx) as u32);
+                btn4 = (inl_Toy_80305C44(ctx, Handle::addr(__inl_9)) as u32);
                 __state = if ((btn4 & (1_i32 as u32)) != 0) {
                     112
                 } else {
@@ -7233,7 +7289,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = 113;
             }
             113 => {
-                btn4 = (inl_Toy_80305C44(ctx) as u32);
+                btn4 = (inl_Toy_80305C44(ctx, Handle::addr(__inl_10)) as u32);
                 __state = if ((btn4 & (8_i32 as u32)) != 0) {
                     115
                 } else {
@@ -7249,7 +7305,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = 116;
             }
             116 => {
-                btn4 = (inl_Toy_80305C44(ctx) as u32);
+                btn4 = (inl_Toy_80305C44(ctx, Handle::addr(__inl_11)) as u32);
                 __state = if ((btn4 & (4_i32 as u32)) != 0) {
                     118
                 } else {
@@ -7373,7 +7429,9 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 unreachable!();
             }
             137 => {
-                __state = if (adj_y > 0.800000011920929) || ((inl_Toy_80305C44(ctx) & 8_i32) != 0) {
+                __state = if (adj_y > 0.800000011920929)
+                    || ((inl_Toy_80305C44(ctx, Handle::addr(__inl_13)) & 8_i32) != 0)
+                {
                     141
                 } else {
                     143
@@ -7400,7 +7458,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                     let __t7 = inl_HSD_JObjGetScaleX(ctx, jobj_next);
                     statics::melee__ty__toy::_Toy_803062EC(ctx, ((anim).xC() as i32), 3_u32, __t7)
                 };
-                __state = if ((inl_Toy_80305C44(ctx) & 8_i32) != 0) {
+                __state = if ((inl_Toy_80305C44(ctx, Handle::addr(__inl_14)) & 8_i32) != 0) {
                     145
                 } else {
                     146
@@ -7411,7 +7469,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             }
             143 => {
                 __state = if (adj_y < fp::fneg(0.800000011920929))
-                    || ((inl_Toy_80305C44(ctx) & 4_i32) != 0)
+                    || ((inl_Toy_80305C44(ctx, Handle::addr(__inl_15)) & 4_i32) != 0)
                 {
                     148
                 } else {
@@ -7439,7 +7497,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                     let __t8 = inl_HSD_JObjGetScaleX(ctx, jobj_next);
                     statics::melee__ty__toy::_Toy_803062EC(ctx, ((anim).xC() as i32), 3_u32, __t8)
                 };
-                __state = if ((inl_Toy_80305C44(ctx) & 4_i32) != 0) {
+                __state = if ((inl_Toy_80305C44(ctx, Handle::addr(__inl_16)) & 4_i32) != 0) {
                     152
                 } else {
                     153
@@ -7449,7 +7507,9 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = 142;
             }
             150 => {
-                __state = if (adj_x > 0.800000011920929) || ((inl_Toy_80305C44(ctx) & 2_i32) != 0) {
+                __state = if (adj_x > 0.800000011920929)
+                    || ((inl_Toy_80305C44(ctx, Handle::addr(__inl_17)) & 2_i32) != 0)
+                {
                     155
                 } else {
                     157
@@ -7478,7 +7538,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                     let __t9 = inl_HSD_JObjGetScaleX(ctx, n2);
                     statics::melee__ty__toy::_Toy_803062EC(ctx, ((anim).xC() as i32), 4_u32, __t9)
                 };
-                __state = if ((inl_Toy_80305C44(ctx) & 2_i32) != 0) {
+                __state = if ((inl_Toy_80305C44(ctx, Handle::addr(__inl_18)) & 2_i32) != 0) {
                     159
                 } else {
                     160
@@ -7489,7 +7549,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             }
             157 => {
                 __state = if (adj_x < fp::fneg(0.800000011920929))
-                    || ((inl_Toy_80305C44(ctx) & 1_i32) != 0)
+                    || ((inl_Toy_80305C44(ctx, Handle::addr(__inl_19)) & 1_i32) != 0)
                 {
                     162
                 } else {
@@ -7519,7 +7579,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                     let __t10 = inl_HSD_JObjGetScaleX(ctx, n2);
                     statics::melee__ty__toy::_Toy_803062EC(ctx, ((anim).xC() as i32), 4_u32, __t10)
                 };
-                __state = if ((inl_Toy_80305C44(ctx) & 1_i32) != 0) {
+                __state = if ((inl_Toy_80305C44(ctx, Handle::addr(__inl_20)) & 1_i32) != 0) {
                     165
                 } else {
                     166
@@ -7542,7 +7602,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 unreachable!();
             }
             168 => {
-                bm = (inl_Toy_80305C44(ctx) as u32);
+                bm = (inl_Toy_80305C44(ctx, Handle::addr(__inl_21)) as u32);
                 __state = if bm != (8_i32 as u32) { 171 } else { 173 };
             }
             169 => {
@@ -7558,7 +7618,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 unreachable!();
             }
             171 => {
-                bm2 = (inl_Toy_80305C44(ctx) as u32);
+                bm2 = (inl_Toy_80305C44(ctx, Handle::addr(__inl_22)) as u32);
                 __state = if bm2 != (4_i32 as u32) { 175 } else { 177 };
             }
             172 => {
@@ -7571,7 +7631,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 unreachable!();
             }
             175 => {
-                bm3 = (inl_Toy_80305C44(ctx) as u32);
+                bm3 = (inl_Toy_80305C44(ctx, Handle::addr(__inl_23)) as u32);
                 __state = if bm3 != (1_i32 as u32) { 179 } else { 181 };
             }
             176 => {
@@ -7584,7 +7644,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 unreachable!();
             }
             179 => {
-                bm4 = (inl_Toy_80305C44(ctx) as u32);
+                bm4 = (inl_Toy_80305C44(ctx, Handle::addr(__inl_24)) as u32);
                 __state = if bm4 == (2_i32 as u32) { 183 } else { 184 };
             }
             180 => {
@@ -7708,7 +7768,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             214 => {
                 moved_x = fp::fmuls(0.30000001192092896, adj_sx);
                 moved_y = fp::fmuls(0.30000001192092896, adj_sy);
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl_25)) as u32);
                 __state = if ((trigger & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
                     216
                 } else {
@@ -7725,7 +7785,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             }
             217 => {
                 statics::melee__ty__toy::_Toy_80308DC8(ctx, cobj);
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl_26)) as u32);
                 __state = if ((trigger
                     & (((shl_i32(1_i32, (6_i32 as u32))) | (shl_i32(1_i32, (5_i32 as u32))))
                         as u32))
@@ -7753,7 +7813,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             }
             222 => {
                 display = fns::Toy_sbss_804D6EE0(ctx).get();
-                trig2 = (inl_Toy_80305B88(ctx) as u32);
+                trig2 = (inl_Toy_80305B88(ctx, Handle::addr(__inl_27)) as u32);
                 __state = if ((trig2 & (0x441_i32 as u32)) != 0) {
                     225
                 } else {
@@ -7761,7 +7821,7 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 };
             }
             223 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl_28)) as u32);
                 __state = if ((trigger & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
                     281
                 } else {
@@ -8278,11 +8338,26 @@ pub fn _Toy_8030B530<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x198);
-    let sp140: _Toy_8030E110_sp140<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp134: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let sp128: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let archive_symbols: _Toy_8030E110_archive_symbols<'a> = frame_at(ctx, &__frame, 0x30);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x90);
+    let sp140: _Toy_8030E110_sp140<'a> = frame_at(ctx, &__frame, 0x138);
+    let sp134: Vec<'a> = frame_at(ctx, &__frame, 0x12c);
+    let sp128: Vec<'a> = frame_at(ctx, &__frame, 0x120);
+    let archive_symbols: _Toy_8030E110_archive_symbols<'a> = frame_at(ctx, &__frame, 0xc0);
+    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x38);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x40);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x48);
+    let __inl_4: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x50);
+    let __inl_5: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x58);
+    let __inl_6: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x60);
+    let __inl_7: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x68);
+    let __inl_8: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x70);
+    let __inl_9: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x78);
+    let __inl_10: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x80);
+    let __inl_11: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x88);
+    let __inl_12: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x90);
+    let __inl_13: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x98);
+    let __inl_14: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xa0);
+    let __inl_15: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xa8);
     let mut arg0 = arg0;
     let mut base: Toy26B8<'a> = null(ctx);
     let mut ed4: ToyCameraControl<'a> = null(ctx);
@@ -8589,7 +8664,7 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = 52;
             }
             55 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl)) as u32);
                 __state = if ((trigger & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0) {
                     63
                 } else {
@@ -8604,7 +8679,7 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = 79;
             }
             58 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl_3)) as u32);
                 __state = if ((trigger & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0)
                     || (fp::frsp((state).x5C() as f64) > 7200.0)
                 {
@@ -8665,7 +8740,7 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 return;
             }
             72 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl_2)) as u32);
                 __state = if ((trigger
                     & (((shl_i32(1_i32, (8_i32 as u32)))
                         | ((shl_i32(1_i32, (10_i32 as u32))) | (shl_i32(1_i32, (11_i32 as u32)))))
@@ -8704,7 +8779,7 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = 76;
             }
             79 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl_10)) as u32);
                 __state = if ((trigger & ((shl_i32(1_i32, (11_i32 as u32))) as u32)) != 0) {
                     138
                 } else {
@@ -8729,7 +8804,7 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = 85;
             }
             83 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl_4)) as u32);
                 tmp = fp::fadds(
                     (state).x44(),
                     (fp::fadds((state).x40(), (fp::fadds((state).x30(), (state).x34())))),
@@ -8783,7 +8858,7 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = 91;
             }
             91 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
+                button = (inl_Toy_80305C44(ctx, Handle::addr(__inl_5)) as u32);
                 __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
                     94
                 } else {
@@ -8802,7 +8877,7 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = if (sx != 0.0) && (sx < 0.0) { 97 } else { 98 };
             }
             95 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
+                button = (inl_Toy_80305C44(ctx, Handle::addr(__inl_6)) as u32);
                 __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
                     100
                 } else {
@@ -8836,7 +8911,7 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 };
             }
             101 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
+                button = (inl_Toy_80305C44(ctx, Handle::addr(__inl_7)) as u32);
                 __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
                     106
                 } else {
@@ -8866,7 +8941,7 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = if (sy != 0.0) && (sy > 0.0) { 109 } else { 110 };
             }
             107 => {
-                button = (inl_Toy_80305C44(ctx) as u32);
+                button = (inl_Toy_80305C44(ctx, Handle::addr(__inl_8)) as u32);
                 __state = if ((button & ((shl_i32(1_i32, (8_i32 as u32))) as u32)) != 0) {
                     112
                 } else {
@@ -8901,7 +8976,9 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             }
             113 => {
                 __state = if (((state).x50() != 0.0) || ((state).x54() != 0.0))
-                    || ((inl_Toy_80305C44(ctx) & (shl_i32(1_i32, (8_i32 as u32)))) != 0)
+                    || ((inl_Toy_80305C44(ctx, Handle::addr(__inl_9))
+                        & (shl_i32(1_i32, (8_i32 as u32))))
+                        != 0)
                 {
                     118
                 } else {
@@ -9081,7 +9158,7 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 unreachable!();
             }
             156 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl_11)) as u32);
                 __state = if ((trigger
                     & (((shl_i32(1_i32, (6_i32 as u32))) | (shl_i32(1_i32, (5_i32 as u32))))
                         as u32))
@@ -9133,7 +9210,9 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 return;
             }
             167 => {
-                __state = if ((state).x30() < 0.0) || ((inl_Toy_80305B88(ctx) & 0x441_i32) != 0) {
+                __state = if ((state).x30() < 0.0)
+                    || ((inl_Toy_80305B88(ctx, Handle::addr(__inl_12)) & 0x441_i32) != 0)
+                {
                     170
                 } else {
                     172
@@ -9164,7 +9243,9 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = 229;
             }
             172 => {
-                __state = if ((state).x30() > 0.0) || ((inl_Toy_80305B88(ctx) & 0x822_i32) != 0) {
+                __state = if ((state).x30() > 0.0)
+                    || ((inl_Toy_80305B88(ctx, Handle::addr(__inl_13)) & 0x822_i32) != 0)
+                {
                     200
                 } else {
                     201
@@ -9505,7 +9586,7 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 unreachable!();
             }
             229 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl_14)) as u32);
                 __state = if ((trigger & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
                     232
                 } else {
@@ -9525,7 +9606,7 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 __state = if (ed4).x10() == 6_i32 { 235 } else { 236 };
             }
             233 => {
-                trigger = (inl_Toy_80305B88(ctx) as u32);
+                trigger = (inl_Toy_80305B88(ctx, Handle::addr(__inl_15)) as u32);
                 __state = if ((trigger & ((shl_i32(1_i32, (4_i32 as u32))) as u32)) != 0) {
                     238
                 } else {
@@ -9591,11 +9672,11 @@ pub fn _Toy_8030E110<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 }
 
 pub fn _Toy_8030FA50<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0xa0);
+    let __frame = ctx.stack_frame(0xa8);
     let framepad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let eye: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x4c);
+    let eye: Vec<'a> = frame_at(ctx, &__frame, 0x60);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
+    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x6c);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut cam_desc: HSD_CameraDescPerspective<'a> = null(ctx);
     let mut cobj: HSD_CObj<'a> = null(ctx);
@@ -9851,9 +9932,9 @@ pub fn _Toy_8030FA50<'a>(ctx: &'a Ctx) {
 
 pub fn _Toy_8030FE48<'a>(ctx: &'a Ctx, data: TyDisplayData<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x48);
-    let sym: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x0);
-    let ptr_: Ptr<'a, Val<'a, i16>> = frame_at(ctx, &__frame, 0x4);
-    let sym2: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x8);
+    let sym: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x18);
+    let ptr_: Ptr<'a, Val<'a, i16>> = frame_at(ctx, &__frame, 0x0);
+    let sym2: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x10);
     let mut data = data;
     let mut arg1 = arg1;
     let mut toy: Toy26B8<'a> =
@@ -10039,7 +10120,7 @@ pub fn Toy_803102D0<'a>(ctx: &'a Ctx) {
 
 pub fn Toy_80310324<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x48);
-    let syms: ArrP<'a, HSD_SObjDesc<'a>, 3> = frame_at(ctx, &__frame, 0x0);
+    let syms: ArrP<'a, HSD_SObjDesc<'a>, 3> = frame_at(ctx, &__frame, 0x10);
     let sym: ArrP<'a, Addr<'a>, 1> = frame_at(ctx, &__frame, 0xc);
     let mut toy: Toy26B8<'a> = null(ctx);
     let mut tg: ToyGlobalsS_<'a> = null(ctx);
@@ -10368,8 +10449,8 @@ pub fn Toy_80310660<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn _Toy_803109A0<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32) {
     let __frame = ctx.stack_frame(0x80);
-    let table: ToyTable<'a> = frame_at(ctx, &__frame, 0x0);
-    let buf: ArrV<'a, i8, 16> = frame_at(ctx, &__frame, 0x48);
+    let table: ToyTable<'a> = frame_at(ctx, &__frame, 0x1c);
+    let buf: ArrV<'a, i8, 16> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -10427,6 +10508,13 @@ pub fn _Toy_803109A0<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32) {
 pub fn _Toy_80310B48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xc0);
     let unused: ArrV<'a, u8, 88> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x58);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x60);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x68);
+    let __inl_4: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x70);
+    let __inl_5: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x78);
+    let __inl_6: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x80);
+    let __inl_7: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x88);
     let mut gobj = gobj;
     let mut editor: ToyParamEditor<'a> = null(ctx);
     let mut stickX: f64 = 0.0;
@@ -10513,7 +10601,7 @@ pub fn _Toy_80310B48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (editor).set_repeat_delay(((((editor).repeat_delay() as i32).wrapping_sub(1_i32)) as u8));
         return;
     }
-    buttons = (inl_Toy_80305B88_unfused(ctx) as u32);
+    buttons = (inl_Toy_80305B88_unfused(ctx, Handle::addr(__inl)) as u32);
     if ((buttons & ((shl_i32(1_i32, (9_i32 as u32))) as u32)) != 0) {
         inl_sfxBack_unfused(ctx);
         fns::HSD_GObjFree(ctx, gobj);
@@ -10521,7 +10609,7 @@ pub fn _Toy_80310B48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<TyModeState<'a>>(fns::Toy_804A284C(ctx).at(0))).set_x4((1_i32 as i8));
         return;
     }
-    buttons = (inl_Toy_80305B88_unfused(ctx) as u32);
+    buttons = (inl_Toy_80305B88_unfused(ctx, Handle::addr(__inl_2)) as u32);
     if ((buttons & (((shl_i32(1_i32, (8_i32 as u32))) | (shl_i32(1_i32, (12_i32 as u32)))) as u32))
         != 0)
     {
@@ -10535,7 +10623,7 @@ pub fn _Toy_80310B48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     'c8: {
                         if ((editor).values().at(slot).get() as i32) != 0_i32 {
                             fns::Toy_80305918(ctx, (slot as i8), 0_i32, 0_i32);
-                            buttons = (inl_Toy_80305B88_unfused(ctx) as u32);
+                            buttons = (inl_Toy_80305B88_unfused(ctx, Handle::addr(__inl_3)) as u32);
                             if ((buttons & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
                                 statics::melee__ty__toy::_Toy_803053C4(
                                     ctx,
@@ -10570,8 +10658,13 @@ pub fn _Toy_80310B48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (editor).set_gobj(null::<HSD_GObj<'a>>(ctx));
         return;
     }
-    if ((dirX > 0.0) || ((inl_Toy_80305C44_unfused(ctx) & (shl_i32(1_i32, (11_i32 as u32)))) != 0))
-        || ((inl_Toy_80305B88_unfused(ctx) & (shl_i32(1_i32, (0_i32 as u32)))) != 0)
+    if ((dirX > 0.0)
+        || ((inl_Toy_80305C44_unfused(ctx, Handle::addr(__inl_4))
+            & (shl_i32(1_i32, (11_i32 as u32))))
+            != 0))
+        || ((inl_Toy_80305B88_unfused(ctx, Handle::addr(__inl_5))
+            & (shl_i32(1_i32, (0_i32 as u32))))
+            != 0)
     {
         inl_sfxMove_unfused(ctx);
         (editor)
@@ -10602,8 +10695,13 @@ pub fn _Toy_80310B48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (editor).set_repeat_delay((4_i32 as u8));
         changed = 1_i32;
     }
-    if ((dirX < 0.0) || ((inl_Toy_80305C44_unfused(ctx) & (shl_i32(1_i32, (10_i32 as u32)))) != 0))
-        || ((inl_Toy_80305B88_unfused(ctx) & (shl_i32(1_i32, (1_i32 as u32)))) != 0)
+    if ((dirX < 0.0)
+        || ((inl_Toy_80305C44_unfused(ctx, Handle::addr(__inl_6))
+            & (shl_i32(1_i32, (10_i32 as u32))))
+            != 0))
+        || ((inl_Toy_80305B88_unfused(ctx, Handle::addr(__inl_7))
+            & (shl_i32(1_i32, (1_i32 as u32))))
+            != 0)
     {
         inl_sfxMove_unfused(ctx);
         (editor)
@@ -10676,11 +10774,11 @@ pub fn _Toy_80310B48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn _Toy_803114E8<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0xa0);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let pad: ArrV<'a, i32, 32> = frame_at(ctx, &__frame, 0x4);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x84);
-    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x88);
-    let __ret_tmp_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8c);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x8c);
+    let pad: ArrV<'a, i32, 32> = frame_at(ctx, &__frame, 0xc);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __ret_tmp_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
     let mut data: ToyParamEditor<'a> = null(ctx);
     let mut i: i32 = 0;
     fns::_Toy_sbss_804D6E5C(ctx).set(Handle::cast::<ToyParamEditor<'a>>(fns::HSD_MemAlloc(
@@ -10820,9 +10918,9 @@ pub fn Toy_80311680<'a>(ctx: &'a Ctx) {
 
 pub fn _Toy_80311788<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x80);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x4c);
     let buf: ArrV<'a, i8, 72> = frame_at(ctx, &__frame, 0x4);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x4c);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut f31: f64 = 0.0;
     let mut f30: f64 = 0.0;
     let mut f29: f64 = 0.0;
@@ -10959,6 +11057,10 @@ pub fn Toy_80311960<'a>(ctx: &'a Ctx) {
 pub fn Toy_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x28);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x30);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x38);
+    let __inl_4: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x40);
     let mut arg0 = arg0;
     let mut base: Val<'a, u8> = null(ctx);
     let mut selp: Val<'a, i16> = null(ctx);
@@ -10997,7 +11099,7 @@ pub fn Toy_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
                 unreachable!();
             }
             6 => {
-                buttons = (inl_Toy_80305C44_unfused(ctx) as u32);
+                buttons = (inl_Toy_80305C44_unfused(ctx, Handle::addr(__inl)) as u32);
                 fns::_Toy_sbss_804D6E50(ctx).set(
                     ((if ((buttons & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0) {
                         1_i32
@@ -11005,7 +11107,7 @@ pub fn Toy_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
                         0_i32
                     }) as i8),
                 );
-                buttons = (inl_Toy_80305C44_unfused(ctx) as u32);
+                buttons = (inl_Toy_80305C44_unfused(ctx, Handle::addr(__inl_2)) as u32);
                 fns::_Toy_sbss_804D6EA2(ctx).set(
                     ((if ((buttons & ((shl_i32(1_i32, (4_i32 as u32))) as u32)) != 0) {
                         1_i32
@@ -11013,7 +11115,7 @@ pub fn Toy_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
                         0_i32
                     }) as i8),
                 );
-                buttons = (inl_Toy_80305C44_unfused(ctx) as u32);
+                buttons = (inl_Toy_80305C44_unfused(ctx, Handle::addr(__inl_3)) as u32);
                 __state = if ((buttons & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
                     9
                 } else {
@@ -11112,7 +11214,7 @@ pub fn Toy_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
                 __state = 13;
             }
             13 => {
-                buttons = (inl_Toy_80305C44_unfused(ctx) as u32);
+                buttons = (inl_Toy_80305C44_unfused(ctx, Handle::addr(__inl_4)) as u32);
                 __state = if ((buttons & ((shl_i32(1_i32, (5_i32 as u32))) as u32)) != 0) {
                     15
                 } else {
@@ -11301,14 +11403,14 @@ pub fn Toy_Scene_OnFrame<'a>(ctx: &'a Ctx) {
 
 pub fn _Toy_80312050<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
     let __frame = ctx.stack_frame(0xc8);
-    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let endpoint: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
-    let viewMtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x28);
-    let up: Vec<'a> = frame_at(ctx, &__frame, 0x58);
-    let left: Vec<'a> = frame_at(ctx, &__frame, 0x64);
-    let eye: Vec<'a> = frame_at(ctx, &__frame, 0x70);
-    let scaled: Vec<'a> = frame_at(ctx, &__frame, 0x7c);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x9c);
+    let endpoint: Vec<'a> = frame_at(ctx, &__frame, 0x90);
+    let pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let viewMtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x50);
+    let up: Vec<'a> = frame_at(ctx, &__frame, 0x44);
+    let left: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let eye: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let scaled: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let mut gobj = gobj;
     let mut code = code;
     let mut cobj: HSD_CObj<'a> = null(ctx);
@@ -11607,9 +11709,8 @@ fn inl_Toy_803048C0_unfused<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     return (((Handle::add(inl_getTrophyFlags_unfused(ctx), arg0)).get() as i32) & 255_i32);
 }
 
-fn inl_Toy_80304B0C_unfused<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let s: Val<'a, u16> = frame_at(ctx, &__frame, 0x0);
+fn inl_Toy_80304B0C_unfused<'a>(ctx: &'a Ctx, arg0: i32, __in_caller: u32) -> i32 {
+    let s: Val<'a, u16> = ptr(ctx, __in_caller + 0x0);
     let mut arg0 = arg0;
     let mut v: Val<'a, u16> = null(ctx);
     if (fns::gm_IsCurrently1PMode(ctx) != 0)
@@ -12043,9 +12144,8 @@ fn inl_sfxBack<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80024030(ctx, 0_i32);
 }
 
-fn inl_Toy_80305B88<'a>(ctx: &'a Ctx) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_Toy_80305B88<'a>(ctx: &'a Ctx, __in_caller: u32) -> i32 {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut i: i32 = 0;
     let mut button: u32 = 0;
     'l1: loop {
@@ -12080,9 +12180,8 @@ fn inl_sfxForward<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80024030(ctx, 1_i32);
 }
 
-fn inl_Toy_80305C44<'a>(ctx: &'a Ctx) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+fn inl_Toy_80305C44<'a>(ctx: &'a Ctx, __in_caller: u32) -> i32 {
+    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0x0);
     let mut i: i32 = 0_i32;
     let mut button: u32 = 0;
     'l1: loop {
@@ -12567,9 +12666,8 @@ fn inl_toy_make_gobj_unfused<'a>(ctx: &'a Ctx) {
     (tg3).set_x4((1_i32 as i8));
 }
 
-fn inl_Toy_80305B88_unfused<'a>(ctx: &'a Ctx) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_Toy_80305B88_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) -> i32 {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut i: i32 = 0;
     let mut button: u32 = 0;
     'l1: loop {
@@ -12608,9 +12706,8 @@ fn inl_sfxForward_unfused<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80024030(ctx, 1_i32);
 }
 
-fn inl_Toy_80305C44_unfused<'a>(ctx: &'a Ctx) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+fn inl_Toy_80305C44_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) -> i32 {
+    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0x0);
     let mut i: i32 = 0_i32;
     let mut button: u32 = 0;
     'l1: loop {

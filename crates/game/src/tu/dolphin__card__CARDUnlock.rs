@@ -72,7 +72,7 @@ pub fn ReadArrayUnlock<'a>(
     mode: i32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let cmd: ArrV<'a, u8, 5> = frame_at(ctx, &__frame, 0x0);
+    let cmd: ArrV<'a, u8, 5> = frame_at(ctx, &__frame, 0x14);
     let mut chan = chan;
     let mut data = data;
     let mut rbuf = rbuf;
@@ -172,7 +172,7 @@ pub fn DummyLen<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn __CARDUnlock<'a>(ctx: &'a Ctx, chan: i32, flashID: Val<'a, u8>) -> i32 {
     let __frame = ctx.stack_frame(0x110);
-    let rbuf: ArrV<'a, u8, 64> = frame_at(ctx, &__frame, 0x0);
+    let rbuf: ArrV<'a, u8, 64> = frame_at(ctx, &__frame, 0x8c);
     let mut chan = chan;
     let mut flashID = flashID;
     let mut init_val: u32 = 0;
@@ -384,8 +384,8 @@ pub fn InitCallback<'a>(ctx: &'a Ctx, _task: Addr<'a>) {
 
 pub fn DoneCallback<'a>(ctx: &'a Ctx, _task: Addr<'a>) {
     let __frame = ctx.stack_frame(0x88);
-    let rbuf: ArrV<'a, u8, 64> = frame_at(ctx, &__frame, 0x0);
-    let unk: Val<'a, u8> = frame_at(ctx, &__frame, 0x40);
+    let rbuf: ArrV<'a, u8, 64> = frame_at(ctx, &__frame, 0x2c);
+    let unk: Val<'a, u8> = frame_at(ctx, &__frame, 0x28);
     let mut _task = _task;
     let mut data: u32 = 0;
     let mut dummy: i32 = 0;

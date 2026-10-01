@@ -67,7 +67,7 @@ pub fn gm_8017DB88<'a>(
     arg10: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x68);
-    let chars: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let chars: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x20);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

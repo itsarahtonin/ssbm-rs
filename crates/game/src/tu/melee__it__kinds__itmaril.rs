@@ -234,6 +234,7 @@ pub fn itMaril_UnkMotion1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itMaril_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut coll: i32 = 0;
     'l1: loop {
@@ -245,7 +246,7 @@ pub fn itMaril_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     coll = fns::it_8026DB40(ctx, gobj);
     if fns::it_80272C6C(ctx, gobj) == 0_i32 {
         if ((coll & 1_i32) != 0) {
-            inl_it_802D69E4_unfused(ctx, gobj);
+            inl_it_802D69E4_unfused(ctx, gobj, Handle::addr(__inl));
         } else {
             fns::it_802D6DDC(ctx, gobj);
         }
@@ -408,9 +409,8 @@ fn inl_it_802D6A54_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::it_802754BC(ctx, gobj);
 }
 
-fn inl_it_802D69E4_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_it_802D69E4_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {

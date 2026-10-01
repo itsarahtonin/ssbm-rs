@@ -239,7 +239,7 @@ pub fn CARDWriteAsync<'a>(
     callback: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x0);
+    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x14);
     let mut fileInfo = fileInfo;
     let mut buf = buf;
     let mut length = length;

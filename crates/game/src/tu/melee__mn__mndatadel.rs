@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn mnDataDel_8024E940<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x38);
-    let sp18: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let sp18: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x10);
     let mut pad1: u32 = 0;
     let mut pad2: u32 = 0;
     let mut pad3: u32 = 0;
@@ -105,8 +105,8 @@ pub fn mnDataDel_8024E940<'a>(ctx: &'a Ctx) {
 pub fn mnDataDel_8024EA6C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x48);
     let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let sp18: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
+    let sp18: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
     let mut temp_f30: f64 = 0.0;
     let mut temp_r31: MnDataDelGObjUserData<'a> = null(ctx);
     let mut data: Val<'a, u32> = null(ctx);
@@ -181,8 +181,8 @@ pub fn mnDataDel_8024EA6C<'a>(ctx: &'a Ctx) {
 
 pub fn mnDataDel_8024EBC8<'a>(ctx: &'a Ctx, root: HSD_JObj<'a>, unused: u8, a: u8, b: u8) {
     let __frame = ctx.stack_frame(0x28);
-    let j2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let j1: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
+    let j2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
+    let j1: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
     let mut root = root;
     let mut unused = unused;
     let mut a = a;
@@ -229,9 +229,10 @@ pub fn mnDataDel_8024EBC8<'a>(ctx: &'a Ctx, root: HSD_JObj<'a>, unused: u8, a: u
 
 pub fn fn_8024ECCC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let panel: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let exclaim: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let panel: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x34);
+    let exclaim: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x30);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut data: WarnCmnData<'a> = null(ctx);
     let mut root: HSD_JObj<'a> = null(ctx);
@@ -246,17 +247,25 @@ pub fn fn_8024ECCC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     }
     root = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, arg0)));
     data = inl_mnDataDel_GetWarnData_unfused(ctx);
-    inl_mnDataDel_AnimateWarning_unfused(ctx, root, arg0, data, panel, exclaim);
+    inl_mnDataDel_AnimateWarning_unfused(
+        ctx,
+        root,
+        arg0,
+        data,
+        panel,
+        exclaim,
+        Handle::addr(__inl),
+    );
 }
 
 pub fn mnDataDel_8024EEC0<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x58);
-    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let cursor_yes: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
-    let cursor_no: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x2c);
+    let cursor_yes: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x28);
+    let cursor_no: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let no: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x14);
-    let yes: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x18);
+    let yes: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x10);
     let mut wrn_modal: HSD_GObj<'a> = null(ctx);
     let mut root: HSD_JObj<'a> = null(ctx);
     let mut cursor: i32 = 0;
@@ -423,11 +432,11 @@ pub fn fn_8024F1D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn fn_8024F318<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb0);
     let _pad0: ArrV<'a, u8, 44> = frame_at(ctx, &__frame, 0x0);
-    let sp68: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x2c);
-    let sp60: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x30);
-    let sp58: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x34);
-    let sp50: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x38);
-    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x3c);
+    let sp68: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x60);
+    let sp60: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x58);
+    let sp58: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x50);
+    let sp50: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x48);
+    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x64);
     let mut gobj = gobj;
     let mut _pad1: u32 = 0;
     let mut _pad2: u32 = 0;
@@ -869,7 +878,7 @@ pub fn fn_8024FBA4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_8024FC48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut i: i32 = 0;
     let mut user_data: Val<'a, u8> = null(ctx);
@@ -1012,8 +1021,8 @@ pub fn fn_8024FD40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnDataDel_8024FE4C<'a>(ctx: &'a Ctx, arg0: u8) {
     let __frame = ctx.stack_frame(0x68);
-    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x4);
+    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut proc: HSD_GObjProc<'a> = null(ctx);
@@ -1305,9 +1314,9 @@ fn inl_mnDataDel_AnimateWarning_unfused<'a>(
     data: WarnCmnData<'a>,
     panel: Ptr<'a, HSD_JObj<'a>>,
     exclaim: Ptr<'a, HSD_JObj<'a>>,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x20);
-    let cursor: mnDataDel_AnimateWarning_cursor<'a> = frame_at(ctx, &__frame, 0x0);
+    let cursor: mnDataDel_AnimateWarning_cursor<'a> = ptr(ctx, __in_caller + 0x0);
     let mut root = root;
     let mut gobj = gobj;
     let mut data = data;

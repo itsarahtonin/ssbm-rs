@@ -42,9 +42,9 @@ pub fn ftMaterial_800BF260<'a>(ctx: &'a Ctx) {
 
 pub fn ftMaterial_800BF2B8<'a>(ctx: &'a Ctx, mobj: HSD_MObj<'a>, rendermode: u32, unused: u32) {
     let __frame = ctx.stack_frame(0xc0);
-    let tobj: Ptr<'a, HSD_TObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let texp: HSD_TExp<'a> = frame_at(ctx, &__frame, 0x4);
-    let pe: HSD_PEDesc<'a> = frame_at(ctx, &__frame, 0x70);
+    let tobj: Ptr<'a, HSD_TObj<'a>> = frame_at(ctx, &__frame, 0x98);
+    let texp: HSD_TExp<'a> = frame_at(ctx, &__frame, 0x2c);
+    let pe: HSD_PEDesc<'a> = frame_at(ctx, &__frame, 0x20);
     let mut mobj = mobj;
     let mut rendermode = rendermode;
     let mut unused = unused;
@@ -171,7 +171,7 @@ pub fn ftMaterial_800BF534<'a>(
     rendermode: u32,
 ) -> HSD_TExp<'a> {
     let __frame = ctx.stack_frame(0xa8);
-    let sp_tevdesc: _HSD_TevDesc<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp_tevdesc: _HSD_TevDesc<'a> = frame_at(ctx, &__frame, 0x10);
     let mut fp = fp;
     let mut mobj = mobj;
     let mut texp = texp;
@@ -251,13 +251,13 @@ pub fn ftMaterial_800BF6BC<'a>(
     texp: HSD_TExp<'a>,
 ) {
     let __frame = ctx.stack_frame(0x188);
-    let sp168: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let _padA: ArrV<'a, u8, 84> = frame_at(ctx, &__frame, 0x4);
-    let sp_cnst1: _HSD_TECnst<'a> = frame_at(ctx, &__frame, 0x58);
-    let _padB: ArrV<'a, u8, 84> = frame_at(ctx, &__frame, 0x70);
-    let sp_cnst2: _HSD_TECnst<'a> = frame_at(ctx, &__frame, 0xc4);
-    let sp_tevdesc: _HSD_TevDesc<'a> = frame_at(ctx, &__frame, 0xdc);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x150);
+    let sp168: _GXColor<'a> = frame_at(ctx, &__frame, 0x160);
+    let _padA: ArrV<'a, u8, 84> = frame_at(ctx, &__frame, 0xa0);
+    let sp_cnst1: _HSD_TECnst<'a> = frame_at(ctx, &__frame, 0xf4);
+    let _padB: ArrV<'a, u8, 84> = frame_at(ctx, &__frame, 0x10c);
+    let sp_cnst2: _HSD_TECnst<'a> = frame_at(ctx, &__frame, 0x88);
+    let sp_tevdesc: _HSD_TevDesc<'a> = frame_at(ctx, &__frame, 0x14);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
     let mut fp = fp;
     let mut mobj = mobj;
     let mut texp = texp;

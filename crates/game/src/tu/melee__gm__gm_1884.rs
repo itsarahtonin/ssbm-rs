@@ -159,8 +159,8 @@ pub fn fn_80188550<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn fn_80188644<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x38);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
     let mut saved_count: i32 = 0;
     'l1: loop {
@@ -232,7 +232,7 @@ pub fn fn_80188644<'a>(ctx: &'a Ctx) {
 
 pub fn fn_80188738<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let jobjs: ArrP<'a, HSD_JObj<'a>, 3> = frame_at(ctx, &__frame, 0x0);
+    let jobjs: ArrP<'a, HSD_JObj<'a>, 3> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut i: i32 = 0;
     let mut val: i32 = 0;
@@ -293,7 +293,7 @@ pub fn fn_80188738<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>) {
 
 pub fn fn_80188910<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let jobjs: ArrP<'a, HSD_JObj<'a>, 3> = frame_at(ctx, &__frame, 0x0);
+    let jobjs: ArrP<'a, HSD_JObj<'a>, 3> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut i: i32 = 0;
     let mut val: i32 = 0;
@@ -354,7 +354,7 @@ pub fn fn_80188910<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>) {
 
 pub fn fn_80188B3C<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let jobjs: ArrP<'a, HSD_JObj<'a>, 3> = frame_at(ctx, &__frame, 0x0);
+    let jobjs: ArrP<'a, HSD_JObj<'a>, 3> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut state: TrainingModeState<'a> = statics::melee__gm__gm_1884::lbl_80473700(ctx);
     let mut i: i32 = 0;
@@ -424,7 +424,7 @@ pub fn fn_80188B3C<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>) {
 
 pub fn fn_80188D3C<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let jobjs: ArrP<'a, HSD_JObj<'a>, 3> = frame_at(ctx, &__frame, 0x0);
+    let jobjs: ArrP<'a, HSD_JObj<'a>, 3> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut i: i32 = 0;
     let mut val: i32 = 0;
@@ -626,9 +626,9 @@ pub fn fn_80188EE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_801891F4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x78);
-    let speed_stack: TrainingSpeedStack<'a> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x2c);
+    let speed_stack: TrainingSpeedStack<'a> = frame_at(ctx, &__frame, 0x24);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut sub: CssSubStruct<'a> = null(ctx);
     let mut buttons: u64 = 0;
     buttons = fns::gm_801A36C0(

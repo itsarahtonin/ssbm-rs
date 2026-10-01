@@ -28,11 +28,11 @@ use crate::support::*;
 
 pub fn mnDiagram3_PopulateRankings<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xf0);
-    let position: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp58: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
-    let first_rank: mnDiagram2_SortEntry<'a> = frame_at(ctx, &__frame, 0x20);
+    let position: Vec<'a> = frame_at(ctx, &__frame, 0x64);
+    let sp58: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x50);
+    let first_rank: mnDiagram2_SortEntry<'a> = frame_at(ctx, &__frame, 0x40);
     let fighter_rank: mnDiagram2_SortEntry<'a> = frame_at(ctx, &__frame, 0x30);
-    let rank_value: mnDiagram2_SortEntry<'a> = frame_at(ctx, &__frame, 0x40);
+    let rank_value: mnDiagram2_SortEntry<'a> = frame_at(ctx, &__frame, 0x20);
     let mut gobj = gobj;
     let mut max_time: u32 = 0;
     let mut data: Diagram3<'a> = null(ctx);
@@ -373,12 +373,12 @@ pub fn mnDiagram3_PopulateRankings<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn mnDiagram3_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x140);
     let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
-    let mode_label_pos: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x2c);
-    let up_label_pos: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let unused_3: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x48);
-    let down_label_pos: Vec<'a> = frame_at(ctx, &__frame, 0x54);
-    let unused_4: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x60);
+    let mode_label_pos: Vec<'a> = frame_at(ctx, &__frame, 0xd4);
+    let unused_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x20);
+    let up_label_pos: Vec<'a> = frame_at(ctx, &__frame, 0xb8);
+    let unused_3: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x30);
+    let down_label_pos: Vec<'a> = frame_at(ctx, &__frame, 0x9c);
+    let unused_4: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x3c);
     let mut gobj = gobj;
     let mut base: Val<'a, i8> = Handle::cast::<Val<'a, i8>>(fns::mnDiagram3_803EEC10(ctx));
     let mut data: Diagram3<'a> =
@@ -739,6 +739,7 @@ pub fn mnDiagram3_Create<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn mnDiagram3_Init<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x98);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x40);
     let mut arg0 = arg0;
     let mut new_var: Addr<'a> = null(ctx);
     let mut data: Diagram3<'a> = null(ctx);
@@ -772,7 +773,7 @@ pub fn mnDiagram3_Init<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
             (0_i32 as u8),
         );
         inl_HSD_JObjSetTranslateYWithMtxDirty(ctx, popup_jobj, row_spacing);
-        inl_mnDiagram3_SetupRows(ctx, popup_jobj, data, 10_i32);
+        inl_mnDiagram3_SetupRows(ctx, popup_jobj, data, 10_i32, Handle::addr(__inl));
     }
     fns::mnDiagram3_PopulateRankings(ctx, fns::mnDiagram3_804D6C20(ctx).get());
     {
@@ -1253,9 +1254,9 @@ fn inl_mnDiagram3_SetupRows<'a>(
     jobj: HSD_JObj<'a>,
     popup_data: Diagram3<'a>,
     count: i32,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x18);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut jobj = jobj;
     let mut popup_data = popup_data;
     let mut count = count;

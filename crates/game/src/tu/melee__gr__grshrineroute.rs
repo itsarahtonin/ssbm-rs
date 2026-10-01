@@ -167,9 +167,9 @@ pub fn grShrineRoute_80208A34<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn fn_80208A38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let flags: ArrV<'a, u8, 6> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
+    let flags: ArrV<'a, u8, 6> = frame_at(ctx, &__frame, 0x28);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut flag: Val<'a, u8> = flags.at(0);
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
@@ -252,8 +252,8 @@ pub fn fn_80208A38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grShrineRoute_80208D14<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let center: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let center: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
     let mut i: i32 = 0;
@@ -404,13 +404,13 @@ pub fn grShrineRoute_80208F14<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn grShrineRoute_80208F70<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xc0);
-    let sp88: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp7C: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp68: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let sp5C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp88: Vec<'a> = frame_at(ctx, &__frame, 0x80);
+    let sp7C: Vec<'a> = frame_at(ctx, &__frame, 0x74);
+    let sp68: Vec<'a> = frame_at(ctx, &__frame, 0x60);
+    let sp5C: Vec<'a> = frame_at(ctx, &__frame, 0x54);
+    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x48);
     let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x48);
+    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut unused1: f64 = 0.0;
     let mut unused2: f64 = 0.0;
@@ -1282,15 +1282,15 @@ pub fn grShrineRoute_8020A214<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 
 pub fn grShrineRoute_8020A21C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x190);
-    let player_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let light_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sorted: ArrV<'a, i32, 20> = frame_at(ctx, &__frame, 0x18);
-    let distances: ArrV<'a, F32, 20> = frame_at(ctx, &__frame, 0x68);
-    let pos1: Vec<'a> = frame_at(ctx, &__frame, 0xb8);
-    let pos2: Vec<'a> = frame_at(ctx, &__frame, 0xc4);
-    let dir: Vec<'a> = frame_at(ctx, &__frame, 0xd0);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0xdc);
-    let temp_pos: Vec<'a> = frame_at(ctx, &__frame, 0xe0);
+    let player_pos: Vec<'a> = frame_at(ctx, &__frame, 0x104);
+    let light_pos: Vec<'a> = frame_at(ctx, &__frame, 0xf8);
+    let sorted: ArrV<'a, i32, 20> = frame_at(ctx, &__frame, 0xa8);
+    let distances: ArrV<'a, F32, 20> = frame_at(ctx, &__frame, 0x58);
+    let pos1: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let pos2: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let dir: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let temp_pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let mut gobj = gobj;
     let mut player: HSD_GObj<'a> = null(ctx);
     let mut gp: Ground<'a> = null(ctx);
@@ -1649,8 +1649,8 @@ pub fn grShrineRoute_8020AA40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grShrineRoute_8020AB58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<'a> {
     let __frame = ctx.stack_frame(0x28);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut new_lobj: HSD_LObj<'a> = null(ctx);
     let mut lobj: HSD_LObj<'a> = null(ctx);
@@ -1700,8 +1700,8 @@ pub fn grShrineRoute_8020AB58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<
 
 pub fn grShrineRoute_8020AC44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<'a> {
     let __frame = ctx.stack_frame(0x28);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut new_lobj: HSD_LObj<'a> = null(ctx);
     let mut lobj: HSD_LObj<'a> = null(ctx);
@@ -1809,9 +1809,9 @@ pub fn grShrineRoute_8020AE08<'a>(
     out: Val<'a, i32>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let lo: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let hi: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let lo: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let hi: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut player_gobj = player_gobj;
     let mut out = out;
@@ -1847,8 +1847,8 @@ pub fn grShrineRoute_8020AE08<'a>(
 
 pub fn grShrineRoute_8020AF38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let scale: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let scale: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut ix: i32 = arg1.wrapping_sub(189_i32);
@@ -1976,7 +1976,7 @@ pub fn grShrineRoute_OnCheckShadowRender<'a>(
     jobj: HSD_JObj<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut a = a;
     let mut b = b;
     let mut jobj = jobj;

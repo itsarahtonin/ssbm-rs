@@ -35,7 +35,7 @@ pub fn itDrMarioPill_Spawn<'a>(
     facing_dir: f64,
 ) {
     let __frame = ctx.stack_frame(0x88);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x14);
     let mut parent_gobj = parent_gobj;
     let mut pos = pos;
     let mut arg2 = arg2;
@@ -57,7 +57,7 @@ pub fn itDrMarioPill_Spawn<'a>(
 
 pub fn itDrMarioPill_802C061C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
@@ -89,7 +89,7 @@ pub fn itDrMarioPill_Appeal_Spawn<'a>(
     facing_dir: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x98);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
     let mut parent_gobj = parent_gobj;
     let mut pos = pos;
     let mut arg2 = arg2;
@@ -135,7 +135,7 @@ pub fn itDrMarioPill_802C09C4<'a>(
     facing_dir: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0xa8);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x20);
     let mut parent_gobj = parent_gobj;
     let mut pos = pos;
     let mut arg2 = arg2;
@@ -289,8 +289,8 @@ pub fn itDrMarioPill_802C0DF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itDrMarioPill_Motion2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
     let mut child: HSD_JObj<'a> = null(ctx);
@@ -401,7 +401,7 @@ pub fn itDrMarioPill_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itDrMarioPill_Motion6_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut orig: HSD_GObj<'a> = gobj;

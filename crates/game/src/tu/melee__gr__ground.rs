@@ -474,8 +474,8 @@ pub fn Ground_801C0800<'a>(ctx: &'a Ctx, pair: StageIdPair<'a>) {
 
 pub fn Ground_801C0A70<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0xa0);
-    let enabled_stages: ArrV<'a, i32, 27> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u32, 5> = frame_at(ctx, &__frame, 0x6c);
+    let enabled_stages: ArrV<'a, i32, 27> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u32, 5> = frame_at(ctx, &__frame, 0x0);
     let mut pos = pos;
     if fns::HSD_Randi(ctx, 2_i32) != 0_i32 {
         enabled_stages.at(0).set((enums::Gr_Kind_Castle as i32));
@@ -546,11 +546,11 @@ pub fn Ground_801C0A70<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> i32 {
 
 pub fn Ground_801C0C2C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x90);
-    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x30);
     let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let spC: BobOmbRain<'a> = frame_at(ctx, &__frame, 0x30);
+    let spC: BobOmbRain<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut pass_position_bounds: i32 = 0;
     let mut pass_y_min: i32 = 0;
@@ -788,7 +788,7 @@ pub fn Ground_801C1158<'a>(ctx: &'a Ctx) {
 
 pub fn Ground_801C11AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut tmp: f64 = 1.0;
@@ -839,7 +839,7 @@ pub fn Ground_801C126C<'a>(
 
 pub fn Ground_801C13D0<'a>(ctx: &'a Ctx, arg0: i32, depth: i32) -> HSD_JObj<'a> {
     let __frame = ctx.stack_frame(0x28);
-    let tmp_depth: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let tmp_depth: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut depth = depth;
     let mut result: HSD_JObj<'a> = null::<HSD_JObj<'a>>(ctx);
@@ -863,6 +863,8 @@ pub fn Ground_801C13D0<'a>(ctx: &'a Ctx, arg0: i32, depth: i32) -> HSD_JObj<'a> 
 
 pub fn Ground_GetStageGObj<'a>(ctx: &'a Ctx, map_id: i32) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0xd0);
+    let __inl: ArrV<'a, u8, 64> = frame_at(ctx, &__frame, 0x50);
+    let __inl_2: ArrV<'a, u8, 64> = frame_at(ctx, &__frame, 0xc);
     let mut map_id = map_id;
     let mut stageinfo: StageInfo<'a> = fns::stage_info(ctx);
     let mut phi_f0: f64 = 0.0;
@@ -951,7 +953,7 @@ pub fn Ground_GetStageGObj<'a>(ctx: &'a Ctx, map_id: i32) -> HSD_GObj<'a> {
         } else {
             phi_f0 = 1.0;
         }
-        new_var = inl_get_jobj_inline_unfused(ctx, phi_f0);
+        new_var = inl_get_jobj_inline_unfused(ctx, phi_f0, Handle::addr(__inl));
         fns::HSD_JObjAddNext(ctx, temp_r23, new_var);
         if Handle::is_null(new_var) {
             fns::HSD_GObjFree(ctx, gobj);
@@ -1030,7 +1032,7 @@ pub fn Ground_GetStageGObj<'a>(ctx: &'a Ctx, map_id: i32) -> HSD_GObj<'a> {
         } else {
             phi_f0 = 1.0;
         }
-        temp_r3_11 = inl_get_jobj_inline_unfused(ctx, phi_f0);
+        temp_r3_11 = inl_get_jobj_inline_unfused(ctx, phi_f0, Handle::addr(__inl_2));
         fns::HSD_JObjAddNext(ctx, new_var, temp_r3_11);
         if Handle::is_null(temp_r3_11) {
             fns::HSD_GObjFree(ctx, gobj);
@@ -1059,6 +1061,7 @@ pub fn Ground_GetStageGObj<'a>(ctx: &'a Ctx, map_id: i32) -> HSD_GObj<'a> {
 
 pub fn Ground_801C1A20<'a>(ctx: &'a Ctx, arg0: HSD_Joint<'a>, arg1: i32) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x80);
+    let __inl: ArrV<'a, u8, 64> = frame_at(ctx, &__frame, 0x10);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut temp_r30: HSD_GObj<'a> = null(ctx);
@@ -1114,7 +1117,8 @@ pub fn Ground_801C1A20<'a>(ctx: &'a Ctx, arg0: HSD_Joint<'a>, arg1: i32) -> HSD_
     fns::grMaterial_801C95C4(ctx, temp_r30);
     temp_r29 = fns::HSD_JObjLoadJoint(ctx, arg0);
     statics::melee__gr__ground::Ground_801C34AC(ctx, arg1, temp_r29, arg0);
-    temp_r3_4 = inl_get_jobj_inline_unfused(ctx, inl_Ground_801C0498_unfused(ctx));
+    temp_r3_4 =
+        inl_get_jobj_inline_unfused(ctx, inl_Ground_801C0498_unfused(ctx), Handle::addr(__inl));
     fns::HSD_JObjAddNext(ctx, temp_r29, temp_r3_4);
     if Handle::is_null(temp_r3_4) {
         fns::HSD_GObjFree(ctx, temp_r30);
@@ -1460,7 +1464,7 @@ pub fn Ground_801C20E0<'a>(
 
 pub fn Ground_801C2374<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut lobj = lobj;
     let mut vec_mul: f64 = 0.0;
     let mut cur: HSD_LObj<'a> = lobj;
@@ -1900,7 +1904,7 @@ pub fn Ground_801C2D0C<'a>(ctx: &'a Ctx, i: i32, jobj: HSD_JObj<'a>) {
 
 pub fn Ground_801C2D24<'a>(ctx: &'a Ctx, arg0: i32, arg1: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
@@ -2612,9 +2616,9 @@ pub fn Ground_801C39B0<'a>(ctx: &'a Ctx, right: f64) {
 
 pub fn Ground_801C39C0<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x38);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp8: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let sp8: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let mut phi_f3: f64 = 0.0;
     let mut phi_f4: f64 = 0.0;
     let mut phi_f5: f64 = 0.0;
@@ -2747,9 +2751,9 @@ pub fn Ground_801C39C0<'a>(ctx: &'a Ctx) {
 
 pub fn Ground_801C3BB4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut lft: f64 = 0.0;
     let mut rgt: f64 = 0.0;
     let mut top: f64 = 0.0;
@@ -3115,11 +3119,11 @@ pub fn Ground_801C43C4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> i32 {
 
 pub fn Ground_801C445C<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let pos0: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let pos1: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let pos0: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let pos1: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let pos2: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let pos3: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x30);
+    let pos3: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut lobj = lobj;
     let mut wobj: HSD_WObj<'a> = null(ctx);
     let mut cur: HSD_LObj<'a> = null(ctx);
@@ -3195,7 +3199,7 @@ pub fn Ground_801C4640<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
 pub fn Ground_801C466C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x40);
     let r28_carrier: Ground_801C466C_r28_carrier<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut i: i32 = 0;
     let mut count: i32 = 0;
     let mut temp_r3: HSD_GObj<'a> = null(ctx);
@@ -3480,9 +3484,9 @@ pub fn Ground_801C4B50<'a>(
     arg8: f64,
 ) {
     let __frame = ctx.stack_frame(0x68);
-    let vec0: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let vec0: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut spline = spline;
     let mut arg1 = arg1;
     let mut result = result;
@@ -3630,7 +3634,7 @@ pub fn Ground_801C4E70<'a>(
     arg5: HSD_JObj<'a>,
 ) {
     let __frame = ctx.stack_frame(0x48);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -3654,15 +3658,15 @@ pub fn Ground_801C4E70<'a>(
 
 pub fn Ground_801C4FAC<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
     let __frame = ctx.stack_frame(0x98);
-    let sp74: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp68: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp5C: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x48);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x54);
-    let sqrt_tmp: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0x60);
+    let sp74: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
+    let sp68: Vec<'a> = frame_at(ctx, &__frame, 0x60);
+    let sp5C: Vec<'a> = frame_at(ctx, &__frame, 0x54);
+    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let sqrt_tmp: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0xc);
     let mut cobj = cobj;
     let mut fog: HSD_Fog<'a> = null(ctx);
     let mut xz_inv_len: f64 = 0.0;
@@ -4013,7 +4017,7 @@ pub fn Ground_801C5878<'a>(ctx: &'a Ctx) {
 
 pub fn Ground_801C58E0<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x28);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut tmp: i32 = arg0;
@@ -4026,8 +4030,8 @@ pub fn Ground_801C58E0<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) -> HSD_GObj<'a> {
 
 pub fn Ground_801C5940<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x90);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let vals: ArrV<'a, i32, 32> = frame_at(ctx, &__frame, 0x4);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x80);
+    let vals: ArrV<'a, i32, 32> = frame_at(ctx, &__frame, 0x0);
     let mut phi_r8: Ground_801C5940_phi_r8<'a> = null(ctx);
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -4261,9 +4265,8 @@ fn inl_alloc_user_data_ground_unfused<'a>(ctx: &'a Ctx) -> Ground<'a> {
     return gp;
 }
 
-fn inl_get_jobj_inline_unfused<'a>(ctx: &'a Ctx, phi_f0: f64) -> HSD_JObj<'a> {
-    let __frame = ctx.stack_frame(0x48);
-    let sp14: HSD_Joint<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_get_jobj_inline_unfused<'a>(ctx: &'a Ctx, phi_f0: f64, __in_caller: u32) -> HSD_JObj<'a> {
+    let sp14: HSD_Joint<'a> = ptr(ctx, __in_caller + 0x0);
     let mut phi_f0 = phi_f0;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     Handle::copy_from(sp14, statics::melee__gr__ground::Ground_803B7E0C(ctx));

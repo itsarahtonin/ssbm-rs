@@ -429,11 +429,11 @@ pub fn mpColl_80042384<'a>(ctx: &'a Ctx, cd: CollData<'a>) {
 
 pub fn mpColl_LoadECB_JObj<'a>(ctx: &'a Ctx, coll: CollData<'a>, flags: u32) {
     let __frame = ctx.stack_frame(0x60);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let left_x: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
-    let bottom_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
-    let right_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
-    let top_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let left_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let bottom_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let right_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let top_y: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
     let mut coll = coll;
     let mut flags = flags;
     let mut dx: f64 = 0.0;
@@ -778,7 +778,15 @@ pub fn mpColl_LoadECB<'a>(ctx: &'a Ctx, coll: CollData<'a>) {
 }
 
 pub fn mpCollInterpolateECB<'a>(ctx: &'a Ctx, coll: CollData<'a>, time: f64) {
-    let __frame = ctx.stack_frame(0x30);
+    let __frame = ctx.stack_frame(0x48);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
+    let __inl_4: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
+    let __inl_5: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x20);
+    let __inl_6: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x28);
+    let __inl_7: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x30);
+    let __inl_8: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x38);
     let mut coll = coll;
     let mut time = time;
     Handle::copy_from((coll).prev_ecb(), (coll).ecb());
@@ -801,42 +809,42 @@ pub fn mpCollInterpolateECB<'a>(ctx: &'a Ctx, coll: CollData<'a>, time: f64) {
         (coll).desired_ecb().right(),
     );
     if ((((((((if 4_u32 == 4_u32 {
-        inl___fpclassifyf(ctx, ((coll).ecb().top().x()))
+        inl___fpclassifyf(ctx, ((coll).ecb().top().x()), Handle::addr(__inl))
     } else {
         inl___fpclassifyd(ctx, ((coll).ecb().top().x()))
     }) == (enums::FP_NAN as i32))
         || ((if 4_u32 == 4_u32 {
-            inl___fpclassifyf(ctx, ((coll).ecb().top().y()))
+            inl___fpclassifyf(ctx, ((coll).ecb().top().y()), Handle::addr(__inl_2))
         } else {
             inl___fpclassifyd(ctx, ((coll).ecb().top().y()))
         }) == (enums::FP_NAN as i32)))
         || ((if 4_u32 == 4_u32 {
-            inl___fpclassifyf(ctx, ((coll).ecb().bottom().x()))
+            inl___fpclassifyf(ctx, ((coll).ecb().bottom().x()), Handle::addr(__inl_3))
         } else {
             inl___fpclassifyd(ctx, ((coll).ecb().bottom().x()))
         }) == (enums::FP_NAN as i32)))
         || ((if 4_u32 == 4_u32 {
-            inl___fpclassifyf(ctx, ((coll).ecb().bottom().y()))
+            inl___fpclassifyf(ctx, ((coll).ecb().bottom().y()), Handle::addr(__inl_4))
         } else {
             inl___fpclassifyd(ctx, ((coll).ecb().bottom().y()))
         }) == (enums::FP_NAN as i32)))
         || ((if 4_u32 == 4_u32 {
-            inl___fpclassifyf(ctx, ((coll).ecb().left().x()))
+            inl___fpclassifyf(ctx, ((coll).ecb().left().x()), Handle::addr(__inl_5))
         } else {
             inl___fpclassifyd(ctx, ((coll).ecb().left().x()))
         }) == (enums::FP_NAN as i32)))
         || ((if 4_u32 == 4_u32 {
-            inl___fpclassifyf(ctx, ((coll).ecb().left().y()))
+            inl___fpclassifyf(ctx, ((coll).ecb().left().y()), Handle::addr(__inl_6))
         } else {
             inl___fpclassifyd(ctx, ((coll).ecb().left().y()))
         }) == (enums::FP_NAN as i32)))
         || ((if 4_u32 == 4_u32 {
-            inl___fpclassifyf(ctx, ((coll).ecb().right().x()))
+            inl___fpclassifyf(ctx, ((coll).ecb().right().x()), Handle::addr(__inl_7))
         } else {
             inl___fpclassifyd(ctx, ((coll).ecb().right().x()))
         }) == (enums::FP_NAN as i32)))
         || ((if 4_u32 == 4_u32 {
-            inl___fpclassifyf(ctx, ((coll).ecb().right().y()))
+            inl___fpclassifyf(ctx, ((coll).ecb().right().y()), Handle::addr(__inl_8))
         } else {
             inl___fpclassifyd(ctx, ((coll).ecb().right().y()))
         }) == (enums::FP_NAN as i32))
@@ -860,7 +868,7 @@ pub fn mpCollInterpolateECB<'a>(ctx: &'a Ctx, coll: CollData<'a>, time: f64) {
 pub fn mpColl_80043268<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32, arg2: i32, dy: f64) {
     let __frame = ctx.stack_frame(0x40);
     let callback: Ptr<'a, FnPtr<'a>> = frame_at(ctx, &__frame, 0x0);
-    let user_data: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x4);
+    let user_data: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x10);
     let mut coll = coll;
     let mut line_id = line_id;
     let mut arg2 = arg2;
@@ -892,6 +900,7 @@ pub fn mpColl_80043268<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32, arg2:
 pub fn mpCollEnd<'a>(ctx: &'a Ctx, coll: CollData<'a>, arg1: i32, arg2: i32) {
     let __frame = ctx.stack_frame(0x48);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut coll = coll;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -929,6 +938,7 @@ pub fn mpCollEnd<'a>(ctx: &'a Ctx, coll: CollData<'a>, arg1: i32, arg2: i32) {
             (coll).ceiling().index(),
             0,
             fp::fsubs((coll).cur_pos().y(), (coll).last_pos().y()),
+            Handle::addr(__inl),
         );
     }
     if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32) {
@@ -996,10 +1006,10 @@ pub fn mpCollEnd<'a>(ctx: &'a Ctx, coll: CollData<'a>, arg1: i32, arg2: i32) {
 
 pub fn mpColl_80043558<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let user_data: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x0);
-    let callback: Ptr<'a, FnPtr<'a>> = frame_at(ctx, &__frame, 0x4);
-    let user_data_2: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x8);
-    let callback_2: Ptr<'a, FnPtr<'a>> = frame_at(ctx, &__frame, 0xc);
+    let user_data: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x14);
+    let callback: Ptr<'a, FnPtr<'a>> = frame_at(ctx, &__frame, 0x0);
+    let user_data_2: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0xc);
+    let callback_2: Ptr<'a, FnPtr<'a>> = frame_at(ctx, &__frame, 0x4);
     let mut coll = coll;
     let mut line_id = line_id;
     let mut kind: i32 = 0;
@@ -1083,8 +1093,8 @@ pub fn mpColl_800436E4<'a>(ctx: &'a Ctx, coll: CollData<'a>, arg1: f64) {
 
 pub fn mpColl_80043754<'a>(ctx: &'a Ctx, cb: FnPtr<'a>, coll: CollData<'a>, flags: u32) -> i32 {
     let __frame = ctx.stack_frame(0x88);
-    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut cb = cb;
     let mut coll = coll;
     let mut flags = flags;
@@ -1170,8 +1180,8 @@ pub fn mpColl_80043754<'a>(ctx: &'a Ctx, cb: FnPtr<'a>, coll: CollData<'a>, flag
 
 pub fn mpColl_800439FC<'a>(ctx: &'a Ctx, coll: CollData<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
     let mut coll = coll;
     let mut right_dx: f64 = 0.0;
     let mut f1: f64 = 0.0;
@@ -1224,8 +1234,8 @@ pub fn mpColl_800439FC<'a>(ctx: &'a Ctx, coll: CollData<'a>) {
 
 pub fn mpColl_80043ADC<'a>(ctx: &'a Ctx, coll: CollData<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
     let mut coll = coll;
     let mut left_dx: f64 = 0.0;
     let mut f1: f64 = 0.0;
@@ -1278,7 +1288,7 @@ pub fn mpColl_80043ADC<'a>(ctx: &'a Ctx, coll: CollData<'a>) {
 
 pub fn mpColl_80043BBC<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id_out: Val<'a, i32>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let wall_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let wall_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
     let mut coll = coll;
     let mut line_id_out = line_id_out;
     let mut line_id: i32 = fns::mpLinePrevNonFloor(ctx, (coll).floor().index());
@@ -1309,8 +1319,8 @@ pub fn mpColl_80043BBC<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id_out: Val<'a
 
 pub fn mpColl_80043C6C<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32, ignore_bottom: i32) {
     let __frame = ctx.stack_frame(0x50);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x28);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let wall_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
     let mut coll = coll;
     let mut line_id = line_id;
@@ -1425,7 +1435,7 @@ pub fn mpColl_80043C6C<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32, ignor
 
 pub fn mpColl_80043E90<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id_out: Val<'a, i32>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let wall_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let wall_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
     let mut coll = coll;
     let mut line_id_out = line_id_out;
     let mut line_id: i32 = fns::mpLineNextNonFloor(ctx, (coll).floor().index());
@@ -1456,8 +1466,8 @@ pub fn mpColl_80043E90<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id_out: Val<'a
 
 pub fn mpColl_80043F40<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32, ignore_bottom: i32) {
     let __frame = ctx.stack_frame(0x50);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x28);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let wall_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
     let mut coll = coll;
     let mut line_id = line_id;
@@ -1573,8 +1583,8 @@ pub fn mpColl_80043F40<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32, ignor
 pub fn mpColl_80044164<'a>(ctx: &'a Ctx, cd: CollData<'a>, p_ledge_id: Val<'a, i32>) -> i32 {
     let __frame = ctx.stack_frame(0x60);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let edge: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
+    let edge: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
     let mut cd = cd;
     let mut p_ledge_id = p_ledge_id;
     let mut left: f64 = 0.0;
@@ -1687,8 +1697,8 @@ pub fn mpColl_80044164<'a>(ctx: &'a Ctx, cd: CollData<'a>, p_ledge_id: Val<'a, i
 pub fn mpColl_800443C4<'a>(ctx: &'a Ctx, cd: CollData<'a>, p_ledge_id: Val<'a, i32>) -> i32 {
     let __frame = ctx.stack_frame(0x60);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let edge: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
+    let edge: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
     let mut cd = cd;
     let mut p_ledge_id = p_ledge_id;
     let mut left: f64 = 0.0;
@@ -1807,9 +1817,9 @@ pub fn mpColl_80044628_Floor<'a>(
     left_right: i32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
-    let bottom: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let prev_bottom: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x30);
+    let bottom: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let prev_bottom: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut coll = coll;
     let mut cb = cb;
     let mut gobj = gobj;
@@ -1914,9 +1924,9 @@ pub fn mpColl_80044628_Floor<'a>(
 
 pub fn mpColl_80044838_Floor<'a>(ctx: &'a Ctx, coll: CollData<'a>, ignore_bottom: i32) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let bottom: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
-    let edge: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let bottom: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
+    let edge: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut coll = coll;
     let mut ignore_bottom = ignore_bottom;
     let mut line_id: i32 = 0;
@@ -1968,9 +1978,9 @@ pub fn mpColl_80044838_Floor<'a>(ctx: &'a Ctx, coll: CollData<'a>, ignore_bottom
 
 pub fn mpColl_80044948_Floor<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let bottom: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
-    let edge: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let bottom: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
+    let edge: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut coll = coll;
     let mut hit_wall: i32 = 0;
     let mut line_id: i32 = 0;
@@ -2047,9 +2057,9 @@ pub fn mpColl_80044948_Floor<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 
 pub fn mpColl_80044AD8_Ceiling<'a>(ctx: &'a Ctx, coll: CollData<'a>, left_right: i32) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let top: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let prev_top: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
+    let top: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let prev_top: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let mut coll = coll;
     let mut left_right = left_right;
     let mut ceiling_id: i32 = 0;
@@ -2133,9 +2143,9 @@ pub fn mpColl_80044AD8_Ceiling<'a>(ctx: &'a Ctx, coll: CollData<'a>, left_right:
 
 pub fn mpColl_80044C74_Ceiling<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let top: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
-    let ceiling_end: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let top: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
+    let ceiling_end: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut coll = coll;
     let mut line_id: i32 = 0;
     let mut hit_wall: i32 = 0;
@@ -2205,8 +2215,8 @@ pub fn mpColl_80044C74_Ceiling<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 
 pub fn mpColl_80044E10_RightWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x70);
-    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x4);
+    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut coll = coll;
     let mut left_x: f64 = 0.0;
     let mut left_y: f64 = 0.0;
@@ -2352,13 +2362,13 @@ pub fn mpColl_80044E10_RightWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 
 pub fn mpColl_800454A4_RightWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0xd0);
-    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
-    let top_2: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let nrm: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
-    let unused: ArrV<'a, u8, 68> = frame_at(ctx, &__frame, 0x38);
+    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x7c);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x70);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x64);
+    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x60);
+    let top_2: Vec<'a> = frame_at(ctx, &__frame, 0x54);
+    let nrm: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let unused: ArrV<'a, u8, 68> = frame_at(ctx, &__frame, 0x0);
     let mut coll = coll;
     let mut line_id: i32 = 0;
     let mut i: i32 = 0;
@@ -2651,8 +2661,8 @@ pub fn mpColl_800454A4_RightWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 
 pub fn mpColl_80045B74_LeftWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x60);
-    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
+    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut coll = coll;
     let mut right_x: f64 = 0.0;
     let mut right_y: f64 = 0.0;
@@ -2803,13 +2813,13 @@ pub fn mpColl_80045B74_LeftWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 
 pub fn mpColl_80046224_LeftWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0xd8);
-    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let nrm: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
-    let unused: ArrV<'a, u8, 68> = frame_at(ctx, &__frame, 0x38);
+    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x7c);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x70);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x64);
+    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x60);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x54);
+    let nrm: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let unused: ArrV<'a, u8, 68> = frame_at(ctx, &__frame, 0x0);
     let mut coll = coll;
     let mut line_id: i32 = 0;
     let mut arr: Val<'a, i32> = statics::melee__mp__mpcoll::mpColl_80458810(ctx)
@@ -3109,8 +3119,10 @@ pub fn mpColl_80046224_LeftWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 pub fn mpColl_80046904<'a>(ctx: &'a Ctx, coll: CollData<'a>, flags: u32) -> i32 {
     let __frame = ctx.stack_frame(0x78);
     let _wpad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let wid_floorA: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
-    let wid_floorB: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
+    let wid_floorA: Val<'a, i32> = frame_at(ctx, &__frame, 0x1c);
+    let wid_floorB: Val<'a, i32> = frame_at(ctx, &__frame, 0x18);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let mut coll = coll;
     let mut flags = flags;
     let mut prev_b6: i32 = 0;
@@ -3189,7 +3201,7 @@ pub fn mpColl_80046904<'a>(ctx: &'a Ctx, coll: CollData<'a>, flags: u32) -> i32 
             if (fns::mpColl_80044AD8_Ceiling(ctx, c, left_right_flags) != 0)
                 && (fns::mpColl_80044C74_Ceiling(ctx, c) != 0)
             {
-                inl_mpCollCeilingInline_unfused(ctx, c);
+                inl_mpCollCeilingInline_unfused(ctx, c, Handle::addr(__inl));
                 squeeze_flags = (squeeze_flags | 1_i32);
                 y_after_collide_ceiling = (c).cur_pos().y();
             }
@@ -3242,7 +3254,7 @@ pub fn mpColl_80046904<'a>(ctx: &'a Ctx, coll: CollData<'a>, flags: u32) -> i32 
                 if (fns::mpColl_80044AD8_Ceiling(ctx, c, left_right_flags) != 0)
                     && (fns::mpColl_80044C74_Ceiling(ctx, c) != 0)
                 {
-                    inl_mpCollCeilingInline_unfused(ctx, c);
+                    inl_mpCollCeilingInline_unfused(ctx, c, Handle::addr(__inl_2));
                     squeeze_flags = (squeeze_flags | 1_i32);
                     y_after_collide_ceiling = (c).cur_pos().y();
                 }
@@ -4306,11 +4318,11 @@ pub fn mpColl_80048844<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 
 pub fn mpColl_800488F4<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let bottom: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let bottom: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
-    let edge: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x28);
+    let edge: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
     let mut coll = coll;
     let mut floor_id: i32 = 0;
     let mut line_id: i32 = 0;
@@ -4379,7 +4391,7 @@ pub fn mpColl_800488F4<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 
 pub fn mpColl_80048AB0_RightWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x68);
-    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
     let mut coll = coll;
     let mut left_x: f64 = 0.0;
     let mut left_y: f64 = 0.0;
@@ -4543,11 +4555,11 @@ pub fn mpColl_80048AB0_RightWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 
 pub fn mpColl_800491C8_RightWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0xa8);
-    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x20);
+    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x58);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x3c);
+    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
     let mut coll = coll;
     let mut line_id: i32 = 0;
     let mut i: i32 = 0;
@@ -4796,7 +4808,7 @@ pub fn mpColl_800491C8_RightWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 
 pub fn mpColl_80049778_LeftWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x68);
-    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
     let mut coll = coll;
     let mut right_x: f64 = 0.0;
     let mut right_y: f64 = 0.0;
@@ -4966,11 +4978,11 @@ pub fn mpColl_80049778_LeftWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 
 pub fn mpColl_80049EAC_LeftWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0xa8);
-    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x20);
+    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x58);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x3c);
+    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
     let mut coll = coll;
     let mut line_id: i32 = 0;
     let mut arr: Val<'a, i32> = statics::melee__mp__mpcoll::mpColl_80458810(ctx)
@@ -5219,10 +5231,10 @@ pub fn mpColl_80049EAC_LeftWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 
 pub fn mpColl_8004A45C_Floor<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
-    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let edge: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x24);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let edge: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut coll = coll;
     let mut line_id = line_id;
     let mut floor_id: i32 = 0;
@@ -5322,10 +5334,10 @@ pub fn mpColl_8004A45C_Floor<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32)
 
 pub fn mpColl_8004A678_Floor<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
-    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let edge: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x24);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let edge: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut coll = coll;
     let mut line_id = line_id;
     let mut floor_id: i32 = 0;
@@ -5437,9 +5449,9 @@ pub fn mpColl_8004A678_Floor<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32)
 
 pub fn mpColl_8004A908_Floor<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let floor_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
-    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x8);
-    let normal: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let floor_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x20);
+    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x1c);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut coll = coll;
     let mut line_id = line_id;
     let mut prev_bottom_x: f64 = 0.0;
@@ -5555,9 +5567,9 @@ pub fn mpColl_8004A908_Floor<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32)
 
 pub fn mpColl_8004AB80<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let top: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
-    let ceiling_end: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let top: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
+    let ceiling_end: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut coll = coll;
     let mut line_id: i32 = 0;
     let mut hit_wall: i32 = 0;
@@ -5629,6 +5641,8 @@ pub fn mpColl_8004AB80<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 
 pub fn mpColl_8004ACE4<'a>(ctx: &'a Ctx, coll: CollData<'a>, flags: i32) -> i32 {
     let __frame = ctx.stack_frame(0x60);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut coll = coll;
     let mut flags = flags;
     let mut touching_floor: i32 = 0;
@@ -5697,7 +5711,13 @@ pub fn mpColl_8004ACE4<'a>(ctx: &'a Ctx, coll: CollData<'a>, flags: i32) -> i32 
                 y_after_ceiling = (coll).cur_pos().y();
             }
             if (fns::mpColl_800488F4(ctx, coll) != 0) {
-                inl_mpCollFloorInline_unfused(ctx, coll, 0_i32, (0_i32 as u32));
+                inl_mpCollFloorInline_unfused(
+                    ctx,
+                    coll,
+                    0_i32,
+                    (0_i32 as u32),
+                    Handle::addr(__inl),
+                );
                 y_after_floor = (coll).cur_pos().y();
                 touching_floor = 1_i32;
                 hit_floor = 1_i32;
@@ -5762,7 +5782,7 @@ pub fn mpColl_8004ACE4<'a>(ctx: &'a Ctx, coll: CollData<'a>, flags: i32) -> i32 
     }
     if (fns::mpColl_8004A908_Floor(ctx, coll, (coll).floor().index()) != 0) {
         if (fns::mpColl_80044838_Floor(ctx, coll, 0_i32) != 0) {
-            inl_mpCollFloorInline_unfused(ctx, coll, 0_i32, (0_i32 as u32));
+            inl_mpCollFloorInline_unfused(ctx, coll, 0_i32, (0_i32 as u32), Handle::addr(__inl_2));
         }
         (coll).x34_flags().set_b5((0_i32 as u8));
         touching_floor = 1_i32;
@@ -5825,11 +5845,11 @@ pub fn mpColl_8004B5C4<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 
 pub fn mpColl_8004B6D8<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let top: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let top: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
-    let ceiling_end: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x28);
+    let ceiling_end: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
     let mut coll = coll;
     let mut ceiling_id: i32 = 0;
     let mut new_ceiling: i32 = 0;
@@ -5899,7 +5919,7 @@ pub fn mpColl_8004B6D8<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 
 pub fn mpColl_8004B894_RightWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
     let mut coll = coll;
     let mut left_x: f64 = 0.0;
     let mut left_y: f64 = 0.0;
@@ -6028,7 +6048,7 @@ pub fn mpColl_8004B894_RightWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 
 pub fn mpColl_8004BDD4_LeftWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
     let mut coll = coll;
     let mut right_x: f64 = 0.0;
     let mut right_y: f64 = 0.0;
@@ -6163,10 +6183,10 @@ pub fn mpColl_8004BDD4_LeftWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 
 pub fn mpColl_8004C328_Ceiling<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
-    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let edge: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x24);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let edge: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut coll = coll;
     let mut line_id = line_id;
     let mut ceiling_id: i32 = 0;
@@ -6256,6 +6276,7 @@ pub fn mpColl_8004C328_Ceiling<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i3
 
 pub fn mpColl_8004C534<'a>(ctx: &'a Ctx, coll: CollData<'a>, flags: u32) -> i32 {
     let __frame = ctx.stack_frame(0x28);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut coll = coll;
     let mut flags = flags;
     let mut hit_ceiling: i32 = 0_i32;
@@ -6268,7 +6289,7 @@ pub fn mpColl_8004C534<'a>(ctx: &'a Ctx, coll: CollData<'a>, flags: u32) -> i32 
         (coll).x34_flags().set_b5((1_i32 as u8));
     }
     if (fns::mpColl_8004B6D8(ctx, coll) != 0) {
-        inl_mpCollCeilingInline_unfused(ctx, coll);
+        inl_mpCollCeilingInline_unfused(ctx, coll, Handle::addr(__inl));
         hit_ceiling = 1_i32;
     } else if (fns::mpLib_80054ED8(ctx, (coll).ceiling().index()) != 0) {
         let mut ceiling_id: i32 = (coll).ceiling().index();
@@ -6413,7 +6434,7 @@ pub fn mpColl_8004CA6C<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> f64 {
 
 pub fn mpCollGetSpeedCeiling<'a>(ctx: &'a Ctx, coll: CollData<'a>, speed: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let top: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let top: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut coll = coll;
     let mut speed = speed;
     let mut index: i32 = (coll).ceiling().index();
@@ -6425,7 +6446,7 @@ pub fn mpCollGetSpeedCeiling<'a>(ctx: &'a Ctx, coll: CollData<'a>, speed: Vec<'a
 
 pub fn mpCollGetSpeedLeftWall<'a>(ctx: &'a Ctx, coll: CollData<'a>, speed: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let top: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let top: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut coll = coll;
     let mut speed = speed;
     let mut index: i32 = (coll).left_facing_wall().index();
@@ -6437,7 +6458,7 @@ pub fn mpCollGetSpeedLeftWall<'a>(ctx: &'a Ctx, coll: CollData<'a>, speed: Vec<'
 
 pub fn mpCollGetSpeedRightWall<'a>(ctx: &'a Ctx, coll: CollData<'a>, speed: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let top: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let top: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut coll = coll;
     let mut speed = speed;
     let mut index: i32 = (coll).right_facing_wall().index();
@@ -6449,7 +6470,7 @@ pub fn mpCollGetSpeedRightWall<'a>(ctx: &'a Ctx, coll: CollData<'a>, speed: Vec<
 
 pub fn mpCollGetSpeedFloor<'a>(ctx: &'a Ctx, coll: CollData<'a>, speed: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let top: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let top: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut coll = coll;
     let mut speed = speed;
     let mut index: i32 = (coll).floor().index();
@@ -6541,7 +6562,7 @@ pub fn mpCopyCollData<'a>(ctx: &'a Ctx, src: CollData<'a>, dst: CollData<'a>, ar
 
 pub fn mpColl_8004D024<'a>(ctx: &'a Ctx, arg0: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x1b0);
-    let spC: CollData<'a> = frame_at(ctx, &__frame, 0x0);
+    let spC: CollData<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     fns::mpColl_80041EE4(ctx, spC);
     spC.x34_flags().set_b1234((0_i32 as u8));
@@ -6629,9 +6650,8 @@ fn inl_Vec2_Interpolate<'a>(ctx: &'a Ctx, time: f64, dest: Vec2<'a>, src: Vec2<'
     ));
 }
 
-fn inl___fpclassifyf<'a>(ctx: &'a Ctx, x: f64) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let x__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+fn inl___fpclassifyf<'a>(ctx: &'a Ctx, x: f64, __in_caller: u32) -> i32 {
+    let x__slot: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
     x__slot.set(x);
     let mut exp_mask: i32 = 0x7f800000_i32;
     let mut mantissa_mask: i32 = 0x7fffff_i32;
@@ -6717,10 +6737,10 @@ fn inl_mpCollEnd_inline2_unfused<'a>(
     line_id: i32,
     arg2: i32,
     dy: f64,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x10);
-    let callback: Ptr<'a, FnPtr<'a>> = frame_at(ctx, &__frame, 0x0);
-    let user_data: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x4);
+    let callback: Ptr<'a, FnPtr<'a>> = ptr(ctx, __in_caller + 0x0);
+    let user_data: Ptr<'a, Addr<'a>> = ptr(ctx, __in_caller + 0x4);
     let mut coll = coll;
     let mut line_id = line_id;
     let mut arg2 = arg2;
@@ -6958,10 +6978,9 @@ fn inl_mpColl_LeftWall_inline_unfused<'a>(ctx: &'a Ctx, line_id: i32) {
     );
 }
 
-fn inl_mpCollCeilingInline_unfused<'a>(ctx: &'a Ctx, coll: CollData<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let right_wall_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let left_wall_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+fn inl_mpCollCeilingInline_unfused<'a>(ctx: &'a Ctx, coll: CollData<'a>, __in_caller: u32) {
+    let right_wall_id: Val<'a, i32> = ptr(ctx, __in_caller + 0x0);
+    let left_wall_id: Val<'a, i32> = ptr(ctx, __in_caller + 0x4);
     let mut coll = coll;
     let mut top_x: f64 = 0.0;
     let mut top_y: f64 = 0.0;
@@ -7164,9 +7183,9 @@ fn inl_mpCollFloorInline_unfused<'a>(
     coll: CollData<'a>,
     ecb_unlocked: i32,
     squeeze_flags: u32,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x10);
-    let wall_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let wall_id: Val<'a, i32> = ptr(ctx, __in_caller + 0x0);
     let mut coll = coll;
     let mut ecb_unlocked = ecb_unlocked;
     let mut squeeze_flags = squeeze_flags;

@@ -42,7 +42,8 @@ pub fn ReadUARTN<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn WriteUARTN<'a>(ctx: &'a Ctx, buf: Addr<'a>, len: u32) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0xc);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut buf = buf;
     let mut len = len;
     let mut xLen: i32 = 0;
@@ -75,7 +76,7 @@ pub fn WriteUARTN<'a>(ctx: &'a Ctx, buf: Addr<'a>, len: u32) -> i32 {
     cmd.set(0xa0010000_u32);
     'l3: while len != (0_i32 as u32) {
         'c4: {
-            qLen = inl_QueueLength_unfused(ctx);
+            qLen = inl_QueueLength_unfused(ctx, Handle::addr(__inl));
             if qLen < 0_i32 {
                 error = 1_i32.wrapping_neg();
                 break 'l3;
@@ -129,9 +130,8 @@ pub fn WriteUARTN<'a>(ctx: &'a Ctx, buf: Addr<'a>, len: u32) -> i32 {
     return error;
 }
 
-fn inl_QueueLength_unfused<'a>(ctx: &'a Ctx) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+fn inl_QueueLength_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) -> i32 {
+    let cmd: Val<'a, u32> = ptr(ctx, __in_caller + 0x0);
     if fns::EXISelect(ctx, 0_i32, (1_i32 as u32), (3_i32 as u32)) == 0_i32 {
         return 1_i32.wrapping_neg();
     }

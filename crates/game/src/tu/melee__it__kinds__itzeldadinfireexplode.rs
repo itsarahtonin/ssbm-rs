@@ -35,8 +35,8 @@ pub fn it_802C4580<'a>(
     scale: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x88);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4c);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut parent_gobj = parent_gobj;
     let mut arg1 = arg1;
     let mut pos = pos;
@@ -130,7 +130,7 @@ pub fn it_802C46C4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: Item<'a>) {
 
 pub fn itZeldadinfireexplode_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attrs: itZeldaDinFireExplodeAttributes<'a> = null(ctx);

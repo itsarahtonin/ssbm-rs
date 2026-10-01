@@ -528,8 +528,8 @@ pub fn ftCo_80095700<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
 
 pub fn ftCo_80095744<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: Val<'a, i32>) {
     let __frame = ctx.stack_frame(0x30);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -1014,10 +1014,10 @@ pub fn ftCo_ItemThrow_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_80095EFC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let vec0: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let scale: ftCo_80095EFC_scale<'a> = frame_at(ctx, &__frame, 0x24);
+    let vec0: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let scale: ftCo_80095EFC_scale<'a> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut interpolation: f64 = 0.0;

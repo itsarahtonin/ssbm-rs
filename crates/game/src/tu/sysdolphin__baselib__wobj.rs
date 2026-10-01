@@ -61,7 +61,7 @@ pub fn HSD_WObjAddAnim<'a>(ctx: &'a Ctx, wobj: HSD_WObj<'a>, anim: HSD_WObjAnim<
 
 pub fn WObjUpdateFunc<'a>(ctx: &'a Ctx, obj: Addr<'a>, r#type: i32, val: HSD_ObjData<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let p: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let p: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut obj = obj;
     let mut r#type = r#type;
     let mut val = val;

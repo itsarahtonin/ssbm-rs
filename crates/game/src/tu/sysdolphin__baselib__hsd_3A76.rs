@@ -861,11 +861,11 @@ pub fn HSD_SisLib_803A8134<'a>(
 
 pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
     let __frame = ctx.stack_frame(0x1c8);
-    let tex_obj: _GXTexObj<'a> = frame_at(ctx, &__frame, 0x0);
-    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x20);
-    let line_width_out: Val<'a, F32> = frame_at(ctx, &__frame, 0x50);
-    let line_height_out: Val<'a, F32> = frame_at(ctx, &__frame, 0x54);
-    let projection_m: Arr<'a, ArrV<'a, F32, 4>, 4> = frame_at(ctx, &__frame, 0x58);
+    let tex_obj: _GXTexObj<'a> = frame_at(ctx, &__frame, 0x90);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x60);
+    let line_width_out: Val<'a, F32> = frame_at(ctx, &__frame, 0x5c);
+    let line_height_out: Val<'a, F32> = frame_at(ctx, &__frame, 0x58);
+    let projection_m: Arr<'a, ArrV<'a, F32, 4>, 4> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut pass = pass;
     let mut text: HSD_Text<'a> = null(ctx);

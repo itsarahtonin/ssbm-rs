@@ -273,9 +273,9 @@ pub fn GXSetDispCopyDst<'a>(ctx: &'a Ctx, wd: u16, ht: u16) {
 
 pub fn GXSetTexCopyDst<'a>(ctx: &'a Ctx, wd: u16, ht: u16, fmt: i32, mipmap: u8) {
     let __frame = ctx.stack_frame(0x30);
-    let rowTiles: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
-    let colTiles: Val<'a, u32> = frame_at(ctx, &__frame, 0x4);
-    let cmpTiles: Val<'a, u32> = frame_at(ctx, &__frame, 0x8);
+    let rowTiles: Val<'a, u32> = frame_at(ctx, &__frame, 0x18);
+    let colTiles: Val<'a, u32> = frame_at(ctx, &__frame, 0x14);
+    let cmpTiles: Val<'a, u32> = frame_at(ctx, &__frame, 0x10);
     let mut wd = wd;
     let mut ht = ht;
     let mut fmt = fmt;

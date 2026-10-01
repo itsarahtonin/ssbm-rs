@@ -87,7 +87,7 @@ pub fn DBGEXIImm<'a>(ctx: &'a Ctx, data: Addr<'a>, byte_size: i32, write: u32) -
 
 pub fn DBGReadMailbox<'a>(ctx: &'a Ctx, param1: Addr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let local_c: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let local_c: Val<'a, u32> = frame_at(ctx, &__frame, 0x10);
     let mut param1 = param1;
     let mut error: i32 = 0_i32;
     if !(inl_DBGEXISelect_unfused(ctx, (4_i32 as u32)) != 0) {
@@ -116,8 +116,8 @@ pub fn DBGReadMailbox<'a>(ctx: &'a Ctx, param1: Addr<'a>) -> i32 {
 
 pub fn DBGRead<'a>(ctx: &'a Ctx, param1: u32, data: Val<'a, u32>, byte_size: i32) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let writeValue: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
-    let readValue: Val<'a, u32> = frame_at(ctx, &__frame, 0x4);
+    let writeValue: Val<'a, u32> = frame_at(ctx, &__frame, 0x1c);
+    let readValue: Val<'a, u32> = frame_at(ctx, &__frame, 0x18);
     let mut param1 = param1;
     let mut data = data;
     let mut byte_size = byte_size;
@@ -165,8 +165,8 @@ pub fn DBGRead<'a>(ctx: &'a Ctx, param1: u32, data: Val<'a, u32>, byte_size: i32
 
 pub fn DBGWrite<'a>(ctx: &'a Ctx, param1: u32, data: Val<'a, u32>, byte_size: i32) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let value: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
-    let nextWord: Val<'a, u32> = frame_at(ctx, &__frame, 0x4);
+    let value: Val<'a, u32> = frame_at(ctx, &__frame, 0x1c);
+    let nextWord: Val<'a, u32> = frame_at(ctx, &__frame, 0x18);
     let mut param1 = param1;
     let mut data = data;
     let mut byte_size = byte_size;
@@ -213,7 +213,7 @@ pub fn DBGWrite<'a>(ctx: &'a Ctx, param1: u32, data: Val<'a, u32>, byte_size: i3
 
 pub fn DBGReadStatus<'a>(ctx: &'a Ctx, param_1: Addr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let value: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let value: Val<'a, u32> = frame_at(ctx, &__frame, 0x10);
     let mut param_1 = param_1;
     let mut error: i32 = 0_i32;
     if !(inl_DBGEXISelect_unfused(ctx, (4_i32 as u32)) != 0) {
@@ -612,7 +612,11 @@ pub fn DBRead<'a>(ctx: &'a Ctx, param1: Addr<'a>, param2: u32) -> i32 {
 
 pub fn DBWrite<'a>(ctx: &'a Ctx, data: Addr<'a>, size: u32) -> i32 {
     let __frame = ctx.stack_frame(0x78);
-    let busyFlag: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let busyFlag: Val<'a, u32> = frame_at(ctx, &__frame, 0x4c);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
+    let __inl_4: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
     let mut data = data;
     let mut size = size;
     let mut value: u32 = 0;
@@ -620,7 +624,11 @@ pub fn DBWrite<'a>(ctx: &'a Ctx, data: Addr<'a>, size: u32) -> i32 {
     enabled = fns::OSDisableInterrupts(ctx);
     'l1: loop {
         'c2: {
-            let _ = inl_DBGReadStatus_unfused(ctx, Handle::cast::<Addr<'a>>(busyFlag));
+            let _ = inl_DBGReadStatus_unfused(
+                ctx,
+                Handle::cast::<Addr<'a>>(busyFlag),
+                Handle::addr(__inl),
+            );
         }
         if !((busyFlag.get() & (2_i32 as u32)) != 0) {
             break 'l1;
@@ -652,7 +660,11 @@ pub fn DBWrite<'a>(ctx: &'a Ctx, data: Addr<'a>, size: u32) -> i32 {
     }
     'l5: loop {
         'c6: {
-            let _ = inl_DBGReadStatus_unfused(ctx, Handle::cast::<Addr<'a>>(busyFlag));
+            let _ = inl_DBGReadStatus_unfused(
+                ctx,
+                Handle::cast::<Addr<'a>>(busyFlag),
+                Handle::addr(__inl_2),
+            );
         }
         if !((busyFlag.get() & (2_i32 as u32)) != 0) {
             break 'l5;
@@ -663,12 +675,17 @@ pub fn DBWrite<'a>(ctx: &'a Ctx, data: Addr<'a>, size: u32) -> i32 {
         (16_i32 as u32),
     )) | 0x1f000000_i32) as u32)
         | size);
-    'l7: while !(inl_DBGWriteMailbox_unfused(ctx, value) != 0) {
+    'l7: while !(inl_DBGWriteMailbox_unfused(ctx, value, Handle::addr(__inl_3)) != 0) {
         'c8: {}
     }
     'l9: loop {
         'c10: {
-            'l11: while !(inl_DBGReadStatus_unfused(ctx, Handle::cast::<Addr<'a>>(busyFlag)) != 0) {
+            'l11: while !(inl_DBGReadStatus_unfused(
+                ctx,
+                Handle::cast::<Addr<'a>>(busyFlag),
+                Handle::addr(__inl_4),
+            ) != 0)
+            {
                 'c12: {}
             }
         }
@@ -721,9 +738,8 @@ fn inl_DBGEXIInit_unfused<'a>(ctx: &'a Ctx) {
     (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006800_u32 as u32)), 10_i32)).set((0_i32 as u32));
 }
 
-fn inl_DBGReadStatus_unfused<'a>(ctx: &'a Ctx, param_1: Addr<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let value: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+fn inl_DBGReadStatus_unfused<'a>(ctx: &'a Ctx, param_1: Addr<'a>, __in_caller: u32) -> i32 {
+    let value: Val<'a, u32> = ptr(ctx, __in_caller + 0x0);
     let mut param_1 = param_1;
     let mut error: i32 = 0_i32;
     if !(inl_DBGEXISelect_unfused(ctx, (4_i32 as u32)) != 0) {
@@ -750,9 +766,8 @@ fn inl_DBGReadStatus_unfused<'a>(ctx: &'a Ctx, param_1: Addr<'a>) -> i32 {
     return (!(error != 0) as i32);
 }
 
-fn inl_DBGWriteMailbox_unfused<'a>(ctx: &'a Ctx, param_1: u32) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let value: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+fn inl_DBGWriteMailbox_unfused<'a>(ctx: &'a Ctx, param_1: u32, __in_caller: u32) -> i32 {
+    let value: Val<'a, u32> = ptr(ctx, __in_caller + 0x0);
     let mut param_1 = param_1;
     let mut error: i32 = 0_i32;
     if !(inl_DBGEXISelect_unfused(ctx, (4_i32 as u32)) != 0) {

@@ -66,10 +66,10 @@ pub fn mkVBillBoardMtx<'a>(
     dst: ArrV<'a, F32, 4>,
 ) {
     let __frame = ctx.stack_frame(0x70);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let ax: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let ay: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let az: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let ax: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let ay: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let az: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut jobj = jobj;
     let mut src = src;
     let mut dst = dst;
@@ -117,10 +117,10 @@ pub fn mkHBillBoardMtx<'a>(
 ) {
     let __frame = ctx.stack_frame(0x98);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let ax: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let ay: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let az: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let uy: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let ax: Vec<'a> = frame_at(ctx, &__frame, 0x44);
+    let ay: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let az: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let uy: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let mut jobj = jobj;
     let mut src = src;
     let mut dst = dst;
@@ -173,9 +173,9 @@ pub fn mkBillBoardMtx<'a>(
     dst: ArrV<'a, F32, 4>,
 ) {
     let __frame = ctx.stack_frame(0x70);
-    let ax: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let ay: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let ax: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let ay: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut jobj = jobj;
     let mut src = src;
     let mut dst = dst;
@@ -238,7 +238,8 @@ pub fn HSD_JObjMakePositionMtx<'a>(
     pmtx: ArrV<'a, F32, 4>,
 ) {
     let __frame = ctx.stack_frame(0xc0);
-    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x6c);
+    let __inl: ArrV<'a, u8, 96> = frame_at(ctx, &__frame, 0x0);
     let mut jobj = jobj;
     let mut vmtx = vmtx;
     let mut pmtx = pmtx;
@@ -280,7 +281,7 @@ pub fn HSD_JObjMakePositionMtx<'a>(
                 break 's1;
             }
             if __case <= 3 {
-                inl_mkRBillBoardMtx_unfused(ctx, jobj, mtx.get(0), pmtx);
+                inl_mkRBillBoardMtx_unfused(ctx, jobj, mtx.get(0), pmtx, Handle::addr(__inl));
                 break 's1;
             }
             if __case <= 4 {
@@ -389,7 +390,7 @@ pub fn HSD_JObjDispDObj<'a>(
     rendermode: u32,
 ) {
     let __frame = ctx.stack_frame(0x70);
-    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x1c);
     let mut jobj = jobj;
     let mut vmtx = vmtx;
     let mut trsp_mask = trsp_mask;
@@ -741,9 +742,9 @@ pub fn HSD_EraseRect<'a>(
     enable_depth: i32,
 ) {
     let __frame = ctx.stack_frame(0x98);
-    let texobj: _GXTexObj<'a> = frame_at(ctx, &__frame, 0x0);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x24);
+    let texobj: _GXTexObj<'a> = frame_at(ctx, &__frame, 0x34);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut top = top;
     let mut bottom = bottom;
     let mut left = left;
@@ -1068,10 +1069,10 @@ fn inl_mkRBillBoardMtx_unfused<'a>(
     jobj: HSD_JObj<'a>,
     src: ArrV<'a, F32, 4>,
     dst: ArrV<'a, F32, 4>,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x68);
-    let rot: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let scl: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
+    let rot: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x0);
+    let scl: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x30);
     let mut jobj = jobj;
     let mut src = src;
     let mut dst = dst;

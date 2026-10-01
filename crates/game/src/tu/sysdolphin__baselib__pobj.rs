@@ -139,8 +139,8 @@ pub fn loadEnvelopeDesc<'a>(
     edesc_p: Ptr<'a, HSD_EnvelopeDesc<'a>>,
 ) -> _HSD_SList<'a> {
     let __frame = ctx.stack_frame(0x38);
-    let list: Ptr<'a, _HSD_SList<'a>> = frame_at(ctx, &__frame, 0x0);
-    let envelope: Ptr<'a, HSD_Envelope<'a>> = frame_at(ctx, &__frame, 0x4);
+    let list: Ptr<'a, _HSD_SList<'a>> = frame_at(ctx, &__frame, 0x10);
+    let envelope: Ptr<'a, HSD_Envelope<'a>> = frame_at(ctx, &__frame, 0xc);
     let mut edesc_p = edesc_p;
     list.set(null::<_HSD_SList<'a>>(ctx));
     let mut list_p: Ptr<'a, _HSD_SList<'a>> = list;
@@ -1292,15 +1292,15 @@ pub fn interpretShapeAnimDisplayList<'a>(
 
 pub fn drawShapeAnim<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>) {
     let __frame = ctx.stack_frame(0x110);
-    let s0: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0x0);
-    let s1: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0xc);
-    let s0_2: ArrV<'a, F32, 9> = frame_at(ctx, &__frame, 0x18);
-    let s1_2: ArrV<'a, F32, 9> = frame_at(ctx, &__frame, 0x3c);
-    let s0_3: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0x60);
-    let s1_3: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0x6c);
-    let s: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0x78);
-    let s_2: ArrV<'a, F32, 9> = frame_at(ctx, &__frame, 0x84);
-    let s_3: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0xa8);
+    let s0: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0xb8);
+    let s1: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0xac);
+    let s0_2: ArrV<'a, F32, 9> = frame_at(ctx, &__frame, 0x88);
+    let s1_2: ArrV<'a, F32, 9> = frame_at(ctx, &__frame, 0x64);
+    let s0_3: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0x54);
+    let s1_3: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0x48);
+    let s: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0x3c);
+    let s_2: ArrV<'a, F32, 9> = frame_at(ctx, &__frame, 0x18);
+    let s_3: ArrV<'a, F32, 3> = frame_at(ctx, &__frame, 0xc);
     let mut pobj = pobj;
     let mut shape_set: HSD_ShapeSet<'a> = (pobj).u().shape_set();
     let mut blend: f64 = 0.0;
@@ -1921,9 +1921,9 @@ pub fn SetupRigidModelMtx<'a>(
     rendermode: u32,
 ) {
     let __frame = ctx.stack_frame(0x60);
-    let n: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let obj: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x30);
-    let mark: Val<'a, u32> = frame_at(ctx, &__frame, 0x34);
+    let n: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x18);
+    let obj: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x0);
+    let mark: Val<'a, u32> = frame_at(ctx, &__frame, 0x4);
     let mut pobj = pobj;
     let mut vmtx = vmtx;
     let mut pmtx = pmtx;
@@ -1970,12 +1970,12 @@ pub fn SetupSharedVtxModelMtx<'a>(
     rendermode: u32,
 ) {
     let __frame = ctx.stack_frame(0xd8);
-    let n0: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let n1: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
-    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x60);
-    let obj: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x90);
-    let mark: Val<'a, u32> = frame_at(ctx, &__frame, 0x94);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x98);
+    let n0: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x7c);
+    let n1: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x4c);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x1c);
+    let obj: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x0);
+    let mark: Val<'a, u32> = frame_at(ctx, &__frame, 0x4);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
     let mut pobj = pobj;
     let mut vmtx = vmtx;
     let mut pmtx = pmtx;
@@ -2054,9 +2054,9 @@ pub fn SetupEnvelopeModelMtx<'a>(
     rendermode: u32,
 ) {
     let __frame = ctx.stack_frame(0x100);
-    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let mtx_2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
-    let tmp: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x60);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x80);
+    let mtx_2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x50);
+    let tmp: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x20);
     let mut pobj = pobj;
     let mut vmtx = vmtx;
     let mut pmtx = pmtx;

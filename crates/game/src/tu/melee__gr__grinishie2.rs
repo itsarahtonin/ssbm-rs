@@ -163,7 +163,7 @@ pub fn grInishie2_801FCF24<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grInishie2_801FCF2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let time_remaining: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let time_remaining: Val<'a, u32> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = null(ctx);
     let mut var_r3: i32 = 0;
@@ -464,8 +464,8 @@ pub fn grInishie2_801FD4CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grInishie2_801FD4F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut spawn_side: i32 = 0;
     let mut gp: Ground<'a> = null(ctx);
@@ -540,8 +540,8 @@ pub fn grInishie2_801FD64C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grInishie2_801FD654<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -620,8 +620,8 @@ pub fn grInishie2_801FD7A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grInishie2_801FD824<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let spawn_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
+    let spawn_pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut spawn_side: i32 = 0;
     let mut gp: Ground<'a> = null(ctx);
@@ -840,10 +840,11 @@ pub fn grInishie2_801FDED0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grInishie2_801FDED8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let _ = fns::Ground_UpdateMapColl(ctx, gobj);
     fns::grInishie2_801FD9EC(ctx, gobj);
-    inl_grInishie2_801FDED8_inline_unfused(ctx, gobj);
+    inl_grInishie2_801FDED8_inline_unfused(ctx, gobj, Handle::addr(__inl));
 }
 
 pub fn grInishie2_801FDFB4<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
@@ -1073,9 +1074,8 @@ fn inl_checkBlastZone_unfused<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> i32 {
     return 0;
 }
 
-fn inl_grInishie2_801FDED8_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_grInishie2_801FDED8_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

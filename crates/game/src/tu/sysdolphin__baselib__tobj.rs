@@ -680,9 +680,9 @@ pub fn HSD_TexMapID2PTTexMtx<'a>(ctx: &'a Ctx, id: i32) -> u32 {
 pub fn MakeTextureMtx<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
     let __frame = ctx.stack_frame(0x98);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xc);
-    let trans: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0x48);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x28);
+    let trans: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0xc);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x58);
     let mut tobj = tobj;
     'l1: loop {
@@ -746,11 +746,11 @@ pub fn MakeTextureMtx<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
 
 pub fn TObjSetupMtx<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
     let __frame = ctx.stack_frame(0xc8);
-    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let ldir: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let half: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let mtx_2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x48);
-    let mtx_3: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x78);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x80);
+    let ldir: Vec<'a> = frame_at(ctx, &__frame, 0x74);
+    let half: Vec<'a> = frame_at(ctx, &__frame, 0x68);
+    let mtx_2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x38);
+    let mtx_3: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x8);
     let mut tobj = tobj;
     let mut i: i32 = 0;
     if ((tobj).flags() & ((15_i32) as u32)) == (4_i32 as u32) {
@@ -994,10 +994,10 @@ pub fn MakeColorGenTExp<'a>(
     repeat: i32,
 ) {
     let __frame = ctx.stack_frame(0xc0);
-    let sel: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x4);
-    let exp: ArrP<'a, HSD_TExp<'a>, 4> = frame_at(ctx, &__frame, 0x14);
-    let sel_2: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x24);
-    let exp_2: ArrP<'a, HSD_TExp<'a>, 4> = frame_at(ctx, &__frame, 0x34);
+    let sel: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x50);
+    let exp: ArrP<'a, HSD_TExp<'a>, 4> = frame_at(ctx, &__frame, 0x40);
+    let sel_2: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x30);
+    let exp_2: ArrP<'a, HSD_TExp<'a>, 4> = frame_at(ctx, &__frame, 0x20);
     let mut lightmap = lightmap;
     let mut tobj = tobj;
     let mut c = c;
@@ -1631,8 +1631,8 @@ pub fn TObjMakeTExp<'a>(
     list: Ptr<'a, HSD_TExp<'a>>,
 ) {
     let __frame = ctx.stack_frame(0x50);
-    let c_src: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0x4);
-    let a_src: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0x8);
+    let c_src: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0x24);
+    let a_src: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0x20);
     let mut tobj = tobj;
     let mut lightmap = lightmap;
     let mut lightmap_done = lightmap_done;
@@ -2212,9 +2212,9 @@ pub fn HSD_TObjAssignResources<'a>(ctx: &'a Ctx, tobj_top: HSD_TObj<'a>) -> i32 
 
 pub fn HSD_TObjSetup<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
     let __frame = ctx.stack_frame(0x90);
-    let tlutobj: _GXTlutObj<'a> = frame_at(ctx, &__frame, 0x4);
-    let texobj: _GXTexObj<'a> = frame_at(ctx, &__frame, 0x10);
-    let tluts: ArrP<'a, _HSD_Tlut<'a>, 8> = frame_at(ctx, &__frame, 0x30);
+    let tlutobj: _GXTlutObj<'a> = frame_at(ctx, &__frame, 0x50);
+    let texobj: _GXTexObj<'a> = frame_at(ctx, &__frame, 0x30);
+    let tluts: ArrP<'a, _HSD_Tlut<'a>, 8> = frame_at(ctx, &__frame, 0x10);
     let mut tobj = tobj;
     let mut num: i32 = 0;
     let mut nb_tluts: i32 = 0_i32;

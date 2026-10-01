@@ -1188,8 +1188,8 @@ pub fn ftCo_8009E714<'a>(
     arg7: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x68);
-    let out_vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let in_vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let out_vec: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let in_vec: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let mut gobj = gobj;
     let mut bone_id = bone_id;
     let mut arg2 = arg2;

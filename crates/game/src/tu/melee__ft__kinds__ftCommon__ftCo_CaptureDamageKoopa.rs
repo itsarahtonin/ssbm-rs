@@ -52,8 +52,9 @@ pub fn ftCo_800BC9C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_CaptureDamageKoopa_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
-    inl_inlineA0_unfused(ctx, gobj, fnptr(ctx, 0x800bcc20));
+    inl_inlineA0_unfused(ctx, gobj, fnptr(ctx, 0x800bcc20), Handle::addr(__inl));
 }
 
 pub fn ftCo_CaptureDamageKoopa_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -94,8 +95,9 @@ pub fn ftCo_800BCAF4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_CaptureDamageKoopaAir_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
-    inl_inlineA0_unfused_2(ctx, gobj, fnptr(ctx, 0x800bcd00));
+    inl_inlineA0_unfused_2(ctx, gobj, fnptr(ctx, 0x800bcd00), Handle::addr(__inl));
 }
 
 pub fn ftCo_CaptureDamageKoopaAir_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -115,9 +117,8 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
-fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut cb = cb;
     ctx.fill(Handle::addr(unused), 0, 0x8);
@@ -138,9 +139,8 @@ fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
     }
 }
 
-fn inl_inlineA0_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_inlineA0_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut cb = cb;
     ctx.fill(Handle::addr(unused), 0, 0x8);

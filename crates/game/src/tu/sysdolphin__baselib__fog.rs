@@ -28,10 +28,10 @@ use crate::support::*;
 
 pub fn HSD_FogSet<'a>(ctx: &'a Ctx, fog: HSD_Fog<'a>) {
     let __frame = ctx.stack_frame(0xc8);
-    let tbl: _GXFogAdjTable<'a> = frame_at(ctx, &__frame, 0x0);
-    let v: ArrV<'a, F32, 6> = frame_at(ctx, &__frame, 0x14);
-    let proj: HSD_FogSet_proj<'a> = frame_at(ctx, &__frame, 0x2c);
-    let mtx: Arr<'a, ArrV<'a, F32, 4>, 4> = frame_at(ctx, &__frame, 0x48);
+    let tbl: _GXFogAdjTable<'a> = frame_at(ctx, &__frame, 0x80);
+    let v: ArrV<'a, F32, 6> = frame_at(ctx, &__frame, 0x68);
+    let proj: HSD_FogSet_proj<'a> = frame_at(ctx, &__frame, 0x4c);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 4> = frame_at(ctx, &__frame, 0xc);
     let mut fog = fog;
     let mut cobj: HSD_CObj<'a> = null(ctx);
     let mut range: i32 = 0;
@@ -153,7 +153,7 @@ pub fn HSD_FogLoadDesc<'a>(ctx: &'a Ctx, desc: HSD_FogDesc<'a>) -> HSD_Fog<'a> {
 
 pub fn HSD_FogInit<'a>(ctx: &'a Ctx, fog: HSD_Fog<'a>, desc: HSD_FogDesc<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let v: ArrV<'a, F32, 6> = frame_at(ctx, &__frame, 0x0);
+    let v: ArrV<'a, F32, 6> = frame_at(ctx, &__frame, 0x8);
     let mut fog = fog;
     let mut desc = desc;
     if !Handle::is_null(fog) {
@@ -195,7 +195,7 @@ pub fn HSD_FogAdjLoadDesc<'a>(ctx: &'a Ctx, desc: HSD_FogAdjDesc<'a>) -> HSD_Fog
 
 pub fn HSD_FogAdjInit<'a>(ctx: &'a Ctx, adj: HSD_FogAdj<'a>, desc: HSD_FogAdjDesc<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let v: ArrV<'a, F32, 6> = frame_at(ctx, &__frame, 0x0);
+    let v: ArrV<'a, F32, 6> = frame_at(ctx, &__frame, 0x8);
     let mut adj = adj;
     let mut desc = desc;
     if !Handle::is_null(adj) {

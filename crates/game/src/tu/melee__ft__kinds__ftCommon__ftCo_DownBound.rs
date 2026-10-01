@@ -80,11 +80,11 @@ pub fn ftCo_80097630<'a>(ctx: &'a Ctx, fp: Fighter<'a>, sfx_ids: Val<'a, i32>, t
 pub fn ftCo_800976A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
     let dist: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let sfx_ids: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x4);
-    let arg2: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
-    let arg3: Val<'a, i32> = frame_at(ctx, &__frame, 0x18);
+    let sfx_ids: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x30);
+    let arg2: Val<'a, i32> = frame_at(ctx, &__frame, 0x2c);
+    let arg3: Val<'a, i32> = frame_at(ctx, &__frame, 0x28);
     let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let vec0: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let vec0: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut common_sfx_ids: Val<'a, i32> = fns::ftCo_DownBound_SfxIds(ctx).at(0);
@@ -143,8 +143,8 @@ pub fn ftCo_800976A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800978D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let param: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x4);
+    let param: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     inl_ftCo_800978D4_inline_unfused(ctx, gobj, param);
     'l1: loop {
@@ -157,8 +157,8 @@ pub fn ftCo_800978D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_8009794C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let param: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x4);
+    let param: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     if ((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32) {
@@ -203,9 +203,9 @@ pub fn ftCo_8009794C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_80097AF4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let param_e: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let param_a: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 50> = frame_at(ctx, &__frame, 0x8);
+    let param_e: Val<'a, F32> = frame_at(ctx, &__frame, 0x40);
+    let param_a: Val<'a, F32> = frame_at(ctx, &__frame, 0x3c);
+    let unused: ArrV<'a, u8, 50> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: Addr<'a> = null(ctx);
     let mut rot0: f64 = 0.0;

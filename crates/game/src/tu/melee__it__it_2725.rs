@@ -491,7 +491,7 @@ pub fn it_80272DE4<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: f64) {
 
 pub fn it_80272F7C<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: f64) {
     let __frame = ctx.stack_frame(0x28);
-    let temp: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let temp: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut jobj = jobj;
     let mut scale = scale;
     temp.set_x({
@@ -856,10 +856,10 @@ pub fn it_80273670<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: i32, arg8: f
 
 pub fn it_80273748<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, pos: Vec<'a>, vel: Vec<'a>) {
     let __frame = ctx.stack_frame(0x90);
-    let sp54: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp48: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x24);
+    let sp54: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let sp48: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut pos = pos;
     let mut vel = vel;
@@ -991,8 +991,8 @@ pub fn it_80273748<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, pos: Vec<'a>, vel:
 pub fn it_80273B50<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, vel: Vec<'a>) {
     let __frame = ctx.stack_frame(0xa0);
     let stack_top: ArrV<'a, i32, 9> = frame_at(ctx, &__frame, 0x0);
-    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
     let mut item_gobj = item_gobj;
     let mut vel = vel;
     let mut item: Item<'a> = null(ctx);
@@ -1311,7 +1311,7 @@ pub fn it_802742F4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, gobj: HSD_GObj<'a>
 
 pub fn it_80274484<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, jobj: HSD_JObj<'a>, scale: f64) {
     let __frame = ctx.stack_frame(0x38);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut item_gobj = item_gobj;
     let mut jobj = jobj;
     let mut scale = scale;
@@ -1336,8 +1336,8 @@ pub fn it_80274574<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn it_80274594<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
@@ -1599,9 +1599,9 @@ pub fn it_80274CAC<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn it_80274D04<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: lb_80014638_arg1_t<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     'l1: loop {

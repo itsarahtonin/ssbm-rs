@@ -812,7 +812,7 @@ fn asm_AIInit(ctx: &Ctx) {
 
 pub fn __AISHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x2e0);
-    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x8);
     let mut interrupt = interrupt;
     let mut context = context;
     (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006c00_u32 as u32)), 0_i32)).set(
@@ -836,7 +836,7 @@ pub fn __AISHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) {
 
 pub fn __AIDHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x2e0);
-    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x8);
     let mut interrupt = interrupt;
     let mut context = context;
     let mut tmp: u16 = 0;

@@ -28,8 +28,8 @@ use crate::support::*;
 
 pub fn plBonusLib_8003D514<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let spC: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut temp_r31: HSD_GObj<'a> = fns::Player_GetEntity(ctx, arg0);
     let mut temp_r30: HSD_GObj<'a> = null(ctx);
@@ -688,7 +688,7 @@ pub fn pl_8003E420<'a>(ctx: &'a Ctx, arg0: i32) -> u32 {
 
 pub fn pl_8003E4A4<'a>(ctx: &'a Ctx, slot: i32, arg1: i32, arg2: Addr<'a>, count: i32) {
     let __frame = ctx.stack_frame(0xd8);
-    let seen: ArrV<'a, u32, 39> = frame_at(ctx, &__frame, 0x0);
+    let seen: ArrV<'a, u32, 39> = frame_at(ctx, &__frame, 0x18);
     let mut slot = slot;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1553,8 +1553,8 @@ pub fn fn_8003F53C<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
 
 pub fn fn_8003F654<'a>(ctx: &'a Ctx, slot: i32, index: i32, pos: Vec<'a>, prevPos: Vec<'a>) {
     let __frame = ctx.stack_frame(0xa8);
-    let other_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let cam_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let other_pos: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let cam_pos: Vec<'a> = frame_at(ctx, &__frame, 0x30);
     let mut slot = slot;
     let mut index = index;
     let mut pos = pos;

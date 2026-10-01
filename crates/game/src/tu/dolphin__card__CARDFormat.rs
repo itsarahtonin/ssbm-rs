@@ -118,7 +118,7 @@ pub fn __CARDFormatRegionAsync<'a>(
     callback: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x0);
+    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x10);
     let mut chan = chan;
     let mut encode = encode;
     let mut callback = callback;

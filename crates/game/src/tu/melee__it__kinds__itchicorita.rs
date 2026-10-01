@@ -243,7 +243,7 @@ pub fn itChicorita_UnkMotion2_Coll<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) ->
 
 pub fn it_802C9B20<'a>(ctx: &'a Ctx, chicorita_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x8);
     let mut chicorita_gobj = chicorita_gobj;
     let mut chicorita: Item<'a> = null(ctx);
     let mut attr: itChicoritaLeafAttr<'a> = null(ctx);

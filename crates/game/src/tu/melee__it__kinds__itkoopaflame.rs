@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn itKoopaFlame_Update_Direction<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flags: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut flags = flags;
     let mut it: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -168,8 +168,8 @@ pub fn itKoopaFlame_Spawn<'a>(
     kind: i32,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0xd0);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4c);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut parent = parent;
     let mut pos = pos;
     let mut facing_dir = facing_dir;
@@ -304,9 +304,9 @@ pub fn itKoopaFlame_Spawn<'a>(
 
 pub fn itKoopaFlame_Setup<'a>(ctx: &'a Ctx, gobj_i: HSD_GObj<'a>, gobj_f: HSD_GObj<'a>, unk: i32) {
     let __frame = ctx.stack_frame(0x1e8);
-    let pad_stack: ArrV<'a, i8, 412> = frame_at(ctx, &__frame, 0x0);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x19c);
-    let pad_stack_2: ArrV<'a, i8, 20> = frame_at(ctx, &__frame, 0x1a8);
+    let pad_stack: ArrV<'a, i8, 412> = frame_at(ctx, &__frame, 0x30);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let pad_stack_2: ArrV<'a, i8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj_i = gobj_i;
     let mut gobj_f = gobj_f;
     let mut unk = unk;
@@ -326,7 +326,7 @@ pub fn itKoopaFlame_Setup<'a>(ctx: &'a Ctx, gobj_i: HSD_GObj<'a>, gobj_f: HSD_GO
 
 pub fn itKoopaFlame_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut it: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itKoopaFlame_Attributes<'a> = Handle::cast::<itKoopaFlame_Attributes<'a>>(

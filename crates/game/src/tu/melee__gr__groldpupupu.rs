@@ -330,10 +330,10 @@ pub fn grOldPupupu_80210D08<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grOldPupupu_80210D10<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x90);
-    let cam_left: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let cam_right: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
-    let cam_center: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let cam_left: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
+    let cam_right: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
+    let cam_center: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut gp: Ground<'a> = null(ctx);
@@ -591,7 +591,7 @@ pub fn fn_802112F4<'a>(
     vel: Vec<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut fighter_gobj = fighter_gobj;
     let mut vel = vel;
@@ -645,7 +645,7 @@ pub fn fn_802112F4<'a>(
 
 pub fn grOldPupupu_802113E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x100);
-    let stack: grOldPupupu_802113E0_stack<'a> = frame_at(ctx, &__frame, 0x0);
+    let stack: grOldPupupu_802113E0_stack<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
     if (Handle::addr(statics::melee__gr__groldpupupu::grOp_804D6A9C(ctx).get()) as i32) == 0_i32 {
@@ -955,7 +955,7 @@ pub fn grOldPupupu_80211CA0<'a>(ctx: &'a Ctx, gobj: i32) -> DynamicsDesc<'a> {
 
 pub fn grOldPupupu_80211CA8<'a>(ctx: &'a Ctx, a: Vec<'a>, arg: i32, joint: HSD_JObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let b: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let b: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut a = a;
     let mut arg = arg;
     let mut joint = joint;

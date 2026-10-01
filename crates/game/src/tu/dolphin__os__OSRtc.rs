@@ -47,7 +47,7 @@ pub fn WriteSramCallback<'a>(ctx: &'a Ctx) {
 
 pub fn WriteSram<'a>(ctx: &'a Ctx, buffer: Addr<'a>, offset: u32, size: u32) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0xc);
     let mut buffer = buffer;
     let mut offset = offset;
     let mut size = size;
@@ -80,6 +80,7 @@ pub fn WriteSram<'a>(ctx: &'a Ctx, buffer: Addr<'a>, offset: u32, size: u32) -> 
 
 pub fn __OSInitSram<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     statics::dolphin__os__OSRtc::Scb(ctx).set_locked({
         let __t1 = 0_i32;
         statics::dolphin__os__OSRtc::Scb(ctx).set_enabled(__t1);
@@ -88,6 +89,7 @@ pub fn __OSInitSram<'a>(ctx: &'a Ctx) {
     statics::dolphin__os__OSRtc::Scb(ctx).set_sync(inl_ReadSram_unfused(
         ctx,
         Handle::cast::<Addr<'a>>(statics::dolphin__os__OSRtc::Scb(ctx)),
+        Handle::addr(__inl),
     ));
     statics::dolphin__os__OSRtc::Scb(ctx).set_offset((64_i32 as u32));
 }
@@ -104,6 +106,7 @@ pub fn __OSLockSramEx<'a>(ctx: &'a Ctx) -> OSSramEx<'a> {
 
 pub fn UnlockSram<'a>(ctx: &'a Ctx, commit: i32, offset: u32) -> i32 {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut commit = commit;
     let mut offset = offset;
     let mut p: Val<'a, u16> = null(ctx);
@@ -162,6 +165,7 @@ pub fn UnlockSram<'a>(ctx: &'a Ctx, commit: i32, offset: u32) -> i32 {
             ),
             statics::dolphin__os__OSRtc::Scb(ctx).offset(),
             (64_i32 as u32).wrapping_sub(statics::dolphin__os__OSRtc::Scb(ctx).offset()),
+            Handle::addr(__inl),
         ));
         if statics::dolphin__os__OSRtc::Scb(ctx).sync() != 0_i32 {
             statics::dolphin__os__OSRtc::Scb(ctx).set_offset((64_i32 as u32));
@@ -381,9 +385,8 @@ pub fn OSSetWirelessID<'a>(ctx: &'a Ctx, chan: i32, id: u16) {
     let _ = inl___OSUnlockSramEx_unfused(ctx, 0_i32);
 }
 
-fn inl_ReadSram_unfused<'a>(ctx: &'a Ctx, buffer: Addr<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+fn inl_ReadSram_unfused<'a>(ctx: &'a Ctx, buffer: Addr<'a>, __in_caller: u32) -> i32 {
+    let cmd: Val<'a, u32> = ptr(ctx, __in_caller + 0x0);
     let mut buffer = buffer;
     let mut err: i32 = 0;
     fns::DCInvalidateRange(ctx, buffer, (64_i32 as u32));
@@ -438,9 +441,14 @@ fn inl_LockSram_unfused<'a>(ctx: &'a Ctx, offset: u32) -> Addr<'a> {
     );
 }
 
-fn inl_WriteSram_unfused<'a>(ctx: &'a Ctx, buffer: Addr<'a>, offset: u32, size: u32) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let cmd: Val<'a, u32> = frame_at(ctx, &__frame, 0x0);
+fn inl_WriteSram_unfused<'a>(
+    ctx: &'a Ctx,
+    buffer: Addr<'a>,
+    offset: u32,
+    size: u32,
+    __in_caller: u32,
+) -> i32 {
+    let cmd: Val<'a, u32> = ptr(ctx, __in_caller + 0x0);
     let mut buffer = buffer;
     let mut offset = offset;
     let mut size = size;

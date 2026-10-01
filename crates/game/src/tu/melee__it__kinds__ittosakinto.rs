@@ -52,7 +52,7 @@ pub fn it_802C8FC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ref_gobj: HSD_GObj<'a>)
 
 pub fn it_802C8FE4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let scale_vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale_vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut it: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut scale: f64 = 0.0;
@@ -137,6 +137,8 @@ pub fn itTosakinto_UnkMotion2_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itTosakinto_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut it: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut temp: i32 = 0;
@@ -155,7 +157,7 @@ pub fn itTosakinto_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
                     .x60_msid()
                     .wrapping_add(1_i32),
             );
-            inl_it_802C90E8_unfused(ctx, gobj);
+            inl_it_802C90E8_unfused(ctx, gobj, Handle::addr(__inl));
         } else {
             (it).xDD4_itemVar().tosakinto().set_x60_msid(
                 (it).xDD4_itemVar()
@@ -172,7 +174,7 @@ pub fn itTosakinto_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
                 .x60_msid()
                 .wrapping_add(1_i32),
         );
-        inl_it_802C90E8_unfused(ctx, gobj);
+        inl_it_802C90E8_unfused(ctx, gobj, Handle::addr(__inl_2));
     }
     return 0_i32;
 }
@@ -347,9 +349,8 @@ fn inl_Item_TickLifetime_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) -> i32 {
     return 0_i32;
 }
 
-fn inl_it_802C90E8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_it_802C90E8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut it: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itTosakinto_Attrs<'a> =

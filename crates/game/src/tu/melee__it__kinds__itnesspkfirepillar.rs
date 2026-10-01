@@ -34,8 +34,8 @@ pub fn itNesspkfirepillar_802AA494<'a>(
     facing_dir: f64,
 ) {
     let __frame = ctx.stack_frame(0x80);
-    let spawnitem: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4c);
+    let spawnitem: SpawnItem<'a> = frame_at(ctx, &__frame, 0x20);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut parent1_gobj = parent1_gobj;
     let mut parent2_gobj = parent2_gobj;
     let mut offset = offset;
@@ -77,6 +77,7 @@ pub fn itNesspkfirepillar_802AA55C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn itNesspkfirepillar_UnkMotion0_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> = null(ctx);
     let mut scale: f64 = 0.0;
@@ -93,7 +94,12 @@ pub fn itNesspkfirepillar_UnkMotion0_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<
         ),
     );
     scale = fp::fmuls(scale, ((item).xCC_item_attr()).x60_scale());
-    return inl_itNesspkfirepillar_INLINE_Anim_SetScale_unfused(ctx, item_gobj, scale);
+    return inl_itNesspkfirepillar_INLINE_Anim_SetScale_unfused(
+        ctx,
+        item_gobj,
+        scale,
+        Handle::addr(__inl),
+    );
 }
 
 pub fn itNesspkfirepillar_UnkMotion0_Phys<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
@@ -268,9 +274,9 @@ fn inl_itNesspkfirepillar_INLINE_Anim_SetScale_unfused<'a>(
     ctx: &'a Ctx,
     item_gobj: HSD_GObj<'a>,
     scale: f64,
+    __in_caller: u32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x18);
-    let scaling: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scaling: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut item_gobj = item_gobj;
     let mut scale = scale;
     let mut jobj: HSD_JObj<'a> =

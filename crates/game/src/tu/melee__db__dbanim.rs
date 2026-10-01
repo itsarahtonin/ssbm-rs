@@ -28,10 +28,10 @@ use crate::support::*;
 
 pub fn fn_SetupAnimationInfo<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let bg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let fg: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let bg: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let fg: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
     let mut temp_r3: HSD_GObj<'a> = null(ctx);
     temp_r3 = fns::DevText_GetGObj(ctx);
     statics::melee__db__dbanim::db_804D6B48(ctx).set_ShowFighterCollisionBubbles((1_i32 as u32));

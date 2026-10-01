@@ -172,11 +172,11 @@ pub fn mnNameNew_8023B314<'a>(ctx: &'a Ctx, arg0: NameNewEntry<'a>, arg1: i32) {
 
 pub fn mnNameNew_KeySetup<'a>(ctx: &'a Ctx, arg0: NameNewEntry<'a>, arg1: u8) -> HSD_Text<'a> {
     let __frame = ctx.stack_frame(0xa8);
-    let text_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let key_color: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let selected_key_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
+    let text_pos: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let key_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x44);
+    let selected_key_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x40);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x3c);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut layout: MnNameNewDataLayout<'a> = null(ctx);
@@ -788,8 +788,8 @@ pub fn mnNameNew_GlyphVariantInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn mnNameNew_MainInput<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let unused: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0x0);
-    let name_buffer: ArrV<'a, i8, 16> = frame_at(ctx, &__frame, 0xc);
-    let unused_2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x1c);
+    let name_buffer: ArrV<'a, i8, 16> = frame_at(ctx, &__frame, 0x1c);
+    let unused_2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut space_lead: i8 = 0;
     let mut data: NameNewEntry<'a> = null(ctx);
@@ -1151,9 +1151,9 @@ pub fn mnNameNew_MainInput<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn mnNameNew_8023CE4C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x60);
-    let text_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let name_char_color: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let name_char_color_ptr: ArrP<'a, _GXColor<'a>, 1> = frame_at(ctx, &__frame, 0x10);
+    let text_pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let name_char_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
+    let name_char_color_ptr: ArrP<'a, _GXColor<'a>, 1> = frame_at(ctx, &__frame, 0x0);
     let mut data: NameNewEntry<'a> = null(ctx);
     let mut jobj_a: HSD_JObj<'a> = null(ctx);
     let mut jobj_b: HSD_JObj<'a> = null(ctx);
@@ -1227,9 +1227,9 @@ pub fn mnNameNew_8023CE4C<'a>(ctx: &'a Ctx) {
 
 pub fn fn_8023CFC8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let key_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let selected_key_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x8);
+    let key_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
+    let selected_key_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut root: HSD_JObj<'a> = null(ctx);
@@ -1330,8 +1330,8 @@ pub fn mnNameNew_8023D130<'a>(
     arg3: i32,
 ) -> HSD_Text<'a> {
     let __frame = ctx.stack_frame(0xa0);
-    let text_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let glyph_color: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let text_pos: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let glyph_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1440,9 +1440,9 @@ pub fn mnNameNew_GlyphVariantSetup<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x98);
     let variant_count: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let position: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let created: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x1c);
+    let position: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let created: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1717,9 +1717,9 @@ pub fn fn_8023DAEC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 pub fn fn_8023DBE8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let unused: ArrV<'a, i8, 4> = frame_at(ctx, &__frame, 0x0);
-    let normal_key_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let highlighted_key_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused_2: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0xc);
+    let normal_key_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
+    let highlighted_key_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let unused_2: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut flow: _MenuFlow<'a> = null(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);

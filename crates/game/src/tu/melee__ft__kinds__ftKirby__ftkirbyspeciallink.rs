@@ -3061,9 +3061,9 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
 
 pub fn ftKb_LkSpecialNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let c: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let b: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let a: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let c: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let b: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let a: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -3903,9 +3903,9 @@ fn asm_ftKb_LkSpecialAirNStart_Anim(ctx: &Ctx) {
 
 pub fn ftKb_LkSpecialAirNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let c: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let b: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let a: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let c: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let b: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let a: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

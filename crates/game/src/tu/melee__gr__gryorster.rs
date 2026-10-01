@@ -151,7 +151,7 @@ pub fn grYorster_802022A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grYorster_802022A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let joints: ArrV<'a, i32, 9> = frame_at(ctx, &__frame, 0x0);
+    let joints: ArrV<'a, i32, 9> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = inl_grYorster_GetGround_unfused(ctx, gobj);
     joints.at(0).set(10_i32);
@@ -292,7 +292,7 @@ pub fn grYorster_802024F0<'a>(
 ) {
     let __frame = ctx.stack_frame(0x58);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut user_data = user_data;
     let mut joint_id = joint_id;
     let mut coll = coll;
@@ -373,8 +373,8 @@ pub fn grYorster_802024F0<'a>(
 pub fn grYorster_8020266C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x98);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused_2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x14);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused_2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = null(ctx);
     let mut gp2: Ground<'a> = null(ctx);

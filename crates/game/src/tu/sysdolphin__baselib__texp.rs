@@ -491,7 +491,7 @@ pub fn HSD_TExpColorInSub<'a>(
     idx: i32,
 ) {
     let __frame = ctx.stack_frame(0x48);
-    let prev: _HSD_TEArg<'a> = frame_at(ctx, &__frame, 0x0);
+    let prev: _HSD_TEArg<'a> = frame_at(ctx, &__frame, 0x10);
     let mut tev = tev;
     let mut sel = sel;
     let mut exp = exp;
@@ -1028,7 +1028,7 @@ pub fn HSD_TExpAlphaInSub<'a>(
     idx: i32,
 ) {
     let __frame = ctx.stack_frame(0x40);
-    let prev: _HSD_TEArg<'a> = frame_at(ctx, &__frame, 0x0);
+    let prev: _HSD_TEArg<'a> = frame_at(ctx, &__frame, 0x10);
     let mut tev = tev;
     let mut sel = sel;
     let mut exp = exp;
@@ -2300,8 +2300,8 @@ pub fn TExp2TevDesc<'a>(
 
 pub fn HSD_TExpSetReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>) {
     let __frame = ctx.stack_frame(0x80);
-    let reg: Arr<'a, _GXColor<'a>, 8> = frame_at(ctx, &__frame, 0x0);
-    let col: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let reg: Arr<'a, _GXColor<'a>, 8> = frame_at(ctx, &__frame, 0x10);
+    let col: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
     let mut texp = texp;
     let mut i: i32 = 0;
     let mut changed: u32 = 0;
@@ -2618,11 +2618,11 @@ pub fn HSD_TExpCompile<'a>(
     texp_list: Ptr<'a, HSD_TExp<'a>>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x5e8);
-    let res: HSD_TExpRes<'a> = frame_at(ctx, &__frame, 0x0);
-    let order: ArrP<'a, HSD_TExp<'a>, 32> = frame_at(ctx, &__frame, 0x2c);
-    let list: Arr<'a, HSD_TExpDag<'a>, 32> = frame_at(ctx, &__frame, 0xac);
-    let init_cprev: Val<'a, i32> = frame_at(ctx, &__frame, 0x5ac);
-    let init_aprev: Val<'a, i32> = frame_at(ctx, &__frame, 0x5b0);
+    let res: HSD_TExpRes<'a> = frame_at(ctx, &__frame, 0x594);
+    let order: ArrP<'a, HSD_TExp<'a>, 32> = frame_at(ctx, &__frame, 0x514);
+    let list: Arr<'a, HSD_TExpDag<'a>, 32> = frame_at(ctx, &__frame, 0x14);
+    let init_cprev: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
+    let init_aprev: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
     let mut texp = texp;
     let mut tevdesc = tevdesc;
     let mut texp_list = texp_list;

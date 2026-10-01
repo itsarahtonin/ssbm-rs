@@ -143,7 +143,7 @@ pub fn grTIceClimber_80221208<'a>(
     u4: f64,
 ) {
     let __frame = ctx.stack_frame(0x38);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut u1 = u1;
     let mut u2 = u2;

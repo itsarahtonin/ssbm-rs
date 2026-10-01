@@ -27,10 +27,10 @@ use ssbm_types::tu as statics;
 use crate::support::*;
 
 pub fn ft_80081938<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x78);
+    let __frame = ctx.stack_frame(0x88);
     let unused1: ArrV<'a, u8, 36> = frame_at(ctx, &__frame, 0x0);
-    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused2: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x30);
+    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let unused2: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x48);
     let mut gobj = gobj;
     let mut lx: f64 = 0.0;
     let mut rx: f64 = 0.0;
@@ -50,10 +50,10 @@ pub fn ft_80081938<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 }
 
 pub fn ft_800819A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x78);
+    let __frame = ctx.stack_frame(0x88);
     let unused1: ArrV<'a, u8, 36> = frame_at(ctx, &__frame, 0x0);
-    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused2: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x30);
+    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let unused2: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x48);
     let mut gobj = gobj;
     let mut lx: f64 = 0.0;
     let mut rx: f64 = 0.0;
@@ -74,8 +74,8 @@ pub fn ft_800819A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ft_80081A00<'a>(ctx: &'a Ctx, fp_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0xb0);
     let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
-    let sp64: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused_2: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x2c);
+    let sp64: Vec<'a> = frame_at(ctx, &__frame, 0x5c);
+    let unused_2: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x20);
     let mut fp_gobj = fp_gobj;
     let mut lx: f64 = 0.0;
     let mut rx: f64 = 0.0;

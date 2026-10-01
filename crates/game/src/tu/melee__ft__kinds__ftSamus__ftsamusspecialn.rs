@@ -66,9 +66,9 @@ pub fn ftSs_SpecialN_80129258<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftSs_SpecialN_801292E4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
+    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut result: HSD_GObj<'a> = null(ctx);
     let mut fp: Fighter<'a> = inl_getFighter_unfused(ctx, gobj);
@@ -106,8 +106,10 @@ pub fn ftSs_SpecialN_801292E4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn ftSs_SpecialN_801293BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x80);
     let unused0: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
-    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused1: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x20);
+    let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let unused1: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x14);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x30);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x48);
     let mut gobj = gobj;
     let mut samus_attr: _ftSamusAttributes<'a> = null(ctx);
     let mut held_item: HSD_GObj<'a> = null(ctx);
@@ -145,10 +147,10 @@ pub fn ftSs_SpecialN_801293BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         if ((fp).motion_id() == 0x15c_i32)
             || (((fp).ground_or_air() as u32) == ((enums::GA_Air as i32) as u32))
         {
-            inl_ftSamus_801293BC_inner_unfused(ctx, gobj);
+            inl_ftSamus_801293BC_inner_unfused(ctx, gobj, Handle::addr(__inl));
         }
         (fp).u().ss().set_x2230((0_u32 as i32));
-        inl_ftSs_SpecialN_801291F0_unfused(ctx, gobj);
+        inl_ftSs_SpecialN_801291F0_unfused(ctx, gobj, Handle::addr(__inl_2));
         let _ = fns::efSync_Spawn(
             ctx,
             0x486_i32,
@@ -563,8 +565,8 @@ pub fn ftSs_SpecialS_8012A068<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn ftSs_SpecialS_8012A074<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let position: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let position: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut samus_attr: _ftSamusAttributes<'a> =
@@ -671,9 +673,8 @@ fn inl_getFighterPlus_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Fighter<'
     return fp;
 }
 
-fn inl_ftSamus_801293BC_inner_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftSamus_801293BC_inner_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -688,9 +689,8 @@ fn inl_ftSamus_801293BC_inner_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     );
 }
 
-fn inl_ftSs_SpecialN_801291F0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftSs_SpecialN_801291F0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}

@@ -143,10 +143,10 @@ pub fn VerifyID<'a>(ctx: &'a Ctx, card: CARDControl<'a>) -> i32 {
 
 pub fn VerifyDir<'a>(ctx: &'a Ctx, card: CARDControl<'a>, outCurrent: Val<'a, i32>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let dir: ArrP<'a, CARDDir<'a>, 2> = frame_at(ctx, &__frame, 0x0);
-    let check: ArrP<'a, CARDDirCheck<'a>, 2> = frame_at(ctx, &__frame, 0x8);
-    let checkSum: Val<'a, u16> = frame_at(ctx, &__frame, 0x10);
-    let checkSumInv: Val<'a, u16> = frame_at(ctx, &__frame, 0x14);
+    let dir: ArrP<'a, CARDDir<'a>, 2> = frame_at(ctx, &__frame, 0x14);
+    let check: ArrP<'a, CARDDirCheck<'a>, 2> = frame_at(ctx, &__frame, 0xc);
+    let checkSum: Val<'a, u16> = frame_at(ctx, &__frame, 0x0);
+    let checkSumInv: Val<'a, u16> = frame_at(ctx, &__frame, 0x4);
     let mut card = card;
     let mut outCurrent = outCurrent;
     let mut i: i32 = 0;
@@ -223,9 +223,9 @@ pub fn VerifyDir<'a>(ctx: &'a Ctx, card: CARDControl<'a>, outCurrent: Val<'a, i3
 
 pub fn VerifyFAT<'a>(ctx: &'a Ctx, card: CARDControl<'a>, outCurrent: Val<'a, i32>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let fat: ArrP<'a, Val<'a, u16>, 2> = frame_at(ctx, &__frame, 0x0);
-    let checkSum: Val<'a, u16> = frame_at(ctx, &__frame, 0x8);
-    let checkSumInv: Val<'a, u16> = frame_at(ctx, &__frame, 0xc);
+    let fat: ArrP<'a, Val<'a, u16>, 2> = frame_at(ctx, &__frame, 0x8);
+    let checkSum: Val<'a, u16> = frame_at(ctx, &__frame, 0x0);
+    let checkSumInv: Val<'a, u16> = frame_at(ctx, &__frame, 0x4);
     let mut card = card;
     let mut outCurrent = outCurrent;
     let mut fatp: Val<'a, u16> = null(ctx);
@@ -368,11 +368,11 @@ pub fn CARDCheckExAsync<'a>(
     callback: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x0);
-    let dir: ArrP<'a, CARDDir<'a>, 2> = frame_at(ctx, &__frame, 0x4);
-    let fat: ArrP<'a, Val<'a, u16>, 2> = frame_at(ctx, &__frame, 0xc);
+    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x28);
+    let dir: ArrP<'a, CARDDir<'a>, 2> = frame_at(ctx, &__frame, 0x20);
+    let fat: ArrP<'a, Val<'a, u16>, 2> = frame_at(ctx, &__frame, 0x18);
     let currentFat: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
-    let currentDir: Val<'a, i32> = frame_at(ctx, &__frame, 0x18);
+    let currentDir: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
     let mut chan = chan;
     let mut xferBytes = xferBytes;
     let mut callback = callback;
@@ -585,7 +585,7 @@ pub fn CARDCheckExAsync<'a>(
 
 pub fn CARDCheckAsync<'a>(ctx: &'a Ctx, chan: i32, callback: FnPtr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let xferBytes: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let xferBytes: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
     let mut chan = chan;
     let mut callback = callback;
     return fns::CARDCheckExAsync(ctx, chan, xferBytes, callback);

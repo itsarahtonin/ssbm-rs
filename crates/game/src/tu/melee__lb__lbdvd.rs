@@ -672,6 +672,12 @@ pub fn lbDvd_8001823C<'a>(ctx: &'a Ctx) {
 
 pub fn lbDvd_80018254<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0xc8);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
+    let __inl_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
+    let __inl_3: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x24);
+    let __inl_4: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x54);
+    let __inl_5: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x64);
+    let __inl_6: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x94);
     let mut enabled: i32 = 0;
     if fns::memcmp(
         ctx,
@@ -700,22 +706,22 @@ pub fn lbDvd_80018254<'a>(ctx: &'a Ctx) {
             break 's1;
         }
         if __case <= 1 {
-            inl_preloadRumbleFile_unfused(ctx);
+            inl_preloadRumbleFile_unfused(ctx, Handle::addr(__inl));
             break 's1;
         }
         if __case <= 2 {
-            inl_preloadRumbleFile_unfused(ctx);
-            inl_preloadCommonFiles_unfused(ctx);
+            inl_preloadRumbleFile_unfused(ctx, Handle::addr(__inl_2));
+            inl_preloadCommonFiles_unfused(ctx, Handle::addr(__inl_3));
             break 's1;
         }
         if __case <= 3 {
-            inl_preloadRumbleFile_unfused(ctx);
-            inl_preloadCommonFiles_unfused(ctx);
+            inl_preloadRumbleFile_unfused(ctx, Handle::addr(__inl_4));
+            inl_preloadCommonFiles_unfused(ctx, Handle::addr(__inl_5));
             fns::lbDvd_80017960(ctx);
             break 's1;
         }
     }
-    inl_releaseNegativeEntries_unfused(ctx);
+    inl_releaseNegativeEntries_unfused(ctx, Handle::addr(__inl_6));
     fns::lbDvd_80017CC4(ctx);
     let _ = fns::OSRestoreInterrupts(ctx, enabled);
 }
@@ -1238,9 +1244,8 @@ fn inl_preloadFile_unfused<'a>(
     );
 }
 
-fn inl_preloadRumbleFile_unfused<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x18);
-    let file: PreloadFile<'a> = frame_at(ctx, &__frame, 0x4);
+fn inl_preloadRumbleFile_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) {
+    let file: PreloadFile<'a> = ptr(ctx, __in_caller + 0x0);
     ctx.fill(Handle::addr(file), 0, 0xc);
     file.set_type((2_i32 as u8));
     file.set_name(cstr(ctx, 0x803ba6bc));
@@ -1255,9 +1260,8 @@ fn inl_preloadRumbleFile_unfused<'a>(ctx: &'a Ctx) {
     }
 }
 
-fn inl_preloadCommonFiles_unfused<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x40);
-    let files: Arr<'a, PreloadFile<'a>, 4> = frame_at(ctx, &__frame, 0x4);
+fn inl_preloadCommonFiles_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) {
+    let files: Arr<'a, PreloadFile<'a>, 4> = ptr(ctx, __in_caller + 0x0);
     let mut i: i32 = 0;
     files.get(0).set_type((3_i32 as u8));
     files.get(0).set_name(cstr(ctx, 0x803ba6c8));
@@ -1290,9 +1294,8 @@ fn inl_preloadCommonFiles_unfused<'a>(ctx: &'a Ctx) {
     }
 }
 
-fn inl_releaseNegativeEntries_unfused<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x18);
-    let pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+fn inl_releaseNegativeEntries_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) {
+    let pad: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
     let mut cleanup_entry: PreloadEntry<'a> = null(ctx);
     let mut j: i32 = 0;
     {

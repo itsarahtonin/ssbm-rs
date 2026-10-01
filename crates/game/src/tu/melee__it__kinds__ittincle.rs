@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn it_802EB5C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     fns::it_8027B730(ctx, gobj);
@@ -989,7 +989,7 @@ pub fn it_802EC870<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
 
 pub fn it_802EC9E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let ecb: _itECB<'a> = frame_at(ctx, &__frame, 0x0);
+    let ecb: _itECB<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     Handle::copy_from(ecb, (ip).xDD4_itemVar().tincle().x68());
@@ -1015,9 +1015,9 @@ pub fn it_802EC9E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802ECA70<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x88);
-    let unused: ArrV<'a, u8, 80> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x50);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x5c);
+    let unused: ArrV<'a, u8, 80> = frame_at(ctx, &__frame, 0x18);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}

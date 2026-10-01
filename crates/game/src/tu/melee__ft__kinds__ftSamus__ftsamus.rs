@@ -187,7 +187,7 @@ pub fn ftSs_Init_CreateThrowGrappleBeam<'a>(
     anim_speed: f64,
 ) {
     let __frame = ctx.stack_frame(0x40);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut motion_state = motion_state;
     let mut anim_speed = anim_speed;

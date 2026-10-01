@@ -99,7 +99,7 @@ pub fn fn_802FDA4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
 
 pub fn fn_802FDA78<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let v: ArrV<'a, F32, 4> = frame_at(ctx, &__frame, 0x0);
+    let v: ArrV<'a, F32, 4> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut p: un_804A1F10_t<'a> = statics::melee__if__if_2FD9::un_804A1F10(ctx);
     let mut i: i32 = 0;

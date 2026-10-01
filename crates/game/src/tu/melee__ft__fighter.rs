@@ -129,7 +129,7 @@ pub fn Fighter_LoadCommonData<'a>(ctx: &'a Ctx) {
 
 pub fn Fighter_UpdateModelScale<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -148,7 +148,7 @@ pub fn Fighter_UpdateModelScale<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn Fighter_UnkInitReset_80067C98<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let player_coords: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let player_coords: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut fp = fp;
     let mut x: f64 = 0.0;
     let mut y: f64 = 0.0;
@@ -451,6 +451,7 @@ pub fn Fighter_UnkInitReset_80067C98<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn Fighter_Spawn<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -484,7 +485,7 @@ pub fn Fighter_Spawn<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).cur_pos(),
     );
     fns::Fighter_UnkApplyTransformation_8006C0F0(ctx, gobj);
-    inl_Fighter_UpdateModelScale_unfused(ctx, gobj);
+    inl_Fighter_UpdateModelScale_unfused(ctx, gobj, Handle::addr(__inl));
     fns::ftCo_800BFFAC(ctx, fp);
     fns::ftCo_800C0074(ctx, fp);
     fns::ftCo_800C8438(ctx, gobj);
@@ -537,8 +538,8 @@ pub fn Fighter_UnkUpdateCostumeJoint_800686E4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'
 
 pub fn Fighter_UnkUpdateVecFromBones_8006876C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut fp = fp;
     let mut jobj: HSD_JObj<'a> =
         (Handle::add((fp).parts(), fns::ftParts_GetBoneIndex(ctx, fp, 2_i32))).joint();
@@ -775,6 +776,7 @@ pub fn Fighter_80068E64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn Fighter_Create<'a>(ctx: &'a Ctx, input: plAllocInfo<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x48);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut input = input;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut fp: Fighter<'a> = null(ctx);
@@ -811,7 +813,7 @@ pub fn Fighter_Create<'a>(ctx: &'a Ctx, input: plAllocInfo<'a>) -> HSD_GObj<'a> 
     fns::ftAnim_8007077C(ctx, gobj);
     fns::ftCo_8009CF84(ctx, fp);
     fns::ftAnim_8006FE48(ctx, gobj);
-    inl_Fighter_UnkUpdateVecFromBones_8006876C_unfused(ctx, fp);
+    inl_Fighter_UnkUpdateVecFromBones_8006876C_unfused(ctx, fp, Handle::addr(__inl));
     fns::ftCo_8009F578(ctx, fp);
     if !Handle::is_null(fns::ftData_OnLoad(ctx).at((fp).kind()).get()) {
         fns::ftData_OnLoad(ctx)
@@ -882,9 +884,9 @@ pub fn Fighter_ChangeMotionState<'a>(
     arg3: HSD_GObj<'a>,
 ) {
     let __frame = ctx.stack_frame(0xa0);
-    let x2070: Struct2070<'a> = frame_at(ctx, &__frame, 0x0);
-    let translation: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let quat: Quaternion<'a> = frame_at(ctx, &__frame, 0x10);
+    let x2070: Struct2070<'a> = frame_at(ctx, &__frame, 0x48);
+    let translation: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let quat: Quaternion<'a> = frame_at(ctx, &__frame, 0x2c);
     let mut gobj = gobj;
     let mut msid = msid;
     let mut flags = flags;
@@ -1457,7 +1459,7 @@ pub fn Fighter_procHitlag<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn Fighter_procAnim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -2339,9 +2341,12 @@ pub fn Fighter_procInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x90);
-    let windOffset: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let selfVel: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let difference: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let windOffset: Vec<'a> = frame_at(ctx, &__frame, 0x44);
+    let selfVel: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let difference: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     if ((fp).is_sleeping() != 0) {
@@ -2678,17 +2683,17 @@ pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ftColl_8007AF28(ctx, gobj);
     if ((fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32))
         && ((((if 4_u32 == 4_u32 {
-            inl___fpclassifyf(ctx, ((fp).cur_pos().x()))
+            inl___fpclassifyf(ctx, ((fp).cur_pos().x()), Handle::addr(__inl))
         } else {
             inl___fpclassifyd(ctx, ((fp).cur_pos().x()))
         }) == (enums::FP_NAN as i32))
             || ((if 4_u32 == 4_u32 {
-                inl___fpclassifyf(ctx, ((fp).cur_pos().y()))
+                inl___fpclassifyf(ctx, ((fp).cur_pos().y()), Handle::addr(__inl_2))
             } else {
                 inl___fpclassifyd(ctx, ((fp).cur_pos().y()))
             }) == (enums::FP_NAN as i32)))
             || ((if 4_u32 == 4_u32 {
-                inl___fpclassifyf(ctx, ((fp).cur_pos().z()))
+                inl___fpclassifyf(ctx, ((fp).cur_pos().z()), Handle::addr(__inl_3))
             } else {
                 inl___fpclassifyd(ctx, ((fp).cur_pos().z()))
             }) == (enums::FP_NAN as i32)))
@@ -2718,11 +2723,11 @@ pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn Fighter_UnkApplyTransformation_8006C0F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xa8);
-    let mtx1: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let mtx2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x60);
-    let translation: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
-    let rotation: Quaternion<'a> = frame_at(ctx, &__frame, 0x78);
+    let mtx1: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x68);
+    let mtx2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x38);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let translation: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let rotation: Quaternion<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -2749,6 +2754,9 @@ pub fn Fighter_UnkApplyTransformation_8006C0F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<
 
 pub fn Fighter_procMap<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -2778,17 +2786,17 @@ pub fn Fighter_procMap<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
         if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32) {
             if (((if 4_u32 == 4_u32 {
-                inl___fpclassifyf_unfused(ctx, ((fp).cur_pos().x()))
+                inl___fpclassifyf_unfused(ctx, ((fp).cur_pos().x()), Handle::addr(__inl))
             } else {
                 inl___fpclassifyd_unfused(ctx, ((fp).cur_pos().x()))
             }) == (enums::FP_NAN as i32))
                 || ((if 4_u32 == 4_u32 {
-                    inl___fpclassifyf_unfused(ctx, ((fp).cur_pos().y()))
+                    inl___fpclassifyf_unfused(ctx, ((fp).cur_pos().y()), Handle::addr(__inl_2))
                 } else {
                     inl___fpclassifyd_unfused(ctx, ((fp).cur_pos().y()))
                 }) == (enums::FP_NAN as i32)))
                 || ((if 4_u32 == 4_u32 {
-                    inl___fpclassifyf_unfused(ctx, ((fp).cur_pos().z()))
+                    inl___fpclassifyf_unfused(ctx, ((fp).cur_pos().z()), Handle::addr(__inl_3))
                 } else {
                     inl___fpclassifyd_unfused(ctx, ((fp).cur_pos().z()))
                 }) == (enums::FP_NAN as i32))
@@ -2866,13 +2874,14 @@ pub fn Fighter_procAccessory<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn Fighter_procCollPos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xd0);
-    let cam_offset: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 136> = frame_at(ctx, &__frame, 0x0);
+    let cam_offset: Vec<'a> = frame_at(ctx, &__frame, 0xa8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !((fp).is_sleeping() != 0) {
         fns::efAsync_QueueFlush(ctx, gobj, (fp).x60C_ref());
-        inl_Fighter_UnkApplyTransformation_8006C0F0_unfused(ctx, gobj);
+        inl_Fighter_UnkApplyTransformation_8006C0F0_unfused(ctx, gobj, Handle::addr(__inl));
         if !((fp).x2219_b5() != 0) {
             if !Handle::is_null((fp).accessory4_cb()) {
                 (fp).accessory4_cb().call::<_, ()>((gobj,));
@@ -3015,8 +3024,8 @@ pub fn Fighter_TakeDamage_8006CC7C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, damage_amo
 
 pub fn Fighter_8006CDA4<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut arg1 = arg1;
     let mut temp_bool: i32 = 0;
@@ -3653,9 +3662,8 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     }
 }
 
-fn inl_Fighter_UpdateModelScale_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_Fighter_UpdateModelScale_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let scale: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -3889,10 +3897,13 @@ fn inl_Fighter_80068E64_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
-fn inl_Fighter_UnkUpdateVecFromBones_8006876C_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
-    let __frame = ctx.stack_frame(0x20);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let vec2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+fn inl_Fighter_UnkUpdateVecFromBones_8006876C_unfused<'a>(
+    ctx: &'a Ctx,
+    fp: Fighter<'a>,
+    __in_caller: u32,
+) {
+    let vec: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let vec2: Vec<'a> = ptr(ctx, __in_caller + 0xc);
     let mut fp = fp;
     let mut jobj: HSD_JObj<'a> =
         (Handle::add((fp).parts(), fns::ftParts_GetBoneIndex(ctx, fp, 2_i32))).joint();
@@ -4015,9 +4026,8 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     return x;
 }
 
-fn inl___fpclassifyf<'a>(ctx: &'a Ctx, x: f64) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let x__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+fn inl___fpclassifyf<'a>(ctx: &'a Ctx, x: f64, __in_caller: u32) -> i32 {
+    let x__slot: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
     x__slot.set(x);
     let mut exp_mask: i32 = 0x7f800000_i32;
     let mut mantissa_mask: i32 = 0x7fffff_i32;
@@ -4133,9 +4143,8 @@ fn inl_HSD_JObjGetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     Handle::copy_from((scale), (jobj).scale());
 }
 
-fn inl___fpclassifyf_unfused<'a>(ctx: &'a Ctx, x: f64) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let x__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+fn inl___fpclassifyf_unfused<'a>(ctx: &'a Ctx, x: f64, __in_caller: u32) -> i32 {
+    let x__slot: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
     x__slot.set(x);
     let mut exp_mask: i32 = 0x7f800000_i32;
     let mut mantissa_mask: i32 = 0x7fffff_i32;
@@ -4211,13 +4220,16 @@ fn inl_Fighter_GetPosY_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
     return (fp).cur_pos().y();
 }
 
-fn inl_Fighter_UnkApplyTransformation_8006C0F0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x90);
-    let mtx1: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let mtx2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x60);
-    let translation: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
-    let rotation: Quaternion<'a> = frame_at(ctx, &__frame, 0x78);
+fn inl_Fighter_UnkApplyTransformation_8006C0F0_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    __in_caller: u32,
+) {
+    let mtx1: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x0);
+    let mtx2: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x30);
+    let scale: Vec<'a> = ptr(ctx, __in_caller + 0x60);
+    let translation: Vec<'a> = ptr(ctx, __in_caller + 0x6c);
+    let rotation: Quaternion<'a> = ptr(ctx, __in_caller + 0x78);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

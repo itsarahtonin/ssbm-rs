@@ -580,6 +580,7 @@ pub fn fn_803B6820<'a>(
 ) {
     let __frame = ctx.stack_frame(0xb0);
     let pixel_out: JpegOutput<'a> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut dst = dst;
     let mut x = x;
     let mut y = y;
@@ -752,8 +753,13 @@ pub fn fn_803B6820<'a>(
                                                                 {
                                                                     pixel_out.set_pixels(out);
                                                                     inl_jpeg_store_rgb565(
-                                                                        ctx, pixel_out, out_offset,
-                                                                        luminance, cb, cr,
+                                                                        ctx,
+                                                                        pixel_out,
+                                                                        out_offset,
+                                                                        luminance,
+                                                                        cb,
+                                                                        cr,
+                                                                        Handle::addr(__inl),
                                                                     );
                                                                 }
                                                             }
@@ -786,6 +792,7 @@ pub fn fn_803B6820<'a>(
 pub fn hsd_803B6BE4<'a>(ctx: &'a Ctx, src: Val<'a, i8>, size: i32, dst: Addr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x88);
     let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x30);
     let mut src = src;
     let mut size = size;
     let mut dst = dst;
@@ -795,7 +802,7 @@ pub fn hsd_803B6BE4<'a>(ctx: &'a Ctx, src: Val<'a, i8>, size: i32, dst: Addr<'a>
             break 'l1;
         }
     }
-    return inl_hsd_803B6BE4_inline_unfused(ctx, src, size, dst);
+    return inl_hsd_803B6BE4_inline_unfused(ctx, src, size, dst, Handle::addr(__inl));
 }
 
 fn inl_jpeg_clamp<'a>(ctx: &'a Ctx, value: f64) -> i32 {
@@ -823,9 +830,9 @@ fn inl_jpeg_store_rgb565<'a>(
     luminance: i32,
     cb: i32,
     cr: i32,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x10);
-    let pixel: jpeg_store_rgb565_pixel<'a> = frame_at(ctx, &__frame, 0x0);
+    let pixel: jpeg_store_rgb565_pixel<'a> = ptr(ctx, __in_caller + 0x0);
     let mut out = out;
     let mut offset = offset;
     let mut luminance = luminance;
@@ -872,9 +879,9 @@ fn inl_hsd_803B6BE4_inline_unfused<'a>(
     src: Val<'a, i8>,
     size: i32,
     dst: Addr<'a>,
+    __in_caller: u32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x20);
-    let state: hsd_803B6BE4_inline_state<'a> = frame_at(ctx, &__frame, 0x0);
+    let state: hsd_803B6BE4_inline_state<'a> = ptr(ctx, __in_caller + 0x0);
     let mut src = src;
     let mut size = size;
     let mut dst = dst;

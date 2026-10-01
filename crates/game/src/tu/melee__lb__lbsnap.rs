@@ -221,8 +221,8 @@ pub fn lbSnap_8001D4A4<'a>(ctx: &'a Ctx, chan: i32, arg1: Val<'a, i8>) {
 
 pub fn lbSnap_8001D5FC<'a>(ctx: &'a Ctx, chan: i32, index: i32) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let text: ArrV<'a, i8, 33> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x24);
+    let text: ArrV<'a, i8, 33> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut chan = chan;
     let mut index = index;
     let mut ptr_: Unk80433380_48<'a> = (Handle::add(
@@ -260,10 +260,10 @@ pub fn lbSnap_8001D5FC<'a>(ctx: &'a Ctx, chan: i32, index: i32) -> i32 {
 
 pub fn lbSnap_8001D7B0<'a>(ctx: &'a Ctx, chan: i32, index: i32, jndex: i32) -> i32 {
     let __frame = ctx.stack_frame(0xa8);
-    let text1: ArrV<'a, i8, 33> = frame_at(ctx, &__frame, 0x0);
-    let text2: ArrV<'a, i8, 33> = frame_at(ctx, &__frame, 0x24);
-    let text3: ArrV<'a, i8, 33> = frame_at(ctx, &__frame, 0x48);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x6c);
+    let text1: ArrV<'a, i8, 33> = frame_at(ctx, &__frame, 0x64);
+    let text2: ArrV<'a, i8, 33> = frame_at(ctx, &__frame, 0x40);
+    let text3: ArrV<'a, i8, 33> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut chan = chan;
     let mut index = index;
     let mut jndex = jndex;
@@ -434,7 +434,7 @@ pub fn lbSnap_8001DA5C<'a>(ctx: &'a Ctx, src: Val<'a, u8>) {
 
 pub fn lbSnap_8001DC0C<'a>(ctx: &'a Ctx, image: Val<'a, u8>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let time: OSCalendarTime<'a> = frame_at(ctx, &__frame, 0x0);
+    let time: OSCalendarTime<'a> = frame_at(ctx, &__frame, 0xc);
     let mut image = image;
     let mut ticks: i64 = 0;
     let mut seconds: u32 = 0;
@@ -585,7 +585,7 @@ pub fn lbSnap_8001DF20<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn lbSnap_8001DF6C<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let text: ArrV<'a, i8, 33> = frame_at(ctx, &__frame, 0x0);
+    let text: ArrV<'a, i8, 33> = frame_at(ctx, &__frame, 0xc);
     let mut chan = chan;
     let mut ptr_: Unk80433380_48<'a> = (Handle::add(
         (statics::melee__lb__lbsnap::lbSnap_80433380(ctx).slot()),
@@ -655,8 +655,8 @@ pub fn lbSnap_8001DF6C<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
 
 pub fn lbSnap_8001E058<'a>(ctx: &'a Ctx, chan: i32, index: i32) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let text: ArrV<'a, i8, 33> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x24);
+    let text: ArrV<'a, i8, 33> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut chan = chan;
     let mut index = index;
     let mut ptr_: Unk80433380_48<'a> = (Handle::add(

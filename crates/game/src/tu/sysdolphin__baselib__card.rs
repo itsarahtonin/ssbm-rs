@@ -1497,8 +1497,8 @@ pub fn fn_803AA790<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn hsd_803AAA48<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x258);
-    let map: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0x0);
-    let stat: CARDStat<'a> = frame_at(ctx, &__frame, 0x100);
+    let map: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0xd8);
+    let stat: CARDStat<'a> = frame_at(ctx, &__frame, 0x68);
     let mut result: i32 = 0;
     let mut chan: i32 = 0;
     'l1: loop {
@@ -2625,7 +2625,7 @@ pub fn fn_803AC168<'a>(ctx: &'a Ctx, cmd: CardCmd<'a>) -> i32 {
 
 pub fn fn_803AC258<'a>(ctx: &'a Ctx, state: CardState<'a>, block_idx: i32) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x8);
     let mut state = state;
     let mut block_idx = block_idx;
     cmd.set_type((enums::CARD_CMD_SCAN_BLOCK as i32));
@@ -2644,7 +2644,7 @@ pub fn fn_803AC258<'a>(ctx: &'a Ctx, state: CardState<'a>, block_idx: i32) -> i3
 
 pub fn fn_803AC2A4<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x4);
     let mut state = state;
     cmd.set_type((enums::CARD_CMD_REPAIR as i32));
     cmd.set_state(state);
@@ -3352,8 +3352,8 @@ pub fn fn_803ACF30<'a>(
     icons: Addr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let buf: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x24);
+    let buf: CardCmd<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut state = state;
     let mut comment = comment;
     let mut banner = banner;
@@ -3552,12 +3552,17 @@ pub fn fn_803ACFC0<'a>(
 
 pub fn fn_803AD16C<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x690);
-    let ids: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0x0);
-    let seq: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0x100);
-    let newmap: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0x200);
-    let filemap: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0x300);
-    let chosen: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0x400);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x500);
+    let ids: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0x550);
+    let seq: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0x450);
+    let newmap: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0x350);
+    let filemap: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0x24c);
+    let chosen: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0x14c);
+    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x38);
+    let __inl_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x60);
+    let __inl_3: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x88);
+    let __inl_4: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0xb0);
+    let __inl_5: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0xd8);
     let mut state = state;
     let mut offset: i32 = 0;
     let mut result: i32 = 0;
@@ -3825,7 +3830,12 @@ pub fn fn_803AD16C<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
                                                     ret = 0x101_i32.wrapping_neg();
                                                 } else {
                                                     ret = inl_fn_803AD16C_queue_clear_unfused(
-                                                        ctx, state, phys, offset, file_idx,
+                                                        ctx,
+                                                        state,
+                                                        phys,
+                                                        offset,
+                                                        file_idx,
+                                                        Handle::addr(__inl),
                                                     );
                                                 }
                                                 if (ret < 0_i32) && (result == 0_i32) {
@@ -3863,6 +3873,7 @@ pub fn fn_803AD16C<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
                                             ctx,
                                             state,
                                             newmap.at(block_id_2).get(),
+                                            Handle::addr(__inl_2),
                                         );
                                         'l39: loop {
                                             'c40: {
@@ -3874,7 +3885,12 @@ pub fn fn_803AD16C<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
                                                 }
                                                 {
                                                     ret = inl_fn_803AD16C_queue_write_unfused(
-                                                        ctx, state, dup, block_id_2, target_seq,
+                                                        ctx,
+                                                        state,
+                                                        dup,
+                                                        block_id_2,
+                                                        target_seq,
+                                                        Handle::addr(__inl_3),
                                                     );
                                                 }
                                             }
@@ -3900,6 +3916,7 @@ pub fn fn_803AD16C<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
                                                 ctx,
                                                 state,
                                                 newmap.at(block_id_2).get(),
+                                                Handle::addr(__inl_4),
                                             );
                                         ret = cmd_result;
                                     }
@@ -3913,7 +3930,12 @@ pub fn fn_803AD16C<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
                                             }
                                             {
                                                 ret = inl_fn_803AD16C_queue_write_last_unfused(
-                                                    ctx, state, dup, block_id_2, target_seq,
+                                                    ctx,
+                                                    state,
+                                                    dup,
+                                                    block_id_2,
+                                                    target_seq,
+                                                    Handle::addr(__inl_5),
                                                 );
                                             }
                                         }
@@ -3946,9 +3968,9 @@ pub fn fn_803ADE4C<'a>(
     callback: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x80);
-    let cmd_open: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
-    let cmd_scan: CardCmd<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x48);
+    let cmd_open: CardCmd<'a> = frame_at(ctx, &__frame, 0x40);
+    let cmd_scan: CardCmd<'a> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut state = state;
     let mut file_no = file_no;
     let mut callback = callback;
@@ -4022,8 +4044,11 @@ pub fn fn_803ADF90<'a>(
     callback: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x250);
-    let block_map: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 44> = frame_at(ctx, &__frame, 0x100);
+    let block_map: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0xfc);
+    let unused: ArrV<'a, u8, 44> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x30);
+    let __inl_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x58);
+    let __inl_3: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x80);
     let mut state = state;
     let mut file_idx = file_idx;
     let mut buf = buf;
@@ -4153,7 +4178,14 @@ pub fn fn_803ADF90<'a>(
                     let mut sector_size: u32 = 0;
                     if phys >= 0_i32 {
                         if r#async != 0_i32 {
-                            result = inl_queueReadDataBlock_unfused(ctx, state, phys, dst, chunk);
+                            result = inl_queueReadDataBlock_unfused(
+                                ctx,
+                                state,
+                                phys,
+                                dst,
+                                chunk,
+                                Handle::addr(__inl),
+                            );
                             if result < 0_i32 {
                                 inl_cancelQueuedCardCommands_unfused(ctx);
                                 return result;
@@ -4177,7 +4209,13 @@ pub fn fn_803ADF90<'a>(
                             }
                         }
                     } else if r#async != 0_i32 {
-                        result = inl_queueClearDataBlock_unfused(ctx, state, dst, chunk);
+                        result = inl_queueClearDataBlock_unfused(
+                            ctx,
+                            state,
+                            dst,
+                            chunk,
+                            Handle::addr(__inl_2),
+                        );
                         if result < 0_i32 {
                             inl_cancelQueuedCardCommands_unfused(ctx);
                             return result;
@@ -4193,8 +4231,14 @@ pub fn fn_803ADF90<'a>(
                     let mut sector_size_2: u32 = 0;
                     if phys_2 >= 0_i32 {
                         if r#async != 0_i32 {
-                            result =
-                                inl_queueReadDataBlock_unfused(ctx, state, phys_2, dst, remaining);
+                            result = inl_queueReadDataBlock_unfused(
+                                ctx,
+                                state,
+                                phys_2,
+                                dst,
+                                remaining,
+                                Handle::addr(__inl_3),
+                            );
                             if result < 0_i32 {
                                 inl_cancelQueuedCardCommands_unfused(ctx);
                                 return result;
@@ -4249,16 +4293,16 @@ pub fn fn_803AE7F8<'a>(
     callback: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x4f8);
-    let block_map: Arr<'a, ArrV<'a, i32, 64>, 3> = frame_at(ctx, &__frame, 0x0);
-    let pad_block_map: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x300);
-    let cmd_done: CardCmd<'a> = frame_at(ctx, &__frame, 0x320);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x344);
-    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x35c);
-    let cmd_2: CardCmd<'a> = frame_at(ctx, &__frame, 0x380);
-    let init_cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x3a4);
-    let cmd_3: CardCmd<'a> = frame_at(ctx, &__frame, 0x3c8);
-    let init_cmd_2: CardCmd<'a> = frame_at(ctx, &__frame, 0x3ec);
-    let cmd_4: CardCmd<'a> = frame_at(ctx, &__frame, 0x410);
+    let block_map: Arr<'a, ArrV<'a, i32, 64>, 3> = frame_at(ctx, &__frame, 0x1a0);
+    let pad_block_map: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
+    let cmd_done: CardCmd<'a> = frame_at(ctx, &__frame, 0x15c);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x20);
+    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x11c);
+    let cmd_2: CardCmd<'a> = frame_at(ctx, &__frame, 0xf4);
+    let init_cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0xcc);
+    let cmd_3: CardCmd<'a> = frame_at(ctx, &__frame, 0xa4);
+    let init_cmd_2: CardCmd<'a> = frame_at(ctx, &__frame, 0x7c);
+    let cmd_4: CardCmd<'a> = frame_at(ctx, &__frame, 0x54);
     let mut state = state;
     let mut file_idx = file_idx;
     let mut buf = buf;
@@ -4878,14 +4922,19 @@ pub fn fn_803AF3F0<'a>(
     callback: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x548);
-    let block_map: Arr<'a, ArrV<'a, i32, 64>, 3> = frame_at(ctx, &__frame, 0x0);
-    let needs_rewrite: Val<'a, i32> = frame_at(ctx, &__frame, 0x300);
-    let file_blocks: Val<'a, i32> = frame_at(ctx, &__frame, 0x304);
-    let total_blocks: Val<'a, i32> = frame_at(ctx, &__frame, 0x308);
-    let free_blk: fn_803AF3F0_free_blk<'a> = frame_at(ctx, &__frame, 0x30c);
-    let write_blk: fn_803AF3F0_write_blk<'a> = frame_at(ctx, &__frame, 0x310);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x314);
-    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x324);
+    let block_map: Arr<'a, ArrV<'a, i32, 64>, 3> = frame_at(ctx, &__frame, 0x1f8);
+    let needs_rewrite: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let file_blocks: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
+    let total_blocks: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let free_blk: fn_803AF3F0_free_blk<'a> = frame_at(ctx, &__frame, 0xc);
+    let write_blk: fn_803AF3F0_write_blk<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
+    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x28);
+    let __inl_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x50);
+    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x1bc);
+    let __inl_3: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x78);
+    let __inl_4: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0xc0);
+    let __inl_5: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x108);
     let mut state = state;
     let mut file_idx = file_idx;
     let mut buf = buf;
@@ -5017,6 +5066,7 @@ pub fn fn_803AF3F0<'a>(
                                         current_seq,
                                         Handle::cast::<Addr<'a>>(data),
                                         inl_fn_803AF3F0_chunk_size_unfused(ctx, state),
+                                        Handle::addr(__inl),
                                     );
                                 if cmd_result < 0_i32 {
                                     inl_fn_803AF3F0_rewind_unfused(ctx);
@@ -5058,6 +5108,7 @@ pub fn fn_803AF3F0<'a>(
                                         current_seq,
                                         Handle::cast::<Addr<'a>>(data),
                                         remaining,
+                                        Handle::addr(__inl_2),
                                     );
                                 if cmd_result_2 < 0_i32 {
                                     inl_fn_803AF3F0_rewind_unfused(ctx);
@@ -5135,6 +5186,7 @@ pub fn fn_803AF3F0<'a>(
                             null::<Addr<'a>>(ctx),
                             0_i32,
                             file_idx,
+                            Handle::addr(__inl_3),
                         );
                         if cmd_result_4 < 0_i32 {
                             inl_fn_803AF3F0_rewind_unfused(ctx);
@@ -5247,6 +5299,7 @@ pub fn fn_803AF3F0<'a>(
                             Handle::cast::<Addr<'a>>(data),
                             chunk,
                             file_idx,
+                            Handle::addr(__inl_4),
                         );
                         if cmd_result_5 < 0_i32 {
                             inl_fn_803AF3F0_rewind_unfused(ctx);
@@ -5303,6 +5356,7 @@ pub fn fn_803AF3F0<'a>(
                             Handle::cast::<Addr<'a>>(data),
                             remaining,
                             file_idx,
+                            Handle::addr(__inl_5),
                         );
                         if cmd_result_6 < 0_i32 {
                             inl_fn_803AF3F0_rewind_unfused(ctx);
@@ -5408,10 +5462,15 @@ pub fn fn_803B0120<'a>(
     callback: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x548);
-    let block_map: Arr<'a, ArrV<'a, i32, 64>, 3> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x300);
-    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x310);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x334);
+    let block_map: Arr<'a, ArrV<'a, i32, 64>, 3> = frame_at(ctx, &__frame, 0x1f8);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x10);
+    let __inl_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x38);
+    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x1bc);
+    let __inl_3: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x60);
+    let __inl_4: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0xa8);
+    let __inl_5: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0xf0);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x138);
     let mut state = state;
     let mut file_idx = file_idx;
     let mut buf = buf;
@@ -5612,6 +5671,7 @@ pub fn fn_803B0120<'a>(
                                     current_seq,
                                     Handle::cast::<Addr<'a>>(data),
                                     chunk,
+                                    Handle::addr(__inl),
                                 );
                                 if cmd_result < 0_i32 {
                                     inl_fn_803B0120_rewind_unfused(ctx);
@@ -5649,6 +5709,7 @@ pub fn fn_803B0120<'a>(
                                     current_seq,
                                     Handle::cast::<Addr<'a>>(data),
                                     remaining,
+                                    Handle::addr(__inl_2),
                                 );
                                 if cmd_result_2 < 0_i32 {
                                     inl_fn_803B0120_rewind_unfused(ctx);
@@ -5722,6 +5783,7 @@ pub fn fn_803B0120<'a>(
                     null::<Addr<'a>>(ctx),
                     0_i32,
                     file_idx,
+                    Handle::addr(__inl_3),
                 );
                 if cmd_result_4 < 0_i32 {
                     inl_fn_803B0120_rewind_unfused(ctx);
@@ -5781,6 +5843,7 @@ pub fn fn_803B0120<'a>(
                             Handle::cast::<Addr<'a>>(data),
                             chunk_2,
                             file_idx,
+                            Handle::addr(__inl_4),
                         );
                         if cmd_result_5 < 0_i32 {
                             inl_fn_803B0120_rewind_unfused(ctx);
@@ -5833,6 +5896,7 @@ pub fn fn_803B0120<'a>(
                             Handle::cast::<Addr<'a>>(data),
                             remaining,
                             file_idx,
+                            Handle::addr(__inl_5),
                         );
                         if cmd_result_6 < 0_i32 {
                             inl_fn_803B0120_rewind_unfused(ctx);
@@ -5909,16 +5973,16 @@ pub fn fn_803B0E9C<'a>(
     r#async: i32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x168);
-    let digest: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x0);
-    let cmd_done: CardCmd<'a> = frame_at(ctx, &__frame, 0x30);
-    let cmd_clear: CardCmd<'a> = frame_at(ctx, &__frame, 0x54);
-    let pad_cmd_clear: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x78);
-    let cmd_patch: CardCmd<'a> = frame_at(ctx, &__frame, 0x7c);
-    let pad_cmd_patch: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xa0);
-    let cmd_write_header: CardCmd<'a> = frame_at(ctx, &__frame, 0xa8);
-    let pad_cmd_write_header: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xcc);
-    let cmd_verify_header: CardCmd<'a> = frame_at(ctx, &__frame, 0xdc);
-    let pad_cmd_verify_header: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x100);
+    let digest: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0xfc);
+    let cmd_done: CardCmd<'a> = frame_at(ctx, &__frame, 0xd8);
+    let cmd_clear: CardCmd<'a> = frame_at(ctx, &__frame, 0xb4);
+    let pad_cmd_clear: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let cmd_patch: CardCmd<'a> = frame_at(ctx, &__frame, 0x8c);
+    let pad_cmd_patch: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
+    let cmd_write_header: CardCmd<'a> = frame_at(ctx, &__frame, 0x60);
+    let pad_cmd_write_header: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
+    let cmd_verify_header: CardCmd<'a> = frame_at(ctx, &__frame, 0x2c);
+    let pad_cmd_verify_header: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
     let mut state = state;
     let mut banner = banner;
     let mut icons = icons;
@@ -6198,25 +6262,25 @@ pub fn fn_803B0E9C<'a>(
 pub fn fn_803B1338<'a>(ctx: &'a Ctx, state: CardState<'a>, r#async: i32) -> i32 {
     let __frame = ctx.stack_frame(0x410);
     let unused: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x0);
-    let cmd0: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x48);
-    let cmd1: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x70);
-    let cmd2: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x98);
-    let cmd3: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0xc0);
-    let cmd4: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0xe8);
-    let cmd5: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x110);
-    let cmd6: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x138);
-    let cmd7: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x160);
-    let cmd8: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x188);
-    let cmd9: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x1b0);
-    let cmd10: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x1d8);
-    let cmd11: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x200);
-    let cmd12: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x228);
-    let cmd13: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x250);
-    let cmd14: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x278);
-    let cmd15: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x2a0);
-    let cmd16: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x2c8);
-    let cmd17: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x2f0);
-    let unused_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x318);
+    let cmd0: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x358);
+    let cmd1: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x330);
+    let cmd2: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x308);
+    let cmd3: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x2e0);
+    let cmd4: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x2b8);
+    let cmd5: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x290);
+    let cmd6: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x268);
+    let cmd7: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x240);
+    let cmd8: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x218);
+    let cmd9: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x1f0);
+    let cmd10: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x1c8);
+    let cmd11: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x1a0);
+    let cmd12: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x48);
+    let cmd13: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x150);
+    let cmd14: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x128);
+    let cmd15: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x100);
+    let cmd16: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0xd8);
+    let cmd17: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0xb0);
+    let unused_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x70);
     let mut state = state;
     let mut r#async = r#async;
     'l1: loop {
@@ -6732,9 +6796,9 @@ pub fn fn_803B1F78<'a>(
     callback: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x88);
-    let cmd_create: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
-    let cmd_set_status: CardCmd<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x48);
+    let cmd_create: CardCmd<'a> = frame_at(ctx, &__frame, 0x44);
+    let cmd_set_status: CardCmd<'a> = frame_at(ctx, &__frame, 0x20);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut state = state;
     let mut filename = filename;
     let mut banner = banner;
@@ -6879,8 +6943,8 @@ pub fn fn_803B21E8<'a>(
     callback: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let cmd_set_status: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x24);
+    let cmd_set_status: CardCmd<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut state = state;
     let mut banner = banner;
     let mut icons = icons;
@@ -7134,6 +7198,7 @@ pub fn fn_803B26CC<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0x78);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x20);
     let mut state = state;
     let mut comment = comment;
     let mut banner = banner;
@@ -7149,7 +7214,7 @@ pub fn fn_803B26CC<'a>(
     (state).set_header_size((fns::hsd_803AC340(ctx, (state).icon_info()) as u32));
     statics::sysdolphin__baselib__card::hsd_804D7998(ctx)
         .set(statics::sysdolphin__baselib__card::curr_tail(ctx).get());
-    result = inl_queueHeaderBlocks_unfused(ctx, state, comment, banner, icons);
+    result = inl_queueHeaderBlocks_unfused(ctx, state, comment, banner, icons, Handle::addr(__inl));
     if result < 0_i32 {
         if statics::sysdolphin__baselib__card::hsd_804D7998(ctx).get() >= 0_i32 {
             inl_rollbackCardCommands_unfused(
@@ -8045,9 +8110,9 @@ fn inl_fn_803AD16C_queue_clear_unfused<'a>(
     phys: i32,
     offset: i32,
     file_idx: i32,
+    __in_caller: u32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x30);
-    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+    let cmd: CardCmd<'a> = ptr(ctx, __in_caller + 0x0);
     let mut state = state;
     let mut phys = phys;
     let mut offset = offset;
@@ -8064,9 +8129,13 @@ fn inl_fn_803AD16C_queue_clear_unfused<'a>(
     return statics::sysdolphin__baselib__card::fn_803AC168(ctx, cmd);
 }
 
-fn inl_fn_803AD16C_queue_read_unfused<'a>(ctx: &'a Ctx, state: CardState<'a>, phys: i32) -> i32 {
-    let __frame = ctx.stack_frame(0x30);
-    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_fn_803AD16C_queue_read_unfused<'a>(
+    ctx: &'a Ctx,
+    state: CardState<'a>,
+    phys: i32,
+    __in_caller: u32,
+) -> i32 {
+    let cmd: CardCmd<'a> = ptr(ctx, __in_caller + 0x0);
     let mut state = state;
     let mut phys = phys;
     let mut size: u32 = (state).sector_size();
@@ -8091,9 +8160,9 @@ fn inl_fn_803AD16C_queue_write_unfused<'a>(
     phys: i32,
     block_id: i32,
     seq: i32,
+    __in_caller: u32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x30);
-    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+    let cmd: CardCmd<'a> = ptr(ctx, __in_caller + 0x0);
     let mut state = state;
     let mut phys = phys;
     let mut block_id = block_id;
@@ -8126,10 +8195,10 @@ fn inl_fn_803AD16C_queue_write_last_unfused<'a>(
     phys: i32,
     block_id: i32,
     seq: i32,
+    __in_caller: u32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x38);
-    let tail: ArrV<'a, i32, 2> = frame_at(ctx, &__frame, 0x0);
-    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x8);
+    let tail: ArrV<'a, i32, 2> = ptr(ctx, __in_caller + 0x0);
+    let cmd: CardCmd<'a> = ptr(ctx, __in_caller + 0x8);
     let mut state = state;
     let mut phys = phys;
     let mut block_id = block_id;
@@ -8226,9 +8295,9 @@ fn inl_queueCardReadCommand_unfused<'a>(
     data: Addr<'a>,
     length: i32,
     offset: i32,
+    __in_caller: u32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x30);
-    let command: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+    let command: CardCmd<'a> = ptr(ctx, __in_caller + 0x0);
     let mut state = state;
     let mut block = block;
     let mut data = data;
@@ -8250,7 +8319,9 @@ fn inl_queueReadDataBlock_unfused<'a>(
     block_idx: i32,
     dst: Val<'a, u8>,
     size: i32,
+    __in_caller: u32,
 ) -> i32 {
+    let __inl: ArrV<'a, u8, 40> = ptr(ctx, __in_caller + 0x0);
     let mut state = state;
     let mut block_idx = block_idx;
     let mut dst = dst;
@@ -8269,6 +8340,7 @@ fn inl_queueReadDataBlock_unfused<'a>(
         Handle::cast::<Addr<'a>>(dst),
         size,
         (sector_size.wrapping_mul(idx) as i32),
+        Handle::addr(__inl),
     );
 }
 
@@ -8399,9 +8471,9 @@ fn inl_queueCardClearCommand_unfused<'a>(
     state: CardState<'a>,
     dst: Val<'a, u8>,
     size: i32,
+    __in_caller: u32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x30);
-    let command: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+    let command: CardCmd<'a> = ptr(ctx, __in_caller + 0x0);
     let mut state = state;
     let mut dst = dst;
     let mut size = size;
@@ -8421,14 +8493,16 @@ fn inl_queueClearDataBlock_unfused<'a>(
     state: CardState<'a>,
     dst: Val<'a, u8>,
     size: i32,
+    __in_caller: u32,
 ) -> i32 {
+    let __inl: ArrV<'a, u8, 40> = ptr(ctx, __in_caller + 0x0);
     let mut state = state;
     let mut dst = dst;
     let mut size = size;
     return (if size == 0_i32 {
         0_i32
     } else {
-        inl_queueCardClearCommand_unfused(ctx, state, dst, size)
+        inl_queueCardClearCommand_unfused(ctx, state, dst, size, Handle::addr(__inl))
     });
 }
 
@@ -8674,9 +8748,9 @@ fn inl_fn_803AF3F0_queue_verify_first_unfused<'a>(
     seq: i32,
     data: Addr<'a>,
     size: i32,
+    __in_caller: u32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x30);
-    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+    let cmd: CardCmd<'a> = ptr(ctx, __in_caller + 0x0);
     let mut state = state;
     let mut phys = phys;
     let mut block_id = block_id;
@@ -8746,9 +8820,9 @@ fn inl_fn_803AF3F0_queue_verify_final_unfused<'a>(
     seq: i32,
     data: Addr<'a>,
     size: i32,
+    __in_caller: u32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x30);
-    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+    let cmd: CardCmd<'a> = ptr(ctx, __in_caller + 0x0);
     let mut state = state;
     let mut phys = phys;
     let mut block_id = block_id;
@@ -8826,10 +8900,10 @@ fn inl_fn_803AF3F0_queue_write_final_unfused<'a>(
     data: Addr<'a>,
     size: i32,
     file_idx: i32,
+    __in_caller: u32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x50);
-    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
-    let init_cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x24);
+    let cmd: CardCmd<'a> = ptr(ctx, __in_caller + 0x0);
+    let init_cmd: CardCmd<'a> = ptr(ctx, __in_caller + 0x24);
     let mut state = state;
     let mut phys = phys;
     let mut block_id = block_id;
@@ -8878,10 +8952,10 @@ fn inl_fn_803AF3F0_queue_write_first_unfused<'a>(
     data: Addr<'a>,
     size: i32,
     file_idx: i32,
+    __in_caller: u32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x50);
-    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
-    let init_cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x24);
+    let cmd: CardCmd<'a> = ptr(ctx, __in_caller + 0x0);
+    let init_cmd: CardCmd<'a> = ptr(ctx, __in_caller + 0x24);
     let mut state = state;
     let mut phys = phys;
     let mut block_id = block_id;
@@ -8969,9 +9043,9 @@ fn inl_fn_803B0120_queue_verify_unfused<'a>(
     seq: i32,
     data: Addr<'a>,
     size: i32,
+    __in_caller: u32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x30);
-    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+    let cmd: CardCmd<'a> = ptr(ctx, __in_caller + 0x0);
     let mut state = state;
     let mut phys = phys;
     let mut block_id = block_id;
@@ -9026,10 +9100,10 @@ fn inl_fn_803B0120_queue_write_unfused<'a>(
     data: Addr<'a>,
     size: i32,
     file_idx: i32,
+    __in_caller: u32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x50);
-    let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
-    let init_cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x24);
+    let cmd: CardCmd<'a> = ptr(ctx, __in_caller + 0x0);
+    let init_cmd: CardCmd<'a> = ptr(ctx, __in_caller + 0x24);
     let mut state = state;
     let mut phys = phys;
     let mut block_id = block_id;
@@ -9403,9 +9477,9 @@ fn inl_queueHeaderBlock_unfused<'a>(
     comment: Addr<'a>,
     banner: Addr<'a>,
     icons: Addr<'a>,
+    __in_caller: u32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x30);
-    let buf: CardCmd<'a> = frame_at(ctx, &__frame, 0x0);
+    let buf: CardCmd<'a> = ptr(ctx, __in_caller + 0x0);
     let mut state = state;
     let mut block = block;
     let mut comment = comment;
@@ -9421,7 +9495,9 @@ fn inl_queueHeaderBlocks_unfused<'a>(
     comment: Addr<'a>,
     banner: Addr<'a>,
     icons: Addr<'a>,
+    __in_caller: u32,
 ) -> i32 {
+    let __inl: ArrV<'a, u8, 40> = ptr(ctx, __in_caller + 0x0);
     let mut state = state;
     let mut comment = comment;
     let mut banner = banner;
@@ -9437,7 +9513,15 @@ fn inl_queueHeaderBlocks_unfused<'a>(
             (state).sector_size(),
         ) {
             'c2: {
-                result = inl_queueHeaderBlock_unfused(ctx, state, i, comment, banner, icons);
+                result = inl_queueHeaderBlock_unfused(
+                    ctx,
+                    state,
+                    i,
+                    comment,
+                    banner,
+                    icons,
+                    Handle::addr(__inl),
+                );
                 if result < 0_i32 {
                     return result;
                 }

@@ -142,7 +142,7 @@ pub fn fn_802FE470<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn un_802FE6A8<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj_ui: HSD_GObj<'a> = null(ctx);
     let mut jobj_ui: HSD_JObj<'a> = null(ctx);
     fns::un_803F9D48(ctx).set_x18(inl_createCamera_unfused(ctx));
@@ -240,8 +240,8 @@ pub fn un_802FE8CC<'a>(ctx: &'a Ctx) {
 pub fn un_802FE918<'a>(ctx: &'a Ctx, a: i32, b: i32, c: i32) {
     let __frame = ctx.stack_frame(0x138);
     let r: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let sp1C: ArrV<'a, i8, 260> = frame_at(ctx, &__frame, 0x4);
-    let sp14: datetime<'a> = frame_at(ctx, &__frame, 0x108);
+    let sp1C: ArrV<'a, i8, 260> = frame_at(ctx, &__frame, 0x14);
+    let sp14: datetime<'a> = frame_at(ctx, &__frame, 0xc);
     let mut a = a;
     let mut b = b;
     let mut c = c;

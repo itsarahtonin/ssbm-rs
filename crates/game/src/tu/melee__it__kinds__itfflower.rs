@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn it_80292D48<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x60);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x4);
     let mut vec = vec;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     spawn.set_kind((enums::It_Kind_F_Flower as i32));

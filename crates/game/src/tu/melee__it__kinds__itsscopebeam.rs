@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn it_80298DEC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vec: Vec<'a>, arg2: i32, arg3: f64) {
     let __frame = ctx.stack_frame(0x88);
-    let si: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let si: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut vec = vec;
     let mut arg2 = arg2;
@@ -48,7 +48,7 @@ pub fn it_80298DEC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vec: Vec<'a>, arg2: i32
 
 pub fn it_80298ED0<'a>(ctx: &'a Ctx, projectile: HSD_GObj<'a>, owner: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut projectile = projectile;
     let mut owner = owner;
     let mut it: Item<'a> =
@@ -162,10 +162,10 @@ pub fn itSscopebeam_UnkMotion9_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itSscopebeam_UnkMotion9_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x1f0);
-    let saved_coll: CollData<'a> = frame_at(ctx, &__frame, 0x0);
-    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x19c);
-    let axis: Vec<'a> = frame_at(ctx, &__frame, 0x1a8);
-    let saved_pos: Vec<'a> = frame_at(ctx, &__frame, 0x1b4);
+    let saved_coll: CollData<'a> = frame_at(ctx, &__frame, 0x2c);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let axis: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let saved_pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut coll: CollData<'a> = (ip).x378_itemColl();

@@ -111,7 +111,7 @@ pub fn UpdateIconOffsets<'a>(ctx: &'a Ctx, ent: CARDDir<'a>, stat: CARDStat<'a>)
 
 pub fn CARDGetStatus<'a>(ctx: &'a Ctx, chan: i32, fileNo: i32, stat: CARDStat<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x0);
+    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0xc);
     let mut chan = chan;
     let mut fileNo = fileNo;
     let mut stat = stat;
@@ -170,7 +170,7 @@ pub fn CARDSetStatusAsync<'a>(
     callback: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x0);
+    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x10);
     let mut chan = chan;
     let mut fileNo = fileNo;
     let mut stat = stat;

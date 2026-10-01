@@ -28,7 +28,9 @@ use crate::support::*;
 
 pub fn __num2dec<'a>(ctx: &'a Ctx, f: decform<'a>, x: f64, d: decimal<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let sp30: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let sp30: Val<'a, i32> = frame_at(ctx, &__frame, 0x28);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut f = f;
     let mut x = x;
     let mut d = d;
@@ -54,9 +56,9 @@ pub fn __num2dec<'a>(ctx: &'a Ctx, f: decform<'a>, x: f64, d: decimal<'a>) {
         (d).sig().text().at(0_i32).set((48_i32 as u8));
         return;
     }
-    if !(inl__fpclassify_unfused(ctx, x) > (enums::FP_INFINITE as i32)) {
+    if !(inl__fpclassify_unfused(ctx, x, Handle::addr(__inl)) > (enums::FP_INFINITE as i32)) {
         (d).sig().text().at(0_i32).set(
-            ((if inl__fpclassify_unfused(ctx, x) == (enums::FP_NAN as i32) {
+            ((if inl__fpclassify_unfused(ctx, x, Handle::addr(__inl_2)) == (enums::FP_NAN as i32) {
                 78_i32
             } else {
                 73_i32
@@ -173,9 +175,8 @@ pub fn __num2dec<'a>(ctx: &'a Ctx, f: decform<'a>, x: f64, d: decimal<'a>) {
     (d).set_exp((exp as i16));
 }
 
-fn inl__fpclassify_unfused<'a>(ctx: &'a Ctx, x: f64) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let x__slot: Val<'a, F64> = frame_at(ctx, &__frame, 0x0);
+fn inl__fpclassify_unfused<'a>(ctx: &'a Ctx, x: f64, __in_caller: u32) -> i32 {
+    let x__slot: Val<'a, F64> = ptr(ctx, __in_caller + 0x0);
     x__slot.set(x);
     's1: {
         let __case = match (((Handle::add((Handle::cast::<Val<'a, i32>>(x__slot)), 0_i32)).get())

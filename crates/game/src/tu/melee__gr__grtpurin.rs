@@ -110,8 +110,8 @@ pub fn grTPurin_80223380<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grTPurin_80223388<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let values: ArrV<'a, i16, 8> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let values: ArrV<'a, i16, 8> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut pos: Val<'a, i16> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);

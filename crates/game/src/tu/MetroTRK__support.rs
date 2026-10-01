@@ -36,11 +36,11 @@ pub fn TRKSuppAccessFile<'a>(
     read: i32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let replyBufferId: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let buffer: Ptr<'a, MessageBuffer<'a>> = frame_at(ctx, &__frame, 0x4);
-    let bufferId: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
-    let replyLength: Val<'a, u16> = frame_at(ctx, &__frame, 0xc);
-    let replyIOResult: Val<'a, u8> = frame_at(ctx, &__frame, 0x10);
+    let replyBufferId: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
+    let buffer: Ptr<'a, MessageBuffer<'a>> = frame_at(ctx, &__frame, 0x8);
+    let bufferId: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let replyLength: Val<'a, u16> = frame_at(ctx, &__frame, 0x2);
+    let replyIOResult: Val<'a, u8> = frame_at(ctx, &__frame, 0x0);
     let mut file_handle = file_handle;
     let mut data = data;
     let mut count = count;
@@ -169,8 +169,8 @@ pub fn TRKRequestSend<'a>(
     p3: i32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let msg_error: Val<'a, u8> = frame_at(ctx, &__frame, 0x0);
-    let msg_command: Val<'a, u8> = frame_at(ctx, &__frame, 0x4);
+    let msg_error: Val<'a, u8> = frame_at(ctx, &__frame, 0x1);
+    let msg_command: Val<'a, u8> = frame_at(ctx, &__frame, 0x0);
     let mut msgBuf = msgBuf;
     let mut bufferId = bufferId;
     let mut p1 = p1;

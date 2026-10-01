@@ -34,7 +34,7 @@ pub fn parse_format<'a>(
     format: print_format<'a>,
 ) -> Val<'a, i8> {
     let __frame = ctx.stack_frame(0x38);
-    let f: print_format<'a> = frame_at(ctx, &__frame, 0x0);
+    let f: print_format<'a> = frame_at(ctx, &__frame, 0xc);
     let mut format_string = format_string;
     let mut arg = arg;
     let mut format = format;
@@ -874,8 +874,8 @@ pub fn float2str<'a>(
     unused: i32,
 ) -> Val<'a, i8> {
     let __frame = ctx.stack_frame(0x60);
-    let dec: decimal<'a> = frame_at(ctx, &__frame, 0x0);
-    let form: decform<'a> = frame_at(ctx, &__frame, 0x2c);
+    let dec: decimal<'a> = frame_at(ctx, &__frame, 0x14);
+    let form: decform<'a> = frame_at(ctx, &__frame, 0x10);
     let mut arg = arg;
     let mut buff = buff;
     let mut format = format;
@@ -3860,7 +3860,7 @@ pub fn vsnprintf<'a>(
     arg: __va_list_t<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let osc: __OutStrCtrl<'a> = frame_at(ctx, &__frame, 0x0);
+    let osc: __OutStrCtrl<'a> = frame_at(ctx, &__frame, 0x10);
     let mut s = s;
     let mut n = n;
     let mut format = format;
@@ -3892,10 +3892,18 @@ pub fn sprintf<'a>(ctx: &'a Ctx, s: Val<'a, i8>, format: Val<'a, i8>) -> i32 {
     let __frame = ctx.stack_frame(0x90);
     __frame.save_varargs();
     let args: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x70);
     let mut s = s;
     let mut format = format;
     __frame.va_info(Handle::addr(Handle::cast::<Addr<'a>>(args)), 2, 0);
-    return inl_vsnprintf_unfused(ctx, s, 0xffffffff_u32, format, args.get(0));
+    return inl_vsnprintf_unfused(
+        ctx,
+        s,
+        0xffffffff_u32,
+        format,
+        args.get(0),
+        Handle::addr(__inl),
+    );
 }
 
 fn inl_isdigit_unfused<'a>(ctx: &'a Ctx, c: i32) -> i32 {
@@ -3912,9 +3920,9 @@ fn inl_vsnprintf_unfused<'a>(
     n: u32,
     format: Val<'a, i8>,
     arg: __va_list_t<'a>,
+    __in_caller: u32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x18);
-    let osc: __OutStrCtrl<'a> = frame_at(ctx, &__frame, 0x0);
+    let osc: __OutStrCtrl<'a> = ptr(ctx, __in_caller + 0x0);
     let mut s = s;
     let mut n = n;
     let mut format = format;

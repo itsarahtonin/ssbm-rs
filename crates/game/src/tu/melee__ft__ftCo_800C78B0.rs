@@ -145,7 +145,7 @@ pub fn ftCo_800C7B0C<'a>(
     arg4: f64,
 ) {
     let __frame = ctx.stack_frame(0x180);
-    let hit: HitCapsule<'a> = frame_at(ctx, &__frame, 0x0);
+    let hit: HitCapsule<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

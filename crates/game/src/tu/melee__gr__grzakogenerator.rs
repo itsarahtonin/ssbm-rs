@@ -67,8 +67,8 @@ pub fn grZakoGenerator_801CA43C<'a>(
     height: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut config = config;
     let mut jobj = jobj;
     let mut height = height;
@@ -213,7 +213,7 @@ pub fn grZakoGenerator_801CA67C<'a>(ctx: &'a Ctx) -> grZakoGenerator_Data<'a> {
 
 pub fn grZakoGenerator_801CA8B4<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x80);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     if (!Handle::is_null(statics::melee__gr__grzakogenerator::lbl_8049F030(ctx).x4()))
         && ((statics::melee__gr__grzakogenerator::lbl_8049F030(ctx).xA_b0() as i32) != 0)

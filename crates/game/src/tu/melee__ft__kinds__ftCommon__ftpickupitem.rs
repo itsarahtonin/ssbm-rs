@@ -29,7 +29,7 @@ use crate::support::*;
 pub fn ftpickupitem_80094150<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x48);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let it_pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
+    let it_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut item_gobj = item_gobj;
     let mut pickup: itPickup<'a> = null(ctx);
@@ -81,8 +81,8 @@ pub fn ftpickupitem_80094150<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, item_gobj: HS
 
 pub fn ftpickupitem_800942A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flags: u32) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x60);
-    let it_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let it_pos: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut flags = flags;
     let mut pickup: itPickup<'a> = null(ctx);
@@ -377,6 +377,7 @@ pub fn ftpickupitem_80094818<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
 pub fn ftpickupitem_800948A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut item_gobj = item_gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -391,7 +392,7 @@ pub fn ftpickupitem_800948A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, item_gobj: HS
     } else {
         (fp).set_item_gobj(item_gobj);
     }
-    inl_ftpickupitem_80094818_unfused(ctx, gobj, 1_i32);
+    inl_ftpickupitem_80094818_unfused(ctx, gobj, 1_i32, Handle::addr(__inl));
     {
         let mut ret_part: i32 = 0;
         if fns::itIsHeavy(ctx, item_gobj) == 0_i32 {
@@ -482,8 +483,8 @@ pub fn ftpickupitem_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftpickupitem_80094B6C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut item_gobj = item_gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -658,9 +659,13 @@ fn inl_ftCheckThrowB3_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     return 0;
 }
 
-fn inl_ftpickupitem_80094818_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftpickupitem_80094818_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    arg1: i32,
+    __in_caller: u32,
+) {
+    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());

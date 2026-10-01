@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn ftMr_SpecialN_VitaminRandom<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let arr: ArrV<'a, i32, 9> = frame_at(ctx, &__frame, 0x0);
+    let arr: ArrV<'a, i32, 9> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut r3: i32 = 0;
@@ -111,8 +111,9 @@ pub fn ftMr_SpecialN_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMr_SpecialN_ItemFireSpawn<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let coords: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let coords: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut flag_res: i32 = 0;
@@ -159,7 +160,8 @@ pub fn ftMr_SpecialN_ItemFireSpawn<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 ],
             );
         } else {
-            rand_val_800E0D1C = inl_ftMr_SpecialN_VitaminRandom_unfused(ctx, gobj);
+            rand_val_800E0D1C =
+                inl_ftMr_SpecialN_VitaminRandom_unfused(ctx, gobj, Handle::addr(__inl));
             fns::itDrMarioPill_Spawn(
                 ctx,
                 gobj,
@@ -277,9 +279,12 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
-fn inl_ftMr_SpecialN_VitaminRandom_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x30);
-    let arr: ArrV<'a, i32, 9> = frame_at(ctx, &__frame, 0x0);
+fn inl_ftMr_SpecialN_VitaminRandom_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    __in_caller: u32,
+) -> i32 {
+    let arr: ArrV<'a, i32, 9> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut r3: i32 = 0;

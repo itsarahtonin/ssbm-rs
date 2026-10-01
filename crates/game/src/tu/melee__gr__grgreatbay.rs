@@ -230,7 +230,7 @@ pub fn grGreatBay_801F4690<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grGreatBay_801F4694<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -282,8 +282,8 @@ pub fn grGreatBay_801F4994<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grGreatBay_801F499C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x80);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let pos2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let pos2: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -621,7 +621,7 @@ pub fn grGreatBay_801F55F8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grGreatBay_801F5600<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1081,7 +1081,7 @@ pub fn grGreatBay_801F60C4<'a>(
 ) {
     let __frame = ctx.stack_frame(0x60);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut user_data = user_data;
     let mut joint_id = joint_id;
     let mut coll = coll;
@@ -1297,10 +1297,10 @@ pub fn grGreatBay_801F62F8<'a>(ctx: &'a Ctx, current: i32) -> i32 {
 
 pub fn grGreatBay_801F63F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x88);
-    let rot: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x64);
+    let rot: Vec<'a> = frame_at(ctx, &__frame, 0x64);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x58);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x8);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut padding: i32 = 0;
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -1391,7 +1391,7 @@ pub fn grGreatBay_801F63F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grGreatBay_801F660C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut i: u32 = 0;
@@ -1447,9 +1447,9 @@ pub fn grGreatBay_801F66A4<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn grGreatBay_801F6708<'a>(ctx: &'a Ctx, unk: u32, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let current: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let previous: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
+    let current: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let previous: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut unk = unk;
     let mut gobj = gobj;
     let mut arg: f64 = 0.0;
@@ -1502,7 +1502,7 @@ pub fn grGreatBay_801F680C<'a>(ctx: &'a Ctx, unused: i32) -> DynamicsDesc<'a> {
 
 pub fn grGreatBay_801F6814<'a>(ctx: &'a Ctx, a: Vec<'a>, unused: i32, joint: HSD_JObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let b: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let b: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut a = a;
     let mut unused = unused;
     let mut joint = joint;

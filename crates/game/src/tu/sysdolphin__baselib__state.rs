@@ -200,9 +200,10 @@ pub fn HSD_SetupPEMode<'a>(ctx: &'a Ctx, flags: u32, pe: HSD_PEDesc<'a>) {
 
 pub fn HSD_SetupRenderModeWithCustomPE<'a>(ctx: &'a Ctx, rendermode: u32, pe: HSD_PEDesc<'a>) {
     let __frame = ctx.stack_frame(0x90);
+    let __inl: ArrV<'a, u8, 120> = frame_at(ctx, &__frame, 0x8);
     let mut rendermode = rendermode;
     let mut pe = pe;
-    inl_setupTevMode_last_unfused(ctx);
+    inl_setupTevMode_last_unfused(ctx, Handle::addr(__inl));
     fns::HSD_SetupPEMode(ctx, rendermode, pe);
     fns::HSD_SetTevRegAll(ctx);
     fns::HSD_StateSetNumTevStages(ctx);
@@ -212,8 +213,14 @@ pub fn HSD_SetupRenderModeWithCustomPE<'a>(ctx: &'a Ctx, rendermode: u32, pe: HS
 
 pub fn HSD_SetupRenderMode<'a>(ctx: &'a Ctx, rendermode: u32) {
     let __frame = ctx.stack_frame(0x88);
+    let __inl: ArrV<'a, u8, 120> = frame_at(ctx, &__frame, 0x4);
     let mut rendermode = rendermode;
-    inl_HSD_SetupRenderModeWithCustomPE_unfused(ctx, rendermode, null::<HSD_PEDesc<'a>>(ctx));
+    inl_HSD_SetupRenderModeWithCustomPE_unfused(
+        ctx,
+        rendermode,
+        null::<HSD_PEDesc<'a>>(ctx),
+        Handle::addr(__inl),
+    );
 }
 
 pub fn HSD_SetMaterialColor<'a>(
@@ -488,9 +495,8 @@ pub fn HSD_StateInvalidate<'a>(ctx: &'a Ctx, mask: i32) {
     }
 }
 
-fn inl_setupTevMode_last_unfused<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x80);
-    let tevdesc: _HSD_TevDesc<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_setupTevMode_last_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) {
+    let tevdesc: _HSD_TevDesc<'a> = ptr(ctx, __in_caller + 0x0);
     if !(fns::HSD_StateGetNumTevStages(ctx) != 0) {
         tevdesc.set_flags((0_i32 as u32));
         tevdesc.set_stage((fns::HSD_StateAssignTev(ctx) as u32));
@@ -509,10 +515,12 @@ fn inl_HSD_SetupRenderModeWithCustomPE_unfused<'a>(
     ctx: &'a Ctx,
     rendermode: u32,
     pe: HSD_PEDesc<'a>,
+    __in_caller: u32,
 ) {
+    let __inl: ArrV<'a, u8, 120> = ptr(ctx, __in_caller + 0x0);
     let mut rendermode = rendermode;
     let mut pe = pe;
-    inl_setupTevMode_last_unfused(ctx);
+    inl_setupTevMode_last_unfused(ctx, Handle::addr(__inl));
     fns::HSD_SetupPEMode(ctx, rendermode, pe);
     fns::HSD_SetTevRegAll(ctx);
     fns::HSD_StateSetNumTevStages(ctx);

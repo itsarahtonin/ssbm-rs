@@ -1594,13 +1594,13 @@ pub fn mpCheckFloor<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0xf0);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let px_sp54: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
-    let py_sp50: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
-    let pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
-    let x0_sp48: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
-    let y0_sp44: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
-    let x1_sp40: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
-    let y1_sp3C: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
+    let px_sp54: Val<'a, F32> = frame_at(ctx, &__frame, 0x4c);
+    let py_sp50: Val<'a, F32> = frame_at(ctx, &__frame, 0x48);
+    let pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let x0_sp48: Val<'a, F32> = frame_at(ctx, &__frame, 0x40);
+    let y0_sp44: Val<'a, F32> = frame_at(ctx, &__frame, 0x3c);
+    let x1_sp40: Val<'a, F32> = frame_at(ctx, &__frame, 0x38);
+    let y1_sp3C: Val<'a, F32> = frame_at(ctx, &__frame, 0x34);
     let mut ax = ax;
     let mut ay = ay;
     let mut bx = bx;
@@ -2125,9 +2125,9 @@ pub fn mpCheckFloorRemap<'a>(
     let __frame = ctx.stack_frame(0x120);
     let ax__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
     let ay__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
-    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
-    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x44);
+    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x40);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
     ax__slot.set(ax);
     ay__slot.set(ay);
     let mut bx = bx;
@@ -2769,13 +2769,13 @@ pub fn mpCheckCeiling<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0xd0);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
-    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
-    let pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
-    let x0: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
-    let y0: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
-    let x1: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
-    let y1: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
+    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x40);
+    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x3c);
+    let pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let x0: Val<'a, F32> = frame_at(ctx, &__frame, 0x34);
+    let y0: Val<'a, F32> = frame_at(ctx, &__frame, 0x30);
+    let x1: Val<'a, F32> = frame_at(ctx, &__frame, 0x2c);
+    let y1: Val<'a, F32> = frame_at(ctx, &__frame, 0x28);
     let mut ax = ax;
     let mut ay = ay;
     let mut bx = bx;
@@ -3228,12 +3228,12 @@ pub fn mpCheckCeilingRemap<'a>(
     let __frame = ctx.stack_frame(0xf0);
     let ax__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
     let ay__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
-    let sp58: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
-    let sp54: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x18);
-    let sp44: Val<'a, F32> = frame_at(ctx, &__frame, 0x24);
-    let sp40: Val<'a, F32> = frame_at(ctx, &__frame, 0x28);
-    let sp3C: Val<'a, F32> = frame_at(ctx, &__frame, 0x2c);
+    let sp58: Val<'a, F32> = frame_at(ctx, &__frame, 0x50);
+    let sp54: Val<'a, F32> = frame_at(ctx, &__frame, 0x4c);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x10);
+    let sp44: Val<'a, F32> = frame_at(ctx, &__frame, 0x3c);
+    let sp40: Val<'a, F32> = frame_at(ctx, &__frame, 0x38);
+    let sp3C: Val<'a, F32> = frame_at(ctx, &__frame, 0x34);
     let sp38: Val<'a, F32> = frame_at(ctx, &__frame, 0x30);
     ax__slot.set(ax);
     ay__slot.set(ay);
@@ -3836,8 +3836,8 @@ pub fn mpCheckLeftWall<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0xe0);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
-    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x2c);
+    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x28);
     let mut ax = ax;
     let mut ay = ay;
     let mut bx = bx;
@@ -4276,8 +4276,8 @@ pub fn mpCheckLeftWallRemap<'a>(
     let ax__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
     let ay__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
-    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
-    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
+    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x34);
+    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x30);
     ax__slot.set(ax);
     ay__slot.set(ay);
     let mut bx = bx;
@@ -4853,8 +4853,8 @@ pub fn mpCheckRightWall<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0xe0);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
-    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x2c);
+    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x28);
     let mut ax = ax;
     let mut ay = ay;
     let mut bx = bx;
@@ -5293,8 +5293,8 @@ pub fn mpCheckRightWallRemap<'a>(
     let ax__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
     let ay__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
-    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
-    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
+    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x34);
+    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x30);
     ax__slot.set(ax);
     ay__slot.set(ay);
     let mut bx = bx;
@@ -5871,10 +5871,10 @@ pub fn mpLib_800511A4_RightWall<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0x110);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
-    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
-    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
-    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
+    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x40);
+    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x3c);
+    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x38);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x34);
     let mut ax = ax;
     let mut ay = ay;
     let mut bx = bx;
@@ -6324,10 +6324,10 @@ pub fn mpLib_800515A0_LeftWall<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0x110);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
-    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
-    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
-    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
+    let int_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x40);
+    let int_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x3c);
+    let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x38);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x34);
     let mut a0x = a0x;
     let mut a0y = a0y;
     let mut a1x = a1x;
@@ -7602,12 +7602,12 @@ pub fn mpCheckMultiple<'a>(
     joint_id_only: i32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0xc8);
-    let temp_pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let temp_normal: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let temp_line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x34);
-    let temp_flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x38);
+    let temp_pos: Vec<'a> = frame_at(ctx, &__frame, 0x60);
+    let temp_normal: Vec<'a> = frame_at(ctx, &__frame, 0x54);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let temp_line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x38);
+    let temp_flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x34);
     let mut x0 = x0;
     let mut y0 = y0;
     let mut x1 = x1;
@@ -11465,8 +11465,8 @@ pub fn mpLib_80055E24<'a>(ctx: &'a Ctx, joint_id: i32) {
 pub fn mpLib_80055E9C<'a>(ctx: &'a Ctx, joint_id: i32) {
     let __frame = ctx.stack_frame(0x70);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused_2: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x10);
+    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let unused_2: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x4);
     let mut joint_id = joint_id;
     let mut f31: f64 = 0.0;
     let mut f30: f64 = 0.0;
@@ -11859,8 +11859,8 @@ pub fn mpLib_80056758<'a>(ctx: &'a Ctx, line_id: i32, x0: f64, y0: f64, x1: f64,
 
 pub fn mpGetSpeed<'a>(ctx: &'a Ctx, line_id: i32, pos: Vec<'a>, speed: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let new_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
-    let new_y: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let new_x: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
+    let new_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
     let mut line_id = line_id;
     let mut pos = pos;
     let mut speed = speed;
@@ -12129,10 +12129,11 @@ pub fn mpLib_80056C54<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0xd0);
     let _padA: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let sp64: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
-    let sp58: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp4C: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let sqrt_tmp: ArrV<'a, F32, 2> = frame_at(ctx, &__frame, 0x24);
+    let sp64: Val<'a, F32> = frame_at(ctx, &__frame, 0x5c);
+    let sp58: Vec<'a> = frame_at(ctx, &__frame, 0x50);
+    let sp4C: Vec<'a> = frame_at(ctx, &__frame, 0x44);
+    let sqrt_tmp: ArrV<'a, F32, 2> = frame_at(ctx, &__frame, 0x3c);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut line_id = line_id;
     let mut pos = pos;
     let mut line_id_out = line_id_out;
@@ -12518,7 +12519,7 @@ pub fn mpLib_80056C54<'a>(
                 unreachable!();
             }
             84 => {
-                let _ = inl_mpLineGetNormal(ctx, line_id, normal_out);
+                let _ = inl_mpLineGetNormal(ctx, line_id, normal_out, Handle::addr(__inl));
                 __state = 85;
             }
             85 => {
@@ -13979,7 +13980,7 @@ pub fn mpUncheckBounding<'a>(ctx: &'a Ctx) {
 
 pub fn mpLib_SetupDraw<'a>(ctx: &'a Ctx, color: _GXColor<'a>) {
     let __frame = ctx.stack_frame(0x88);
-    let spC: _HSD_TevDesc<'a> = frame_at(ctx, &__frame, 0x0);
+    let spC: _HSD_TevDesc<'a> = frame_at(ctx, &__frame, 0x4);
     fns::HSD_StateInitTev(ctx);
     spC.set_flags((0_i32 as u32));
     spC.set_stage((fns::HSD_StateAssignTev(ctx) as u32));
@@ -14003,13 +14004,13 @@ pub fn mpLib_SetupDraw<'a>(ctx: &'a Ctx, color: _GXColor<'a>) {
 pub fn mpLib_DrawEcbs<'a>(ctx: &'a Ctx, cd: CollData<'a>) {
     let __frame = ctx.stack_frame(0xf0);
     let spE0: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let spDC: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let spD8: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let spD4: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let spD0: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
-    let spCC: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
-    let spC8: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
-    let spC4: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
+    let spDC: _GXColor<'a> = frame_at(ctx, &__frame, 0xd4);
+    let spD8: _GXColor<'a> = frame_at(ctx, &__frame, 0xd0);
+    let spD4: _GXColor<'a> = frame_at(ctx, &__frame, 0xcc);
+    let spD0: _GXColor<'a> = frame_at(ctx, &__frame, 0xc8);
+    let spCC: _GXColor<'a> = frame_at(ctx, &__frame, 0xc4);
+    let spC8: _GXColor<'a> = frame_at(ctx, &__frame, 0xc0);
+    let spC4: _GXColor<'a> = frame_at(ctx, &__frame, 0xbc);
     let mut cd = cd;
     spE0.set_r((255_i32 as u8));
     spE0.set_g((160_i32 as u8));
@@ -14342,13 +14343,13 @@ pub fn mpLib_DrawEcbs<'a>(ctx: &'a Ctx, cd: CollData<'a>) {
 
 pub fn mpLib_DrawSnapping<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x158);
-    let left_snap_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let right_snap_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let spDC: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x38);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x68);
-    let sp7C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x6c);
-    let unused_2: ArrV<'a, u8, 52> = frame_at(ctx, &__frame, 0x9c);
+    let left_snap_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x108);
+    let right_snap_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x104);
+    let spDC: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xd4);
+    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x0);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp7C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x74);
+    let unused_2: ArrV<'a, u8, 52> = frame_at(ctx, &__frame, 0x34);
     Handle::copy_from(
         left_snap_color,
         statics::melee__mp__mplib::mpLib_804D80E0(ctx),
@@ -14993,10 +14994,10 @@ fn asm_mpLib_DrawMatchingLines(ctx: &Ctx) {
 pub fn mpLib_80059554<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0xd8);
     let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let spB4: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let spB0: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let spAC: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
-    let spA8: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
+    let spB4: _GXColor<'a> = frame_at(ctx, &__frame, 0xac);
+    let spB0: _GXColor<'a> = frame_at(ctx, &__frame, 0xa8);
+    let spAC: _GXColor<'a> = frame_at(ctx, &__frame, 0xa4);
+    let spA8: _GXColor<'a> = frame_at(ctx, &__frame, 0xa0);
     let mut line_r7: CollLine<'a> = null(ctx);
     let mut line_r4: CollLine<'a> = null(ctx);
     let mut v0_r6: CollVtx<'a> = null(ctx);
@@ -15990,10 +15991,10 @@ pub fn mpLib_80059554<'a>(ctx: &'a Ctx) {
 
 pub fn mpLib_80059E60<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x140);
-    let sp104: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x30);
-    let sp28: mpLib_80059E60_sp28<'a> = frame_at(ctx, &__frame, 0x60);
-    let colors: mpLib_80059E60_colors<'a> = frame_at(ctx, &__frame, 0x10c);
+    let sp104: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xfc);
+    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0xcc);
+    let sp28: mpLib_80059E60_sp28<'a> = frame_at(ctx, &__frame, 0x20);
+    let colors: mpLib_80059E60_colors<'a> = frame_at(ctx, &__frame, 0x0);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -16091,7 +16092,7 @@ pub fn mpLib_80059E60<'a>(ctx: &'a Ctx) {
 
 pub fn mpLib_DrawCrosses<'a>(ctx: &'a Ctx, idx: Val<'a, i16>, len: i32, arg2: _GXColor<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
     let mut idx = idx;
     let mut len = len;
     let mut i: i32 = 0;
@@ -16242,12 +16243,12 @@ pub fn mpLib_8005A2DC<'a>(ctx: &'a Ctx) {
 pub fn mpLib_DrawZones<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0xd8);
     let _3: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let sp7C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x4);
-    let _2: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x34);
-    let sp40: _GXColor<'a> = frame_at(ctx, &__frame, 0x6c);
-    let _5: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x70);
-    let sp34: _GXColor<'a> = frame_at(ctx, &__frame, 0x78);
-    let sp20: _GXColor<'a> = frame_at(ctx, &__frame, 0x7c);
+    let sp7C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x74);
+    let _2: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x3c);
+    let sp40: _GXColor<'a> = frame_at(ctx, &__frame, 0x38);
+    let _5: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
+    let sp34: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
+    let sp20: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
     let mut var_r30: CmSubject<'a> = null(ctx);
     let mut left: f64 = 0.0;
     let mut right: f64 = 0.0;
@@ -17610,9 +17611,13 @@ fn inl_mpLineGetFlags<'a>(ctx: &'a Ctx, line_id: i32) -> u32 {
     .lo_flags() as u32);
 }
 
-fn inl_mpLineGetNormal<'a>(ctx: &'a Ctx, line_id: i32, normal_out: Vec<'a>) -> Vec<'a> {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+fn inl_mpLineGetNormal<'a>(
+    ctx: &'a Ctx,
+    line_id: i32,
+    normal_out: Vec<'a>,
+    __in_caller: u32,
+) -> Vec<'a> {
+    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0x0);
     let mut line_id = line_id;
     let mut normal_out = normal_out;
     let mut line: MapLine<'a> = null(ctx);

@@ -44,8 +44,8 @@ pub fn it_802B1DF8<'a>(
     kind: i32,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0xb8);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4c);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x24);
+    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut owner = owner;
     let mut pos = pos;
     let mut vel = vel;
@@ -228,7 +228,7 @@ pub fn itPikachuthunder_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) ->
 
 pub fn itPikachuthunder_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (ip).xDD4_itemVar().pikachuthunder().x0() == 0_i32 {

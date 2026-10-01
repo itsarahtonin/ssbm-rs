@@ -49,7 +49,7 @@ pub fn HSD_PadGetResetSwitch<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn HSD_PadRenewRawStatus<'a>(ctx: &'a Ctx, err_check: i32) {
     let __frame = ctx.stack_frame(0x68);
-    let now: HSD_PadData<'a> = frame_at(ctx, &__frame, 0x0);
+    let now: HSD_PadData<'a> = frame_at(ctx, &__frame, 0x24);
     let mut err_check = err_check;
     let mut i: i32 = 0;
     let mut mask: u32 = 0;

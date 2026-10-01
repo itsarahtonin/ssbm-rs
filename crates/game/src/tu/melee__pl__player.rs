@@ -169,10 +169,10 @@ pub fn Player_800319C4<'a>(ctx: &'a Ctx, slot: i32, arg1: i32) -> i32 {
 
 pub fn Player_80031AD0<'a>(ctx: &'a Ctx, slot: i32) {
     let __frame = ctx.stack_frame(0x48);
-    let first_struct: plAllocInfo<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
-    let second_struct: plAllocInfo<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused1: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x14);
+    let first_struct: plAllocInfo<'a> = frame_at(ctx, &__frame, 0x1c);
+    let unused0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let second_struct: plAllocInfo<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused1: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x4);
     let mut slot = slot;
     let mut internal_id: i32 = 0;
     let mut has_transformation: i32 = 0;
@@ -2822,7 +2822,7 @@ pub fn Player_80036EA0<'a>(ctx: &'a Ctx, slot: i32) -> HSD_JObj<'a> {
 
 pub fn Player_80036F34<'a>(ctx: &'a Ctx, slot: i32, arg1: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let some_struct: plAllocInfo2<'a> = frame_at(ctx, &__frame, 0x0);
+    let some_struct: plAllocInfo2<'a> = frame_at(ctx, &__frame, 0xc);
     let mut slot = slot;
     let mut arg1 = arg1;
     let mut unused: u8 = 0;
@@ -2864,7 +2864,7 @@ pub fn Player_80036F34<'a>(ctx: &'a Ctx, slot: i32, arg1: i32) {
 
 pub fn Player_80037054<'a>(ctx: &'a Ctx, slot: i32, arg1: i32) {
     let __frame = ctx.stack_frame(0x40);
-    let some_struct: plAllocInfo2<'a> = frame_at(ctx, &__frame, 0x0);
+    let some_struct: plAllocInfo2<'a> = frame_at(ctx, &__frame, 0xc);
     let mut slot = slot;
     let mut arg1 = arg1;
     let mut unused: u8 = 0;

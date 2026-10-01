@@ -267,7 +267,7 @@ pub fn grRCruise_801FF444<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grRCruise_801FF5B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -554,10 +554,11 @@ pub fn grRCruise_801FFAD4<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 }
 
 pub fn grRCruise_801FFADC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x88);
-    let sp64: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let pad58: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let cam_offset: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let __frame = ctx.stack_frame(0xa8);
+    let sp64: Vec<'a> = frame_at(ctx, &__frame, 0x5c);
+    let pad58: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let cam_offset: Vec<'a> = frame_at(ctx, &__frame, 0x44);
+    let __inl: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x68);
     let mut arg0 = arg0;
     let mut gp: Ground<'a> = null(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);
@@ -575,7 +576,12 @@ pub fn grRCruise_801FFADC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                 cstr(ctx, 0x803b828c),
             )
         });
-        inl_grRCruise_801FFADC_inline(ctx, (gp).u().scroll().anim_gobj(), sp64);
+        inl_grRCruise_801FFADC_inline(
+            ctx,
+            (gp).u().scroll().anim_gobj(),
+            sp64,
+            Handle::addr(__inl),
+        );
         let _ = fns::lbVector_Diff(ctx, (gp).u().scroll().x10(), sp64, (gp).u().scroll().x1C());
         Handle::copy_from((gp).u().scroll().x10(), sp64);
         sp64.set_x(fp::fmuls(sp64.x(), fp::fneg(1.0)));
@@ -1045,8 +1051,8 @@ pub fn grRCruise_80200578<'a>(
 ) {
     let __frame = ctx.stack_frame(0x60);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x14);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut user_data = user_data;
     let mut joint_id = joint_id;
     let mut coll = coll;
@@ -1665,7 +1671,7 @@ pub fn grRCruise_80201410<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grRCruise_80201588<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1981,13 +1987,17 @@ fn inl_HSD_GObjGetUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
     return (gobj).user_data();
 }
 
-fn inl_grRCruise_801FFADC_inline<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, sp64: Vec<'a>) {
-    let __frame = ctx.stack_frame(0x40);
-    let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let diff: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let cam_offset2: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x30);
+fn inl_grRCruise_801FFADC_inline<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    sp64: Vec<'a>,
+    __in_caller: u32,
+) {
+    let sp18: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let sp24: Vec<'a> = ptr(ctx, __in_caller + 0xc);
+    let diff: Vec<'a> = ptr(ctx, __in_caller + 0x18);
+    let cam_offset2: Vec<'a> = ptr(ctx, __in_caller + 0x24);
+    let pad: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0x30);
     let mut gobj = gobj;
     let mut sp64 = sp64;
     ctx.fill(Handle::addr(pad), 0, 0x4);

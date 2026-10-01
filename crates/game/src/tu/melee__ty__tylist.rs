@@ -1308,10 +1308,10 @@ pub fn _tyList_80314504<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
 pub fn _tyList_8031457C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x48);
     let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let viewport: _HSD_RectS16<'a> = frame_at(ctx, &__frame, 0x8);
-    let scissor: _Scissor<'a> = frame_at(ctx, &__frame, 0x10);
-    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let eye: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let viewport: _HSD_RectS16<'a> = frame_at(ctx, &__frame, 0x28);
+    let scissor: _Scissor<'a> = frame_at(ctx, &__frame, 0x20);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let eye: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x30);
     let mut entry: TyListGobjEntry<'a> = statics::melee__ty__tylist::_tyList_804A2D6C(ctx);
     let mut archive: ToyED8Data<'a> = fns::Toy_sbss_804D6ED8(ctx).get();

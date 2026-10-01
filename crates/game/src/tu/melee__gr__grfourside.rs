@@ -313,6 +313,7 @@ pub fn grFourside_801F326C<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 
 pub fn grFourside_801F3274<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -322,7 +323,7 @@ pub fn grFourside_801F3274<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut temp_fVar1: f64 = 0.0;
     let mut rand_max: i32 = 0;
     let mut rand_max2: i32 = 0;
-    inl_grFourside_UpdateCrane_unfused(ctx, gp, hsd_gobj);
+    inl_grFourside_UpdateCrane_unfused(ctx, gp, hsd_gobj, Handle::addr(__inl));
     inl_HSD_JObjSetTranslateY_unfused(ctx, crane_iron, inl_grFourside_GetCraneY_unfused(ctx, gp));
     let _ = fns::Ground_UpdateMapColl(ctx, hsd_gobj);
 }
@@ -380,7 +381,7 @@ pub fn grFourside_801F3B6C<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn grFourside_801F3B70<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let local18: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let local18: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -444,8 +445,8 @@ pub fn grFourside_801F3CC0<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 
 pub fn grFourside_801F3CC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -587,8 +588,8 @@ pub fn grFourside_801F3F10<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn fn_801F3F74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, renderpass: i32) {
     let __frame = ctx.stack_frame(0x40);
-    let eye: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let eye: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut renderpass = renderpass;
     let mut gp: Ground<'a> = null(ctx);
@@ -646,7 +647,7 @@ pub fn grFourside_801F41E0<'a>(ctx: &'a Ctx, arg: i32) -> DynamicsDesc<'a> {
 pub fn grFourside_801F41E8<'a>(ctx: &'a Ctx, a: Vec<'a>, arg: i32, joint: HSD_JObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let b: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let b: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut a = a;
     let mut arg = arg;
     let mut joint = joint;
@@ -721,9 +722,13 @@ fn inl_grFourside_GetCraneIron_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> 
     return fns::Ground_801C3FA4(ctx, gobj, 4_i32);
 }
 
-fn inl_grFourside_UpdateCrane_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>, hsd_gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
+fn inl_grFourside_UpdateCrane_unfused<'a>(
+    ctx: &'a Ctx,
+    gp: Ground<'a>,
+    hsd_gobj: HSD_GObj<'a>,
+    __in_caller: u32,
+) {
+    let unused: ArrV<'a, u8, 20> = ptr(ctx, __in_caller + 0x0);
     let mut gp = gp;
     let mut hsd_gobj = hsd_gobj;
     let mut fVar1: f64 = 0.0;

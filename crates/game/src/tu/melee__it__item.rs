@@ -857,7 +857,7 @@ pub fn Item_802682F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn Item_8026849C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut temp_jobj: HSD_JObj<'a> =
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
@@ -919,6 +919,7 @@ pub fn Item_80268560<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn Item_8026862C<'a>(ctx: &'a Ctx, spawnItem: SpawnItem<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x50);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut spawnItem = spawnItem;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut user_data: Addr<'a> = null(ctx);
@@ -985,7 +986,7 @@ pub fn Item_8026862C<'a>(ctx: &'a Ctx, spawnItem: SpawnItem<'a>) -> HSD_GObj<'a>
     inl_Item_802680CC_unfused(ctx, gobj);
     if statics::melee__it__item::Item_802682F0(ctx, gobj) != 0_i32 {
         statics::melee__it__item::Item_8026814C(ctx, gobj);
-        inl_Item_8026849C_unfused(ctx, gobj);
+        inl_Item_8026849C_unfused(ctx, gobj, Handle::addr(__inl));
         fns::it_8027163C(ctx, gobj);
         statics::melee__it__item::Item_80268560(ctx, gobj);
         let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x802693e4), (0_i32 as u8));
@@ -1204,9 +1205,9 @@ pub fn Item_80268E40<'a>(ctx: &'a Ctx, item_data: Item<'a>, itemStateDesc: ItemS
 
 pub fn Item_80268E5C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32, flags: i32) {
     let __frame = ctx.stack_frame(0x88);
-    let sp4C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let scl: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x18);
+    let sp4C: Vec<'a> = frame_at(ctx, &__frame, 0x44);
+    let scl: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut msid = msid;
     let mut flags = flags;
@@ -1494,8 +1495,8 @@ pub fn Item_802696CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn Item_802697D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut item_data: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -2570,9 +2571,8 @@ fn inl_Item_802680CC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
-fn inl_Item_8026849C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_Item_8026849C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let sp14: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut temp_jobj: HSD_JObj<'a> =
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));

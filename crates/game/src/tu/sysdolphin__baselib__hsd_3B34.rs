@@ -4307,12 +4307,13 @@ pub fn hsd_803B51C8<'a>(
     arg4: i32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x230);
-    let comment: JpegComment<'a> = frame_at(ctx, &__frame, 0x0);
-    let huff_dc_luma: JpegHuffDc<'a> = frame_at(ctx, &__frame, 0x18);
-    let huff_dc_chroma: JpegHuffDc<'a> = frame_at(ctx, &__frame, 0x34);
-    let huff_ac_luma: JpegHuffAc<'a> = frame_at(ctx, &__frame, 0x50);
-    let huff_ac_chroma: JpegHuffAc<'a> = frame_at(ctx, &__frame, 0x104);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x1b8);
+    let comment: JpegComment<'a> = frame_at(ctx, &__frame, 0x1e4);
+    let huff_dc_luma: JpegHuffDc<'a> = frame_at(ctx, &__frame, 0x1c8);
+    let huff_dc_chroma: JpegHuffDc<'a> = frame_at(ctx, &__frame, 0x1ac);
+    let huff_ac_luma: JpegHuffAc<'a> = frame_at(ctx, &__frame, 0xf8);
+    let huff_ac_chroma: JpegHuffAc<'a> = frame_at(ctx, &__frame, 0x44);
+    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -4337,6 +4338,7 @@ pub fn hsd_803B51C8<'a>(
         huff_dc_chroma,
         huff_ac_luma,
         huff_ac_chroma,
+        Handle::addr(__inl),
     );
 }
 
@@ -4379,9 +4381,9 @@ fn inl_hsd_803B51C8_inline_unfused<'a>(
     huff_dc_chroma: JpegHuffDc<'a>,
     huff_ac_luma: JpegHuffAc<'a>,
     huff_ac_chroma: JpegHuffAc<'a>,
+    __in_caller: u32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x18);
-    let state: hsd_803B51C8_inline_state<'a> = frame_at(ctx, &__frame, 0x0);
+    let state: hsd_803B51C8_inline_state<'a> = ptr(ctx, __in_caller + 0x0);
     let mut image = image;
     let mut image_height = image_height;
     let mut image_width = image_width;

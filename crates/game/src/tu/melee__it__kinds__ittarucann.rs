@@ -42,8 +42,8 @@ pub fn it_80295ED4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_80295F38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let launch_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let params: lbColl_80008D30_arg1<'a> = frame_at(ctx, &__frame, 0xc);
+    let launch_pos: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let params: lbColl_80008D30_arg1<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
     let mut da: itTaruCann_DatAttrs<'a> = null(ctx);
@@ -304,7 +304,7 @@ pub fn itTarucann_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itTarucann_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let normal: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let normal: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> =
@@ -813,6 +813,7 @@ pub fn itTarucann_UnkMotion9_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn it_80297790<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut da: itTaruCann_DatAttrs<'a> =
@@ -836,7 +837,7 @@ pub fn it_80297790<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             _ => 1,
         };
         if __case <= 0 {
-            inl_it_802969D8_unfused(ctx, gobj);
+            inl_it_802969D8_unfused(ctx, gobj, Handle::addr(__inl));
             fns::it_802762BC(ctx, ip);
             fns::Item_8026AE84(ctx, ip, 0x129_i32, (127_i32 as u8), (64_i32 as u8));
             (ip).xDD4_itemVar().tarucann().set_x24((da).x2C());
@@ -1014,9 +1015,8 @@ fn inl_itTarucann_UnkMotion9_Anim_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GOb
     }
 }
 
-fn inl_it_802969D8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+fn inl_it_802969D8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {

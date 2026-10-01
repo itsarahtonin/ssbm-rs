@@ -63,7 +63,7 @@ pub fn it_802C3BAC<'a>(
     arg3: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x80);
-    let si: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let si: SpawnItem<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut vec = vec;
     let mut facing_dir = facing_dir;
@@ -177,7 +177,7 @@ pub fn it_802C3D74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itZeldadinfire_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
@@ -222,7 +222,7 @@ pub fn itZeldadinfire_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i
 
 pub fn itZeldadinfire_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
@@ -269,8 +269,8 @@ pub fn itZeldadinfire_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i
 
 pub fn itZeldadinfire_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let f1: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let f2: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let f1: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let f2: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attrs: ItZeldaDinFire_ItemVars<'a> = Handle::cast::<ItZeldaDinFire_ItemVars<'a>>(

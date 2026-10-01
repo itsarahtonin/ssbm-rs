@@ -144,7 +144,7 @@ pub fn CARDCreateAsync<'a>(
     callback: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x0);
+    let card: Ptr<'a, CARDControl<'a>> = frame_at(ctx, &__frame, 0x14);
     let mut chan = chan;
     let mut fileName = fileName;
     let mut size = size;

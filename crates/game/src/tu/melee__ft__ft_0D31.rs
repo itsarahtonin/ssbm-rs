@@ -260,7 +260,8 @@ pub fn ftCo_800D35FC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ftCo_800D3680<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -274,7 +275,7 @@ pub fn ftCo_800D3680<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         let __t2 = fns::Stage_GetBlastZoneBottomOffset(ctx);
         inl_clampDeadPos_unfused(ctx, pos.y_ref(), __t2, __t1)
     };
-    inl_spawnDeadEffect_unfused(ctx, gobj, pos, angle);
+    inl_spawnDeadEffect_unfused(ctx, gobj, pos, angle, Handle::addr(__inl));
     pos.set_x(fns::Stage_GetBlastZoneLeftOffset(ctx));
     fns::ftCo_800D4E50(ctx, fp, pos, 1_i32, 0.0);
 }
@@ -309,7 +310,8 @@ pub fn ftCo_DeadLeft_Cam<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800D3950<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -323,7 +325,7 @@ pub fn ftCo_800D3950<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         let __t2 = fns::Stage_GetBlastZoneBottomOffset(ctx);
         inl_clampDeadPos_unfused(ctx, pos.y_ref(), __t2, __t1)
     };
-    inl_spawnDeadEffect_unfused(ctx, gobj, pos, angle);
+    inl_spawnDeadEffect_unfused(ctx, gobj, pos, angle, Handle::addr(__inl));
     pos.set_x(fns::Stage_GetBlastZoneRightOffset(ctx));
     fns::ftCo_800D4E50(ctx, fp, pos, 1_i32, 3.1415927410125732);
 }
@@ -348,8 +350,9 @@ pub fn ftCo_DeadRight_Cam<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800D3BC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -369,7 +372,7 @@ pub fn ftCo_800D3BC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         let __t2 = fns::Stage_GetBlastZoneLeftOffset(ctx);
         inl_clampDeadPos_unfused(ctx, pos.x_ref(), __t2, __t1)
     };
-    inl_spawnDeadEffect_unfused(ctx, gobj, pos, angle);
+    inl_spawnDeadEffect_unfused(ctx, gobj, pos, angle, Handle::addr(__inl));
     pos.set_y(fns::Stage_GetBlastZoneBottomOffset(ctx));
     fns::ftCo_800D4E50(ctx, fp, pos, 1_i32, (fp::fdivs(3.1415927410125732, 2.0)));
 }
@@ -394,8 +397,9 @@ pub fn ftCo_DeadDown_Cam<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800D3E40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -415,7 +419,7 @@ pub fn ftCo_800D3E40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         let __t2 = fns::Stage_GetBlastZoneLeftOffset(ctx);
         inl_clampDeadPos_unfused(ctx, pos.x_ref(), __t2, __t1)
     };
-    inl_spawnDeadEffect_unfused(ctx, gobj, pos, angle);
+    inl_spawnDeadEffect_unfused(ctx, gobj, pos, angle, Handle::addr(__inl));
     pos.set_y(fns::Stage_GetBlastZoneTopOffset(ctx));
     fns::ftCo_800D4E50(
         ctx,
@@ -637,8 +641,8 @@ pub fn ftCo_DeadUpStar_Cam<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_800D4580<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x50);
     let _2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let q: Quaternion<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x14);
+    let q: Quaternion<'a> = frame_at(ctx, &__frame, 0x20);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> = null(ctx);
@@ -721,8 +725,8 @@ pub fn ftCo_800D47B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_800D481C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x60);
     let _1: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let q: Quaternion<'a> = frame_at(ctx, &__frame, 0x4);
-    let _2: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x14);
+    let q: Quaternion<'a> = frame_at(ctx, &__frame, 0x30);
+    let _2: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> = null(ctx);
@@ -1042,9 +1046,14 @@ fn inl_clampDeadPos_unfused<'a>(ctx: &'a Ctx, v: Val<'a, F32>, min: f64, max: f6
     }
 }
 
-fn inl_spawnDeadEffect_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>, angle: f64) {
-    let __frame = ctx.stack_frame(0x10);
-    let angle__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+fn inl_spawnDeadEffect_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    pos: Vec<'a>,
+    angle: f64,
+    __in_caller: u32,
+) {
+    let angle__slot: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut pos = pos;
     angle__slot.set(angle);

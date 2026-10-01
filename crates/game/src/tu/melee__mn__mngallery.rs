@@ -75,10 +75,10 @@ pub fn mnGallery_80258A08<'a>(
     priority: u32,
 ) {
     let __frame = ctx.stack_frame(0x90);
-    let viewport: _HSD_RectS16<'a> = frame_at(ctx, &__frame, 0x0);
-    let scissor: _Scissor<'a> = frame_at(ctx, &__frame, 0x8);
-    let eye: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let viewport: _HSD_RectS16<'a> = frame_at(ctx, &__frame, 0x2c);
+    let scissor: _Scissor<'a> = frame_at(ctx, &__frame, 0x24);
+    let eye: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut width = width;
     let mut height = height;

@@ -105,7 +105,7 @@ pub fn grPushOn_802183E4<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
 
 pub fn grPushOn_802184CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let cam_offset: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let cam_offset: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     fns::grAnime_801C8138(ctx, gobj, (gp).map_id(), 0_i32);
@@ -241,8 +241,8 @@ pub fn fn_80218678<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn grPushOn_802186C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
     'l1: loop {
@@ -345,15 +345,15 @@ pub fn grPushOn_80218880<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 
 pub fn grPushOn_80218888<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x190);
-    let player_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let light_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sorted: ArrV<'a, i32, 20> = frame_at(ctx, &__frame, 0x18);
-    let distances: ArrV<'a, F32, 20> = frame_at(ctx, &__frame, 0x68);
-    let pos1: Vec<'a> = frame_at(ctx, &__frame, 0xb8);
-    let pos2: Vec<'a> = frame_at(ctx, &__frame, 0xc4);
-    let dir: Vec<'a> = frame_at(ctx, &__frame, 0xd0);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0xdc);
-    let temp_pos: Vec<'a> = frame_at(ctx, &__frame, 0xe0);
+    let player_pos: Vec<'a> = frame_at(ctx, &__frame, 0x104);
+    let light_pos: Vec<'a> = frame_at(ctx, &__frame, 0xf8);
+    let sorted: ArrV<'a, i32, 20> = frame_at(ctx, &__frame, 0xa8);
+    let distances: ArrV<'a, F32, 20> = frame_at(ctx, &__frame, 0x58);
+    let pos1: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let pos2: Vec<'a> = frame_at(ctx, &__frame, 0x40);
+    let dir: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let temp_pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let mut gobj = gobj;
     let mut player: HSD_GObj<'a> = null(ctx);
     let mut gp: Ground<'a> = null(ctx);
@@ -586,8 +586,8 @@ pub fn grPushOn_80218ED0<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn grPushOn_80218ED4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<'a> {
     let __frame = ctx.stack_frame(0x28);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut new_lobj: HSD_LObj<'a> = null(ctx);
     let mut lobj: HSD_LObj<'a> = null(ctx);
@@ -635,8 +635,8 @@ pub fn grPushOn_80218ED4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<'a> {
 
 pub fn grPushOn_80218FC0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<'a> {
     let __frame = ctx.stack_frame(0x28);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut new_lobj: HSD_LObj<'a> = null(ctx);
     let mut lobj: HSD_LObj<'a> = null(ctx);
@@ -710,8 +710,8 @@ pub fn fn_802190A0<'a>(
 
 pub fn grPushOn_802190D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut cur: HSD_LObj<'a> = Handle::cast::<HSD_LObj<'a>>((gobj).hsd_obj());
     let mut scale: f64 = fns::Ground_801C0498(ctx);
@@ -836,7 +836,7 @@ pub fn fn_802192A4<'a>(
     result: Val<'a, i32>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut gobj = gobj;
     let mut result = result;

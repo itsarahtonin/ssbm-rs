@@ -118,9 +118,9 @@ pub fn grCorneria_801DCCFC<'a>(ctx: &'a Ctx) {
 
 pub fn grCorneria_801DCE1C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x60);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
-    let pos2: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let pos2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     if (fns::Stage_80225194(ctx) as u32) != (70_i32 as u32) {
         if !(statics::melee__gr__grcorneria::grCn_804D69B0(ctx).get() != 0) {
             if Handle::is_null(
@@ -391,8 +391,8 @@ pub fn grCorneria_801DD2C0<'a>(ctx: &'a Ctx, unused: i32) {
 pub fn grCorneria_801DD350<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
     let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let light_pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let _pad2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x14);
+    let light_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let _pad2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x18);
     let mut gp: Ground<'a> = null(ctx);
     statics::melee__gr__grcorneria::yakumono_param(ctx).set(Handle::cast::<
         grCorneria_YakumonoParam<'a>,
@@ -568,7 +568,7 @@ pub fn grCorneria_801DD65C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grCorneria_801DD674<'a>(ctx: &'a Ctx, ground_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let translate: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let translate: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut ground_gobj = ground_gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut unused: u32 = 0;
@@ -869,8 +869,8 @@ pub fn grCorneria_801DDD4C<'a>(ctx: &'a Ctx, vec: Vec<'a>) {
 pub fn grCorneria_801DDDA8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vec: Vec<'a>) {
     let __frame = ctx.stack_frame(0x48);
     let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut vec = vec;
     let mut gp2: Ground<'a> = null(ctx);
@@ -924,8 +924,8 @@ pub fn grCorneria_801DDDA8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vec: Vec<'a>) {
 
 pub fn grCorneria_801DDE88<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1009,7 +1009,8 @@ pub fn grCorneria_801DDE88<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grCorneria_801DE024<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let translate: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let translate: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x20);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1077,7 +1078,7 @@ pub fn grCorneria_801DE024<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 }
                 if __case <= 1 {
                     inl_HSD_JObjSetRotationY_unfused(ctx, jobj, fp::fneg(1.5707963705062866));
-                    inl_grCorneria_801DE024_inline_unfused(ctx, gobj);
+                    inl_grCorneria_801DE024_inline_unfused(ctx, gobj, Handle::addr(__inl));
                     {
                         let mut vf: f64 = fns::grCorneria_801E2EA0(ctx);
                         let mut j0: HSD_JObj<'a> = null(ctx);
@@ -1366,10 +1367,10 @@ pub fn grCorneria_801DEC94<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> i32 {
 
 pub fn grCorneria_801DED50<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xc0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 6> = frame_at(ctx, &__frame, 0xc);
-    let arwing_pos: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let arwing_pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x74);
+    let unused: ArrV<'a, u8, 6> = frame_at(ctx, &__frame, 0x0);
+    let arwing_pos: Vec<'a> = frame_at(ctx, &__frame, 0x5c);
+    let arwing_pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x40);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -3231,7 +3232,7 @@ pub fn grCorneria_801E0678<'a>(ctx: &'a Ctx) {
 
 pub fn grCorneria_801E08CC<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut unused1: f64 = 0.0;
     let mut unused2: f64 = 0.0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
@@ -3717,11 +3718,11 @@ pub fn fn_801E12D4<'a>(
 
 pub fn grCorneria_801E1348<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x98);
-    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
-    let cannon_pos: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let fighter_pos: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused_2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x2c);
+    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let cannon_pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let fighter_pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused_2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -4020,8 +4021,8 @@ pub fn grCorneria_801E1348<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn grCorneria_801E1878<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x14);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gr: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -4051,7 +4052,7 @@ pub fn grCorneria_801E1878<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grCorneria_801E1970<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
@@ -4213,15 +4214,15 @@ pub fn grCorneria_801E1BF0<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
 
 pub fn grCorneria_801E2110<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
-    let c1: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let c2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let c3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let c4: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let c1: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let c2: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
+    let c3: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
+    let c4: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
     let c5: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
-    let c6: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
-    let c7: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
-    let c8: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
-    let c9: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let c6: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let c7: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let c8: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let c9: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut id: i32 = fns::grCorneria_801E08CC(ctx);
     if id == 8_i32 {
         Handle::copy_from(c1, fns::grCn_804DB218(ctx));
@@ -4537,8 +4538,8 @@ pub fn grCorneria_801E2738<'a>(
 
 pub fn grCorneria_801E277C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, gv: grSmashTaunt_GroundVars<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let sp18: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let sp18: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gv = gv;
     let mut gp: Ground<'a> =
@@ -4864,7 +4865,7 @@ pub fn grCorneria_801E2EE4<'a>(ctx: &'a Ctx, arg: i32) -> DynamicsDesc<'a> {
 
 pub fn grCorneria_801E2EEC<'a>(ctx: &'a Ctx, v: Vec<'a>, arg1: i32, jobj: HSD_JObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut v = v;
     let mut arg1 = arg1;
     let mut jobj = jobj;
@@ -5186,9 +5187,8 @@ fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64
     }
 }
 
-fn inl_grCorneria_801DE024_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_grCorneria_801DE024_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

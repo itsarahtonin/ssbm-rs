@@ -402,7 +402,7 @@ pub fn fn_8001ECF4<'a>(ctx: &'a Ctx, data: THPDecComp<'a>, buf: Addr<'a>) {
 
 pub fn fn_8001EF5C<'a>(ctx: &'a Ctx, data: THPDecComp<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let spC: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let spC: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
     let mut data = data;
     let mut intr: i32 = 0;
     if ((data).unk_94() as u32) != (data).unk_90() {
@@ -571,8 +571,8 @@ pub fn fn_8001F294<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn fn_8001F2A4<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x10);
-    let streamPlayer: Ptr<'a, THPDecComp<'a>> = frame_at(ctx, &__frame, 0x0);
-    let rate_table: Ptr<'a, Ptr<'a, Val<'a, u32>>> = frame_at(ctx, &__frame, 0x4);
+    let streamPlayer: Ptr<'a, THPDecComp<'a>> = frame_at(ctx, &__frame, 0x4);
+    let rate_table: Ptr<'a, Ptr<'a, Val<'a, u32>>> = frame_at(ctx, &__frame, 0x0);
     let mut alarm = alarm;
     let mut context = context;
     let mut frame: u32 = 0;

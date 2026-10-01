@@ -300,11 +300,11 @@ pub fn MObjMakeTExp<'a>(
     list: Ptr<'a, HSD_TExp<'a>>,
 ) -> HSD_TExp<'a> {
     let __frame = ctx.stack_frame(0x60);
-    let diff: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0x4);
-    let spec: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0x8);
-    let ext: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0xc);
-    let alpha: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x14);
+    let diff: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0x34);
+    let spec: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0x30);
+    let ext: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0x2c);
+    let alpha: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x4);
     let mut mobj = mobj;
     let mut tobj_top = tobj_top;
     let mut list = list;
@@ -731,7 +731,7 @@ pub fn MObjMakeTExp<'a>(
 
 pub fn HSD_MObjCompileTev<'a>(ctx: &'a Ctx, mobj: HSD_MObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
-    let tobj: Ptr<'a, HSD_TObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let tobj: Ptr<'a, HSD_TObj<'a>> = frame_at(ctx, &__frame, 0x4);
     let mut mobj = mobj;
     let mut tail: Ptr<'a, HSD_TObj<'a>> = null(ctx);
     let mut texp: HSD_TExp<'a> = null(ctx);
@@ -799,7 +799,7 @@ pub fn MObjSetupTev<'a>(ctx: &'a Ctx, mobj: HSD_MObj<'a>, tobj: HSD_TObj<'a>, ar
 
 pub fn HSD_MObjSetup<'a>(ctx: &'a Ctx, mobj: HSD_MObj<'a>, rendermode: u32) {
     let __frame = ctx.stack_frame(0x30);
-    let tobj: Ptr<'a, HSD_TObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let tobj: Ptr<'a, HSD_TObj<'a>> = frame_at(ctx, &__frame, 0x14);
     let mut mobj = mobj;
     let mut rendermode = rendermode;
     let mut tail: Ptr<'a, HSD_TObj<'a>> = null(ctx);

@@ -53,7 +53,7 @@ pub fn it_802D3F6C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802D3FA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let f: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let f: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut item: Item<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -155,7 +155,7 @@ pub fn itCerebi_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itCerebi_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let f: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let f: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut item: Item<'a> = null(ctx);

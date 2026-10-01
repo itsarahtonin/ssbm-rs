@@ -28,9 +28,9 @@ use crate::support::*;
 
 pub fn db_GetGameLaunchButtonState<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x48);
-    let status: Arr<'a, PADStatus<'a>, 4> = frame_at(ctx, &__frame, 0x0);
-    let memSize: Val<'a, i32> = frame_at(ctx, &__frame, 0x30);
-    let sectorSize: Val<'a, i32> = frame_at(ctx, &__frame, 0x34);
+    let status: Arr<'a, PADStatus<'a>, 4> = frame_at(ctx, &__frame, 0x8);
+    let memSize: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let sectorSize: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
     let mut done: i32 = 0;
     let mut pad: i32 = 0;
     'l1: loop {
@@ -83,7 +83,7 @@ pub fn db_GetGameLaunchButtonState<'a>(ctx: &'a Ctx) {
 
 pub fn db_Setup<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    let commonData: Ptr<'a, db_Setup_commonData<'a>> = frame_at(ctx, &__frame, 0x0);
+    let commonData: Ptr<'a, db_Setup_commonData<'a>> = frame_at(ctx, &__frame, 0x8);
     let mut i: i32 = 0;
     if (fns::DbLevel(ctx).get() as u32) >= ((enums::DbLKind_DebugRom as i32) as u32) {
         {

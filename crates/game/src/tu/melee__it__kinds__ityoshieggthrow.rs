@@ -70,8 +70,8 @@ pub fn it_802B2A10<'a>(
     facing_dir: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x88);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4c);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut parent = parent;
     let mut pos = pos;
     let mut part = part;
@@ -162,6 +162,7 @@ pub fn it_802B2C04<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802B2C38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itYoshiEggThrowAttributes<'a> = Handle::cast::<itYoshiEggThrowAttributes<'a>>(
@@ -176,7 +177,7 @@ pub fn it_802B2C38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::it_80273454(ctx, gobj);
     (ip).set_xD44_lifeTimer((attrs).x4());
     inl_spawn1_unfused(ctx, gobj, jobj);
-    inl_spawn2_unfused(ctx, gobj, jobj);
+    inl_spawn2_unfused(ctx, gobj, jobj, Handle::addr(__inl));
     fns::Item_8026AE84(ctx, ip, 0x44618_i32, (127_i32 as u8), (64_i32 as u8));
 }
 
@@ -188,10 +189,11 @@ pub fn itYoshieggthrow_UnkMotion2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> 
 
 pub fn it_2725_Logic43_Clanked<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (ip).msid() != 2_i32 {
-        inl_it_802B2C38_unfused(ctx, gobj);
+        inl_it_802B2C38_unfused(ctx, gobj, Handle::addr(__inl));
     }
     return 0_i32;
 }
@@ -204,10 +206,11 @@ pub fn it_802B2E5C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802B2E7C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (ip).msid() != 2_i32 {
-        inl_it_802B2C38_unfused(ctx, gobj);
+        inl_it_802B2C38_unfused(ctx, gobj, Handle::addr(__inl));
     }
     return 0_i32;
 }
@@ -300,9 +303,8 @@ fn inl_spawn1_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, jobj: HSD_JObj<'a>) 
     );
 }
 
-fn inl_spawn2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, jobj: HSD_JObj<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let scale: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+fn inl_spawn2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, jobj: HSD_JObj<'a>, __in_caller: u32) {
+    let scale: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut jobj = jobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -318,7 +320,8 @@ fn inl_spawn2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, jobj: HSD_JObj<'a>) 
     );
 }
 
-fn inl_it_802B2C38_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
+fn inl_it_802B2C38_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let __inl: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itYoshiEggThrowAttributes<'a> = Handle::cast::<itYoshiEggThrowAttributes<'a>>(
@@ -333,7 +336,7 @@ fn inl_it_802B2C38_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::it_80273454(ctx, gobj);
     (ip).set_xD44_lifeTimer((attrs).x4());
     inl_spawn1_unfused(ctx, gobj, jobj);
-    inl_spawn2_unfused(ctx, gobj, jobj);
+    inl_spawn2_unfused(ctx, gobj, jobj, Handle::addr(__inl));
     fns::Item_8026AE84(ctx, ip, 0x44618_i32, (127_i32 as u8), (64_i32 as u8));
 }
 

@@ -186,14 +186,16 @@ pub fn ftMs_SpecialN_80136A7C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMs_SpecialNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x20);
     let mut gobj = gobj;
-    inl_doLoopAnim_unfused(ctx, gobj, fnptr(ctx, 0x80137354));
+    inl_doLoopAnim_unfused(ctx, gobj, fnptr(ctx, 0x80137354), Handle::addr(__inl));
 }
 
 pub fn ftMs_SpecialAirNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x20);
     let mut gobj = gobj;
-    inl_doLoopAnim_unfused_2(ctx, gobj, fnptr(ctx, 0x801373b8));
+    inl_doLoopAnim_unfused_2(ctx, gobj, fnptr(ctx, 0x801373b8), Handle::addr(__inl));
 }
 
 pub fn ftMs_SpecialNLoop_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -296,14 +298,16 @@ pub fn ftMs_SpecialN_80136EAC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMs_SpecialNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
-    inl_inlineA0_unfused(ctx, gobj, fnptr(ctx, 0x8008a2bc));
+    inl_inlineA0_unfused(ctx, gobj, fnptr(ctx, 0x8008a2bc), Handle::addr(__inl));
 }
 
 pub fn ftMs_SpecialAirNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
-    inl_inlineA0_unfused_2(ctx, gobj, fnptr(ctx, 0x800cc730));
+    inl_inlineA0_unfused_2(ctx, gobj, fnptr(ctx, 0x800cc730), Handle::addr(__inl));
 }
 
 pub fn ftMs_SpecialNEnd_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -511,9 +515,8 @@ fn inl_ftCommon_AirToGroundStateChange_unfused<'a>(
     );
 }
 
-fn inl_doLoopAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_doLoopAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>, __in_caller: u32) {
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut cb = cb;
     'l1: loop {
@@ -570,9 +573,8 @@ fn inl_doLoopAnim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
     }
 }
 
-fn inl_doLoopAnim_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_doLoopAnim_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>, __in_caller: u32) {
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut cb = cb;
     'l1: loop {
@@ -655,9 +657,8 @@ fn inl_doLoopIasa_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>)
     }
 }
 
-fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let position: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>, __in_caller: u32) {
+    let position: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut cb = cb;
     let mut fp: Fighter<'a> =
@@ -724,9 +725,8 @@ fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
     }
 }
 
-fn inl_inlineA0_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let position: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_inlineA0_unfused_2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>, __in_caller: u32) {
+    let position: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut cb = cb;
     let mut fp: Fighter<'a> =

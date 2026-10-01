@@ -38,15 +38,15 @@ pub fn ftCo_8009F834<'a>(
     arg7: f64,
 ) {
     let __frame = ctx.stack_frame(0xd0);
-    let spA8: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp9C: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp98: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
-    let sp94: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
-    let sp90: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
-    let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let sp80: Val<'a, F32> = frame_at(ctx, &__frame, 0x30);
-    let sp7C: Val<'a, F32> = frame_at(ctx, &__frame, 0x34);
-    let unused: ArrV<'a, u8, 68> = frame_at(ctx, &__frame, 0x38);
+    let spA8: Vec<'a> = frame_at(ctx, &__frame, 0xa0);
+    let sp9C: Vec<'a> = frame_at(ctx, &__frame, 0x94);
+    let sp98: Val<'a, F32> = frame_at(ctx, &__frame, 0x90);
+    let sp94: Val<'a, F32> = frame_at(ctx, &__frame, 0x8c);
+    let sp90: Val<'a, F32> = frame_at(ctx, &__frame, 0x88);
+    let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x7c);
+    let sp80: Val<'a, F32> = frame_at(ctx, &__frame, 0x78);
+    let sp7C: Val<'a, F32> = frame_at(ctx, &__frame, 0x74);
+    let unused: ArrV<'a, u8, 68> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut part = part;

@@ -1374,7 +1374,7 @@ pub fn grAnime_801C8318<'a>(
     arg2: u32,
 ) -> HSD_AObj<'a> {
     let __frame = ctx.stack_frame(0x28);
-    let sp14: Ptr<'a, HSD_AObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let sp14: Ptr<'a, HSD_AObj<'a>> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1410,11 +1410,13 @@ pub fn grAnime_801C8318<'a>(
 
 pub fn grAnime_801C83D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i32) -> i32 {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
-    let mut aobj: HSD_AObj<'a> = inl_grAnime_801C8318_unfused(ctx, gobj, arg1, (arg2 as u32));
+    let mut aobj: HSD_AObj<'a> =
+        inl_grAnime_801C8318_unfused(ctx, gobj, arg1, (arg2 as u32), Handle::addr(__inl));
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -1429,11 +1431,13 @@ pub fn grAnime_801C83D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i
 
 pub fn grAnime_801C84A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i32) -> i32 {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
-    let mut aobj: HSD_AObj<'a> = inl_grAnime_801C8318_unfused(ctx, gobj, arg1, (arg2 as u32));
+    let mut aobj: HSD_AObj<'a> =
+        inl_grAnime_801C8318_unfused(ctx, gobj, arg1, (arg2 as u32), Handle::addr(__inl));
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -1477,8 +1481,8 @@ pub fn grAnime_801C8578<'a>(
 pub fn grAnime_801C86D4<'a>(ctx: &'a Ctx, arg0: i32, arg1: HSD_GObj<'a>, arg2: i32) {
     let __frame = ctx.stack_frame(0x38);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let sp: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let sp: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -2185,9 +2189,9 @@ fn inl_grAnime_801C8318_unfused<'a>(
     gobj: HSD_GObj<'a>,
     arg1: i32,
     arg2: u32,
+    __in_caller: u32,
 ) -> HSD_AObj<'a> {
-    let __frame = ctx.stack_frame(0x10);
-    let sp14: Ptr<'a, HSD_AObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let sp14: Ptr<'a, HSD_AObj<'a>> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

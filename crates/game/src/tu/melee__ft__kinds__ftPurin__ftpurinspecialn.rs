@@ -560,8 +560,8 @@ pub fn ftPr_SpecialNFull_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPr_SpecialNRelease_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -673,9 +673,9 @@ pub fn ftPr_SpecialNRelease_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPr_SpecialNTurn_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let angle: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
+    let angle: Val<'a, F32> = frame_at(ctx, &__frame, 0x28);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut da: _ftPurinAttributes<'a> = Handle::cast::<_ftPurinAttributes<'a>>((fp).dat_attrs());
@@ -746,7 +746,7 @@ pub fn ftPr_SpecialNTurn_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPr_SpecialNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -888,8 +888,8 @@ pub fn ftPr_SpecialAirNChargeFull_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPr_SpecialAirNChargeRelease_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut scale_base: Val<'a, F32> = fns::ftPr_Init_803D05C8(ctx).at(0);
     let mut fp: Fighter<'a> =
@@ -1005,8 +1005,8 @@ pub fn ftPr_SpecialAirNChargeRelease_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
 
 pub fn ftPr_SpecialAirNStartTurn_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut da: _ftPurinAttributes<'a> = Handle::cast::<_ftPurinAttributes<'a>>((fp).dat_attrs());
@@ -1064,8 +1064,8 @@ pub fn ftPr_SpecialAirNStartTurn_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftPr_SpecialAirNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x1c);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1094,8 +1094,8 @@ pub fn ftPr_SpecialAirNEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftPr_SpecialNHit_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
-    let scale: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let scale: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut da: _ftPurinAttributes<'a> = Handle::cast::<_ftPurinAttributes<'a>>((fp).dat_attrs());
@@ -1889,11 +1889,11 @@ pub fn ftPr_SpecialNFull_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPr_SpecialNRelease_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x78);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let angle: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
-    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let angle_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x20);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let angle: Val<'a, F32> = frame_at(ctx, &__frame, 0x34);
+    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let angle_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x24);
+    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut da: _ftPurinAttributes<'a> = Handle::cast::<_ftPurinAttributes<'a>>((fp).dat_attrs());
@@ -2100,11 +2100,11 @@ pub fn ftPr_SpecialAirNChargeFull_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPr_SpecialAirNChargeRelease_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x88);
-    let land_angle: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let angle: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
-    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let angle_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
+    let land_angle: Val<'a, F32> = frame_at(ctx, &__frame, 0x54);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let angle: Val<'a, F32> = frame_at(ctx, &__frame, 0x44);
+    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let angle_2: Val<'a, F32> = frame_at(ctx, &__frame, 0x34);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut da: _ftPurinAttributes<'a> = Handle::cast::<_ftPurinAttributes<'a>>((fp).dat_attrs());

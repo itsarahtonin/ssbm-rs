@@ -60,7 +60,7 @@ pub fn it_8028F9D8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: Vec<'a>, arg8: f6
 
 pub fn it_8028FAF4<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: Vec<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x68);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut gobj: HSD_GObj<'a> = null(ctx);

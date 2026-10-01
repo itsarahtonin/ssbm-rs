@@ -89,6 +89,7 @@ pub fn UpdateOrigin<'a>(ctx: &'a Ctx, chan: i32) {
 
 pub fn PADOriginCallback<'a>(ctx: &'a Ctx, chan: i32, error: u32, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x14);
     let mut chan = chan;
     let mut error = error;
     let mut context = context;
@@ -97,7 +98,11 @@ pub fn PADOriginCallback<'a>(ctx: &'a Ctx, chan: i32, error: u32, context: OSCon
             ctx,
             statics::dolphin__pad__pad::ResettingChan(ctx).get(),
         );
-        inl_PADEnable_unfused(ctx, statics::dolphin__pad__pad::ResettingChan(ctx).get());
+        inl_PADEnable_unfused(
+            ctx,
+            statics::dolphin__pad__pad::ResettingChan(ctx).get(),
+            Handle::addr(__inl),
+        );
     }
     inl_DoReset_unfused(ctx);
 }
@@ -123,11 +128,16 @@ pub fn PADOriginUpdateCallback<'a>(ctx: &'a Ctx, chan: i32, error: u32, context:
 
 pub fn PADProbeCallback<'a>(ctx: &'a Ctx, chan: i32, error: u32, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x14);
     let mut chan = chan;
     let mut error = error;
     let mut context = context;
     if !((error & ((((1_i32 | 2_i32) | 8_i32) | 4_i32) as u32)) != 0) {
-        inl_PADEnable_unfused(ctx, statics::dolphin__pad__pad::ResettingChan(ctx).get());
+        inl_PADEnable_unfused(
+            ctx,
+            statics::dolphin__pad__pad::ResettingChan(ctx).get(),
+            Handle::addr(__inl),
+        );
         statics::dolphin__pad__pad::WaitingBits(ctx).set(
             (statics::dolphin__pad__pad::WaitingBits(ctx).get()
                 | shr_u32(
@@ -141,6 +151,7 @@ pub fn PADProbeCallback<'a>(ctx: &'a Ctx, chan: i32, error: u32, context: OSCont
 
 pub fn PADTypeAndStatusCallback<'a>(ctx: &'a Ctx, chan: i32, r#type: u32) {
     let __frame = ctx.stack_frame(0x40);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x14);
     let mut chan = chan;
     let mut r#type = r#type;
     let mut chanBit: u32 = 0;
@@ -169,7 +180,11 @@ pub fn PADTypeAndStatusCallback<'a>(ctx: &'a Ctx, chan: i32, r#type: u32) {
         return;
     }
     if statics::dolphin__pad__pad::Spec(ctx).get() < (2_i32 as u32) {
-        inl_PADEnable_unfused(ctx, statics::dolphin__pad__pad::ResettingChan(ctx).get());
+        inl_PADEnable_unfused(
+            ctx,
+            statics::dolphin__pad__pad::ResettingChan(ctx).get(),
+            Handle::addr(__inl),
+        );
         inl_DoReset_unfused(ctx);
         return;
     }
@@ -400,8 +415,8 @@ pub fn PADInit<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn PADRead<'a>(ctx: &'a Ctx, status: PADStatus<'a>) -> u32 {
     let __frame = ctx.stack_frame(0x50);
-    let data: ArrV<'a, u32, 2> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let data: ArrV<'a, u32, 2> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut status = status;
     let mut enabled: i32 = fns::OSDisableInterrupts(ctx);
     let mut chanBit: u32 = 0;
@@ -1059,7 +1074,7 @@ pub fn OnReset<'a>(ctx: &'a Ctx, f: i32) -> i32 {
 
 pub fn SamplingHandler<'a>(ctx: &'a Ctx, intr: i16, arg1: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x2e0);
-    let sp10: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp10: OSContext<'a> = frame_at(ctx, &__frame, 0x8);
     let mut intr = intr;
     let mut arg1 = arg1;
     if !Handle::is_null(statics::dolphin__pad__pad::SamplingCallback(ctx).get()) {
@@ -1105,9 +1120,8 @@ pub fn __PADDisableRecalibration<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     return result;
 }
 
-fn inl_PADEnable_unfused<'a>(ctx: &'a Ctx, chan: i32) {
-    let __frame = ctx.stack_frame(0x10);
-    let data: ArrV<'a, u32, 2> = frame_at(ctx, &__frame, 0x0);
+fn inl_PADEnable_unfused<'a>(ctx: &'a Ctx, chan: i32, __in_caller: u32) {
+    let data: ArrV<'a, u32, 2> = ptr(ctx, __in_caller + 0x0);
     let mut chan = chan;
     let mut cmd: u32 = 0;
     let mut chanBit: u32 = 0;

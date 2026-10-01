@@ -109,7 +109,7 @@ pub fn grBattle_80219D84<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
 
 pub fn grBattle_GObj0_Callback0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -274,8 +274,8 @@ pub fn grBattle_BG_Callback1<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
 
 pub fn grBattle_BG_Callback2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let indices: ArrV<'a, i16, 3> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x8);
+    let indices: ArrV<'a, i16, 3> = frame_at(ctx, &__frame, 0x20);
+    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

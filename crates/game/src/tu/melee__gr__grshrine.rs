@@ -32,9 +32,9 @@ pub fn grShrine_80201C60<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn grShrine_80201C64<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let unused0: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused1: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x14);
+    let unused0: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x4);
+    let unused1: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     statics::melee__gr__grshrine::yakumono_param(ctx).set(fns::Ground_GetYakumonoParam(ctx));
     let _ = statics::melee__gr__grshrine::grShrine_80201D20(ctx, 0_i32);
     let _ = statics::melee__gr__grshrine::grShrine_80201D20(ctx, 1_i32);
@@ -177,7 +177,7 @@ pub fn grShrine_80201F44<'a>(ctx: &'a Ctx, arg0: i32) -> DynamicsDesc<'a> {
 
 pub fn grShrine_80201F4C<'a>(ctx: &'a Ctx, a: Vec<'a>, unused: i32, joint: HSD_JObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let b: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let b: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut a = a;
     let mut unused = unused;
     let mut joint = joint;

@@ -186,8 +186,8 @@ pub fn grStory_801E3414<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grStory_801E3418<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x80);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut spawn_pattern: i32 = 0;
     let mut i: i32 = 0;
@@ -294,7 +294,7 @@ pub fn grStory_801E36D0<'a>(ctx: &'a Ctx, arg0: i32) -> DynamicsDesc<'a> {
 
 pub fn grStory_801E36D8<'a>(ctx: &'a Ctx, a: Vec<'a>, unused: i32, jobj: HSD_JObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let b: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let b: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut a = a;
     let mut unused = unused;
     let mut jobj = jobj;

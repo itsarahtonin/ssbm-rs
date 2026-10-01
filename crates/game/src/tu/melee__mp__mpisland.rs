@@ -41,8 +41,8 @@ pub fn mpIsland_8005A6F8<'a>(ctx: &'a Ctx) {
 pub fn mpIsland_8005A728<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x660);
     let seg: mpIsland_8005A728_seg<'a> = frame_at(ctx, &__frame, 0x0);
-    let visited: ArrV<'a, u8, 1536> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x604);
+    let visited: ArrV<'a, u8, 1536> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x610);
     let mut map: MapCollData<'a> = null(ctx);
     let mut lines: CollLine<'a> = null(ctx);
     let mut vtx: CollVtx<'a> = null(ctx);
@@ -313,7 +313,7 @@ pub fn mpIsland_8005AB54<'a>(ctx: &'a Ctx, surface_idx: i32) -> mp_UnkStruct0<'a
 
 pub fn mpIsland_8005AC14<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: f64) -> mp_UnkStruct0<'a> {
     let __frame = ctx.stack_frame(0x20);
-    let i: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
+    let i: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     if (fns::mpCheckFloor(
@@ -721,8 +721,8 @@ pub fn mpIsland_8005B004<'a>(
 ) {
     let __frame = ctx.stack_frame(0x680);
     let _q0: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let visited: ArrV<'a, u8, 1536> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x608);
+    let visited: ArrV<'a, u8, 1536> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

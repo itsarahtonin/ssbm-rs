@@ -176,10 +176,10 @@ pub fn itLizardon_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802CBD24<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let bone_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let scale: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let bone_pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let scale: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
     let facing: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itLizardonAttributes<'a> =
@@ -431,9 +431,9 @@ pub fn it_802CC1A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802CC1CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, kind: i32) {
     let __frame = ctx.stack_frame(0x98);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x0);
-    let bone_pos: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x58);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x1c);
+    let bone_pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut kind = kind;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -512,8 +512,8 @@ pub fn it_802CC1CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, kind: i32) {
 
 pub fn itLizardon_Logic34_Spawned<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let f2: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
+    let f2: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut hsd_obj: Addr<'a> = (gobj).hsd_obj();
@@ -541,8 +541,8 @@ pub fn itLizardon_Logic34_Spawned<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLizardon_Logic35_Spawned<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let f2: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let f2: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut hsd_obj: Addr<'a> = (gobj).hsd_obj();
@@ -570,8 +570,8 @@ pub fn itLizardon_Logic35_Spawned<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLizardon_Logic36_Spawned<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let f2: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let f2: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut hsd_obj: Addr<'a> = (gobj).hsd_obj();
@@ -599,8 +599,8 @@ pub fn itLizardon_Logic36_Spawned<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLizardon_Logic37_Spawned<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let f2: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let f2: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut hsd_obj: Addr<'a> = (gobj).hsd_obj();

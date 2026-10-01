@@ -28,16 +28,24 @@ use crate::support::*;
 
 pub fn ftFx_SpecialN_FtGetHoldJoint<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
     let __frame = ctx.stack_frame(0x28);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut pos = pos;
-    inl_ftFox_SpecialN_GetHoldJoint_unfused(ctx, gobj, pos, 4.263599872589111);
+    inl_ftFox_SpecialN_GetHoldJoint_unfused(ctx, gobj, pos, 4.263599872589111, Handle::addr(__inl));
 }
 
 pub fn ftFx_SpecialN_ItGetHoldJoint<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
     let __frame = ctx.stack_frame(0x28);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut pos = pos;
-    inl_ftFox_SpecialN_GetHoldJoint_unfused(ctx, gobj, pos, 0.013600001111626625);
+    inl_ftFox_SpecialN_GetHoldJoint_unfused(
+        ctx,
+        gobj,
+        pos,
+        0.013600001111626625,
+        Handle::addr(__inl),
+    );
 }
 
 pub fn ftFx_SpecialN_OnChangeAction<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -160,8 +168,9 @@ pub fn ftFx_SpecialN_RemoveBlaster<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftFx_SpecialN_CreateBlasterShot<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut da: ftFox_DatAttrs<'a> = null(ctx);
     let mut fp: Fighter<'a> = null(ctx);
@@ -180,7 +189,14 @@ pub fn ftFx_SpecialN_CreateBlasterShot<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     da = Handle::cast::<ftFox_DatAttrs<'a>>(inl_getFtSpecialAttrs_unfused(ctx, fp));
     if (fp).cmd_vars().at(2_i32).get() != (0_i32 as u32) {
         (fp).cmd_vars().at(2_i32).set((0_i32 as u32));
-        launchAngle = inl_ftFox_SpecialN_PrepareBlasterShot_unfused(ctx, gobj, fp, da, sp2C);
+        launchAngle = inl_ftFox_SpecialN_PrepareBlasterShot_unfused(
+            ctx,
+            gobj,
+            fp,
+            da,
+            sp2C,
+            Handle::addr(__inl),
+        );
         inl_ftFox_SpecialN_FireBlasterShot_unfused(ctx, gobj, fp, da, sp2C, launchAngle);
     }
 }
@@ -240,7 +256,8 @@ pub fn ftFx_SpecialNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftFx_SpecialNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     inl_ftFox_SpecialN_UpdateBlaster_unfused(ctx, fp);
@@ -279,7 +296,14 @@ pub fn ftFx_SpecialNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
         if (fp).cmd_vars().at(2_i32).get() != (0_i32 as u32) {
             (fp).cmd_vars().at(2_i32).set((0_i32 as u32));
-            launchAngle = inl_ftFox_SpecialN_PrepareBlasterShot_unfused(ctx, gobj, fp, da, sp2C);
+            launchAngle = inl_ftFox_SpecialN_PrepareBlasterShot_unfused(
+                ctx,
+                gobj,
+                fp,
+                da,
+                sp2C,
+                Handle::addr(__inl),
+            );
             inl_ftFox_SpecialN_FireBlasterShot_unfused(ctx, gobj, fp, da, sp2C, launchAngle);
         }
     }
@@ -303,7 +327,8 @@ pub fn ftFx_SpecialAirNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftFx_SpecialAirNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x24);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     inl_ftFox_SpecialN_UpdateBlaster_unfused(ctx, fp);
@@ -344,7 +369,14 @@ pub fn ftFx_SpecialAirNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         if (fp).cmd_vars().at(2_i32).get() != (0_i32 as u32) {
             let mut launchAngle: f64 = 0.0;
             (fp).cmd_vars().at(2_i32).set((0_i32 as u32));
-            launchAngle = inl_ftFox_SpecialN_PrepareBlasterShot_unfused(ctx, gobj, fp, da, sp2C);
+            launchAngle = inl_ftFox_SpecialN_PrepareBlasterShot_unfused(
+                ctx,
+                gobj,
+                fp,
+                da,
+                sp2C,
+                Handle::addr(__inl),
+            );
             inl_ftFox_SpecialN_FireBlasterShot_unfused(ctx, gobj, fp, da, sp2C, launchAngle);
         }
     }
@@ -478,8 +510,10 @@ pub fn ftFx_SpecialAirNEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftFx_Throw_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut da: ftFox_DatAttrs<'a> = null(ctx);
@@ -659,8 +693,8 @@ pub fn ftFx_Throw_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 __state = 24;
             }
             29 => {
-                inl_ftFx_SpecialN_FtGetHoldJoint_unfused(ctx, gobj, sp50);
-                inl_ftFx_SpecialN_ItGetHoldJoint_unfused(ctx, gobj, sp44);
+                inl_ftFx_SpecialN_FtGetHoldJoint_unfused(ctx, gobj, sp50, Handle::addr(__inl));
+                inl_ftFx_SpecialN_ItGetHoldJoint_unfused(ctx, gobj, sp44, Handle::addr(__inl_2));
                 sp44.set_z(fp::frsp(0_i32 as f64));
                 sp50.set_z(fp::frsp(0_i32 as f64));
                 __state = match inl_ftGetAction_unfused(ctx, fp) {
@@ -918,9 +952,9 @@ fn inl_ftFox_SpecialN_GetHoldJoint_unfused<'a>(
     gobj: HSD_GObj<'a>,
     pos: Vec<'a>,
     z_offset: f64,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x18);
-    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp14: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut z_offset = z_offset;
@@ -956,10 +990,16 @@ fn inl_getFtSpecialAttrs_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> 
     return fighter_attr;
 }
 
-fn inl_ftFx_SpecialN_FtGetHoldJoint_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
+fn inl_ftFx_SpecialN_FtGetHoldJoint_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    pos: Vec<'a>,
+    __in_caller: u32,
+) {
+    let __inl: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut pos = pos;
-    inl_ftFox_SpecialN_GetHoldJoint_unfused(ctx, gobj, pos, 4.263599872589111);
+    inl_ftFox_SpecialN_GetHoldJoint_unfused(ctx, gobj, pos, 4.263599872589111, Handle::addr(__inl));
 }
 
 fn inl_ftFox_SpecialN_PrepareBlasterShot_unfused<'a>(
@@ -968,12 +1008,14 @@ fn inl_ftFox_SpecialN_PrepareBlasterShot_unfused<'a>(
     fp: Fighter<'a>,
     da: ftFox_DatAttrs<'a>,
     pos: Vec<'a>,
+    __in_caller: u32,
 ) -> f64 {
+    let __inl: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp = fp;
     let mut da = da;
     let mut pos = pos;
-    inl_ftFx_SpecialN_FtGetHoldJoint_unfused(ctx, gobj, pos);
+    inl_ftFx_SpecialN_FtGetHoldJoint_unfused(ctx, gobj, pos, Handle::addr(__inl));
     (pos).set_z(0.0);
     if (fp).facing_dir() == 1.0 {
         return (da).x10_FOX_BLASTER_ANGLE();
@@ -1234,10 +1276,22 @@ fn inl_ftCheckThrowB0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     return 0;
 }
 
-fn inl_ftFx_SpecialN_ItGetHoldJoint_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
+fn inl_ftFx_SpecialN_ItGetHoldJoint_unfused<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    pos: Vec<'a>,
+    __in_caller: u32,
+) {
+    let __inl: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut pos = pos;
-    inl_ftFox_SpecialN_GetHoldJoint_unfused(ctx, gobj, pos, 0.013600001111626625);
+    inl_ftFox_SpecialN_GetHoldJoint_unfused(
+        ctx,
+        gobj,
+        pos,
+        0.013600001111626625,
+        Handle::addr(__inl),
+    );
 }
 
 fn inl_ftGetAction_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {

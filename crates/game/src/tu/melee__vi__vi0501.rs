@@ -43,8 +43,8 @@ pub fn un_8031D9F8<'a>(
     spawn_count: i32,
 ) {
     let __frame = ctx.stack_frame(0x78);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut char_kind = char_kind;
     let mut costume = costume;
     let mut spawn_mode = spawn_mode;

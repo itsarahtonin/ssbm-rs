@@ -34,10 +34,10 @@ pub fn grFZeroCar_801CAFBC<'a>(
     mode: i32,
 ) {
     let __frame = ctx.stack_frame(0xc8);
-    let scl_local: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let trans_local: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let rot_local: Quaternion<'a> = frame_at(ctx, &__frame, 0x18);
-    let scl: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+    let scl_local: Vec<'a> = frame_at(ctx, &__frame, 0x50);
+    let trans_local: Vec<'a> = frame_at(ctx, &__frame, 0x44);
+    let rot_local: Quaternion<'a> = frame_at(ctx, &__frame, 0x34);
+    let scl: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut data = data;
     let mut count = count;

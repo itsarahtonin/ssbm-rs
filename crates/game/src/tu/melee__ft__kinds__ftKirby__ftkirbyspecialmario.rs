@@ -94,7 +94,8 @@ pub fn ftKb_MrSpecialN_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_800F9260<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -134,7 +135,7 @@ pub fn fn_800F9260<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 );
                 return;
             }
-            pick = inl_fn_800F9260_inline_unfused(ctx, gobj);
+            pick = inl_fn_800F9260_inline_unfused(ctx, gobj, Handle::addr(__inl));
             fns::itDrMarioPill_Spawn(
                 ctx,
                 gobj,
@@ -298,9 +299,8 @@ fn inl_fn_800F9260_GetPartJoint_unfused<'a>(
     return (Handle::add((fp).parts(), bone)).joint();
 }
 
-fn inl_fn_800F9260_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x30);
-    let candidates: ArrV<'a, i32, 9> = frame_at(ctx, &__frame, 0x0);
+fn inl_fn_800F9260_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) -> i32 {
+    let candidates: ArrV<'a, i32, 9> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp2: Fighter<'a> = null(ctx);
     let mut count: i32 = 0;

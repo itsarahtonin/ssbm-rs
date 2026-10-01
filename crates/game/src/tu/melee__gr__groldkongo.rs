@@ -135,7 +135,7 @@ pub fn stageGObj3_Callback3<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn stageGObj1_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -190,9 +190,9 @@ pub fn stageGObj1_Callback1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn stageGObj1_GObjProc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x90);
-    let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
-    let hit: lbColl_80008D30_arg1<'a> = frame_at(ctx, &__frame, 0x14);
+    let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0x34);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let hit: lbColl_80008D30_arg1<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -569,9 +569,9 @@ pub fn stageGObj2_Callback1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn stageGObj2_GObjProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let left: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let right: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
-    let center: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let left: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
+    let right: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
+    let center: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
     let mut arg0 = arg0;
     let mut pad: u32 = 0;
     let mut gp: Ground<'a> = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, arg0)));
@@ -658,9 +658,9 @@ pub fn stageGObj2_Callback3<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn grOldKongo_80210454<'a>(ctx: &'a Ctx, ground_gobj: HSD_GObj<'a>, keep: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let pos_gnd: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let pos_ft: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unk: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
+    let pos_gnd: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let pos_ft: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unk: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
     let mut ground_gobj = ground_gobj;
     let mut keep = keep;
     let mut gp: Ground<'a> = null(ctx);
@@ -886,7 +886,7 @@ pub fn grOldKongo_80210780<'a>(ctx: &'a Ctx, gobj: i32) -> DynamicsDesc<'a> {
 
 pub fn grOldKongo_80210788<'a>(ctx: &'a Ctx, a: Vec<'a>, arg: i32, joint: HSD_JObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let b: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let b: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut a = a;
     let mut arg = arg;
     let mut joint = joint;

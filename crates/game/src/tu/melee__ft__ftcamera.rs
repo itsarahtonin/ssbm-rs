@@ -45,7 +45,7 @@ pub fn ftCamera_80076018<'a>(
 
 pub fn ftCamera_80076064<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let spC: UnkFloat6_Camera<'a> = frame_at(ctx, &__frame, 0x0);
+    let spC: UnkFloat6_Camera<'a> = frame_at(ctx, &__frame, 0x4);
     let mut fp = fp;
     let mut camera_box: CmSubject<'a> = null(ctx);
     camera_box = (fp).x890_cameraBox();
@@ -81,7 +81,7 @@ pub fn ftCamera_80076064<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ftCamera_UpdateCameraBox<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let cam_floats: UnkFloat6_Camera<'a> = frame_at(ctx, &__frame, 0x0);
+    let cam_floats: UnkFloat6_Camera<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -130,7 +130,7 @@ pub fn ftCamera_800762F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCamera_80076320<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let center_pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let center_pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut camera_box: CmSubject<'a> = null(ctx);

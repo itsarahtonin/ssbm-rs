@@ -80,8 +80,8 @@ pub fn lbBgFlash_Init<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn lbBgFlash_Proc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut data: BgFlashUserData<'a> = Handle::cast::<BgFlashUserData<'a>>((gobj).user_data());
     let mut was_active: i32 = ((data).x4().x7C_color_enable() as i32);

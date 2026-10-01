@@ -29,7 +29,7 @@ use ssbm_rt::cpu as c;
 
 pub fn ftKb_SpecialNFx_800FDC00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vec: Vec<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let offset: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let offset: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut vec = vec;
     if !Handle::is_null(gobj) {
@@ -61,7 +61,7 @@ pub fn ftKb_SpecialNFx_800FDC00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vec: Vec<'
 
 pub fn ftKb_SpecialNFx_800FDC70<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vec: Vec<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let pos1: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos1: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut vec = vec;
     if !Handle::is_null(gobj) {
@@ -307,9 +307,9 @@ pub fn ftKb_SpecialNFx_800FDEE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_SpecialNFx_800FDF30<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let pos1: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let pos1: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

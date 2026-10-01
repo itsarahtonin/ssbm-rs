@@ -28,9 +28,9 @@ use crate::support::*;
 
 pub fn it_8029A114<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>, facing_dir: f64, arg4: i32) {
     let __frame = ctx.stack_frame(0x80);
-    let facing_dir__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x50);
+    let facing_dir__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut pos = pos;
     facing_dir__slot.set(facing_dir);
@@ -85,8 +85,8 @@ pub fn it_8029A218<'a>(
     arg4: i32,
 ) {
     let __frame = ctx.stack_frame(0x80);
-    let facing_dir__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x4);
+    let facing_dir__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
     let mut owner = owner;
     let mut pos = pos;
     facing_dir__slot.set(facing_dir);

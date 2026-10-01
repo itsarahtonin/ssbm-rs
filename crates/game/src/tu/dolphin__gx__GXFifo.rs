@@ -28,6 +28,7 @@ use crate::support::*;
 
 pub fn GXCPInterruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x2e0);
+    let __inl: ArrV<'a, u8, 712> = frame_at(ctx, &__frame, 0x8);
     let mut interrupt = interrupt;
     let mut context = context;
     (fns::gx(ctx).get()).set_cpStatus(((Handle::add(fns::__cpReg(ctx).get(), 0_i32)).get() as u32));
@@ -56,7 +57,7 @@ pub fn GXCPInterruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext
             & ((shl_i32(1_i32, ((1_i32) as u32))).wrapping_sub(1_i32)))
             != 0)
     {
-        inl_GXBreakPointHandler_unfused(ctx, 0, context);
+        inl_GXBreakPointHandler_unfused(ctx, 0, context, Handle::addr(__inl));
     }
 }
 
@@ -397,9 +398,13 @@ fn inl_GXOverflowHandler_unfused<'a>(ctx: &'a Ctx, interrupt: i16, context: OSCo
     );
 }
 
-fn inl_GXBreakPointHandler_unfused<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) {
-    let __frame = ctx.stack_frame(0x2d0);
-    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_GXBreakPointHandler_unfused<'a>(
+    ctx: &'a Ctx,
+    interrupt: i16,
+    context: OSContext<'a>,
+    __in_caller: u32,
+) {
+    let exceptionContext: OSContext<'a> = ptr(ctx, __in_caller + 0x0);
     let mut interrupt = interrupt;
     let mut context = context;
     (fns::gx(ctx).get()).set_cpEnable(((fns::gx(ctx).get()).cpEnable() & 0xffffffdf_u32));

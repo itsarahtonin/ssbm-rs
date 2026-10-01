@@ -372,7 +372,7 @@ pub fn mnItemSw_8023405C<'a>(ctx: &'a Ctx, data: MnItemSwData<'a>, idx: u8) -> H
 
 pub fn mnItemSw_80234104<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let item_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let item_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x30);
     let mut gobj = gobj;
     let mut i: i32 = 0;
     let mut item_anim: i32 = 0;
@@ -445,7 +445,8 @@ pub fn mnItemSw_80234104<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnItemSw_8023453C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u8, arg2: u8) {
     let __frame = ctx.stack_frame(0x80);
-    let sp44: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let sp44: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x3c);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x34);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -623,7 +624,7 @@ pub fn mnItemSw_8023453C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u8, arg2: u
         }
     }
     if (arg2_ as i32) != 0_i32 {
-        arg1_ = inl_mnItemSw_UpdateConfirmed(ctx, data, tbl, arg1_);
+        arg1_ = inl_mnItemSw_UpdateConfirmed(ctx, data, tbl, arg1_, Handle::addr(__inl));
     }
     {
         let mut sel: u16 = 0;
@@ -907,8 +908,8 @@ pub fn fn_80234C24<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnItemSw_80235020<'a>(ctx: &'a Ctx, arg0: u8, arg1: MnItemSwData<'a>) -> HSD_JObj<'a> {
     let __frame = ctx.stack_frame(0x38);
-    let sp14: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
-    let sp10: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
+    let sp14: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
+    let sp10: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut item_val: u8 = 0;
@@ -1419,9 +1420,9 @@ fn inl_mnItemSw_UpdateConfirmed<'a>(
     user_data: MnItemSwData<'a>,
     tbl: MnItemSwTable<'a>,
     changed: u8,
+    __in_caller: u32,
 ) -> u8 {
-    let __frame = ctx.stack_frame(0x10);
-    let confirmed_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let confirmed_jobj: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x0);
     let mut user_data = user_data;
     let mut tbl = tbl;
     let mut changed = changed;

@@ -38,6 +38,7 @@ pub fn ifStatus_PercentOnDeathAnimationThink<'a>(
     arg2: IfDamageState<'a>,
 ) {
     let __frame = ctx.stack_frame(0x70);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut value = value;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -71,6 +72,7 @@ pub fn ifStatus_PercentOnDeathAnimationThink<'a>(
                 if inl_fabsf_bitwise(
                     ctx,
                     inl_HSD_JObjGetTranslationX(ctx, (value).jobjs().at(i).get()),
+                    Handle::addr(__inl),
                 ) < 100.0
                 {
                     inl_HSD_JObjAddTranslationX(
@@ -174,13 +176,13 @@ pub fn ifStatus_802F4B84<'a>(ctx: &'a Ctx, state: IfDamageState<'a>, is_stamina:
 
 pub fn ifStatus_802F4EDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xf8);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let pad_a: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x4);
-    let stamina_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
-    let pad_b: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x24);
-    let normal_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
-    let pad_c: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x2c);
-    let digit_offset: ifStatus_802F4EDC_digit_offset<'a> = frame_at(ctx, &__frame, 0x34);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x58);
+    let pad_a: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x0);
+    let stamina_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x38);
+    let pad_b: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x1c);
+    let normal_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let pad_c: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x20);
+    let digit_offset: ifStatus_802F4EDC_digit_offset<'a> = frame_at(ctx, &__frame, 0x28);
     let mut gobj = gobj;
     let mut hud: HudIndex<'a> = null(ctx);
     let mut state: IfDamageState<'a> = null(ctx);
@@ -618,8 +620,8 @@ pub fn ifStatus_802F61FC<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x48);
     let chara: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
     let mut state = state;
     let mut player_idx = player_idx;
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -1232,9 +1234,8 @@ fn inl_HSD_JObjGetTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     return (jobj).translate().x();
 }
 
-fn inl_fabsf_bitwise<'a>(ctx: &'a Ctx, v: f64) -> f64 {
-    let __frame = ctx.stack_frame(0x10);
-    let v__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+fn inl_fabsf_bitwise<'a>(ctx: &'a Ctx, v: f64, __in_caller: u32) -> f64 {
+    let v__slot: Val<'a, F32> = ptr(ctx, __in_caller + 0x0);
     v__slot.set(v);
     (Handle::cast::<Val<'a, u32>>(v__slot))
         .set(((Handle::cast::<Val<'a, u32>>(v__slot)).get() & (!0x80000000_u32)));

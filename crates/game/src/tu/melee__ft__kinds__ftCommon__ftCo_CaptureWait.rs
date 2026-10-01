@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn fn_800DB5D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let sp18: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x0);
+    let sp18: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -117,7 +117,7 @@ pub fn fn_800DB6C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_800DB790<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x0);
+    let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut victim_fp: Fighter<'a> = null(ctx);
     let mut fp: Fighter<'a> = null(ctx);
@@ -295,7 +295,7 @@ pub fn fn_800DBAC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_800DBAE4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x0);
+    let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut victim_fp: Fighter<'a> = null(ctx);
     let mut fp: Fighter<'a> = null(ctx);
@@ -365,7 +365,7 @@ pub fn fn_800DBAE4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_800DBBF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x0);
+    let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut victim_fp: Fighter<'a> = null(ctx);
     let mut fp: Fighter<'a> = null(ctx);

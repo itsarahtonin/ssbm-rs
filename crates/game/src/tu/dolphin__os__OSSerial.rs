@@ -451,7 +451,7 @@ pub fn __SITransfer<'a>(
     callback: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let comcsr: anon_e6cc7a26<'a> = frame_at(ctx, &__frame, 0x0);
+    let comcsr: anon_e6cc7a26<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut chan = chan;
     let mut output = output;
     let mut outputBytes = outputBytes;

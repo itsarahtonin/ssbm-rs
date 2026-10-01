@@ -110,8 +110,8 @@ pub fn lb_8000B134<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
 
 pub fn lb_8000B1CC<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>, pos0: Vec<'a>, pos1: Vec<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let r: Quaternion<'a> = frame_at(ctx, &__frame, 0x0);
-    let s: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let r: Quaternion<'a> = frame_at(ctx, &__frame, 0x18);
+    let s: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut pos0 = pos0;
     let mut pos1 = pos1;
@@ -264,8 +264,8 @@ pub fn lb_8000B9D8<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: Ptr<'a, Val<'a, F
 
 pub fn lb_8000BA0C<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg8: f64) {
     let __frame = ctx.stack_frame(0x18);
-    let arg8__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let sp10: Ptr<'a, Val<'a, F32>> = frame_at(ctx, &__frame, 0x4);
+    let arg8__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
+    let sp10: Ptr<'a, Val<'a, F32>> = frame_at(ctx, &__frame, 0x8);
     let mut jobj = jobj;
     arg8__slot.set(arg8);
     sp10.set(arg8__slot);
@@ -592,10 +592,10 @@ pub fn lb_8000C490<'a>(
     arg9: f64,
 ) {
     let __frame = ctx.stack_frame(0x90);
-    let sp60: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp54: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let quat1: Quaternion<'a> = frame_at(ctx, &__frame, 0x18);
-    let quat2: Quaternion<'a> = frame_at(ctx, &__frame, 0x28);
+    let sp60: Vec<'a> = frame_at(ctx, &__frame, 0x58);
+    let sp54: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
+    let quat1: Quaternion<'a> = frame_at(ctx, &__frame, 0x3c);
+    let quat2: Quaternion<'a> = frame_at(ctx, &__frame, 0x2c);
     let mut jobj1 = jobj1;
     let mut jobj2 = jobj2;
     let mut arg2 = arg2;
@@ -756,12 +756,12 @@ pub fn lb_8000C868<'a>(
     arg9: f64,
 ) {
     let __frame = ctx.stack_frame(0xe8);
-    let spC0: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let spB4: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let spA4: Quaternion<'a> = frame_at(ctx, &__frame, 0x18);
-    let sp94: Quaternion<'a> = frame_at(ctx, &__frame, 0x28);
-    let sum: Quaternion<'a> = frame_at(ctx, &__frame, 0x38);
-    let dif: Quaternion<'a> = frame_at(ctx, &__frame, 0x48);
+    let spC0: Vec<'a> = frame_at(ctx, &__frame, 0xb8);
+    let spB4: Vec<'a> = frame_at(ctx, &__frame, 0xac);
+    let spA4: Quaternion<'a> = frame_at(ctx, &__frame, 0x9c);
+    let sp94: Quaternion<'a> = frame_at(ctx, &__frame, 0x8c);
+    let sum: Quaternion<'a> = frame_at(ctx, &__frame, 0x0);
+    let dif: Quaternion<'a> = frame_at(ctx, &__frame, 0x10);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -929,7 +929,7 @@ pub fn lbGetFreeColorRegImpl<'a>(
     texp2: HSD_TExp<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let register_used: ArrV<'a, i32, 8> = frame_at(ctx, &__frame, 0x0);
+    let register_used: ArrV<'a, i32, 8> = frame_at(ctx, &__frame, 0x1c);
     let mut i0 = i0;
     let mut tevdesc = tevdesc;
     let mut texp1 = texp1;
@@ -1020,7 +1020,7 @@ pub fn lbGetFreeAlphaRegImpl<'a>(
     arg3: HSD_TExp<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let register_used: ArrV<'a, i32, 8> = frame_at(ctx, &__frame, 0x0);
+    let register_used: ArrV<'a, i32, 8> = frame_at(ctx, &__frame, 0x1c);
     let mut i0 = i0;
     let mut cur = cur;
     let mut arg2 = arg2;

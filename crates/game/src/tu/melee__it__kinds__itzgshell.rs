@@ -28,7 +28,7 @@ use crate::support::*;
 
 pub fn it_802DDB38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itZGShell_Attrs<'a> = Handle::cast::<itZGShell_Attrs<'a>>(
@@ -534,6 +534,7 @@ pub fn it_802DE6F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itZrshell_UnkMotion6_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     if (ip).xDD4_itemVar().zgshell().xDF4() <= 0.0 {
@@ -547,7 +548,7 @@ pub fn itZrshell_UnkMotion6_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     }
     inl_it_802DDBE8_unfused(ctx, gobj);
     if ((ip).msid() == 6_i32) || ((ip).msid() == 5_i32) {
-        inl_it_802DDB38_unfused(ctx, gobj);
+        inl_it_802DDB38_unfused(ctx, gobj, Handle::addr(__inl));
     }
     return 0_i32;
 }
@@ -916,8 +917,8 @@ pub fn it_802DF230<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itZrshell_UnkMotion11_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut spawn: HSD_GObj<'a> = null(ctx);
@@ -1218,7 +1219,7 @@ pub fn itZGShell_Logic11_Destroyed<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802DFF14<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let capsule: itGShell_HurtInit<'a> = frame_at(ctx, &__frame, 0x0);
+    let capsule: itGShell_HurtInit<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1240,15 +1241,22 @@ pub fn it_802DFFA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802DFFB8<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, ip: Item<'a>) {
     let __frame = ctx.stack_frame(0x30);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut jobj = jobj;
     let mut ip = ip;
-    inl_itUpdateVelocityFromBone_unfused(ctx, jobj, ip, (ip).xDD4_itemVar().zgshell().vel());
+    inl_itUpdateVelocityFromBone_unfused(
+        ctx,
+        jobj,
+        ip,
+        (ip).xDD4_itemVar().zgshell().vel(),
+        Handle::addr(__inl),
+    );
 }
 
 pub fn it_802E0100<'a>(ctx: &'a Ctx, arg0: i32, pos: Vec<'a>, facing_int: i32) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x50);
-    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
+    let vel: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut pos = pos;
     let mut facing_int = facing_int;
@@ -1461,9 +1469,8 @@ fn inl_itZrshell_UnkMotion3_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -
     return 0_i32;
 }
 
-fn inl_it_802DDB38_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+fn inl_it_802DDB38_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let v: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itZGShell_Attrs<'a> = Handle::cast::<itZGShell_Attrs<'a>>(
@@ -1750,10 +1757,10 @@ fn inl_itUpdateVelocityFromBone_unfused<'a>(
     jobj: HSD_JObj<'a>,
     ip: Item<'a>,
     previous_pos: Vec<'a>,
+    __in_caller: u32,
 ) {
-    let __frame = ctx.stack_frame(0x20);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let zero: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let pos: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let zero: Vec<'a> = ptr(ctx, __in_caller + 0xc);
     let mut jobj = jobj;
     let mut ip = ip;
     let mut previous_pos = previous_pos;

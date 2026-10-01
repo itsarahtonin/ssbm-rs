@@ -172,7 +172,7 @@ pub fn OSCancelAlarm<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>) {
 
 pub fn DecrementerExceptionCallback<'a>(ctx: &'a Ctx, exception: u8, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x2f0);
-    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x0);
+    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x10);
     let mut exception = exception;
     let mut context = context;
     let mut alarm: OSAlarm<'a> = null(ctx);

@@ -285,7 +285,7 @@ pub fn gm_801B44A0<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B45A4<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let colors: ArrV<'a, u8, 3> = frame_at(ctx, &__frame, 0x0);
+    let colors: ArrV<'a, u8, 3> = frame_at(ctx, &__frame, 0x8);
     let ckinds: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x4);
     let mut scene = scene;
     let mut temp_r31: CutsceneData<'a> =
@@ -482,7 +482,7 @@ pub fn gm_801B4D34<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B4DAC<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let ckinds: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x0);
+    let ckinds: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x8);
     let colors: ArrV<'a, u8, 3> = frame_at(ctx, &__frame, 0x4);
     let mut scene = scene;
     let mut temp_r30: UnkAdventureData<'a> = fns::gm_GetAdventureData(ctx);

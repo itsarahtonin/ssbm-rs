@@ -455,6 +455,7 @@ pub fn enterEnd<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn enterEndSmash<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
     let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     fns::Fighter_ChangeMotionState(
         ctx,
@@ -466,11 +467,12 @@ pub fn enterEndSmash<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fp::frsp(0_i32 as f64),
         null::<HSD_GObj<'a>>(ctx),
     );
-    inl_doPostEnd_unfused(ctx, gobj);
+    inl_doPostEnd_unfused(ctx, gobj, Handle::addr(__inl));
 }
 
 pub fn enterAirEndSmash<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
+    let __inl: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -502,7 +504,7 @@ pub fn enterAirEndSmash<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             null::<HSD_GObj<'a>>(ctx),
         );
     }
-    inl_doPostEnd_SmallerStack_unfused(ctx, gobj);
+    inl_doPostEnd_SmallerStack_unfused(ctx, gobj, Handle::addr(__inl));
 }
 
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
@@ -571,10 +573,9 @@ fn inl_ftCommon_AirToGroundStateChange_unfused<'a>(
     );
 }
 
-fn inl_doPostEnd_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 38> = frame_at(ctx, &__frame, 0x0);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x28);
+fn inl_doPostEnd_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 38> = ptr(ctx, __in_caller + 0x0);
+    let vec: Vec<'a> = ptr(ctx, __in_caller + 0x28);
     let mut gobj = gobj;
     ctx.fill(Handle::addr(unused), 0, 0x26);
     unused.at(0).set((0_i32 as u8));
@@ -600,10 +601,9 @@ fn inl_doPostEnd_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).set_x21F8(fnptr(ctx, 0x8007f7b4));
 }
 
-fn inl_doPostEnd_SmallerStack_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 34> = frame_at(ctx, &__frame, 0x0);
-    let vec: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+fn inl_doPostEnd_SmallerStack_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
+    let unused: ArrV<'a, u8, 34> = ptr(ctx, __in_caller + 0x0);
+    let vec: Vec<'a> = ptr(ctx, __in_caller + 0x24);
     let mut gobj = gobj;
     ctx.fill(Handle::addr(unused), 0, 0x22);
     unused.at(0).set((0_i32 as u8));

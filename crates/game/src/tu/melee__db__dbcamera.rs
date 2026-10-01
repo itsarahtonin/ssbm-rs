@@ -200,8 +200,8 @@ pub fn fn_SetupCameraInfo<'a>(ctx: &'a Ctx) {
 
 pub fn fn_80227188<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x50);
-    let camera: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let interest: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let camera: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let interest: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut cobj: HSD_CObj<'a> = null(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut fov: f64 = 0.0;
@@ -391,6 +391,8 @@ pub fn fn_CheckCameraInfo<'a>(
     cstick_y: f64,
 ) {
     let __frame = ctx.stack_frame(0x60);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut player = player;
     let mut buttons_down = buttons_down;
     let mut buttons_pressed = buttons_pressed;
@@ -411,11 +413,11 @@ pub fn fn_CheckCameraInfo<'a>(
                     (cstick_y)
                 }) > 0.6000000238418579))
         {
-            inl_fn_CheckCameraInfo_helper_unfused(ctx);
+            inl_fn_CheckCameraInfo_helper_unfused(ctx, Handle::addr(__inl));
             fns::Camera_8003006C(ctx);
         } else {
             if ((buttons_pressed & (shl_i32(1_i32, (3_i32 as u32)))) != 0) {
-                inl_fn_CheckCameraInfo_helper_unfused(ctx);
+                inl_fn_CheckCameraInfo_helper_unfused(ctx, Handle::addr(__inl_2));
                 if (buttons_down
                     & ((((shl_i32(1_i32, (11_i32 as u32))) | (shl_i32(1_i32, (10_i32 as u32))))
                         | (shl_i32(1_i32, (6_i32 as u32))))
@@ -572,10 +574,10 @@ pub fn fn_802279E8<'a>(
     cstick_y: f64,
 ) {
     let __frame = ctx.stack_frame(0x98);
-    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x3c);
     let forward_vec: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let axis: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let up_vec: Vec<'a> = frame_at(ctx, &__frame, 0x48);
+    let axis: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let up_vec: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut camera = camera;
     let mut camera_pos = camera_pos;
     let mut camera_interest = camera_interest;
@@ -643,9 +645,9 @@ pub fn fn_80227B64<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, cstick_x: f64, cstick
 
 pub fn fn_80227BA8<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: f64, arg3: f64) {
     let __frame = ctx.stack_frame(0x48);
-    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
+    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut camera = camera;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -687,7 +689,7 @@ pub fn fn_80227BA8<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: 
 
 pub fn fn_80227CAC<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, cstick_y: f64) {
     let __frame = ctx.stack_frame(0x30);
-    let forward: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let forward: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut camera = camera;
     let mut cstick_y = cstick_y;
     let mut cobj: HSD_CObj<'a> = null(ctx);
@@ -714,10 +716,10 @@ pub fn fn_80227CAC<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, cstick_y: f64) {
 
 pub fn fn_80227D38<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: f64) {
     let __frame = ctx.stack_frame(0x60);
-    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x38);
+    let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut camera = camera;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -777,8 +779,8 @@ pub fn fn_80227EB0<'a>(
     arg9: f64,
 ) {
     let __frame = ctx.stack_frame(0x60);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -820,8 +822,8 @@ pub fn fn_80227EB0<'a>(
 
 pub fn fn_80227FE0<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, cstick_x: f64, cstick_y: f64) {
     let __frame = ctx.stack_frame(0x50);
-    let up_vec: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let left_vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let up_vec: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let left_vec: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut camera = camera;
     let mut cstick_x = cstick_x;
     let mut cstick_y = cstick_y;
@@ -878,11 +880,11 @@ pub fn fn_80227FE0<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, cstick_x: f64, cstick
 pub fn fn_80228124<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: f64, arg3: f64) {
     let __frame = ctx.stack_frame(0x80);
     let _2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x34);
+    let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
+    let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut camera = camera;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -963,12 +965,11 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
-fn inl_fn_CheckCameraInfo_helper_unfused<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x18);
-    let bg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let fg: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+fn inl_fn_CheckCameraInfo_helper_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) {
+    let bg: _GXColor<'a> = ptr(ctx, __in_caller + 0x0);
+    let fg: _GXColor<'a> = ptr(ctx, __in_caller + 0x4);
+    let __ret_tmp: _GXColor<'a> = ptr(ctx, __in_caller + 0x8);
+    let __ret_tmp_2: _GXColor<'a> = ptr(ctx, __in_caller + 0xc);
     Handle::copy_from(bg, fns::g_bg(ctx));
     Handle::copy_from(fg, fns::g_fg(ctx));
     let mut gobj: HSD_GObj<'a> = fns::DevText_GetGObj(ctx);

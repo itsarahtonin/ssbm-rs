@@ -480,10 +480,10 @@ pub fn setupStageCallbacks<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
 
 pub fn stageGObj0_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let pos_3: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let pos_4: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x20);
+    let pos_3: Vec<'a> = frame_at(ctx, &__frame, 0x14);
+    let pos_4: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -639,7 +639,7 @@ pub fn stageGObj9_Callback1<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
 
 pub fn stageGObj9_GObjProc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut unused1: u32 = 0;
     let mut unused2: u32 = 0;
@@ -674,7 +674,7 @@ pub fn stageGObj9_Callback3<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn stageGObj10_UnkGroundCallback<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let cb: Ptr<'a, FnPtr<'a>> = frame_at(ctx, &__frame, 0x0);
-    let user_data_out: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x4);
+    let user_data_out: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -810,9 +810,9 @@ pub fn stageGObj10_Callback1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn stageGObj10_GObjProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let sp30: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
+    let sp30: Val<'a, F32> = frame_at(ctx, &__frame, 0x28);
+    let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
+    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((arg0).user_data());
     let mut fighter_gobj: HSD_GObj<'a> = null(ctx);
@@ -1014,8 +1014,8 @@ pub fn stageGObj10_Callback3<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn stageGObj1_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let sp14: GrIm588<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let sp14: GrIm588<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1119,8 +1119,8 @@ pub fn stageGObj1_Callback3<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn stageGObj2_OnInit<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let sp14: GrIm588<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
+    let sp14: GrIm588<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg0)));
@@ -1255,8 +1255,8 @@ pub fn stageGObj2_Callback3<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn stageGObj3_OnInit<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let sp14: stageGObj3_OnInit_sp14<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let sp14: stageGObj3_OnInit_sp14<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg0)));
@@ -1351,8 +1351,8 @@ pub fn stageGObj3_Callback3<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn stageGObj4_OnInit<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let sp14: stageGObj4_OnInit_sp14<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let sp14: stageGObj4_OnInit_sp14<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut jobj3: HSD_JObj<'a> = null(ctx);
     let mut gp: Ground<'a> =
@@ -1475,8 +1475,8 @@ pub fn stageGObj4_Callback3<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn stageGObj5_OnInit<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let sp14: GrIm825C<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
+    let sp14: GrIm825C<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg0)));
@@ -1575,8 +1575,8 @@ pub fn stageGObj5_Callback3<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn stageGObj6_OnInit<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let sp14: stageGObj6_OnInit_sp14<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
+    let sp14: stageGObj6_OnInit_sp14<'a> = frame_at(ctx, &__frame, 0xc);
+    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg0)));
@@ -1746,7 +1746,7 @@ pub fn fn_801F8C64<'a>(
     u4: f64,
 ) {
     let __frame = ctx.stack_frame(0x38);
-    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut u1 = u1;
     let mut u2 = u2;
@@ -1774,7 +1774,7 @@ pub fn grIceMt_801F8CDC<'a>(
 ) {
     let __frame = ctx.stack_frame(0xb0);
     let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let parent_jobjs: ArrP<'a, HSD_JObj<'a>, 20> = frame_at(ctx, &__frame, 0x10);
+    let parent_jobjs: ArrP<'a, HSD_JObj<'a>, 20> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut joint_indices = joint_indices;
     let mut block_num = block_num;
@@ -1883,7 +1883,7 @@ pub fn grIceMt_801F8CDC<'a>(
 
 pub fn fn_801F8E58<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, out: Val<'a, i32>) -> i32 {
     let __frame = ctx.stack_frame(0x60);
-    let list: ArrV<'a, i32, 12> = frame_at(ctx, &__frame, 0x0);
+    let list: ArrV<'a, i32, 12> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut out = out;
     let mut gp: Ground<'a> = null(ctx);
@@ -3467,7 +3467,7 @@ pub fn grIceMt_801FA364<'a>(
     gobj: HSD_GObj<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let next_delay: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let next_delay: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
     let mut state = state;
     let mut out = out;
     let mut cb = cb;
