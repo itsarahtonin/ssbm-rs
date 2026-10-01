@@ -93,6 +93,25 @@ pub fn install_japanese(ctx: &Ctx) {
     );
 }
 
+/// Unlocks every character, stage and trophy whenever the main menu comes up, as the save data
+/// of the game's debug levels is, so the menus and modes have all of them to show.
+pub fn install_unlocks(ctx: &Ctx) {
+    ctx.set_hook(
+        ssbm_sdk::sym("mnMain_Scene_OnEnter"),
+        Rc::new(|ctx| {
+            let game = gmm_x0(At::new(ctx, ctx.read_u32(ssbm_sdk::sym("gmMainLib_804D3EE0"))));
+            let save = game.thing().save_data();
+            save.set_unlocked_characters(save.unlocked_characters() | 0x7FF);
+            save.set_x186A(save.x186A() | 0x7FF);
+            save.set_x186C(0xFF);
+            // The 300 trophies, a bit each.
+            for i in 0..10 {
+                save.x1B58().set(i, if i < 9 { u32::MAX } else { 0xFFF });
+            }
+        }),
+    );
+}
+
 /// Makes every match's human players level 9 CPUs, so the modes that end when the player
 /// loses go on further than random play takes them.
 pub fn install_cpu_players(ctx: &Ctx) {

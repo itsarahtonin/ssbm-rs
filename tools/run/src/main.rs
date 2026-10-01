@@ -297,6 +297,10 @@ fn run() -> ExitCode {
     if std::env::var_os("CPU_PLAYERS").is_some() {
         matches::install_cpu_players(&ctx);
     }
+    // UNLOCK_ALL=1 unlocks every character, stage and trophy once the main menu comes up.
+    if std::env::var_os("UNLOCK_ALL").is_some() {
+        matches::install_unlocks(&ctx);
+    }
     // GAME_LANGUAGE=jp runs the game in Japanese.
     if std::env::var("GAME_LANGUAGE").is_ok_and(|v| v == "jp") {
         matches::install_japanese(&ctx);
