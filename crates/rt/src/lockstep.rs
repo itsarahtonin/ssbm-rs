@@ -1043,6 +1043,12 @@ fn mutate(ctx: &Ctx, reads: &[u32]) -> Vec<String> {
                 next() as u8
             };
             ctx.write_u8(at, new);
+            // Nor does a word become a pointer to hardware registers: both sides would then
+            // read and write registers through it, in whichever order each reads the fields.
+            if (0xCC00_0000..0xCC01_0000).contains(&ctx.read_u32(at & !3)) {
+                ctx.write_u8(at, old);
+                return;
+            }
             changes.borrow_mut().push(format!("{at:#010X} {old:02X}->{new:02X}"));
         }
     };
