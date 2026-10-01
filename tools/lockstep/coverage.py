@@ -1,7 +1,8 @@
 """How much of each function lockstep has verified, block by block.
 
     python tools/lockstep/coverage.py <decomp root> --coverage FILE... [--ledger FILE...]
-        [--bar 0.9] [--dead FILE] [--stand-ins FILE] [--csv OUT] [--done OUT]
+        [--bar 0.9] [--dead FILE] [--stand-ins FILE] [--stale CHANGED=FILES]... [--csv OUT]
+        [--done OUT]
 
 ssbm-run's LOCKSTEP_COVERAGE bitmaps mark each instruction of the original that ran within a
 check of its own function whose sides agreed. This splits every function of the decomp's
@@ -10,7 +11,9 @@ Blocks that call __assert, OSPanic or HSD_Panic, which never return and never ru
 correct game, are left out of the count. A function is verified at or above the bar, as long
 as no ledger records a mismatch for it; --done lists those, for LOCKSTEP_DONE. Functions
 reach.py finds can never run (--dead), and those the SDK layer stands in for (--stand-ins, from
-ssbm-run's STAND_INS), are counted apart: no run can check them.
+ssbm-run's STAND_INS), are counted apart: no run can check them. Results of a binary built
+before a port last changed say nothing of it: each --stale gives a list of ports, as changed.py
+writes it, that take nothing from the results its glob matches.
 """
 
 import argparse
@@ -73,10 +76,15 @@ def blocks(insns, labels):
     return out
 
 
-def load_bits(paths):
+def load_bits(paths, spans, stale):
     bits = bytearray()
     for p in paths:
-        data = open(p, "rb").read()
+        data = bytearray(open(p, "rb").read())
+        for start in stale(p):
+            for addr in range(*spans.get(start, (start, start))):
+                i = (addr - LO) // 4
+                if i // 8 < len(data):
+                    data[i // 8] &= ~(1 << (i % 8)) & 0xFF
         if len(data) > len(bits):
             bits.extend(b"\0" * (len(data) - len(bits)))
         for i, b in enumerate(data):
@@ -89,12 +97,15 @@ def covered(bits, addr):
     return i // 8 < len(bits) and bits[i // 8] >> (i % 8) & 1
 
 
-def load_ledgers(paths):
+def load_ledgers(paths, stale):
     """address -> [calls, mismatches, uninitialized, mismatches with inputs no real call gave]"""
     rows = collections.defaultdict(lambda: [0, 0, 0, 0])
     for p in paths:
+        skip = stale(p)
         for r in csv.DictReader(open(p, encoding="utf-8")):
             a = int(r["address"], 16)
+            if a in skip:
+                continue
             rows[a][0] += int(r["calls"])
             rows[a][1] += int(r["mismatches"])
             rows[a][2] += int(r["uninitialized"])
@@ -110,6 +121,7 @@ def main():
     ap.add_argument("--bar", type=float, default=0.9)
     ap.add_argument("--dead")
     ap.add_argument("--stand-ins")
+    ap.add_argument("--stale", action="append", default=[])
     ap.add_argument("--csv")
     ap.add_argument("--done")
     args = ap.parse_args()
@@ -120,11 +132,24 @@ def main():
         lines = (l.split("#")[0].split() for l in open(path, encoding="utf-8"))
         return {w[-1] if w[0].startswith("0x") else w[0] for w in lines if w}
     dead, stand_ins = names(args.dead), names(args.stand_ins)
-    bits = load_bits([p for g in args.coverage for p in glob.glob(g)])
-    ledger = load_ledgers([p for g in args.ledger for p in glob.glob(g)])
+    stale_lists = []
+    for s in args.stale:
+        changed, pattern = s.split("=", 1)
+        starts = {int(l.split()[0], 16) for l in open(changed, encoding="utf-8")
+                  if l.startswith("0x")}
+        stale_lists.append((starts, {os.path.normcase(os.path.abspath(p))
+                                     for p in glob.glob(pattern)}))
+
+    def stale(path):
+        path = os.path.normcase(os.path.abspath(path))
+        return set().union(*(starts for starts, files in stale_lists if path in files))
+    funcs = list(functions(args.root))
+    spans = {insns[0][0]: (insns[0][0], insns[-1][0] + 4) for _, _, insns, _ in funcs}
+    bits = load_bits([p for g in args.coverage for p in glob.glob(g)], spans, stale)
+    ledger = load_ledgers([p for g in args.ledger for p in glob.glob(g)], stale)
 
     rows = []
-    for unit, name, insns, labels in functions(args.root):
+    for unit, name, insns, labels in funcs:
         bs = blocks(insns, labels)
         countable = [b for b in bs if not any(is_call(m) and ops.split(",")[0].strip() in NORETURN
                                               for _, m, ops in b)]
