@@ -329,7 +329,7 @@ pub fn install(ctx: &Ctx, disc: Disc, card: Option<Card>) -> Rc<Sdk> {
     // load queue, the crash screen for the frame buffers to be shown), and the calls each spin
     // of the others makes, which nothing else makes (for an ARAM transfer, the movie player's
     // reads, and the disc requests at a reset). Loops that would end at once take no time.
-    let spins: [(&str, fn(&Ctx) -> bool); 6] = [
+    let spins: [(&str, ssbm_rt::HookSkip); 6] = [
         ("HSD_SynthPStreamStart", |ctx| {
             ctx.read_u8(sym("HSD_Synth_804D7778")) == 0
         }),

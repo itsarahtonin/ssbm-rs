@@ -30,6 +30,9 @@ pub use regs::{Regs, RegsSnapshot, spr};
 /// Code run when execution reaches an address.
 pub type Hook = Rc<dyn Fn(&Ctx)>;
 
+/// When a hook has nothing to do (see `Ctx::set_hook_unless`).
+pub type HookSkip = fn(&Ctx) -> bool;
+
 /// Reads a read log notes at most.
 const READ_LOG_MAX: usize = 1 << 16;
 
@@ -158,7 +161,7 @@ pub struct Ctx {
     names: OnceCell<Box<dyn Fn(u32) -> Option<String>>>,
     hooks: RefCell<HashMap<u32, Hook>>,
     /// When the hooks set with `set_hook_unless` do nothing.
-    hook_skips: RefCell<HashMap<u32, fn(&Ctx) -> bool>>,
+    hook_skips: RefCell<HashMap<u32, HookSkip>>,
     /// Per MEM1 word: `FLAG_NATIVE` and `FLAG_HOOK`, so the interpreter checks cheaply.
     flags: Box<[Cell<u8>]>,
     pub lockstep: lockstep::State,
@@ -1041,7 +1044,7 @@ impl Ctx {
     /// Like `set_hook`, for a hook with nothing to do when `skip` holds on reaching `addr`. It
     /// then doesn't run, and reaching it is no interaction with the layer that set it, so checks
     /// go on there.
-    pub fn set_hook_unless(&self, addr: u32, skip: fn(&Ctx) -> bool, hook: Hook) {
+    pub fn set_hook_unless(&self, addr: u32, skip: HookSkip, hook: Hook) {
         self.set_hook(addr, hook);
         self.hook_skips.borrow_mut().insert(addr, skip);
     }
