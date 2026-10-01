@@ -304,7 +304,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     state.checking.borrow_mut().push(addr);
     let traced = state.trace_calls.get();
     // A check of the function `trace_deep` names traces every call it makes at any depth, with
-    // the port's callees running unchecked, and prints both sides' lists.
+    // the port's callees running unchecked, and prints both sides' lists if they disagree.
     let deep = traced && state.trace_deep.get() == Some(addr);
     if traced {
         state.traces.borrow_mut().push(CallTrace {
@@ -493,7 +493,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     }
 
     if traced && let Some(t) = state.traces.borrow_mut().pop() {
-        if t.deep {
+        if t.deep && !diffs.is_empty() {
             let show = |c: Option<&(u32, [u32; 4])>| {
                 c.map(|&(a, x)| {
                     format!("{}{} {:08X?}", "  ".repeat((a & 3) as usize), ctx.name_of(a & !3), x)

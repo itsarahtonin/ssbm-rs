@@ -515,7 +515,8 @@ fn run() -> ExitCode {
             .trace_log
             .set(std::env::var_os("LOCKSTEP_TRACE_LOG").is_some());
         // LOCKSTEP_TRACE_DEEP=NAME prints the calls a check of that function makes at every
-        // depth on both sides, with the port's callees unchecked (needs LOCKSTEP_TRACE_CALLS).
+        // depth on both sides when they disagree, with the port's callees unchecked (needs
+        // LOCKSTEP_TRACE_CALLS).
         if let Ok(name) = std::env::var("LOCKSTEP_TRACE_DEEP") {
             ctx.lockstep.trace_deep.set(Some(ssbm_sdk::sym(&name)));
         }
