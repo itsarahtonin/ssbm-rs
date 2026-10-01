@@ -650,6 +650,15 @@ fn run() -> ExitCode {
             functions.map(|s| s.0 + s.1).max().unwrap_or(0),
         ));
         ctx.lockstep.constant.borrow_mut().extend(READ_ONLY);
+        // So are the literals MWCC places in writable sections, such as short strings in
+        // .sdata, which the C never writes: a format string that loses its terminator sends
+        // printf through whatever follows.
+        ctx.lockstep.constant.borrow_mut().extend(
+            ssbm_types::symbols::SYMBOLS
+                .iter()
+                .filter(|s| !s.3 && s.2.starts_with('@') && s.1 > 0)
+                .map(|s| (s.0, s.0 + s.1)),
+        );
         let checking = checking.clone();
         let enable = move |ctx: &Ctx| {
             for &addr in &checked {
