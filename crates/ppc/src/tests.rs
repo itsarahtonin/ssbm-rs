@@ -154,6 +154,7 @@ fn notes_calls_that_break_the_calling_convention() {
     ctx.check_conventions(true);
     ctx.run_original(CODE);
     assert_eq!(ctx.check_conventions(false), Some(CODE));
+
     // One that returns with its stack pointer above the one it found (addi r1, r1, 16).
     let ctx = machine(&[addi(1, 1, 16), BLR]);
     ctx.check_conventions(true);
@@ -297,6 +298,25 @@ fn mutated_checks_reach_what_a_loaded_value_decides() {
         let seven = ctx.read_u8(0x8060_0010) == 7;
         ctx.regs.set_r(3, if seven { 8 } else { 9 });
     }) > 0);
+}
+
+#[test]
+fn mutated_checks_tell_which_nan_an_add_passes_on() {
+    // f(a, b): return b + a, which MWCC emits as fadds f1, f2, f1.
+    let mismatches = |port: fn(&Ctx)| {
+        let ctx = machine(&[0xEC22_082A, BLR]);
+        ctx.register_port(CODE, port, ssbm_rt::lockstep::Returns::Float);
+        ctx.set_mode(CODE, Mode::Lockstep);
+        ctx.lockstep.mutations.set(2000);
+        ctx.lockstep.rng.set(1);
+        ctx.regs.set_f(1, 1.0);
+        ctx.regs.set_f(2, 2.0);
+        ctx.invoke(CODE);
+        ctx.lockstep.mismatches.borrow().len()
+    };
+    assert_eq!(mismatches(|ctx| ctx.regs.set_f(1, fp::fadds(ctx.regs.f(2), ctx.regs.f(1)))), 0);
+    // The same sum, but of two NaNs the other one's.
+    assert!(mismatches(|ctx| ctx.regs.set_f(1, fp::fadds(ctx.regs.f(1), ctx.regs.f(2)))) > 0);
 }
 
 #[test]

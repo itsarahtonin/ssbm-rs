@@ -1033,7 +1033,8 @@ fn change_target(ctx: &Ctx, addr: u32, loaded: &[(u32, u32)]) -> Option<String> 
 /// stay as they are: only the original runs code from memory or reads the constants ports
 /// hold inline, a pointer changed sends both sides through memory where they differ only in
 /// what ports keep out of it, and counts, flags and floats are what reach the branches real
-/// calls miss.
+/// calls miss. Some words and floats become NaNs, of either sign and with some payload: of two
+/// NaN operands, an operation passes on the first one's, which ports then must have first too.
 fn mutate(ctx: &Ctx, reads: &[u32]) -> Vec<String> {
     let state = &ctx.lockstep;
     let next = || state.random();
@@ -1041,13 +1042,17 @@ fn mutate(ctx: &Ctx, reads: &[u32]) -> Vec<String> {
     let (code_start, code_end) = state.code.get();
     let constant = state.constant.borrow();
     let changes = std::cell::RefCell::new(Vec::new());
-    let change_byte = |at: u32| {
-        if ram(at)
+    let changeable = |at: u32| {
+        ram(at)
             && !(code_start..code_end).contains(&at)
             && !state.is_ram_code(at & !3)
             && !constant.iter().any(|&(lo, hi)| (lo..hi).contains(&at))
             && !ram(ctx.read_u32(at & !3))
-        {
+    };
+    // A single-precision NaN's sign, exponent and payload.
+    let nan = || ((next() as u32 & 1) << 31) | 0x7F80_0000 | (next() as u32 % 0x7F_FFFF + 1);
+    let change_byte = |at: u32| {
+        if changeable(at) {
             let old = ctx.read_u8(at);
             let new = if next() % 2 == 0 {
                 old ^ (1 << (next() % 8))
@@ -1098,18 +1103,36 @@ fn mutate(ctx: &Ctx, reads: &[u32]) -> Vec<String> {
     if !reads.is_empty() {
         for _ in 0..=next() % 3 {
             let word = reads[(next() % reads.len() as u64) as usize];
-            change_byte(word + (next() % 4) as u32);
+            if next() % 4 == 0 {
+                let at = word & !3;
+                if changeable(at) {
+                    let (old, new) = (ctx.read_u32(at), nan());
+                    ctx.write_u32(at, new);
+                    changes.borrow_mut().push(format!("{at:#010X} {old:08X}->{new:08X}"));
+                }
+            } else {
+                change_byte(word + (next() % 4) as u32);
+            }
         }
     }
     for f in 1..=8 {
         if next() % 3 == 0 {
             let v = ctx.regs.f(f);
-            let new = match next() % 5 {
+            let new = match next() % 6 {
                 0 => 0.0,
                 1 => 1.0,
                 2 => -v,
                 3 => v * 2.0,
-                _ => v * 0.5,
+                4 => v * 0.5,
+                _ => {
+                    // As a single NaN, which loading one gives.
+                    let bits = nan();
+                    f64::from_bits(
+                        (u64::from(bits >> 31) << 63)
+                            | 0x7FF0_0000_0000_0000
+                            | (u64::from(bits & 0x7F_FFFF) << 29),
+                    )
+                }
             };
             ctx.regs.set_f(f, new);
             changes.borrow_mut().push(format!("f{f} {v}->{new}"));
