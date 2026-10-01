@@ -1,14 +1,16 @@
 """How much of each function lockstep has verified, block by block.
 
     python tools/lockstep/coverage.py <decomp root> --coverage FILE... [--ledger FILE...]
-        [--bar 0.9] [--csv OUT] [--done OUT]
+        [--bar 0.9] [--dead FILE] [--stand-ins FILE] [--csv OUT] [--done OUT]
 
 ssbm-run's LOCKSTEP_COVERAGE bitmaps mark each instruction of the original that ran within a
 check of its own function whose sides agreed. This splits every function of the decomp's
 listings into basic blocks and counts a block verified when any of its instructions is marked.
 Blocks that call __assert, OSPanic or HSD_Panic, which never return and never run in a
 correct game, are left out of the count. A function is verified at or above the bar, as long
-as no ledger records a mismatch for it; --done lists those, for LOCKSTEP_DONE.
+as no ledger records a mismatch for it; --done lists those, for LOCKSTEP_DONE. Functions
+reach.py finds can never run (--dead), and those the SDK layer stands in for (--stand-ins, from
+ssbm-run's STAND_INS), are counted apart: no run can check them.
 """
 
 import argparse
@@ -104,9 +106,18 @@ def main():
     ap.add_argument("--coverage", nargs="+", default=[])
     ap.add_argument("--ledger", nargs="*", default=[])
     ap.add_argument("--bar", type=float, default=0.9)
+    ap.add_argument("--dead")
+    ap.add_argument("--stand-ins")
     ap.add_argument("--csv")
     ap.add_argument("--done")
     args = ap.parse_args()
+
+    def names(path):
+        if not path:
+            return set()
+        lines = (l.split("#")[0].split() for l in open(path, encoding="utf-8"))
+        return {w[-1] if w[0].startswith("0x") else w[0] for w in lines if w}
+    dead, stand_ins = names(args.dead), names(args.stand_ins)
     bits = load_bits([p for g in args.coverage for p in glob.glob(g)])
     ledger = load_ledgers([p for g in args.ledger for p in glob.glob(g)])
 
@@ -121,12 +132,17 @@ def main():
         share = done / len(countable) if countable else 1.0
         rows.append((start, name, unit, len(bs), len(countable), done, share, calls, bad, uninit))
 
+    apart = [r for r in rows if r[1] in dead or r[1] in stand_ins]
+    rows = [r for r in rows if r not in apart]
     verified = [r for r in rows if r[6] >= args.bar and r[8] == 0 and r[7] > 0]
     checked = [r for r in rows if r[7] > 0]
     mismatching = [r for r in rows if r[8] > 0]
     blocks_all = sum(r[4] for r in rows)
     blocks_done = sum(r[5] for r in rows)
-    print(f"{len(rows)} functions, {blocks_all} blocks that can run "
+    print(f"{len(rows) + len(apart)} functions: {len(apart)} no run can reach "
+          f"({sum(r[1] in dead for r in apart)} never called, {sum(r[1] in stand_ins for r in apart)} "
+          f"that the SDK layer stands in for), {len(rows)} to check")
+    print(f"{blocks_all} blocks of these that can run "
           f"({sum(r[3] - r[4] for r in rows)} more only fail an assertion)")
     print(f"checked: {len(checked)} functions; blocks verified: {blocks_done} "
           f"({100 * blocks_done / max(blocks_all, 1):.1f}%)")

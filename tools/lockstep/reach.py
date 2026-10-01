@@ -1,11 +1,13 @@
 """Which functions the game can reach at all, from the decomp's listings.
 
-    python tools/lockstep/reach.py <decomp root> [--dead OUT]
+    python tools/lockstep/reach.py <decomp root> [--stand-ins FILE] [--dead OUT]
 
 A function is reachable from `__start`, from anything a data table points to (callbacks,
 dispatch tables), and from what reachable code calls, branches to or takes the address of.
 The rest can never run, whatever the input, so coverage counts only the reachable ones.
---dead lists the others, with the unit each is in.
+--stand-ins takes ssbm-run's STAND_INS list: the SDK layer runs those in place of the game's
+code, so what only they call never runs either. --dead lists the others, with the unit each
+is in.
 """
 
 import argparse
@@ -46,6 +48,7 @@ def listings(root):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("root")
+    ap.add_argument("--stand-ins")
     ap.add_argument("--dead")
     args = ap.parse_args()
     calls, unit_of, from_data = {}, {}, set()
@@ -55,6 +58,9 @@ def main():
         else:
             calls[fn] = refs
             unit_of[fn] = unit
+    stand_ins = set()
+    if args.stand_ins:
+        stand_ins = {line.split()[1] for line in open(args.stand_ins, encoding="utf-8") if line.strip()}
     roots = {"__start"} | (from_data & calls.keys())
     live, todo = set(), list(roots)
     while todo:
@@ -62,7 +68,8 @@ def main():
         if f in live or f not in calls:
             continue
         live.add(f)
-        todo.extend(r for r in calls[f] if r in calls and r not in live)
+        if f not in stand_ins:
+            todo.extend(r for r in calls[f] if r in calls and r not in live)
     dead = sorted(set(calls) - live)
     by_area = collections.Counter("/".join(unit_of[f].split("/")[:2]) for f in dead)
     print(f"{len(calls)} functions: {len(live)} reachable, {len(dead)} never")

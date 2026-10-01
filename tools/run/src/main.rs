@@ -255,6 +255,17 @@ fn run() -> ExitCode {
     ctx.set_names(Box::new(ssbm_types::describe));
     let dol = disc.main_dol().ok();
     let sdk = ssbm_sdk::install(&ctx, disc);
+    // STAND_INS=FILE lists the functions the SDK layer stands in for, which neither a port
+    // nor the original code runs.
+    if let Ok(path) = std::env::var("STAND_INS") {
+        let list: String = ctx
+            .registered()
+            .into_iter()
+            .filter(|&a| ctx.entry(a).is_some_and(|e| e.external))
+            .map(|a| format!("{a:#010x} {}\n", ctx.name_of(a)))
+            .collect();
+        std::fs::write(&path, list).unwrap_or_else(|e| panic!("{path}: {e}"));
+    }
     // --monkey SEED plays every controller at random; --mode KIND starts in that game mode
     // (GameModeKind, in hex) instead of the title screen. MODES=1 logs each mode entered.
     if let Some(seed) = monkey_seed {
