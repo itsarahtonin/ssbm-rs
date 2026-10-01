@@ -1291,6 +1291,8 @@ pub fn grShrineRoute_8020A21C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let dir: Vec<'a> = frame_at(ctx, &__frame, 0x34);
     let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
     let temp_pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut player: HSD_GObj<'a> = null(ctx);
     let mut gp: Ground<'a> = null(ctx);
@@ -1490,8 +1492,14 @@ pub fn grShrineRoute_8020A21C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 );
             }
         }
-        fns::HSD_LObjSetColor(ctx, (gp).u().shrineroute2().x170(), color);
-        inl_grShrineRoute_StackPad(ctx, color);
+        fns::HSD_LObjSetColor(ctx, (gp).u().shrineroute2().x170(), {
+            Handle::copy_from(__arg, color);
+            __arg
+        });
+        inl_grShrineRoute_StackPad(ctx, {
+            Handle::copy_from(__arg_2, color);
+            __arg_2
+        });
         if fns::HSD_LObjGetPosition(
             ctx,
             (gp).u()
@@ -1589,6 +1597,7 @@ pub fn grShrineRoute_8020A8A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grShrineRoute_8020AA40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut config: grSh_Route_LightConfig<'a> = null(ctx);
     let mut lobj: HSD_LObj<'a> = null(ctx);
@@ -1604,7 +1613,10 @@ pub fn grShrineRoute_8020AA40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 'c2: {
                     config = statics::melee__gr__grshrineroute::light_config(ctx).get((i as i32));
                     if !Handle::is_null(lobj) {
-                        fns::HSD_LObjSetColor(ctx, lobj, (config).color());
+                        fns::HSD_LObjSetColor(ctx, lobj, {
+                            Handle::copy_from(__arg, (config).color());
+                            __arg
+                        });
                         fns::HSD_LObjSetPosition(ctx, lobj, (config).pos());
                         fns::HSD_LObjSetDistAttn(
                             ctx,

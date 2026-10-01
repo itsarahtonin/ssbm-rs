@@ -16363,6 +16363,8 @@ pub fn ftCo_800B395C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) -> i32 {
     let sp50: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x48);
     let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
     let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x30);
+    let __arg: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> = null(ctx);
@@ -16470,7 +16472,21 @@ pub fn ftCo_800B395C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) -> i32 {
         sp44.set_y((temp_r30).x54().y());
         sp44.set_z(0.0);
         fns::PSMTXIdentity(ctx, sp50.get(0));
-        fns::lbColl_800096B4(ctx, sp50.get(0), sp44, sp44, sp84, sp80, 5.0);
+        fns::lbColl_800096B4(
+            ctx,
+            sp50.get(0),
+            {
+                Handle::copy_from(__arg, sp44);
+                __arg
+            },
+            {
+                Handle::copy_from(__arg_2, sp44);
+                __arg_2
+            },
+            sp84,
+            sp80,
+            5.0,
+        );
         sp84.set_r((255_i32 as u8));
         sp84.set_g((255_i32 as u8));
         sp84.set_b((0_i32 as u8));

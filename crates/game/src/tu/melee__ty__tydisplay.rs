@@ -1757,6 +1757,7 @@ pub fn _tyDisplay_8031B1FC<'a>(ctx: &'a Ctx) {
 pub fn _tyDisplay_8031B328<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x40);
     let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
     let mut ptr_: TyDspBgData<'a> = statics::melee__ty__tydisplay::_tyDisplay_804D6F1C(ctx).get();
     let mut scene: ToyCameraControl<'a> = fns::Toy_sbss_804D6ED4(ctx).get();
     let mut lightData: Ptr<'a, LightList<'a>> = null(ctx);
@@ -1822,11 +1823,13 @@ pub fn _tyDisplay_8031B328<'a>(ctx: &'a Ctx) {
         );
     }
     if statics::melee__ty__tydisplay::_tyDisplay_804D6F20(ctx).get() != 0_i32 {
-        fns::HSD_LObjSetColor(
-            ctx,
-            lobj,
-            statics::melee__ty__tydisplay::_tyDisplay_color_C8C8C8FF(ctx),
-        );
+        fns::HSD_LObjSetColor(ctx, lobj, {
+            Handle::copy_from(
+                __arg,
+                statics::melee__ty__tydisplay::_tyDisplay_color_C8C8C8FF(ctx),
+            );
+            __arg
+        });
     }
     if !Handle::is_null(
         ({
@@ -2445,12 +2448,14 @@ pub fn _tyDisplay_8031BF34<'a>(ctx: &'a Ctx, arg0: i32) {
 }
 
 pub fn _tyDisplay_8031C1D0<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x38);
+    let __frame = ctx.stack_frame(0x40);
     let savedColor: Val<'a, i32> = frame_at(ctx, &__frame, 0x28);
     let bgColor: Val<'a, i32> = frame_at(ctx, &__frame, 0x24);
     let buf: ArrV<'a, i8, 28> = frame_at(ctx, &__frame, 0x8);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
+    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     savedColor.set(
         (Handle::cast::<Val<'a, i32>>(statics::melee__ty__tydisplay::_tyDisplay_804DE024(ctx)))
@@ -2489,7 +2494,10 @@ pub fn _tyDisplay_8031C1D0<'a>(ctx: &'a Ctx) {
                 ctx,
                 __ret_tmp,
                 statics::melee__ty__tydisplay::_tyDisplay_804D6F24(ctx).get(),
-                (Handle::cast::<_GXColor<'a>>(bgColor)),
+                {
+                    Handle::copy_from(__arg, (Handle::cast::<_GXColor<'a>>(bgColor)));
+                    __arg
+                },
             );
             __ret_tmp
         };
@@ -2519,7 +2527,10 @@ pub fn _tyDisplay_8031C1D0<'a>(ctx: &'a Ctx) {
                 ctx,
                 __ret_tmp_2,
                 statics::melee__ty__tydisplay::_tyDisplay_804D6F24(ctx).get(),
-                (Handle::cast::<_GXColor<'a>>(savedColor)),
+                {
+                    Handle::copy_from(__arg_2, (Handle::cast::<_GXColor<'a>>(savedColor)));
+                    __arg_2
+                },
             );
             __ret_tmp_2
         };

@@ -114,18 +114,30 @@ pub fn un_80302EA4<'a>(ctx: &'a Ctx, arg0: un_80304138_objalloc_t_x8<'a>) -> i32
 
 pub fn un_80302FFC<'a>(ctx: &'a Ctx, arg0: un_80304138_objalloc_t<'a>) {
     let __frame = ctx.stack_frame(0x78);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let __ret_tmp_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let __ret_tmp_4: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let __ret_tmp_5: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
-    let __ret_tmp_6: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
-    let __ret_tmp_7: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
-    let __ret_tmp_8: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
-    let __ret_tmp_9: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
-    let __ret_tmp_10: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
-    let __ret_tmp_11: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
-    let __ret_tmp_12: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let __ret_tmp_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
+    let __arg_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
+    let __ret_tmp_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
+    let __arg_5: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let __ret_tmp_5: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
+    let __arg_6: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
+    let __ret_tmp_6: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
+    let __arg_7: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let __ret_tmp_7: _GXColor<'a> = frame_at(ctx, &__frame, 0x34);
+    let __arg_8: _GXColor<'a> = frame_at(ctx, &__frame, 0x38);
+    let __ret_tmp_8: _GXColor<'a> = frame_at(ctx, &__frame, 0x3c);
+    let __arg_9: _GXColor<'a> = frame_at(ctx, &__frame, 0x40);
+    let __ret_tmp_9: _GXColor<'a> = frame_at(ctx, &__frame, 0x44);
+    let __arg_10: _GXColor<'a> = frame_at(ctx, &__frame, 0x48);
+    let __ret_tmp_10: _GXColor<'a> = frame_at(ctx, &__frame, 0x4c);
+    let __arg_11: _GXColor<'a> = frame_at(ctx, &__frame, 0x50);
+    let __ret_tmp_11: _GXColor<'a> = frame_at(ctx, &__frame, 0x54);
+    let __arg_12: _GXColor<'a> = frame_at(ctx, &__frame, 0x58);
+    let __ret_tmp_12: _GXColor<'a> = frame_at(ctx, &__frame, 0x5c);
     let mut arg0 = arg0;
     let mut x8: un_80304138_objalloc_t_x8<'a> = (arg0).x8();
     let mut cursor_x: i32 = inl_un_80302FFC_maxlen_unfused(ctx, (arg0).x8());
@@ -134,8 +146,14 @@ pub fn un_80302FFC<'a>(ctx: &'a Ctx, arg0: un_80304138_objalloc_t<'a>) {
         let _ = fns::DevText_StoreColorIndex(ctx, (arg0).x4(), (0_i32 as u8));
         let _ = {
             let __t1 = {
-                inl_adjust_unfused(ctx, __ret_tmp, fns::un_804D5A0C(ctx));
-                __ret_tmp
+                Handle::copy_from(__arg_2, {
+                    inl_adjust_unfused(ctx, __ret_tmp, {
+                        Handle::copy_from(__arg, fns::un_804D5A0C(ctx));
+                        __arg
+                    });
+                    __ret_tmp
+                });
+                __arg_2
             };
             {
                 fns::DevText_SetTextColor(ctx, __ret_tmp_2, (arg0).x4(), __t1);
@@ -145,8 +163,14 @@ pub fn un_80302FFC<'a>(ctx: &'a Ctx, arg0: un_80304138_objalloc_t<'a>) {
         let _ = fns::DevText_StoreColorIndex(ctx, (arg0).x4(), (1_i32 as u8));
         let _ = {
             let __t2 = {
-                inl_adjust_unfused(ctx, __ret_tmp_3, fns::un_804D5A10(ctx));
-                __ret_tmp_3
+                Handle::copy_from(__arg_4, {
+                    inl_adjust_unfused(ctx, __ret_tmp_3, {
+                        Handle::copy_from(__arg_3, fns::un_804D5A10(ctx));
+                        __arg_3
+                    });
+                    __ret_tmp_3
+                });
+                __arg_4
             };
             {
                 fns::DevText_SetTextColor(ctx, __ret_tmp_4, (arg0).x4(), __t2);
@@ -156,8 +180,14 @@ pub fn un_80302FFC<'a>(ctx: &'a Ctx, arg0: un_80304138_objalloc_t<'a>) {
         let _ = fns::DevText_StoreColorIndex(ctx, (arg0).x4(), (2_i32 as u8));
         let _ = {
             let __t3 = {
-                inl_adjust_unfused(ctx, __ret_tmp_5, fns::un_804D5A14(ctx));
-                __ret_tmp_5
+                Handle::copy_from(__arg_6, {
+                    inl_adjust_unfused(ctx, __ret_tmp_5, {
+                        Handle::copy_from(__arg_5, fns::un_804D5A14(ctx));
+                        __arg_5
+                    });
+                    __ret_tmp_5
+                });
+                __arg_6
             };
             {
                 fns::DevText_SetTextColor(ctx, __ret_tmp_6, (arg0).x4(), __t3);
@@ -166,8 +196,14 @@ pub fn un_80302FFC<'a>(ctx: &'a Ctx, arg0: un_80304138_objalloc_t<'a>) {
         };
         let _ = {
             let __t4 = {
-                inl_adjust_unfused(ctx, __ret_tmp_7, fns::un_804D5A08(ctx));
-                __ret_tmp_7
+                Handle::copy_from(__arg_8, {
+                    inl_adjust_unfused(ctx, __ret_tmp_7, {
+                        Handle::copy_from(__arg_7, fns::un_804D5A08(ctx));
+                        __arg_7
+                    });
+                    __ret_tmp_7
+                });
+                __arg_8
             };
             {
                 fns::DevText_SetBGColor(ctx, __ret_tmp_8, (arg0).x4(), __t4);
@@ -177,21 +213,33 @@ pub fn un_80302FFC<'a>(ctx: &'a Ctx, arg0: un_80304138_objalloc_t<'a>) {
     } else {
         let _ = fns::DevText_StoreColorIndex(ctx, (arg0).x4(), (0_i32 as u8));
         let _ = {
-            fns::DevText_SetTextColor(ctx, __ret_tmp_9, (arg0).x4(), fns::un_804D5A0C(ctx));
+            fns::DevText_SetTextColor(ctx, __ret_tmp_9, (arg0).x4(), {
+                Handle::copy_from(__arg_9, fns::un_804D5A0C(ctx));
+                __arg_9
+            });
             __ret_tmp_9
         };
         let _ = fns::DevText_StoreColorIndex(ctx, (arg0).x4(), (1_i32 as u8));
         let _ = {
-            fns::DevText_SetTextColor(ctx, __ret_tmp_10, (arg0).x4(), fns::un_804D5A10(ctx));
+            fns::DevText_SetTextColor(ctx, __ret_tmp_10, (arg0).x4(), {
+                Handle::copy_from(__arg_10, fns::un_804D5A10(ctx));
+                __arg_10
+            });
             __ret_tmp_10
         };
         let _ = fns::DevText_StoreColorIndex(ctx, (arg0).x4(), (2_i32 as u8));
         let _ = {
-            fns::DevText_SetTextColor(ctx, __ret_tmp_11, (arg0).x4(), fns::un_804D5A14(ctx));
+            fns::DevText_SetTextColor(ctx, __ret_tmp_11, (arg0).x4(), {
+                Handle::copy_from(__arg_11, fns::un_804D5A14(ctx));
+                __arg_11
+            });
             __ret_tmp_11
         };
         let _ = {
-            fns::DevText_SetBGColor(ctx, __ret_tmp_12, (arg0).x4(), fns::un_804D5A08(ctx));
+            fns::DevText_SetBGColor(ctx, __ret_tmp_12, (arg0).x4(), {
+                Handle::copy_from(__arg_12, fns::un_804D5A08(ctx));
+                __arg_12
+            });
             __ret_tmp_12
         };
     }

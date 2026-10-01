@@ -2677,6 +2677,9 @@ pub fn grMuteCity_801F28A8<'a>(ctx: &'a Ctx) -> DynamicModelDesc<'a> {
 
 pub fn grMuteCity_801F290C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg_3: grMc_StackPadArg<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -2700,11 +2703,13 @@ pub fn grMuteCity_801F290C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 'l3: while !Handle::is_null(lobj) {
                     'c4: {
                         if ((fns::HSD_LObjGetFlags(ctx, lobj) & (4_i32 as u32)) != 0) {
-                            fns::HSD_LObjSetColor(
-                                ctx,
-                                lobj,
-                                (gp).u().mutecity2().saved_colors().get(i),
-                            );
+                            fns::HSD_LObjSetColor(ctx, lobj, {
+                                Handle::copy_from(
+                                    __arg,
+                                    (gp).u().mutecity2().saved_colors().get(i),
+                                );
+                                __arg
+                            });
                             i = i.wrapping_add(1);
                             if i >= 4_i32 {
                                 break 'l3;
@@ -2741,7 +2746,10 @@ pub fn grMuteCity_801F290C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                 (gp).u().mutecity2().saved_colors().get(j),
                             );
                         }
-                        fns::HSD_LObjSetColor(ctx, lobj2, (gp).color_overlay().x2C_hex());
+                        fns::HSD_LObjSetColor(ctx, lobj2, {
+                            Handle::copy_from(__arg_2, (gp).color_overlay().x2C_hex());
+                            __arg_2
+                        });
                         j = j.wrapping_add(1);
                         if j >= 4_i32 {
                             break 'l7;
@@ -2757,10 +2765,13 @@ pub fn grMuteCity_801F290C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
         (gp).u().mutecity2().xC4_flags().set_b0((1_i32 as u8));
     }
-    inl_grMc_StackPad_unfused(
-        ctx,
-        (Handle::cast::<grMc_StackPadArg<'a>>((gp).u().mutecity2().saved_colors().get(0))),
-    );
+    inl_grMc_StackPad_unfused(ctx, {
+        Handle::copy_from(
+            __arg_3,
+            (Handle::cast::<grMc_StackPadArg<'a>>((gp).u().mutecity2().saved_colors().get(0))),
+        );
+        __arg_3
+    });
 }
 
 pub fn grMuteCity_801F2AB0<'a>(ctx: &'a Ctx, a0: i32, a1: HSD_JObj<'a>) -> HSD_Generator<'a> {

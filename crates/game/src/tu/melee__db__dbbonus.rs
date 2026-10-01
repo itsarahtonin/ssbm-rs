@@ -42,8 +42,10 @@ pub fn fn_80228D18<'a>(ctx: &'a Ctx) {
 
 pub fn fn_80228D38<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut i: i32 = 0;
     gobj = fns::DevText_GetGObj(ctx);
@@ -89,12 +91,21 @@ pub fn fn_80228D38<'a>(ctx: &'a Ctx) {
                             __ret_tmp,
                             (Handle::add(statics::melee__db__dbbonus::db_804D6B9C(ctx).get(), i))
                                 .text(),
-                            statics::melee__db__dbbonus::db_TextColors(ctx)
-                                .get(
-                                    (statics::melee__db__dbbonus::db_804D6B98(ctx).x1().x0().b0()
-                                        as i32),
-                                )
-                                .bg(),
+                            {
+                                Handle::copy_from(
+                                    __arg,
+                                    statics::melee__db__dbbonus::db_TextColors(ctx)
+                                        .get(
+                                            (statics::melee__db__dbbonus::db_804D6B98(ctx)
+                                                .x1()
+                                                .x0()
+                                                .b0()
+                                                as i32),
+                                        )
+                                        .bg(),
+                                );
+                                __arg
+                            },
                         );
                         __ret_tmp
                     };
@@ -104,12 +115,21 @@ pub fn fn_80228D38<'a>(ctx: &'a Ctx) {
                             __ret_tmp_2,
                             (Handle::add(statics::melee__db__dbbonus::db_804D6B9C(ctx).get(), i))
                                 .text(),
-                            statics::melee__db__dbbonus::db_TextColors(ctx)
-                                .get(
-                                    (statics::melee__db__dbbonus::db_804D6B98(ctx).x1().x0().b0()
-                                        as i32),
-                                )
-                                .fg(),
+                            {
+                                Handle::copy_from(
+                                    __arg_2,
+                                    statics::melee__db__dbbonus::db_TextColors(ctx)
+                                        .get(
+                                            (statics::melee__db__dbbonus::db_804D6B98(ctx)
+                                                .x1()
+                                                .x0()
+                                                .b0()
+                                                as i32),
+                                        )
+                                        .fg(),
+                                );
+                                __arg_2
+                            },
                         );
                         __ret_tmp_2
                     };
@@ -213,10 +233,14 @@ pub fn fn_80228E54<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32) {
 
 pub fn fn_8022900C<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let __ret_tmp_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let __ret_tmp_4: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let __ret_tmp_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
+    let __arg_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
+    let __ret_tmp_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut arg0 = arg0;
     let mut i: i32 = 0;
     if (statics::melee__db__dbbonus::db_804D6B98(ctx).x0() as i32) == arg0 {
@@ -262,14 +286,21 @@ pub fn fn_8022900C<'a>(ctx: &'a Ctx, arg0: i32) {
                                     i,
                                 ))
                                 .text(),
-                                statics::melee__db__dbbonus::db_TextColors(ctx)
-                                    .get(
-                                        (statics::melee__db__dbbonus::db_804D6B98(ctx)
-                                            .x1()
-                                            .x0()
-                                            .b0() as i32),
-                                    )
-                                    .bg(),
+                                {
+                                    Handle::copy_from(
+                                        __arg,
+                                        statics::melee__db__dbbonus::db_TextColors(ctx)
+                                            .get(
+                                                (statics::melee__db__dbbonus::db_804D6B98(ctx)
+                                                    .x1()
+                                                    .x0()
+                                                    .b0()
+                                                    as i32),
+                                            )
+                                            .bg(),
+                                    );
+                                    __arg
+                                },
                             );
                             __ret_tmp
                         };
@@ -282,14 +313,21 @@ pub fn fn_8022900C<'a>(ctx: &'a Ctx, arg0: i32) {
                                     i,
                                 ))
                                 .text(),
-                                statics::melee__db__dbbonus::db_TextColors(ctx)
-                                    .get(
-                                        (statics::melee__db__dbbonus::db_804D6B98(ctx)
-                                            .x1()
-                                            .x0()
-                                            .b0() as i32),
-                                    )
-                                    .fg(),
+                                {
+                                    Handle::copy_from(
+                                        __arg_2,
+                                        statics::melee__db__dbbonus::db_TextColors(ctx)
+                                            .get(
+                                                (statics::melee__db__dbbonus::db_804D6B98(ctx)
+                                                    .x1()
+                                                    .x0()
+                                                    .b0()
+                                                    as i32),
+                                            )
+                                            .fg(),
+                                    );
+                                    __arg_2
+                                },
                             );
                             __ret_tmp_2
                         };
@@ -320,12 +358,21 @@ pub fn fn_8022900C<'a>(ctx: &'a Ctx, arg0: i32) {
                             __ret_tmp_3,
                             (Handle::add(statics::melee__db__dbbonus::db_804D6B9C(ctx).get(), i))
                                 .text(),
-                            statics::melee__db__dbbonus::db_TextColors(ctx)
-                                .get(
-                                    (statics::melee__db__dbbonus::db_804D6B98(ctx).x1().x0().b0()
-                                        as i32),
-                                )
-                                .bg(),
+                            {
+                                Handle::copy_from(
+                                    __arg_3,
+                                    statics::melee__db__dbbonus::db_TextColors(ctx)
+                                        .get(
+                                            (statics::melee__db__dbbonus::db_804D6B98(ctx)
+                                                .x1()
+                                                .x0()
+                                                .b0()
+                                                as i32),
+                                        )
+                                        .bg(),
+                                );
+                                __arg_3
+                            },
                         );
                         __ret_tmp_3
                     };
@@ -335,12 +382,21 @@ pub fn fn_8022900C<'a>(ctx: &'a Ctx, arg0: i32) {
                             __ret_tmp_4,
                             (Handle::add(statics::melee__db__dbbonus::db_804D6B9C(ctx).get(), i))
                                 .text(),
-                            statics::melee__db__dbbonus::db_TextColors(ctx)
-                                .get(
-                                    (statics::melee__db__dbbonus::db_804D6B98(ctx).x1().x0().b0()
-                                        as i32),
-                                )
-                                .fg(),
+                            {
+                                Handle::copy_from(
+                                    __arg_4,
+                                    statics::melee__db__dbbonus::db_TextColors(ctx)
+                                        .get(
+                                            (statics::melee__db__dbbonus::db_804D6B98(ctx)
+                                                .x1()
+                                                .x0()
+                                                .b0()
+                                                as i32),
+                                        )
+                                        .fg(),
+                                );
+                                __arg_4
+                            },
                         );
                         __ret_tmp_4
                     };

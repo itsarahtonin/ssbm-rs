@@ -207,6 +207,7 @@ pub fn HSD_AllocateFifo<'a>(ctx: &'a Ctx, size: u32) -> GXFifoObj<'a> {
 pub fn HSD_GXInit<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x58);
     let lightobj: _GXLightObj<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
     fns::GXInitLightPos(
         ctx,
@@ -232,11 +233,13 @@ pub fn HSD_GXInit<'a>(ctx: &'a Ctx) {
         fp::frsp(0_i32 as f64),
         fp::frsp(0_i32 as f64),
     );
-    fns::GXInitLightColor(
-        ctx,
-        lightobj,
-        statics::sysdolphin__baselib__initialize::HSD_Init_804D5E1C(ctx),
-    );
+    fns::GXInitLightColor(ctx, lightobj, {
+        Handle::copy_from(
+            __arg,
+            statics::sysdolphin__baselib__initialize::HSD_Init_804D5E1C(ctx),
+        );
+        __arg
+    });
     {
         i = 0_i32;
         'l1: while i < 8_i32 {

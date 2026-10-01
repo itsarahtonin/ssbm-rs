@@ -2407,6 +2407,10 @@ pub fn lbColl_80008D30<'a>(ctx: &'a Ctx, arg0: HitCapsule<'a>, arg1: lbColl_8000
 pub fn lbColl_80008DA4<'a>(ctx: &'a Ctx, arg0: _GXColor<'a>, arg1: _GXColor<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let sp10: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __arg_4: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut var_r3: i32 = 0;
@@ -2414,7 +2418,10 @@ pub fn lbColl_80008DA4<'a>(ctx: &'a Ctx, arg0: _GXColor<'a>, arg1: _GXColor<'a>)
     Handle::copy_from(sp10, fns::lbColl_804D7A50(ctx));
     fns::GXSetColorUpdate(ctx, (1_i32 as u8));
     fns::GXSetAlphaUpdate(ctx, (0_i32 as u8));
-    fns::GXSetFog(ctx, (enums::GX_FOG_NONE as i32), 0.0, 0.0, 0.0, 0.0, sp10);
+    fns::GXSetFog(ctx, (enums::GX_FOG_NONE as i32), 0.0, 0.0, 0.0, 0.0, {
+        Handle::copy_from(__arg, sp10);
+        __arg
+    });
     if ((arg0).a() as i32) < 255_i32 {
         var_r3 = (enums::GX_BM_BLEND as i32);
     } else {
@@ -2452,7 +2459,10 @@ pub fn lbColl_80008DA4<'a>(ctx: &'a Ctx, arg0: _GXColor<'a>, arg1: _GXColor<'a>)
         (enums::GX_TEXMAP_NULL as i32),
         (enums::GX_COLOR0A0 as i32),
     );
-    fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), (arg0));
+    fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), {
+        Handle::copy_from(__arg_2, (arg0));
+        __arg_2
+    });
     fns::GXSetTevColorIn(
         ctx,
         (enums::GX_TEVSTAGE0 as i32),
@@ -2489,12 +2499,18 @@ pub fn lbColl_80008DA4<'a>(ctx: &'a Ctx, arg0: _GXColor<'a>, arg1: _GXColor<'a>)
     );
     fns::GXSetNumChans(ctx, (1_i32 as u8));
     Handle::copy_from(sp10, (arg1));
-    fns::GXSetChanAmbColor(ctx, (enums::GX_COLOR0A0 as i32), sp10);
+    fns::GXSetChanAmbColor(ctx, (enums::GX_COLOR0A0 as i32), {
+        Handle::copy_from(__arg_3, sp10);
+        __arg_3
+    });
     sp10.set_r((255_i32 as u8));
     sp10.set_g((255_i32 as u8));
     sp10.set_b((255_i32 as u8));
     sp10.set_a((255_i32 as u8));
-    fns::GXSetChanMatColor(ctx, (enums::GX_COLOR0A0 as i32), sp10);
+    fns::GXSetChanMatColor(ctx, (enums::GX_COLOR0A0 as i32), {
+        Handle::copy_from(__arg_4, sp10);
+        __arg_4
+    });
     if ((arg0).a() as i32) < 255_i32 {
         fns::GXSetChanCtrl(
             ctx,
@@ -3068,6 +3084,8 @@ pub fn lbColl_80009DD4<'a>(ctx: &'a Ctx, v0: Vec<'a>, v1: Vec<'a>, clr: _GXColor
 
 pub fn lbColl_80009F54<'a>(ctx: &'a Ctx, hit: HitCapsule<'a>, arg1: u32, arg8: f64) -> i32 {
     let __frame = ctx.stack_frame(0x30);
+    let __arg: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut hit = hit;
     let mut arg1 = arg1;
     let mut arg8 = arg8;
@@ -3109,8 +3127,14 @@ pub fn lbColl_80009F54<'a>(ctx: &'a Ctx, hit: HitCapsule<'a>, arg1: u32, arg8: f
             }
             fns::lbColl_80008FC8(
                 ctx,
-                (hit).x58(),
-                (hit).x4C(),
+                {
+                    Handle::copy_from(__arg, (hit).x58());
+                    __arg
+                },
+                {
+                    Handle::copy_from(__arg_2, (hit).x4C());
+                    __arg_2
+                },
                 var_r5,
                 statics::melee__lb__lbcollision::lbColl_804D36A8(ctx),
                 var_f1,
@@ -3123,6 +3147,8 @@ pub fn lbColl_80009F54<'a>(ctx: &'a Ctx, hit: HitCapsule<'a>, arg1: u32, arg8: f
 
 pub fn lbColl_8000A044<'a>(ctx: &'a Ctx, hit: HitCapsule<'a>, arg1: u32, arg8: f64) -> i32 {
     let __frame = ctx.stack_frame(0x30);
+    let __arg: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut hit = hit;
     let mut arg1 = arg1;
     let mut arg8 = arg8;
@@ -3144,8 +3170,14 @@ pub fn lbColl_8000A044<'a>(ctx: &'a Ctx, hit: HitCapsule<'a>, arg1: u32, arg8: f
             }
             fns::lbColl_80008FC8(
                 ctx,
-                (hit).x58(),
-                (hit).x4C(),
+                {
+                    Handle::copy_from(__arg, (hit).x58());
+                    __arg
+                },
+                {
+                    Handle::copy_from(__arg_2, (hit).x4C());
+                    __arg_2
+                },
                 statics::melee__lb__lbcollision::lbColl_804D36E8(ctx),
                 statics::melee__lb__lbcollision::lbColl_804D36EC(ctx),
                 var_f1,
@@ -3163,6 +3195,8 @@ pub fn lbColl_8000A10C<'a>(
     arg2: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x30);
+    let __arg: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -3176,8 +3210,14 @@ pub fn lbColl_8000A10C<'a>(
     if var_r0 == arg1 {
         fns::lbColl_80008FC8(
             ctx,
-            (arg0).x14(),
-            (arg0).x8(),
+            {
+                Handle::copy_from(__arg, (arg0).x14());
+                __arg
+            },
+            {
+                Handle::copy_from(__arg_2, (arg0).x8());
+                __arg_2
+            },
             c,
             statics::melee__lb__lbcollision::lbColl_804D36FC(ctx),
             fp::fmuls((arg0).x0(), arg2),
@@ -3194,6 +3234,8 @@ pub fn lbColl_8000A1A8<'a>(
     scale_y: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x30);
+    let __arg: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut scale_y = scale_y;
@@ -3206,8 +3248,14 @@ pub fn lbColl_8000A1A8<'a>(
     if var_r0 == (arg1 as u32) {
         fns::lbColl_80008FC8(
             ctx,
-            (arg0).x14(),
-            (arg0).x8(),
+            {
+                Handle::copy_from(__arg, (arg0).x14());
+                __arg
+            },
+            {
+                Handle::copy_from(__arg_2, (arg0).x8());
+                __arg_2
+            },
             statics::melee__lb__lbcollision::lbColl_804D36F0(ctx),
             statics::melee__lb__lbcollision::lbColl_804D36F4(ctx),
             fp::fmuls((arg0).x0(), scale_y),
@@ -3228,7 +3276,7 @@ pub fn lbColl_8000A244<'a>(
     let sp9C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x94);
     let sp90: Vec<'a> = frame_at(ctx, &__frame, 0x88);
     let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x7c);
-    let __inl: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 96> = frame_at(ctx, &__frame, 0x0);
     let mut hurt = hurt;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -3292,6 +3340,8 @@ pub fn lbColl_8000A244<'a>(
 
 pub fn lbColl_8000A460<'a>(ctx: &'a Ctx, hurt: Fighter_x1670_t<'a>, arg1: u32) -> i32 {
     let __frame = ctx.stack_frame(0x48);
+    let __arg: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut hurt = hurt;
     let mut arg1 = arg1;
     let mut var_r0: u32 = 0;
@@ -3307,8 +3357,14 @@ pub fn lbColl_8000A460<'a>(ctx: &'a Ctx, hurt: Fighter_x1670_t<'a>, arg1: u32) -
         fns::lbColl_800096B4(
             ctx,
             inl_HSD_JObjGetMtxPtr_unfused(ctx, (hurt).jobj()),
-            (hurt).v1(),
-            (hurt).v1(),
+            {
+                Handle::copy_from(__arg, (hurt).v1());
+                __arg
+            },
+            {
+                Handle::copy_from(__arg_2, (hurt).v1());
+                __arg_2
+            },
             r31,
             r30,
             (hurt).v2(),
@@ -3331,7 +3387,7 @@ pub fn lbColl_8000A584<'a>(
     let spA0: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x98);
     let sp94: Vec<'a> = frame_at(ctx, &__frame, 0x8c);
     let sp88: Vec<'a> = frame_at(ctx, &__frame, 0x80);
-    let __inl: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x8);
+    let __inl: ArrV<'a, u8, 96> = frame_at(ctx, &__frame, 0x8);
     let mut hurt = hurt;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -3424,7 +3480,7 @@ pub fn lbColl_8000A78C<'a>(
     let sp9C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x94);
     let sp90: Vec<'a> = frame_at(ctx, &__frame, 0x88);
     let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x7c);
-    let __inl: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 96> = frame_at(ctx, &__frame, 0x0);
     let mut hit = hit;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -3455,7 +3511,7 @@ pub fn lbColl_8000A95C<'a>(
     let sp9C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x94);
     let sp90: Vec<'a> = frame_at(ctx, &__frame, 0x88);
     let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x7c);
-    let __inl: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 96> = frame_at(ctx, &__frame, 0x0);
     let mut hit = hit;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -3486,7 +3542,7 @@ pub fn lbColl_8000AB2C<'a>(
     let sp9C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x94);
     let sp90: Vec<'a> = frame_at(ctx, &__frame, 0x88);
     let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x7c);
-    let __inl: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 96> = frame_at(ctx, &__frame, 0x0);
     let mut hit = hit;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -3865,6 +3921,8 @@ fn inl_lbColl_DrawHitResult_unfused<'a>(
     let sp30: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let sp24: Vec<'a> = ptr(ctx, __in_caller + 0xc);
     let sp3C: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x18);
+    let __arg: Vec<'a> = ptr(ctx, __in_caller + 0x48);
+    let __arg_2: Vec<'a> = ptr(ctx, __in_caller + 0x54);
     let mut mtx = mtx;
     let mut a = a;
     let mut b = b;
@@ -3874,7 +3932,21 @@ fn inl_lbColl_DrawHitResult_unfused<'a>(
     fns::HSD_MtxInverse(ctx, mtx, sp3C.get(0));
     fns::PSMTXMultVec(ctx, sp3C.get(0), a, sp30);
     fns::PSMTXMultVec(ctx, sp3C.get(0), b, sp24);
-    fns::lbColl_800096B4(ctx, mtx, sp30, sp24, c0, c1, size);
+    fns::lbColl_800096B4(
+        ctx,
+        mtx,
+        {
+            Handle::copy_from(__arg, sp30);
+            __arg
+        },
+        {
+            Handle::copy_from(__arg_2, sp24);
+            __arg_2
+        },
+        c0,
+        c1,
+        size,
+    );
 }
 
 fn inl_lbColl_DrawHit_unfused<'a>(
@@ -3890,7 +3962,7 @@ fn inl_lbColl_DrawHit_unfused<'a>(
     pos_b: Vec<'a>,
     __in_caller: u32,
 ) -> i32 {
-    let __inl: ArrV<'a, u8, 72> = ptr(ctx, __in_caller + 0x0);
+    let __inl: ArrV<'a, u8, 96> = ptr(ctx, __in_caller + 0x0);
     let mut hit = hit;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

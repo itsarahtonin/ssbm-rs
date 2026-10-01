@@ -3236,7 +3236,10 @@ class Translator:
                 out.append(self.zero(pt))
                 continue
             if pt["k"] == "rec":
-                out.append(self.expr(a).code)
+                # By value: MWCC passes the address of a copy, which the callee may change.
+                v = self.expr(a)
+                slot = ident(self.stack_slot("__arg", pt))
+                out.append(f"{{ Handle::copy_from({slot}, {v.code}); {slot} }}")
                 continue
             if pt["k"] == "arr":
                 pt = {"k": "ptr", "to": pt["of"]}

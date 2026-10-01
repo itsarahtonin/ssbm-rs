@@ -391,8 +391,8 @@ pub fn fn_CheckCameraInfo<'a>(
     cstick_y: f64,
 ) {
     let __frame = ctx.stack_frame(0x60);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let __inl_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x18);
     let mut player = player;
     let mut buttons_down = buttons_down;
     let mut buttons_pressed = buttons_pressed;
@@ -968,8 +968,10 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
 fn inl_fn_CheckCameraInfo_helper_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) {
     let bg: _GXColor<'a> = ptr(ctx, __in_caller + 0x0);
     let fg: _GXColor<'a> = ptr(ctx, __in_caller + 0x4);
-    let __ret_tmp: _GXColor<'a> = ptr(ctx, __in_caller + 0x8);
-    let __ret_tmp_2: _GXColor<'a> = ptr(ctx, __in_caller + 0xc);
+    let __arg: _GXColor<'a> = ptr(ctx, __in_caller + 0x8);
+    let __ret_tmp: _GXColor<'a> = ptr(ctx, __in_caller + 0xc);
+    let __arg_2: _GXColor<'a> = ptr(ctx, __in_caller + 0x10);
+    let __ret_tmp_2: _GXColor<'a> = ptr(ctx, __in_caller + 0x14);
     Handle::copy_from(bg, fns::g_bg(ctx));
     Handle::copy_from(fg, fns::g_fg(ctx));
     let mut gobj: HSD_GObj<'a> = fns::DevText_GetGObj(ctx);
@@ -1007,7 +1009,10 @@ fn inl_fn_CheckCameraInfo_helper_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) {
                     ctx,
                     __ret_tmp,
                     statics::melee__db__dbcamera::db_CameraInfoDisplay(ctx).get(),
-                    bg,
+                    {
+                        Handle::copy_from(__arg, bg);
+                        __arg
+                    },
                 );
                 __ret_tmp
             };
@@ -1016,7 +1021,10 @@ fn inl_fn_CheckCameraInfo_helper_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) {
                     ctx,
                     __ret_tmp_2,
                     statics::melee__db__dbcamera::db_CameraInfoDisplay(ctx).get(),
-                    fg,
+                    {
+                        Handle::copy_from(__arg_2, fg);
+                        __arg_2
+                    },
                 );
                 __ret_tmp_2
             };

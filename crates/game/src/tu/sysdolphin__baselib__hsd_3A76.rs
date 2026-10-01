@@ -866,6 +866,8 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
     let line_width_out: Val<'a, F32> = frame_at(ctx, &__frame, 0x5c);
     let line_height_out: Val<'a, F32> = frame_at(ctx, &__frame, 0x58);
     let projection_m: Arr<'a, ArrV<'a, F32, 4>, 4> = frame_at(ctx, &__frame, 0x14);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut pass = pass;
     let mut text: HSD_Text<'a> = null(ctx);
@@ -1222,7 +1224,10 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
                     (enums::GX_CA_ZERO as i32),
                     (enums::GX_CA_A0 as i32),
                 );
-                fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), (text).bg_color());
+                fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), {
+                    Handle::copy_from(__arg, (text).bg_color());
+                    __arg
+                });
                 fns::GXBegin(
                     ctx,
                     (enums::GX_QUADS as i32),
@@ -2157,7 +2162,10 @@ pub fn HSD_SisLib_803A84BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pass: i32) {
             }
             203 => {
                 fns::GXLoadTexObj(ctx, tex_obj, (enums::GX_TEXMAP0 as i32));
-                fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), (text).active_color());
+                fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), {
+                    Handle::copy_from(__arg_2, (text).active_color());
+                    __arg_2
+                });
                 fns::GXBegin(
                     ctx,
                     (enums::GX_QUADS as i32),

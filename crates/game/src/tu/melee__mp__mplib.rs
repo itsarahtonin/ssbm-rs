@@ -14011,6 +14011,14 @@ pub fn mpLib_DrawEcbs<'a>(ctx: &'a Ctx, cd: CollData<'a>) {
     let spCC: _GXColor<'a> = frame_at(ctx, &__frame, 0xc4);
     let spC8: _GXColor<'a> = frame_at(ctx, &__frame, 0xc0);
     let spC4: _GXColor<'a> = frame_at(ctx, &__frame, 0xbc);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let __arg_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let __arg_5: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
+    let __arg_6: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
+    let __arg_7: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
+    let __arg_8: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
     let mut cd = cd;
     spE0.set_r((255_i32 as u8));
     spE0.set_g((160_i32 as u8));
@@ -14044,7 +14052,10 @@ pub fn mpLib_DrawEcbs<'a>(ctx: &'a Ctx, cd: CollData<'a>) {
     spC4.set_g((255_i32 as u8));
     spC4.set_b((255_i32 as u8));
     spC4.set_a((128_i32 as u8));
-    fns::mpLib_SetupDraw(ctx, spE0);
+    fns::mpLib_SetupDraw(ctx, {
+        Handle::copy_from(__arg, spE0);
+        __arg
+    });
     fns::GXBegin(
         ctx,
         (enums::GX_QUADS as i32),
@@ -14076,7 +14087,10 @@ pub fn mpLib_DrawEcbs<'a>(ctx: &'a Ctx, cd: CollData<'a>) {
         (cd).cur_pos().z(),
     );
     inl_GXEnd_unfused(ctx);
-    fns::mpLib_SetupDraw(ctx, spDC);
+    fns::mpLib_SetupDraw(ctx, {
+        Handle::copy_from(__arg_2, spDC);
+        __arg_2
+    });
     fns::GXBegin(
         ctx,
         (enums::GX_LINES as i32),
@@ -14108,7 +14122,10 @@ pub fn mpLib_DrawEcbs<'a>(ctx: &'a Ctx, cd: CollData<'a>) {
         (cd).cur_pos().z(),
     );
     inl_GXEnd_unfused(ctx);
-    fns::mpLib_SetupDraw(ctx, spD8);
+    fns::mpLib_SetupDraw(ctx, {
+        Handle::copy_from(__arg_3, spD8);
+        __arg_3
+    });
     fns::GXBegin(
         ctx,
         (enums::GX_QUADS as i32),
@@ -14140,7 +14157,10 @@ pub fn mpLib_DrawEcbs<'a>(ctx: &'a Ctx, cd: CollData<'a>) {
         fp::fsubs((cd).prev_pos().z(), 0.5),
     );
     inl_GXEnd_unfused(ctx);
-    fns::mpLib_SetupDraw(ctx, spD4);
+    fns::mpLib_SetupDraw(ctx, {
+        Handle::copy_from(__arg_4, spD4);
+        __arg_4
+    });
     fns::GXBegin(
         ctx,
         (enums::GX_LINES as i32),
@@ -14172,7 +14192,10 @@ pub fn mpLib_DrawEcbs<'a>(ctx: &'a Ctx, cd: CollData<'a>) {
         fp::fsubs((cd).prev_pos().z(), 0.5),
     );
     inl_GXEnd_unfused(ctx);
-    fns::mpLib_SetupDraw(ctx, spD0);
+    fns::mpLib_SetupDraw(ctx, {
+        Handle::copy_from(__arg_5, spD0);
+        __arg_5
+    });
     fns::GXBegin(
         ctx,
         (enums::GX_QUADS as i32),
@@ -14204,7 +14227,10 @@ pub fn mpLib_DrawEcbs<'a>(ctx: &'a Ctx, cd: CollData<'a>) {
         fp::fsubs((cd).last_pos().z(), 1.0),
     );
     inl_GXEnd_unfused(ctx);
-    fns::mpLib_SetupDraw(ctx, spCC);
+    fns::mpLib_SetupDraw(ctx, {
+        Handle::copy_from(__arg_6, spCC);
+        __arg_6
+    });
     fns::GXBegin(
         ctx,
         (enums::GX_LINES as i32),
@@ -14236,7 +14262,10 @@ pub fn mpLib_DrawEcbs<'a>(ctx: &'a Ctx, cd: CollData<'a>) {
         fp::fsubs((cd).last_pos().z(), 1.0),
     );
     inl_GXEnd_unfused(ctx);
-    fns::mpLib_SetupDraw(ctx, spC8);
+    fns::mpLib_SetupDraw(ctx, {
+        Handle::copy_from(__arg_7, spC8);
+        __arg_7
+    });
     fns::GXBegin(
         ctx,
         (enums::GX_LINESTRIP as i32),
@@ -14307,7 +14336,10 @@ pub fn mpLib_DrawEcbs<'a>(ctx: &'a Ctx, cd: CollData<'a>) {
         );
     }
     inl_GXEnd_unfused(ctx);
-    fns::mpLib_SetupDraw(ctx, spC4);
+    fns::mpLib_SetupDraw(ctx, {
+        Handle::copy_from(__arg_8, spC4);
+        __arg_8
+    });
     fns::GXBegin(
         ctx,
         (enums::GX_LINES as i32),
@@ -14347,9 +14379,12 @@ pub fn mpLib_DrawSnapping<'a>(ctx: &'a Ctx) {
     let right_snap_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x104);
     let spDC: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xd4);
     let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x0);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x34);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x38);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x3c);
     let sp7C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x74);
-    let unused_2: ArrV<'a, u8, 52> = frame_at(ctx, &__frame, 0x34);
+    let unused_2: ArrV<'a, u8, 52> = frame_at(ctx, &__frame, 0x40);
     Handle::copy_from(
         left_snap_color,
         statics::melee__mp__mplib::mpLib_804D80E0(ctx),
@@ -14400,7 +14435,10 @@ pub fn mpLib_DrawSnapping<'a>(ctx: &'a Ctx) {
                             fp::fadds((cd).cur_pos().x(), (cd).ecb().right().x());
                         let mut pos_y: f64 = (cd).cur_pos().y();
                         let mut f30: f64 = fp::fmuls(0.5, (cd).ledge_snap_height());
-                        fns::mpLib_SetupDraw(ctx, right_snap_color);
+                        fns::mpLib_SetupDraw(ctx, {
+                            Handle::copy_from(__arg, right_snap_color);
+                            __arg
+                        });
                         fns::GXBegin(
                             ctx,
                             (enums::GX_LINESTRIP as i32),
@@ -14441,8 +14479,14 @@ pub fn mpLib_DrawSnapping<'a>(ctx: &'a Ctx) {
                         pos_y = (cd).cur_pos().y();
                         inner_x = fp::fadds((cd).cur_pos().x(), (cd).ecb().left().x());
                         fns::mpLib_SetupDraw(ctx, {
-                            inl_mpLib_CopyColor_unfused(ctx, __ret_tmp, left_snap_color);
-                            __ret_tmp
+                            Handle::copy_from(__arg_3, {
+                                inl_mpLib_CopyColor_unfused(ctx, __ret_tmp, {
+                                    Handle::copy_from(__arg_2, left_snap_color);
+                                    __arg_2
+                                });
+                                __ret_tmp
+                            });
+                            __arg_3
                         });
                         fns::GXBegin(
                             ctx,
@@ -14998,6 +15042,14 @@ pub fn mpLib_80059554<'a>(ctx: &'a Ctx) {
     let spB0: _GXColor<'a> = frame_at(ctx, &__frame, 0xa8);
     let spAC: _GXColor<'a> = frame_at(ctx, &__frame, 0xa4);
     let spA8: _GXColor<'a> = frame_at(ctx, &__frame, 0xa0);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let __arg_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
+    let __arg_5: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
+    let __arg_6: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
+    let __arg_7: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let __arg_8: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
     let mut line_r7: CollLine<'a> = null(ctx);
     let mut line_r4: CollLine<'a> = null(ctx);
     let mut v0_r6: CollVtx<'a> = null(ctx);
@@ -15034,7 +15086,10 @@ pub fn mpLib_80059554<'a>(ctx: &'a Ctx) {
         }
     }
     if total_r29 != 0_i32 {
-        fns::mpLib_SetupDraw(ctx, statics::melee__mp__mplib::mpLib_FloorColor(ctx));
+        fns::mpLib_SetupDraw(ctx, {
+            Handle::copy_from(__arg, statics::melee__mp__mplib::mpLib_FloorColor(ctx));
+            __arg
+        });
         fns::GXBegin(
             ctx,
             (enums::GX_QUADS as i32),
@@ -15155,7 +15210,10 @@ pub fn mpLib_80059554<'a>(ctx: &'a Ctx) {
         }
     }
     if total_r29 != 0_i32 {
-        fns::mpLib_SetupDraw(ctx, statics::melee__mp__mplib::mpLib_CeilingColor(ctx));
+        fns::mpLib_SetupDraw(ctx, {
+            Handle::copy_from(__arg_2, statics::melee__mp__mplib::mpLib_CeilingColor(ctx));
+            __arg_2
+        });
         fns::GXBegin(
             ctx,
             (enums::GX_QUADS as i32),
@@ -15276,7 +15334,13 @@ pub fn mpLib_80059554<'a>(ctx: &'a Ctx) {
         }
     }
     if total_r29 != 0_i32 {
-        fns::mpLib_SetupDraw(ctx, statics::melee__mp__mplib::mpLib_RightWallColor(ctx));
+        fns::mpLib_SetupDraw(ctx, {
+            Handle::copy_from(
+                __arg_3,
+                statics::melee__mp__mplib::mpLib_RightWallColor(ctx),
+            );
+            __arg_3
+        });
         fns::GXBegin(
             ctx,
             (enums::GX_QUADS as i32),
@@ -15397,7 +15461,10 @@ pub fn mpLib_80059554<'a>(ctx: &'a Ctx) {
         }
     }
     if total_r29 != 0_i32 {
-        fns::mpLib_SetupDraw(ctx, statics::melee__mp__mplib::mpLib_LeftWallColor(ctx));
+        fns::mpLib_SetupDraw(ctx, {
+            Handle::copy_from(__arg_4, statics::melee__mp__mplib::mpLib_LeftWallColor(ctx));
+            __arg_4
+        });
         fns::GXBegin(
             ctx,
             (enums::GX_QUADS as i32),
@@ -15535,7 +15602,10 @@ pub fn mpLib_80059554<'a>(ctx: &'a Ctx) {
         }
     }
     if total_r29 != 0_i32 {
-        fns::mpLib_SetupDraw(ctx, spB4);
+        fns::mpLib_SetupDraw(ctx, {
+            Handle::copy_from(__arg_5, spB4);
+            __arg_5
+        });
         fns::GXBegin(
             ctx,
             (enums::GX_QUADS as i32),
@@ -15654,7 +15724,10 @@ pub fn mpLib_80059554<'a>(ctx: &'a Ctx) {
         }
     }
     if total_r29 != 0_i32 {
-        fns::mpLib_SetupDraw(ctx, spB0);
+        fns::mpLib_SetupDraw(ctx, {
+            Handle::copy_from(__arg_6, spB0);
+            __arg_6
+        });
         fns::GXBegin(
             ctx,
             (enums::GX_QUADS as i32),
@@ -15773,7 +15846,10 @@ pub fn mpLib_80059554<'a>(ctx: &'a Ctx) {
         }
     }
     if total_r29 != 0_i32 {
-        fns::mpLib_SetupDraw(ctx, spAC);
+        fns::mpLib_SetupDraw(ctx, {
+            Handle::copy_from(__arg_7, spAC);
+            __arg_7
+        });
         fns::GXBegin(
             ctx,
             (enums::GX_QUADS as i32),
@@ -15892,7 +15968,10 @@ pub fn mpLib_80059554<'a>(ctx: &'a Ctx) {
         }
     }
     if total_r29 != 0_i32 {
-        fns::mpLib_SetupDraw(ctx, spA8);
+        fns::mpLib_SetupDraw(ctx, {
+            Handle::copy_from(__arg_8, spA8);
+            __arg_8
+        });
         fns::GXBegin(
             ctx,
             (enums::GX_QUADS as i32),
@@ -16093,6 +16172,7 @@ pub fn mpLib_80059E60<'a>(ctx: &'a Ctx) {
 pub fn mpLib_DrawCrosses<'a>(ctx: &'a Ctx, idx: Val<'a, i16>, len: i32, arg2: _GXColor<'a>) {
     let __frame = ctx.stack_frame(0x60);
     let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut idx = idx;
     let mut len = len;
     let mut i: i32 = 0;
@@ -16116,7 +16196,10 @@ pub fn mpLib_DrawCrosses<'a>(ctx: &'a Ctx, idx: Val<'a, i16>, len: i32, arg2: _G
     if !(out_count != 0) {
         return;
     }
-    fns::mpLib_SetupDraw(ctx, arg2);
+    fns::mpLib_SetupDraw(ctx, {
+        Handle::copy_from(__arg, arg2);
+        __arg
+    });
     fns::GXBegin(
         ctx,
         (enums::GX_LINES as i32),
@@ -16173,6 +16256,12 @@ pub fn mpLib_DrawCrosses<'a>(ctx: &'a Ctx, idx: Val<'a, i16>, len: i32, arg2: _G
 pub fn mpLib_DrawSpecialPoints<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x50);
     let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let __arg_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x34);
+    let __arg_5: _GXColor<'a> = frame_at(ctx, &__frame, 0x38);
+    let __arg_6: _GXColor<'a> = frame_at(ctx, &__frame, 0x3c);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -16183,39 +16272,52 @@ pub fn mpLib_DrawSpecialPoints<'a>(ctx: &'a Ctx) {
         ctx,
         statics::melee__mp__mplib::mpLib_SpawnVtxIds(ctx).at(0),
         4_i32,
-        statics::melee__mp__mplib::mpLib_804D8128(ctx),
+        {
+            Handle::copy_from(__arg, statics::melee__mp__mplib::mpLib_804D8128(ctx));
+            __arg
+        },
     );
-    fns::mpLib_DrawCrosses(
-        ctx,
-        fns::mpLib_RespawnVtxIds(ctx).at(0),
-        4_i32,
-        statics::melee__mp__mplib::mpLib_804D812C(ctx),
-    );
+    fns::mpLib_DrawCrosses(ctx, fns::mpLib_RespawnVtxIds(ctx).at(0), 4_i32, {
+        Handle::copy_from(__arg_2, statics::melee__mp__mplib::mpLib_804D812C(ctx));
+        __arg_2
+    });
     fns::mpLib_DrawCrosses(
         ctx,
         statics::melee__mp__mplib::mpLib_ItemSpawnVtxIds(ctx).at(0),
         21_i32,
-        statics::melee__mp__mplib::mpLib_804D8130(ctx),
+        {
+            Handle::copy_from(__arg_3, statics::melee__mp__mplib::mpLib_804D8130(ctx));
+            __arg_3
+        },
     );
     fns::mpLib_DrawCrosses(
         ctx,
         statics::melee__mp__mplib::mpLib_ItemSpawnVtxIds(ctx)
             .at((enums::mpLib_EnemySpawnVtxIds as i32)),
         80_i32,
-        statics::melee__mp__mplib::mpLib_804D8134(ctx),
+        {
+            Handle::copy_from(__arg_4, statics::melee__mp__mplib::mpLib_804D8134(ctx));
+            __arg_4
+        },
     );
     fns::mpLib_DrawCrosses(
         ctx,
         statics::melee__mp__mplib::mpLib_ItemSpawnVtxIds(ctx)
             .at((enums::mpLib_TrophySpawnVtxIds as i32)),
         25_i32,
-        statics::melee__mp__mplib::mpLib_804D8138(ctx),
+        {
+            Handle::copy_from(__arg_5, statics::melee__mp__mplib::mpLib_804D8138(ctx));
+            __arg_5
+        },
     );
     fns::mpLib_DrawCrosses(
         ctx,
         statics::melee__mp__mplib::mpLib_ItemSpawnVtxIds(ctx).at((enums::mpLib_ExitVtxIds as i32)),
         46_i32,
-        statics::melee__mp__mplib::mpLib_804D813C(ctx),
+        {
+            Handle::copy_from(__arg_6, statics::melee__mp__mplib::mpLib_804D813C(ctx));
+            __arg_6
+        },
     );
 }
 
@@ -16249,6 +16351,11 @@ pub fn mpLib_DrawZones<'a>(ctx: &'a Ctx) {
     let _5: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let sp34: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
     let sp20: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
+    let __arg_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
+    let __arg_5: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
     let mut var_r30: CmSubject<'a> = null(ctx);
     let mut left: f64 = 0.0;
     let mut right: f64 = 0.0;
@@ -16274,7 +16381,10 @@ pub fn mpLib_DrawZones<'a>(ctx: &'a Ctx) {
     bottom = fns::Stage_GetBlastZoneBottomOffset(ctx);
     top = fns::Stage_GetBlastZoneTopOffset(ctx);
     Handle::copy_from(sp40, statics::melee__mp__mplib::mpLib_804D8144(ctx));
-    fns::mpLib_SetupDraw(ctx, statics::melee__mp__mplib::mpLib_804D8140(ctx));
+    fns::mpLib_SetupDraw(ctx, {
+        Handle::copy_from(__arg, statics::melee__mp__mplib::mpLib_804D8140(ctx));
+        __arg
+    });
     fns::GXSetZMode(ctx, (1_i32 as u8), (enums::GX_LEQUAL as i32), (0_i32 as u8));
     fns::GXSetLineWidth(ctx, (16_i32 as u8), (enums::GX_TO_ZERO as i32));
     fns::GXBegin(
@@ -16289,7 +16399,10 @@ pub fn mpLib_DrawZones<'a>(ctx: &'a Ctx) {
     inl_GXPosition3f32_unfused(ctx, left, top, 0.0);
     inl_GXPosition3f32_unfused(ctx, left, bottom, 0.0);
     inl_GXEnd_unfused(ctx);
-    fns::mpLib_SetupDraw(ctx, sp40);
+    fns::mpLib_SetupDraw(ctx, {
+        Handle::copy_from(__arg_2, sp40);
+        __arg_2
+    });
     fns::GXSetZMode(
         ctx,
         (1_i32 as u8),
@@ -16314,7 +16427,10 @@ pub fn mpLib_DrawZones<'a>(ctx: &'a Ctx) {
     bottom = fns::Stage_GetCamBoundsBottomOffset(ctx);
     top = fns::Stage_GetCamBoundsTopOffset(ctx);
     Handle::copy_from(sp34, statics::melee__mp__mplib::mpLib_804D814C(ctx));
-    fns::mpLib_SetupDraw(ctx, statics::melee__mp__mplib::mpLib_804D8148(ctx));
+    fns::mpLib_SetupDraw(ctx, {
+        Handle::copy_from(__arg_3, statics::melee__mp__mplib::mpLib_804D8148(ctx));
+        __arg_3
+    });
     fns::GXSetZMode(ctx, (1_i32 as u8), (enums::GX_LEQUAL as i32), (0_i32 as u8));
     fns::GXSetLineWidth(ctx, (16_i32 as u8), (enums::GX_TO_ZERO as i32));
     fns::GXBegin(
@@ -16330,7 +16446,10 @@ pub fn mpLib_DrawZones<'a>(ctx: &'a Ctx) {
     inl_GXPosition3f32_unfused(ctx, left, top, 0.0);
     inl_GXPosition3f32_unfused(ctx, left, bottom, 0.0);
     inl_GXEnd_unfused(ctx);
-    fns::mpLib_SetupDraw(ctx, sp20);
+    fns::mpLib_SetupDraw(ctx, {
+        Handle::copy_from(__arg_4, sp20);
+        __arg_4
+    });
     fns::GXSetZMode(
         ctx,
         (1_i32 as u8),
@@ -16350,10 +16469,13 @@ pub fn mpLib_DrawZones<'a>(ctx: &'a Ctx) {
     inl_GXPosition3f32_unfused(ctx, left, top, 0.0);
     inl_GXPosition3f32_unfused(ctx, left, bottom, 0.0);
     inl_GXEnd_unfused(ctx);
-    fns::mpLib_SetupDraw(
-        ctx,
-        statics::melee__mp__mplib::mpLib_804D8150(ctx).get(0_i32),
-    );
+    fns::mpLib_SetupDraw(ctx, {
+        Handle::copy_from(
+            __arg_5,
+            statics::melee__mp__mplib::mpLib_804D8150(ctx).get(0_i32),
+        );
+        __arg_5
+    });
     fns::GXSetZMode(ctx, (0_i32 as u8), (enums::GX_LEQUAL as i32), (0_i32 as u8));
     fns::GXSetLineWidth(ctx, (16_i32 as u8), (enums::GX_TO_ZERO as i32));
     var_r30 = fns::cm_804D6468(ctx).get();

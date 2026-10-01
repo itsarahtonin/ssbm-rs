@@ -30,8 +30,10 @@ pub fn fn_SetupAnimationInfo<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
     let bg: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
     let fg: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
     let mut temp_r3: HSD_GObj<'a> = null(ctx);
     temp_r3 = fns::DevText_GetGObj(ctx);
     statics::melee__db__dbanim::db_804D6B48(ctx).set_ShowFighterCollisionBubbles((1_i32 as u32));
@@ -73,7 +75,10 @@ pub fn fn_SetupAnimationInfo<'a>(ctx: &'a Ctx) {
                 ctx,
                 __ret_tmp,
                 statics::melee__db__dbanim::db_AnimationInfo(ctx).text(),
-                bg,
+                {
+                    Handle::copy_from(__arg, bg);
+                    __arg
+                },
             );
             __ret_tmp
         };
@@ -82,7 +87,10 @@ pub fn fn_SetupAnimationInfo<'a>(ctx: &'a Ctx) {
                 ctx,
                 __ret_tmp_2,
                 statics::melee__db__dbanim::db_AnimationInfo(ctx).text(),
-                fg,
+                {
+                    Handle::copy_from(__arg_2, fg);
+                    __arg_2
+                },
             );
             __ret_tmp_2
         };

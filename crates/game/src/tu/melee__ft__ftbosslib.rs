@@ -547,10 +547,14 @@ pub fn ftBossLib_8015CB7C<'a>(ctx: &'a Ctx) {
 pub fn ftBossLib_8015CB9C<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x28);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x10);
+    let __arg: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     fns::Player_LoadPlayerCoords(ctx, arg0, vec);
     fns::Camera_8002E818(ctx, vec);
-    inl_func_8015CB9C_inline_unfused(ctx, vec);
+    inl_func_8015CB9C_inline_unfused(ctx, {
+        Handle::copy_from(__arg, vec);
+        __arg
+    });
 }
 
 pub fn ftBossLib_8015CC14<'a>(ctx: &'a Ctx) {

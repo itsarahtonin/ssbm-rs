@@ -346,6 +346,9 @@ pub fn lb_800122F0<'a>(ctx: &'a Ctx, img: HSD_ImageDesc<'a>, tex: _GXTexObj<'a>,
     let color0: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
     let color1: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
     let color2: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
     let mut img = img;
     let mut tex = tex;
     let mut factor = factor;
@@ -415,9 +418,18 @@ pub fn lb_800122F0<'a>(ctx: &'a Ctx, img: HSD_ImageDesc<'a>, tex: _GXTexObj<'a>,
             (enums::GX_TEXMAP0 as i32),
             (enums::GX_COLOR0A0 as i32),
         );
-        fns::GXSetTevKColor(ctx, (enums::GX_KCOLOR0 as i32), color0);
-        fns::GXSetTevKColor(ctx, (enums::GX_KCOLOR1 as i32), color1);
-        fns::GXSetTevKColor(ctx, (enums::GX_KCOLOR2 as i32), color2);
+        fns::GXSetTevKColor(ctx, (enums::GX_KCOLOR0 as i32), {
+            Handle::copy_from(__arg, color0);
+            __arg
+        });
+        fns::GXSetTevKColor(ctx, (enums::GX_KCOLOR1 as i32), {
+            Handle::copy_from(__arg_2, color1);
+            __arg_2
+        });
+        fns::GXSetTevKColor(ctx, (enums::GX_KCOLOR2 as i32), {
+            Handle::copy_from(__arg_3, color2);
+            __arg_3
+        });
         fns::GXSetTevKColorSel(
             ctx,
             (enums::GX_TEVSTAGE0 as i32),
@@ -1939,9 +1951,13 @@ fn inl_GXEnd_unfused<'a>(ctx: &'a Ctx) {}
 
 fn inl_setTevAlpha_unfused<'a>(ctx: &'a Ctx, alpha: u8, __in_caller: u32) {
     let color: _GXColor<'a> = ptr(ctx, __in_caller + 0x0);
+    let __arg: _GXColor<'a> = ptr(ctx, __in_caller + 0x4);
     let mut alpha = alpha;
     color.set_a(alpha);
-    fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), color);
+    fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), {
+        Handle::copy_from(__arg, color);
+        __arg
+    });
     fns::GXSetTevAlphaIn(
         ctx,
         (enums::GX_TEVSTAGE0 as i32),

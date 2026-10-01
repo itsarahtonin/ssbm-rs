@@ -507,14 +507,19 @@ pub fn psDispParticles<'a>(ctx: &'a Ctx, target_link: u32, sw: u32) {
     let non_edge_particles: Ptr<'a, HSD_Particle<'a>> = frame_at(ctx, &__frame, 0x754);
     let billboard_mtx: psdisp_Mtx<'a> = frame_at(ctx, &__frame, 0x724);
     let gx_tlut_obj: _GXTlutObj<'a> = frame_at(ctx, &__frame, 0x714);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
-    let __inl_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let __arg_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let __arg_5: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x1c);
+    let __inl_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x34);
     let temp_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x6dc);
-    let __inl_3: ArrV<'a, u8, 88> = frame_at(ctx, &__frame, 0x24);
-    let __inl_4: ArrV<'a, u8, 552> = frame_at(ctx, &__frame, 0x7c);
-    let __inl_5: ArrV<'a, u8, 192> = frame_at(ctx, &__frame, 0x2a4);
-    let __inl_6: ArrV<'a, u8, 136> = frame_at(ctx, &__frame, 0x364);
-    let __inl_7: ArrV<'a, u8, 144> = frame_at(ctx, &__frame, 0x3ec);
+    let __inl_3: ArrV<'a, u8, 88> = frame_at(ctx, &__frame, 0x5c);
+    let __inl_4: ArrV<'a, u8, 552> = frame_at(ctx, &__frame, 0xb4);
+    let __inl_5: ArrV<'a, u8, 192> = frame_at(ctx, &__frame, 0x2dc);
+    let __inl_6: ArrV<'a, u8, 136> = frame_at(ctx, &__frame, 0x39c);
+    let __inl_7: ArrV<'a, u8, 144> = frame_at(ctx, &__frame, 0x424);
     let mut target_link = target_link;
     let mut sw = sw;
     let mut sp7B4: i32 = 0;
@@ -630,16 +635,20 @@ pub fn psDispParticles<'a>(ctx: &'a Ctx, target_link: u32, sw: u32) {
                                         .set_a(__t5);
                                     __t5
                                 });
-                                fns::GXSetChanMatColor(
-                                    ctx,
-                                    (enums::GX_COLOR0A0 as i32),
-                                    statics::sysdolphin__baselib__psdisp::prevChanMat(ctx),
-                                );
-                                fns::GXSetChanAmbColor(
-                                    ctx,
-                                    (enums::GX_COLOR0A0 as i32),
-                                    statics::sysdolphin__baselib__psdisp::prevChanAmb(ctx),
-                                );
+                                fns::GXSetChanMatColor(ctx, (enums::GX_COLOR0A0 as i32), {
+                                    Handle::copy_from(
+                                        __arg,
+                                        statics::sysdolphin__baselib__psdisp::prevChanMat(ctx),
+                                    );
+                                    __arg
+                                });
+                                fns::GXSetChanAmbColor(ctx, (enums::GX_COLOR0A0 as i32), {
+                                    Handle::copy_from(
+                                        __arg_2,
+                                        statics::sysdolphin__baselib__psdisp::prevChanAmb(ctx),
+                                    );
+                                    __arg_2
+                                });
                                 fns::psSetupTevInvalidState(ctx);
                                 fns::psSetupTevCommon(ctx);
                                 inl_psSetColor(
@@ -657,21 +666,27 @@ pub fn psDispParticles<'a>(ctx: &'a Ctx, target_link: u32, sw: u32) {
                                     statics::sysdolphin__baselib__psdisp::prevColorMat(ctx),
                                     (255_i32 as u8),
                                 );
-                                fns::GXSetTevColor(
-                                    ctx,
-                                    (enums::GX_TEVREG0 as i32),
-                                    statics::sysdolphin__baselib__psdisp::prevColorPrim(ctx),
-                                );
-                                fns::GXSetTevColor(
-                                    ctx,
-                                    (enums::GX_TEVREG1 as i32),
-                                    statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx),
-                                );
-                                fns::GXSetTevColor(
-                                    ctx,
-                                    (enums::GX_TEVREG2 as i32),
-                                    statics::sysdolphin__baselib__psdisp::prevColorMat(ctx),
-                                );
+                                fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), {
+                                    Handle::copy_from(
+                                        __arg_3,
+                                        statics::sysdolphin__baselib__psdisp::prevColorPrim(ctx),
+                                    );
+                                    __arg_3
+                                });
+                                fns::GXSetTevColor(ctx, (enums::GX_TEVREG1 as i32), {
+                                    Handle::copy_from(
+                                        __arg_4,
+                                        statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx),
+                                    );
+                                    __arg_4
+                                });
+                                fns::GXSetTevColor(ctx, (enums::GX_TEVREG2 as i32), {
+                                    Handle::copy_from(
+                                        __arg_5,
+                                        statics::sysdolphin__baselib__psdisp::prevColorMat(ctx),
+                                    );
+                                    __arg_5
+                                });
                                 statics::sysdolphin__baselib__psdisp::HSD_PSDisp_804D792C(ctx)
                                     .set(1_i32.wrapping_neg());
                                 fns::GXSetZCompLoc(ctx, (0_i32 as u8));
@@ -1656,6 +1671,8 @@ fn inl_setupChanReg<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, __in_caller: u32) {
     let prim_color: _GXColor<'a> = ptr(ctx, __in_caller + 0x0);
     let amb_color: _GXColor<'a> = ptr(ctx, __in_caller + 0x4);
     let mat_color: _GXColor<'a> = ptr(ctx, __in_caller + 0x8);
+    let __arg: _GXColor<'a> = ptr(ctx, __in_caller + 0xc);
+    let __arg_2: _GXColor<'a> = ptr(ctx, __in_caller + 0x10);
     let mut pp = pp;
     let mut lobj: HSD_LObj<'a> = null(ctx);
     if (((pp).kind() & ((enums::DispLighting as i32) as u32)) != 0) {
@@ -1702,11 +1719,13 @@ fn inl_setupChanReg<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, __in_caller: u32) {
                 statics::sysdolphin__baselib__psdisp::prevChanMat(ctx),
                 prim_color,
             );
-            fns::GXSetChanMatColor(
-                ctx,
-                (enums::GX_COLOR0 as i32),
-                statics::sysdolphin__baselib__psdisp::prevChanMat(ctx),
-            );
+            fns::GXSetChanMatColor(ctx, (enums::GX_COLOR0 as i32), {
+                Handle::copy_from(
+                    __arg,
+                    statics::sysdolphin__baselib__psdisp::prevChanMat(ctx),
+                );
+                __arg
+            });
         }
         lobj = fns::HSD_LObjGetActiveByID(ctx, (enums::GX_MAX_LIGHT as i32));
         if !Handle::is_null(lobj) {
@@ -1733,11 +1752,13 @@ fn inl_setupChanReg<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, __in_caller: u32) {
                 statics::sysdolphin__baselib__psdisp::prevChanAmb(ctx),
                 amb_color,
             );
-            fns::GXSetChanAmbColor(
-                ctx,
-                (enums::GX_COLOR0 as i32),
-                statics::sysdolphin__baselib__psdisp::prevChanAmb(ctx),
-            );
+            fns::GXSetChanAmbColor(ctx, (enums::GX_COLOR0 as i32), {
+                Handle::copy_from(
+                    __arg_2,
+                    statics::sysdolphin__baselib__psdisp::prevChanAmb(ctx),
+                );
+                __arg_2
+            });
         }
     }
 }
@@ -1747,6 +1768,11 @@ fn inl_setupTevReg<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, __in_caller: u32) {
     let env_color: _GXColor<'a> = ptr(ctx, __in_caller + 0x4);
     let mat_color: _GXColor<'a> = ptr(ctx, __in_caller + 0x8);
     let amb_color: _GXColor<'a> = ptr(ctx, __in_caller + 0xc);
+    let __arg: _GXColor<'a> = ptr(ctx, __in_caller + 0x10);
+    let __arg_2: _GXColor<'a> = ptr(ctx, __in_caller + 0x14);
+    let __arg_3: _GXColor<'a> = ptr(ctx, __in_caller + 0x18);
+    let __arg_4: _GXColor<'a> = ptr(ctx, __in_caller + 0x1c);
+    let __arg_5: _GXColor<'a> = ptr(ctx, __in_caller + 0x20);
     let mut pp = pp;
     statics::sysdolphin__baselib__psdisp::getColorPrimEnv(ctx, pp, prim_color, env_color);
     if (((pp).kind() & ((enums::PrimEnv as i32) as u32)) != 0)
@@ -1766,11 +1792,13 @@ fn inl_setupTevReg<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, __in_caller: u32) {
                 statics::sysdolphin__baselib__psdisp::prevColorPrim(ctx),
                 prim_color,
             );
-            fns::GXSetTevColor(
-                ctx,
-                (enums::GX_TEVREG0 as i32),
-                statics::sysdolphin__baselib__psdisp::prevColorPrim(ctx),
-            );
+            fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), {
+                Handle::copy_from(
+                    __arg,
+                    statics::sysdolphin__baselib__psdisp::prevColorPrim(ctx),
+                );
+                __arg
+            });
         }
         if (((pp).kind() & ((enums::PrimEnv as i32) as u32)) != 0) {
             if ((((statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx).r() as i32)
@@ -1786,11 +1814,13 @@ fn inl_setupTevReg<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, __in_caller: u32) {
                     statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx),
                     env_color,
                 );
-                fns::GXSetTevColor(
-                    ctx,
-                    (enums::GX_TEVREG1 as i32),
-                    statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx),
-                );
+                fns::GXSetTevColor(ctx, (enums::GX_TEVREG1 as i32), {
+                    Handle::copy_from(
+                        __arg_2,
+                        statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx),
+                    );
+                    __arg_2
+                });
             }
         } else if ((((statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx).r() as i32)
             != 0_i32)
@@ -1811,11 +1841,13 @@ fn inl_setupTevReg<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, __in_caller: u32) {
                 statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx).set_g(__t3);
                 __t3
             });
-            fns::GXSetTevColor(
-                ctx,
-                (enums::GX_TEVREG1 as i32),
-                statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx),
-            );
+            fns::GXSetTevColor(ctx, (enums::GX_TEVREG1 as i32), {
+                Handle::copy_from(
+                    __arg_3,
+                    statics::sysdolphin__baselib__psdisp::prevColorEnv(ctx),
+                );
+                __arg_3
+            });
         }
     }
     if (((pp).kind() & ((enums::DispLighting as i32) as u32)) != 0) {
@@ -1834,11 +1866,13 @@ fn inl_setupTevReg<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, __in_caller: u32) {
                     statics::sysdolphin__baselib__psdisp::prevColorMat(ctx),
                     mat_color,
                 );
-                fns::GXSetTevColor(
-                    ctx,
-                    (enums::GX_TEVREG2 as i32),
-                    statics::sysdolphin__baselib__psdisp::prevColorMat(ctx),
-                );
+                fns::GXSetTevColor(ctx, (enums::GX_TEVREG2 as i32), {
+                    Handle::copy_from(
+                        __arg_4,
+                        statics::sysdolphin__baselib__psdisp::prevColorMat(ctx),
+                    );
+                    __arg_4
+                });
             }
         } else {
             mat_color.set_a(
@@ -1860,11 +1894,13 @@ fn inl_setupTevReg<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, __in_caller: u32) {
                     statics::sysdolphin__baselib__psdisp::prevColorMat(ctx),
                     mat_color,
                 );
-                fns::GXSetTevColor(
-                    ctx,
-                    (enums::GX_TEVREG2 as i32),
-                    statics::sysdolphin__baselib__psdisp::prevColorMat(ctx),
-                );
+                fns::GXSetTevColor(ctx, (enums::GX_TEVREG2 as i32), {
+                    Handle::copy_from(
+                        __arg_5,
+                        statics::sysdolphin__baselib__psdisp::prevColorMat(ctx),
+                    );
+                    __arg_5
+                });
             }
         }
     }

@@ -236,10 +236,13 @@ pub fn grZebesRoute_8020B548<'a>(ctx: &'a Ctx) {
     let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x44);
     let interest: Vec<'a> = frame_at(ctx, &__frame, 0x38);
-    let color_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let color_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
     let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let color_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let color_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
     let pos_3: Vec<'a> = frame_at(ctx, &__frame, 0x18);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj: HSD_GObj<'a> = (Handle::add(fns::HSD_GObjGXLinkHead(ctx).get(), 4_i32)).get();
     (if !Handle::is_null((gobj)) {
         ({ () })
@@ -293,7 +296,10 @@ pub fn grZebesRoute_8020B548<'a>(ctx: &'a Ctx) {
                             statics::melee__gr__grzebesroute::grZe_Route_803B83A0(ctx)
                                 .spot_interest(),
                         );
-                        fns::HSD_LObjSetColor(ctx, lobj, color);
+                        fns::HSD_LObjSetColor(ctx, lobj, {
+                            Handle::copy_from(__arg, color);
+                            __arg
+                        });
                         pos.set_x(fp::fmuls(pos.x(), scale));
                         pos.set_y(fp::fmuls(pos.y(), scale));
                         pos.set_z(fp::fmuls(pos.z(), scale));
@@ -322,7 +328,10 @@ pub fn grZebesRoute_8020B548<'a>(ctx: &'a Ctx) {
                             statics::melee__gr__grzebesroute::grZe_Route_803B83A0(ctx)
                                 .upper_point_pos(),
                         );
-                        fns::HSD_LObjSetColor(ctx, lobj, color_2);
+                        fns::HSD_LObjSetColor(ctx, lobj, {
+                            Handle::copy_from(__arg_2, color_2);
+                            __arg_2
+                        });
                         pos_2.set_x(fp::fmuls(pos_2.x(), scale));
                         pos_2.set_y(fp::fmuls(pos_2.y(), scale));
                         pos_2.set_z(fp::fmuls(pos_2.z(), scale));
@@ -346,7 +355,10 @@ pub fn grZebesRoute_8020B548<'a>(ctx: &'a Ctx) {
                             statics::melee__gr__grzebesroute::grZe_Route_803B83A0(ctx)
                                 .lower_point_pos(),
                         );
-                        fns::HSD_LObjSetColor(ctx, lobj, color_3);
+                        fns::HSD_LObjSetColor(ctx, lobj, {
+                            Handle::copy_from(__arg_3, color_3);
+                            __arg_3
+                        });
                         pos_3.set_x(fp::fmuls(pos_3.x(), scale));
                         pos_3.set_y(fp::fmuls(pos_3.y(), scale));
                         pos_3.set_z(fp::fmuls(pos_3.z(), scale));

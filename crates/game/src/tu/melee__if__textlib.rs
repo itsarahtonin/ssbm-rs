@@ -37,6 +37,11 @@ pub fn DevText_Create<'a>(
 ) -> DevText<'a> {
     let __frame = ctx.stack_frame(0x60);
     let bg: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __arg_4: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let __arg_5: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
     let mut id = id;
     let mut x = x;
     let mut y = y;
@@ -73,27 +78,26 @@ pub fn DevText_Create<'a>(
         (text).set_cursor_y((0_i32 as u8));
         (text).set_scale_x(10.0);
         (text).set_scale_y(16.0);
-        inl_set_color_unfused(ctx, (text).bg_color(), bg);
-        inl_set_color_unfused(
-            ctx,
-            (text).text_colors().get(0_i32),
-            At::new(ctx, 0x804ddc8c).field::<_GXColor<'a>>(0),
-        );
-        inl_set_color_unfused(
-            ctx,
-            (text).text_colors().get(1_i32),
-            At::new(ctx, 0x804ddc90).field::<_GXColor<'a>>(0),
-        );
-        inl_set_color_unfused(
-            ctx,
-            (text).text_colors().get(2_i32),
-            At::new(ctx, 0x804ddc94).field::<_GXColor<'a>>(0),
-        );
-        inl_set_color_unfused(
-            ctx,
-            (text).text_colors().get(3_i32),
-            At::new(ctx, 0x804ddc98).field::<_GXColor<'a>>(0),
-        );
+        inl_set_color_unfused(ctx, (text).bg_color(), {
+            Handle::copy_from(__arg, bg);
+            __arg
+        });
+        inl_set_color_unfused(ctx, (text).text_colors().get(0_i32), {
+            Handle::copy_from(__arg_2, At::new(ctx, 0x804ddc8c).field::<_GXColor<'a>>(0));
+            __arg_2
+        });
+        inl_set_color_unfused(ctx, (text).text_colors().get(1_i32), {
+            Handle::copy_from(__arg_3, At::new(ctx, 0x804ddc90).field::<_GXColor<'a>>(0));
+            __arg_3
+        });
+        inl_set_color_unfused(ctx, (text).text_colors().get(2_i32), {
+            Handle::copy_from(__arg_4, At::new(ctx, 0x804ddc94).field::<_GXColor<'a>>(0));
+            __arg_4
+        });
+        inl_set_color_unfused(ctx, (text).text_colors().get(3_i32), {
+            Handle::copy_from(__arg_5, At::new(ctx, 0x804ddc98).field::<_GXColor<'a>>(0));
+            __arg_5
+        });
         (text).set_id(((id as i32) as i8));
         (text).set_line_width((10_i32 as u8));
         (text).set_flags(((16_i32) as u8));

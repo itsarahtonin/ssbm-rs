@@ -824,6 +824,12 @@ pub fn __GXInitGX<'a>(ctx: &'a Ctx) {
     let clear: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
     let black: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
     let white: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __arg_4: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let __arg_5: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let __arg_6: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
     clear.set_r((64_i32 as u8));
     clear.set_g((64_i32 as u8));
     clear.set_b((64_i32 as u8));
@@ -862,7 +868,14 @@ pub fn __GXInitGX<'a>(ctx: &'a Ctx) {
             break 's1;
         }
     }
-    fns::GXSetCopyClear(ctx, clear, (0xffffff_i32 as u32));
+    fns::GXSetCopyClear(
+        ctx,
+        {
+            Handle::copy_from(__arg, clear);
+            __arg
+        },
+        (0xffffff_i32 as u32),
+    );
     inl_GXSetTexCoordGen_unfused(
         ctx,
         (enums::GX_TEXCOORD0 as i32),
@@ -990,8 +1003,14 @@ pub fn __GXInitGX<'a>(ctx: &'a Ctx) {
         (enums::GX_DF_NONE as i32),
         (enums::GX_AF_NONE as i32),
     );
-    fns::GXSetChanAmbColor(ctx, (enums::GX_COLOR0A0 as i32), black);
-    fns::GXSetChanMatColor(ctx, (enums::GX_COLOR0A0 as i32), white);
+    fns::GXSetChanAmbColor(ctx, (enums::GX_COLOR0A0 as i32), {
+        Handle::copy_from(__arg_2, black);
+        __arg_2
+    });
+    fns::GXSetChanMatColor(ctx, (enums::GX_COLOR0A0 as i32), {
+        Handle::copy_from(__arg_3, white);
+        __arg_3
+    });
     fns::GXSetChanCtrl(
         ctx,
         (enums::GX_COLOR1A1 as i32),
@@ -1002,8 +1021,14 @@ pub fn __GXInitGX<'a>(ctx: &'a Ctx) {
         (enums::GX_DF_NONE as i32),
         (enums::GX_AF_NONE as i32),
     );
-    fns::GXSetChanAmbColor(ctx, (enums::GX_COLOR1A1 as i32), black);
-    fns::GXSetChanMatColor(ctx, (enums::GX_COLOR1A1 as i32), white);
+    fns::GXSetChanAmbColor(ctx, (enums::GX_COLOR1A1 as i32), {
+        Handle::copy_from(__arg_4, black);
+        __arg_4
+    });
+    fns::GXSetChanMatColor(ctx, (enums::GX_COLOR1A1 as i32), {
+        Handle::copy_from(__arg_5, white);
+        __arg_5
+    });
     fns::GXInvalidateTexAll(ctx);
     (fns::gx(ctx).get()).set_nextTexRgn((0_i32 as u32));
     (fns::gx(ctx).get()).set_nextTexRgnCI((0_i32 as u32));
@@ -1230,7 +1255,10 @@ pub fn __GXInitGX<'a>(ctx: &'a Ctx) {
         1.0,
         0.10000000149011612,
         1.0,
-        black,
+        {
+            Handle::copy_from(__arg_6, black);
+            __arg_6
+        },
     );
     fns::GXSetFogRangeAdj(
         ctx,

@@ -335,9 +335,20 @@ pub fn HSD_SObjLib_803A49E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
 pub fn HSD_SObjLib_803A4A68<'a>(ctx: &'a Ctx, sobj: HSD_SObj<'a>) {
     let __frame = ctx.stack_frame(0xc8);
     let __lit: _GXColorS10<'a> = frame_at(ctx, &__frame, 0x0);
-    let __lit_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let __lit_3: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let __lit_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let __arg: _GXColorS10<'a> = frame_at(ctx, &__frame, 0x8);
+    let __lit_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
+    let __lit_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
+    let __lit_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let __arg_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
+    let __arg_5: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
+    let __arg_6: _GXColor<'a> = frame_at(ctx, &__frame, 0x2c);
+    let __arg_7: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
+    let __arg_8: _GXColor<'a> = frame_at(ctx, &__frame, 0x34);
+    let __arg_9: _GXColor<'a> = frame_at(ctx, &__frame, 0x38);
+    let __arg_10: _GXColor<'a> = frame_at(ctx, &__frame, 0x3c);
+    let __arg_11: _GXColor<'a> = frame_at(ctx, &__frame, 0x40);
     let mut sobj = sobj;
     let mut x_cos: f64 = 0.0;
     let mut origin_x: f64 = 0.0;
@@ -658,32 +669,44 @@ pub fn HSD_SObjLib_803A4A68<'a>(ctx: &'a Ctx, sobj: HSD_SObj<'a>) {
             (0_i32 as u8),
         );
         fns::GXSetTevColorS10(ctx, (enums::GX_TEVREG0 as i32), {
-            __lit.set_r((90_i32.wrapping_neg() as i16));
-            __lit.set_g((0_i32 as i16));
-            __lit.set_b((114_i32.wrapping_neg() as i16));
-            __lit.set_a((135_i32 as i16));
-            __lit
+            Handle::copy_from(__arg, {
+                __lit.set_r((90_i32.wrapping_neg() as i16));
+                __lit.set_g((0_i32 as i16));
+                __lit.set_b((114_i32.wrapping_neg() as i16));
+                __lit.set_a((135_i32 as i16));
+                __lit
+            });
+            __arg
         });
         fns::GXSetTevKColor(ctx, (enums::GX_KCOLOR0 as i32), {
-            __lit_2.set_r((0_i32 as u8));
-            __lit_2.set_g((0_i32 as u8));
-            __lit_2.set_b((226_i32 as u8));
-            __lit_2.set_a((88_i32 as u8));
-            __lit_2
+            Handle::copy_from(__arg_2, {
+                __lit_2.set_r((0_i32 as u8));
+                __lit_2.set_g((0_i32 as u8));
+                __lit_2.set_b((226_i32 as u8));
+                __lit_2.set_a((88_i32 as u8));
+                __lit_2
+            });
+            __arg_2
         });
         fns::GXSetTevKColor(ctx, (enums::GX_KCOLOR1 as i32), {
-            __lit_3.set_r((179_i32 as u8));
-            __lit_3.set_g((0_i32 as u8));
-            __lit_3.set_b((0_i32 as u8));
-            __lit_3.set_a((182_i32 as u8));
-            __lit_3
+            Handle::copy_from(__arg_3, {
+                __lit_3.set_r((179_i32 as u8));
+                __lit_3.set_g((0_i32 as u8));
+                __lit_3.set_b((0_i32 as u8));
+                __lit_3.set_a((182_i32 as u8));
+                __lit_3
+            });
+            __arg_3
         });
         fns::GXSetTevKColor(ctx, (enums::GX_KCOLOR2 as i32), {
-            __lit_4.set_r((255_i32 as u8));
-            __lit_4.set_g((0_i32 as u8));
-            __lit_4.set_b((255_i32 as u8));
-            __lit_4.set_a((128_i32 as u8));
-            __lit_4
+            Handle::copy_from(__arg_4, {
+                __lit_4.set_r((255_i32 as u8));
+                __lit_4.set_g((0_i32 as u8));
+                __lit_4.set_b((255_i32 as u8));
+                __lit_4.set_a((128_i32 as u8));
+                __lit_4
+            });
+            __arg_4
         });
         fns::GXSetTevSwapModeTable(
             ctx,
@@ -727,7 +750,10 @@ pub fn HSD_SObjLib_803A4A68<'a>(ctx: &'a Ctx, sobj: HSD_SObj<'a>) {
             (0_i32 as u8),
         );
         if (((sobj).x40() & (4_i32 as u32)) != 0) {
-            fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), (sobj).x3C_u().x3C_color());
+            fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), {
+                Handle::copy_from(__arg_5, (sobj).x3C_u().x3C_color());
+                __arg_5
+            });
             fns::GXSetTevColorIn(
                 ctx,
                 (enums::GX_TEVSTAGE0 as i32),
@@ -820,8 +846,14 @@ pub fn HSD_SObjLib_803A4A68<'a>(ctx: &'a Ctx, sobj: HSD_SObj<'a>) {
                     _ => 4,
                 };
                 if __case <= 0 {
-                    fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), (sobj).x38_u().x38_color());
-                    fns::GXSetTevColor(ctx, (enums::GX_TEVREG1 as i32), (sobj).x3C_u().x3C_color());
+                    fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), {
+                        Handle::copy_from(__arg_6, (sobj).x38_u().x38_color());
+                        __arg_6
+                    });
+                    fns::GXSetTevColor(ctx, (enums::GX_TEVREG1 as i32), {
+                        Handle::copy_from(__arg_7, (sobj).x3C_u().x3C_color());
+                        __arg_7
+                    });
                     fns::GXSetTevColorIn(
                         ctx,
                         (enums::GX_TEVSTAGE0 as i32),
@@ -859,8 +891,14 @@ pub fn HSD_SObjLib_803A4A68<'a>(ctx: &'a Ctx, sobj: HSD_SObj<'a>) {
                     break 's1;
                 }
                 if __case <= 1 {
-                    fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), (sobj).x38_u().x38_color());
-                    fns::GXSetTevColor(ctx, (enums::GX_TEVREG1 as i32), (sobj).x3C_u().x3C_color());
+                    fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), {
+                        Handle::copy_from(__arg_8, (sobj).x38_u().x38_color());
+                        __arg_8
+                    });
+                    fns::GXSetTevColor(ctx, (enums::GX_TEVREG1 as i32), {
+                        Handle::copy_from(__arg_9, (sobj).x3C_u().x3C_color());
+                        __arg_9
+                    });
                     fns::GXSetTevColorIn(
                         ctx,
                         (enums::GX_TEVSTAGE0 as i32),
@@ -898,7 +936,10 @@ pub fn HSD_SObjLib_803A4A68<'a>(ctx: &'a Ctx, sobj: HSD_SObj<'a>) {
                     break 's1;
                 }
                 if __case <= 2 {
-                    fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), (sobj).x3C_u().x3C_color());
+                    fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), {
+                        Handle::copy_from(__arg_10, (sobj).x3C_u().x3C_color());
+                        __arg_10
+                    });
                     fns::GXSetTevColorIn(
                         ctx,
                         (enums::GX_TEVSTAGE0 as i32),
@@ -936,7 +977,10 @@ pub fn HSD_SObjLib_803A4A68<'a>(ctx: &'a Ctx, sobj: HSD_SObj<'a>) {
                     break 's1;
                 }
                 if __case <= 3 {
-                    fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), (sobj).x3C_u().x3C_color());
+                    fns::GXSetTevColor(ctx, (enums::GX_TEVREG0 as i32), {
+                        Handle::copy_from(__arg_11, (sobj).x3C_u().x3C_color());
+                        __arg_11
+                    });
                     fns::GXSetTevColorIn(
                         ctx,
                         (enums::GX_TEVSTAGE0 as i32),

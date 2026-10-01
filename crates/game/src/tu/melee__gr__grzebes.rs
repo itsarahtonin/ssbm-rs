@@ -1402,6 +1402,7 @@ pub fn grZebes_801DA254<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, level: f64) {
     let c1: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
     let c2: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
     let result: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut level = level;
     let mut gp: Ground<'a> = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
@@ -1471,7 +1472,7 @@ pub fn grZebes_801DA254<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, level: f64) {
             ) as u8),
         );
         result.set_a((255_i32 as u8));
-        inl_grZebes_801DA254_inline2(ctx, lobj, result);
+        inl_grZebes_801DA254_inline2(ctx, lobj, result, Handle::addr(__inl));
     }
 }
 
@@ -3627,12 +3628,29 @@ fn inl_HSD_LObjGetNext<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) -> HSD_LObj<'a> {
 
 fn inl_grZebes_801DA254_inline1<'a>(ctx: &'a Ctx, color: _GXColor<'a>) {}
 
-fn inl_grZebes_801DA254_inline2<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, color: _GXColor<'a>) {
+fn inl_grZebes_801DA254_inline2<'a>(
+    ctx: &'a Ctx,
+    lobj: HSD_LObj<'a>,
+    color: _GXColor<'a>,
+    __in_caller: u32,
+) {
+    let __arg: _GXColor<'a> = ptr(ctx, __in_caller + 0x0);
+    let __arg_2: _GXColor<'a> = ptr(ctx, __in_caller + 0x4);
+    let __arg_3: _GXColor<'a> = ptr(ctx, __in_caller + 0x8);
     let mut lobj = lobj;
     let mut color = color;
-    inl_grZebes_801DA254_inline1(ctx, (color));
-    inl_grZebes_801DA254_inline1(ctx, (color));
-    fns::HSD_LObjSetColor(ctx, lobj, (color));
+    inl_grZebes_801DA254_inline1(ctx, {
+        Handle::copy_from(__arg, (color));
+        __arg
+    });
+    inl_grZebes_801DA254_inline1(ctx, {
+        Handle::copy_from(__arg_2, (color));
+        __arg_2
+    });
+    fns::HSD_LObjSetColor(ctx, lobj, {
+        Handle::copy_from(__arg_3, (color));
+        __arg_3
+    });
 }
 
 fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {

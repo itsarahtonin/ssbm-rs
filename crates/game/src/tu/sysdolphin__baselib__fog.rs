@@ -31,12 +31,17 @@ pub fn HSD_FogSet<'a>(ctx: &'a Ctx, fog: HSD_Fog<'a>) {
     let tbl: _GXFogAdjTable<'a> = frame_at(ctx, &__frame, 0x80);
     let v: ArrV<'a, F32, 6> = frame_at(ctx, &__frame, 0x68);
     let proj: HSD_FogSet_proj<'a> = frame_at(ctx, &__frame, 0x4c);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
     let mtx: Arr<'a, ArrV<'a, F32, 4>, 4> = frame_at(ctx, &__frame, 0xc);
     let mut fog = fog;
     let mut cobj: HSD_CObj<'a> = null(ctx);
     let mut range: i32 = 0;
     if Handle::is_null(fog) {
-        fns::GXSetFog(ctx, 0_i32, 0.0, 0.0, 0.0, 0.0, fns::HSD_Fog_804DE6F0(ctx));
+        fns::GXSetFog(ctx, 0_i32, 0.0, 0.0, 0.0, 0.0, {
+            Handle::copy_from(__arg, fns::HSD_Fog_804DE6F0(ctx));
+            __arg
+        });
         return;
     }
     cobj = fns::HSD_CObjGetCurrent(ctx);
@@ -58,7 +63,10 @@ pub fn HSD_FogSet<'a>(ctx: &'a Ctx, fog: HSD_Fog<'a>) {
             (fog).end(),
             __t2,
             __t1,
-            (fog).color(),
+            {
+                Handle::copy_from(__arg_2, (fog).color());
+                __arg_2
+            },
         )
     };
     if !Handle::is_null((fog).fog_adj()) {

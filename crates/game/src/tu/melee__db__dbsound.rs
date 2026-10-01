@@ -27,11 +27,13 @@ use ssbm_types::tu as statics;
 use crate::support::*;
 
 pub fn fn_SetupSoundInfo<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x18);
+    let __frame = ctx.stack_frame(0x20);
     let bg: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
     let fg: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
     bg.set_r((128_i32 as u8));
     bg.set_g((128_i32 as u8));
     bg.set_b((128_i32 as u8));
@@ -78,7 +80,10 @@ pub fn fn_SetupSoundInfo<'a>(ctx: &'a Ctx) {
                 ctx,
                 __ret_tmp,
                 statics::melee__db__dbsound::db_SoundInfoText(ctx).get(),
-                bg,
+                {
+                    Handle::copy_from(__arg, bg);
+                    __arg
+                },
             );
             __ret_tmp
         };
@@ -87,7 +92,10 @@ pub fn fn_SetupSoundInfo<'a>(ctx: &'a Ctx) {
                 ctx,
                 __ret_tmp_2,
                 statics::melee__db__dbsound::db_SoundInfoText(ctx).get(),
-                fg,
+                {
+                    Handle::copy_from(__arg_2, fg);
+                    __arg_2
+                },
             );
             __ret_tmp_2
         };

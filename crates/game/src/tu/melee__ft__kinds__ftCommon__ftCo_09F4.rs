@@ -72,6 +72,8 @@ pub fn ftCo_8009F5AC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let position: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
     let mut fp = fp;
     let mut data: ColorOverlay<'a> = fns::ftCo_800C0658(ctx, fp);
     if !((data).x7C_flag2() != 0) {
@@ -112,10 +114,16 @@ pub fn ftCo_8009F5AC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                 statics::melee__ft__kinds__ftCommon__ftCo_09F4::node0(ctx).color(),
             );
             color.set_a((data).x50_light_color().a());
-            fns::HSD_LObjSetColor(ctx, (fp).x588(), color);
+            fns::HSD_LObjSetColor(ctx, (fp).x588(), {
+                Handle::copy_from(__arg, color);
+                __arg
+            });
             fns::HSD_LObjSetFlags(ctx, (fp).x588(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
         } else {
-            fns::HSD_LObjSetColor(ctx, (fp).x588(), (data).x50_light_color());
+            fns::HSD_LObjSetColor(ctx, (fp).x588(), {
+                Handle::copy_from(__arg_2, (data).x50_light_color());
+                __arg_2
+            });
             fns::HSD_LObjClearFlags(ctx, (fp).x588(), ((shl_i32(1_i32, (4_i32 as u32))) as u32));
         }
         (fp).set_x2221_b3((0_i32 as u8));

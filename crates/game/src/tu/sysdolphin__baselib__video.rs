@@ -289,6 +289,7 @@ pub fn HSD_VIGetXFBDrawEnable<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn HSD_VICopyEFB2XFBPtr<'a>(ctx: &'a Ctx, vi: _HSD_VIStatus<'a>, buffer: Addr<'a>, rpass: i32) {
     let __frame = ctx.stack_frame(0x38);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut vi = vi;
     let mut buffer = buffer;
     let mut rpass = rpass;
@@ -312,7 +313,14 @@ pub fn HSD_VICopyEFB2XFBPtr<'a>(ctx: &'a Ctx, vi: _HSD_VIStatus<'a>, buffer: Add
         (enums::GX_LEQUAL as i32),
         ((1_i32 as u8) as i32),
     );
-    fns::GXSetCopyClear(ctx, (vi).clear_clr(), (vi).clear_z());
+    fns::GXSetCopyClear(
+        ctx,
+        {
+            Handle::copy_from(__arg, (vi).clear_clr());
+            __arg
+        },
+        (vi).clear_z(),
+    );
     's1: {
         let __case = match (rpass as u32) {
             0_u32 => 0,

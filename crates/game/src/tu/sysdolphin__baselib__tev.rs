@@ -62,6 +62,10 @@ pub fn HSD_ChanGetAllocData<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
 
 pub fn HSD_SetupChannel<'a>(ctx: &'a Ctx, ch: HSD_Chan<'a>) {
     let __frame = ctx.stack_frame(0x60);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __arg_4: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
     let mut ch = ch;
     let mut idx: i32 = 0;
     let mut chan: i32 = 0;
@@ -119,7 +123,10 @@ pub fn HSD_SetupChannel<'a>(ctx: &'a Ctx, ch: HSD_Chan<'a>) {
             }
             8 => {
                 fns::prev_amb_invalid(ctx).at(no).set(0_i32);
-                fns::GXSetChanAmbColor(ctx, no.wrapping_add(4_i32), (ch).amb_color());
+                fns::GXSetChanAmbColor(ctx, no.wrapping_add(4_i32), {
+                    Handle::copy_from(__arg, (ch).amb_color());
+                    __arg
+                });
                 Handle::copy_from(
                     statics::sysdolphin__baselib__tev::prev_ch(ctx)
                         .get(no)
@@ -188,7 +195,10 @@ pub fn HSD_SetupChannel<'a>(ctx: &'a Ctx, ch: HSD_Chan<'a>) {
                 unreachable!();
             }
             19 => {
-                fns::GXSetChanAmbColor(ctx, chan, (ch).amb_color());
+                fns::GXSetChanAmbColor(ctx, chan, {
+                    Handle::copy_from(__arg_2, (ch).amb_color());
+                    __arg_2
+                });
                 __state = 30;
             }
             20 => {
@@ -301,7 +311,10 @@ pub fn HSD_SetupChannel<'a>(ctx: &'a Ctx, ch: HSD_Chan<'a>) {
             }
             35 => {
                 fns::prev_mat_invalid(ctx).at(no).set(0_i32);
-                fns::GXSetChanMatColor(ctx, no.wrapping_add(4_i32), (ch).mat_color());
+                fns::GXSetChanMatColor(ctx, no.wrapping_add(4_i32), {
+                    Handle::copy_from(__arg_3, (ch).mat_color());
+                    __arg_3
+                });
                 Handle::copy_from(
                     statics::sysdolphin__baselib__tev::prev_ch(ctx)
                         .get(no)
@@ -370,7 +383,10 @@ pub fn HSD_SetupChannel<'a>(ctx: &'a Ctx, ch: HSD_Chan<'a>) {
                 unreachable!();
             }
             46 => {
-                fns::GXSetChanMatColor(ctx, chan, (ch).mat_color());
+                fns::GXSetChanMatColor(ctx, chan, {
+                    Handle::copy_from(__arg_4, (ch).mat_color());
+                    __arg_4
+                });
                 __state = 57;
             }
             47 => {
@@ -985,6 +1001,7 @@ pub fn HSD_TevStage2Num<'a>(ctx: &'a Ctx, stage: i32) -> i32 {
 
 pub fn HSD_SetTevRegAll<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
+    let __arg: _GXColorS10<'a> = frame_at(ctx, &__frame, 0x0);
     let mut i: u32 = 0;
     {
         i = (0_i32 as u32);
@@ -1025,13 +1042,15 @@ pub fn HSD_SetTevRegAll<'a>(ctx: &'a Ctx) {
                             break 's3;
                         }
                     }
-                    fns::GXSetTevColorS10(
-                        ctx,
-                        reg,
-                        statics::sysdolphin__baselib__tev::TevReg(ctx)
-                            .get((i as i32))
-                            .a(),
-                    );
+                    fns::GXSetTevColorS10(ctx, reg, {
+                        Handle::copy_from(
+                            __arg,
+                            statics::sysdolphin__baselib__tev::TevReg(ctx)
+                                .get((i as i32))
+                                .a(),
+                        );
+                        __arg
+                    });
                     statics::sysdolphin__baselib__tev::TevReg(ctx)
                         .get((i as i32))
                         .set_c(0_i32);

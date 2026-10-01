@@ -280,6 +280,7 @@ pub fn HSD_LObjGetLightVector<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, dir: Vec<'a>
 
 pub fn HSD_LObjSetup<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, color: _GXColor<'a>, shininess: f64) {
     let __frame = ctx.stack_frame(0x30);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut lobj = lobj;
     let mut shininess = shininess;
     let mut k0: f64 = shininess;
@@ -294,7 +295,10 @@ pub fn HSD_LObjSetup<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, color: _GXColor<'a>, 
             || (((lobj).hw_color().b() as i32) != (color.b() as i32)))
             || (((lobj).hw_color().a() as i32) != (color.a() as i32))
         {
-            fns::GXInitLightColor(ctx, (lobj).lightobj(), color);
+            fns::GXInitLightColor(ctx, (lobj).lightobj(), {
+                Handle::copy_from(__arg, color);
+                __arg
+            });
             Handle::copy_from((lobj).hw_color(), color);
             (lobj).set_flags(((((lobj).flags() as i32) | (shl_i32(1_i32, (7_i32 as u32)))) as u16));
         }
@@ -400,14 +404,18 @@ pub fn setup_spec_lightobj<'a>(
     spec_id: i32,
 ) {
     let __frame = ctx.stack_frame(0x40);
-    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x8);
     let mut lobj = lobj;
     let mut mtx = mtx;
     let mut spec_id = spec_id;
     let mut x: f64 = 0.0;
     (lobj).set_spec_id(spec_id);
     if spec_id != 0_i32 {
-        fns::GXInitLightColor(ctx, (lobj).spec_lightobj(), (lobj).color());
+        fns::GXInitLightColor(ctx, (lobj).spec_lightobj(), {
+            Handle::copy_from(__arg, (lobj).color());
+            __arg
+        });
         (lobj).set_shininess(50.0);
         x = {
             let __t1 = (lobj).shininess();
@@ -465,9 +473,13 @@ pub fn setup_spec_lightobj<'a>(
 pub fn setup_point_lightobj<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, mtx: ArrV<'a, F32, 4>) {
     let __frame = ctx.stack_frame(0x38);
     let lpos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut lobj = lobj;
     let mut mtx = mtx;
-    fns::GXInitLightColor(ctx, (lobj).lightobj(), (lobj).color());
+    fns::GXInitLightColor(ctx, (lobj).lightobj(), {
+        Handle::copy_from(__arg, (lobj).color());
+        __arg
+    });
     Handle::copy_from((lobj).hw_color(), (lobj).color());
     let _ = fns::HSD_LObjGetPosition(ctx, lobj, lpos);
     fns::PSMTXMultVec(ctx, mtx, lpos, lpos);
@@ -535,6 +547,8 @@ pub fn setup_spot_lightobj<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, mtx: ArrV<'a, F
 pub fn HSD_LObjSetupInit<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
     let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
     let mut cobj = cobj;
     let mut vmtx: ArrV<'a, F32, 4> = null(ctx);
     let mut i: i32 = 0;
@@ -632,7 +646,7 @@ pub fn HSD_LObjSetupInit<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
                         _ => 2,
                     };
                     if __case <= 0 {
-                        inl_setup_diffuse_lightobj_unfused(ctx, lobj);
+                        inl_setup_diffuse_lightobj_unfused(ctx, lobj, Handle::addr(__inl_2));
                         break 's5;
                     }
                     if __case <= 1 {
@@ -723,7 +737,15 @@ pub fn HSD_LObjSetupInit<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
                 )) {
                     return;
                 }
-                fns::HSD_LObjSetup(ctx, lobj_4, (lobj_4).color(), (lobj_4).shininess());
+                fns::HSD_LObjSetup(
+                    ctx,
+                    lobj_4,
+                    {
+                        Handle::copy_from(__arg, (lobj_4).color());
+                        __arg
+                    },
+                    (lobj_4).shininess(),
+                );
             }
             i = i.wrapping_add(1);
         }
@@ -1149,9 +1171,13 @@ pub fn HSD_LObjGetInterestWObj<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) -> HSD_WObj
 
 pub fn LObjLoad<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, ldesc: HSD_LightDesc<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut lobj = lobj;
     let mut ldesc = ldesc;
-    inl_HSD_LObjSetColor_unfused(ctx, lobj, (ldesc).color());
+    inl_HSD_LObjSetColor_unfused(ctx, lobj, {
+        Handle::copy_from(__arg, (ldesc).color());
+        __arg
+    });
     inl_HSD_LObjSetFlags_unfused(ctx, lobj, ((ldesc).flags() as u32));
     's1: {
         let __case = match (((ldesc).flags() as i32)
@@ -1530,10 +1556,14 @@ fn inl_setup_infinite_lightobj_unfused<'a>(
     }
 }
 
-fn inl_setup_diffuse_lightobj_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) {
+fn inl_setup_diffuse_lightobj_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, __in_caller: u32) {
+    let __arg: _GXColor<'a> = ptr(ctx, __in_caller + 0x0);
     let mut lobj = lobj;
     let mut unused: u32 = ((lobj).flags() as u32);
-    fns::GXInitLightColor(ctx, (lobj).lightobj(), (lobj).color());
+    fns::GXInitLightColor(ctx, (lobj).lightobj(), {
+        Handle::copy_from(__arg, (lobj).color());
+        __arg
+    });
     Handle::copy_from((lobj).hw_color(), (lobj).color());
     (lobj).set_flags(((((lobj).flags() as i32) | (shl_i32(1_i32, (7_i32 as u32)))) as u16));
     statics::sysdolphin__baselib__lobj::lightmask_diffuse(ctx)

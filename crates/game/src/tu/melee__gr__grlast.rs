@@ -653,6 +653,7 @@ pub fn grLast_8021B2E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
     let sp30: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
     let sp2C: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = null(ctx);
     let mut temp_f1: f64 = 0.0;
@@ -779,7 +780,15 @@ pub fn grLast_8021B2E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 }
                 tmp = fns::HSD_Randi(ctx, 60_i32);
                 tmp = tmp.wrapping_add(60_i32);
-                statics::melee__gr__grlast::grLast_8021C40C(ctx, gobj, sp30, fp::frsp(tmp as f64));
+                statics::melee__gr__grlast::grLast_8021C40C(
+                    ctx,
+                    gobj,
+                    {
+                        Handle::copy_from(__arg, sp30);
+                        __arg
+                    },
+                    fp::frsp(tmp as f64),
+                );
             }
             break 's2;
         }
@@ -948,6 +957,10 @@ pub fn grLast_8021B920<'a>(ctx: &'a Ctx, gobj_: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x70);
     let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x38);
     let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
+    let __arg_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj_ = gobj_;
     let mut arg1 = arg1;
     let mut gobj: HSD_GObj<'a> = gobj_;
@@ -1197,7 +1210,10 @@ pub fn grLast_8021B920<'a>(ctx: &'a Ctx, gobj_: HSD_GObj<'a>, arg1: i32) {
             statics::melee__gr__grlast::grLast_8021C40C(
                 ctx,
                 gobj,
-                statics::melee__gr__grlast::grNLa_804DBBD4(ctx),
+                {
+                    Handle::copy_from(__arg, statics::melee__gr__grlast::grNLa_804DBBD4(ctx));
+                    __arg
+                },
                 120.0,
             );
             fns::grAnime_801C7A94(
@@ -1248,7 +1264,10 @@ pub fn grLast_8021B920<'a>(ctx: &'a Ctx, gobj_: HSD_GObj<'a>, arg1: i32) {
             statics::melee__gr__grlast::grLast_8021C40C(
                 ctx,
                 gobj,
-                statics::melee__gr__grlast::grNLa_804DBBD8(ctx),
+                {
+                    Handle::copy_from(__arg_2, statics::melee__gr__grlast::grNLa_804DBBD8(ctx));
+                    __arg_2
+                },
                 120.0,
             );
             {
@@ -1273,7 +1292,10 @@ pub fn grLast_8021B920<'a>(ctx: &'a Ctx, gobj_: HSD_GObj<'a>, arg1: i32) {
             statics::melee__gr__grlast::grLast_8021C40C(
                 ctx,
                 gobj,
-                statics::melee__gr__grlast::grNLa_804DBBDC(ctx),
+                {
+                    Handle::copy_from(__arg_3, statics::melee__gr__grlast::grNLa_804DBBDC(ctx));
+                    __arg_3
+                },
                 60.0,
             );
             {
@@ -1333,7 +1355,10 @@ pub fn grLast_8021B920<'a>(ctx: &'a Ctx, gobj_: HSD_GObj<'a>, arg1: i32) {
             statics::melee__gr__grlast::grLast_8021C40C(
                 ctx,
                 gobj,
-                statics::melee__gr__grlast::grNLa_804DBBE0(ctx),
+                {
+                    Handle::copy_from(__arg_4, statics::melee__gr__grlast::grNLa_804DBBE0(ctx));
+                    __arg_4
+                },
                 60.0,
             );
             fns::grMaterial_801C9604(

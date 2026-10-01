@@ -2302,6 +2302,8 @@ pub fn HSD_TExpSetReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>) {
     let __frame = ctx.stack_frame(0x80);
     let reg: Arr<'a, _GXColor<'a>, 8> = frame_at(ctx, &__frame, 0x10);
     let col: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
     let mut texp = texp;
     let mut i: i32 = 0;
     let mut changed: u32 = 0;
@@ -2560,7 +2562,10 @@ pub fn HSD_TExpSetReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>) {
                         fns::GXSetTevKColor(
                             ctx,
                             statics::sysdolphin__baselib__texp::id1(ctx).at(i).get(),
-                            reg.get(i),
+                            {
+                                Handle::copy_from(__arg, reg.get(i));
+                                __arg
+                            },
                         );
                     }
                 }
@@ -2577,7 +2582,10 @@ pub fn HSD_TExpSetReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>) {
                             statics::sysdolphin__baselib__texp::id2(ctx)
                                 .at(i.wrapping_sub(4_i32))
                                 .get(),
-                            reg.get(i),
+                            {
+                                Handle::copy_from(__arg_2, reg.get(i));
+                                __arg_2
+                            },
                         );
                     }
                 }

@@ -800,6 +800,9 @@ pub fn MObjSetupTev<'a>(ctx: &'a Ctx, mobj: HSD_MObj<'a>, tobj: HSD_TObj<'a>, ar
 pub fn HSD_MObjSetup<'a>(ctx: &'a Ctx, mobj: HSD_MObj<'a>, rendermode: u32) {
     let __frame = ctx.stack_frame(0x30);
     let tobj: Ptr<'a, HSD_TObj<'a>> = frame_at(ctx, &__frame, 0x14);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
     let mut mobj = mobj;
     let mut rendermode = rendermode;
     let mut tail: Ptr<'a, HSD_TObj<'a>> = null(ctx);
@@ -807,9 +810,18 @@ pub fn HSD_MObjSetup<'a>(ctx: &'a Ctx, mobj: HSD_MObj<'a>, rendermode: u32) {
     rendermode = (mobj).rendermode();
     fns::HSD_SetMaterialColor(
         ctx,
-        ((mobj).mat()).ambient(),
-        ((mobj).mat()).diffuse(),
-        ((mobj).mat()).specular(),
+        {
+            Handle::copy_from(__arg, ((mobj).mat()).ambient());
+            __arg
+        },
+        {
+            Handle::copy_from(__arg_2, ((mobj).mat()).diffuse());
+            __arg_2
+        },
+        {
+            Handle::copy_from(__arg_3, ((mobj).mat()).specular());
+            __arg_3
+        },
         ((mobj).mat()).alpha(),
     );
     if ((rendermode & ((shl_i32(1_i32, (3_i32 as u32))) as u32)) != 0) {

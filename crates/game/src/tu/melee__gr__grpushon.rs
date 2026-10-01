@@ -354,6 +354,8 @@ pub fn grPushOn_80218888<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let dir: Vec<'a> = frame_at(ctx, &__frame, 0x34);
     let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
     let temp_pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut player: HSD_GObj<'a> = null(ctx);
     let mut gp: Ground<'a> = null(ctx);
@@ -547,8 +549,14 @@ pub fn grPushOn_80218888<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 );
             }
         }
-        fns::HSD_LObjSetColor(ctx, (gp).u().pushon().spot_light(), color);
-        inl_pad_stack(ctx, color);
+        fns::HSD_LObjSetColor(ctx, (gp).u().pushon().spot_light(), {
+            Handle::copy_from(__arg, color);
+            __arg
+        });
+        inl_pad_stack(ctx, {
+            Handle::copy_from(__arg_2, color);
+            __arg_2
+        });
         if fns::HSD_LObjGetPosition(
             ctx,
             (gp).u().pushon().lobjs().at(sorted.at(1_i32).get()).get(),
@@ -712,6 +720,7 @@ pub fn grPushOn_802190D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut cur: HSD_LObj<'a> = Handle::cast::<HSD_LObj<'a>>((gobj).hsd_obj());
     let mut scale: f64 = fns::Ground_801C0498(ctx);
@@ -745,8 +754,11 @@ pub fn grPushOn_802190D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 (((shl_i32(2_i32, (0_i32 as u32))) | (shl_i32(1_i32, (2_i32 as u32)))) as u16),
             );
             fns::HSD_LObjSetColor(ctx, lobj, {
-                inl_get_light_color_unfused(ctx, __ret_tmp, entry);
-                __ret_tmp
+                Handle::copy_from(__arg, {
+                    inl_get_light_color_unfused(ctx, __ret_tmp, entry);
+                    __ret_tmp
+                });
+                __arg
             });
             Handle::copy_from(pos, (entry).pos());
             pos.set_x(fp::fmuls(pos.x(), scale));

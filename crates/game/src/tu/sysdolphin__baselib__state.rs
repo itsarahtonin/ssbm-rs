@@ -28,6 +28,7 @@ use crate::support::*;
 
 pub fn HSD_SetupChannelMode<'a>(ctx: &'a Ctx, arg0: u32) {
     let __frame = ctx.stack_frame(0x30);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_r3: HSD_LObj<'a> = null(ctx);
     let mut temp_r3_2: HSD_LObj<'a> = null(ctx);
@@ -57,7 +58,15 @@ pub fn HSD_SetupChannelMode<'a>(ctx: &'a Ctx, arg0: u32) {
                         } else {
                             (temp_r3).shininess()
                         });
-                        fns::HSD_LObjSetup(ctx, temp_r3, (temp_r3).color(), var_f0);
+                        fns::HSD_LObjSetup(
+                            ctx,
+                            temp_r3,
+                            {
+                                Handle::copy_from(__arg, (temp_r3).color());
+                                __arg
+                            },
+                            var_f0,
+                        );
                     }
                 }
                 i = i.wrapping_add(1);

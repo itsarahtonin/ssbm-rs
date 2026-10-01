@@ -53,6 +53,9 @@ pub fn fn_80277D8C<'a>(ctx: &'a Ctx, mobj: HSD_MObj<'a>, rendermode_arg: u32, un
     let tobj2: Ptr<'a, HSD_TObj<'a>> = frame_at(ctx, &__frame, 0x9c);
     let sp38: HSD_TExp<'a> = frame_at(ctx, &__frame, 0x30);
     let pe_desc: HSD_PEDesc<'a> = frame_at(ctx, &__frame, 0x24);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
     let mut mobj = mobj;
     let mut rendermode_arg = rendermode_arg;
     let mut unused_arg = unused_arg;
@@ -67,9 +70,18 @@ pub fn fn_80277D8C<'a>(ctx: &'a Ctx, mobj: HSD_MObj<'a>, rendermode_arg: u32, un
     rendermode = (mobj).rendermode();
     fns::HSD_SetMaterialColor(
         ctx,
-        ((mobj).mat()).ambient(),
-        ((mobj).mat()).diffuse(),
-        ((mobj).mat()).specular(),
+        {
+            Handle::copy_from(__arg, ((mobj).mat()).ambient());
+            __arg
+        },
+        {
+            Handle::copy_from(__arg_2, ((mobj).mat()).diffuse());
+            __arg_2
+        },
+        {
+            Handle::copy_from(__arg_3, ((mobj).mat()).specular());
+            __arg_3
+        },
         ((mobj).mat()).alpha(),
     );
     if ((rendermode & (8_i32 as u32)) != 0) {

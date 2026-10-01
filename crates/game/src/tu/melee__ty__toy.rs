@@ -10773,12 +10773,15 @@ pub fn _Toy_80310B48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 }
 
 pub fn _Toy_803114E8<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0xa0);
+    let __frame = ctx.stack_frame(0xa8);
     let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x8c);
     let pad: ArrV<'a, i32, 32> = frame_at(ctx, &__frame, 0xc);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let __ret_tmp_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x90);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x94);
+    let __ret_tmp_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x98);
     let mut data: ToyParamEditor<'a> = null(ctx);
     let mut i: i32 = 0;
     fns::_Toy_sbss_804D6E5C(ctx).set(Handle::cast::<ToyParamEditor<'a>>(fns::HSD_MemAlloc(
@@ -10800,7 +10803,10 @@ pub fn _Toy_803114E8<'a>(ctx: &'a Ctx) {
         Handle::copy_from(color, statics::melee__ty__toy::_Toy_color_4080D060_0(ctx));
         inl_showDevText_unfused(ctx, gobj, fns::_Toy_sbss_804D6E98(ctx));
         let _ = {
-            fns::DevText_SetBGColor(ctx, __ret_tmp, fns::_Toy_sbss_804D6E98(ctx).get(), (color));
+            fns::DevText_SetBGColor(ctx, __ret_tmp, fns::_Toy_sbss_804D6E98(ctx).get(), {
+                Handle::copy_from(__arg, (color));
+                __arg
+            });
             __ret_tmp
         };
         fns::DevText_SetScale(ctx, fns::_Toy_sbss_804D6E98(ctx).get(), 12.0, 18.0);
@@ -10809,23 +10815,19 @@ pub fn _Toy_803114E8<'a>(ctx: &'a Ctx) {
         let _ =
             fns::DevText_StoreColorIndex(ctx, fns::_Toy_sbss_804D6E98(ctx).get(), (0_i32 as u8));
         let _ = {
-            fns::DevText_SetTextColor(
-                ctx,
-                __ret_tmp_2,
-                fns::_Toy_sbss_804D6E98(ctx).get(),
-                (statics::melee__ty__toy::_Toy_color_E2E2E2FF(ctx)),
-            );
+            fns::DevText_SetTextColor(ctx, __ret_tmp_2, fns::_Toy_sbss_804D6E98(ctx).get(), {
+                Handle::copy_from(__arg_2, (statics::melee__ty__toy::_Toy_color_E2E2E2FF(ctx)));
+                __arg_2
+            });
             __ret_tmp_2
         };
         let _ =
             fns::DevText_StoreColorIndex(ctx, fns::_Toy_sbss_804D6E98(ctx).get(), (1_i32 as u8));
         let _ = {
-            fns::DevText_SetTextColor(
-                ctx,
-                __ret_tmp_3,
-                fns::_Toy_sbss_804D6E98(ctx).get(),
-                (statics::melee__ty__toy::_Toy_color_FF8020FF(ctx)),
-            );
+            fns::DevText_SetTextColor(ctx, __ret_tmp_3, fns::_Toy_sbss_804D6E98(ctx).get(), {
+                Handle::copy_from(__arg_3, (statics::melee__ty__toy::_Toy_color_FF8020FF(ctx)));
+                __arg_3
+            });
             __ret_tmp_3
         };
         {
@@ -10920,7 +10922,8 @@ pub fn _Toy_80311788<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x80);
     let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x4c);
     let buf: ArrV<'a, i8, 72> = frame_at(ctx, &__frame, 0x4);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x50);
     let mut f31: f64 = 0.0;
     let mut f30: f64 = 0.0;
     let mut f29: f64 = 0.0;
@@ -10940,7 +10943,10 @@ pub fn _Toy_80311788<'a>(ctx: &'a Ctx) {
         Handle::copy_from(color, statics::melee__ty__toy::_Toy_color_40B0D060_1(ctx));
         inl_showDevText_unfused(ctx, gobj, fns::_Toy_sbss_804D6E9C(ctx));
         let _ = {
-            fns::DevText_SetBGColor(ctx, __ret_tmp, fns::_Toy_sbss_804D6E9C(ctx).get(), (color));
+            fns::DevText_SetBGColor(ctx, __ret_tmp, fns::_Toy_sbss_804D6E9C(ctx).get(), {
+                Handle::copy_from(__arg, (color));
+                __arg
+            });
             __ret_tmp
         };
         fns::DevText_SetScale(ctx, fns::_Toy_sbss_804D6E9C(ctx).get(), 12.0, 18.0);
