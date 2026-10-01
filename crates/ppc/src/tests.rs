@@ -157,6 +157,39 @@ fn notes_calls_that_break_the_calling_convention() {
 }
 
 #[test]
+fn mutated_checks_drop_calls_whose_original_fails() {
+    // f(p): q = *p; return q != 0 ? *q : p. The call's p points to 0, which mutated checks
+    // change: the original then fails reading memory, and the port another way.
+    const P: u32 = 0x8000_5000;
+    let ctx = machine(&[
+        0x8083_0000, // lwz r4, 0(r3)
+        0x2C04_0000, // cmpwi r4, 0
+        0x4182_0008, // beq +8
+        0x8064_0000, // lwz r3, 0(r4)
+        BLR,
+    ]);
+    ctx.write_u32(P, 0);
+    ctx.register_port(
+        CODE,
+        |ctx| {
+            let q = ctx.read_u32(ctx.regs.r(3));
+            if q != 0 {
+                assert!((0x8000_0000..0x8180_0000).contains(&q), "{q:#X} is no object");
+                ctx.regs.set_r(3, ctx.read_u32(q));
+            }
+        },
+        ssbm_rt::lockstep::Returns::Int,
+    );
+    ctx.set_mode(CODE, Mode::Lockstep);
+    ctx.lockstep.mutations.set(50);
+    ctx.lockstep.rng.set(1);
+    ctx.regs.set_r(3, P);
+    ctx.invoke(CODE);
+    assert_eq!(ctx.regs.r(3), P);
+    assert!(ctx.lockstep.mismatches.borrow().is_empty());
+}
+
+#[test]
 fn mutated_checks_leave_code_run_from_ram_as_it_is() {
     // `li r3, 5; blr` placed in RAM past the game's code, as playback places injected code,
     // and called with a pointer to itself, which mutated checks change bytes behind.

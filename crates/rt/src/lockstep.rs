@@ -518,11 +518,14 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     if wrote_code
         || broke_convention
         || original_panic.as_ref().is_some_and(|p| p.is::<Runaway>())
+        || (outermost && mutating && original_panic.is_some())
     {
         // A mutated call that runs on and on may never return on the port's side. One that
         // writes over code then runs what ports never read, and one that writes over a frame's
         // saved registers or return address then returns with what ports never saved: drop
-        // it.
+        // it. So with one whose original fails, through a bad pointer say: no call the game
+        // makes has its inputs, and where the port fails on them instead depends on the order
+        // of its loads, which ports needn't keep.
         ctx.mem.restore(&j1);
         ctx.regs.restore(&regs0);
         return drop_check(ctx, traced, enclosing, outermost);
