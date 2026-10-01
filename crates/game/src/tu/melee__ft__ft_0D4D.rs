@@ -269,12 +269,12 @@ pub fn ftCo_Rebirth_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         {
             let mut inv: f64 = fp::fdivs(1.0, fp::frsp((new_var).mv().co().common().x0() as f64));
             (new_var).self_vel().set_x(fp::fmuls(
-                (fp::fsubs((new_var).mv().co().common().x4().x(), cur_pos.x())),
                 inv,
+                (fp::fsubs((new_var).mv().co().common().x4().x(), cur_pos.x())),
             ));
             (new_var).self_vel().set_y(fp::fmuls(
-                (fp::fsubs((new_var).mv().co().common().x4().y(), cur_pos.y())),
                 inv,
+                (fp::fsubs((new_var).mv().co().common().x4().y(), cur_pos.y())),
             ));
         }
     } else {

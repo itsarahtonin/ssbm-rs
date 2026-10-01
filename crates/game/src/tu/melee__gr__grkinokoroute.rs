@@ -619,11 +619,11 @@ pub fn grKinokoRoute_80207C88<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         if inl_sqrtf(
             ctx,
             fp::fadds(
+                (fp::fmuls((diff.z()), (diff.z()))),
                 fp::fadds(
                     (fp::fmuls((diff.x()), (diff.x()))),
                     (fp::fmuls((diff.y()), (diff.y()))),
                 ),
-                (fp::fmuls((diff.z()), (diff.z()))),
             ),
         ) > 10.0
         {
@@ -1050,15 +1050,15 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;

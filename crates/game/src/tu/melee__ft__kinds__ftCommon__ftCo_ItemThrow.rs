@@ -980,7 +980,7 @@ pub fn ftCo_80095D5C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>) {
             ))
             .get();
         } else {
-            angle = (fp::fmuls(fp::frsp((int_angle) as f64), 0.01745329238474369));
+            angle = (fp::fmuls(0.01745329238474369, fp::frsp((int_angle) as f64)));
         }
         (fp).cmd_vars().at(0_i32).set((0_i32 as u32));
     } else {
@@ -1149,8 +1149,8 @@ pub fn ftCo_LightThrowDash_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             ctx,
             gobj,
             fp::fmuls(
-                (fp::fmuls((cd).x404(), (fp).co_attrs().ground_friction())),
                 (cd).x40C(),
+                (fp::fmuls((cd).x404(), (fp).co_attrs().ground_friction())),
             ),
             (fp).facing_dir(),
         );

@@ -218,8 +218,8 @@ pub fn it_802D472C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         dist = inl_sqrtf(
             ctx,
             fp::fadds(
-                fp::fadds(fp::fmuls(dir.x(), dir.x()), fp::fmuls(dir.y(), dir.y())),
                 fp::fmuls(dir.z(), dir.z()),
+                fp::fadds(fp::fmuls(dir.x(), dir.x()), fp::fmuls(dir.y(), dir.y())),
             ),
         );
         if dist > (attrs).x38() {
@@ -688,15 +688,15 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;

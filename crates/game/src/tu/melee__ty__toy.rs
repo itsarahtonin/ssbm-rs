@@ -11372,15 +11372,15 @@ pub fn _Toy_80309338<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: Vec<'a>) -> f64 {
         guess = fp::frsqrte(var_f1);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), var_f1, 3.0)),
+            (fp::fnmsub(var_f1, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), var_f1, 3.0)),
+            (fp::fnmsub(var_f1, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), var_f1, 3.0)),
+            (fp::fnmsub(var_f1, fp::fmul(guess, guess), 3.0)),
         );
         sp10 = fp::frsp((fp::fmul(var_f1, guess)));
         var_f1 = sp10;

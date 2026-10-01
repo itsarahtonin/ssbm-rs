@@ -68,7 +68,7 @@ pub fn it_80286088<'a>(ctx: &'a Ctx, parent_gobj: HSD_GObj<'a>) -> HSD_GObj<'a> 
                 (spawned_ip)
                     .xDD4_itemVar()
                     .r#box()
-                    .set_rot_vel_x(fp::frsp(fp::fmul((fp::fsubs(r, 0.5)), 0.03490658476948738)));
+                    .set_rot_vel_x(fp::frsp(fp::fmul(0.03490658476948738, (fp::fsubs(r, 0.5)))));
             }
             {
                 let mut r_2: f64 = fns::HSD_Randf(ctx);
@@ -76,8 +76,8 @@ pub fn it_80286088<'a>(ctx: &'a Ctx, parent_gobj: HSD_GObj<'a>) -> HSD_GObj<'a> 
                     .xDD4_itemVar()
                     .r#box()
                     .set_rot_vel_y(fp::frsp(fp::fmul(
-                        (fp::fsubs(r_2, 0.5)),
                         0.03490658476948738,
+                        (fp::fsubs(r_2, 0.5)),
                     )));
             }
             (spawned_ip).xDC8_word().flags().set_x19((0_i32 as u32));

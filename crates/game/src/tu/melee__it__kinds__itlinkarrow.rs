@@ -2551,12 +2551,12 @@ pub fn itLinkarrow_UnkMotion4_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
                 ((ip).xDD4_itemVar().linkarrow().x9C() as i32),
             );
             var_f32 = (fp::fmuls(
+                0.01745329238474369,
                 (fp::fmadds(
                     (Handle::add(temp_r3, 31_i32)).get(),
                     rand,
                     (Handle::add(temp_r3, 23_i32)).get(),
                 )),
-                0.01745329238474369,
             ));
             var_f31 = fp::fadds((ip).xDD4_itemVar().linkarrow().x94(), var_f32);
             break 's3;
@@ -2568,12 +2568,12 @@ pub fn itLinkarrow_UnkMotion4_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
                 ((ip).xDD4_itemVar().linkarrow().x9C() as i32),
             );
             var_f32 = (fp::fmuls(
+                0.01745329238474369,
                 (fp::fmadds(
                     (Handle::add(temp_r3, 31_i32)).get(),
                     rand,
                     (Handle::add(temp_r3, 23_i32)).get(),
                 )),
-                0.01745329238474369,
             ));
             var_f31 = fp::fsubs((ip).xDD4_itemVar().linkarrow().x94(), var_f32);
             break 's3;

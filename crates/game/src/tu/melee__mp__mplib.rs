@@ -2710,17 +2710,17 @@ pub fn mpLib_8004DD90_Floor<'a>(
     .y();
     if !Handle::is_null(y_out) {
         (y_out).set(fp::frsp(fp::fadd(
+            0.0001,
             fp::fsubs(
                 fp::fadds(
+                    y0,
                     fp::fdivs(
                         fp::fmuls((fp::fsubs(y1, y0)), (fp::fsubs(x, x0))),
                         (fp::fsubs(x1, x0)),
                     ),
-                    y0,
                 ),
                 y,
             ),
-            0.0001,
         )));
     }
     if !Handle::is_null(normal_out) {
@@ -2890,11 +2890,11 @@ pub fn mpLib_8004E090_Ceiling<'a>(
         (y_out).set(fp::frsp(fp::fsub(
             fp::fsubs(
                 fp::fadds(
+                    y0,
                     fp::fdivs(
                         fp::fmuls((fp::fsubs(y1, y0)), (fp::fsubs(x, x0))),
                         (fp::fsubs(x1, x0)),
                     ),
-                    y0,
                 ),
                 (vec).y(),
             ),
@@ -21481,20 +21481,20 @@ pub fn mpJointUpdateBounding<'a>(ctx: &'a Ctx, joint_id: i32) {
                         .bounding_min()
                         .set_x(fp::fsubs((vtx).pos().x(), 30.0));
                 }
-                if (joint).bounding_max().x() < fp::fadds((vtx).pos().x(), 30.0) {
+                if (joint).bounding_max().x() < fp::fadds(30.0, (vtx).pos().x()) {
                     (joint)
                         .bounding_max()
-                        .set_x(fp::fadds((vtx).pos().x(), 30.0));
+                        .set_x(fp::fadds(30.0, (vtx).pos().x()));
                 }
                 if (joint).bounding_min().y() > fp::fsubs((vtx).pos().y(), 30.0) {
                     (joint)
                         .bounding_min()
                         .set_y(fp::fsubs((vtx).pos().y(), 30.0));
                 }
-                if (joint).bounding_max().y() < fp::fadds((vtx).pos().y(), 30.0) {
+                if (joint).bounding_max().y() < fp::fadds(30.0, (vtx).pos().y()) {
                     (joint)
                         .bounding_max()
-                        .set_y(fp::fadds((vtx).pos().y(), 30.0));
+                        .set_y(fp::fadds(30.0, (vtx).pos().y()));
                 }
                 vtx = Handle::add(vtx, 1_i32);
             }

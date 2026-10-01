@@ -188,7 +188,7 @@ pub fn it_802AB58C<'a>(
                         .pkthunder()
                         .angles()
                         .at(i)
-                        .set((fp::fmuls(((attr).x8_PKTHUNDER_SPAWN_ANGLE()), 0.01745329238474369)));
+                        .set((fp::fmuls(0.01745329238474369, ((attr).x8_PKTHUNDER_SPAWN_ANGLE()))));
                 }
                 i = i.wrapping_add(1);
             }
@@ -302,7 +302,7 @@ pub fn it_802ABA4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .pkthunder()
                     .angles()
                     .at(i)
-                    .set((fp::fmuls(((attr).x8_PKTHUNDER_SPAWN_ANGLE()), 0.01745329238474369)));
+                    .set((fp::fmuls(0.01745329238474369, ((attr).x8_PKTHUNDER_SPAWN_ANGLE()))));
             }
             i = i.wrapping_add(1);
         }
@@ -450,8 +450,8 @@ pub fn itNesspkthunderball_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>)
                         .angles()
                         .at(0_i32)
                         .set(fp::fmadds(
-                            ((attr).x10_PKTHUNDER_TURN_RADIUS()),
                             0.01745329238474369,
+                            ((attr).x10_PKTHUNDER_TURN_RADIUS()),
                             (ip).xDD4_itemVar().pkthunder().angles().at(0_i32).get(),
                         ));
                 } else if cross.z() < 0.0 {
@@ -460,8 +460,8 @@ pub fn itNesspkthunderball_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>)
                         .angles()
                         .at(0_i32)
                         .set(fp::fnmsubs(
-                            ((attr).x10_PKTHUNDER_TURN_RADIUS()),
                             0.01745329238474369,
+                            ((attr).x10_PKTHUNDER_TURN_RADIUS()),
                             (ip).xDD4_itemVar().pkthunder().angles().at(0_i32).get(),
                         ));
                 }

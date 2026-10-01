@@ -384,11 +384,14 @@ pub fn grFourside_801F3B70<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::lb_8000B1CC(ctx, jobj, null::<Vec<'a>>(ctx), local18);
     if !Handle::is_null((gp).u().foursideUfo().xC()) {
         if {
-            let __t1 = fp::fadds(
-                fns::Stage_GetCamBoundsTopOffset(ctx),
-                (statics::melee__gr__grfourside::yakumono_param(ctx).get()).ufo_cs_offs(),
-            );
-            local18.y() <= __t1
+            let __t2 = {
+                let __t1 = fns::Stage_GetCamBoundsTopOffset(ctx);
+                fp::fadds(
+                    (statics::melee__gr__grfourside::yakumono_param(ctx).get()).ufo_cs_offs(),
+                    __t1,
+                )
+            };
+            local18.y() <= __t2
         } {
             if ((gp).u().foursideUfo().x3() as i32) == 0_i32 {
                 (gp).u().foursideUfo().set_x3((1_i32 as u8));

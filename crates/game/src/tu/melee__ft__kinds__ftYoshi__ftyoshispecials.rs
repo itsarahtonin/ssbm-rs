@@ -3420,8 +3420,8 @@ fn inl_ftYs_SpecialS_UpdateLoop1Rotation2<'a>(
             );
         }
         (angle).set(fp::frsp(fp::fmadd(
-            fp::fdivs(delta, total),
             3.141592653589793,
+            fp::fdivs(delta, total),
             (fp::fdiv(3.141592653589793, (2_i32 as f64))),
         )));
     } else {
@@ -3456,7 +3456,7 @@ fn inl_ftYs_SpecialS_UpdateLoop1Rotation2<'a>(
         (angle).set(fp::frsp(fp::fmadd(
             3.0,
             (fp::fdiv(3.141592653589793, (2_i32 as f64))),
-            fp::fmul(fp::fdivs(delta_2, total), 3.141592653589793),
+            fp::fmul(3.141592653589793, fp::fdivs(delta_2, total)),
         )));
     }
     'l1: while (angle).get() < 0.0 {

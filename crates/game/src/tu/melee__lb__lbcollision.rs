@@ -1579,11 +1579,11 @@ pub fn lbColl_800077A0<'a>(
         diff_ba.set_y(fp::fsubs((b).y(), (a).y()));
         diff_ba.set_z(fp::fsubs((b).z(), (a).z()));
         dot_diff_cb = fp::fadds(
+            fp::fmuls(diff_cb.z(), diff_cb.z()),
             fp::fadds(
                 fp::fmuls(diff_cb.x(), diff_cb.x()),
                 fp::fmuls(diff_cb.y(), diff_cb.y()),
             ),
-            fp::fmuls(diff_cb.z(), diff_cb.z()),
         );
         if (inl_approximatelyZero(ctx, dot_diff_cb) != 0) {
             scl = 0.0;
@@ -2562,11 +2562,11 @@ pub fn lbColl_80008FC8<'a>(
     var_f31 = inl_sqrtf(
         ctx,
         fp::fadds(
+            (fp::fmuls((sp38.z()), (sp38.z()))),
             fp::fadds(
                 (fp::fmuls((sp38.x()), (sp38.x()))),
                 (fp::fmuls((sp38.y()), (sp38.y()))),
             ),
-            (fp::fmuls((sp38.z()), (sp38.z()))),
         ),
     );
     if (inl_isSmall(ctx, var_f31) != 0)
@@ -2797,11 +2797,11 @@ pub fn lbColl_800096B4<'a>(
     var_f31 = inl_sqrtf(
         ctx,
         fp::fadds(
+            (fp::fmuls((sp3C.z()), (sp3C.z()))),
             fp::fadds(
                 (fp::fmuls((sp3C.x()), (sp3C.x()))),
                 (fp::fmuls((sp3C.y()), (sp3C.y()))),
             ),
-            (fp::fmuls((sp3C.z()), (sp3C.z()))),
         ),
     );
     if (inl_isSmall(ctx, var_f31) != 0)
@@ -3775,15 +3775,15 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;
@@ -3807,15 +3807,15 @@ fn inl_sqrtf_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         (y).set(fp::frsp((fp::fmul(x, guess))));
         return (y).get();

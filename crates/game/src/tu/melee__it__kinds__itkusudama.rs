@@ -2633,12 +2633,12 @@ fn inl_it_80289BE8_inline<'a>(
     (vel).set_x(fp::fmsubs(
         vel_scale,
         fns::HSD_Randf(ctx),
-        (fp::fmuls(vel_scale, 0.5)),
+        (fp::fmuls(0.5, vel_scale)),
     ));
     (vel).set_y(fp::fmsubs(
-        (fp::fmuls(vel_scale, 0.5)),
+        (fp::fmuls(0.5, vel_scale)),
         fns::HSD_Randf(ctx),
-        (fp::fmuls(vel_scale, 0.25)),
+        (fp::fmuls(0.25, vel_scale)),
     ));
     (vel).set_z(0.0);
 }

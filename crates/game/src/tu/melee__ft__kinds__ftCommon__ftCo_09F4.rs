@@ -81,7 +81,7 @@ pub fn ftCo_8009F5AC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     }
     if ((fp).x2221_b3() != 0) {
         {
-            let mut angle_yz: f64 = (fp::fmuls(((data).x78_light_rot_yz()), 0.01745329238474369));
+            let mut angle_yz: f64 = (fp::fmuls(0.01745329238474369, ((data).x78_light_rot_yz())));
             let mut angle_x: f64 = fp::frsp(fp::fdiv(
                 {
                     let __t1 = inl_HSD_JObjGetRotationY_unfused(
@@ -92,7 +92,7 @@ pub fn ftCo_8009F5AC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                         ))),
                     );
                     fp::fmuls(
-                        (fp::fmuls(((data).x74_light_rot_x()), 0.01745329238474369)),
+                        (fp::fmuls(0.01745329238474369, ((data).x74_light_rot_x()))),
                         __t1,
                     )
                 },

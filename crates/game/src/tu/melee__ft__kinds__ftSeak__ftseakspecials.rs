@@ -43,7 +43,7 @@ pub fn ftSk_SpecialS_80110490<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     if v2 < fp::frsp(0_i32 as f64) {
         v2 = fp::fadds(v2, fp::frsp(6.283185307179586));
     }
-    v3 = (fp::fmuls((v2), 57.295780181884766));
+    v3 = (fp::fmuls(57.295780181884766, (v2)));
     if v3 < fp::frsp(0_i32 as f64) {
         v3 = fp::frsp(0_i32 as f64);
     }
@@ -2021,15 +2021,15 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;

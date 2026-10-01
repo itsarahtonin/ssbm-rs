@@ -232,15 +232,15 @@ pub fn ft_80089B08<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 let mut guess: f64 = fp::frsqrte(line_len);
                 guess = fp::fmul(
                     fp::fmul(0.5, guess),
-                    (fp::fnmsub(fp::fmul(guess, guess), line_len, 3.0)),
+                    (fp::fnmsub(line_len, fp::fmul(guess, guess), 3.0)),
                 );
                 guess = fp::fmul(
                     fp::fmul(0.5, guess),
-                    (fp::fnmsub(fp::fmul(guess, guess), line_len, 3.0)),
+                    (fp::fnmsub(line_len, fp::fmul(guess, guess), 3.0)),
                 );
                 guess = fp::fmul(
                     fp::fmul(0.5, guess),
-                    (fp::fnmsub(fp::fmul(guess, guess), line_len, 3.0)),
+                    (fp::fnmsub(line_len, fp::fmul(guess, guess), 3.0)),
                 );
                 (Handle::add((Handle::cast::<Val<'a, F32>>(sp1C)), 1_i32.wrapping_neg()))
                     .set(fp::frsp((fp::fmul(line_len, guess))));

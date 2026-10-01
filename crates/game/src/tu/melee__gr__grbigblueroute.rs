@@ -4915,7 +4915,7 @@ pub fn grBigBlueRoute_8020DF80<'a>(ctx: &'a Ctx, a: Vec<'a>, arg: i32, joint: HS
     let mut arg = arg;
     let mut joint = joint;
     fns::lb_8000B1CC(ctx, joint, null::<Vec<'a>>(ctx), b);
-    if (a).y() > fp::fadds(b.y(), fp::fneg(3.0)) {
+    if (a).y() > fp::fadds(fp::fneg(3.0), b.y()) {
         return 1_i32;
     } else {
         return 0_i32;

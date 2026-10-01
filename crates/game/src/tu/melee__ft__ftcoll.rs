@@ -732,8 +732,8 @@ pub fn ftColl_80077688<'a>(
             if ((fp).x221B().x221B_b1() != 0) {
                 let mut cos_val: f64 = 0.0;
                 val = (fp::fmuls(
-                    ((fns::p_ftCommonData(ctx).get()).x2D0()),
                     0.01745329238474369,
+                    ((fns::p_ftCommonData(ctx).get()).x2D0()),
                 ));
                 (item).set_xC54(0.0);
                 cos_val = fns::cosf(ctx, val);
@@ -818,16 +818,16 @@ pub fn ftColl_80077970<'a>(
         }
     }
     midpoint.set_x(fp::fmuls(
-        (fp::fadds((hit1).hurt_coll_pos().x(), (hit2).hurt_coll_pos().x())),
         0.5,
+        (fp::fadds((hit1).hurt_coll_pos().x(), (hit2).hurt_coll_pos().x())),
     ));
     midpoint.set_y(fp::fmuls(
-        (fp::fadds((hit1).hurt_coll_pos().y(), (hit2).hurt_coll_pos().y())),
         0.5,
+        (fp::fadds((hit1).hurt_coll_pos().y(), (hit2).hurt_coll_pos().y())),
     ));
     midpoint.set_z(fp::fmuls(
-        (fp::fadds((hit1).hurt_coll_pos().z(), (hit2).hurt_coll_pos().z())),
         0.5,
+        (fp::fadds((hit1).hurt_coll_pos().z(), (hit2).hurt_coll_pos().z())),
     ));
     {
         let mut dmg_: f64 = (hit2).damage();

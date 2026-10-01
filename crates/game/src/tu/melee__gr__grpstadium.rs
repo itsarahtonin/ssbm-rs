@@ -1267,24 +1267,28 @@ pub fn grStadium_801D2A60<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     } else {
         'l1: loop {
             'c2: {
-                val = fp::fmuls(
-                    fns::HSD_Randf(ctx),
-                    fp::frsp(
-                        (((statics::melee__gr__grpstadium::yakumono_param(ctx).get()).x48() as i32)
-                            .wrapping_add(
-                                ((statics::melee__gr__grpstadium::yakumono_param(ctx).get()).x4A()
-                                    as i32),
-                            )
-                            .wrapping_add(
-                                ((statics::melee__gr__grpstadium::yakumono_param(ctx).get()).x4C()
-                                    as i32),
-                            )
-                            .wrapping_add(
-                                ((statics::melee__gr__grpstadium::yakumono_param(ctx).get()).x4E()
-                                    as i32),
-                            )) as f64,
-                    ),
-                );
+                val = {
+                    let __t1 = fns::HSD_Randf(ctx);
+                    fp::fmuls(
+                        fp::frsp(
+                            (((statics::melee__gr__grpstadium::yakumono_param(ctx).get()).x48()
+                                as i32)
+                                .wrapping_add(
+                                    ((statics::melee__gr__grpstadium::yakumono_param(ctx).get())
+                                        .x4A() as i32),
+                                )
+                                .wrapping_add(
+                                    ((statics::melee__gr__grpstadium::yakumono_param(ctx).get())
+                                        .x4C() as i32),
+                                )
+                                .wrapping_add(
+                                    ((statics::melee__gr__grpstadium::yakumono_param(ctx).get())
+                                        .x4E() as i32),
+                                )) as f64,
+                        ),
+                        __t1,
+                    )
+                };
                 val = fp::fsubs(
                     val,
                     fp::frsp(
@@ -1753,7 +1757,7 @@ pub fn grStadium_801D32D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                     sp1C.set_x((cobj).viewport().xmin());
                     var_r28 = 1_i32;
                 } else {
-                    if fp::fadds(sp1C.x(), 124.0) > (cobj).viewport().xmax() {
+                    if fp::fadds(124.0, sp1C.x()) > (cobj).viewport().xmax() {
                         var_r28 = 1_i32;
                         sp1C.set_x(fp::fsubs((cobj).viewport().xmax(), 124.0));
                     }
@@ -1763,7 +1767,7 @@ pub fn grStadium_801D32D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                     sp1C.set_y((cobj).viewport().ymin());
                     var_r28 = 1_i32;
                 } else {
-                    if fp::fadds(sp1C.y(), 80.0) > (cobj).viewport().ymax() {
+                    if fp::fadds(80.0, sp1C.y()) > (cobj).viewport().ymax() {
                         var_r28 = 1_i32;
                         sp1C.set_y(fp::fsubs((cobj).viewport().ymax(), 80.0));
                     }
@@ -2962,6 +2966,7 @@ pub fn grStadium_801D4548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 let mut tmp: f64 = 0.0;
                 jobj = Handle::cast::<HSD_JObj<'a>>(((gp).u().stadium().xE8()).hsd_obj());
                 tmp = fp::fadds(
+                    0.05000000074505806,
                     fp::fdivs(
                         fp::fmuls(0.949999988079071, fp::frsp(frame as f64)),
                         fp::frsp(
@@ -2969,7 +2974,6 @@ pub fn grStadium_801D4548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                 as f64,
                         ),
                     ),
-                    0.05000000074505806,
                 );
                 inl_HSD_JObjSetScaleY_2(ctx, jobj, tmp, scale);
                 frame1 = (gp).u().stadium().xD8();
@@ -3097,7 +3101,7 @@ pub fn grStadium_OnCheckShadowRender<'a>(
     let mut arg1 = arg1;
     let mut jobj = jobj;
     fns::lb_8000B1CC(ctx, jobj, null::<Vec<'a>>(ctx), sp14);
-    if fp::fadds((arg0).y(), 1.0) > sp14.y() {
+    if fp::fadds(1.0, (arg0).y()) > sp14.y() {
         return 1_i32;
     } else {
         return 0_i32;

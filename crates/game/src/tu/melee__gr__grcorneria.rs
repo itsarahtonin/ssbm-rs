@@ -1335,20 +1335,26 @@ pub fn grCorneria_801DEC94<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> i32 {
             return 1_i32;
         }
         if {
-            let __t2 = fp::fadds(fns::Stage_GetBlastZoneLeftOffset(ctx), 30.0);
-            (pos).x() < __t2
+            let __t3 = {
+                let __t2 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+                fp::fadds(30.0, __t2)
+            };
+            (pos).x() < __t3
         } {
             return 1_i32;
         }
         if {
-            let __t3 = fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), 30.0);
-            (pos).y() > __t3
+            let __t4 = fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), 30.0);
+            (pos).y() > __t4
         } {
             return 1_i32;
         }
         if {
-            let __t4 = fp::fadds(fns::Stage_GetBlastZoneBottomOffset(ctx), 30.0);
-            (pos).y() < __t4
+            let __t6 = {
+                let __t5 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+                fp::fadds(30.0, __t5)
+            };
+            (pos).y() < __t6
         } {
             return 1_i32;
         }
@@ -9081,14 +9087,14 @@ pub fn grCorneria_801E2FCC<'a>(ctx: &'a Ctx) -> f64 {
     if !Handle::is_null(gobj) {
         gp = Handle::cast::<Ground<'a>>((gobj).user_data());
         if !Handle::is_null(gp) {
-            return fp::fadds(
-                (fp::fmsubs(
-                    fns::Ground_801C0498(ctx),
+            return {
+                let __t2 = (fp::fmsubs(
                     fp::fneg(35.0),
+                    fns::Ground_801C0498(ctx),
                     (gp).u().corneria().xD0(),
-                )),
-                5.0,
-            );
+                ));
+                fp::fadds(5.0, __t2)
+            };
         }
     }
     return fp::fneg(3.4028234663852886e+38_f64);

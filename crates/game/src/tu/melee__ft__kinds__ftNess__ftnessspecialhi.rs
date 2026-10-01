@@ -1047,8 +1047,8 @@ pub fn ftNs_SpecialHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 if !(temp_f1_2 < fp::frsp((fp::fdiv(3.141592653589793, (2_i32 as f64))))) {
                     if !(temp_f1_2
                         > (fp::fmuls(
-                            (fp::fadds(90.0, (ness_attr).x60_PK_THUNDER_2_KNOCKDOWN_ANGLE())),
                             0.01745329238474369,
+                            (fp::fadds(90.0, (ness_attr).x60_PK_THUNDER_2_KNOCKDOWN_ANGLE())),
                         )))
                     {
                         {

@@ -44,8 +44,8 @@ pub fn ftCo_80099D9C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         let mut fp_x191C: f64 = (fp).dmg().x191C();
         (fp).mv().co().rebound().set_anim_speed(fp::fdivs(
             (fp::fadds(
-                (fp).co_attrs().clank_animation_length(),
                 0.10000000149011612,
+                (fp).co_attrs().clank_animation_length(),
             )),
             fp_x191C,
         ));

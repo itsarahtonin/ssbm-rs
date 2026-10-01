@@ -1225,16 +1225,17 @@ pub fn fn_8018A000<'a>(ctx: &'a Ctx) -> HSD_Text<'a> {
     } else {
         fns::HSD_SisLib_803A62A0(ctx, 0_i32, cstr(ctx, 0x803d9904), cstr(ctx, 0x803d98f0));
     }
-    let __t2 = fns::HSD_SisLib_803A5ACC(
+    let __t4 = fns::HSD_SisLib_803A5ACC(
         ctx,
         0_i32,
         0_i32,
         fp::fmadds(
             12.0,
-            (fp::fadds(
-                inl_HSD_JObjGetTranslationX(ctx, fns::gm_80473814(ctx).jobjs().at(1_i32).get()),
-                9.798828125,
-            )),
+            ({
+                let __t3 =
+                    inl_HSD_JObjGetTranslationX(ctx, fns::gm_80473814(ctx).jobjs().at(1_i32).get());
+                fp::fadds(9.798828125, __t3)
+            }),
             50.0,
         ),
         150.0,
@@ -1247,7 +1248,7 @@ pub fn fn_8018A000<'a>(ctx: &'a Ctx) -> HSD_Text<'a> {
         text_ptr = __t1;
         __t1
     })
-    .set(__t2);
+    .set(__t4);
     text = (text_ptr).get();
     let _ = fns::lbLang_IsSettingUS(ctx);
     fns::HSD_SisLib_803A6368(

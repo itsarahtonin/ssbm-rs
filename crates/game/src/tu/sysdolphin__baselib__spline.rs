@@ -2931,14 +2931,14 @@ fn inl_splGetBSplinePoint<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, u: f64) {
     let mut u3: f64 = fp::fmuls(u2, u);
     let mut u_1: f64 = fp::fsubs(1.0, u);
     let mut k1_6: f64 = (fp::fdivs(1.0, 6.0));
-    let mut b0: f64 = fp::fmuls(fp::fmuls(fp::fmuls(k1_6, u_1), u_1), u_1);
+    let mut b0: f64 = fp::fmuls(u_1, fp::fmuls(u_1, fp::fmuls(k1_6, u_1)));
     let mut b1: f64 = fp::fmuls(
         k1_6,
         (fp::fadds(4.0, (fp::fmsubs(3.0, u3, fp::fmuls(6.0, u2))))),
     );
     let mut b2: f64 = fp::fmuls(
         k1_6,
-        (fp::fmadds(3.0, (fp::fadds(fp::fadds(fp::fneg(u3), u2), u)), 1.0)),
+        (fp::fmadds(3.0, (fp::fadds(u, fp::fadds(fp::fneg(u3), u2))), 1.0)),
     );
     let mut b3: f64 = fp::fmuls(k1_6, u3);
     (p).set_x(fp::fmadds(
@@ -2991,12 +2991,12 @@ fn inl_splGetCardinalPoint<'a>(ctx: &'a Ctx, p: Vec<'a>, cp: Vec<'a>, tension: f
     let mut u3: f64 = fp::fmuls(u2, u);
     let mut car0: f64 = fp::fmuls(tension, (fp::fsubs(fp::fmadds(2.0, u2, fp::fneg(u3)), u)));
     let mut car1: f64 = fp::fadds(
+        1.0,
         fp::fmadds(
             (fp::fsubs(2.0, tension)),
             u3,
             (fp::fmuls((fp::fsubs(tension, 3.0)), u2)),
         ),
-        1.0,
     );
     let mut car2: f64 = fp::fmadds(
         tension,

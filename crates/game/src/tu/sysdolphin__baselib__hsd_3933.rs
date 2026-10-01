@@ -549,8 +549,8 @@ pub fn hsd_80393A5C<'a>(ctx: &'a Ctx, filename: Val<'a, i8>, data: Addr<'a>, siz
     );
     {
         let __t2 = VarArg::Float(fp::fmuls(
-            fp::fdivs(fp::fmuls(8.0, fp::frsp(size as f64)), elapsed),
             inl_kbps_scale_unfused(ctx),
+            fp::fdivs(fp::fmuls(8.0, fp::frsp(size as f64)), elapsed),
         ));
         fns::OSReport(
             ctx,

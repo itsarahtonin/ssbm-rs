@@ -2020,8 +2020,8 @@ pub fn it_802DB074<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     (ip).set_facing_dir(fp::frsp((ip).xDD4_itemVar().likelike().x3C() as f64));
     (ip).x40_vel().set_x(fp::fmuls(
-        fp::fmuls((ip).facing_dir(), ((attr).x0().x0_f32()).y()),
         2.0,
+        fp::fmuls((ip).facing_dir(), ((attr).x0().x0_f32()).y()),
     ));
     (ip).xDD4_itemVar().likelike().set_x4C(30_i32);
     fns::Item_80268E5C(ctx, gobj, 8_i32, (enums::ITEM_ANIM_UPDATE as i32));

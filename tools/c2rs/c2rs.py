@@ -2313,6 +2313,14 @@ class Translator:
             fused = self.try_fuse_binary(op, a, b, t)
             if fused is not None:
                 return fused
+        if op in ("+", "*") and is_float(t) and self.commuted(a, b):
+            va, vb = self.convert(va, t), self.convert(vb, t)
+            if va.pure:
+                return self.arith_op(op, vb, va, t)
+            # The left side still goes first.
+            tmp = self.f.temp()
+            res = self.arith_op(op, vb, Expr(tmp, t, True), t)
+            return Expr("{ " + f"let {tmp} = {va.code}; {res.code}" + " }", t, False)
         return self.arith_op(op, self.convert(va, t), self.convert(vb, t), t)
 
     def enum_type(self, node):
@@ -2419,7 +2427,13 @@ class Translator:
         a, c = children(n)
         if self.is_square(a, c):
             return None
-        return self.convert(self.expr(a), t), self.convert(self.expr(c), t), False
+        ea, ec = self.convert(self.expr(a), t), self.convert(self.expr(c), t)
+        if self.commuted(a, c):
+            # The left factor still goes first: a call in it may change what the right reads.
+            if not ea.pure and (not ec.pure or self.reads_memory(c)):
+                raise Unsupported(SWAPPED_CALL)
+            return ec, ea, False
+        return ea, ec, False
 
     def is_square(self, a, c):
         """Whether a product squares a value MWCC loads or computes, `v->x * v->x` or
@@ -2477,37 +2491,57 @@ class Translator:
 
     CALL_WEIGHT = 1000
 
-    def weight(self, node):
+    def weight(self, node, depth=0):
         """Registers MWCC's code generator reckons an expression needs, as in Sethi-Ullman
         numbering: of two operands it computes the heavier one first. Constants weigh
         nothing, and a side with a call goes first."""
         n = strip(node)
         k = n.kind
-        if k in (CK.INTEGER_LITERAL, CK.FLOATING_LITERAL, CK.CHARACTER_LITERAL):
+        if k in (CK.INTEGER_LITERAL, CK.FLOATING_LITERAL, CK.CHARACTER_LITERAL) or \
+                is_constant(n) or self.folded_constant(n):
             return 0
         if k == CK.DECL_REF_EXPR:
             r = n.referenced
             return 0 if r is not None and r.kind in (CK.ENUM_CONSTANT_DECL, CK.FUNCTION_DECL) else 1
         if k in (CK.MEMBER_REF_EXPR, CK.ARRAY_SUBSCRIPT_EXPR):
-            inner = max((self.weight(x) for x in children(n)), default=0)
+            inner = max((self.weight(x, depth) for x in children(n)), default=0)
             return inner if inner >= self.CALL_WEIGHT else 1
         if k == CK.CSTYLE_CAST_EXPR:
-            return self.weight(children(n)[-1])
+            return self.weight(children(n)[-1], depth)
         if k == CK.UNARY_OPERATOR:
             op = UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(n))
-            w = self.weight(children(n)[0])
+            w = self.weight(children(n)[0], depth)
             return max(w, 1) if op in ("*", "&") else w
         if k == CK.BINARY_OPERATOR or k == CK.CONDITIONAL_OPERATOR:
-            ws = [self.weight(x) for x in children(n)[-2:]]
+            ws = [self.weight(x, depth) for x in children(n)[-2:]]
             return ws[0] + 1 if ws[0] == ws[1] else max(ws)
         if k == CK.CALL_EXPR:
             callee = strip(children(n)[0]) if children(n) else None
             ref = callee.referenced if callee is not None and callee.kind == CK.DECL_REF_EXPR else None
             if ref is not None and ref.kind == CK.FUNCTION_DECL and ref.get_definition() is not None \
                     and self.inlined_in_original(ref.spelling, ref):
-                return 1
+                # An inline call weighs what it returns, its parameters as variables.
+                ret = returned_expr(ref.get_definition())
+                return 1 if ret is None or depth > 8 else self.weight(ret, depth + 1)
             return self.CALL_WEIGHT
         return 1
+
+    def folded_constant(self, n):
+        """Whether n names a header constant MWCC folds into its uses."""
+        if n.kind != CK.DECL_REF_EXPR or n.referenced is None:
+            return False
+        r = n.referenced
+        if r.kind != CK.VAR_DECL or vkey(r) in self.f.locals or \
+                self.u.prog.global_(r.spelling, self.u.name) is not None:
+            return False
+        return evaluate(n) is not None or (r.type.is_const_qualified() and var_init(r) is not None
+                                           and evaluate(var_init(r)) is not None)
+
+    def commuted(self, left, right):
+        """Whether MWCC swaps the operands of a float add or multiply: it puts the heavier one
+        second. Which operand comes first decides the NaN of a result whose operands are both
+        NaN, and a single-precision multiply rounds its second operand."""
+        return self.weight(left) > self.weight(right)
 
     def is_plain_product(self, node, t):
         """Whether product(node, t) would find a product to contract, without translating."""
@@ -2710,6 +2744,8 @@ class Translator:
             if fwd is not None and i in fwd:
                 pname, (fa, fc, neg) = fwd[i]
                 na, nc = product_factors(nodes[i])
+                if na is not None and self.commuted(na, nc):
+                    na, nc = nc, na
                 if nc is None or calls_or_effects(nc):
                     fc = self.first(fc, self.call_pre)
                 if na is None or calls_or_effects(na):
@@ -3585,6 +3621,15 @@ def calls_or_effects(node):
     return any(n.kind == CK.CALL_EXPR for n in node.walk_preorder()) or has_effects(node)
 
 
+def returned_expr(defn):
+    """The expression a function whose body is just `return expr;` returns, else None."""
+    body = [x for x in children(defn) if x.kind == CK.COMPOUND_STMT]
+    stmts = children(body[0]) if body else []
+    if len(stmts) != 1 or stmts[0].kind != CK.RETURN_STMT or not children(stmts[0]):
+        return None
+    return children(stmts[0])[0]
+
+
 def product_factors(node):
     """The factors of a product, or of a negated one, as C expressions: (None, None) otherwise."""
     n = strip(node)
@@ -3852,8 +3897,11 @@ def bare_return(cursor):
     return kinds == {False}
 
 
+# A product whose factors MWCC swaps, the left one with a call that the right one's loads must
+# follow, which the translation's argument order can't keep.
+SWAPPED_CALL = "a product whose factors MWCC swaps around a call"
 # What makes a function's C untranslatable where its machine code is the source to port.
-MACHINE_CODE_REASONS = ("MWCC-only code", "inline asm")
+MACHINE_CODE_REASONS = ("MWCC-only code", "inline asm", SWAPPED_CALL)
 
 # C functions ported from their machine code anyway, and why.
 FROM_MACHINE_CODE = {

@@ -4225,8 +4225,8 @@ fn inl_product_xyz<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> f64 {
     let mut a = a;
     let mut b = b;
     return (fp::fadds(
-        fp::fadds(fp::fmuls((a).x(), (b).x()), fp::fmuls((a).y(), (b).y())),
         fp::fmuls((a).z(), (b).z()),
+        fp::fadds(fp::fmuls((a).x(), (b).x()), fp::fmuls((a).y(), (b).y())),
     ));
 }
 
@@ -4237,15 +4237,15 @@ fn inl_itzako_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;

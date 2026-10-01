@@ -719,8 +719,8 @@ pub fn lb_8000C490<'a>(
         (fp::fsubs(quat1.w(), quat2.w())),
         (fp::fsubs(quat1.w(), quat2.w())),
     ));
-    sum_square_sums = fp::fadds(fp::fadds(fp::fadds(sx, sy), sz), sw);
-    sum_square_diffs = fp::fadds(fp::fadds(fp::fadds(dx, dy), dz), dw);
+    sum_square_sums = fp::fadds(sw, fp::fadds(sz, fp::fadds(sx, sy)));
+    sum_square_diffs = fp::fadds(dw, fp::fadds(dz, fp::fadds(dx, dy)));
     if sum_square_diffs > sum_square_sums {
         quat2.set_x(fp::fneg(quat2.x()));
         quat2.set_y(fp::fneg(quat2.y()));
@@ -908,8 +908,8 @@ pub fn lb_8000C868<'a>(
             (fp::fsubs(spA4.w(), sp94.w())),
         )),
     );
-    if fp::fadds(fp::fadds(fp::fadds(dif.x(), dif.y()), dif.z()), dif.w())
-        > fp::fadds(fp::fadds(fp::fadds(sum.x(), sum.y()), sum.z()), sum.w())
+    if fp::fadds(dif.w(), fp::fadds(dif.z(), fp::fadds(dif.x(), dif.y())))
+        > fp::fadds(sum.w(), fp::fadds(sum.z(), fp::fadds(sum.x(), sum.y())))
     {
         sp94.set_x(fp::fneg(sp94.x()));
         sp94.set_y(fp::fneg(sp94.y()));

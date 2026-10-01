@@ -686,7 +686,7 @@ fn inl_ftKb_NsSpecialNStart_Anim_inline<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, fl
             flash_pos,
         );
         (flash_pos).set_z(fp::frsp(0_i32 as f64));
-        (flash_pos).set_y(fp::fmadds((fp).x34_scale().y(), 3.0, (flash_pos).y()));
+        (flash_pos).set_y(fp::fmadds(3.0, (fp).x34_scale().y(), (flash_pos).y()));
         {
             let mut flash_gobj: HSD_GObj<'a> = fns::it_802AA8C0(
                 ctx,

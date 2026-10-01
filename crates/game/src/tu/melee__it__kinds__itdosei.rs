@@ -1091,8 +1091,8 @@ fn inl_itDosei_FacingAngle<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, m: f64) -> f64 
     let mut facing_dir: f64 =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj))).facing_dir();
     let mut angle: f64 = fp::frsp(fp::fmadd(
-        facing_dir,
         (fp::fdiv(3.141592653589793, (2_i32 as f64))),
+        facing_dir,
         (fp::fmuls(facing_dir, m)),
     ));
     return angle;

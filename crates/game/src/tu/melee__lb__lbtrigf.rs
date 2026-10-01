@@ -83,15 +83,15 @@ pub fn acosf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         guess = fp::frsp(fp::frsqrte(result));
         guess = fp::fmuls(
             fp::fmuls(0.5, guess),
-            (fp::fnmsubs(fp::fmuls(guess, guess), result, 3.0)),
+            (fp::fnmsubs(result, fp::fmuls(guess, guess), 3.0)),
         );
         guess = fp::fmuls(
             fp::fmuls(0.5, guess),
-            (fp::fnmsubs(fp::fmuls(guess, guess), result, 3.0)),
+            (fp::fnmsubs(result, fp::fmuls(guess, guess), 3.0)),
         );
         guess = fp::fmuls(
             fp::fmuls(0.5, guess),
-            (fp::fnmsubs(fp::fmuls(guess, guess), result, 3.0)),
+            (fp::fnmsubs(result, fp::fmuls(guess, guess), 3.0)),
         );
         result = guess;
     } else if (result != 0.0) {
@@ -124,15 +124,15 @@ pub fn lb_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         guess = fp::frsp(fp::frsqrte(x));
         guess = fp::fmuls(
             fp::fmuls(0.5, guess),
-            (fp::fnmsubs(fp::fmuls(guess, guess), x, 3.0)),
+            (fp::fnmsubs(x, fp::fmuls(guess, guess), 3.0)),
         );
         guess = fp::fmuls(
             fp::fmuls(0.5, guess),
-            (fp::fnmsubs(fp::fmuls(guess, guess), x, 3.0)),
+            (fp::fnmsubs(x, fp::fmuls(guess, guess), 3.0)),
         );
         guess = fp::fmuls(
             fp::fmuls(0.5, guess),
-            (fp::fnmsubs(fp::fmuls(guess, guess), x, 3.0)),
+            (fp::fnmsubs(x, fp::fmuls(guess, guess), 3.0)),
         );
         return guess;
     }

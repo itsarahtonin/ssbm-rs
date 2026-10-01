@@ -148,8 +148,8 @@ pub fn ft_8007C2E0<'a>(
             );
             if fp::fmuls((fp0).pos_delta().x(), (fp1).pos_delta().x()) >= fp::frsp(0_i32 as f64) {
                 (fp1).x98_atk_shield_kb().set_x(fp::fmadds(
-                    (fp::fsubs((fp0).pos_delta().x(), (fp1).pos_delta().x())),
                     weight_ratio,
+                    (fp::fsubs((fp0).pos_delta().x(), (fp1).pos_delta().x())),
                     (fp1).x98_atk_shield_kb().x(),
                 ));
             } else {
@@ -161,8 +161,8 @@ pub fn ft_8007C2E0<'a>(
             }
             if fp::fmuls((fp0).pos_delta().y(), (fp1).pos_delta().y()) >= fp::frsp(0_i32 as f64) {
                 (fp1).x98_atk_shield_kb().set_y(fp::fmadds(
-                    (fp::fsubs((fp0).pos_delta().y(), (fp1).pos_delta().y())),
                     weight_ratio,
+                    (fp::fsubs((fp0).pos_delta().y(), (fp1).pos_delta().y())),
                     (fp1).x98_atk_shield_kb().y(),
                 ));
             } else {
@@ -188,8 +188,8 @@ pub fn ft_8007C2E0<'a>(
             );
             if fp::fmuls((fp0).pos_delta().x(), (fp1).pos_delta().x()) >= fp::frsp(0_i32 as f64) {
                 (fp0).x98_atk_shield_kb().set_x(fp::fmadds(
-                    (fp::fsubs((fp1).pos_delta().x(), (fp0).pos_delta().x())),
                     weight_ratio_2,
+                    (fp::fsubs((fp1).pos_delta().x(), (fp0).pos_delta().x())),
                     (fp0).x98_atk_shield_kb().x(),
                 ));
             } else {
@@ -201,8 +201,8 @@ pub fn ft_8007C2E0<'a>(
             }
             if fp::fmuls((fp0).pos_delta().y(), (fp1).pos_delta().y()) >= fp::frsp(0_i32 as f64) {
                 (fp0).x98_atk_shield_kb().set_y(fp::fmadds(
-                    (fp::fsubs((fp1).pos_delta().y(), (fp0).pos_delta().y())),
                     weight_ratio_2,
+                    (fp::fsubs((fp1).pos_delta().y(), (fp0).pos_delta().y())),
                     (fp0).x98_atk_shield_kb().y(),
                 ));
             } else {

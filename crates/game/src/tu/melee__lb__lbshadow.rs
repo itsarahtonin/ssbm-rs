@@ -1875,15 +1875,15 @@ fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64, __in_caller: u32) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(fns::lbShadow_804D7B78(ctx).get(), guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, fns::lbShadow_804D7B80(ctx).get())),
+            (fp::fnmsub(x, fp::fmul(guess, guess), fns::lbShadow_804D7B80(ctx).get())),
         );
         guess = fp::fmul(
             fp::fmul(fns::lbShadow_804D7B78(ctx).get(), guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, fns::lbShadow_804D7B80(ctx).get())),
+            (fp::fnmsub(x, fp::fmul(guess, guess), fns::lbShadow_804D7B80(ctx).get())),
         );
         guess = fp::fmul(
             fp::fmul(fns::lbShadow_804D7B78(ctx).get(), guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, fns::lbShadow_804D7B80(ctx).get())),
+            (fp::fnmsub(x, fp::fmul(guess, guess), fns::lbShadow_804D7B80(ctx).get())),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;

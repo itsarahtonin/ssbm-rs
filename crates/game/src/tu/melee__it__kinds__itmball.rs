@@ -168,8 +168,8 @@ pub fn itMball_EnteredAir<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::Item_80268E5C(ctx, gobj, 4_i32, (enums::ITEM_ANIM_UPDATE as i32));
     (ip).set_facing_dir(
         (if (fp::fadds(
-            fp::fadds((ip).x40_vel().x(), (ip).x7C().x()),
             (ip).x88().x(),
+            fp::fadds((ip).x40_vel().x(), (ip).x7C().x()),
         )) >= 0.0
         {
             1.0

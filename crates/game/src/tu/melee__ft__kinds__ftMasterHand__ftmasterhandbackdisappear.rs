@@ -387,15 +387,15 @@ fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;
@@ -408,11 +408,11 @@ fn inl_my_lbVector_Len<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     return inl_my_sqrtf(
         ctx,
         fp::fadds(
+            fp::fmuls((vec).z(), (vec).z()),
             fp::fadds(
                 fp::fmuls((vec).x(), (vec).x()),
                 fp::fmuls((vec).y(), (vec).y()),
             ),
-            fp::fmuls((vec).z(), (vec).z()),
         ),
     );
 }

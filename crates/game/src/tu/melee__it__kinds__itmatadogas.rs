@@ -237,11 +237,11 @@ pub fn it_802CB4F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, kind: i32, radius: f64)
     spawn.set_x3C_damage((0_i32 as i16));
     spawn.vel().set_x(fp::fmuls(
         radius,
-        fns::cosf(ctx, (fp::fmuls((rand), 0.01745329238474369))),
+        fns::cosf(ctx, (fp::fmuls(0.01745329238474369, (rand)))),
     ));
     spawn.vel().set_y(fp::fmuls(
         radius,
-        fns::sinf(ctx, (fp::fmuls((rand), 0.01745329238474369))),
+        fns::sinf(ctx, (fp::fmuls(0.01745329238474369, (rand)))),
     ));
     spawn.vel().set_z(0.0);
     spawn.set_kind(kind);

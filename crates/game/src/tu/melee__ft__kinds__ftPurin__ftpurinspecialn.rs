@@ -452,7 +452,7 @@ pub fn ftPr_SpecialNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).set_cur_anim_frame(fp::frsp(0_i32 as f64));
         fns::ftAnim_SetAnimRate(ctx, gobj, fp::frsp(0_i32 as f64));
         (fp).set_gr_vel({
-            let __t1 = fp::fmuls((fp).facing_dir(), 9.999999747378752e-05_f64);
+            let __t1 = fp::fmuls(9.999999747378752e-05_f64, (fp).facing_dir());
             (fp).self_vel().set_x(__t1);
             __t1
         });
@@ -505,7 +505,7 @@ pub fn ftPr_SpecialNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).mv().pr().specialn().x34().x(),
         (fp::fmuls(
             fp::frsp((fp).mv().pr().specialn().x2C() as f64),
-            (fp::fmuls(((da).xAC()), 0.01745329238474369)),
+            (fp::fmuls(0.01745329238474369, ((da).xAC()))),
         )),
         (fp).mv().pr().specialn().x14(),
     ));
@@ -540,7 +540,7 @@ pub fn ftPr_SpecialNFull_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).mv().pr().specialn().x34().x(),
         (fp::fmuls(
             fp::frsp((fp).mv().pr().specialn().x2C() as f64),
-            (fp::fmuls(((da).xAC()), 0.01745329238474369)),
+            (fp::fmuls(0.01745329238474369, ((da).xAC()))),
         )),
         (fp).mv().pr().specialn().x14(),
     ));
@@ -578,8 +578,8 @@ pub fn ftPr_SpecialNRelease_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         let mut old_angle: f64 = (fp).mv().pr().specialn().x14();
         let mut delta: f64 = fp::fmuls(
             (fp::fmuls(
-                fp::frsp(((fp).mv().pr().specialn().x2C()) as f64),
                 0.01745329238474369,
+                fp::frsp(((fp).mv().pr().specialn().x2C()) as f64),
             )),
             fp::frsp(
                 (fp::fmul(
@@ -1658,7 +1658,7 @@ pub fn ftPr_SpecialAirNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).set_cur_anim_frame(fp::frsp(0_i32 as f64));
         fns::ftAnim_SetAnimRate(ctx, gobj, fp::frsp(0_i32 as f64));
         (fp).self_vel()
-            .set_x(fp::fmuls((fp).facing_dir(), 9.999999747378752e-05_f64));
+            .set_x(fp::fmuls(9.999999747378752e-05_f64, (fp).facing_dir()));
         (fp).x74_self_accel().set_x(fp::frsp(0_i32 as f64));
         fns::ftPartSetRotY(
             ctx,
@@ -1704,7 +1704,7 @@ pub fn ftPr_SpecialAirNChargeLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).mv().pr().specialn().x34().x(),
         (fp::fmuls(
             fp::frsp((fp).mv().pr().specialn().x2C() as f64),
-            (fp::fmuls(((da).xAC()), 0.01745329238474369)),
+            (fp::fmuls(0.01745329238474369, ((da).xAC()))),
         )),
         (fp).mv().pr().specialn().x14(),
     ));
@@ -1739,7 +1739,7 @@ pub fn ftPr_SpecialAirNChargeFull_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).mv().pr().specialn().x34().x(),
         (fp::fmuls(
             fp::frsp((fp).mv().pr().specialn().x2C() as f64),
-            (fp::fmuls(((da).xAC()), 0.01745329238474369)),
+            (fp::fmuls(0.01745329238474369, ((da).xAC()))),
         )),
         (fp).mv().pr().specialn().x14(),
     ));
@@ -2241,7 +2241,7 @@ pub fn ftPr_SpecialNStart_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).set_xE4_ground_accel_1(fp::frsp(0_i32 as f64));
     (fp).set_gr_vel(fp::frsp(0_i32 as f64));
     (fp).self_vel()
-        .set_x(fp::fmuls((fp).facing_dir(), 9.999999747378752e-05_f64));
+        .set_x(fp::fmuls(9.999999747378752e-05_f64, (fp).facing_dir()));
     (fp).self_vel().set_y(fp::frsp(0_i32 as f64));
     (fp).x74_self_accel().set_y(fp::frsp(0_i32 as f64));
     (fp).x74_self_accel().set_x(fp::frsp(0_i32 as f64));
@@ -3606,7 +3606,7 @@ fn inl_ftPr_SpecialNStart_Phys_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).set_xE4_ground_accel_1(fp::frsp(0_i32 as f64));
     (fp).set_gr_vel(fp::frsp(0_i32 as f64));
     (fp).self_vel()
-        .set_x(fp::fmuls((fp).facing_dir(), 9.999999747378752e-05_f64));
+        .set_x(fp::fmuls(9.999999747378752e-05_f64, (fp).facing_dir()));
     (fp).self_vel().set_y(fp::frsp(0_i32 as f64));
     (fp).x74_self_accel().set_y(fp::frsp(0_i32 as f64));
     (fp).x74_self_accel().set_x(fp::frsp(0_i32 as f64));

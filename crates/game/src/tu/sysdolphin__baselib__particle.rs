@@ -1890,7 +1890,12 @@ pub fn hsd_80398F8C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, angle: f64) {
         magnitude = fp::frsp((fp::fmul(vx, x)));
         vx = magnitude;
     }
-    rand_angle = fp::frsp((fp::fmul(fp::fmul(3.141592653589793, fns::HSD_Randf(ctx)), 2.0)));
+    rand_angle = fp::frsp(
+        ({
+            let __t1 = fp::fmul(3.141592653589793, fns::HSD_Randf(ctx));
+            fp::fmul(2.0, __t1)
+        }),
+    );
     angle_copy = angle;
     sin_angle = fp::fmuls(vx, fns::sinf(ctx, angle_copy));
     cos_rand = fp::fmuls(sin_angle, fns::cosf(ctx, rand_angle));
@@ -3154,11 +3159,11 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 .get());
                 base_speed = fp::fmadds(random_range, fns::HSD_Randf(ctx), base_speed);
                 mag = fp::fadds(
+                    fp::fmuls((pp).vel().z(), (pp).vel().z()),
                     fp::fadds(
                         fp::fmuls((pp).vel().x(), (pp).vel().x()),
                         fp::fmuls((pp).vel().y(), (pp).vel().y()),
                     ),
-                    fp::fmuls((pp).vel().z(), (pp).vel().z()),
                 );
                 __state = if mag > 0.0 { 593 } else { 594 };
             }
@@ -4826,6 +4831,7 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 mtx = (srt_5).mmtx().get(0);
                 fns::HSD_MtxSRT(ctx, mtx, scale_2, rot, translate, null::<Vec<'a>>(ctx));
                 (pp).pos().set_x(fp::fadds(
+                    ((pp).appsrt()).mmtx().get(0_i32).at(3_i32).get(),
                     fp::fmadds(
                         ((pp).appsrt()).mmtx().get(0_i32).at(2_i32).get(),
                         (pp).pos().z(),
@@ -4838,9 +4844,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                             ),
                         ),
                     ),
-                    ((pp).appsrt()).mmtx().get(0_i32).at(3_i32).get(),
                 ));
                 (pp).pos().set_y(fp::fadds(
+                    ((pp).appsrt()).mmtx().get(1_i32).at(3_i32).get(),
                     fp::fmadds(
                         ((pp).appsrt()).mmtx().get(1_i32).at(2_i32).get(),
                         (pp).pos().z(),
@@ -4853,9 +4859,9 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                             ),
                         ),
                     ),
-                    ((pp).appsrt()).mmtx().get(1_i32).at(3_i32).get(),
                 ));
                 (pp).pos().set_z(fp::fadds(
+                    ((pp).appsrt()).mmtx().get(2_i32).at(3_i32).get(),
                     fp::fmadds(
                         ((pp).appsrt()).mmtx().get(2_i32).at(2_i32).get(),
                         (pp).pos().z(),
@@ -4868,7 +4874,6 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                             ),
                         ),
                     ),
-                    ((pp).appsrt()).mmtx().get(2_i32).at(3_i32).get(),
                 ));
                 let _ = fns::psRemoveParticleAppSRT(ctx, pp);
                 __state = 141;
@@ -5067,15 +5072,15 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 guess = fp::frsqrte(vel_mag_sq);
                 guess = fp::fmul(
                     fp::fmul(0.5, guess),
-                    (fp::fnmsub(fp::fmul(guess, guess), vel_mag_sq, 3.0)),
+                    (fp::fnmsub(vel_mag_sq, fp::fmul(guess, guess), 3.0)),
                 );
                 guess = fp::fmul(
                     fp::fmul(0.5, guess),
-                    (fp::fnmsub(fp::fmul(guess, guess), vel_mag_sq, 3.0)),
+                    (fp::fnmsub(vel_mag_sq, fp::fmul(guess, guess), 3.0)),
                 );
                 guess = fp::fmul(
                     fp::fmul(0.5, guess),
-                    (fp::fnmsub(fp::fmul(guess, guess), vel_mag_sq, 3.0)),
+                    (fp::fnmsub(vel_mag_sq, fp::fmul(guess, guess), 3.0)),
                 );
                 vel_res = fp::frsp((fp::fmul(vel_mag_sq, guess)));
                 vel_mag_sq = vel_res;
@@ -5113,15 +5118,15 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 guess_2 = fp::frsqrte(dist_sq);
                 guess_2 = fp::fmul(
                     fp::fmul(0.5, guess_2),
-                    (fp::fnmsub(fp::fmul(guess_2, guess_2), dist_sq, 3.0)),
+                    (fp::fnmsub(dist_sq, fp::fmul(guess_2, guess_2), 3.0)),
                 );
                 guess_2 = fp::fmul(
                     fp::fmul(0.5, guess_2),
-                    (fp::fnmsub(fp::fmul(guess_2, guess_2), dist_sq, 3.0)),
+                    (fp::fnmsub(dist_sq, fp::fmul(guess_2, guess_2), 3.0)),
                 );
                 guess_2 = fp::fmul(
                     fp::fmul(0.5, guess_2),
-                    (fp::fnmsub(fp::fmul(guess_2, guess_2), dist_sq, 3.0)),
+                    (fp::fnmsub(dist_sq, fp::fmul(guess_2, guess_2), 3.0)),
                 );
                 dist_res = fp::frsp((fp::fmul(dist_sq, guess_2)));
                 dist_sq = dist_res;
@@ -5921,15 +5926,15 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 guess_3 = fp::frsqrte(mag);
                 guess_3 = fp::fmul(
                     fp::fmul(0.5, guess_3),
-                    (fp::fnmsub(fp::fmul(guess_3, guess_3), mag, 3.0)),
+                    (fp::fnmsub(mag, fp::fmul(guess_3, guess_3), 3.0)),
                 );
                 guess_3 = fp::fmul(
                     fp::fmul(0.5, guess_3),
-                    (fp::fnmsub(fp::fmul(guess_3, guess_3), mag, 3.0)),
+                    (fp::fnmsub(mag, fp::fmul(guess_3, guess_3), 3.0)),
                 );
                 guess_3 = fp::fmul(
                     fp::fmul(0.5, guess_3),
-                    (fp::fnmsub(fp::fmul(guess_3, guess_3), mag, 3.0)),
+                    (fp::fnmsub(mag, fp::fmul(guess_3, guess_3), 3.0)),
                 );
                 sqrt_res = fp::frsp((fp::fmul(mag, guess_3)));
                 mag = sqrt_res;

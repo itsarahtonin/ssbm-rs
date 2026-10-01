@@ -1026,7 +1026,7 @@ pub fn it_802E9494<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fall_speed = ((ip).xCC_item_attr()).x10_fall_speed();
     if (ip).x40_vel().y() <= fall_speed {
         (ip).x40_vel()
-            .set_y(fp::fadds(fall_speed, 0.10000000149011612));
+            .set_y(fp::fadds(0.10000000149011612, fall_speed));
     }
     (ip).xDD4_itemVar().leadead().set_x44(1_i32);
     (ip).set_facing_dir((ip).init_facing_dir());

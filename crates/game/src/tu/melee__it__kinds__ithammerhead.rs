@@ -54,8 +54,8 @@ pub fn it_80299C48<'a>(
         fns::it_80299D7C(ctx, gobj);
         (it).set_facing_dir(facing_dir);
         (it).x40_vel().set_x(fp::fmuls(
-            fp::fmuls((velocity).x(), (attrs).initial_velocity()),
             (it).facing_dir(),
+            fp::fmuls((velocity).x(), (attrs).initial_velocity()),
         ));
         (it).x40_vel()
             .set_y(fp::fmadds((velocity).y(), (attrs).initial_velocity(), 0.5));

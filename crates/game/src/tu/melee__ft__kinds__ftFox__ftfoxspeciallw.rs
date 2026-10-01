@@ -518,11 +518,11 @@ pub fn ftFx_SpecialLw_Turn<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fp,
         0_i32,
         fp::fnmsubs(
+            0.01745329238474369,
             (fp::fdivs(
                 fp::frsp(180_i32 as f64),
                 (da).x9C_FOX_REFLECTOR_TURN_FRAMES(),
             )),
-            0.01745329238474369,
             fns::ftPartGetRotZ(ctx, fp, 0_i32),
         ),
     );
@@ -1139,11 +1139,11 @@ fn inl_ftFx_SpecialLw_Turn<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fp,
         0_i32,
         fp::fnmsubs(
+            0.01745329238474369,
             (fp::fdivs(
                 fp::frsp(180_i32 as f64),
                 (da).x9C_FOX_REFLECTOR_TURN_FRAMES(),
             )),
-            0.01745329238474369,
             fns::ftPartGetRotZ(ctx, fp, 0_i32),
         ),
     );

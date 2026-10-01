@@ -56,7 +56,7 @@ pub fn sinf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     {
         fp::fctiwz((fp::fsubs(z, 0.5)))
     } else {
-        fp::fctiwz((fp::fadds(z, 0.5)))
+        fp::fctiwz((fp::fadds(0.5, z)))
     });
     y = fp::fmadds(
         fns::__four_over_pi_m1(ctx).at(3_i32).get(),
@@ -79,13 +79,13 @@ pub fn sinf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     if fns::fabsf__Ff(ctx, y) < 0.0003452669770922512 {
         n = shl_i32(n, (1_i32 as u32));
         return fp::fmadds(
+            ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(9_i32).get(),
             fp::fmuls(
                 ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9358)
                     .at(n.wrapping_add(1_i32))
                     .get(),
                 y,
             ),
-            ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(9_i32).get(),
             ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9358).at(n).get(),
         );
     }
@@ -93,44 +93,44 @@ pub fn sinf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     if ((n & 1_i32) != 0) {
         n = shl_i32(n, (1_i32 as u32));
         z = fp::fmadds(
+            ysq,
             (fp::fmadds(
+                ysq,
                 (fp::fmadds(
+                    ysq,
                     (fp::fmadds(
                         ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(0_i32).get(),
                         ysq,
                         ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(2_i32).get(),
                     )),
-                    ysq,
                     ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(4_i32).get(),
                 )),
-                ysq,
                 ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(6_i32).get(),
             )),
-            ysq,
             ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(8_i32).get(),
         );
         return fp::fmuls(z, ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9358).at(n).get());
     } else {
         n = shl_i32(n, (1_i32 as u32));
         z = fp::fmuls(
+            y,
             (fp::fmadds(
+                ysq,
                 (fp::fmadds(
+                    ysq,
                     (fp::fmadds(
+                        ysq,
                         (fp::fmadds(
                             ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(1_i32).get(),
                             ysq,
                             ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(3_i32).get(),
                         )),
-                        ysq,
                         ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(5_i32).get(),
                     )),
-                    ysq,
                     ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(7_i32).get(),
                 )),
-                ysq,
                 ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(9_i32).get(),
             )),
-            y,
         );
         return fp::fmuls(
             z,
@@ -158,7 +158,7 @@ pub fn cosf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     {
         fp::fctiwz((fp::fsubs(z, 0.5)))
     } else {
-        fp::fctiwz((fp::fadds(z, 0.5)))
+        fp::fctiwz((fp::fadds(0.5, z)))
     });
     y = fp::fmadds(
         fns::__four_over_pi_m1(ctx).at(3_i32).get(),
@@ -192,43 +192,43 @@ pub fn cosf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
     if ((n & 1_i32) != 0) {
         n = shl_i32(n, (1_i32 as u32));
         z = fp::fmuls(
+            y,
             fp::fnmadds(
+                ysq,
                 (fp::fmadds(
+                    ysq,
                     (fp::fmadds(
+                        ysq,
                         (fp::fmadds(
                             ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(1_i32).get(),
                             ysq,
                             ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(3_i32).get(),
                         )),
-                        ysq,
                         ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(5_i32).get(),
                     )),
-                    ysq,
                     ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(7_i32).get(),
                 )),
-                ysq,
                 ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(9_i32).get(),
             ),
-            y,
         );
         return fp::fmuls(z, ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9358).at(n).get());
     } else {
         n = shl_i32(n, (1_i32 as u32));
         z = fp::fmadds(
+            ysq,
             (fp::fmadds(
+                ysq,
                 (fp::fmadds(
+                    ysq,
                     (fp::fmadds(
                         ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(0_i32).get(),
                         ysq,
                         ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(2_i32).get(),
                     )),
-                    ysq,
                     ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(4_i32).get(),
                 )),
-                ysq,
                 ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(6_i32).get(),
             )),
-            ysq,
             ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(8_i32).get(),
         );
         return fp::fmuls(

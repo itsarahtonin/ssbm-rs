@@ -4938,8 +4938,8 @@ pub fn grKongo_801D6AFC<'a>(ctx: &'a Ctx) {
                             .get(i_4)
                             .unk10(),
                         (fp::fmuls(
-                            ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unk98()),
                             0.01745329238474369,
+                            ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unk98()),
                         )),
                         statics::melee__gr__grkongo::grKg_803E188C(ctx)
                             .get(i_4)
@@ -4972,8 +4972,8 @@ pub fn grKongo_801D6AFC<'a>(ctx: &'a Ctx) {
                             .get(i_5)
                             .unkC(),
                         (fp::fmuls(
-                            ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unk90()),
                             0.01745329238474369,
+                            ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unk90()),
                         )),
                         statics::melee__gr__grkongo::grKg_803E188C(ctx)
                             .get(i_5)
@@ -5028,8 +5028,8 @@ pub fn grKongo_801D6AFC<'a>(ctx: &'a Ctx) {
                                     .unkC(),
                             );
                             let mut limit: f64 = (fp::fmuls(
-                                ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unk9C()),
                                 0.01745329238474369,
+                                ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unk9C()),
                             ));
                             if input > limit {
                                 sp8.at(i_7).set(fp::fmadds(
@@ -5062,8 +5062,8 @@ pub fn grKongo_801D6AFC<'a>(ctx: &'a Ctx) {
                                     .unkC(),
                             );
                             let mut limit_2: f64 = (fp::fmuls(
-                                ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unk9C()),
                                 0.01745329238474369,
+                                ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unk9C()),
                             ));
                             if input_2 > limit_2 {
                                 sp8.at(i_7).set(fp::fmadds(
@@ -5163,12 +5163,12 @@ pub fn grKongo_801D7134<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
         (fp::fsubs(
             fp::fdivs(
                 (fp::fmuls(
-                    ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unkA8()),
                     0.01745329238474369,
+                    ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unkA8()),
                 )),
                 (fp::fmuls(
-                    ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unk90()),
                     0.01745329238474369,
+                    ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unk90()),
                 )),
             ),
             1.0,
@@ -5183,8 +5183,8 @@ pub fn grKongo_801D7134<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     } else {
         (fp::fsubs(angle, old_angle))
     }) > (fp::fmuls(
-        ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unkB0()),
         0.01745329238474369,
+        ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unkB0()),
     )) {
         (gp).u()
             .kongo()
@@ -5197,12 +5197,12 @@ pub fn grKongo_801D7134<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
         (fp::fsubs(
             (fp::fdivs(
                 (fp::fmuls(
-                    ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unkA8()),
                     0.01745329238474369,
+                    ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unkA8()),
                 )),
                 (fp::fmuls(
-                    ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unk90()),
                     0.01745329238474369,
+                    ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unk90()),
                 )),
             )),
             1.0,
@@ -5217,8 +5217,8 @@ pub fn grKongo_801D7134<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     } else {
         (fp::fsubs(angle, old_angle))
     }) > (fp::fmuls(
-        ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unkB0()),
         0.01745329238474369,
+        ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unkB0()),
     )) {
         (gp).u()
             .kongo()
@@ -6478,7 +6478,7 @@ pub fn grKongo_801D8078<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_GObj<'a> {
                     dy2 = fp::fmuls(dy, dy);
                     dz2 = fp::fmuls(dz, dz);
                     r = (statics::melee__gr__grkongo::yakumono_param(ctx).get()).unk28();
-                    if fp::fadds(fp::fadds(dx2, dy2), dz2) < fp::fmuls(r, r) {
+                    if fp::fadds(dz2, fp::fadds(dx2, dy2)) < fp::fmuls(r, r) {
                         return cur;
                     }
                 }
@@ -6504,6 +6504,10 @@ pub fn fn_801D8134<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>) -> 
         let _ = fns::Ground_801C4DA0(ctx, pos_gnd, unk);
         fns::ftLib_GetPos(ctx, arg1, pos_ft);
         if fp::fadds(
+            fp::fmuls(
+                (fp::fsubs(pos_gnd.z(), pos_ft.z())),
+                (fp::fsubs(pos_gnd.z(), pos_ft.z())),
+            ),
             fp::fadds(
                 fp::fmuls(
                     (fp::fsubs(pos_gnd.x(), pos_ft.x())),
@@ -6513,10 +6517,6 @@ pub fn fn_801D8134<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>) -> 
                     (fp::fsubs(pos_gnd.y(), pos_ft.y())),
                     (fp::fsubs(pos_gnd.y(), pos_ft.y())),
                 ),
-            ),
-            fp::fmuls(
-                (fp::fsubs(pos_gnd.z(), pos_ft.z())),
-                (fp::fsubs(pos_gnd.z(), pos_ft.z())),
             ),
         ) < fp::fmuls(
             (statics::melee__gr__grkongo::yakumono_param(ctx).get()).unk28(),
@@ -6927,7 +6927,7 @@ fn inl_rad_compare_b<'a>(ctx: &'a Ctx, a: f64, b: f64, ret: Val<'a, F32>) {
     let mut a = a;
     let mut b = b;
     let mut ret = ret;
-    let mut limit: f64 = (fp::fmuls((b), 0.01745329238474369));
+    let mut limit: f64 = (fp::fmuls(0.01745329238474369, (b)));
     if a > limit {
         b = fp::fneg(limit);
     } else if a < fp::fneg(limit) {
@@ -6976,26 +6976,26 @@ fn inl_grKongo_calc_angle_unfused<'a>(ctx: &'a Ctx, index: i32) -> f64 {
     );
     if angle
         > (fp::fmuls(
-            ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unkAC()),
             0.01745329238474369,
+            ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unkAC()),
         ))
     {
         angle = (fp::fmuls(
-            ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unkAC()),
             0.01745329238474369,
+            ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unkAC()),
         ));
     } else if angle
         < fp::fneg(
             (fp::fmuls(
-                ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unkAC()),
                 0.01745329238474369,
+                ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unkAC()),
             )),
         )
     {
         angle = fp::fneg(
             (fp::fmuls(
-                ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unkAC()),
                 0.01745329238474369,
+                ((statics::melee__gr__grkongo::yakumono_param(ctx).get()).unkAC()),
             )),
         );
     }

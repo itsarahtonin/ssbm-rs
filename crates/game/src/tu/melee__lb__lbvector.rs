@@ -1370,12 +1370,12 @@ pub fn lbVector_Mirror<'a>(ctx: &'a Ctx, a: Vec<'a>, unit_mirror_axis: Vec<'a>) 
     let mut a = a;
     let mut unit_mirror_axis = unit_mirror_axis;
     let mut f: f64 = fp::fmuls(
+        fp::fneg(2.0),
         (fp::fmadds(
             (unit_mirror_axis).x(),
             (a).x(),
             fp::fmuls((unit_mirror_axis).y(), (a).y()),
         )),
-        fp::fneg(2.0),
     );
     (a).set_x(fp::fmadds((unit_mirror_axis).x(), f, (a).x()));
     (a).set_y(fp::fmadds((unit_mirror_axis).y(), f, (a).y()));
@@ -1431,67 +1431,67 @@ pub fn lbVector_8000DE38<'a>(ctx: &'a Ctx, points: Vec<'a>, v: Vec<'a>, c: f64) 
         c = 0.0;
     }
     var1 = fp::fmadds(
-        (Handle::add(points, 2_i32)).x(),
         2.0,
+        (Handle::add(points, 2_i32)).x(),
         fp::fmsubs(
-            (Handle::add(points, 0_i32)).x(),
             2.0,
-            fp::fmuls((Handle::add(points, 1_i32)).x(), 4.0),
+            (Handle::add(points, 0_i32)).x(),
+            fp::fmuls(4.0, (Handle::add(points, 1_i32)).x()),
         ),
     );
     var2 = fp::fsubs(
         fp::fmadds(
-            (Handle::add(points, 0_i32)).x(),
             fp::fneg(3.0),
-            fp::fmuls((Handle::add(points, 1_i32)).x(), 4.0),
+            (Handle::add(points, 0_i32)).x(),
+            fp::fmuls(4.0, (Handle::add(points, 1_i32)).x()),
         ),
         (Handle::add(points, 2_i32)).x(),
     );
     (v).set_x(fp::fadds(
         (Handle::add(points, 0_i32)).x(),
-        (fp::fmadds(fp::fmuls(var1, c), c, fp::fmuls(var2, c))),
+        (fp::fmadds(c, fp::fmuls(var1, c), fp::fmuls(var2, c))),
     ));
     var1 = fp::fmadds(
-        (Handle::add(points, 2_i32)).y(),
         2.0,
+        (Handle::add(points, 2_i32)).y(),
         fp::fmsubs(
-            (Handle::add(points, 0_i32)).y(),
             2.0,
-            fp::fmuls((Handle::add(points, 1_i32)).y(), 4.0),
+            (Handle::add(points, 0_i32)).y(),
+            fp::fmuls(4.0, (Handle::add(points, 1_i32)).y()),
         ),
     );
     var2 = fp::fsubs(
         fp::fmadds(
-            (Handle::add(points, 0_i32)).y(),
             fp::fneg(3.0),
-            fp::fmuls((Handle::add(points, 1_i32)).y(), 4.0),
+            (Handle::add(points, 0_i32)).y(),
+            fp::fmuls(4.0, (Handle::add(points, 1_i32)).y()),
         ),
         (Handle::add(points, 2_i32)).y(),
     );
     (v).set_y(fp::fadds(
         (Handle::add(points, 0_i32)).y(),
-        (fp::fmadds(fp::fmuls(var1, c), c, fp::fmuls(var2, c))),
+        (fp::fmadds(c, fp::fmuls(var1, c), fp::fmuls(var2, c))),
     ));
     var1 = fp::fmadds(
-        (Handle::add(points, 2_i32)).z(),
         2.0,
+        (Handle::add(points, 2_i32)).z(),
         fp::fmsubs(
-            (Handle::add(points, 0_i32)).z(),
             2.0,
-            fp::fmuls((Handle::add(points, 1_i32)).z(), 4.0),
+            (Handle::add(points, 0_i32)).z(),
+            fp::fmuls(4.0, (Handle::add(points, 1_i32)).z()),
         ),
     );
     var2 = fp::fsubs(
         fp::fmadds(
-            (Handle::add(points, 0_i32)).z(),
             fp::fneg(3.0),
-            fp::fmuls((Handle::add(points, 1_i32)).z(), 4.0),
+            (Handle::add(points, 0_i32)).z(),
+            fp::fmuls(4.0, (Handle::add(points, 1_i32)).z()),
         ),
         (Handle::add(points, 2_i32)).z(),
     );
     (v).set_z(fp::fadds(
         (Handle::add(points, 0_i32)).z(),
-        (fp::fmadds(fp::fmuls(var1, c), c, fp::fmuls(var2, c))),
+        (fp::fmadds(c, fp::fmuls(var1, c), fp::fmuls(var2, c))),
     ));
     return v;
 }
@@ -1802,6 +1802,7 @@ pub fn lbVector_WorldToScreen<'a>(
         mvMtx = fns::HSD_CObjGetViewingMtxPtr(ctx, cobj);
     }
     f1 = fp::fadds(
+        (Handle::add(mvMtx, 2_i32)).at(3_i32).get(),
         fp::fmadds(
             (Handle::add(mvMtx, 2_i32)).at(2_i32).get(),
             (pos3d).z(),
@@ -1811,7 +1812,6 @@ pub fn lbVector_WorldToScreen<'a>(
                 fp::fmuls((Handle::add(mvMtx, 2_i32)).at(1_i32).get(), (pos3d).y()),
             ),
         ),
-        (Handle::add(mvMtx, 2_i32)).at(3_i32).get(),
     );
     if f1 > fp::fneg(0.009999999776482582) {
         f1 = fp::fsubs(fp::fneg(f1), 0.009999999776482582);
@@ -2078,15 +2078,15 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;
@@ -2099,11 +2099,11 @@ fn inl_lbVector_Len<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     return inl_sqrtf(
         ctx,
         fp::fadds(
+            fp::fmuls((vec).z(), (vec).z()),
             fp::fadds(
                 fp::fmuls((vec).x(), (vec).x()),
                 fp::fmuls((vec).y(), (vec).y()),
             ),
-            fp::fmuls((vec).z(), (vec).z()),
         ),
     );
 }
@@ -2115,19 +2115,19 @@ fn inl_sqrtf_accurate<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;
@@ -2140,11 +2140,11 @@ fn inl_lbVector_Len_unfused<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     return ctx.call::<_, f64>(
         0x8000d5bc,
         (Single(fp::frsp(fp::fadds(
+            fp::fmuls((vec).z(), (vec).z()),
             fp::fadds(
                 fp::fmuls((vec).x(), (vec).x()),
                 fp::fmuls((vec).y(), (vec).y()),
             ),
-            fp::fmuls((vec).z(), (vec).z()),
         ))),),
     );
 }
@@ -2229,20 +2229,20 @@ fn inl_lbvector_sin<'a>(ctx: &'a Ctx, angle: f64) -> f64 {
         angle = fp::frsp(fp::fadd(angle, 6.283185307179586));
     }
     return fp::fmadds(
-        fp::fmuls(
-            fp::fmuls(
-                fp::fmuls(fp::fmuls(0.005642999894917011, angle), angle),
-                angle,
-            ),
-            angle,
-        ),
         angle,
+        fp::fmuls(
+            angle,
+            fp::fmuls(
+                angle,
+                fp::fmuls(fp::fmuls(0.005642999894917011, angle), angle),
+            ),
+        ),
         fp::fmsubs(
             0.9878619909286499,
             angle,
             fp::fmuls(
-                fp::fmuls(fp::fmuls(0.1552709937095642, angle), angle),
                 angle,
+                fp::fmuls(fp::fmuls(0.1552709937095642, angle), angle),
             ),
         ),
     );
@@ -2257,20 +2257,20 @@ fn inl_lbvector_cos<'a>(ctx: &'a Ctx, angle: f64) -> f64 {
         angle = fp::frsp(fp::fadd(angle, 6.283185307179586));
     }
     return fp::fmadds(
-        fp::fmuls(
-            fp::fmuls(
-                fp::fmuls(fp::fmuls(0.005642999894917011, angle), angle),
-                angle,
-            ),
-            angle,
-        ),
         angle,
+        fp::fmuls(
+            angle,
+            fp::fmuls(
+                angle,
+                fp::fmuls(fp::fmuls(0.005642999894917011, angle), angle),
+            ),
+        ),
         fp::fmsubs(
             0.9878619909286499,
             angle,
             fp::fmuls(
-                fp::fmuls(fp::fmuls(0.1552709937095642, angle), angle),
                 angle,
+                fp::fmuls(fp::fmuls(0.1552709937095642, angle), angle),
             ),
         ),
     );

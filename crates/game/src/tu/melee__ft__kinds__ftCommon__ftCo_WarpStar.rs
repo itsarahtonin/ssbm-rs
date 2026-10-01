@@ -285,11 +285,11 @@ pub fn ftCo_800C4C60<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).self_vel().set_z(fp::frsp(0_i32 as f64));
     {
         let mut h_init_v: f64 = fp::fmuls(
+            (fp).co_attrs().jump_h_initial_velocity(),
             fp::fmuls(
                 fp::fneg((fp).facing_dir()),
                 (fns::p_ftCommonData(ctx).get()).x78(),
             ),
-            (fp).co_attrs().jump_h_initial_velocity(),
         );
         let mut h_vel: f64 = fp::fmuls((fp).mv().co().jump().jump_mul(), h_init_v);
         let mut h_max_vel: f64 = 0.0;

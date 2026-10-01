@@ -174,7 +174,7 @@ pub fn it_80287690<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         rot = inl_HSD_JObjGetRotationX_unfused(ctx, child);
         if rot
             > fp::fadds(
-                fp::fadds((ip).xDD4_itemVar().taru().xDDC(), 0.01745329238474369),
+                fp::fadds(0.01745329238474369, (ip).xDD4_itemVar().taru().xDDC()),
                 step,
             )
         {

@@ -520,8 +520,8 @@ pub fn itHassam_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                 Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj()),
             ));
         (ip).xDD4_itemVar().hassam().set_x68(fp::fmadds(
-            fp::frsp((div_i32(180_i32, (attr).x20())) as f64),
             0.01745329238474369,
+            fp::frsp((div_i32(180_i32, (attr).x20())) as f64),
             (ip).xDD4_itemVar().hassam().x68(),
         ));
         inl_HSD_JObjSetRotationY(ctx, jobj, (ip).xDD4_itemVar().hassam().x68());

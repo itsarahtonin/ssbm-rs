@@ -151,7 +151,7 @@ pub fn it_802A013C<'a>(
             .linkboomerang()
             .set_xF7C(fp::fneg(fns::sinf(
                 ctx,
-                (fp::fmuls(((attrs).x1C()), 0.01745329238474369)),
+                (fp::fmuls(0.01745329238474369, ((attrs).x1C()))),
             )));
         (ip).xDD4_itemVar().linkboomerang().set_xDE8(0_i32);
         (ip).xDD4_itemVar().linkboomerang().set_xF98(owner_gobj);
@@ -714,11 +714,11 @@ pub fn it_802A1948<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     if arg1 != 0_i32 {
         (ip).xDD4_itemVar()
             .linkboomerang()
-            .set_xF84((fp::fmuls(((attrs).x24()), 0.01745329238474369)));
+            .set_xF84((fp::fmuls(0.01745329238474369, ((attrs).x24()))));
     } else {
         (ip).xDD4_itemVar()
             .linkboomerang()
-            .set_xF84((fp::fmuls(((attrs).x20()), 0.01745329238474369)));
+            .set_xF84((fp::fmuls(0.01745329238474369, ((attrs).x20()))));
     }
     (ip).xDD4_itemVar().linkboomerang().set_xF80((attrs).x28());
     inl_it_802A19E0_no_inline_unfused(ctx, gobj);
@@ -838,7 +838,7 @@ pub fn it_802A1F08<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         inl_clamp_angle_pi_unfused(ctx, (ip).xDD4_itemVar().linkboomerang().xF74_ref());
         (ip).xDD4_itemVar()
             .linkboomerang()
-            .set_xF84((fp::fmuls(((attrs).x24()), 0.01745329238474369)));
+            .set_xF84((fp::fmuls(0.01745329238474369, ((attrs).x24()))));
         (ip).xDD4_itemVar().linkboomerang().set_xF80((attrs).x28());
         inl_it_802A19E0_no_inline_unfused(ctx, gobj);
     }
@@ -860,7 +860,7 @@ pub fn it_802A1FA8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         inl_clamp_angle_pi_unfused(ctx, (ip).xDD4_itemVar().linkboomerang().xF74_ref());
         (ip).xDD4_itemVar()
             .linkboomerang()
-            .set_xF84((fp::fmuls(((attrs).x24()), 0.01745329238474369)));
+            .set_xF84((fp::fmuls(0.01745329238474369, ((attrs).x24()))));
         (ip).xDD4_itemVar().linkboomerang().set_xF80((attrs).x28());
         inl_it_802A19E0_no_inline_unfused(ctx, gobj);
     }
@@ -882,7 +882,7 @@ pub fn itLinkBoomerang_Logic18_Absorbed<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) ->
         inl_clamp_angle_pi_unfused(ctx, (ip).xDD4_itemVar().linkboomerang().xF74_ref());
         (ip).xDD4_itemVar()
             .linkboomerang()
-            .set_xF84((fp::fmuls(((attrs).x24()), 0.01745329238474369)));
+            .set_xF84((fp::fmuls(0.01745329238474369, ((attrs).x24()))));
         (ip).xDD4_itemVar().linkboomerang().set_xF80((attrs).x28());
         inl_it_802A19E0_no_inline_unfused(ctx, gobj);
     }
@@ -958,7 +958,7 @@ pub fn it_802A2288<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         inl_clamp_angle_pi_unfused(ctx, (ip).xDD4_itemVar().linkboomerang().xF74_ref());
         (ip).xDD4_itemVar()
             .linkboomerang()
-            .set_xF84((fp::fmuls(((attrs).x24()), 0.01745329238474369)));
+            .set_xF84((fp::fmuls(0.01745329238474369, ((attrs).x24()))));
         (ip).xDD4_itemVar().linkboomerang().set_xF80((attrs).x28());
         inl_it_802A19E0_no_inline_unfused(ctx, gobj);
     }
@@ -1454,15 +1454,15 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;

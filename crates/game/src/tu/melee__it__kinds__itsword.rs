@@ -275,14 +275,14 @@ pub fn it_802852B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: Val<'a, F32>, arg
     let mut arg2 = arg2;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut f1: f64 = fp::fmuls(
+        0.30000001192092896,
         fp::fmuls(
+            (ip).xDD4_itemVar().sword().x28(),
             fp::fmuls(
                 (ip).xDD4_itemVar().sword().x4C(),
                 (ip).xDD4_itemVar().star().xvel(),
             ),
-            (ip).xDD4_itemVar().sword().x28(),
         ),
-        0.30000001192092896,
     );
     if !Handle::is_null(arg1) {
         (arg1).set(0.0);

@@ -434,15 +434,15 @@ pub fn ftZd_SpecialHi_8013A058<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         _three = 3.0;
         guess = fp::fmul(
             fp::fmul(_half, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), var_f4, _three)),
+            (fp::fnmsub(var_f4, fp::fmul(guess, guess), _three)),
         );
         guess = fp::fmul(
             fp::fmul(_half, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), var_f4, _three)),
+            (fp::fnmsub(var_f4, fp::fmul(guess, guess), _three)),
         );
         guess = fp::fmul(
             fp::fmul(_half, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), var_f4, _three)),
+            (fp::fnmsub(var_f4, fp::fmul(guess, guess), _three)),
         );
         y = fp::frsp((fp::fmul(var_f4, guess)));
         temp_f5 = y;
@@ -537,15 +537,15 @@ pub fn ftZd_SpecialHi_8013A244<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         _three = 3.0;
         guess = fp::fmul(
             fp::fmul(_half, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), var_f4, _three)),
+            (fp::fnmsub(var_f4, fp::fmul(guess, guess), _three)),
         );
         guess = fp::fmul(
             fp::fmul(_half, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), var_f4, _three)),
+            (fp::fnmsub(var_f4, fp::fmul(guess, guess), _three)),
         );
         guess = fp::fmul(
             fp::fmul(_half, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), var_f4, _three)),
+            (fp::fnmsub(var_f4, fp::fmul(guess, guess), _three)),
         );
         y = fp::frsp((fp::fmul(var_f4, guess)));
         var_f5 = y;
@@ -946,8 +946,8 @@ fn inl_ftCommon_HandleTeleportCollisions_unfused<'a>(
     if (((coll).env_flags() & (0x2000_i32 | 0x4000_i32)) != 0)
         && (fns::lbVector_AngleXY(ctx, (coll).ceiling().normal(), (fp).self_vel())
             > (fp::fmuls(
-                (fp::fadds(90.0, fp::frsp((angle_clamp).get() as f64))),
                 0.01745329238474369,
+                (fp::fadds(90.0, fp::frsp((angle_clamp).get() as f64))),
             )))
     {
         fns::ftZd_SpecialHi_8013A764(ctx, gobj);
@@ -955,8 +955,8 @@ fn inl_ftCommon_HandleTeleportCollisions_unfused<'a>(
     if (((coll).env_flags() & 63_i32) != 0)
         && (fns::lbVector_AngleXY(ctx, (coll).left_facing_wall().normal(), (fp).self_vel())
             > (fp::fmuls(
-                (fp::fadds(90.0, fp::frsp((angle_clamp).get() as f64))),
                 0.01745329238474369,
+                (fp::fadds(90.0, fp::frsp((angle_clamp).get() as f64))),
             )))
     {
         fns::ftZd_SpecialHi_8013A764(ctx, gobj);
@@ -964,8 +964,8 @@ fn inl_ftCommon_HandleTeleportCollisions_unfused<'a>(
     if (((coll).env_flags() & 0xfc0_i32) != 0)
         && (fns::lbVector_AngleXY(ctx, (coll).right_facing_wall().normal(), (fp).self_vel())
             > (fp::fmuls(
-                (fp::fadds(90.0, fp::frsp((angle_clamp).get() as f64))),
                 0.01745329238474369,
+                (fp::fadds(90.0, fp::frsp((angle_clamp).get() as f64))),
             )))
     {
         fns::ftZd_SpecialHi_8013A764(ctx, gobj);

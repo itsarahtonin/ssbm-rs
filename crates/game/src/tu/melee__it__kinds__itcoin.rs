@@ -407,8 +407,8 @@ pub fn itCoin_Logic116_EnteredAir<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     ip = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     fns::Item_80268E5C(ctx, gobj, 5_i32, (enums::ITEM_ANIM_UPDATE as i32));
     if fp::fadds(
-        fp::fadds((ip).x40_vel().x(), (ip).x7C().x()),
         (ip).x88().x(),
+        fp::fadds((ip).x40_vel().x(), (ip).x7C().x()),
     ) >= 0.0
     {
         item_dir = fp::frsp(1_i32 as f64);

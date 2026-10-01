@@ -224,9 +224,9 @@ pub fn stageGObj1_GObjProc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     (fp::fdivs(
                         (gp).u().taru().xE4(),
                         (fp::fmuls(
+                            0.01745329238474369,
                             ((statics::melee__gr__groldkongo::yakumono_param(ctx).get())
                                 .rspeed_barrel_rot_accel()),
-                            0.01745329238474369,
                         )),
                     )),
                 )),
@@ -272,16 +272,16 @@ pub fn stageGObj1_GObjProc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 (gp).u().taru().set_xC4((1_i32 as i16));
                 if fns::HSD_Randi(ctx, 2_i32) != 0_i32 {
                     x_speed = (fp::fmuls(
+                        0.01745329238474369,
                         ((statics::melee__gr__groldkongo::yakumono_param(ctx).get())
                             .rspeed_barrel_rot_accel()),
-                        0.01745329238474369,
                     ));
                 } else {
                     x_speed = fp::fneg(
                         (fp::fmuls(
+                            0.01745329238474369,
                             ((statics::melee__gr__groldkongo::yakumono_param(ctx).get())
                                 .rspeed_barrel_rot_accel()),
-                            0.01745329238474369,
                         )),
                     );
                 }
@@ -310,9 +310,9 @@ pub fn stageGObj1_GObjProc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 ctx,
                 (gp).u().taru().xE4(),
                 (fp::fmuls(
+                    0.01745329238474369,
                     ((statics::melee__gr__groldkongo::yakumono_param(ctx).get())
                         .rspeed_barrel_rot_max()),
-                    0.01745329238474369,
                 )),
                 (gp).u().taru().xE4_ref(),
             );
@@ -673,6 +673,10 @@ pub fn grOldKongo_80210454<'a>(ctx: &'a Ctx, ground_gobj: HSD_GObj<'a>, keep: HS
         let _ = fns::Ground_801C4DA0(ctx, pos_gnd, unk);
         fns::ftLib_GetPos(ctx, keep, pos_ft);
         if !(fp::fadds(
+            fp::fmuls(
+                (fp::fsubs(pos_gnd.z(), pos_ft.z())),
+                (fp::fsubs(pos_gnd.z(), pos_ft.z())),
+            ),
             fp::fadds(
                 fp::fmuls(
                     (fp::fsubs(pos_gnd.x(), pos_ft.x())),
@@ -682,10 +686,6 @@ pub fn grOldKongo_80210454<'a>(ctx: &'a Ctx, ground_gobj: HSD_GObj<'a>, keep: HS
                     (fp::fsubs(pos_gnd.y(), pos_ft.y())),
                     (fp::fsubs(pos_gnd.y(), pos_ft.y())),
                 ),
-            ),
-            fp::fmuls(
-                (fp::fsubs(pos_gnd.z(), pos_ft.z())),
-                (fp::fsubs(pos_gnd.z(), pos_ft.z())),
             ),
         ) < fp::fmuls(
             (statics::melee__gr__groldkongo::yakumono_param(ctx).get()).rframe_barrel_in(),
@@ -987,9 +987,9 @@ fn inl_grOldKongo_8020F888_inline_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>) {
     if vel > 0.0 {
         if vel
             < (fp::fmuls(
+                0.01745329238474369,
                 ((statics::melee__gr__groldkongo::yakumono_param(ctx).get())
                     .rspeed_barrel_rot_accel()),
-                0.01745329238474369,
             ))
         {
             (gp).u().taru().set_xE4(0.0);
@@ -998,9 +998,9 @@ fn inl_grOldKongo_8020F888_inline_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>) {
             (gp).u().taru().set_xE4(fp::fsubs(
                 vel,
                 (fp::fmuls(
+                    0.01745329238474369,
                     ((statics::melee__gr__groldkongo::yakumono_param(ctx).get())
                         .rspeed_barrel_rot_accel()),
-                    0.01745329238474369,
                 )),
             ));
         }
@@ -1008,9 +1008,9 @@ fn inl_grOldKongo_8020F888_inline_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>) {
         if vel
             > fp::fneg(
                 (fp::fmuls(
+                    0.01745329238474369,
                     ((statics::melee__gr__groldkongo::yakumono_param(ctx).get())
                         .rspeed_barrel_rot_accel()),
-                    0.01745329238474369,
                 )),
             )
         {
@@ -1020,9 +1020,9 @@ fn inl_grOldKongo_8020F888_inline_unfused<'a>(ctx: &'a Ctx, gp: Ground<'a>) {
             (gp).u().taru().set_xE4(fp::fadds(
                 vel,
                 (fp::fmuls(
+                    0.01745329238474369,
                     ((statics::melee__gr__groldkongo::yakumono_param(ctx).get())
                         .rspeed_barrel_rot_accel()),
-                    0.01745329238474369,
                 )),
             ));
         }

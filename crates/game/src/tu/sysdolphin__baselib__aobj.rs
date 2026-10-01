@@ -971,10 +971,10 @@ fn inl_getLoopedFrame_unfused<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) -> f64 {
     let mut aobj = aobj;
     let mut y: f64 = fp::fsubs((aobj).end_frame(), (aobj).rewind_frame());
     let mut x: f64 = fp::fsubs((aobj).curr_frame(), (aobj).rewind_frame());
-    return fp::fadds(
-        ctx.call::<_, f64>(0x80364340, (Single(fp::frsp(x)), Single(fp::frsp(y)))),
-        (aobj).rewind_frame(),
-    );
+    return {
+        let __t1 = ctx.call::<_, f64>(0x80364340, (Single(fp::frsp(x)), Single(fp::frsp(y))));
+        fp::fadds((aobj).rewind_frame(), __t1)
+    };
 }
 
 fn inl_HSD_AObjStopAnim_unfused<'a>(

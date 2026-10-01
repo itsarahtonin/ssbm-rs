@@ -238,11 +238,11 @@ fn inl_calcAngleRadians_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, lstick_y: 
         left_stick_y = fp::fneg(left_stick_y);
     }
     return (fp::fmuls(
+        0.01745329238474369,
         (fp::fdivs(
             fp::fmuls(left_stick_y, (da).xE4()),
             (fp::fsubs((da).xE0(), (da).xDC())),
         )),
-        0.01745329238474369,
     ));
 }
 

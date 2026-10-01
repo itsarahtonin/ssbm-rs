@@ -1573,8 +1573,8 @@ pub fn HSD_SynthSFXUpdatePitch<'a>(ctx: &'a Ctx, node: HSD_SynthSFXNode<'a>) {
         ratio = 0.0;
     } else {
         ratio = fp::fmuls(
-            fp::fmuls((node).x14(), (node).x18().at(0_i32).get()),
             (node).x18().at(1_i32).get(),
+            fp::fmuls((node).x14(), (node).x18().at(0_i32).get()),
         );
     }
     if !((((node).flags() as i32) & 8_i32) != 0) {
@@ -2411,8 +2411,8 @@ pub fn HSD_SynthPStreamFirstHakoDataCallback<'a>(ctx: &'a Ctx) {
                             (fp::fmuls(
                                 65536.0,
                                 (fp::fmuls(
-                                    fp::fmuls((node).x14(), (node).x18().at(0_i32).get()),
                                     (node).x18().at(1_i32).get(),
+                                    fp::fmuls((node).x14(), (node).x18().at(0_i32).get()),
                                 )),
                             )),
                         ));
@@ -3145,8 +3145,8 @@ fn inl_HSD_SynthSFXUpdatePitch_unfused<'a>(ctx: &'a Ctx, node: HSD_SynthSFXNode<
         ratio = 0.0;
     } else {
         ratio = fp::fmuls(
-            fp::fmuls((node).x14(), (node).x18().at(0_i32).get()),
             (node).x18().at(1_i32).get(),
+            fp::fmuls((node).x14(), (node).x18().at(0_i32).get()),
         );
     }
     if !((((node).flags() as i32) & 8_i32) != 0) {
@@ -3180,19 +3180,19 @@ fn inl_sqrtf_accurate<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;

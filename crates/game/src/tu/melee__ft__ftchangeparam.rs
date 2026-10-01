@@ -51,7 +51,7 @@ pub fn ftCo_CalcYScaledKnockback<'a>(ctx: &'a Ctx, arg0: f64, scale: f64, arg2: 
         );
     }
     if (scale >= 1.0) || (arg2 <= 1.0) {
-        return fp::fmadds(fp::fmuls((fp::fsubs(scale, 1.0)), arg0), arg2, arg0);
+        return fp::fmadds(arg2, fp::fmuls((fp::fsubs(scale, 1.0)), arg0), arg0);
     }
     return fp::fdivs(fp::fmuls(arg0, scale), arg2);
 }
@@ -603,7 +603,7 @@ fn inl_ftCo_CalcYScaledKnockback<'a>(ctx: &'a Ctx, arg0: f64, scale: f64, arg2: 
         );
     }
     if (scale >= 1.0) || (arg2 <= 1.0) {
-        return fp::fmadds(fp::fmuls((fp::fsubs(scale, 1.0)), arg0), arg2, arg0);
+        return fp::fmadds(arg2, fp::fmuls((fp::fsubs(scale, 1.0)), arg0), arg0);
     }
     return fp::fdivs(fp::fmuls(arg0, scale), arg2);
 }

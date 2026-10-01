@@ -4639,7 +4639,7 @@ pub fn ftCo_800B9704<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut rand: f64 = fns::HSD_Randf(ctx);
     (cpu).set_x34(fp::fctiwz(fp::fmadds(
         fp::frsp((10_i32.wrapping_sub((cpu).level())) as f64),
-        (fp::fmadds(rand, 15.0, 15.0)),
+        (fp::fmadds(15.0, rand, 15.0)),
         10.0,
     )));
     if (cpu).kind() == ((7_i32 as u32) as i32) {
@@ -5568,7 +5568,7 @@ pub fn ftCo_800BB768<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Fighter<'a>) -> i3
                 temp_f1 = (arg1).cpu().x564();
                 temp_f3 = (temp_r31).x564();
                 temp_f4 = (fp).cur_pos().x();
-                if (fp::fadds(fp::fadds(temp_f2, temp_f1), temp_f3) > temp_f4)
+                if (fp::fadds(temp_f3, fp::fadds(temp_f2, temp_f1)) > temp_f4)
                     && (fp::fsubs(fp::fsubs(temp_f2, temp_f1), temp_f3) < temp_f4)
                 {
                     return 1_i32;
@@ -5578,7 +5578,7 @@ pub fn ftCo_800BB768<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Fighter<'a>) -> i3
                 temp_f1 = (arg1).cpu().x564();
                 temp_f3 = (temp_r31).x564();
                 temp_f4 = (fp).cur_pos().x();
-                if (fp::fadds(fp::fadds(temp_f2, temp_f1), temp_f3) > temp_f4)
+                if (fp::fadds(temp_f3, fp::fadds(temp_f2, temp_f1)) > temp_f4)
                     && (fp::fsubs(fp::fsubs(temp_f2, temp_f1), temp_f3) < temp_f4)
                 {
                     if ((arg1).cur_pos().y() < (fp).cur_pos().y())
@@ -5616,7 +5616,7 @@ pub fn ftCo_800BB768<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Fighter<'a>) -> i3
                 temp_f1 = (arg1).cpu().x564();
                 temp_f3 = (temp_r31).x564();
                 temp_f4 = (fp).cur_pos().x();
-                if (fp::fadds(fp::fadds(temp_f2, temp_f1), temp_f3) > temp_f4)
+                if (fp::fadds(temp_f3, fp::fadds(temp_f2, temp_f1)) > temp_f4)
                     && (fp::fsubs(fp::fsubs(temp_f2, temp_f1), temp_f3) < temp_f4)
                 {
                     return 1_i32;
@@ -5721,15 +5721,15 @@ fn inl_sqrtf_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         (y).set(fp::frsp((fp::fmul(x, guess))));
         return (y).get();
@@ -5794,15 +5794,15 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;
@@ -6038,7 +6038,7 @@ fn inl_ftCo_800B9704<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut rand: f64 = fns::HSD_Randf(ctx);
     (cpu).set_x34(fp::fctiwz(fp::fmadds(
         fp::frsp((10_i32.wrapping_sub((cpu).level())) as f64),
-        (fp::fmadds(rand, 15.0, 15.0)),
+        (fp::fmadds(15.0, rand, 15.0)),
         10.0,
     )));
     if (cpu).kind() == ((7_i32 as u32) as i32) {

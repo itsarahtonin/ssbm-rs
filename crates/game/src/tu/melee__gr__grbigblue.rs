@@ -637,16 +637,19 @@ pub fn grBigBlue_801E6364<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 );
                 inl_HSD_JObjSetRotationY_unfused(ctx, cur, (fp::fdivs(3.1415927410125732, 2.0)));
                 scale.set_x({
-                    let __t5 = {
-                        let __t4 = fp::fmuls(
-                            fns::Ground_801C0498(ctx),
-                            (statics::melee__gr__grbigblue::yakumono_param(ctx).get()).xC(),
-                        );
-                        scale.set_z(__t4);
-                        __t4
+                    let __t6 = {
+                        let __t5 = {
+                            let __t4 = fns::Ground_801C0498(ctx);
+                            fp::fmuls(
+                                (statics::melee__gr__grbigblue::yakumono_param(ctx).get()).xC(),
+                                __t4,
+                            )
+                        };
+                        scale.set_z(__t5);
+                        __t5
                     };
-                    scale.set_y(__t5);
-                    __t5
+                    scale.set_y(__t6);
+                    __t6
                 });
                 inl_HSD_JObjSetScale_unfused(
                     ctx,
@@ -675,16 +678,16 @@ pub fn grBigBlue_801E6364<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         let mut min_val: i32 = 0;
         let mut max_val: i32 = 0;
         if {
-            let __t8 = ({
-                let __t7 = (statics::melee__gr__grbigblue::yakumono_param(ctx).get()).x14();
-                min_val = __t7;
-                __t7
+            let __t9 = ({
+                let __t8 = (statics::melee__gr__grbigblue::yakumono_param(ctx).get()).x14();
+                min_val = __t8;
+                __t8
             });
             ({
-                let __t6 = (statics::melee__gr__grbigblue::yakumono_param(ctx).get()).x10();
-                max_val = __t6;
-                __t6
-            }) > __t8
+                let __t7 = (statics::melee__gr__grbigblue::yakumono_param(ctx).get()).x10();
+                max_val = __t7;
+                __t7
+            }) > __t9
         } {
             let mut range: i32 = max_val.wrapping_sub(min_val);
             max_val = min_val.wrapping_add(
@@ -19612,17 +19615,17 @@ pub fn grBigBlue_801EB4AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         let mut direction: i16 = (gp).u().bigblue().x0_u().road().direction();
         if (direction as i32) == 1_i32 {
             if {
-                let __t2 = fp::fmuls(
-                    ({
+                let __t3 = {
+                    let __t2 = ({
                         let __t1 = fns::Ground_801C0498(ctx);
                         fp::fmuls(
                             (statics::melee__gr__grbigblue::yakumono_param(ctx).get()).x8(),
                             __t1,
                         )
-                    }),
-                    0.25,
-                );
-                (gp).u().bigblue().x0_u().road().position().y() < __t2
+                    });
+                    fp::fmuls(0.25, __t2)
+                };
+                (gp).u().bigblue().x0_u().road().position().y() < __t3
             } {
                 (gp).u()
                     .bigblue()
@@ -19632,19 +19635,19 @@ pub fn grBigBlue_801EB4AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             }
         } else if (direction as i32) == 1_i32.wrapping_neg() {
             if {
-                let __t4 = fp::fmuls(
+                let __t5 = fp::fmuls(
                     0.25,
                     fp::fneg(
                         ({
-                            let __t3 = fns::Ground_801C0498(ctx);
+                            let __t4 = fns::Ground_801C0498(ctx);
                             fp::fmuls(
                                 (statics::melee__gr__grbigblue::yakumono_param(ctx).get()).x4(),
-                                __t3,
+                                __t4,
                             )
                         }),
                     ),
                 );
-                (gp).u().bigblue().x0_u().road().position().y() > __t4
+                (gp).u().bigblue().x0_u().road().position().y() > __t5
             } {
                 (gp).u()
                     .bigblue()
@@ -19654,16 +19657,16 @@ pub fn grBigBlue_801EB4AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             }
         } else {
             if {
-                let __t6 = fp::fneg(
+                let __t7 = fp::fneg(
                     ({
-                        let __t5 = fns::Ground_801C0498(ctx);
+                        let __t6 = fns::Ground_801C0498(ctx);
                         fp::fmuls(
                             (statics::melee__gr__grbigblue::yakumono_param(ctx).get()).x4(),
-                            __t5,
+                            __t6,
                         )
                     }),
                 );
-                (gp).u().bigblue().x0_u().road().position().y() < __t6
+                (gp).u().bigblue().x0_u().road().position().y() < __t7
             } {
                 (gp).u()
                     .bigblue()
@@ -19671,14 +19674,14 @@ pub fn grBigBlue_801EB4AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     .road()
                     .set_direction((1_i32.wrapping_neg() as i16));
             } else if {
-                let __t8 = {
-                    let __t7 = fns::Ground_801C0498(ctx);
+                let __t9 = {
+                    let __t8 = fns::Ground_801C0498(ctx);
                     fp::fmuls(
                         (statics::melee__gr__grbigblue::yakumono_param(ctx).get()).x8(),
-                        __t7,
+                        __t8,
                     )
                 };
-                (gp).u().bigblue().x0_u().road().position().y() > __t8
+                (gp).u().bigblue().x0_u().road().position().y() > __t9
             } {
                 (gp).u()
                     .bigblue()
@@ -19693,9 +19696,9 @@ pub fn grBigBlue_801EB4AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         'l1: loop {
             'c2: {
                 if {
-                    let __t9 = count;
+                    let __t10 = count;
                     count = count.wrapping_add(1);
-                    __t9
+                    __t10
                 } > 0x3e8_i32
                 {
                     (if ((0_i32) != 0) {
@@ -19741,12 +19744,13 @@ pub fn grBigBlue_801EB4AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         }
                     }
                     if {
-                        let __t11 = fp::fmadds(
+                        let __t12 = fp::fmadds(
                             (statics::melee__gr__grbigblue::yakumono_param(ctx).get()).x8(),
                             fns::Ground_801C0498(ctx),
                             (gp).u().bigblue().x0_u().road().position().y(),
                         );
                         fp::fadds(
+                            (entry).delta().y(),
                             fp::fadds(
                                 sp_pos.y(),
                                 statics::melee__gr__grbigblue::grBb_TrackEntries(ctx)
@@ -19757,8 +19761,7 @@ pub fn grBigBlue_801EB4AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                     .delta()
                                     .y(),
                             ),
-                            (entry).delta().y(),
-                        ) < __t11
+                        ) < __t12
                     } {
                         break 'c2;
                     }
@@ -30552,6 +30555,7 @@ pub fn grBigBlue_801EEF00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, index: i32) -> i
                         predicted = fp::fnmsubs(
                             norm_4,
                             (fp::fmuls(
+                                norm_4,
                                 fp::fmuls(
                                     0.5,
                                     (fp::fmuls(
@@ -30560,7 +30564,6 @@ pub fn grBigBlue_801EEF00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, index: i32) -> i
                                         scale_4,
                                     )),
                                 ),
-                                norm_4,
                             )),
                             fp::fmadds(
                                 (gp).typed().cars().get(index).velocity(),
@@ -30599,6 +30602,7 @@ pub fn grBigBlue_801EEF00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, index: i32) -> i
                         predicted = fp::fnmsubs(
                             norm_4,
                             (fp::fmuls(
+                                norm_4,
                                 fp::fmuls(
                                     0.5,
                                     fp::fneg(
@@ -30610,7 +30614,6 @@ pub fn grBigBlue_801EEF00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, index: i32) -> i
                                         )),
                                     ),
                                 ),
-                                norm_4,
                             )),
                             fp::fmadds(
                                 (gp).typed().cars().get(index).velocity(),
@@ -30771,32 +30774,31 @@ pub fn grBigBlue_801EF424<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                     } else {
                                         absDiff = diff;
                                     }
-                                    if absDiff
-                                        < fp::fmuls(
-                                            fns::Ground_801C0498(ctx),
+                                    if absDiff < {
+                                        let __t1 = fns::Ground_801C0498(ctx);
+                                        fp::fmuls(
                                             fp::frsp(
                                                 (statics::melee__gr__grbigblue::yakumono_param(ctx)
                                                     .get())
                                                 .x20()
                                                     as f64,
                                             ),
+                                            __t1,
                                         )
-                                    {
+                                    } {
                                         let mut adjustment: f64 = 0.0;
                                         if diff > zero {
-                                            adjustment = fp::fmuls(
-                                                fns::Ground_801C0498(ctx),
-                                                fp::frsp(
-                                                    (statics::melee__gr__grbigblue::yakumono_param(
-                                                        ctx,
-                                                    )
-                                                    .get())
-                                                    .x20()
-                                                        as f64,
-                                                ),
-                                            );
+                                            adjustment = {
+                                                let __t2 = fns::Ground_801C0498(ctx);
+                                                fp::fmuls(fp::frsp((statics::melee__gr__grbigblue::yakumono_param(ctx).get()).x20() as f64), __t2)
+                                            };
                                         } else {
-                                            adjustment = fp::fneg((fp::fmuls(fns::Ground_801C0498(ctx), fp::frsp((statics::melee__gr__grbigblue::yakumono_param(ctx).get()).x20() as f64))));
+                                            adjustment = fp::fneg(
+                                                ({
+                                                    let __t3 = fns::Ground_801C0498(ctx);
+                                                    fp::fmuls(fp::frsp((statics::melee__gr__grbigblue::yakumono_param(ctx).get()).x20() as f64), __t3)
+                                                }),
+                                            );
                                         }
                                         diff = fp::fsubs(diff, adjustment);
                                         changed = 1_i32;

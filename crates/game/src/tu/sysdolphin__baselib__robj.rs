@@ -2658,15 +2658,15 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;
@@ -2759,6 +2759,10 @@ fn inl_HSD_MtxColMag<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, col: i32) -> f64 {
     return inl_sqrtf(
         ctx,
         fp::fadds(
+            (fp::fmuls(
+                (Handle::add(mtx, 2_i32)).at(col).get(),
+                (Handle::add(mtx, 2_i32)).at(col).get(),
+            )),
             fp::fadds(
                 (fp::fmuls(
                     (Handle::add(mtx, 0_i32)).at(col).get(),
@@ -2769,10 +2773,6 @@ fn inl_HSD_MtxColMag<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, col: i32) -> f64 {
                     (Handle::add(mtx, 1_i32)).at(col).get(),
                 )),
             ),
-            (fp::fmuls(
-                (Handle::add(mtx, 2_i32)).at(col).get(),
-                (Handle::add(mtx, 2_i32)).at(col).get(),
-            )),
         ),
     );
 }

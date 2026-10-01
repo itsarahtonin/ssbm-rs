@@ -2986,20 +2986,26 @@ fn inl_Stage_IsOutsideBlastZoneWithMargin_unfused<'a>(
         return 1_i32;
     }
     if {
-        let __t2 = fp::fadds(fns::Stage_GetBlastZoneLeftOffset(ctx), margin);
-        (pos).x() < __t2
+        let __t3 = {
+            let __t2 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+            fp::fadds(margin, __t2)
+        };
+        (pos).x() < __t3
     } {
         return 1_i32;
     }
     if {
-        let __t3 = fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), margin);
-        (pos).y() > __t3
+        let __t4 = fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), margin);
+        (pos).y() > __t4
     } {
         return 1_i32;
     }
     if {
-        let __t4 = fp::fadds(fns::Stage_GetBlastZoneBottomOffset(ctx), margin);
-        (pos).y() < __t4
+        let __t6 = {
+            let __t5 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+            fp::fadds(margin, __t5)
+        };
+        (pos).y() < __t6
     } {
         return 1_i32;
     }

@@ -150,8 +150,8 @@ pub fn ft_80081DD4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         let mut tmp: f64 = 0.0;
         temp_r28 = ((fp).ft_data()).x44();
         tmp = fp::fmuls(
-            fp::fmuls((temp_r28).ledge_snap_height(), (fp).x34_scale().y()),
             (fns::p_ftCommonData(ctx).get()).x1CC(),
+            fp::fmuls((temp_r28).ledge_snap_height(), (fp).x34_scale().y()),
         );
         if (coll).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
             (coll).set_ledge_snap_height(tmp);
@@ -194,8 +194,8 @@ pub fn ft_80081F2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         let mut tmp: f64 = 0.0;
         temp_r28 = ((fp).ft_data()).x44();
         tmp = fp::fmuls(
-            fp::fmuls((temp_r28).ledge_snap_height(), (fp).x34_scale().y()),
             (fns::p_ftCommonData(ctx).get()).x1CC(),
+            fp::fmuls((temp_r28).ledge_snap_height(), (fp).x34_scale().y()),
         );
         if (coll).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
             (coll).set_ledge_snap_height(tmp);
@@ -238,8 +238,8 @@ pub fn ft_80082084<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         let mut tmp: f64 = 0.0;
         temp_r28 = ((fp).ft_data()).x44();
         tmp = fp::fmuls(
-            fp::fmuls((temp_r28).ledge_snap_height(), (fp).x34_scale().y()),
             (fns::p_ftCommonData(ctx).get()).x1CC(),
+            fp::fmuls((temp_r28).ledge_snap_height(), (fp).x34_scale().y()),
         );
         if (coll).ecb_source().kind() == (((enums::ECBSource_JObj as i32) as u32) as i32) {
             (coll).set_ledge_snap_height(tmp);
@@ -3751,21 +3751,21 @@ pub fn ft_80084CE4<'a>(ctx: &'a Ctx, attacker: Fighter<'a>, victim: Fighter<'a>)
     let mut victim_x: f64 = 0.0;
     let mut victim_y: f64 = 0.0;
     attacker_y = fp::fmuls(
+        0.5,
         (fp::fadds(
             (attacker).coll_data().ecb().top().y(),
             (attacker).coll_data().ecb().bottom().y(),
         )),
-        0.5,
     );
     attacker_y = fp::fadds(attacker_y, (attacker).cur_pos().y());
     attacker_x = 0.0;
     attacker_x = fp::fadds(attacker_x, (attacker).cur_pos().x());
     victim_y = fp::fmuls(
+        0.5,
         (fp::fadds(
             (victim).coll_data().ecb().top().y(),
             (victim).coll_data().ecb().bottom().y(),
         )),
-        0.5,
     );
     victim_y = fp::fadds(victim_y, (victim).cur_pos().y());
     victim_x = 0.0;

@@ -138,16 +138,16 @@ pub fn mpCollCheckBounding<'a>(ctx: &'a Ctx, cd: CollData<'a>, flags: u32) {
             ctx,
             bottom,
             fp::fadds(
-                fp::fsubs((cd).ledge_snap_y(), half_height),
                 (cd).cur_pos().y(),
+                fp::fsubs((cd).ledge_snap_y(), half_height),
             ),
         );
         inl_clamp_below_unfused(
             ctx,
             bottom,
             fp::fadds(
-                fp::fsubs((cd).ledge_snap_y(), half_height),
                 (cd).prev_pos().y(),
+                fp::fsubs((cd).ledge_snap_y(), half_height),
             ),
         );
         offset = fp::fadds((cd).ledge_snap_y(), half_height);
@@ -592,7 +592,7 @@ pub fn mpColl_LoadECB_JObj<'a>(ctx: &'a Ctx, coll: CollData<'a>, flags: u32) {
         if ((flags & (16_i32 as u32)) != 0) {
             mid_y = fp::fmuls(0.5, (fp::fadds(bottom_y.get(), top_y.get())));
             bottom_y.set(fp::fsubs(mid_y, 1.0));
-            top_y.set(fp::fadds(mid_y, 1.0));
+            top_y.set(fp::fadds(1.0, mid_y));
             if bottom_y.get() < 0.0 {
                 bottom_y.set(0.0);
                 top_y.set(2.0);
@@ -6592,15 +6592,15 @@ pub fn mpColl_800454A4_RightWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
                         {
                             let _ = fns::mpLineGetNormal(ctx, line_id, nrm);
                             x.set(fp::fadds(
+                                0.5,
                                 fp::fsubs(
                                     fp::fmadds(
-                                        fp::fdivs((fp::fsubs(pos.y(), top_2.y())), nrm.x()),
                                         fp::fneg(nrm.y()),
+                                        fp::fdivs((fp::fsubs(pos.y(), top_2.y())), nrm.x()),
                                         top_2.x(),
                                     ),
                                     pos.x(),
                                 ),
-                                0.5,
                             ));
                             if statics::melee__mp__mpcoll::mpColl_804D6490_max_x(ctx).get()
                                 < fp::fadds((coll).cur_pos().x(), x.get())
@@ -8939,8 +8939,8 @@ pub fn mpColl_80046224_LeftWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
                             x.set(fp::fsubs(
                                 fp::fsubs(
                                     fp::fmadds(
-                                        fp::fdivs((fp::fsubs(pos.y(), vec.y())), fp::fneg(nrm.x())),
                                         nrm.y(),
+                                        fp::fdivs((fp::fsubs(pos.y(), vec.y())), fp::fneg(nrm.x())),
                                         vec.x(),
                                     ),
                                     pos.x(),
@@ -28249,7 +28249,7 @@ pub fn mpCollSqueezeHorizontal<'a>(
     let mut half_width: f64 = fp::fmuls(
         0.5,
         (fp::fsubs(
-            fp::fadds(fp::fsubs(right, left), (coll).ecb().right().x()),
+            fp::fadds((coll).ecb().right().x(), fp::fsubs(right, left)),
             (coll).ecb().left().x(),
         )),
     );
@@ -28280,7 +28280,7 @@ pub fn mpCollSqueezeVertical<'a>(
     let mut top = top;
     let mut bottom = bottom;
     let mut height: f64 = fp::fsubs(
-        fp::fadds(fp::fsubs(top, bottom), (coll).ecb().top().y()),
+        fp::fadds((coll).ecb().top().y(), fp::fsubs(top, bottom)),
         (coll).ecb().bottom().y(),
     );
     let mut mid_y: f64 = 0.0;
@@ -28313,8 +28313,8 @@ pub fn mpCollSqueezeVertical<'a>(
         (coll).ecb().top().set_y(fp::fmuls(
             0.5,
             (fp::fadds(
-                fp::fadds((coll).ecb().top().y(), (coll).ecb().bottom().y()),
                 height,
+                fp::fadds((coll).ecb().top().y(), (coll).ecb().bottom().y()),
             )),
         ));
         (coll)

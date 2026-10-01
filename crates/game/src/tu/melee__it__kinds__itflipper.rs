@@ -190,7 +190,7 @@ pub fn itFlipper_SpinFromFighter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
         (ip).set_xCF4_fighterGObjUnk(null::<HSD_GObj<'a>>(ctx));
     }
-    fns::itFlipper_AddSpinImpulse(ctx, gobj, pos, (fp::fmuls((speed), 0.01745329238474369)));
+    fns::itFlipper_AddSpinImpulse(ctx, gobj, pos, (fp::fmuls(0.01745329238474369, (speed))));
 }
 
 pub fn itFlipper_Repel<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, kind: i32, pos: Vec<'a>) {
@@ -917,7 +917,7 @@ fn inl_spinFromVictim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>, __in_c
         }
         (ip).set_xCF4_fighterGObjUnk(null::<HSD_GObj<'a>>(ctx));
     }
-    fns::itFlipper_AddSpinImpulse(ctx, gobj, pos, (fp::fmuls((speed), 0.01745329238474369)));
+    fns::itFlipper_AddSpinImpulse(ctx, gobj, pos, (fp::fmuls(0.01745329238474369, (speed))));
 }
 
 fn inl_itFlipper_Repel<'a>(
@@ -1034,7 +1034,7 @@ fn inl_spinFromAttacker_unfused<'a>(
         }
         (ip).set_xCEC_fighterGObj(null::<HSD_GObj<'a>>(ctx));
     }
-    fns::itFlipper_AddSpinImpulse(ctx, gobj, pos, (fp::fmuls((speed), 0.01745329238474369)));
+    fns::itFlipper_AddSpinImpulse(ctx, gobj, pos, (fp::fmuls(0.01745329238474369, (speed))));
 }
 
 fn inl_itFlipper_Repel_unfused<'a>(

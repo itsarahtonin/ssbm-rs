@@ -142,24 +142,24 @@ pub fn itCrazyhandbomb_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         };
         if __case <= 0 {
             rot.set_x(fp::fmadds(
-                (fp::fmuls(10.0, (ip).x40_vel().y())),
                 0.01745329238474369,
+                (fp::fmuls(10.0, (ip).x40_vel().y())),
                 rot.x(),
             ));
             break 's1;
         }
         if __case <= 1 {
             rot.set_y(fp::fmadds(
-                (fp::fmuls(10.0, (ip).x40_vel().y())),
                 0.01745329238474369,
+                (fp::fmuls(10.0, (ip).x40_vel().y())),
                 rot.y(),
             ));
             break 's1;
         }
         if __case <= 2 {
             rot.set_z(fp::fmadds(
-                (fp::fmuls(10.0, (ip).x40_vel().y())),
                 0.01745329238474369,
+                (fp::fmuls(10.0, (ip).x40_vel().y())),
                 rot.z(),
             ));
             break 's1;

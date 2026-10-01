@@ -594,8 +594,8 @@ pub fn ftCo_DamageIce_Collide<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, normal: Vec<
             ));
         } else {
             (fp).cur_pos().set_y(fp::fadds(
-                fp::fadds((fp).cur_pos().y(), (vec).y()),
                 (fp).x68C_transNPos().y(),
+                fp::fadds((fp).cur_pos().y(), (vec).y()),
             ));
         }
         if (fns::ft_80081D0C(ctx, gobj) != 0) {
@@ -917,15 +917,15 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;
@@ -938,11 +938,11 @@ fn inl_ftCo_Speed<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> f64 {
     return inl_sqrtf(
         ctx,
         fp::fadds(
+            (fp::fmuls((fp).self_vel().z(), (fp).self_vel().z())),
             fp::fadds(
                 (fp::fmuls((fp).self_vel().x(), (fp).self_vel().x())),
                 (fp::fmuls((fp).self_vel().y(), (fp).self_vel().y())),
             ),
-            (fp::fmuls((fp).self_vel().z(), (fp).self_vel().z())),
         ),
     );
 }

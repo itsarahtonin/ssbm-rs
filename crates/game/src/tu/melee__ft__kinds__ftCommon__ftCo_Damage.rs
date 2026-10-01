@@ -40,8 +40,8 @@ pub fn ftCo_Damage_CalcAngle<'a>(ctx: &'a Ctx, fp: Fighter<'a>, f: f64) -> f64 {
                 .set_x1B(((fns::p_ftCommonData(ctx).get()).x7F0() as u8));
         }
         return (fp::fmuls(
-            fp::frsp(((fp).dmg().x1848_kb_angle()) as f64),
             0.01745329238474369,
+            fp::frsp(((fp).dmg().x1848_kb_angle()) as f64),
         ));
     }
     if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
@@ -50,6 +50,7 @@ pub fn ftCo_Damage_CalcAngle<'a>(ctx: &'a Ctx, fp: Fighter<'a>, f: f64) -> f64 {
         return fp::frsp(0_i32 as f64);
     } else {
         let mut result: f64 = (fp::fmuls(
+            0.01745329238474369,
             (fp::fmadds(
                 (fns::p_ftCommonData(ctx).get()).x148(),
                 (fp::fdivs(
@@ -61,17 +62,16 @@ pub fn ftCo_Damage_CalcAngle<'a>(ctx: &'a Ctx, fp: Fighter<'a>, f: f64) -> f64 {
                 )),
                 fp::frsp(1_i32 as f64),
             )),
-            0.01745329238474369,
         ));
         if result
             > (fp::fmuls(
-                ((fns::p_ftCommonData(ctx).get()).x148()),
                 0.01745329238474369,
+                ((fns::p_ftCommonData(ctx).get()).x148()),
             ))
         {
             result = (fp::fmuls(
-                ((fns::p_ftCommonData(ctx).get()).x148()),
                 0.01745329238474369,
+                ((fns::p_ftCommonData(ctx).get()).x148()),
             ));
         }
         return result;
@@ -3058,8 +3058,8 @@ pub fn ftCo_8008E5A4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                 let mut scale: f64 = 0.0;
                 kb_mag = inl_sqrtf(ctx, fp::fmadds(kb_x, kb_x, fp::fmuls(kb_y, kb_y)));
                 scale = (fp::fmuls(
-                    ((fns::p_ftCommonData(ctx).get()).x1A8()),
                     0.01745329238474369,
+                    ((fns::p_ftCommonData(ctx).get()).x1A8()),
                 ));
                 angle = fp::fmadds(scale, f30, angle);
                 (fp).x8c_kb_vel()
@@ -7912,11 +7912,11 @@ pub fn ftCo_Damage_SetMv8FromKbThreshold<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             0x8000d5bc,
             (Single(fp::frsp(
                 (fp::fadds(
+                    (fp::fmuls(((fp).x8c_kb_vel().z()), ((fp).x8c_kb_vel().z()))),
                     fp::fadds(
                         (fp::fmuls(((fp).x8c_kb_vel().x()), ((fp).x8c_kb_vel().x()))),
                         (fp::fmuls(((fp).x8c_kb_vel().y()), ((fp).x8c_kb_vel().y()))),
                     ),
-                    (fp::fmuls(((fp).x8c_kb_vel().z()), ((fp).x8c_kb_vel().z()))),
                 )),
             )),),
         )
@@ -7995,11 +7995,11 @@ pub fn ftCo_DamageFly_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         && (inl_sqrtf(
             ctx,
             (fp::fadds(
+                (fp::fmuls(((fp).x8c_kb_vel().z()), ((fp).x8c_kb_vel().z()))),
                 fp::fadds(
                     (fp::fmuls(((fp).x8c_kb_vel().x()), ((fp).x8c_kb_vel().x()))),
                     (fp::fmuls(((fp).x8c_kb_vel().y()), ((fp).x8c_kb_vel().y()))),
                 ),
-                (fp::fmuls(((fp).x8c_kb_vel().z()), ((fp).x8c_kb_vel().z()))),
             )),
         ) < (fns::p_ftCommonData(ctx).get()).x1C8())
     {
@@ -8130,11 +8130,11 @@ pub fn ftCo_DamageFlyRoll_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         if fns::sqrtf__Ff(
             ctx,
             (fp::fadds(
+                (fp::fmuls(((fp).x8c_kb_vel().z()), ((fp).x8c_kb_vel().z()))),
                 fp::fadds(
                     (fp::fmuls(((fp).x8c_kb_vel().x()), ((fp).x8c_kb_vel().x()))),
                     (fp::fmuls(((fp).x8c_kb_vel().y()), ((fp).x8c_kb_vel().y()))),
                 ),
-                (fp::fmuls(((fp).x8c_kb_vel().z()), ((fp).x8c_kb_vel().z()))),
             )),
         ) < (fns::p_ftCommonData(ctx).get()).x1C8()
         {
@@ -8311,15 +8311,15 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;

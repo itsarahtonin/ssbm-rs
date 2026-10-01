@@ -550,20 +550,20 @@ pub fn ftWalkCommon_800E0060<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     {
         let mut accel: f64 = fp::fmuls(
+            accel_mul,
             fp::fmuls(
                 (fp).input().lstick().get(0_i32).x(),
                 (fp).co_attrs().walk_accel_mul(),
             ),
-            accel_mul,
         );
         accel = fp::fadds(accel, inl_getWalkAccel_unfused(ctx, fp, accel_mul));
         {
             let mut target_vel: f64 = fp::fmuls(
+                accel_mul,
                 fp::fmuls(
                     (fp).input().lstick().get(0_i32).x(),
                     (fp).co_attrs().walk_max_vel(),
                 ),
-                accel_mul,
             );
             if (target_vel != 0.0) {
                 let mut mult: f64 = fp::fdivs((fp).gr_vel(), target_vel);

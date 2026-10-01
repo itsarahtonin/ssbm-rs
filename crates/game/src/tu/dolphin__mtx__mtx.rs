@@ -1999,7 +1999,7 @@ pub fn MTXLightPerspective<'a>(
     let mut angle: f64 = 0.0;
     let mut cot: f64 = 0.0;
     angle = (fp::fmuls(0.5, fovY));
-    angle = fp::fmuls(angle, 0.01745329238474369);
+    angle = fp::fmuls(0.01745329238474369, angle);
     cot = fp::fdivs(fp::frsp(1_i32 as f64), fns::tanf(ctx, angle));
     (Handle::add(m, 0_i32))
         .at(0_i32)

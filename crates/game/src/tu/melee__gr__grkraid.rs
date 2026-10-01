@@ -283,8 +283,8 @@ pub fn grKraid_801FE440<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 (gp).u().kraid().set_x0((0_i32 as i8));
             } else {
                 fVar3 = fp::fmuls(
-                    fVar3,
                     (fp::fdivs(3.1415927410125732, fp::frsp(180_i32 as f64))),
+                    fVar3,
                 );
                 inl_HSD_JObjAddRotationZ_unfused(ctx, jobj, fVar3);
                 fns::Camera_RequestQuake(ctx, (enums::QuakeKind_Loop as i32), pos);
@@ -581,7 +581,7 @@ pub fn grKraid_801FEA00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 fns::grKraid_801FF068(
                     ctx,
                     gobj,
-                    fp::fctiwz(fp::fadds((gp).u().kraid2().x8(), 5.0)),
+                    fp::fctiwz(fp::fadds(5.0, (gp).u().kraid2().x8())),
                 );
                 (gp).u().kraid2().set_xC(0_i32);
                 (gp).u().kraid2().set_x0((3_i32 as i8));

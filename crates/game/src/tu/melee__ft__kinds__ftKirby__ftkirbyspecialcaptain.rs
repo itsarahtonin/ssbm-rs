@@ -150,6 +150,7 @@ pub fn ftKb_CaSpecialAirN_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             range = fp::fneg(range);
         }
         angle = (fp::fmuls(
+            0.01745329238474369,
             (fp::fdivs(
                 (fp::fmuls(range, (da2).specialn_ca_angle_difference())),
                 (fp::fsubs(
@@ -157,7 +158,6 @@ pub fn ftKb_CaSpecialAirN_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     (da2).specialn_ca_x_axis_range(),
                 )),
             )),
-            0.01745329238474369,
         ));
         (fp).self_vel().set_y({
             let __t1 = fns::sinf(ctx, angle);

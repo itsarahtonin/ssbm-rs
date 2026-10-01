@@ -2247,8 +2247,8 @@ pub fn ftCommon_8007FDA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         ctx,
         (fp).x1980(),
         fp::fmuls(
-            fp::fmuls(phi_f31, (Handle::add(temp_r30, 1_i32)).x()),
             (fp).x34_scale().y(),
+            fp::fmuls(phi_f31, (Handle::add(temp_r30, 1_i32)).x()),
         ),
     );
 }
@@ -2381,8 +2381,8 @@ pub fn ftCommon_80080174<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             ctx,
             (fp).x1980(),
             fp::fmuls(
-                fp::fmuls(phi_f2, (Handle::add(v, 1_i32)).x()),
                 (fp).x34_scale().y(),
+                fp::fmuls(phi_f2, (Handle::add(v, 1_i32)).x()),
             ),
         );
     }

@@ -118,9 +118,9 @@ pub fn ftMr_SpecialHi_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             )),
         ));
         let mut rad: f64 = (if (fp).input().lstick().get(0_i32).x() > fp::frsp(0_i32 as f64) {
-            fp::fneg((fp::fmuls((deg), 0.01745329238474369)))
+            fp::fneg((fp::fmuls(0.01745329238474369, (deg))))
         } else {
-            (fp::fmuls((deg), 0.01745329238474369))
+            (fp::fmuls(0.01745329238474369, (deg)))
         });
         if (if rad < fp::frsp(0_i32 as f64) {
             fp::fneg(rad)
@@ -288,9 +288,9 @@ fn inl_ftMr_SpecialHi_IASA_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             )),
         ));
         let mut rad: f64 = (if (fp).input().lstick().get(0_i32).x() > fp::frsp(0_i32 as f64) {
-            fp::fneg((fp::fmuls((deg), 0.01745329238474369)))
+            fp::fneg((fp::fmuls(0.01745329238474369, (deg))))
         } else {
-            (fp::fmuls((deg), 0.01745329238474369))
+            (fp::fmuls(0.01745329238474369, (deg)))
         });
         if (if rad < fp::frsp(0_i32 as f64) {
             fp::fneg(rad)

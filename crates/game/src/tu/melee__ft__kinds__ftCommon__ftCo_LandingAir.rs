@@ -424,7 +424,10 @@ pub fn ftCo_LandingAir_EnterWithMsidLag<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ms
         ctx,
         gobj,
         fp::fdivs(
-            (fp::fadds(fns::ftAnim_8006F484(ctx, gobj), 0.10000000149011612)),
+            ({
+                let __t1 = fns::ftAnim_8006F484(ctx, gobj);
+                fp::fadds(0.10000000149011612, __t1)
+            }),
             lag,
         ),
     );

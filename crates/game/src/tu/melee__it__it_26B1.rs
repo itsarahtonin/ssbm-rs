@@ -36,11 +36,11 @@ pub fn it_8026B1D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, itemHitboxUnk: HitCapsu
         let mut itemSpeed: f64 = inl_my_sqrtf(
             ctx,
             fp::fadds(
+                fp::fmuls((ip).x40_vel().z(), (ip).x40_vel().z()),
                 fp::fadds(
                     fp::fmuls((ip).x40_vel().x(), (ip).x40_vel().x()),
                     fp::fmuls((ip).x40_vel().y(), (ip).x40_vel().y()),
                 ),
-                fp::fmuls((ip).x40_vel().z(), (ip).x40_vel().z()),
             ),
         );
         ret = fp::fmadds(
@@ -1227,15 +1227,15 @@ fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp(fp::fmul(x, guess));
         return y;

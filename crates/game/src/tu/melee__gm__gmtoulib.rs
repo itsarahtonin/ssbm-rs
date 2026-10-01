@@ -693,29 +693,29 @@ pub fn fn_8018B090<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                     )));
                     fns::lbl_803D9DAC(ctx).target().set_z(fp::fneg(150.0));
                     d = (if (fp::fmuls(
+                        0.03333299979567528,
                         (fp::fsubs(
                             fns::lbl_803D9DAC(ctx).target().x(),
                             fns::lbl_803D9DAC(ctx).current().x(),
                         )),
-                        0.03333299979567528,
                     )) < fp::frsp(0_i32 as f64)
                     {
                         fp::fneg(
                             (fp::fmuls(
+                                0.03333299979567528,
                                 (fp::fsubs(
                                     fns::lbl_803D9DAC(ctx).target().x(),
                                     fns::lbl_803D9DAC(ctx).current().x(),
                                 )),
-                                0.03333299979567528,
                             )),
                         )
                     } else {
                         (fp::fmuls(
+                            0.03333299979567528,
                             (fp::fsubs(
                                 fns::lbl_803D9DAC(ctx).target().x(),
                                 fns::lbl_803D9DAC(ctx).current().x(),
                             )),
-                            0.03333299979567528,
                         ))
                     });
                     fns::lbl_803D9DAC(ctx).step().set_x(fp::fadds(1.0, d));

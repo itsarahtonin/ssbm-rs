@@ -2008,7 +2008,7 @@ pub fn ftCo_AirCatch_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fns::ftCommon_Fall(
             ctx,
             fp,
-            fp::frsp(fp::fmul((co).gravity(), 0.2)),
+            fp::frsp(fp::fmul(0.2, (co).gravity())),
             (co).terminal_velocity(),
         );
     } else {

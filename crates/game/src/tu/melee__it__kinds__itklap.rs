@@ -233,11 +233,11 @@ pub fn it_802E1E94<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     rand_val = fns::HSD_Randf(ctx);
     (ip).xDD4_itemVar()
         .klap()
-        .set_x24(fp::fmuls((fp::fsubs(rand_val, 0.5)), 0.1745329201221466));
+        .set_x24(fp::fmuls(0.1745329201221466, (fp::fsubs(rand_val, 0.5))));
     rand_val = fns::HSD_Randf(ctx);
     (ip).xDD4_itemVar()
         .klap()
-        .set_x28(fp::fmuls((fp::fsubs(rand_val, 0.5)), 0.1745329201221466));
+        .set_x28(fp::fmuls(0.1745329201221466, (fp::fsubs(rand_val, 0.5))));
     fns::Item_80268E5C(ctx, gobj, 4_i32, (enums::ITEM_ANIM_UPDATE as i32));
 }
 

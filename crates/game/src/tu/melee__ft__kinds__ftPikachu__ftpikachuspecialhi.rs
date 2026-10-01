@@ -832,7 +832,7 @@ pub fn ftPk_SpecialHi_80127064<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         vec2.set_y((fp).mv().pk().specialhi().x10().y());
         vec2.set_z(0.0);
         tempf = fns::lbVector_AngleXY(ctx, vec2, vec1);
-        if tempf > (fp::fmuls(fp::frsp(((pika_attr).xA8()) as f64), 0.01745329238474369)) {
+        if tempf > (fp::fmuls(0.01745329238474369, fp::frsp(((pika_attr).xA8()) as f64))) {
             return 1_i32;
         }
         return 0_i32;
@@ -1169,8 +1169,8 @@ fn inl_ftCommon_HandleTeleportCollisions_unfused<'a>(
     if (((coll).env_flags() & (0x2000_i32 | 0x4000_i32)) != 0)
         && (fns::lbVector_AngleXY(ctx, (coll).ceiling().normal(), (fp).self_vel())
             > (fp::fmuls(
-                (fp::fadds(90.0, fp::frsp((angle_clamp).get() as f64))),
                 0.01745329238474369,
+                (fp::fadds(90.0, fp::frsp((angle_clamp).get() as f64))),
             )))
     {
         fns::ftPk_SpecialHi_MotionChangeUpdateVel_Unk1(ctx, gobj);
@@ -1178,8 +1178,8 @@ fn inl_ftCommon_HandleTeleportCollisions_unfused<'a>(
     if (((coll).env_flags() & 63_i32) != 0)
         && (fns::lbVector_AngleXY(ctx, (coll).left_facing_wall().normal(), (fp).self_vel())
             > (fp::fmuls(
-                (fp::fadds(90.0, fp::frsp((angle_clamp).get() as f64))),
                 0.01745329238474369,
+                (fp::fadds(90.0, fp::frsp((angle_clamp).get() as f64))),
             )))
     {
         fns::ftPk_SpecialHi_MotionChangeUpdateVel_Unk1(ctx, gobj);
@@ -1187,8 +1187,8 @@ fn inl_ftCommon_HandleTeleportCollisions_unfused<'a>(
     if (((coll).env_flags() & 0xfc0_i32) != 0)
         && (fns::lbVector_AngleXY(ctx, (coll).right_facing_wall().normal(), (fp).self_vel())
             > (fp::fmuls(
-                (fp::fadds(90.0, fp::frsp((angle_clamp).get() as f64))),
                 0.01745329238474369,
+                (fp::fadds(90.0, fp::frsp((angle_clamp).get() as f64))),
             )))
     {
         fns::ftPk_SpecialHi_MotionChangeUpdateVel_Unk1(ctx, gobj);
@@ -1202,15 +1202,15 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;

@@ -54,13 +54,13 @@ pub fn fn_801A0E34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
         inl_HSD_JObjSetRotationY_unfused(
             ctx,
             statics::melee__gm__gmpause::lbl_80479B10(ctx).analog_stick(),
-            (fp::fmuls((x), 0.01745329238474369)),
+            (fp::fmuls(0.01745329238474369, (x))),
         );
         inl_HSD_JObjSetRotationX_unfused(
             ctx,
             statics::melee__gm__gmpause::lbl_80479B10(ctx).analog_stick(),
-            (y),
             0.01745329238474369,
+            (y),
         );
     }
 }

@@ -46,6 +46,7 @@ pub fn HSD_MtxInverse<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: ArrV<'a, F3
     }
     det = fp::fdivs(1.0, det);
     (Handle::add(dest, 0_i32)).at(0_i32).set(fp::fmuls(
+        det,
         (fp::fmsubs(
             (m).get(1_i32).at(1_i32).get(),
             (m).get(2_i32).at(2_i32).get(),
@@ -54,9 +55,9 @@ pub fn HSD_MtxInverse<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: ArrV<'a, F3
                 (m).get(1_i32).at(2_i32).get(),
             ),
         )),
-        det,
     ));
     (Handle::add(dest, 0_i32)).at(1_i32).set(fp::fmuls(
+        det,
         fp::fnmsubs(
             (m).get(0_i32).at(1_i32).get(),
             (m).get(2_i32).at(2_i32).get(),
@@ -65,9 +66,9 @@ pub fn HSD_MtxInverse<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: ArrV<'a, F3
                 (m).get(0_i32).at(2_i32).get(),
             ),
         ),
-        det,
     ));
     (Handle::add(dest, 0_i32)).at(2_i32).set(fp::fmuls(
+        det,
         (fp::fmsubs(
             (m).get(0_i32).at(1_i32).get(),
             (m).get(1_i32).at(2_i32).get(),
@@ -76,9 +77,9 @@ pub fn HSD_MtxInverse<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: ArrV<'a, F3
                 (m).get(0_i32).at(2_i32).get(),
             ),
         )),
-        det,
     ));
     (Handle::add(dest, 1_i32)).at(0_i32).set(fp::fmuls(
+        det,
         fp::fnmsubs(
             (m).get(1_i32).at(0_i32).get(),
             (m).get(2_i32).at(2_i32).get(),
@@ -87,9 +88,9 @@ pub fn HSD_MtxInverse<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: ArrV<'a, F3
                 (m).get(1_i32).at(2_i32).get(),
             ),
         ),
-        det,
     ));
     (Handle::add(dest, 1_i32)).at(1_i32).set(fp::fmuls(
+        det,
         (fp::fmsubs(
             (m).get(0_i32).at(0_i32).get(),
             (m).get(2_i32).at(2_i32).get(),
@@ -98,9 +99,9 @@ pub fn HSD_MtxInverse<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: ArrV<'a, F3
                 (m).get(0_i32).at(2_i32).get(),
             ),
         )),
-        det,
     ));
     (Handle::add(dest, 1_i32)).at(2_i32).set(fp::fmuls(
+        det,
         fp::fnmsubs(
             (m).get(0_i32).at(0_i32).get(),
             (m).get(1_i32).at(2_i32).get(),
@@ -109,9 +110,9 @@ pub fn HSD_MtxInverse<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: ArrV<'a, F3
                 (m).get(0_i32).at(2_i32).get(),
             ),
         ),
-        det,
     ));
     (Handle::add(dest, 2_i32)).at(0_i32).set(fp::fmuls(
+        det,
         (fp::fmsubs(
             (m).get(1_i32).at(0_i32).get(),
             (m).get(2_i32).at(1_i32).get(),
@@ -120,9 +121,9 @@ pub fn HSD_MtxInverse<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: ArrV<'a, F3
                 (m).get(1_i32).at(1_i32).get(),
             ),
         )),
-        det,
     ));
     (Handle::add(dest, 2_i32)).at(1_i32).set(fp::fmuls(
+        det,
         fp::fnmsubs(
             (m).get(0_i32).at(0_i32).get(),
             (m).get(2_i32).at(1_i32).get(),
@@ -131,9 +132,9 @@ pub fn HSD_MtxInverse<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: ArrV<'a, F3
                 (m).get(0_i32).at(1_i32).get(),
             ),
         ),
-        det,
     ));
     (Handle::add(dest, 2_i32)).at(2_i32).set(fp::fmuls(
+        det,
         (fp::fmsubs(
             (m).get(0_i32).at(0_i32).get(),
             (m).get(1_i32).at(1_i32).get(),
@@ -142,7 +143,6 @@ pub fn HSD_MtxInverse<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: ArrV<'a, F3
                 (m).get(0_i32).at(1_i32).get(),
             ),
         )),
-        det,
     ));
     (Handle::add(dest, 0_i32)).at(3_i32).set(fp::fnmsubs(
         (Handle::add(dest, 0_i32)).at(2_i32).get(),
@@ -216,6 +216,7 @@ pub fn HSD_MtxInverseConcat<'a>(
     } else {
         det = fp::fdivs(1.0, det);
         temp1 = fp::fmuls(
+            det,
             (fp::fmsubs(
                 (Handle::add(inv, 1_i32)).at(1_i32).get(),
                 (Handle::add(inv, 2_i32)).at(2_i32).get(),
@@ -224,9 +225,9 @@ pub fn HSD_MtxInverseConcat<'a>(
                     (Handle::add(inv, 1_i32)).at(2_i32).get(),
                 )),
             )),
-            det,
         );
         temp2 = fp::fmuls(
+            det,
             (fp::fnmsubs(
                 (Handle::add(inv, 0_i32)).at(1_i32).get(),
                 (Handle::add(inv, 2_i32)).at(2_i32).get(),
@@ -235,10 +236,10 @@ pub fn HSD_MtxInverseConcat<'a>(
                     (Handle::add(inv, 0_i32)).at(2_i32).get(),
                 )),
             )),
-            det,
         );
         new_var = (Handle::add(inv, 1_i32)).at(1_i32).get();
         temp3 = fp::fmuls(
+            det,
             (fp::fnmsubs(
                 (Handle::add(inv, 1_i32)).at(0_i32).get(),
                 (Handle::add(inv, 2_i32)).at(2_i32).get(),
@@ -247,17 +248,17 @@ pub fn HSD_MtxInverseConcat<'a>(
                     (Handle::add(inv, 1_i32)).at(2_i32).get(),
                 )),
             )),
-            det,
         );
         temp7 = fp::fmuls(
+            det,
             (fp::fmsubs(
                 (Handle::add(inv, 0_i32)).at(1_i32).get(),
                 (Handle::add(inv, 1_i32)).at(2_i32).get(),
                 (fp::fmuls(new_var, (Handle::add(inv, 0_i32)).at(2_i32).get())),
             )),
-            det,
         );
         temp4 = fp::fmuls(
+            det,
             (fp::fmsubs(
                 (Handle::add(inv, 0_i32)).at(0_i32).get(),
                 (Handle::add(inv, 2_i32)).at(2_i32).get(),
@@ -266,9 +267,9 @@ pub fn HSD_MtxInverseConcat<'a>(
                     (Handle::add(inv, 0_i32)).at(2_i32).get(),
                 )),
             )),
-            det,
         );
         temp8 = fp::fmuls(
+            det,
             (fp::fnmsubs(
                 (Handle::add(inv, 0_i32)).at(0_i32).get(),
                 (Handle::add(inv, 1_i32)).at(2_i32).get(),
@@ -277,17 +278,17 @@ pub fn HSD_MtxInverseConcat<'a>(
                     (Handle::add(inv, 0_i32)).at(2_i32).get(),
                 )),
             )),
-            det,
         );
         temp5 = fp::fmuls(
+            det,
             (fp::fmsubs(
                 (Handle::add(inv, 1_i32)).at(0_i32).get(),
                 (Handle::add(inv, 2_i32)).at(1_i32).get(),
                 (fp::fmuls((Handle::add(inv, 2_i32)).at(0_i32).get(), new_var)),
             )),
-            det,
         );
         temp6 = fp::fmuls(
+            det,
             (fp::fnmsubs(
                 (Handle::add(inv, 0_i32)).at(0_i32).get(),
                 (Handle::add(inv, 2_i32)).at(1_i32).get(),
@@ -296,9 +297,9 @@ pub fn HSD_MtxInverseConcat<'a>(
                     (Handle::add(inv, 0_i32)).at(1_i32).get(),
                 )),
             )),
-            det,
         );
         temp9 = fp::fmuls(
+            det,
             (fp::fmsubs(
                 (Handle::add(inv, 0_i32)).at(0_i32).get(),
                 (Handle::add(inv, 1_i32)).at(1_i32).get(),
@@ -307,7 +308,6 @@ pub fn HSD_MtxInverseConcat<'a>(
                     (Handle::add(inv, 0_i32)).at(1_i32).get(),
                 )),
             )),
-            det,
         );
         temp10 = fp::fnmsubs(
             temp7,
@@ -369,6 +369,7 @@ pub fn HSD_MtxInverseConcat<'a>(
                 )),
             ));
             m.get(0_i32).at(3_i32).set(fp::fadds(
+                temp10,
                 fp::fmadds(
                     temp7,
                     (Handle::add(src, 2_i32)).at(3_i32).get(),
@@ -378,7 +379,6 @@ pub fn HSD_MtxInverseConcat<'a>(
                         fp::fmuls(temp2, (Handle::add(src, 1_i32)).at(3_i32).get()),
                     )),
                 ),
-                temp10,
             ));
             m.get(1_i32).at(0_i32).set(fp::fmadds(
                 temp8,
@@ -408,6 +408,7 @@ pub fn HSD_MtxInverseConcat<'a>(
                 )),
             ));
             m.get(1_i32).at(3_i32).set(fp::fadds(
+                temp11,
                 fp::fmadds(
                     temp8,
                     (Handle::add(src, 2_i32)).at(3_i32).get(),
@@ -417,7 +418,6 @@ pub fn HSD_MtxInverseConcat<'a>(
                         fp::fmuls(temp4, (Handle::add(src, 1_i32)).at(3_i32).get()),
                     )),
                 ),
-                temp11,
             ));
             m.get(2_i32).at(0_i32).set(fp::fmadds(
                 temp9,
@@ -447,6 +447,7 @@ pub fn HSD_MtxInverseConcat<'a>(
                 )),
             ));
             m.get(2_i32).at(3_i32).set(fp::fadds(
+                temp12,
                 fp::fmadds(
                     temp9,
                     (Handle::add(src, 2_i32)).at(3_i32).get(),
@@ -456,7 +457,6 @@ pub fn HSD_MtxInverseConcat<'a>(
                         fp::fmuls(temp6, (Handle::add(src, 1_i32)).at(3_i32).get()),
                     )),
                 ),
-                temp12,
             ));
             fns::PSMTXCopy(ctx, m.get(0), dest);
         } else {
@@ -488,6 +488,7 @@ pub fn HSD_MtxInverseConcat<'a>(
                 )),
             ));
             (Handle::add(dest, 0_i32)).at(3_i32).set(fp::fadds(
+                temp10,
                 fp::fmadds(
                     temp7,
                     (Handle::add(src, 2_i32)).at(3_i32).get(),
@@ -497,7 +498,6 @@ pub fn HSD_MtxInverseConcat<'a>(
                         fp::fmuls(temp2, (Handle::add(src, 1_i32)).at(3_i32).get()),
                     )),
                 ),
-                temp10,
             ));
             (Handle::add(dest, 1_i32)).at(0_i32).set(fp::fmadds(
                 temp8,
@@ -527,6 +527,7 @@ pub fn HSD_MtxInverseConcat<'a>(
                 )),
             ));
             (Handle::add(dest, 1_i32)).at(3_i32).set(fp::fadds(
+                temp11,
                 fp::fmadds(
                     temp8,
                     (Handle::add(src, 2_i32)).at(3_i32).get(),
@@ -536,7 +537,6 @@ pub fn HSD_MtxInverseConcat<'a>(
                         fp::fmuls(temp4, (Handle::add(src, 1_i32)).at(3_i32).get()),
                     )),
                 ),
-                temp11,
             ));
             (Handle::add(dest, 2_i32)).at(0_i32).set(fp::fmadds(
                 temp9,
@@ -566,6 +566,7 @@ pub fn HSD_MtxInverseConcat<'a>(
                 )),
             ));
             (Handle::add(dest, 2_i32)).at(3_i32).set(fp::fadds(
+                temp12,
                 fp::fmadds(
                     temp9,
                     (Handle::add(src, 2_i32)).at(3_i32).get(),
@@ -575,7 +576,6 @@ pub fn HSD_MtxInverseConcat<'a>(
                         fp::fmuls(temp6, (Handle::add(src, 1_i32)).at(3_i32).get()),
                     )),
                 ),
-                temp12,
             ));
         }
     }
@@ -601,6 +601,7 @@ pub fn HSD_MtxInverseTranspose<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: Ar
         }
         det = fp::fdivs(1.0, det);
         (Handle::add(dest, 0_i32)).at(0_i32).set(fp::fmuls(
+            det,
             (fp::fmsubs(
                 (m).get(1_i32).at(1_i32).get(),
                 (m).get(2_i32).at(2_i32).get(),
@@ -609,9 +610,9 @@ pub fn HSD_MtxInverseTranspose<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: Ar
                     (m).get(1_i32).at(2_i32).get(),
                 )),
             )),
-            det,
         ));
         (Handle::add(dest, 1_i32)).at(0_i32).set(fp::fmuls(
+            det,
             fp::fnmsubs(
                 (m).get(0_i32).at(1_i32).get(),
                 (m).get(2_i32).at(2_i32).get(),
@@ -620,9 +621,9 @@ pub fn HSD_MtxInverseTranspose<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: Ar
                     (m).get(0_i32).at(2_i32).get(),
                 )),
             ),
-            det,
         ));
         (Handle::add(dest, 2_i32)).at(0_i32).set(fp::fmuls(
+            det,
             (fp::fmsubs(
                 (m).get(0_i32).at(1_i32).get(),
                 (m).get(1_i32).at(2_i32).get(),
@@ -631,9 +632,9 @@ pub fn HSD_MtxInverseTranspose<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: Ar
                     (m).get(0_i32).at(2_i32).get(),
                 )),
             )),
-            det,
         ));
         (Handle::add(dest, 0_i32)).at(1_i32).set(fp::fmuls(
+            det,
             fp::fnmsubs(
                 (m).get(1_i32).at(0_i32).get(),
                 (m).get(2_i32).at(2_i32).get(),
@@ -642,9 +643,9 @@ pub fn HSD_MtxInverseTranspose<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: Ar
                     (m).get(1_i32).at(2_i32).get(),
                 )),
             ),
-            det,
         ));
         (Handle::add(dest, 1_i32)).at(1_i32).set(fp::fmuls(
+            det,
             (fp::fmsubs(
                 (m).get(0_i32).at(0_i32).get(),
                 (m).get(2_i32).at(2_i32).get(),
@@ -653,9 +654,9 @@ pub fn HSD_MtxInverseTranspose<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: Ar
                     (m).get(0_i32).at(2_i32).get(),
                 )),
             )),
-            det,
         ));
         (Handle::add(dest, 2_i32)).at(1_i32).set(fp::fmuls(
+            det,
             fp::fnmsubs(
                 (m).get(0_i32).at(0_i32).get(),
                 (m).get(1_i32).at(2_i32).get(),
@@ -664,9 +665,9 @@ pub fn HSD_MtxInverseTranspose<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: Ar
                     (m).get(0_i32).at(2_i32).get(),
                 )),
             ),
-            det,
         ));
         (Handle::add(dest, 0_i32)).at(2_i32).set(fp::fmuls(
+            det,
             (fp::fmsubs(
                 (m).get(1_i32).at(0_i32).get(),
                 (m).get(2_i32).at(1_i32).get(),
@@ -675,9 +676,9 @@ pub fn HSD_MtxInverseTranspose<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: Ar
                     (m).get(1_i32).at(1_i32).get(),
                 )),
             )),
-            det,
         ));
         (Handle::add(dest, 1_i32)).at(2_i32).set(fp::fmuls(
+            det,
             fp::fnmsubs(
                 (m).get(0_i32).at(0_i32).get(),
                 (m).get(2_i32).at(1_i32).get(),
@@ -686,9 +687,9 @@ pub fn HSD_MtxInverseTranspose<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: Ar
                     (m).get(0_i32).at(1_i32).get(),
                 )),
             ),
-            det,
         ));
         (Handle::add(dest, 2_i32)).at(2_i32).set(fp::fmuls(
+            det,
             (fp::fmsubs(
                 (m).get(0_i32).at(0_i32).get(),
                 (m).get(1_i32).at(1_i32).get(),
@@ -697,7 +698,6 @@ pub fn HSD_MtxInverseTranspose<'a>(ctx: &'a Ctx, src: ArrV<'a, F32, 4>, dest: Ar
                     (m).get(0_i32).at(1_i32).get(),
                 )),
             )),
-            det,
         ));
         (Handle::add(dest, 0_i32))
             .at(3_i32)
@@ -726,6 +726,10 @@ pub fn HSD_MtxGetRotation<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, vec: Vec<'a>) {
     length0 = inl_sqrtf(
         ctx,
         fp::fadds(
+            fp::fmuls(
+                (Handle::add(m, 2_i32)).at(0_i32).get(),
+                (Handle::add(m, 2_i32)).at(0_i32).get(),
+            ),
             fp::fadds(
                 fp::fmuls(
                     (Handle::add(m, 0_i32)).at(0_i32).get(),
@@ -735,10 +739,6 @@ pub fn HSD_MtxGetRotation<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, vec: Vec<'a>) {
                     (Handle::add(m, 1_i32)).at(0_i32).get(),
                     (Handle::add(m, 1_i32)).at(0_i32).get(),
                 ),
-            ),
-            fp::fmuls(
-                (Handle::add(m, 2_i32)).at(0_i32).get(),
-                (Handle::add(m, 2_i32)).at(0_i32).get(),
             ),
         ),
     );
@@ -746,6 +746,10 @@ pub fn HSD_MtxGetRotation<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, vec: Vec<'a>) {
         length1 = inl_sqrtf(
             ctx,
             fp::fadds(
+                fp::fmuls(
+                    (Handle::add(m, 2_i32)).at(1_i32).get(),
+                    (Handle::add(m, 2_i32)).at(1_i32).get(),
+                ),
                 fp::fadds(
                     fp::fmuls(
                         (Handle::add(m, 0_i32)).at(1_i32).get(),
@@ -755,10 +759,6 @@ pub fn HSD_MtxGetRotation<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, vec: Vec<'a>) {
                         (Handle::add(m, 1_i32)).at(1_i32).get(),
                         (Handle::add(m, 1_i32)).at(1_i32).get(),
                     ),
-                ),
-                fp::fmuls(
-                    (Handle::add(m, 2_i32)).at(1_i32).get(),
-                    (Handle::add(m, 2_i32)).at(1_i32).get(),
                 ),
             ),
         );
@@ -766,6 +766,10 @@ pub fn HSD_MtxGetRotation<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, vec: Vec<'a>) {
             length2 = inl_sqrtf(
                 ctx,
                 fp::fadds(
+                    fp::fmuls(
+                        (Handle::add(m, 2_i32)).at(2_i32).get(),
+                        (Handle::add(m, 2_i32)).at(2_i32).get(),
+                    ),
                     fp::fadds(
                         fp::fmuls(
                             (Handle::add(m, 0_i32)).at(2_i32).get(),
@@ -775,10 +779,6 @@ pub fn HSD_MtxGetRotation<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, vec: Vec<'a>) {
                             (Handle::add(m, 1_i32)).at(2_i32).get(),
                             (Handle::add(m, 1_i32)).at(2_i32).get(),
                         ),
-                    ),
-                    fp::fmuls(
-                        (Handle::add(m, 2_i32)).at(2_i32).get(),
-                        (Handle::add(m, 2_i32)).at(2_i32).get(),
                     ),
                 ),
             );
@@ -1425,41 +1425,41 @@ pub fn HSD_MtxInitAllocData<'a>(ctx: &'a Ctx) {
 fn inl_HSD_CalcDeterminantMatrix3x4<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>) -> f64 {
     let mut m = m;
     return fp::fnmsubs(
+        (Handle::add(m, 1_i32)).at(2_i32).get(),
         fp::fmuls(
             (Handle::add(m, 0_i32)).at(0_i32).get(),
             (Handle::add(m, 2_i32)).at(1_i32).get(),
         ),
-        (Handle::add(m, 1_i32)).at(2_i32).get(),
         fp::fnmsubs(
+            (Handle::add(m, 2_i32)).at(2_i32).get(),
             fp::fmuls(
                 (Handle::add(m, 1_i32)).at(0_i32).get(),
                 (Handle::add(m, 0_i32)).at(1_i32).get(),
             ),
-            (Handle::add(m, 2_i32)).at(2_i32).get(),
             fp::fnmsubs(
+                (Handle::add(m, 0_i32)).at(2_i32).get(),
                 fp::fmuls(
                     (Handle::add(m, 2_i32)).at(0_i32).get(),
                     (Handle::add(m, 1_i32)).at(1_i32).get(),
                 ),
-                (Handle::add(m, 0_i32)).at(2_i32).get(),
                 fp::fmadds(
+                    (Handle::add(m, 2_i32)).at(1_i32).get(),
                     fp::fmuls(
                         (Handle::add(m, 0_i32)).at(2_i32).get(),
                         (Handle::add(m, 1_i32)).at(0_i32).get(),
                     ),
-                    (Handle::add(m, 2_i32)).at(1_i32).get(),
                     fp::fmadds(
+                        (Handle::add(m, 2_i32)).at(2_i32).get(),
                         fp::fmuls(
                             (Handle::add(m, 0_i32)).at(0_i32).get(),
                             (Handle::add(m, 1_i32)).at(1_i32).get(),
                         ),
-                        (Handle::add(m, 2_i32)).at(2_i32).get(),
                         fp::fmuls(
+                            (Handle::add(m, 2_i32)).at(0_i32).get(),
                             fp::fmuls(
                                 (Handle::add(m, 0_i32)).at(1_i32).get(),
                                 (Handle::add(m, 1_i32)).at(2_i32).get(),
                             ),
-                            (Handle::add(m, 2_i32)).at(0_i32).get(),
                         ),
                     ),
                 ),
@@ -1483,15 +1483,15 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;

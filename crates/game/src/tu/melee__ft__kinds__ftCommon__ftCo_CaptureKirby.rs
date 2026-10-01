@@ -31,6 +31,10 @@ pub fn ftCo_800BD19C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) -> f64 
     let mut pos = pos;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     return fp::fadds(
+        (fp::fmuls(
+            (fp::fsubs((fp).cur_pos().z(), (pos).z())),
+            (fp::fsubs((fp).cur_pos().z(), (pos).z())),
+        )),
         fp::fadds(
             (fp::fmuls(
                 (fp::fsubs((fp).cur_pos().x(), (pos).x())),
@@ -41,10 +45,6 @@ pub fn ftCo_800BD19C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) -> f64 
                 (fp::fsubs((fp).cur_pos().y(), (pos).y())),
             )),
         ),
-        (fp::fmuls(
-            (fp::fsubs((fp).cur_pos().z(), (pos).z())),
-            (fp::fsubs((fp).cur_pos().z(), (pos).z())),
-        )),
     );
 }
 
@@ -215,11 +215,11 @@ fn inl_lbVector_Len_unfused<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     return ctx.call::<_, f64>(
         0x8000d5bc,
         (Single(fp::frsp(fp::fadds(
+            fp::fmuls((vec).z(), (vec).z()),
             fp::fadds(
                 fp::fmuls((vec).x(), (vec).x()),
                 fp::fmuls((vec).y(), (vec).y()),
             ),
-            fp::fmuls((vec).z(), (vec).z()),
         ))),),
     );
 }

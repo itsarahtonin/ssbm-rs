@@ -231,6 +231,7 @@ pub fn _tyFigupon_80314C5C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 (tp).translate().set_y(0.4000000059604645);
                 (tp).offset().set_y(fp::fneg(0.02666666731238365));
                 (tp).set_x8(fp::fctiwz(fp::fadds(
+                    35.0,
                     fp::frsp(fp::fctiwz(
                         (if (fp::fsubs(temp_f27, temp_f29)) < fp::frsp(0_i32 as f64) {
                             fp::fneg((fp::fsubs(temp_f27, temp_f29)))
@@ -238,7 +239,6 @@ pub fn _tyFigupon_80314C5C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                             (fp::fsubs(temp_f27, temp_f29))
                         }),
                     ) as f64),
-                    35.0,
                 )));
             }
             (temp_r29).set_x56(((tp).x8() as i16));
@@ -527,8 +527,8 @@ pub fn _tyFigupon_803155C8<'a>(ctx: &'a Ctx) {
                     pct = fp::fmuls(
                         100.0,
                         (fp::fadds(
-                            (fp::fdivs(fp::frsp((ef4).x54() as f64), fval)),
                             (fp::fdivs(fp::frsp((sc.wrapping_mul(5_i32)) as f64), 100.0)),
+                            (fp::fdivs(fp::frsp((ef4).x54() as f64), fval)),
                         )),
                     );
                     if pct >= 100.0 {
@@ -5551,8 +5551,8 @@ fn inl_setupPercentDisplay_unfused<'a>(ctx: &'a Ctx, ef4: un_804D6EF4_t<'a>) {
         pct = 0.0;
     } else {
         pct = fp::fadds(
-            (fp::fdivs(fp::frsp((ef4_3).x54() as f64), fval)),
             (fp::fdivs(fp::frsp((sc.wrapping_mul(5_i32)) as f64), 100.0)),
+            (fp::fdivs(fp::frsp((ef4_3).x54() as f64), fval)),
         );
     }
     if pct >= 1.0 {
@@ -5793,8 +5793,8 @@ fn inl_setupPercentDisplay<'a>(ctx: &'a Ctx, ef4: un_804D6EF4_t<'a>) {
         pct = 0.0;
     } else {
         pct = fp::fadds(
-            (fp::fdivs(fp::frsp((ef4_3).x54() as f64), fval)),
             (fp::fdivs(fp::frsp((sc.wrapping_mul(5_i32)) as f64), 100.0)),
+            (fp::fdivs(fp::frsp((ef4_3).x54() as f64), fval)),
         );
     }
     if pct >= 1.0 {

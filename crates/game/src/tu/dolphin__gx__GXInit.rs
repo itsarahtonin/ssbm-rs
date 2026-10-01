@@ -71,7 +71,7 @@ pub fn __GXDefaultTlutRegionCallback<'a>(ctx: &'a Ctx, idx: u32) -> _GXTlutRegio
 }
 
 pub fn GXInit<'a>(ctx: &'a Ctx, a0: Addr<'a>, a1: u32) -> GXFifoObj<'a> {
-    // Transliterated from its machine code: calls __GXInitGX, which reads registers its caller sets without passing them.
+    // Transliterated from its machine code: calls GXInitTexCacheRegion, which reads registers its caller sets without passing them.
     (a0, a1).put_regs(ctx);
     asm_GXInit(ctx);
     Ret::get(ctx)

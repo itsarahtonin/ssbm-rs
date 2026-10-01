@@ -223,14 +223,14 @@ pub fn fn_80227188<'a>(ctx: &'a Ctx) {
                 fns::HSD_CObjGetEyePosition(ctx, cobj, camera);
                 fns::HSD_CObjGetInterest(ctx, cobj, interest);
                 fov = fns::HSD_CObjGetFov(ctx, cobj);
-                ang = (fp::fmuls(
-                    (fns::atan2f(
+                ang = ({
+                    let __t1 = (fns::atan2f(
                         ctx,
                         fp::fsubs(interest.y(), camera.y()),
                         fp::fneg((fp::fsubs(interest.z(), camera.z()))),
-                    )),
-                    57.295780181884766,
-                ));
+                    ));
+                    fp::fmuls(57.295780181884766, __t1)
+                });
                 fns::DevText_Erase(
                     ctx,
                     statics::melee__db__dbcamera::db_CameraInfoDisplay(ctx).get(),
@@ -797,7 +797,10 @@ pub fn fn_80227EB0<'a>(
                 fns::tanf(
                     ctx,
                     fp::fdivs(
-                        (fp::fmuls((fns::HSD_CObjGetFov(ctx, cobj)), 0.01745329238474369)),
+                        ({
+                            let __t1 = (fns::HSD_CObjGetFov(ctx, cobj));
+                            fp::fmuls(0.01745329238474369, __t1)
+                        }),
                         fp::frsp(2_i32 as f64),
                     ),
                 ),
@@ -844,7 +847,10 @@ pub fn fn_80227FE0<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, cstick_x: f64, cstick
                     fns::tanf(
                         ctx,
                         fp::fdivs(
-                            (fp::fmuls((fns::HSD_CObjGetFov(ctx, cobj)), 0.01745329238474369)),
+                            ({
+                                let __t1 = (fns::HSD_CObjGetFov(ctx, cobj));
+                                fp::fmuls(0.01745329238474369, __t1)
+                            }),
                             fp::frsp(2_i32 as f64),
                         ),
                     ),

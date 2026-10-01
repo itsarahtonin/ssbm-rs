@@ -382,7 +382,7 @@ fn inl_pika_scale_unfused<'a>(ctx: &'a Ctx, a: f64, b: f64) -> f64 {
     let mut b = b;
     let mut f: f64 = fp::fdivs(fp::fmuls(10000.0, a), b);
     f = fp::fdivs(
-        fp::frsp((fp::fctiwz((fp::fadds(f, fp::frsp(1_i32 as f64))))) as f64),
+        fp::frsp((fp::fctiwz((fp::fadds(fp::frsp(1_i32 as f64), f)))) as f64),
         10000.0,
     );
     return f;

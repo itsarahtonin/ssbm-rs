@@ -839,17 +839,20 @@ pub fn it_802DF230<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::it_802DFF14(ctx, gobj, 1_i32);
     (ip).xDD4_itemVar().zgshell().set_xE0C(20_i32);
     jobj = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
-    angle = (fp::fmuls((inl_HSD_JObjGetRotationY(ctx, jobj)), 57.295780181884766));
+    angle = ({
+        let __t3 = (inl_HSD_JObjGetRotationY(ctx, jobj));
+        fp::fmuls(57.295780181884766, __t3)
+    });
     child = inl_HSD_JObjGetChild(ctx, jobj);
     angle = fp::fmadds(
-        (inl_HSD_JObjGetRotationY(ctx, child)),
         57.295780181884766,
+        (inl_HSD_JObjGetRotationY(ctx, child)),
         angle,
     );
     if (fp::fneg(90.0) == angle) || (90.0 == angle) {
         (ip).set_facing_dir((if angle < 0.0 { fp::fneg(1.0) } else { 1.0 }));
         (ip).xDD4_itemVar().zgshell().set_xE00(0.0);
-        inl_HSD_JObjSetRotationY(ctx, jobj, (angle), 0.01745329238474369);
+        inl_HSD_JObjSetRotationY(ctx, jobj, 0.01745329238474369, (angle));
         inl_HSD_JObjSetRotationY_2(ctx, child, 0.0);
     } else {
         let mut factor: f64 = 0.0;
@@ -869,7 +872,7 @@ pub fn it_802DF230<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             });
         }
         angle = fp::frsp((rem_i32(fp::fctiwz(angle), 0x168_i32)) as f64);
-        inl_HSD_JObjSetRotationY(ctx, jobj, (angle), 0.01745329238474369);
+        inl_HSD_JObjSetRotationY(ctx, jobj, 0.01745329238474369, (angle));
         inl_HSD_JObjSetRotationY_2(ctx, child, 0.0);
         if 0.0 == angle {
             (ip).set_facing_dir(

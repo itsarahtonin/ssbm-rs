@@ -323,7 +323,7 @@ pub fn it_802D8EC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     }
     (ip).xDCC_flag().set_b3((1_i32 as u8));
     if (ip).xC9C()
-        > fp::fctiwz((fp::fmuls(fp::frsp(((attr).get()).get() as f64), 0.800000011920929)))
+        > fp::fctiwz((fp::fmuls(0.800000011920929, fp::frsp(((attr).get()).get() as f64))))
     {
         fns::it_8027CE44(ctx, gobj);
         inl_it_802D8EC8_inline(ctx, gobj);

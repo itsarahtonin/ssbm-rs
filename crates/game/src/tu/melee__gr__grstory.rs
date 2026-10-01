@@ -295,7 +295,7 @@ pub fn grStory_801E36D8<'a>(ctx: &'a Ctx, a: Vec<'a>, unused: i32, jobj: HSD_JOb
     let mut unused = unused;
     let mut jobj = jobj;
     fns::lb_8000B1CC(ctx, jobj, null::<Vec<'a>>(ctx), b);
-    if fp::fadds((a).y(), 1.0) > b.y() {
+    if fp::fadds(1.0, (a).y()) > b.y() {
         return 1_i32;
     } else {
         return 0_i32;

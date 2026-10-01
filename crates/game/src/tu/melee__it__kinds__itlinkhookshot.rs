@@ -3015,11 +3015,11 @@ pub fn it_802A3C98<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: Vec<'a>, arg2: Vec<'a>
     len = inl_sqrtf(
         ctx,
         fp::fadds(
+            fp::fmuls((arg2).z(), (arg2).z()),
             fp::fadds(
                 fp::fmuls((arg2).x(), (arg2).x()),
                 fp::fmuls((arg2).y(), (arg2).y()),
             ),
-            fp::fmuls((arg2).z(), (arg2).z()),
         ),
     );
     if len == 0.0 {
@@ -4850,15 +4850,15 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;
@@ -5027,15 +5027,15 @@ fn inl_it_802A4BFC_sqrtf_offset<'a>(ctx: &'a Ctx, x: f64, __in_caller: u32) -> f
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         (Handle::add(y, 6_i32)).set(fp::frsp((fp::fmul(x, guess))));
         return (Handle::add(y, 6_i32)).get();

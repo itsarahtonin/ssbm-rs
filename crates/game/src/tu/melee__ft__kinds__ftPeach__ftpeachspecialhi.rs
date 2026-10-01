@@ -220,9 +220,9 @@ pub fn ftPe_SpecialHiStart_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             )),
         ));
         let mut rad: f64 = (if (fp).input().lstick().get(0_i32).x() > fp::frsp(0_i32 as f64) {
-            fp::fneg((fp::fmuls((deg), 0.01745329238474369)))
+            fp::fneg((fp::fmuls(0.01745329238474369, (deg))))
         } else {
-            (fp::fmuls((deg), 0.01745329238474369))
+            (fp::fmuls(0.01745329238474369, (deg)))
         });
         let mut abs_lstick_angle: f64 = (if ((fp).lstick_angle()) < fp::frsp(0_i32 as f64) {
             fp::fneg(((fp).lstick_angle()))
@@ -573,9 +573,9 @@ fn inl_ftPe_SpecialHiStart_IASA_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             )),
         ));
         let mut rad: f64 = (if (fp).input().lstick().get(0_i32).x() > fp::frsp(0_i32 as f64) {
-            fp::fneg((fp::fmuls((deg), 0.01745329238474369)))
+            fp::fneg((fp::fmuls(0.01745329238474369, (deg))))
         } else {
-            (fp::fmuls((deg), 0.01745329238474369))
+            (fp::fmuls(0.01745329238474369, (deg)))
         });
         let mut abs_lstick_angle: f64 = (if ((fp).lstick_angle()) < fp::frsp(0_i32 as f64) {
             fp::fneg(((fp).lstick_angle()))

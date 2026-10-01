@@ -2859,15 +2859,15 @@ fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(half, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, three)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), three)),
         );
         guess = fp::fmul(
             fp::fmul(half, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, three)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), three)),
         );
         guess = fp::fmul(
             fp::fmul(half, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, three)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), three)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;

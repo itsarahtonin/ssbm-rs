@@ -1614,7 +1614,7 @@ pub fn it_80274D6C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (ip).xB54().x8().set_x(fp::fadds(left_x, (ip).pos().x()));
     (ip).xB54()
         .x8()
-        .set_z(fp::fadds(fp::fadds(right_y, (ip).pos().y()), top_y));
+        .set_z(fp::fadds(top_y, fp::fadds(right_y, (ip).pos().y())));
 }
 
 pub fn it_80274DAC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -1641,7 +1641,7 @@ pub fn it_80274DAC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (ip_2)
             .xB54()
             .x8()
-            .set_z(fp::fadds(fp::fadds(right_y, (ip_2).pos().y()), top_y));
+            .set_z(fp::fadds(top_y, fp::fadds(right_y, (ip_2).pos().y())));
     }
 }
 

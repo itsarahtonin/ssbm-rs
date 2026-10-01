@@ -133,24 +133,24 @@ pub fn calcTornadoLastPos<'a>(
     py = fp::fmuls(radius, fns::sinf(ctx, vx0));
     pz = vz0;
     (x).set(fp::fadds(
-        fp::fmadds(px, cosb, fp::fmuls(pz, sinb)),
         (gp).pos().x(),
+        fp::fmadds(px, cosb, fp::fmuls(pz, sinb)),
     ));
     (y).set(fp::fadds(
-        fp::fmadds(
-            fp::fmuls(pz, sina),
-            cosb,
-            fp::fmadds(fp::fmuls(fp::fneg(px), sina), sinb, fp::fmuls(py, cosa)),
-        ),
         (gp).pos().y(),
+        fp::fmadds(
+            cosb,
+            fp::fmuls(pz, sina),
+            fp::fmadds(sinb, fp::fmuls(fp::fneg(px), sina), fp::fmuls(py, cosa)),
+        ),
     ));
     (z).set(fp::fadds(
-        fp::fmadds(
-            fp::fmuls(pz, cosa),
-            cosb,
-            fp::fmsubs(fp::fmuls(fp::fneg(px), cosa), sinb, fp::fmuls(py, sina)),
-        ),
         (gp).pos().z(),
+        fp::fmadds(
+            cosb,
+            fp::fmuls(pz, cosa),
+            fp::fmsubs(sinb, fp::fmuls(fp::fneg(px), cosa), fp::fmuls(py, sina)),
+        ),
     ));
 }
 

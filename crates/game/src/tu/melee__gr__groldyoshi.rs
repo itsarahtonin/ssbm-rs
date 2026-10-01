@@ -585,7 +585,7 @@ pub fn grOldYoshi_8020F088<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
             fp::frsp(
                 ((statics::melee__gr__groldyoshi::yakumono_param(ctx).get()).x18() as i32) as f64,
             ),
-            (fp::fmsubs(dVar10, 2.0, 1.0)),
+            (fp::fmsubs(2.0, dVar10, 1.0)),
         );
         inl_HSD_JObjSetTranslateY(ctx, Handle::cast::<HSD_JObj<'a>>((arg).hsd_obj()), dVar9);
     } else {
@@ -690,7 +690,7 @@ pub fn grOldYoshi_8020F31C<'a>(
     }
     fVar4 = fp::fmadds(
         fVar3,
-        (fp::fmuls(fp::fmuls(fp::fneg(param2), 0.5), fVar3)),
+        (fp::fmuls(fp::fmuls(0.5, fp::fneg(param2)), fVar3)),
         (fp::fmuls(fVar3, fVar2)),
     );
     param1 = inl_grOldYoshi_8020F31C_inline(ctx, param1, param2, param3, param4, fVar4);
@@ -715,7 +715,7 @@ pub fn grOldYoshi_8020F40C<'a>(ctx: &'a Ctx, a: Vec<'a>, arg: i32, joint: HSD_JO
     let mut arg = arg;
     let mut joint = joint;
     fns::lb_8000B1CC(ctx, joint, null::<Vec<'a>>(ctx), b);
-    if (a).y() > fp::fadds(b.y(), fp::fneg(5.0)) {
+    if (a).y() > fp::fadds(fp::fneg(5.0), b.y()) {
         return 1_i32;
     } else {
         return 0_i32;

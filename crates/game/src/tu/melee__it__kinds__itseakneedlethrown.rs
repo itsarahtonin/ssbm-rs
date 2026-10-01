@@ -867,12 +867,12 @@ fn inl_itSeakNeedleThrown_SetupDrop_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>
         } else {
             fp::fneg(1.0)
         });
-        fp::fmuls(
-            statics::melee__it__kinds__itseakneedlethrown::it_803F6FE0(ctx)
+        {
+            let __t2 = statics::melee__it__kinds__itseakneedlethrown::it_803F6FE0(ctx)
                 .at(fns::HSD_Randi(ctx, 8_i32))
-                .get(),
-            __t1,
-        )
+                .get();
+            fp::fmuls(__t1, __t2)
+        }
     });
     (ip).xDD4_itemVar().seakneedlethrown().set_xDD8(0.0);
     (ip).xDD4_itemVar().seakneedlethrown().set_xDDC(

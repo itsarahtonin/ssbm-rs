@@ -779,8 +779,8 @@ fn inl_ftCommon_HandleTeleportCollisions_unfused<'a>(
     if (((coll).env_flags() & (0x2000_i32 | 0x4000_i32)) != 0)
         && (fns::lbVector_AngleXY(ctx, (coll).ceiling().normal(), (fp).self_vel())
             > (fp::fmuls(
-                (fp::fadds(90.0, fp::frsp((angle_clamp).get() as f64))),
                 0.01745329238474369,
+                (fp::fadds(90.0, fp::frsp((angle_clamp).get() as f64))),
             )))
     {
         statics::melee__ft__kinds__ftSeak__ftseakspecialhi::ftSk_SpecialHi_80113F68(ctx, gobj);
@@ -788,8 +788,8 @@ fn inl_ftCommon_HandleTeleportCollisions_unfused<'a>(
     if (((coll).env_flags() & 63_i32) != 0)
         && (fns::lbVector_AngleXY(ctx, (coll).left_facing_wall().normal(), (fp).self_vel())
             > (fp::fmuls(
-                (fp::fadds(90.0, fp::frsp((angle_clamp).get() as f64))),
                 0.01745329238474369,
+                (fp::fadds(90.0, fp::frsp((angle_clamp).get() as f64))),
             )))
     {
         statics::melee__ft__kinds__ftSeak__ftseakspecialhi::ftSk_SpecialHi_80113F68(ctx, gobj);
@@ -797,8 +797,8 @@ fn inl_ftCommon_HandleTeleportCollisions_unfused<'a>(
     if (((coll).env_flags() & 0xfc0_i32) != 0)
         && (fns::lbVector_AngleXY(ctx, (coll).right_facing_wall().normal(), (fp).self_vel())
             > (fp::fmuls(
-                (fp::fadds(90.0, fp::frsp((angle_clamp).get() as f64))),
                 0.01745329238474369,
+                (fp::fadds(90.0, fp::frsp((angle_clamp).get() as f64))),
             )))
     {
         statics::melee__ft__kinds__ftSeak__ftseakspecialhi::ftSk_SpecialHi_80113F68(ctx, gobj);
@@ -835,15 +835,15 @@ fn inl_my_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
             let mut guess: f64 = fp::frsqrte(x);
             guess = fp::fmul(
                 fp::fmul(0.5, guess),
-                (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+                (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
             );
             guess = fp::fmul(
                 fp::fmul(0.5, guess),
-                (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+                (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
             );
             guess = fp::fmul(
                 fp::fmul(0.5, guess),
-                (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+                (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
             );
             y = fp::frsp((fp::fmul(x, guess)));
             return y;

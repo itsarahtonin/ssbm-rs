@@ -414,16 +414,19 @@ pub fn grIzumi_801CC358<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 } as i32)
                     < 0_i32
                 {
-                    let mut f: f64 = fp::fmuls(
-                        fns::HSD_Randf(ctx),
-                        (fp::fadds(
-                            fp::fadds(
-                                (statics::melee__gr__grizumi::yakumono_param(ctx).get()).x40(),
-                                (statics::melee__gr__grizumi::yakumono_param(ctx).get()).x44(),
-                            ),
-                            (statics::melee__gr__grizumi::yakumono_param(ctx).get()).x48(),
-                        )),
-                    );
+                    let mut f: f64 = {
+                        let __t2 = fns::HSD_Randf(ctx);
+                        fp::fmuls(
+                            (fp::fadds(
+                                (statics::melee__gr__grizumi::yakumono_param(ctx).get()).x48(),
+                                fp::fadds(
+                                    (statics::melee__gr__grizumi::yakumono_param(ctx).get()).x40(),
+                                    (statics::melee__gr__grizumi::yakumono_param(ctx).get()).x44(),
+                                ),
+                            )),
+                            __t2,
+                        )
+                    };
                     f = fp::fsubs(
                         f,
                         (statics::melee__gr__grizumi::yakumono_param(ctx).get()).x40(),
@@ -576,11 +579,11 @@ pub fn grIzumi_801CC358<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         if __case <= 4 {
             {
                 if ({
-                    let __t2 = (gp).u().izumi3().xC6();
+                    let __t3 = (gp).u().izumi3().xC6();
                     (gp).u()
                         .izumi3()
                         .set_xC6((gp).u().izumi3().xC6().wrapping_sub(1));
-                    __t2
+                    __t3
                 } as i32)
                     < 0_i32
                 {

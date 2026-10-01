@@ -486,7 +486,7 @@ pub fn ftCo_800A0CB0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     if rem_i32((fp).cpu().x7C(), 0x258_i32) == 0_i32 {
         let mut x: f64 = fns::HSD_Randf(ctx);
         let mut rand: f64 = 0.0;
-        x = fp::fmuls(fp::fmuls(x, x), x);
+        x = fp::fmuls(x, fp::fmuls(x, x));
         rand = fp::fsubs(1.0, x);
         's1: {
             let __case = match ((fp).kind() as u32) {
@@ -3602,8 +3602,8 @@ pub fn ftCo_800A3908<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
                         dist = fp::frsp({
                             let __t11 = ({
                                 let __t10 = fp::fmuls(
-                                    fp::frsp((t.wrapping_sub(frames)) as f64),
                                     inl_ftCo_GetTerminalVelocity(ctx, fp),
+                                    fp::frsp((t.wrapping_sub(frames)) as f64),
                                 );
                                 fp::fsub(
                                     (fp::fnmsub(
@@ -3825,8 +3825,8 @@ pub fn ftCo_800A4038<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
                         dist = fp::frsp({
                             let __t11 = ({
                                 let __t10 = fp::fmuls(
-                                    fp::frsp((t.wrapping_sub(frames)) as f64),
                                     inl_ftCo_GetTerminalVelocity(ctx, fp),
+                                    fp::frsp((t.wrapping_sub(frames)) as f64),
                                 );
                                 fp::fsub(
                                     (fp::fnmsub(
@@ -3978,7 +3978,7 @@ pub fn ftCo_800A4768<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>) -> i32 {
                         dist = fp::fmadds(dx, dx, fp::fmuls(dy, dy));
                         if (best < 0.0) || (best > dist) {
                             best = dist;
-                            (arg1).set_x(fp::frsp(fp::fadd(pt.x(), 5.0)));
+                            (arg1).set_x(fp::frsp(fp::fadd(5.0, pt.x())));
                             (arg1).set_y(pt.y());
                             (arg1).set_z(pt.z());
                         }
@@ -12308,7 +12308,7 @@ pub fn ftCo_800A6700<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>, arg2: Vec
                     Handle::copy_from(a, (island).x8());
                     ax = a.x();
                     ay = a.y();
-                    px = fp::frsp(fp::fadd(ax, 5.0));
+                    px = fp::frsp(fp::fadd(5.0, ax));
                     result = inl_ftCo_800A0FB0(
                         ctx,
                         floor_pos,
@@ -12318,9 +12318,9 @@ pub fn ftCo_800A6700<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>, arg2: Vec
                         1_i32.wrapping_neg(),
                         1_i32.wrapping_neg(),
                         1_i32.wrapping_neg(),
-                        fp::frsp(fp::fadd(ax, 5.0)),
-                        fp::frsp(fp::fadd(ay, 5.0)),
-                        fp::frsp(fp::fadd(ax, 5.0)),
+                        fp::frsp(fp::fadd(5.0, ax)),
+                        fp::frsp(fp::fadd(5.0, ay)),
+                        fp::frsp(fp::fadd(5.0, ax)),
                         fp::frsp(fp::fsub(ay, 5.0)),
                         0.0,
                     );
@@ -12331,7 +12331,7 @@ pub fn ftCo_800A6700<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>, arg2: Vec
                             dist = fp::fmadds(px, px, fp::fmuls(dy, dy));
                             if dist > best {
                                 best = dist;
-                                (arg2).set_x(fp::frsp(fp::fadd(ax, 5.0)));
+                                (arg2).set_x(fp::frsp(fp::fadd(5.0, ax)));
                                 (arg2).set_y(ay);
                                 (arg2).set_z(a.z());
                             }
@@ -12351,7 +12351,7 @@ pub fn ftCo_800A6700<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>, arg2: Vec
                         1_i32.wrapping_neg(),
                         1_i32.wrapping_neg(),
                         px,
-                        fp::frsp(fp::fadd(by, 5.0)),
+                        fp::frsp(fp::fadd(5.0, by)),
                         px,
                         fp::frsp(fp::fsub(by, 5.0)),
                         0.0,
@@ -12694,11 +12694,11 @@ pub fn ftCo_800A6FC4<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>, arg2: Vec
                 }
                 line_id.set(1_i32.wrapping_neg());
                 line = 0_i32;
-                px = fp::frsp(fp::fadd(a.x(), 5.0));
+                px = fp::frsp(fp::fadd(5.0, a.x()));
                 blocked = fns::mpCheckFloor(
                     ctx,
                     px,
-                    fp::frsp(fp::fadd(a.y(), 10.0)),
+                    fp::frsp(fp::fadd(10.0, a.y())),
                     px,
                     fp::frsp(fp::fsub(a.y(), 10.0)),
                     0.0,
@@ -12757,7 +12757,7 @@ pub fn ftCo_800A6FC4<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>, arg2: Vec
                 blocked = fns::mpCheckFloor(
                     ctx,
                     px,
-                    fp::frsp(fp::fadd(b.y(), 10.0)),
+                    fp::frsp(fp::fadd(10.0, b.y())),
                     px,
                     fp::frsp(fp::fsub(b.y(), 10.0)),
                     0.0,
@@ -15467,15 +15467,15 @@ pub fn ftCo_800A9904<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                         let mut guess: f64 = fp::frsqrte(x_time);
                         guess = fp::fmul(
                             fp::fmul(0.5, guess),
-                            (fp::fnmsub(fp::fmul(guess, guess), x_time, 3.0)),
+                            (fp::fnmsub(x_time, fp::fmul(guess, guess), 3.0)),
                         );
                         guess = fp::fmul(
                             fp::fmul(0.5, guess),
-                            (fp::fnmsub(fp::fmul(guess, guess), x_time, 3.0)),
+                            (fp::fnmsub(x_time, fp::fmul(guess, guess), 3.0)),
                         );
                         guess = fp::fmul(
                             fp::fmul(0.5, guess),
-                            (fp::fnmsub(fp::fmul(guess, guess), x_time, 3.0)),
+                            (fp::fnmsub(x_time, fp::fmul(guess, guess), 3.0)),
                         );
                         sqrt_time_store.set(fp::frsp((fp::fmul(x_time, guess))));
                         sqrt_time = (sqrt_time_store).get();
@@ -15502,15 +15502,15 @@ pub fn ftCo_800A9904<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                         let mut guess_2: f64 = fp::frsqrte(terminal_time);
                         guess_2 = fp::fmul(
                             fp::fmul(0.5, guess_2),
-                            (fp::fnmsub(fp::fmul(guess_2, guess_2), terminal_time, 3.0)),
+                            (fp::fnmsub(terminal_time, fp::fmul(guess_2, guess_2), 3.0)),
                         );
                         guess_2 = fp::fmul(
                             fp::fmul(0.5, guess_2),
-                            (fp::fnmsub(fp::fmul(guess_2, guess_2), terminal_time, 3.0)),
+                            (fp::fnmsub(terminal_time, fp::fmul(guess_2, guess_2), 3.0)),
                         );
                         guess_2 = fp::fmul(
                             fp::fmul(0.5, guess_2),
-                            (fp::fnmsub(fp::fmul(guess_2, guess_2), terminal_time, 3.0)),
+                            (fp::fnmsub(terminal_time, fp::fmul(guess_2, guess_2), 3.0)),
                         );
                         sqrt_terminal_store.set(fp::frsp((fp::fmul(terminal_time, guess_2))));
                         sqrt_terminal = (sqrt_terminal_store).get();
@@ -15525,8 +15525,8 @@ pub fn ftCo_800A9904<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             predicted_y = fp::frsp({
                 let __t3 = ({
                     let __t2 = (fp::fmuls(
-                        (fp::fsubs(x_time, terminal_time)),
                         inl_ftCo_GetTerminalVelocity(ctx, fp),
+                        (fp::fsubs(x_time, terminal_time)),
                     ));
                     fp::fsub(
                         fp::fnmsub(
@@ -15734,15 +15734,15 @@ pub fn ftCo_800A9CB4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                     let mut guess: f64 = fp::frsqrte(x_time);
                     guess = fp::fmul(
                         fp::fmul(0.5, guess),
-                        (fp::fnmsub(fp::fmul(guess, guess), x_time, 3.0)),
+                        (fp::fnmsub(x_time, fp::fmul(guess, guess), 3.0)),
                     );
                     guess = fp::fmul(
                         fp::fmul(0.5, guess),
-                        (fp::fnmsub(fp::fmul(guess, guess), x_time, 3.0)),
+                        (fp::fnmsub(x_time, fp::fmul(guess, guess), 3.0)),
                     );
                     guess = fp::fmul(
                         fp::fmul(0.5, guess),
-                        (fp::fnmsub(fp::fmul(guess, guess), x_time, 3.0)),
+                        (fp::fnmsub(x_time, fp::fmul(guess, guess), 3.0)),
                     );
                     sqrt_x_time_store = fp::frsp((fp::fmul(x_time, guess)));
                     sqrt_x_time = sqrt_x_time_store;
@@ -15769,15 +15769,15 @@ pub fn ftCo_800A9CB4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                     let mut guess_2: f64 = fp::frsqrte(terminal_time);
                     guess_2 = fp::fmul(
                         fp::fmul(0.5, guess_2),
-                        (fp::fnmsub(fp::fmul(guess_2, guess_2), terminal_time, 3.0)),
+                        (fp::fnmsub(terminal_time, fp::fmul(guess_2, guess_2), 3.0)),
                     );
                     guess_2 = fp::fmul(
                         fp::fmul(0.5, guess_2),
-                        (fp::fnmsub(fp::fmul(guess_2, guess_2), terminal_time, 3.0)),
+                        (fp::fnmsub(terminal_time, fp::fmul(guess_2, guess_2), 3.0)),
                     );
                     guess_2 = fp::fmul(
                         fp::fmul(0.5, guess_2),
-                        (fp::fnmsub(fp::fmul(guess_2, guess_2), terminal_time, 3.0)),
+                        (fp::fnmsub(terminal_time, fp::fmul(guess_2, guess_2), 3.0)),
                     );
                     sqrt_terminal_time_store = fp::frsp((fp::fmul(terminal_time, guess_2)));
                     sqrt_term_time = sqrt_terminal_time_store;
@@ -19218,7 +19218,7 @@ pub fn ftCo_800AC30C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     if (rem_i32((data).x7C(), 3_i32) == 0_i32)
         && (!({
             let __t1 = fns::HSD_Randf(ctx);
-            fp::fmuls(fp::frsp((data).level() as f64), 0.10000000149011612) < __t1
+            fp::fmuls(0.10000000149011612, fp::frsp((data).level() as f64)) < __t1
         }))
     {
         if ((fp).cpu().lstick().x() as i32) < 0_i32 {
@@ -46511,15 +46511,15 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;
@@ -46755,15 +46755,15 @@ fn inl_sqrtf_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         (y).set(fp::frsp((fp::fmul(x, guess))));
         return (y).get();
@@ -46987,12 +46987,14 @@ fn inl_inlineD0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, fp1: Fighter<'a>) -> 
     let mut data: CpuFighter<'a> = (fp).cpu();
     y = (fp1).cur_pos().y();
     x = (fp1).cur_pos().x();
-    if (((x < fp::fadds(fns::Stage_GetBlastZoneLeftOffset(ctx), (data).half_width()))
-        || (x > fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), (data).half_width())))
-        || (y < fp::fadds(
-            fns::Stage_GetBlastZoneBottomOffset(ctx),
-            (data).half_height(),
-        )))
+    if (((x < {
+        let __t1 = fns::Stage_GetBlastZoneLeftOffset(ctx);
+        fp::fadds((data).half_width(), __t1)
+    }) || (x > fp::fsubs(fns::Stage_GetBlastZoneRightOffset(ctx), (data).half_width())))
+        || (y < {
+            let __t2 = fns::Stage_GetBlastZoneBottomOffset(ctx);
+            fp::fadds((data).half_height(), __t2)
+        }))
         || (y > fp::fsubs(fns::Stage_GetBlastZoneTopOffset(ctx), (data).half_height()))
     {
         return 1_i32;

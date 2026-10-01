@@ -67,10 +67,10 @@ pub fn ftNs_SpecialS_ItemPKFireSpawn<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             PKFireVel = (ness_attr).x2C_PKFIRE_GROUNDED_VELOCITY();
         }
         PKFireVelStruct.set_z(0.0);
-        PKFireVelStruct.set_x(fp::fmuls(
-            fp::fmuls(PKFireVel, fns::cosf(ctx, PKFireLaunch)),
-            (fp).facing_dir(),
-        ));
+        PKFireVelStruct.set_x({
+            let __t1 = fp::fmuls(PKFireVel, fns::cosf(ctx, PKFireLaunch));
+            fp::fmuls((fp).facing_dir(), __t1)
+        });
         PKFireLaunchNew = fns::sinf(ctx, PKFireLaunch);
         PKFireVelStruct.set_y(fp::fmuls(PKFireVel, PKFireLaunchNew));
         PKFireRot = fp::fmuls(PKFireLaunch, (fp).facing_dir());

@@ -255,11 +255,11 @@ pub fn ftCo_LiftTurn_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     ));
     if !((fp).x2222_b6() != 0) {
         let mut angle: f64 = fp::fmadds(
+            0.01745329238474369,
             (fp::fdivs(
                 fp::frsp(180_i32 as f64),
                 (fns::p_ftCommonData(ctx).get()).x230(),
             )),
-            0.01745329238474369,
             fns::ftPartGetRotZ(ctx, fp, part),
         );
         fns::ftPartSetRotY(ctx, fp, part, angle);

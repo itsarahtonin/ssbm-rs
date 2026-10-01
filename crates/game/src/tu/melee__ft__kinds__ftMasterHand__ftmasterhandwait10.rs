@@ -431,8 +431,8 @@ pub fn ftMh_Wait1_0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         rand = fns::HSD_Randf(ctx);
                         vec.set_x(fp::fsubs(
                             fp::fmadds(
-                                fp::fmuls((da).xCC_pos().x(), rand),
                                 fp::frsp(2_i32 as f64),
+                                fp::fmuls((da).xCC_pos().x(), rand),
                                 (da).xC4_pos().x(),
                             ),
                             (da).xCC_pos().x(),
@@ -440,8 +440,8 @@ pub fn ftMh_Wait1_0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         rand = fns::HSD_Randf(ctx);
                         vec.set_y(fp::fsubs(
                             fp::fmadds(
-                                fp::fmuls((da).xCC_pos().y(), rand),
                                 fp::frsp(2_i32 as f64),
+                                fp::fmuls((da).xCC_pos().y(), rand),
                                 (da).xC4_pos().y(),
                             ),
                             (da).xCC_pos().y(),
@@ -603,8 +603,8 @@ pub fn ftMh_MS_341_80150894<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         let mut rand: f64 = fns::HSD_Randf(ctx);
         pos.set_x(fp::fsubs(
             fp::fmadds(
-                fp::fmuls((da).xCC_pos().x(), rand),
                 fp::frsp(2_i32 as f64),
+                fp::fmuls((da).xCC_pos().x(), rand),
                 (da).xC4_pos().x(),
             ),
             (da).xCC_pos().x(),
@@ -612,8 +612,8 @@ pub fn ftMh_MS_341_80150894<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         rand = fns::HSD_Randf(ctx);
         pos.set_y(fp::fsubs(
             fp::fmadds(
-                fp::fmuls((da).xCC_pos().y(), rand),
                 fp::frsp(2_i32 as f64),
+                fp::fmuls((da).xCC_pos().y(), rand),
                 (da).xC4_pos().y(),
             ),
             (da).xCC_pos().y(),

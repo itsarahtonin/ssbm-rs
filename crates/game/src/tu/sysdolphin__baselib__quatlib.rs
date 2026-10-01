@@ -45,6 +45,10 @@ pub fn MatToQuat<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, q: Quaternion<'a>) -> i3
     lenCol.at(0_i32).set(inl_sqrtf(
         ctx,
         fp::fadds(
+            fp::fmuls(
+                (Handle::add(m, 2_i32)).at(0_i32).get(),
+                (Handle::add(m, 2_i32)).at(0_i32).get(),
+            ),
             fp::fadds(
                 fp::fmuls(
                     (Handle::add(m, 0_i32)).at(0_i32).get(),
@@ -54,16 +58,16 @@ pub fn MatToQuat<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, q: Quaternion<'a>) -> i3
                     (Handle::add(m, 1_i32)).at(0_i32).get(),
                     (Handle::add(m, 1_i32)).at(0_i32).get(),
                 ),
-            ),
-            fp::fmuls(
-                (Handle::add(m, 2_i32)).at(0_i32).get(),
-                (Handle::add(m, 2_i32)).at(0_i32).get(),
             ),
         ),
     ));
     lenCol.at(1_i32).set(inl_sqrtf(
         ctx,
         fp::fadds(
+            fp::fmuls(
+                (Handle::add(m, 2_i32)).at(1_i32).get(),
+                (Handle::add(m, 2_i32)).at(1_i32).get(),
+            ),
             fp::fadds(
                 fp::fmuls(
                     (Handle::add(m, 0_i32)).at(1_i32).get(),
@@ -73,16 +77,16 @@ pub fn MatToQuat<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, q: Quaternion<'a>) -> i3
                     (Handle::add(m, 1_i32)).at(1_i32).get(),
                     (Handle::add(m, 1_i32)).at(1_i32).get(),
                 ),
-            ),
-            fp::fmuls(
-                (Handle::add(m, 2_i32)).at(1_i32).get(),
-                (Handle::add(m, 2_i32)).at(1_i32).get(),
             ),
         ),
     ));
     lenCol.at(2_i32).set(inl_sqrtf(
         ctx,
         fp::fadds(
+            fp::fmuls(
+                (Handle::add(m, 2_i32)).at(2_i32).get(),
+                (Handle::add(m, 2_i32)).at(2_i32).get(),
+            ),
             fp::fadds(
                 fp::fmuls(
                     (Handle::add(m, 0_i32)).at(2_i32).get(),
@@ -93,13 +97,13 @@ pub fn MatToQuat<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, q: Quaternion<'a>) -> i3
                     (Handle::add(m, 1_i32)).at(2_i32).get(),
                 ),
             ),
-            fp::fmuls(
-                (Handle::add(m, 2_i32)).at(2_i32).get(),
-                (Handle::add(m, 2_i32)).at(2_i32).get(),
-            ),
         ),
     ));
     s = fp::fadds(
+        fp::fdivs(
+            (Handle::add(m, 2_i32)).at(2_i32).get(),
+            lenCol.at(2_i32).get(),
+        ),
         fp::fadds(
             fp::fdivs(
                 (Handle::add(m, 0_i32)).at(0_i32).get(),
@@ -109,10 +113,6 @@ pub fn MatToQuat<'a>(ctx: &'a Ctx, m: ArrV<'a, F32, 4>, q: Quaternion<'a>) -> i3
                 (Handle::add(m, 1_i32)).at(1_i32).get(),
                 lenCol.at(1_i32).get(),
             ),
-        ),
-        fp::fdivs(
-            (Handle::add(m, 2_i32)).at(2_i32).get(),
-            lenCol.at(2_i32).get(),
         ),
     );
     if s > 0.0 {
@@ -331,11 +331,11 @@ pub fn HSD_QuatLib_8037ECE0<'a>(ctx: &'a Ctx, axis: Vec<'a>, q: Quaternion<'a>, 
     len = inl_sqrtf(
         ctx,
         fp::fadds(
+            fp::fmuls((axis).z(), (axis).z()),
             fp::fadds(
                 fp::fmuls((axis).x(), (axis).x()),
                 fp::fmuls((axis).y(), (axis).y()),
             ),
-            fp::fmuls((axis).z(), (axis).z()),
         ),
     );
     if fp::fabs(len) < 1.1754943508222875e-38_f64 {
@@ -1232,15 +1232,15 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;

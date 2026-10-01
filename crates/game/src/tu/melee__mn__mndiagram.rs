@@ -7684,8 +7684,8 @@ pub fn mnDiagram_DrawCellValue<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, col: u8, ro
                         ctx,
                         jobj,
                         fp::fadds(
-                            fp::fmadds(x_spacing, fp::frsp(i as f64), col_offset),
                             0.4000000059604645,
+                            fp::fmadds(x_spacing, fp::frsp(i as f64), col_offset),
                         ),
                     );
                 }

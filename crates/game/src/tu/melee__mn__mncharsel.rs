@@ -28842,7 +28842,7 @@ fn inl_inline3_unfused<'a>(ctx: &'a Ctx, i: i32, x: f64, __in_caller: u32) -> HS
     let mut x = x;
     let mut cc0: HSD_JObj<'a> = null(ctx);
     let mut arc: HSD_JObj<'a> = statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get();
-    let mut frame: f64 = fp::fadds(x, fp::frsp(1_i32 as f64));
+    let mut frame: f64 = fp::fadds(fp::frsp(1_i32 as f64), x);
     let _ = fns::lb_80011E24(
         ctx,
         arc,

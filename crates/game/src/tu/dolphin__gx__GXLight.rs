@@ -177,7 +177,7 @@ pub fn GXInitLightDistAttn<'a>(
             );
             k2 = fp::fdivs(
                 (fp::fmuls(0.5, (fp::fsubs(1.0, ref_br)))),
-                (fp::fmuls(fp::fmuls(ref_br, ref_dist), ref_dist)),
+                (fp::fmuls(ref_dist, fp::fmuls(ref_br, ref_dist))),
             );
             break 's1;
         }
@@ -186,7 +186,7 @@ pub fn GXInitLightDistAttn<'a>(
             k1 = 0.0;
             k2 = fp::fdivs(
                 (fp::fsubs(1.0, ref_br)),
-                (fp::fmuls(fp::fmuls(ref_br, ref_dist), ref_dist)),
+                (fp::fmuls(ref_dist, fp::fmuls(ref_br, ref_dist))),
             );
             break 's1;
         }

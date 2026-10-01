@@ -913,6 +913,9 @@ pub fn __THPReadQuantizationTable<'a>(ctx: &'a Ctx, info: _THPFileInfo<'a>) -> u
                                             .get((id as i32))
                                             .at((i as i32))
                                             .set(fp::frsp(fp::fmul(
+                                            statics::dolphin__thp__THPDec::__THPAANScaleFactor(ctx)
+                                                .at((col as i32))
+                                                .get(),
                                             fp::fmul(
                                                 q_temp.at((i as i32)).get(),
                                                 statics::dolphin__thp__THPDec::__THPAANScaleFactor(
@@ -921,9 +924,6 @@ pub fn __THPReadQuantizationTable<'a>(ctx: &'a Ctx, info: _THPFileInfo<'a>) -> u
                                                 .at((row as i32))
                                                 .get(),
                                             ),
-                                            statics::dolphin__thp__THPDec::__THPAANScaleFactor(ctx)
-                                                .at((col as i32))
-                                                .get(),
                                         )));
                                         i = i.wrapping_add(1);
                                     }

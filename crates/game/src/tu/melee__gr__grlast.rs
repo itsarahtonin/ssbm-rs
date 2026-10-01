@@ -395,8 +395,8 @@ pub fn grLast_8021AC30<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (gp).u().last().set_xCC(fp::frsp(0_i32 as f64));
     (gp).u().last().set_xD0(fp::frsp(0_i32 as f64));
     (gp).u().last().set_xD4(fp::fmadds(
-        fns::HSD_Randf(ctx),
         grLast_804DBB80,
+        fns::HSD_Randf(ctx),
         grLast_804DBB7C,
     ));
     (gp).u().last().set_xD4(fp::fmuls(
@@ -408,8 +408,8 @@ pub fn grLast_8021AC30<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }),
     ));
     (gp).u().last().set_xD8(fp::fmadds(
-        fns::HSD_Randf(ctx),
         grLast_804DBB80,
+        fns::HSD_Randf(ctx),
         grLast_804DBB7C,
     ));
     (gp).u().last().set_xD8(fp::fmuls(

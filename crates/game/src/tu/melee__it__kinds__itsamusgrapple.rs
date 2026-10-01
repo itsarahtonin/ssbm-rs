@@ -88,20 +88,20 @@ pub fn it_802B7160<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, data: itSamusGrapple_Hi
     damage_arg = (damage_arg & (0x3ff_i32 as u32));
     fns::ftColl_8007ABD0(ctx, hitbox, damage_arg, gobj);
     (hitbox).set_scale(fp::fmuls(
-        fp::frsp(((data).create_hitbox().create_hitbox_1().size() as i32) as f64),
         0.0039059999398887157,
+        fp::frsp(((data).create_hitbox().create_hitbox_1().size() as i32) as f64),
     ));
     (hitbox).b_offset().set_x(fp::fmuls(
-        fp::frsp((data).create_hitbox().create_hitbox_1().z_offset() as f64),
         0.0039059999398887157,
+        fp::frsp((data).create_hitbox().create_hitbox_1().z_offset() as f64),
     ));
     (hitbox).b_offset().set_y(fp::fmuls(
-        fp::frsp((data).create_hitbox().create_hitbox_2().y_offset() as f64),
         0.0039059999398887157,
+        fp::frsp((data).create_hitbox().create_hitbox_2().y_offset() as f64),
     ));
     (hitbox).b_offset().set_z(fp::fmuls(
-        fp::frsp((data).create_hitbox().create_hitbox_2().x_offset() as f64),
         0.0039059999398887157,
+        fp::frsp((data).create_hitbox().create_hitbox_2().x_offset() as f64),
     ));
     fns::ftColl_8007AC9C(
         ctx,

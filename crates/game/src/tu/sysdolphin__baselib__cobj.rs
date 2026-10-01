@@ -4338,8 +4338,8 @@ pub fn HSD_CObjGetTop<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
                     fp::fmuls(
                         0.5,
                         (fp::fmuls(
-                            ((cobj).projection_param().perspective().fov()),
                             0.01745329238474369,
+                            ((cobj).projection_param().perspective().fov()),
                         )),
                     ),
                 );
@@ -4410,8 +4410,8 @@ pub fn HSD_CObjGetBottom<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
                     fp::fmuls(
                         0.5,
                         (fp::fmuls(
-                            ((cobj).projection_param().perspective().fov()),
                             0.01745329238474369,
+                            ((cobj).projection_param().perspective().fov()),
                         )),
                     ),
                 );
@@ -4480,8 +4480,8 @@ pub fn HSD_CObjGetLeft<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
                         fp::fmuls(
                             0.5,
                             (fp::fmuls(
-                                ((cobj).projection_param().perspective().fov()),
                                 0.01745329238474369,
+                                ((cobj).projection_param().perspective().fov()),
                             )),
                         ),
                     );
@@ -4552,8 +4552,8 @@ pub fn HSD_CObjGetRight<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
                         fp::fmuls(
                             0.5,
                             (fp::fmuls(
-                                ((cobj).projection_param().perspective().fov()),
                                 0.01745329238474369,
+                                ((cobj).projection_param().perspective().fov()),
                             )),
                         ),
                     );
@@ -5638,15 +5638,15 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;

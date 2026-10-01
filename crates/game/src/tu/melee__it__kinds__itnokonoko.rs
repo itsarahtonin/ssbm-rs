@@ -661,7 +661,7 @@ pub fn it_802DD7F0<'a>(
             (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
         (ip).set_facing_dir(fp::frsp(arg3 as f64));
         inl_coll_inline_unfused(ctx, ip);
-        temp_f31 = fp::frsp(fp::fmul((ip).facing_dir(), 1.5707963267948966));
+        temp_f31 = fp::frsp(fp::fmul(1.5707963267948966, (ip).facing_dir()));
         inl_HSD_JObjSetRotationY_unfused(ctx, jobj, temp_f31);
         (ip).xDD4_itemVar().nokonoko().set_x40(arg0);
         if (ip).xDD4_itemVar().nokonoko().x40() == 2_i32 {

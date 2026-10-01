@@ -431,7 +431,7 @@ pub fn ftKb_PrSpecialNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).set_cur_anim_frame(fp::frsp(0_i32 as f64));
         fns::ftAnim_SetAnimRate(ctx, gobj, fp::frsp(0_i32 as f64));
         (fp).set_gr_vel({
-            let __t1 = fp::fmuls((fp).facing_dir(), 9.999999747378752e-05_f64);
+            let __t1 = fp::fmuls(9.999999747378752e-05_f64, (fp).facing_dir());
             (fp).self_vel().set_x(__t1);
             __t1
         });
@@ -488,8 +488,8 @@ pub fn ftKb_PrSpecialNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp::fmuls(
             fp::frsp((fp).mv().pr().specialn().x2C() as f64),
             (fp::fmuls(
-                ((da).specialn_pr_charge_spin_animation()),
                 0.01745329238474369,
+                ((da).specialn_pr_charge_spin_animation()),
             )),
         )),
         (fp).mv().pr().specialn().x14(),
@@ -529,8 +529,8 @@ pub fn ftKb_PrSpecialNFull_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp::fmuls(
             fp::frsp((fp).mv().pr().specialn().x2C() as f64),
             (fp::fmuls(
-                ((da).specialn_pr_charge_spin_animation()),
                 0.01745329238474369,
+                ((da).specialn_pr_charge_spin_animation()),
             )),
         )),
         (fp).mv().pr().specialn().x14(),
@@ -569,8 +569,8 @@ pub fn ftKb_PrSpecialN1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         let mut old_angle: f64 = (fp).mv().pr().specialn().x14();
         let mut delta: f64 = fp::fmuls(
             (fp::fmuls(
-                fp::frsp(((fp).mv().pr().specialn().x2C()) as f64),
                 0.01745329238474369,
+                fp::frsp(((fp).mv().pr().specialn().x2C()) as f64),
             )),
             fp::frsp(
                 (fp::fmul(
@@ -1649,7 +1649,7 @@ pub fn ftKb_PrSpecialAirNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).set_cur_anim_frame(fp::frsp(0_i32 as f64));
         fns::ftAnim_SetAnimRate(ctx, gobj, fp::frsp(0_i32 as f64));
         (fp).self_vel()
-            .set_x(fp::fmuls((fp).facing_dir(), 9.999999747378752e-05_f64));
+            .set_x(fp::fmuls(9.999999747378752e-05_f64, (fp).facing_dir()));
         (fp).x74_self_accel().set_x(fp::frsp(0_i32 as f64));
         fns::ftPartSetRotY(
             ctx,
@@ -1699,8 +1699,8 @@ pub fn ftKb_PrSpecialAirNLoop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp::fmuls(
             fp::frsp((fp).mv().pr().specialn().x2C() as f64),
             (fp::fmuls(
-                ((da).specialn_pr_charge_spin_animation()),
                 0.01745329238474369,
+                ((da).specialn_pr_charge_spin_animation()),
             )),
         )),
         (fp).mv().pr().specialn().x14(),
@@ -1740,8 +1740,8 @@ pub fn ftKb_PrSpecialAirNFull_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp::fmuls(
             fp::frsp((fp).mv().pr().specialn().x2C() as f64),
             (fp::fmuls(
-                ((da).specialn_pr_charge_spin_animation()),
                 0.01745329238474369,
+                ((da).specialn_pr_charge_spin_animation()),
             )),
         )),
         (fp).mv().pr().specialn().x14(),
@@ -2028,11 +2028,11 @@ pub fn ftKb_PrSpecialNLoop_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).set_gr_vel(fp::fmuls(
             (fp).mv().pr().specialn().x34().x(),
             (fp::fmuls(
+                (da).specialn_pr_air_speed(),
                 (fp::fsubs(
                     fp::frsp((fp).mv().pr().specialn().x2C() as f64),
                     (da).specialn_pr_charge_rate1(),
                 )),
-                (da).specialn_pr_air_speed(),
             )),
         ));
         fns::ftPartSetRotY(
@@ -2076,11 +2076,11 @@ pub fn ftKb_PrSpecialNFull_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).set_gr_vel(fp::fmuls(
             (fp).mv().pr().specialn().x34().x(),
             (fp::fmuls(
+                (da).specialn_pr_air_speed(),
                 (fp::fsubs(
                     fp::frsp((fp).mv().pr().specialn().x2C() as f64),
                     (da).specialn_pr_charge_rate1(),
                 )),
-                (da).specialn_pr_air_speed(),
             )),
         ));
         fns::ftPartSetRotY(
@@ -2180,11 +2180,11 @@ pub fn ftKb_PrSpecialAirNLoop_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).self_vel().set_x(fp::fmuls(
             (fp).mv().pr().specialn().x34().x(),
             (fp::fmuls(
+                (da).specialn_pr_air_speed(),
                 (fp::fsubs(
                     fp::frsp((fp).mv().pr().specialn().x2C() as f64),
                     (da).specialn_pr_charge_rate1(),
                 )),
-                (da).specialn_pr_air_speed(),
             )),
         ));
         fns::ftPartSetRotY(
@@ -2228,11 +2228,11 @@ pub fn ftKb_PrSpecialAirNFull_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).self_vel().set_x(fp::fmuls(
             (fp).mv().pr().specialn().x34().x(),
             (fp::fmuls(
+                (da).specialn_pr_air_speed(),
                 (fp::fsubs(
                     fp::frsp((fp).mv().pr().specialn().x2C() as f64),
                     (da).specialn_pr_charge_rate1(),
                 )),
-                (da).specialn_pr_air_speed(),
             )),
         ));
         fns::ftPartSetRotY(

@@ -1187,15 +1187,15 @@ fn inl_sqrtf_unfused<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
+            (fp::fsub(3.0, fp::fmul(x, fp::fmul(guess, guess)))),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
+            (fp::fsub(3.0, fp::fmul(x, fp::fmul(guess, guess)))),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fsub(3.0, fp::fmul(fp::fmul(guess, guess), x))),
+            (fp::fsub(3.0, fp::fmul(x, fp::fmul(guess, guess)))),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;

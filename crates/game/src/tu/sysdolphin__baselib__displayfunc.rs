@@ -135,8 +135,8 @@ pub fn mkHBillBoardMtx<'a>(
             ctx,
             fp::fmadds(pos.x(), pos.x(), fp::fmuls(pos.z(), pos.z())),
         ));
-        uy.set_x(fp::fmuls(fp::fdivs(fp::fneg(pos.y()), uy.y()), pos.x()));
-        uy.set_z(fp::fmuls(fp::fdivs(fp::fneg(pos.y()), uy.y()), pos.z()));
+        uy.set_x(fp::fmuls(pos.x(), fp::fdivs(fp::fneg(pos.y()), uy.y())));
+        uy.set_z(fp::fmuls(pos.z(), fp::fdivs(fp::fneg(pos.y()), uy.y())));
         fns::PSVECCrossProduct(ctx, ax, uy, az);
     } else {
         fns::PSVECCrossProduct(ctx, ax, fns::yOne(ctx), az);
@@ -967,15 +967,15 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         y = fp::frsp((fp::fmul(x, guess)));
         return y;
@@ -989,6 +989,10 @@ fn inl_HSD_MtxColMag<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, col: i32) -> f64 {
     return inl_sqrtf(
         ctx,
         fp::fadds(
+            (fp::fmuls(
+                (Handle::add(mtx, 2_i32)).at(col).get(),
+                (Handle::add(mtx, 2_i32)).at(col).get(),
+            )),
             fp::fadds(
                 (fp::fmuls(
                     (Handle::add(mtx, 0_i32)).at(col).get(),
@@ -999,10 +1003,6 @@ fn inl_HSD_MtxColMag<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, col: i32) -> f64 {
                     (Handle::add(mtx, 1_i32)).at(col).get(),
                 )),
             ),
-            (fp::fmuls(
-                (Handle::add(mtx, 2_i32)).at(col).get(),
-                (Handle::add(mtx, 2_i32)).at(col).get(),
-            )),
         ),
     );
 }
@@ -1022,6 +1022,10 @@ fn inl_HSD_MtxColMag_unfused<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, col: i32) 
     return ctx.call::<_, f64>(
         0x8000d5bc,
         (Single(fp::frsp(fp::fadds(
+            (fp::fmuls(
+                (Handle::add(mtx, 2_i32)).at(col).get(),
+                (Handle::add(mtx, 2_i32)).at(col).get(),
+            )),
             fp::fadds(
                 (fp::fmuls(
                     (Handle::add(mtx, 0_i32)).at(col).get(),
@@ -1032,10 +1036,6 @@ fn inl_HSD_MtxColMag_unfused<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, col: i32) 
                     (Handle::add(mtx, 1_i32)).at(col).get(),
                 )),
             ),
-            (fp::fmuls(
-                (Handle::add(mtx, 2_i32)).at(col).get(),
-                (Handle::add(mtx, 2_i32)).at(col).get(),
-            )),
         ))),),
     );
 }

@@ -162,7 +162,7 @@ pub fn lbBgFlash_80020E38<'a>(
     let mut dx2: f64 = fp::fmuls((dir).x(), (dir).x());
     let mut dy2: f64 = fp::fmuls((dir).y(), (dir).y());
     dz2 = fp::fmuls((dir).z(), (dir).z());
-    if fp::fadds(fp::fadds(dx2, dy2), dz2) == 0.0 {
+    if fp::fadds(dz2, fp::fadds(dx2, dy2)) == 0.0 {
         return;
     }
     inl_HSD_JObjSetupMatrix(ctx, jobj);
@@ -714,15 +714,15 @@ fn inl_sqrtf_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
         let mut guess: f64 = fp::frsqrte(x);
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         guess = fp::fmul(
             fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
         );
         (y).set(fp::frsp((fp::fmul(x, guess))));
         return (y).get();

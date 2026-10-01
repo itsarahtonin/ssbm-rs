@@ -647,15 +647,15 @@ pub fn mn_8022A440<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>, root: HSD_JObj<'a>, selec
         ctx,
         sp24.at(0_i32).get(),
         fp::fadds(
+            statics::melee__mn__mnmain::mn_803EB360(ctx)
+                .get(0_i32)
+                .start_frame(),
             (fp::fsubs(
                 f,
                 statics::melee__mn__mnmain::mn_803EB360(ctx)
                     .get(1_i32)
                     .start_frame(),
             )),
-            statics::melee__mn__mnmain::mn_803EB360(ctx)
-                .get(0_i32)
-                .start_frame(),
         ),
     );
     fns::HSD_JObjAnimAll(ctx, sp24.at(0_i32).get());

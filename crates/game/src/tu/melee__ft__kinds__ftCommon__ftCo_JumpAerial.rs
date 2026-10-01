@@ -38,8 +38,8 @@ pub fn ft_800CB6EC<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) {
         inl_HSD_JObjAddRotationY(
             ctx,
             ((fp).parts()).joint(),
-            (fp::fdivs(180.0, fp::frsp(arg1 as f64))),
             0.01745329238474369,
+            (fp::fdivs(180.0, fp::frsp(arg1 as f64))),
         );
         if (fp).mv().co().jumpaerial().x0() == (div_i32(arg1, 2_i32)) {
             (fp).set_facing_dir(fp::fneg((fp).facing_dir()));
@@ -767,8 +767,8 @@ fn inl_ft_800CB6EC<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) {
         inl_HSD_JObjAddRotationY(
             ctx,
             ((fp).parts()).joint(),
-            (fp::fdivs(180.0, fp::frsp(arg1 as f64))),
             0.01745329238474369,
+            (fp::fdivs(180.0, fp::frsp(arg1 as f64))),
         );
         if (fp).mv().co().jumpaerial().x0() == (div_i32(arg1, 2_i32)) {
             (fp).set_facing_dir(fp::fneg((fp).facing_dir()));

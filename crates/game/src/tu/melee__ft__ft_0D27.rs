@@ -180,7 +180,7 @@ pub fn fn_800D2A3C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         let mut scale: f64 = inl_HSD_JObjGetScaleX(ctx, (fp).x2184());
         let mut mid: f64 = (fp).mv().co().walk().middle_anim_frame();
         let mut fast: f64 = (fp).mv().co().walk().fast_anim_frame();
-        fns::ftLib_SetScale(ctx, gobj, fp::fmadds((fp::fsubs(fast, mid)), scale, mid));
+        fns::ftLib_SetScale(ctx, gobj, fp::fmadds(scale, (fp::fsubs(fast, mid)), mid));
     }
     if ((fns::HSD_AObjGetFlags(ctx, ((fp).x2184()).aobj()) & (0x40000000_i32 as u32)) != 0) {
         return 0_i32;
