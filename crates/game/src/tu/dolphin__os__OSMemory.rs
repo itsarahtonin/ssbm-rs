@@ -354,40 +354,320 @@ fn asm_RealMode(ctx: &Ctx) {
 }
 
 pub fn __OSInitMemoryProtection<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x48);
-    let mut simulated_mem: u32 = inl_OSGetConsoleSimulatedMemSize_unfused(ctx);
-    let mut enabled: i32 = fns::OSDisableInterrupts(ctx);
-    if simulated_mem <= (24_i32.wrapping_mul(0x400_i32).wrapping_mul(0x400_i32) as u32) {
-        statics::dolphin__os__OSMemory::RealMode(ctx, fnptr(ctx, 0x80347ca4));
-    } else if simulated_mem <= (48_i32.wrapping_mul(0x400_i32).wrapping_mul(0x400_i32) as u32) {
-        statics::dolphin__os__OSMemory::RealMode(ctx, fnptr(ctx, 0x80347d24));
-    }
-    (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc004000_u32 as u32)), 16_i32)).set((0_i32 as u16));
-    (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc004000_u32 as u32)), 8_i32)).set((255_i32 as u16));
-    let _ = fns::__OSMaskInterrupts(ctx, 0xf0000000_u32);
-    let _ = fns::__OSSetInterruptHandler(ctx, (0_i32 as i16), fnptr(ctx, 0x80347c38));
-    let _ = fns::__OSSetInterruptHandler(ctx, (1_i32 as i16), fnptr(ctx, 0x80347c38));
-    let _ = fns::__OSSetInterruptHandler(ctx, (2_i32 as i16), fnptr(ctx, 0x80347c38));
-    let _ = fns::__OSSetInterruptHandler(ctx, (3_i32 as i16), fnptr(ctx, 0x80347c38));
-    let _ = fns::__OSSetInterruptHandler(ctx, (4_i32 as i16), fnptr(ctx, 0x80347c38));
-    fns::OSRegisterResetFunction(ctx, statics::dolphin__os__OSMemory::ResetFunctionInfo(ctx));
-    simulated_mem = inl_OSGetConsoleSimulatedMemSize_unfused(ctx);
-    if (simulated_mem < inl_OSGetPhysicalMemSize_unfused(ctx))
-        && (simulated_mem == (24_i32.wrapping_mul(0x400_i32).wrapping_mul(0x400_i32) as u32))
-    {
-        (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc004000_u32 as u32)), 20_i32))
-            .set((2_i32 as u16));
-    }
-    let _ = fns::__OSUnmaskInterrupts(ctx, (0x8000000_i32 as u32));
-    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+    // Transliterated from its machine code: hardware register order.
+    ().put_regs(ctx);
+    asm___OSInitMemoryProtection(ctx);
 }
 
-fn inl_OSGetConsoleSimulatedMemSize_unfused<'a>(ctx: &'a Ctx) -> u32 {
-    return ((ptr::<Val<'a, u32>>(ctx, 0x800000f0_u32 as u32)).get());
-}
-
-fn inl_OSGetPhysicalMemSize_unfused<'a>(ctx: &'a Ctx) -> u32 {
-    return ((ptr::<Val<'a, u32>>(ctx, 0x80000028_u32 as u32)).get());
+fn asm___OSInitMemoryProtection(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80347dbc_u32;
+    loop {
+        match pc {
+            0x80347dbc_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x48(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffb8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x44(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x44_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x40(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x40_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // stw r29, 0x3c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x3c_u32);
+                    ctx.write_u32(ea, g[29].get());
+                }
+                // lis r3, 0x8000
+                g[3].set(0x80000000_u32);
+                // lwz r29, 0xf0(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xf0_u32);
+                    g[29].set(ctx.read_u32(ea));
+                }
+                // bl OSDisableInterrupts
+                c::call(ctx, 0x80347364_u32, 0x80347de0_u32);
+                pc = 0x80347de0_u32;
+            }
+            0x80347de0_u32 => {
+                // lis r0, 0x180
+                g[0].set(0x1800000_u32);
+                // cmplw r29, r0
+                {
+                    let (x, y) = (g[29].get(), g[0].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // mr r31, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[31].set(v);
+                }
+                // bgt .L_80347E00
+                if (c::cr_bit(ctx, 1) == true) {
+                    pc = 0x80347e00_u32;
+                    continue;
+                }
+                pc = 0x80347df0_u32;
+            }
+            0x80347df0_u32 => {
+                // lis r3, Config24MB@ha
+                g[3].set(0x80340000_u32);
+                // addi r3, r3, Config24MB@l
+                g[3].set(g[3].get().wrapping_add(0x7ca4_u32));
+                // bl RealMode
+                c::call(ctx, 0x80347da4_u32, 0x80347dfc_u32);
+                pc = 0x80347dfc_u32;
+            }
+            0x80347dfc_u32 => {
+                // b .L_80347E18
+                pc = 0x80347e18_u32;
+                continue;
+                pc = 0x80347e00_u32;
+            }
+            0x80347e00_u32 => {
+                // lis r0, 0x300
+                g[0].set(0x3000000_u32);
+                // cmplw r29, r0
+                {
+                    let (x, y) = (g[29].get(), g[0].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bgt .L_80347E18
+                if (c::cr_bit(ctx, 1) == true) {
+                    pc = 0x80347e18_u32;
+                    continue;
+                }
+                pc = 0x80347e0c_u32;
+            }
+            0x80347e0c_u32 => {
+                // lis r3, Config48MB@ha
+                g[3].set(0x80340000_u32);
+                // addi r3, r3, Config48MB@l
+                g[3].set(g[3].get().wrapping_add(0x7d24_u32));
+                // bl RealMode
+                c::call(ctx, 0x80347da4_u32, 0x80347e18_u32);
+                pc = 0x80347e18_u32;
+            }
+            0x80347e18_u32 => {
+                // lis r3, 0xcc00
+                g[3].set(0xcc000000_u32);
+                // addi r29, r3, 0x4000
+                g[29].set(g[3].get().wrapping_add(0x4000_u32));
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // sth r0, 0x20(r29)
+                {
+                    let ea = g[29].get().wrapping_add(0x20_u32);
+                    ctx.write_u16(ea, g[0].get() as u16);
+                }
+                // li r0, 0xff
+                g[0].set(0xff_u32);
+                // lis r3, 0xf000
+                g[3].set(0xf0000000_u32);
+                // sth r0, 0x10(r29)
+                {
+                    let ea = g[29].get().wrapping_add(0x10_u32);
+                    ctx.write_u16(ea, g[0].get() as u16);
+                }
+                // bl __OSMaskInterrupts
+                c::call(ctx, 0x8034772c_u32, 0x80347e38_u32);
+                pc = 0x80347e38_u32;
+            }
+            0x80347e38_u32 => {
+                // lis r3, MEMIntrruptHandler@ha
+                g[3].set(0x80340000_u32);
+                // addi r30, r3, MEMIntrruptHandler@l
+                g[30].set(g[3].get().wrapping_add(0x7c38_u32));
+                // mr r4, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[4].set(v);
+                }
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // bl __OSSetInterruptHandler
+                c::call(ctx, 0x803473b0_u32, 0x80347e4c_u32);
+                pc = 0x80347e4c_u32;
+            }
+            0x80347e4c_u32 => {
+                // mr r4, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[4].set(v);
+                }
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // bl __OSSetInterruptHandler
+                c::call(ctx, 0x803473b0_u32, 0x80347e58_u32);
+                pc = 0x80347e58_u32;
+            }
+            0x80347e58_u32 => {
+                // mr r4, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[4].set(v);
+                }
+                // li r3, 0x2
+                g[3].set(0x2_u32);
+                // bl __OSSetInterruptHandler
+                c::call(ctx, 0x803473b0_u32, 0x80347e64_u32);
+                pc = 0x80347e64_u32;
+            }
+            0x80347e64_u32 => {
+                // mr r4, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[4].set(v);
+                }
+                // li r3, 0x3
+                g[3].set(0x3_u32);
+                // bl __OSSetInterruptHandler
+                c::call(ctx, 0x803473b0_u32, 0x80347e70_u32);
+                pc = 0x80347e70_u32;
+            }
+            0x80347e70_u32 => {
+                // mr r4, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[4].set(v);
+                }
+                // li r3, 0x4
+                g[3].set(0x4_u32);
+                // bl __OSSetInterruptHandler
+                c::call(ctx, 0x803473b0_u32, 0x80347e7c_u32);
+                pc = 0x80347e7c_u32;
+            }
+            0x80347e7c_u32 => {
+                // lis r3, ResetFunctionInfo@ha
+                g[3].set(0x80400000_u32);
+                // addi r3, r3, ResetFunctionInfo@l
+                g[3].set(g[3].get().wrapping_add(0x2348_u32));
+                // bl OSRegisterResetFunction
+                c::call(ctx, 0x80348310_u32, 0x80347e88_u32);
+                pc = 0x80347e88_u32;
+            }
+            0x80347e88_u32 => {
+                // lis r3, 0x8000
+                g[3].set(0x80000000_u32);
+                // lwz r4, 0xf0(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xf0_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // lwz r0, 0x28(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x28_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmplw r4, r0
+                {
+                    let (x, y) = (g[4].get(), g[0].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bge .L_80347EB0
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x80347eb0_u32;
+                    continue;
+                }
+                pc = 0x80347e9c_u32;
+            }
+            0x80347e9c_u32 => {
+                // subis r0, r4, 0x180
+                g[0].set(g[4].get().wrapping_add(0xfe800000_u32));
+                // cmplwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80347EB0
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80347eb0_u32;
+                    continue;
+                }
+                pc = 0x80347ea8_u32;
+            }
+            0x80347ea8_u32 => {
+                // li r0, 0x2
+                g[0].set(0x2_u32);
+                // sth r0, 0x28(r29)
+                {
+                    let ea = g[29].get().wrapping_add(0x28_u32);
+                    ctx.write_u16(ea, g[0].get() as u16);
+                }
+                pc = 0x80347eb0_u32;
+            }
+            0x80347eb0_u32 => {
+                // lis r3, 0x800
+                g[3].set(0x8000000_u32);
+                // bl __OSUnmaskInterrupts
+                c::call(ctx, 0x803477b4_u32, 0x80347eb8_u32);
+                pc = 0x80347eb8_u32;
+            }
+            0x80347eb8_u32 => {
+                // mr r3, r31
+                {
+                    let v = g[31].get() | g[31].get();
+                    g[3].set(v);
+                }
+                // bl OSRestoreInterrupts
+                c::call(ctx, 0x8034738c_u32, 0x80347ec0_u32);
+                pc = 0x80347ec0_u32;
+            }
+            0x80347ec0_u32 => {
+                // lwz r0, 0x4c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x44(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x44_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x40(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x40_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // lwz r29, 0x3c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x3c_u32);
+                    g[29].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x48
+                g[1].set(g[1].get().wrapping_add(0x48_u32));
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of __OSInitMemoryProtection");
+            }
+            _ => unreachable!("__OSInitMemoryProtection: no block at {pc:#010x}"),
+        }
+    }
 }
 
 /// Registers this unit's ports.
@@ -418,11 +698,5 @@ pub fn register(ctx: &Ctx) {
     ctx.register_port(0x80347ca4, asm_Config24MB, Returns::Nothing);
     ctx.register_port(0x80347d24, asm_Config48MB, Returns::Nothing);
     ctx.register_port(0x80347da4, asm_RealMode, Returns::Nothing);
-    ctx.register_port(
-        0x80347dbc,
-        |ctx| {
-            Ret::put(__OSInitMemoryProtection(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80347dbc, asm___OSInitMemoryProtection, Returns::Nothing);
 }

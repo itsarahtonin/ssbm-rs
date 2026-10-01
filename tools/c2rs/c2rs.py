@@ -3783,6 +3783,35 @@ UNSET_WARNINGS = {"-Wreturn-type", "-Wuninitialized", "-Wsometimes-uninitialized
                   "-Wconditional-uninitialized"}
 UNSET_REASON = "returns or uses a value its C never sets"
 CALLER_REASON = "calls {}, which reads registers its caller sets without passing them"
+HARDWARE_REASON = "hardware register order"
+
+
+def hardware_accesses(listing, name):
+    """How many loads and stores of hardware registers (based on `lis rN, 0xcc00`) the machine
+    code of `name` makes, as (loads, all)."""
+    words = asm2rs.function_words(listing, name) or []
+    base, loads, stores = set(), 0, 0
+    for _, _, text in words:
+        m, _, ops = text.partition(" ")
+        r = [o.strip() for o in ops.split(",")]
+        if m == "lis" and len(r) == 2 and r[1].lower() in ("0xcc00", "-0x3400"):
+            base.add(r[0])
+        elif m in ("addi", "subi", "ori") and len(r) == 3 and r[1] in base:
+            base.add(r[0])
+        elif len(r) >= 2 and (at := re.search(r"\((r\d+)\)", r[1])) and at.group(1) in base:
+            if re.fullmatch(r"l[bhw][az]?u?x?", m):
+                loads += 1
+            elif re.fullmatch(r"st[bhw]u?x?", m):
+                stores += 1
+    return loads, loads + stores
+
+
+def hardware_order(listing, name):
+    """Whether `name` reads hardware registers and accesses them more than once: MWCC orders
+    those accesses as its scheduler does, volatile as the registers are, and the translation
+    of the C can't follow that order, which the hardware sees."""
+    loads, total = hardware_accesses(listing, name)
+    return loads >= 1 and total >= 2
 
 
 def unset_values(tu):
@@ -3842,17 +3871,6 @@ FROM_MACHINE_CODE = {
     "__va_arg": "register it leaves that other code reads",
     # MWCC drops its second, dead read of a video interface register, volatile as it is.
     "__VIRetraceHandler": "dead read of a hardware register that MWCC drops",
-    # They inline getCurrentHalfLine, whose loop MWCC compiles reading the vertical beam
-    # position before the horizontal one, the other way round from the source.
-    "VIGetCurrentLine": "hardware register order",
-    "VIGetNextField": "hardware register order",
-    "getCurrentFieldEvenOdd": "hardware register order",
-    # MWCC reads their hardware registers in another order than the source, volatile as they
-    # are: the serial interface's status before its communication control (OSSerial's), the
-    # DSP's mailbox halves, the memory interface's error registers.
-    "CompleteTransfer": "hardware register order",
-    "__OSStopAudioSystem": "hardware register order",
-    "MEMIntrruptHandler": "hardware register order",
     # Its loop reads dir_ptr before setting it the first time round, which clang does not see:
     # the original takes whatever a register holds.
     "it_802BA3BC": "pointer read before it is set, in a loop",
@@ -3974,7 +3992,8 @@ def translate_unit(args):
             unit.ported.append(name)
             continue
         why = FROM_MACHINE_CODE.get(name) or (UNSET_REASON if name in unset else None) or (
-            CALLER_REASON.format(callers[name]) if name in callers else None)
+            CALLER_REASON.format(callers[name]) if name in callers else None) or (
+            HARDWARE_REASON if hardware_order(unit.listing, f.get("symbol") or name) else None)
         code = None
         if why:
             try:

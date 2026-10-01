@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn DSPCheckMailToDSP<'a>(ctx: &'a Ctx) -> u32 {
     return (sar_i32(
@@ -43,14 +44,42 @@ pub fn DSPCheckMailFromDSP<'a>(ctx: &'a Ctx) -> u32 {
 }
 
 pub fn DSPReadMailFromDSP<'a>(ctx: &'a Ctx) -> u32 {
-    return ({
-        let __t1 =
-            ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 3_i32)).get() as i32);
-        ((shl_i32(
-            ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 2_i32)).get() as i32),
-            (16_i32 as u32),
-        )) | __t1)
-    } as u32);
+    // Transliterated from its machine code: hardware register order.
+    ().put_regs(ctx);
+    asm_DSPReadMailFromDSP(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_DSPReadMailFromDSP(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // lis r3, 0xcc00
+    g[3].set(0xcc000000_u32);
+    // addi r3, r3, 0x5000
+    g[3].set(g[3].get().wrapping_add(0x5000_u32));
+    // lhz r0, 0x4(r3)
+    {
+        let ea = g[3].get().wrapping_add(0x4_u32);
+        g[0].set(u32::from(ctx.read_u16(ea)));
+    }
+    // lhz r3, 0x6(r3)
+    {
+        let ea = g[3].get().wrapping_add(0x6_u32);
+        g[3].set(u32::from(ctx.read_u16(ea)));
+    }
+    // rlwimi r3, r0, 16, 0, 15
+    {
+        let v = (g[0].get().rotate_left(16) & 0xffff0000_u32) | (g[3].get() & 0xffff_u32);
+        g[3].set(v);
+    }
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
 }
 
 pub fn DSPSendMailToDSP<'a>(ctx: &'a Ctx, mail: u32) {
@@ -62,47 +91,201 @@ pub fn DSPSendMailToDSP<'a>(ctx: &'a Ctx, mail: u32) {
 }
 
 pub fn DSPInit<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x10);
-    let mut old: i32 = 0;
-    let mut tmp: u16 = 0;
-    fns::__DSP_debug_printf(
-        ctx,
-        cstr(ctx, 0x80400c08),
-        &[
-            VarArg::Int(Handle::addr(cstr(ctx, 0x80400c28))),
-            VarArg::Int(Handle::addr(cstr(ctx, 0x80400c34))),
-        ],
-    );
-    if statics::dolphin__dsp__dsp::__DSP_init_flag(ctx).get() == 1_i32 {
-        return;
+    // Transliterated from its machine code: hardware register order.
+    ().put_regs(ctx);
+    asm_DSPInit(ctx);
+}
+
+fn asm_DSPInit(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80336014_u32;
+    loop {
+        match pc {
+            0x80336014_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // lis r3, "@9"@ha
+                g[3].set(0x80400000_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // addi r3, r3, "@9"@l
+                g[3].set(g[3].get().wrapping_add(0xc08_u32));
+                // crclr cr1eq
+                {
+                    let (x, y) = (c::cr_bit(ctx, 6), c::cr_bit(ctx, 6));
+                    c::set_cr_bit(ctx, 6, x ^ y);
+                }
+                // addi r4, r3, 0x20
+                g[4].set(g[3].get().wrapping_add(0x20_u32));
+                // stwu r1, -0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // addi r5, r3, 0x2c
+                g[5].set(g[3].get().wrapping_add(0x2c_u32));
+                // stw r31, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // bl __DSP_debug_printf
+                c::call(ctx, 0x8033620c_u32, 0x8033603c_u32);
+                pc = 0x8033603c_u32;
+            }
+            0x8033603c_u32 => {
+                // lwz r0, __DSP_init_flag@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb70_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmpwi r0, 0x1
+                {
+                    let (x, y) = (g[0].get() as i32, 1_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_803360B8
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x803360b8_u32;
+                    continue;
+                }
+                pc = 0x80336048_u32;
+            }
+            0x80336048_u32 => {
+                // bl OSDisableInterrupts
+                c::call(ctx, 0x80347364_u32, 0x8033604c_u32);
+                pc = 0x8033604c_u32;
+            }
+            0x8033604c_u32 => {
+                // lis r4, __DSPHandler@ha
+                g[4].set(0x80330000_u32);
+                // addi r31, r3, 0x0
+                g[31].set(g[3].get());
+                // addi r4, r4, __DSPHandler@l
+                g[4].set(g[4].get().wrapping_add(0x625c_u32));
+                // li r3, 0x7
+                g[3].set(0x7_u32);
+                // bl __OSSetInterruptHandler
+                c::call(ctx, 0x803473b0_u32, 0x80336060_u32);
+                pc = 0x80336060_u32;
+            }
+            0x80336060_u32 => {
+                // lis r3, 0x100
+                g[3].set(0x1000000_u32);
+                // bl __OSUnmaskInterrupts
+                c::call(ctx, 0x803477b4_u32, 0x80336068_u32);
+                pc = 0x80336068_u32;
+            }
+            0x80336068_u32 => {
+                // lis r3, 0xcc00
+                g[3].set(0xcc000000_u32);
+                // addi r6, r3, 0x5000
+                g[6].set(g[3].get().wrapping_add(0x5000_u32));
+                // lhz r3, 0x500a(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x500a_u32);
+                    g[3].set(u32::from(ctx.read_u16(ea)));
+                }
+                // li r0, -0xa9
+                g[0].set(0xffffff57_u32);
+                // and r0, r3, r0
+                {
+                    let v = g[3].get() & g[0].get();
+                    g[0].set(v);
+                }
+                // ori r0, r0, 0x800
+                g[0].set(g[0].get() | 0x800_u32);
+                // sth r0, 0xa(r6)
+                {
+                    let ea = g[6].get().wrapping_add(0xa_u32);
+                    ctx.write_u16(ea, g[0].get() as u16);
+                }
+                // li r5, -0xad
+                g[5].set(0xffffff53_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // lhz r7, 0xa(r6)
+                {
+                    let ea = g[6].get().wrapping_add(0xa_u32);
+                    g[7].set(u32::from(ctx.read_u16(ea)));
+                }
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // addi r3, r31, 0x0
+                g[3].set(g[31].get());
+                // and r5, r7, r5
+                {
+                    let v = g[7].get() & g[5].get();
+                    g[5].set(v);
+                }
+                // sth r5, 0xa(r6)
+                {
+                    let ea = g[6].get().wrapping_add(0xa_u32);
+                    ctx.write_u16(ea, g[5].get() as u16);
+                }
+                // stw r4, __DSP_tmp_task@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb80_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // stw r4, __DSP_curr_task@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb8c_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // stw r4, __DSP_last_task@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb84_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // stw r4, __DSP_first_task@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb88_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // stw r0, __DSP_init_flag@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb70_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // bl OSRestoreInterrupts
+                c::call(ctx, 0x8034738c_u32, 0x803360b8_u32);
+                pc = 0x803360b8_u32;
+            }
+            0x803360b8_u32 => {
+                // lwz r0, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x10
+                g[1].set(g[1].get().wrapping_add(0x10_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of DSPInit");
+            }
+            _ => unreachable!("DSPInit: no block at {pc:#010x}"),
+        }
     }
-    old = fns::OSDisableInterrupts(ctx);
-    let _ = fns::__OSSetInterruptHandler(ctx, (7_i32 as i16), fnptr(ctx, 0x8033625c));
-    let _ = fns::__OSUnmaskInterrupts(ctx, (shr_u32(0x80000000_u32, ((7_i32) as u32))));
-    tmp = (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 5_i32)).get();
-    tmp = ((((tmp as i32) & (!168_i32)) | 0x800_i32) as u16);
-    (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 5_i32)).set(tmp);
-    tmp = (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 5_i32)).get();
-    (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 5_i32)).set({
-        let __t1 = (((tmp as i32) & (!172_i32)) as u16);
-        tmp = __t1;
-        __t1
-    });
-    fns::__DSP_first_task(ctx).set({
-        let __t4 = {
-            let __t3 = {
-                let __t2 = null::<STRUCT_DSP_TASK<'a>>(ctx);
-                fns::__DSP_tmp_task(ctx).set(__t2);
-                __t2
-            };
-            fns::__DSP_curr_task(ctx).set(__t3);
-            __t3
-        };
-        fns::__DSP_last_task(ctx).set(__t4);
-        __t4
-    });
-    statics::dolphin__dsp__dsp::__DSP_init_flag(ctx).set(1_i32);
-    let _ = fns::OSRestoreInterrupts(ctx, old);
 }
 
 pub fn DSPCheckInit<'a>(ctx: &'a Ctx) -> i32 {
@@ -124,41 +307,261 @@ pub fn DSPAddTask<'a>(ctx: &'a Ctx, task: STRUCT_DSP_TASK<'a>) -> STRUCT_DSP_TAS
     return task;
 }
 
-pub fn DSPAssertTask<'a>(ctx: &'a Ctx, task: STRUCT_DSP_TASK<'a>) -> STRUCT_DSP_TASK<'a> {
-    let __frame = ctx.stack_frame(0x18);
-    let mut task = task;
-    let mut old: i32 = 0;
-    old = fns::OSDisableInterrupts(ctx);
-    if Handle::addr(fns::__DSP_curr_task(ctx).get()) == Handle::addr(task) {
-        fns::__DSP_rude_task(ctx).set(task);
-        fns::__DSP_rude_task_pending(ctx).set(1_i32);
-        let _ = fns::OSRestoreInterrupts(ctx, old);
-        return task;
-    }
-    if {
-        let __t1 = (fns::__DSP_curr_task(ctx).get()).priority();
-        (task).priority() < __t1
-    } {
-        fns::__DSP_rude_task(ctx).set(task);
-        fns::__DSP_rude_task_pending(ctx).set(1_i32);
-        if (fns::__DSP_curr_task(ctx).get()).state() == (1_i32 as u32) {
-            inl_DSPAssertInt_unfused(ctx);
-        }
-        let _ = fns::OSRestoreInterrupts(ctx, old);
-        return task;
-    }
-    let _ = fns::OSRestoreInterrupts(ctx, old);
-    return null::<STRUCT_DSP_TASK<'a>>(ctx);
+pub fn DSPAssertTask<'a>(ctx: &'a Ctx, a0: STRUCT_DSP_TASK<'a>) -> STRUCT_DSP_TASK<'a> {
+    // Transliterated from its machine code: hardware register order.
+    (a0,).put_regs(ctx);
+    asm_DSPAssertTask(ctx);
+    Ret::get(ctx)
 }
 
-fn inl_DSPAssertInt_unfused<'a>(ctx: &'a Ctx) {
-    let mut old: i32 = 0;
-    let mut tmp: u16 = 0;
-    old = fns::OSDisableInterrupts(ctx);
-    tmp = (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 5_i32)).get();
-    tmp = ((((tmp as i32) & (!168_i32)) | 2_i32) as u16);
-    (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc005000_u32 as u32)), 5_i32)).set(tmp);
-    let _ = fns::OSRestoreInterrupts(ctx, old);
+fn asm_DSPAssertTask(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80336144_u32;
+    loop {
+        match pc {
+            0x80336144_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // mr r30, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[30].set(v);
+                }
+                // bl OSDisableInterrupts
+                c::call(ctx, 0x80347364_u32, 0x80336160_u32);
+                pc = 0x80336160_u32;
+            }
+            0x80336160_u32 => {
+                // lwz r4, __DSP_curr_task@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb8c_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // addi r31, r3, 0x0
+                g[31].set(g[3].get());
+                // cmplw r4, r30
+                {
+                    let (x, y) = (g[4].get(), g[30].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_8033618C
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x8033618c_u32;
+                    continue;
+                }
+                pc = 0x80336170_u32;
+            }
+            0x80336170_u32 => {
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // stw r30, __DSP_rude_task@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb7c_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // mr r3, r31
+                {
+                    let v = g[31].get() | g[31].get();
+                    g[3].set(v);
+                }
+                // stw r0, __DSP_rude_task_pending@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb78_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // bl OSRestoreInterrupts
+                c::call(ctx, 0x8034738c_u32, 0x80336184_u32);
+                pc = 0x80336184_u32;
+            }
+            0x80336184_u32 => {
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // b .L_803361F4
+                pc = 0x803361f4_u32;
+                continue;
+                pc = 0x8033618c_u32;
+            }
+            0x8033618c_u32 => {
+                // lwz r3, 0x4(r30)
+                {
+                    let ea = g[30].get().wrapping_add(0x4_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // lwz r0, 0x4(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x4_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmplw r3, r0
+                {
+                    let (x, y) = (g[3].get(), g[0].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bge .L_803361E8
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x803361e8_u32;
+                    continue;
+                }
+                pc = 0x8033619c_u32;
+            }
+            0x8033619c_u32 => {
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // stw r30, __DSP_rude_task@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb7c_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // stw r0, __DSP_rude_task_pending@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb78_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lwz r0, 0x0(r4)
+                {
+                    let ea = g[4].get();
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmplwi r0, 0x1
+                {
+                    let (x, y) = (g[0].get(), 0x1_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_803361D8
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x803361d8_u32;
+                    continue;
+                }
+                pc = 0x803361b4_u32;
+            }
+            0x803361b4_u32 => {
+                // bl OSDisableInterrupts
+                c::call(ctx, 0x80347364_u32, 0x803361b8_u32);
+                pc = 0x803361b8_u32;
+            }
+            0x803361b8_u32 => {
+                // lis r4, 0xcc00
+                g[4].set(0xcc000000_u32);
+                // addi r5, r4, 0x5000
+                g[5].set(g[4].get().wrapping_add(0x5000_u32));
+                // lhz r4, 0x500a(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x500a_u32);
+                    g[4].set(u32::from(ctx.read_u16(ea)));
+                }
+                // li r0, -0xa9
+                g[0].set(0xffffff57_u32);
+                // and r0, r4, r0
+                {
+                    let v = g[4].get() & g[0].get();
+                    g[0].set(v);
+                }
+                // ori r0, r0, 0x2
+                g[0].set(g[0].get() | 0x2_u32);
+                // sth r0, 0xa(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0xa_u32);
+                    ctx.write_u16(ea, g[0].get() as u16);
+                }
+                // bl OSRestoreInterrupts
+                c::call(ctx, 0x8034738c_u32, 0x803361d8_u32);
+                pc = 0x803361d8_u32;
+            }
+            0x803361d8_u32 => {
+                // mr r3, r31
+                {
+                    let v = g[31].get() | g[31].get();
+                    g[3].set(v);
+                }
+                // bl OSRestoreInterrupts
+                c::call(ctx, 0x8034738c_u32, 0x803361e0_u32);
+                pc = 0x803361e0_u32;
+            }
+            0x803361e0_u32 => {
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // b .L_803361F4
+                pc = 0x803361f4_u32;
+                continue;
+                pc = 0x803361e8_u32;
+            }
+            0x803361e8_u32 => {
+                // mr r3, r31
+                {
+                    let v = g[31].get() | g[31].get();
+                    g[3].set(v);
+                }
+                // bl OSRestoreInterrupts
+                c::call(ctx, 0x8034738c_u32, 0x803361f0_u32);
+                pc = 0x803361f0_u32;
+            }
+            0x803361f0_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                pc = 0x803361f4_u32;
+            }
+            0x803361f4_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of DSPAssertTask");
+            }
+            _ => unreachable!("DSPAssertTask: no block at {pc:#010x}"),
+        }
+    }
 }
 
 /// Registers this unit's ports.
@@ -177,13 +580,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80335fe8,
-        |ctx| {
-            Ret::put(DSPReadMailFromDSP(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80335fe8, asm_DSPReadMailFromDSP, Returns::Int);
     ctx.register_port(
         0x80336000,
         |ctx| {
@@ -192,13 +589,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80336014,
-        |ctx| {
-            Ret::put(DSPInit(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80336014, asm_DSPInit, Returns::Nothing);
     ctx.register_port(
         0x803360cc,
         |ctx| {
@@ -214,12 +605,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80336144,
-        |ctx| {
-            let (a0,): (STRUCT_DSP_TASK<'_>,) = Args::take_all(ctx);
-            Ret::put(DSPAssertTask(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80336144, asm_DSPAssertTask, Returns::Int);
 }

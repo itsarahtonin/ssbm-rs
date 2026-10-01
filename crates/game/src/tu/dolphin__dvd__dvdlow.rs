@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn __DVDInitWA<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x8);
@@ -36,119 +37,957 @@ pub fn __DVDInitWA<'a>(ctx: &'a Ctx) {
     fns::OSInitAlarm(ctx);
 }
 
-pub fn __DVDInterruptHandler<'a>(ctx: &'a Ctx, unused: i16, context: OSContext<'a>) {
-    let __frame = ctx.stack_frame(0x2e8);
-    let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x8);
-    let mut unused = unused;
-    let mut context = context;
-    let mut cause: u32 = 0;
-    let mut reg: u32 = 0;
-    let mut intr: u32 = 0;
-    let mut mask: u32 = 0;
-    cause = (0_i32 as u32);
-    fns::OSCancelAlarm(ctx, statics::dolphin__dvd__dvdlow::AlarmForTimeout(ctx));
-    if (statics::dolphin__dvd__dvdlow::LastCommandWasRead(ctx).get() != 0) {
-        statics::dolphin__dvd__dvdlow::LastReadFinished(ctx)
-            .set(ctx.call::<_, i64>(0x8034c410, ()));
-        statics::dolphin__dvd__dvdlow::FirstRead(ctx).set(0_i32);
-        statics::dolphin__dvd__dvdlow::Prev(ctx)
-            .set_bootFilePosition(statics::dolphin__dvd__dvdlow::Curr(ctx).bootFilePosition());
-        statics::dolphin__dvd__dvdlow::Prev(ctx)
-            .set_FSTPosition(statics::dolphin__dvd__dvdlow::Curr(ctx).FSTPosition());
-        statics::dolphin__dvd__dvdlow::Prev(ctx)
-            .set_FSTLength(statics::dolphin__dvd__dvdlow::Curr(ctx).FSTLength());
-        if statics::dolphin__dvd__dvdlow::StopAtNextInt(ctx).get() == 1_i32 {
-            cause = (cause | (8_i32 as u32));
-        }
-    }
-    statics::dolphin__dvd__dvdlow::LastCommandWasRead(ctx).set(0_i32);
-    statics::dolphin__dvd__dvdlow::StopAtNextInt(ctx).set(0_i32);
-    reg = (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 0_i32)).get();
-    mask = (reg & (42_i32 as u32));
-    intr = ((reg & (84_i32 as u32)) & (shl_u32(mask, (1_i32 as u32))));
-    if ((intr & (64_i32 as u32)) != 0) {
-        cause = (cause | (8_i32 as u32));
-    }
-    if ((intr & (16_i32 as u32)) != 0) {
-        cause = (cause | (1_i32 as u32));
-    }
-    if ((intr & (4_i32 as u32)) != 0) {
-        cause = (cause | (2_i32 as u32));
-    }
-    if (cause != 0) {
-        statics::dolphin__dvd__dvdlow::ResetOccurred(ctx).set((0_i32 as u32));
-    }
-    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 0_i32)).set((intr | mask));
-    if (statics::dolphin__dvd__dvdlow::ResetOccurred(ctx).get() != (0_i32 as u32))
-        && (({
-            let __t1 = statics::dolphin__dvd__dvdlow::LastResetEnd(ctx).get();
-            ctx.call::<_, i64>(0x8034c410, ()).wrapping_sub(__t1)
-        }) < ((((200_i32) as u32).wrapping_mul(
-            (div_u32(
-                (div_u32(
-                    ((ptr::<Val<'a, u32>>(
-                        ctx,
-                        ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
-                    ))
-                    .get()),
-                    (4_i32 as u32),
-                )),
-                (0x3e8_i32 as u32),
-            )),
-        )) as i64))
-    {
-        reg = (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 1_i32)).get();
-        mask = (reg & (2_i32 as u32));
-        intr = ((reg & (4_i32 as u32)) & (shl_u32(mask, (1_i32 as u32))));
-        if ((intr & (4_i32 as u32)) != 0) {
-            if !Handle::is_null(statics::dolphin__dvd__dvdlow::ResetCoverCallback(ctx).get()) {
-                statics::dolphin__dvd__dvdlow::ResetCoverCallback(ctx)
-                    .get()
-                    .call::<_, ()>(((4_i32 as u32),));
+pub fn __DVDInterruptHandler<'a>(ctx: &'a Ctx, a0: i16, a1: OSContext<'a>) {
+    // Transliterated from its machine code: hardware register order.
+    (a0, a1).put_regs(ctx);
+    asm___DVDInterruptHandler(ctx);
+}
+
+fn asm___DVDInterruptHandler(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80336b20_u32;
+    loop {
+        match pc {
+            0x80336b20_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // lis r3, CommandList@ha
+                g[3].set(0x804a0000_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x2e8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffd18_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x2e4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x2e4_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x2e0(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x2e0_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // addi r30, r3, CommandList@l
+                g[30].set(g[3].get().wrapping_add(0x7488_u32));
+                // addi r3, r30, 0x68
+                g[3].set(g[30].get().wrapping_add(0x68_u32));
+                // stw r29, 0x2dc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x2dc_u32);
+                    ctx.write_u32(ea, g[29].get());
+                }
+                // li r29, 0x0
+                g[29].set(0_u32);
+                // stw r28, 0x2d8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x2d8_u32);
+                    ctx.write_u32(ea, g[28].get());
+                }
+                // addi r28, r4, 0x0
+                g[28].set(g[4].get());
+                // bl OSCancelAlarm
+                c::call(ctx, 0x80343aac_u32, 0x80336b54_u32);
+                pc = 0x80336b54_u32;
             }
-            statics::dolphin__dvd__dvdlow::ResetCoverCallback(ctx).set(null::<FnPtr<'a>>(ctx));
+            0x80336b54_u32 => {
+                // lwz r0, LastCommandWasRead@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbd0_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80336B9C
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80336b9c_u32;
+                    continue;
+                }
+                pc = 0x80336b60_u32;
+            }
+            0x80336b60_u32 => {
+                // bl __OSGetSystemTime
+                c::call(ctx, 0x8034c410_u32, 0x80336b64_u32);
+                pc = 0x80336b64_u32;
+            }
+            0x80336b64_u32 => {
+                // stw r4, LastReadFinished+0x4@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbc4_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stw r3, LastReadFinished@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbc0_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // stw r0, FirstRead@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffa4e0_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lwz r0, 0xc4(r30)
+                {
+                    let ea = g[30].get().wrapping_add(0xc4_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // stw r0, 0xb8(r30)
+                {
+                    let ea = g[30].get().wrapping_add(0xb8_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lwz r0, 0xc8(r30)
+                {
+                    let ea = g[30].get().wrapping_add(0xc8_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // stw r0, 0xbc(r30)
+                {
+                    let ea = g[30].get().wrapping_add(0xbc_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lwz r0, 0xcc(r30)
+                {
+                    let ea = g[30].get().wrapping_add(0xcc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // stw r0, 0xc0(r30)
+                {
+                    let ea = g[30].get().wrapping_add(0xc0_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lwz r0, StopAtNextInt@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb90_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmpwi r0, 0x1
+                {
+                    let (x, y) = (g[0].get() as i32, 1_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80336B9C
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80336b9c_u32;
+                    continue;
+                }
+                pc = 0x80336b98_u32;
+            }
+            0x80336b98_u32 => {
+                // ori r29, r29, 0x8
+                g[29].set(g[29].get() | 0x8_u32);
+                pc = 0x80336b9c_u32;
+            }
+            0x80336b9c_u32 => {
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stw r0, LastCommandWasRead@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbd0_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lis r3, 0xcc00
+                g[3].set(0xcc000000_u32);
+                // stw r0, StopAtNextInt@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb90_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lwz r0, 0x6000(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x6000_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // andi. r4, r0, 0x2a
+                {
+                    let v = g[0].get() & 0x2a_u32;
+                    g[4].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // andi. r3, r0, 0x54
+                {
+                    let v = g[0].get() & 0x54_u32;
+                    g[3].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // slwi r0, r4, 1
+                {
+                    let v = g[4].get().rotate_left(1) & 0xfffffffe_u32;
+                    g[0].set(v);
+                }
+                // and r3, r3, r0
+                {
+                    let v = g[3].get() & g[0].get();
+                    g[3].set(v);
+                }
+                // rlwinm. r0, r3, 0, 25, 25
+                {
+                    let v = g[3].get().rotate_left(0) & 0x40_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80336BCC
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80336bcc_u32;
+                    continue;
+                }
+                pc = 0x80336bc8_u32;
+            }
+            0x80336bc8_u32 => {
+                // ori r29, r29, 0x8
+                g[29].set(g[29].get() | 0x8_u32);
+                pc = 0x80336bcc_u32;
+            }
+            0x80336bcc_u32 => {
+                // rlwinm. r0, r3, 0, 27, 27
+                {
+                    let v = g[3].get().rotate_left(0) & 0x10_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80336BD8
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80336bd8_u32;
+                    continue;
+                }
+                pc = 0x80336bd4_u32;
+            }
+            0x80336bd4_u32 => {
+                // ori r29, r29, 0x1
+                g[29].set(g[29].get() | 0x1_u32);
+                pc = 0x80336bd8_u32;
+            }
+            0x80336bd8_u32 => {
+                // rlwinm. r0, r3, 0, 29, 29
+                {
+                    let v = g[3].get().rotate_left(0) & 0x4_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80336BE4
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80336be4_u32;
+                    continue;
+                }
+                pc = 0x80336be0_u32;
+            }
+            0x80336be0_u32 => {
+                // ori r29, r29, 0x2
+                g[29].set(g[29].get() | 0x2_u32);
+                pc = 0x80336be4_u32;
+            }
+            0x80336be4_u32 => {
+                // cmplwi r29, 0x0
+                {
+                    let (x, y) = (g[29].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80336BF4
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80336bf4_u32;
+                    continue;
+                }
+                pc = 0x80336bec_u32;
+            }
+            0x80336bec_u32 => {
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stw r0, ResetOccurred@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbba8_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                pc = 0x80336bf4_u32;
+            }
+            0x80336bf4_u32 => {
+                // or r0, r3, r4
+                {
+                    let v = g[3].get() | g[4].get();
+                    g[0].set(v);
+                }
+                // lis r31, 0xcc00
+                g[31].set(0xcc000000_u32);
+                // stw r0, 0x6000(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x6000_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lwz r0, ResetOccurred@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbba8_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmplwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80336CA4
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80336ca4_u32;
+                    continue;
+                }
+                pc = 0x80336c0c_u32;
+            }
+            0x80336c0c_u32 => {
+                // bl __OSGetSystemTime
+                c::call(ctx, 0x8034c410_u32, 0x80336c10_u32);
+                pc = 0x80336c10_u32;
+            }
+            0x80336c10_u32 => {
+                // lis r5, 0x8000
+                g[5].set(0x80000000_u32);
+                // lwz r7, LastResetEnd@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbba0_u32);
+                    g[7].set(ctx.read_u32(ea));
+                }
+                // lwz r6, 0xf8(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0xf8_u32);
+                    g[6].set(ctx.read_u32(ea));
+                }
+                // lis r5, 0x1062
+                g[5].set(0x10620000_u32);
+                // addi r5, r5, 0x4dd3
+                g[5].set(g[5].get().wrapping_add(0x4dd3_u32));
+                // lwz r8, LastResetEnd+0x4@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbba4_u32);
+                    g[8].set(ctx.read_u32(ea));
+                }
+                // srwi r6, r6, 2
+                {
+                    let v = g[6].get().rotate_left(30) & 0x3fffffff_u32;
+                    g[6].set(v);
+                }
+                // mulhwu r5, r5, r6
+                {
+                    let (v, ov) = (
+                        (((u64::from(g[5].get()) * u64::from(g[6].get())) >> 32) as u32),
+                        false,
+                    );
+                    g[5].set(v);
+                    let _ = ov;
+                }
+                // srwi r5, r5, 6
+                {
+                    let v = g[5].get().rotate_left(26) & 0x3ffffff_u32;
+                    g[5].set(v);
+                }
+                // mulli r5, r5, 0xc8
+                g[5].set((g[5].get() as i32).wrapping_mul(200_i32) as u32);
+                // subfc r6, r8, r4
+                {
+                    let (v, ca, ov) = c::add3(!g[8].get(), g[4].get(), 1);
+                    g[6].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // subfe r3, r7, r3
+                {
+                    let (v, ca, ov) = c::add3(!g[7].get(), g[3].get(), c::ca(ctx));
+                    g[3].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // xoris r4, r3, 0x8000
+                g[4].set(g[3].get() ^ 0x80000000_u32);
+                // xoris r3, r0, 0x8000
+                g[3].set(g[0].get() ^ 0x80000000_u32);
+                // subfc r0, r5, r6
+                {
+                    let (v, ca, ov) = c::add3(!g[5].get(), g[6].get(), 1);
+                    g[0].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // subfe r3, r3, r4
+                {
+                    let (v, ca, ov) = c::add3(!g[3].get(), g[4].get(), c::ca(ctx));
+                    g[3].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // subfe r3, r4, r4
+                {
+                    let (v, ca, ov) = c::add3(!g[4].get(), g[4].get(), c::ca(ctx));
+                    g[3].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // neg. r3, r3
+                {
+                    let (v, ca, ov) = c::add3(!g[3].get(), 0, 1);
+                    g[3].set(v);
+                    c::update_cr0(ctx, v);
+                    let _ = (ca, ov);
+                }
+                // beq .L_80336CA4
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80336ca4_u32;
+                    continue;
+                }
+                pc = 0x80336c60_u32;
+            }
+            0x80336c60_u32 => {
+                // lwzu r0, 0x6004(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x6004_u32);
+                    g[0].set(ctx.read_u32(ea));
+                    g[31].set(ea);
+                }
+                // rlwinm r3, r0, 0, 29, 29
+                {
+                    let v = g[0].get().rotate_left(0) & 0x4_u32;
+                    g[3].set(v);
+                }
+                // rlwinm r0, r0, 1, 29, 29
+                {
+                    let v = g[0].get().rotate_left(1) & 0x4_u32;
+                    g[0].set(v);
+                }
+                // and r0, r3, r0
+                {
+                    let v = g[3].get() & g[0].get();
+                    g[0].set(v);
+                }
+                // rlwinm. r0, r0, 0, 29, 29
+                {
+                    let v = g[0].get().rotate_left(0) & 0x4_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80336C98
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80336c98_u32;
+                    continue;
+                }
+                pc = 0x80336c78_u32;
+            }
+            0x80336c78_u32 => {
+                // lwz r12, ResetCoverCallback@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb9c_u32);
+                    g[12].set(ctx.read_u32(ea));
+                }
+                // cmplwi r12, 0x0
+                {
+                    let (x, y) = (g[12].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80336C90
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80336c90_u32;
+                    continue;
+                }
+                pc = 0x80336c84_u32;
+            }
+            0x80336c84_u32 => {
+                // mtlr r12
+                ctx.regs.set_spr(8, g[12].get());
+                // li r3, 0x4
+                g[3].set(0x4_u32);
+                // blrl
+                c::call(ctx, ctx.regs.lr.get() & !3, 0x80336c90_u32);
+                pc = 0x80336c90_u32;
+            }
+            0x80336c90_u32 => {
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stw r0, ResetCoverCallback@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb9c_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                pc = 0x80336c98_u32;
+            }
+            0x80336c98_u32 => {
+                // lwz r0, 0x0(r31)
+                {
+                    let ea = g[31].get();
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // stw r0, 0x0(r31)
+                {
+                    let ea = g[31].get();
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // b .L_80336CF8
+                pc = 0x80336cf8_u32;
+                continue;
+                pc = 0x80336ca4_u32;
+            }
+            0x80336ca4_u32 => {
+                // lwz r0, WaitingCoverClose@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbac_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80336CEC
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80336cec_u32;
+                    continue;
+                }
+                pc = 0x80336cb0_u32;
+            }
+            0x80336cb0_u32 => {
+                // lis r3, 0xcc00
+                g[3].set(0xcc000000_u32);
+                // addi r5, r3, 0x6000
+                g[5].set(g[3].get().wrapping_add(0x6000_u32));
+                // lwzu r0, 0x4(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x4_u32);
+                    g[0].set(ctx.read_u32(ea));
+                    g[5].set(ea);
+                }
+                // rlwinm r4, r0, 0, 30, 30
+                {
+                    let v = g[0].get().rotate_left(0) & 0x2_u32;
+                    g[4].set(v);
+                }
+                // rlwinm r3, r0, 0, 29, 29
+                {
+                    let v = g[0].get().rotate_left(0) & 0x4_u32;
+                    g[3].set(v);
+                }
+                // rlwinm r0, r0, 1, 29, 29
+                {
+                    let v = g[0].get().rotate_left(1) & 0x4_u32;
+                    g[0].set(v);
+                }
+                // and r3, r3, r0
+                {
+                    let v = g[3].get() & g[0].get();
+                    g[3].set(v);
+                }
+                // rlwinm. r0, r3, 0, 29, 29
+                {
+                    let v = g[3].get().rotate_left(0) & 0x4_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80336CD8
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80336cd8_u32;
+                    continue;
+                }
+                pc = 0x80336cd4_u32;
+            }
+            0x80336cd4_u32 => {
+                // ori r29, r29, 0x4
+                g[29].set(g[29].get() | 0x4_u32);
+                pc = 0x80336cd8_u32;
+            }
+            0x80336cd8_u32 => {
+                // or r0, r3, r4
+                {
+                    let v = g[3].get() | g[4].get();
+                    g[0].set(v);
+                }
+                // stw r0, 0x0(r5)
+                {
+                    let ea = g[5].get();
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stw r0, WaitingCoverClose@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbac_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // b .L_80336CF8
+                pc = 0x80336cf8_u32;
+                continue;
+                pc = 0x80336cec_u32;
+            }
+            0x80336cec_u32 => {
+                // lis r3, 0xcc00
+                g[3].set(0xcc000000_u32);
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stw r0, 0x6004(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x6004_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                pc = 0x80336cf8_u32;
+            }
+            0x80336cf8_u32 => {
+                // rlwinm. r0, r29, 0, 28, 28
+                {
+                    let v = g[29].get().rotate_left(0) & 0x8_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80336D10
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80336d10_u32;
+                    continue;
+                }
+                pc = 0x80336d00_u32;
+            }
+            0x80336d00_u32 => {
+                // lwz r0, Breaking@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbb0_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80336D10
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80336d10_u32;
+                    continue;
+                }
+                pc = 0x80336d0c_u32;
+            }
+            0x80336d0c_u32 => {
+                // rlwinm r29, r29, 0, 29, 27
+                {
+                    let v = g[29].get().rotate_left(0) & 0xfffffff7_u32;
+                    g[29].set(v);
+                }
+                pc = 0x80336d10_u32;
+            }
+            0x80336d10_u32 => {
+                // clrlwi. r0, r29, 31
+                {
+                    let v = g[29].get().rotate_left(0) & 0x1_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80336D94
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80336d94_u32;
+                    continue;
+                }
+                pc = 0x80336d18_u32;
+            }
+            0x80336d18_u32 => {
+                // lwz r0, NextCommandNumber@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbd4_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // mulli r0, r0, 0x14
+                g[0].set((g[0].get() as i32).wrapping_mul(20_i32) as u32);
+                // lwzx r3, r30, r0
+                g[3].set(ctx.read_u32(g[30].get().wrapping_add(g[0].get())));
+                // cmpwi r3, 0x1
+                {
+                    let (x, y) = (g[3].get() as i32, 1_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80336D58
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80336d58_u32;
+                    continue;
+                }
+                pc = 0x80336d2c_u32;
+            }
+            0x80336d2c_u32 => {
+                // lwz r3, NextCommandNumber@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbd4_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // add r6, r30, r0
+                {
+                    let (v, ca, ov) = c::add3(g[30].get(), g[0].get(), 0);
+                    g[6].set(v);
+                    let _ = (ca, ov);
+                }
+                // addi r0, r3, 0x1
+                g[0].set(g[3].get().wrapping_add(0x1_u32));
+                // stw r0, NextCommandNumber@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbd4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lwz r3, 0x4(r6)
+                {
+                    let ea = g[6].get().wrapping_add(0x4_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // lwz r4, 0x8(r6)
+                {
+                    let ea = g[6].get().wrapping_add(0x8_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // lwz r5, 0xc(r6)
+                {
+                    let ea = g[6].get().wrapping_add(0xc_u32);
+                    g[5].set(ctx.read_u32(ea));
+                }
+                // lwz r6, 0x10(r6)
+                {
+                    let ea = g[6].get().wrapping_add(0x10_u32);
+                    g[6].set(ctx.read_u32(ea));
+                }
+                // bl Read
+                c::call(ctx, 0x80336f08_u32, 0x80336d50_u32);
+                pc = 0x80336d50_u32;
+            }
+            0x80336d50_u32 => {
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // b .L_80336D88
+                pc = 0x80336d88_u32;
+                continue;
+                pc = 0x80336d58_u32;
+            }
+            0x80336d58_u32 => {
+                // cmpwi r3, 0x2
+                {
+                    let (x, y) = (g[3].get() as i32, 2_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80336D84
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80336d84_u32;
+                    continue;
+                }
+                pc = 0x80336d60_u32;
+            }
+            0x80336d60_u32 => {
+                // lwz r3, NextCommandNumber@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbd4_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // add r4, r30, r0
+                {
+                    let (v, ca, ov) = c::add3(g[30].get(), g[0].get(), 0);
+                    g[4].set(v);
+                    let _ = (ca, ov);
+                }
+                // addi r0, r3, 0x1
+                g[0].set(g[3].get().wrapping_add(0x1_u32));
+                // stw r0, NextCommandNumber@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbd4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lwz r3, 0xc(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0xc_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // lwz r4, 0x10(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x10_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // bl DVDLowSeek
+                c::call(ctx, 0x80337330_u32, 0x80336d7c_u32);
+                pc = 0x80336d7c_u32;
+            }
+            0x80336d7c_u32 => {
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // b .L_80336D88
+                pc = 0x80336d88_u32;
+                continue;
+                pc = 0x80336d84_u32;
+            }
+            0x80336d84_u32 => {
+                // li r0, 0x0
+                g[0].set(0_u32);
+                pc = 0x80336d88_u32;
+            }
+            0x80336d88_u32 => {
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80336DA4
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80336da4_u32;
+                    continue;
+                }
+                pc = 0x80336d90_u32;
+            }
+            0x80336d90_u32 => {
+                // b .L_80336DF4
+                pc = 0x80336df4_u32;
+                continue;
+                pc = 0x80336d94_u32;
+            }
+            0x80336d94_u32 => {
+                // li r0, -0x1
+                g[0].set(0xffffffff_u32);
+                // stw r0, 0x0(r30)
+                {
+                    let ea = g[30].get();
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stw r0, NextCommandNumber@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbd4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                pc = 0x80336da4_u32;
+            }
+            0x80336da4_u32 => {
+                // addi r3, r1, 0x10
+                g[3].set(g[1].get().wrapping_add(0x10_u32));
+                // bl OSClearContext
+                c::call(ctx, 0x80345254_u32, 0x80336dac_u32);
+                pc = 0x80336dac_u32;
+            }
+            0x80336dac_u32 => {
+                // addi r3, r1, 0x10
+                g[3].set(g[1].get().wrapping_add(0x10_u32));
+                // bl OSSetCurrentContext
+                c::call(ctx, 0x8034508c_u32, 0x80336db4_u32);
+                pc = 0x80336db4_u32;
+            }
+            0x80336db4_u32 => {
+                // cmplwi r29, 0x0
+                {
+                    let (x, y) = (g[29].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80336DE4
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80336de4_u32;
+                    continue;
+                }
+                pc = 0x80336dbc_u32;
+            }
+            0x80336dbc_u32 => {
+                // lwz r12, Callback@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb98_u32);
+                    g[12].set(ctx.read_u32(ea));
+                }
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // cmplwi r12, 0x0
+                {
+                    let (x, y) = (g[12].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // stw r0, Callback@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb98_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // beq .L_80336DDC
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80336ddc_u32;
+                    continue;
+                }
+                pc = 0x80336dd0_u32;
+            }
+            0x80336dd0_u32 => {
+                // mtlr r12
+                ctx.regs.set_spr(8, g[12].get());
+                // addi r3, r29, 0x0
+                g[3].set(g[29].get());
+                // blrl
+                c::call(ctx, ctx.regs.lr.get() & !3, 0x80336ddc_u32);
+                pc = 0x80336ddc_u32;
+            }
+            0x80336ddc_u32 => {
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stw r0, Breaking@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbb0_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                pc = 0x80336de4_u32;
+            }
+            0x80336de4_u32 => {
+                // addi r3, r1, 0x10
+                g[3].set(g[1].get().wrapping_add(0x10_u32));
+                // bl OSClearContext
+                c::call(ctx, 0x80345254_u32, 0x80336dec_u32);
+                pc = 0x80336dec_u32;
+            }
+            0x80336dec_u32 => {
+                // mr r3, r28
+                {
+                    let v = g[28].get() | g[28].get();
+                    g[3].set(v);
+                }
+                // bl OSSetCurrentContext
+                c::call(ctx, 0x8034508c_u32, 0x80336df4_u32);
+                pc = 0x80336df4_u32;
+            }
+            0x80336df4_u32 => {
+                // lwz r0, 0x2ec(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x2ec_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x2e4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x2e4_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x2e0(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x2e0_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // lwz r29, 0x2dc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x2dc_u32);
+                    g[29].set(ctx.read_u32(ea));
+                }
+                // lwz r28, 0x2d8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x2d8_u32);
+                    g[28].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x2e8
+                g[1].set(g[1].get().wrapping_add(0x2e8_u32));
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of __DVDInterruptHandler");
+            }
+            _ => unreachable!("__DVDInterruptHandler: no block at {pc:#010x}"),
         }
-        (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 1_i32))
-            .set((Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 1_i32)).get());
-    } else if (statics::dolphin__dvd__dvdlow::WaitingCoverClose(ctx).get() != 0) {
-        reg = (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 1_i32)).get();
-        mask = (reg & (2_i32 as u32));
-        intr = ((reg & (4_i32 as u32)) & (shl_u32(mask, (1_i32 as u32))));
-        if ((intr & (4_i32 as u32)) != 0) {
-            cause = (cause | (4_i32 as u32));
-        }
-        (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 1_i32)).set((intr | mask));
-        statics::dolphin__dvd__dvdlow::WaitingCoverClose(ctx).set(0_i32);
-    } else {
-        (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 1_i32)).set((0_i32 as u32));
     }
-    if ((cause & (8_i32 as u32)) != 0)
-        && (statics::dolphin__dvd__dvdlow::Breaking(ctx).get() == 0_i32)
-    {
-        cause = (cause & 0xfffffff7_u32);
-    }
-    if ((cause & (1_i32 as u32)) != 0) {
-        if (inl_ProcessNextCommand_unfused(ctx) != 0) {
-            return;
-        }
-    } else {
-        statics::dolphin__dvd__dvdlow::CommandList(ctx)
-            .get(0_i32)
-            .set_cmd(1_i32.wrapping_neg());
-        statics::dolphin__dvd__dvdlow::NextCommandNumber(ctx).set(0_i32);
-    }
-    fns::OSClearContext(ctx, exceptionContext);
-    fns::OSSetCurrentContext(ctx, exceptionContext);
-    if cause != (0_i32 as u32) {
-        let mut callback: FnPtr<'a> = statics::dolphin__dvd__dvdlow::Callback(ctx).get();
-        statics::dolphin__dvd__dvdlow::Callback(ctx).set(null::<FnPtr<'a>>(ctx));
-        if !Handle::is_null(callback) {
-            callback.call::<_, ()>((cause,));
-        }
-        statics::dolphin__dvd__dvdlow::Breaking(ctx).set(0_i32);
-    }
-    fns::OSClearContext(ctx, exceptionContext);
-    fns::OSSetCurrentContext(ctx, context);
 }
 
 pub fn AlarmHandler<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>, context: OSContext<'a>) {
@@ -275,147 +1114,895 @@ pub fn SeekTwiceBeforeRead<'a>(
     let _ = fns::DVDLowSeek(ctx, newOffset, callback);
 }
 
-pub fn DVDLowRead<'a>(
-    ctx: &'a Ctx,
-    addr: Addr<'a>,
-    length: u32,
-    offset: u32,
-    callback: FnPtr<'a>,
-) -> i32 {
-    let __frame = ctx.stack_frame(0x40);
-    let mut addr = addr;
-    let mut length = length;
-    let mut offset = offset;
-    let mut callback = callback;
-    let mut diff: i64 = 0;
-    let mut prev: u32 = 0;
-    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 6_i32)).set(length);
-    statics::dolphin__dvd__dvdlow::Curr(ctx).set_bootFilePosition(addr);
-    statics::dolphin__dvd__dvdlow::Curr(ctx).set_FSTPosition(length);
-    statics::dolphin__dvd__dvdlow::Curr(ctx).set_FSTLength(offset);
-    if statics::dolphin__dvd__dvdlow::WorkAroundType(ctx).get() == (0_i32 as u32) {
-        inl_DoJustRead_unfused(ctx, addr, length, offset, callback);
-    } else if statics::dolphin__dvd__dvdlow::WorkAroundType(ctx).get() == (1_i32 as u32) {
-        if (statics::dolphin__dvd__dvdlow::FirstRead(ctx).get() != 0) {
-            statics::dolphin__dvd__dvdlow::SeekTwiceBeforeRead(ctx, addr, length, offset, callback);
-        } else if !(inl_HitCache_unfused(ctx) != 0) {
-            inl_DoJustRead_unfused(ctx, addr, length, offset, callback);
-        } else {
-            prev = shr_u32(
-                (statics::dolphin__dvd__dvdlow::Prev(ctx)
-                    .FSTLength()
-                    .wrapping_add(statics::dolphin__dvd__dvdlow::Prev(ctx).FSTPosition())
-                    .wrapping_sub((1_i32 as u32))),
-                (15_i32 as u32),
-            );
-            if (prev
-                == shr_u32(
-                    statics::dolphin__dvd__dvdlow::Curr(ctx).FSTLength(),
-                    (15_i32 as u32),
-                ))
-                || (prev.wrapping_add((1_i32 as u32))
-                    == shr_u32(
-                        statics::dolphin__dvd__dvdlow::Curr(ctx).FSTLength(),
-                        (15_i32 as u32),
-                    ))
-            {
-                diff = {
-                    let __t1 = statics::dolphin__dvd__dvdlow::LastReadFinished(ctx).get();
-                    ctx.call::<_, i64>(0x8034c410, ()).wrapping_sub(__t1)
-                };
-                if ((((5_i32) as u32).wrapping_mul(
-                    (div_u32(
-                        (div_u32(
-                            ((ptr::<Val<'a, u32>>(
-                                ctx,
-                                ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
-                            ))
-                            .get()),
-                            (4_i32 as u32),
-                        )),
-                        (0x3e8_i32 as u32),
-                    )),
-                )) as i64)
-                    < diff
-                {
-                    inl_DoJustRead_unfused(ctx, addr, length, offset, callback);
-                } else {
-                    inl_WaitBeforeRead_unfused(
-                        ctx,
-                        addr,
-                        length,
-                        offset,
-                        callback,
-                        ((((5_i32) as u32).wrapping_mul(
-                            (div_u32(
-                                (div_u32(
-                                    ((ptr::<Val<'a, u32>>(
-                                        ctx,
-                                        ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
-                                    ))
-                                    .get()),
-                                    (4_i32 as u32),
-                                )),
-                                (0x3e8_i32 as u32),
-                            )),
-                        )) as i64)
-                            .wrapping_sub(diff)
-                            .wrapping_add(
-                                ((div_u32(
-                                    (((0x1f4_i32) as u32).wrapping_mul(
-                                        (div_u32(
-                                            (div_u32(
-                                                ((ptr::<Val<'a, u32>>(
-                                                    ctx,
-                                                    ((shl_i32(0x8000_i32, (16_i32 as u32)))
-                                                        | 248_i32)
-                                                        as u32,
-                                                ))
-                                                .get()),
-                                                (4_i32 as u32),
-                                            )),
-                                            (0x1e848_i32 as u32),
-                                        )),
-                                    )),
-                                    (8_i32 as u32),
-                                )) as i64),
-                            ),
-                    );
-                }
-            } else {
-                statics::dolphin__dvd__dvdlow::SeekTwiceBeforeRead(
-                    ctx, addr, length, offset, callback,
-                );
-            }
-        }
-    }
-    return 1_i32;
+pub fn DVDLowRead<'a>(ctx: &'a Ctx, a0: Addr<'a>, a1: u32, a2: u32, a3: FnPtr<'a>) -> i32 {
+    // Transliterated from its machine code: hardware register order.
+    (a0, a1, a2, a3).put_regs(ctx);
+    asm_DVDLowRead(ctx);
+    Ret::get(ctx)
 }
 
-pub fn DVDLowSeek<'a>(ctx: &'a Ctx, offset: u32, callback: FnPtr<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x18);
-    let mut offset = offset;
-    let mut callback = callback;
-    statics::dolphin__dvd__dvdlow::StopAtNextInt(ctx).set(0_i32);
-    statics::dolphin__dvd__dvdlow::Callback(ctx).set(callback);
-    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 2_i32)).set(0xab000000_u32);
-    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 3_i32))
-        .set((shr_u32(offset, (2_i32 as u32))));
-    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 7_i32)).set((1_i32 as u32));
-    inl_SetTimeoutAlarm_unfused(
-        ctx,
-        ((((10_i32) as u32).wrapping_mul(
-            (div_u32(
-                ((ptr::<Val<'a, u32>>(
-                    ctx,
-                    ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
-                ))
-                .get()),
-                (4_i32 as u32),
-            )),
-        )) as i64),
-    );
-    return 1_i32;
+fn asm_DVDLowRead(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80337098_u32;
+    loop {
+        match pc {
+            0x80337098_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // lis r7, 0xcc00
+                g[7].set(0xcc000000_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x40(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffc0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stmw r22, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    for (i, reg) in (22..32).enumerate() {
+                        ctx.write_u32(ea.wrapping_add(4 * i as u32), g[reg].get());
+                    }
+                }
+                // addi r25, r4, 0x0
+                g[25].set(g[4].get());
+                // addi r4, r7, 0x6000
+                g[4].set(g[7].get().wrapping_add(0x6000_u32));
+                // lis r7, CommandList@ha
+                g[7].set(0x804a0000_u32);
+                // addi r31, r7, CommandList@l
+                g[31].set(g[7].get().wrapping_add(0x7488_u32));
+                // addi r24, r3, 0x0
+                g[24].set(g[3].get());
+                // addi r26, r5, 0x0
+                g[26].set(g[5].get());
+                // addi r30, r31, 0xcc
+                g[30].set(g[31].get().wrapping_add(0xcc_u32));
+                // mr r27, r6
+                {
+                    let v = g[6].get() | g[6].get();
+                    g[27].set(v);
+                }
+                // stw r25, 0x18(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x18_u32);
+                    ctx.write_u32(ea, g[25].get());
+                }
+                // stw r24, 0xc4(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xc4_u32);
+                    ctx.write_u32(ea, g[24].get());
+                }
+                // stw r25, 0xc8(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xc8_u32);
+                    ctx.write_u32(ea, g[25].get());
+                }
+                // stw r26, 0xcc(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xcc_u32);
+                    ctx.write_u32(ea, g[26].get());
+                }
+                // lwz r0, WorkAroundType@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbb4_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmplwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80337110
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80337110_u32;
+                    continue;
+                }
+                pc = 0x803370e8_u32;
+            }
+            0x803370e8_u32 => {
+                // li r0, -0x1
+                g[0].set(0xffffffff_u32);
+                // stw r0, 0x0(r31)
+                {
+                    let ea = g[31].get();
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // addi r3, r24, 0x0
+                g[3].set(g[24].get());
+                // stw r0, NextCommandNumber@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbd4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // addi r4, r25, 0x0
+                g[4].set(g[25].get());
+                // addi r5, r26, 0x0
+                g[5].set(g[26].get());
+                // addi r6, r27, 0x0
+                g[6].set(g[27].get());
+                // bl Read
+                c::call(ctx, 0x80336f08_u32, 0x8033710c_u32);
+                pc = 0x8033710c_u32;
+            }
+            0x8033710c_u32 => {
+                // b .L_80337318
+                pc = 0x80337318_u32;
+                continue;
+                pc = 0x80337110_u32;
+            }
+            0x80337110_u32 => {
+                // lwz r0, WorkAroundType@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbb4_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmplwi r0, 0x1
+                {
+                    let (x, y) = (g[0].get(), 0x1_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80337318
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80337318_u32;
+                    continue;
+                }
+                pc = 0x8033711c_u32;
+            }
+            0x8033711c_u32 => {
+                // lwz r0, FirstRead@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffa4e0_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80337140
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80337140_u32;
+                    continue;
+                }
+                pc = 0x80337128_u32;
+            }
+            0x80337128_u32 => {
+                // addi r3, r24, 0x0
+                g[3].set(g[24].get());
+                // addi r4, r25, 0x0
+                g[4].set(g[25].get());
+                // addi r5, r26, 0x0
+                g[5].set(g[26].get());
+                // addi r6, r27, 0x0
+                g[6].set(g[27].get());
+                // bl SeekTwiceBeforeRead
+                c::call(ctx, 0x80337018_u32, 0x8033713c_u32);
+                pc = 0x8033713c_u32;
+            }
+            0x8033713c_u32 => {
+                // b .L_80337318
+                pc = 0x80337318_u32;
+                continue;
+                pc = 0x80337140_u32;
+            }
+            0x80337140_u32 => {
+                // addi r29, r31, 0xbc
+                g[29].set(g[31].get().wrapping_add(0xbc_u32));
+                // lwz r0, 0x0(r30)
+                {
+                    let ea = g[30].get();
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r28, r31, 0xc0
+                g[28].set(g[31].get().wrapping_add(0xc0_u32));
+                // lwz r3, 0xbc(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xbc_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // lwz r4, 0xc0(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xc0_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // srwi r23, r0, 15
+                {
+                    let v = g[0].get().rotate_left(17) & 0x1ffff_u32;
+                    g[23].set(v);
+                }
+                // subi r0, r3, 0x1
+                g[0].set(g[3].get().wrapping_add(0xffffffff_u32));
+                // add r0, r4, r0
+                {
+                    let (v, ca, ov) = c::add3(g[4].get(), g[0].get(), 0);
+                    g[0].set(v);
+                    let _ = (ca, ov);
+                }
+                // srwi r22, r0, 15
+                {
+                    let v = g[0].get().rotate_left(17) & 0x1ffff_u32;
+                    g[22].set(v);
+                }
+                // bl DVDGetCurrentDiskID
+                c::call(ctx, 0x80339f48_u32, 0x80337168_u32);
+                pc = 0x80337168_u32;
+            }
+            0x80337168_u32 => {
+                // lbz r0, 0x8(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x8_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // cmplwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_8033717C
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x8033717c_u32;
+                    continue;
+                }
+                pc = 0x80337174_u32;
+            }
+            0x80337174_u32 => {
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // b .L_80337180
+                pc = 0x80337180_u32;
+                continue;
+                pc = 0x8033717c_u32;
+            }
+            0x8033717c_u32 => {
+                // li r0, 0x0
+                g[0].set(0_u32);
+                pc = 0x80337180_u32;
+            }
+            0x80337180_u32 => {
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80337190
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80337190_u32;
+                    continue;
+                }
+                pc = 0x80337188_u32;
+            }
+            0x80337188_u32 => {
+                // li r3, 0x5
+                g[3].set(0x5_u32);
+                // b .L_80337194
+                pc = 0x80337194_u32;
+                continue;
+                pc = 0x80337190_u32;
+            }
+            0x80337190_u32 => {
+                // li r3, 0xf
+                g[3].set(0xf_u32);
+                pc = 0x80337194_u32;
+            }
+            0x80337194_u32 => {
+                // subi r0, r22, 0x2
+                g[0].set(g[22].get().wrapping_add(0xfffffffe_u32));
+                // cmplw r23, r0
+                {
+                    let (x, y) = (g[23].get(), g[0].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bgt .L_803371B0
+                if (c::cr_bit(ctx, 1) == true) {
+                    pc = 0x803371b0_u32;
+                    continue;
+                }
+                pc = 0x803371a0_u32;
+            }
+            0x803371a0_u32 => {
+                // addi r0, r3, 0x3
+                g[0].set(g[3].get().wrapping_add(0x3_u32));
+                // add r0, r22, r0
+                {
+                    let (v, ca, ov) = c::add3(g[22].get(), g[0].get(), 0);
+                    g[0].set(v);
+                    let _ = (ca, ov);
+                }
+                // cmplw r23, r0
+                {
+                    let (x, y) = (g[23].get(), g[0].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bge .L_803371B8
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x803371b8_u32;
+                    continue;
+                }
+                pc = 0x803371b0_u32;
+            }
+            0x803371b0_u32 => {
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // b .L_803371BC
+                pc = 0x803371bc_u32;
+                continue;
+                pc = 0x803371b8_u32;
+            }
+            0x803371b8_u32 => {
+                // li r0, 0x0
+                g[0].set(0_u32);
+                pc = 0x803371bc_u32;
+            }
+            0x803371bc_u32 => {
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_803371EC
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x803371ec_u32;
+                    continue;
+                }
+                pc = 0x803371c4_u32;
+            }
+            0x803371c4_u32 => {
+                // li r0, -0x1
+                g[0].set(0xffffffff_u32);
+                // stw r0, 0x0(r31)
+                {
+                    let ea = g[31].get();
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // addi r3, r24, 0x0
+                g[3].set(g[24].get());
+                // stw r0, NextCommandNumber@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbd4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // addi r4, r25, 0x0
+                g[4].set(g[25].get());
+                // addi r5, r26, 0x0
+                g[5].set(g[26].get());
+                // addi r6, r27, 0x0
+                g[6].set(g[27].get());
+                // bl Read
+                c::call(ctx, 0x80336f08_u32, 0x803371e8_u32);
+                pc = 0x803371e8_u32;
+            }
+            0x803371e8_u32 => {
+                // b .L_80337318
+                pc = 0x80337318_u32;
+                continue;
+                pc = 0x803371ec_u32;
+            }
+            0x803371ec_u32 => {
+                // lwz r3, 0x0(r29)
+                {
+                    let ea = g[29].get();
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // lwz r4, 0x0(r28)
+                {
+                    let ea = g[28].get();
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // subi r3, r3, 0x1
+                g[3].set(g[3].get().wrapping_add(0xffffffff_u32));
+                // lwz r0, 0x0(r30)
+                {
+                    let ea = g[30].get();
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // add r3, r4, r3
+                {
+                    let (v, ca, ov) = c::add3(g[4].get(), g[3].get(), 0);
+                    g[3].set(v);
+                    let _ = (ca, ov);
+                }
+                // srwi r3, r3, 15
+                {
+                    let v = g[3].get().rotate_left(17) & 0x1ffff_u32;
+                    g[3].set(v);
+                }
+                // srwi r4, r0, 15
+                {
+                    let v = g[0].get().rotate_left(17) & 0x1ffff_u32;
+                    g[4].set(v);
+                }
+                // cmplw r3, r4
+                {
+                    let (x, y) = (g[3].get(), g[4].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_8033721C
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x8033721c_u32;
+                    continue;
+                }
+                pc = 0x80337210_u32;
+            }
+            0x80337210_u32 => {
+                // addi r0, r3, 0x1
+                g[0].set(g[3].get().wrapping_add(0x1_u32));
+                // cmplw r0, r4
+                {
+                    let (x, y) = (g[0].get(), g[4].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80337304
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80337304_u32;
+                    continue;
+                }
+                pc = 0x8033721c_u32;
+            }
+            0x8033721c_u32 => {
+                // bl __OSGetSystemTime
+                c::call(ctx, 0x8034c410_u32, 0x80337220_u32);
+                pc = 0x80337220_u32;
+            }
+            0x80337220_u32 => {
+                // lis r5, 0x8000
+                g[5].set(0x80000000_u32);
+                // lwz r8, LastReadFinished@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbc0_u32);
+                    g[8].set(ctx.read_u32(ea));
+                }
+                // lwz r0, 0xf8(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0xf8_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lis r5, 0x1062
+                g[5].set(0x10620000_u32);
+                // lwz r9, LastReadFinished+0x4@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbc4_u32);
+                    g[9].set(ctx.read_u32(ea));
+                }
+                // li r6, 0x0
+                g[6].set(0_u32);
+                // srwi r7, r0, 2
+                {
+                    let v = g[0].get().rotate_left(30) & 0x3fffffff_u32;
+                    g[7].set(v);
+                }
+                // addi r0, r5, 0x4dd3
+                g[0].set(g[5].get().wrapping_add(0x4dd3_u32));
+                // mulhwu r0, r0, r7
+                {
+                    let (v, ov) = (
+                        (((u64::from(g[0].get()) * u64::from(g[7].get())) >> 32) as u32),
+                        false,
+                    );
+                    g[0].set(v);
+                    let _ = ov;
+                }
+                // srwi r0, r0, 6
+                {
+                    let v = g[0].get().rotate_left(26) & 0x3ffffff_u32;
+                    g[0].set(v);
+                }
+                // subfc r9, r9, r4
+                {
+                    let (v, ca, ov) = c::add3(!g[9].get(), g[4].get(), 1);
+                    g[9].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // subfe r8, r8, r3
+                {
+                    let (v, ca, ov) = c::add3(!g[8].get(), g[3].get(), c::ca(ctx));
+                    g[8].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // mulli r5, r0, 0x5
+                g[5].set((g[0].get() as i32).wrapping_mul(5_i32) as u32);
+                // xoris r4, r6, 0x8000
+                g[4].set(g[6].get() ^ 0x80000000_u32);
+                // xoris r3, r8, 0x8000
+                g[3].set(g[8].get() ^ 0x80000000_u32);
+                // subfc r0, r9, r5
+                {
+                    let (v, ca, ov) = c::add3(!g[9].get(), g[5].get(), 1);
+                    g[0].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // subfe r3, r3, r4
+                {
+                    let (v, ca, ov) = c::add3(!g[3].get(), g[4].get(), c::ca(ctx));
+                    g[3].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // subfe r3, r4, r4
+                {
+                    let (v, ca, ov) = c::add3(!g[4].get(), g[4].get(), c::ca(ctx));
+                    g[3].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // neg. r3, r3
+                {
+                    let (v, ca, ov) = c::add3(!g[3].get(), 0, 1);
+                    g[3].set(v);
+                    c::update_cr0(ctx, v);
+                    let _ = (ca, ov);
+                }
+                // beq .L_80337294
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80337294_u32;
+                    continue;
+                }
+                pc = 0x80337270_u32;
+            }
+            0x80337270_u32 => {
+                // li r0, -0x1
+                g[0].set(0xffffffff_u32);
+                // stw r0, 0x0(r31)
+                {
+                    let ea = g[31].get();
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // addi r3, r24, 0x0
+                g[3].set(g[24].get());
+                // addi r4, r25, 0x0
+                g[4].set(g[25].get());
+                // stw r6, NextCommandNumber@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbd4_u32);
+                    ctx.write_u32(ea, g[6].get());
+                }
+                // addi r5, r26, 0x0
+                g[5].set(g[26].get());
+                // addi r6, r27, 0x0
+                g[6].set(g[27].get());
+                // bl Read
+                c::call(ctx, 0x80336f08_u32, 0x80337290_u32);
+                pc = 0x80337290_u32;
+            }
+            0x80337290_u32 => {
+                // b .L_80337318
+                pc = 0x80337318_u32;
+                continue;
+                pc = 0x80337294_u32;
+            }
+            0x80337294_u32 => {
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // stw r0, 0x0(r31)
+                {
+                    let ea = g[31].get();
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lis r3, 0x431c
+                g[3].set(0x431c0000_u32);
+                // subi r0, r3, 0x217d
+                g[0].set(g[3].get().wrapping_add(0xffffde83_u32));
+                // stw r24, 0x4(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[24].get());
+                }
+                // mulhwu r0, r0, r7
+                {
+                    let (v, ov) = (
+                        (((u64::from(g[0].get()) * u64::from(g[7].get())) >> 32) as u32),
+                        false,
+                    );
+                    g[0].set(v);
+                    let _ = ov;
+                }
+                // stw r25, 0x8(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x8_u32);
+                    ctx.write_u32(ea, g[25].get());
+                }
+                // stw r26, 0xc(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xc_u32);
+                    ctx.write_u32(ea, g[26].get());
+                }
+                // srwi r0, r0, 15
+                {
+                    let v = g[0].get().rotate_left(17) & 0x1ffff_u32;
+                    g[0].set(v);
+                }
+                // mulli r3, r0, 0x1f4
+                g[3].set((g[0].get() as i32).wrapping_mul(500_i32) as u32);
+                // stw r27, 0x10(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x10_u32);
+                    ctx.write_u32(ea, g[27].get());
+                }
+                // li r0, -0x1
+                g[0].set(0xffffffff_u32);
+                // stw r0, 0x14(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // subfc r5, r9, r5
+                {
+                    let (v, ca, ov) = c::add3(!g[9].get(), g[5].get(), 1);
+                    g[5].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // subfe r4, r8, r6
+                {
+                    let (v, ca, ov) = c::add3(!g[8].get(), g[6].get(), c::ca(ctx));
+                    g[4].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // srwi r0, r3, 3
+                {
+                    let v = g[3].get().rotate_left(29) & 0x1fffffff_u32;
+                    g[0].set(v);
+                }
+                // stw r6, NextCommandNumber@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbbd4_u32);
+                    ctx.write_u32(ea, g[6].get());
+                }
+                // addc r23, r5, r0
+                {
+                    let (v, ca, ov) = c::add3(g[5].get(), g[0].get(), 0);
+                    g[23].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // adde r22, r4, r6
+                {
+                    let (v, ca, ov) = c::add3(g[4].get(), g[6].get(), c::ca(ctx));
+                    g[22].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // addi r3, r31, 0x40
+                g[3].set(g[31].get().wrapping_add(0x40_u32));
+                // bl OSCreateAlarm
+                c::call(ctx, 0x8034376c_u32, 0x803372e8_u32);
+                pc = 0x803372e8_u32;
+            }
+            0x803372e8_u32 => {
+                // lis r3, AlarmHandler@ha
+                g[3].set(0x80330000_u32);
+                // addi r7, r3, AlarmHandler@l
+                g[7].set(g[3].get().wrapping_add(0x6e14_u32));
+                // addi r6, r23, 0x0
+                g[6].set(g[23].get());
+                // addi r5, r22, 0x0
+                g[5].set(g[22].get());
+                // addi r3, r31, 0x40
+                g[3].set(g[31].get().wrapping_add(0x40_u32));
+                // bl OSSetAlarm
+                c::call(ctx, 0x803439c8_u32, 0x80337300_u32);
+                pc = 0x80337300_u32;
+            }
+            0x80337300_u32 => {
+                // b .L_80337318
+                pc = 0x80337318_u32;
+                continue;
+                pc = 0x80337304_u32;
+            }
+            0x80337304_u32 => {
+                // addi r3, r24, 0x0
+                g[3].set(g[24].get());
+                // addi r4, r25, 0x0
+                g[4].set(g[25].get());
+                // addi r5, r26, 0x0
+                g[5].set(g[26].get());
+                // addi r6, r27, 0x0
+                g[6].set(g[27].get());
+                // bl SeekTwiceBeforeRead
+                c::call(ctx, 0x80337018_u32, 0x80337318_u32);
+                pc = 0x80337318_u32;
+            }
+            0x80337318_u32 => {
+                // lmw r22, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    for (i, reg) in (22..32).enumerate() {
+                        g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
+                    }
+                }
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // lwz r0, 0x44(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x44_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x40
+                g[1].set(g[1].get().wrapping_add(0x40_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of DVDLowRead");
+            }
+            _ => unreachable!("DVDLowRead: no block at {pc:#010x}"),
+        }
+    }
+}
+
+pub fn DVDLowSeek<'a>(ctx: &'a Ctx, a0: u32, a1: FnPtr<'a>) -> i32 {
+    // Transliterated from its machine code: hardware register order.
+    (a0, a1).put_regs(ctx);
+    asm_DVDLowSeek(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_DVDLowSeek(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80337330_u32;
+    loop {
+        match pc {
+            0x80337330_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // stw r4, Callback@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb98_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // lis r4, 0xcc00
+                g[4].set(0xcc000000_u32);
+                // addi r4, r4, 0x6000
+                g[4].set(g[4].get().wrapping_add(0x6000_u32));
+                // stw r0, StopAtNextInt@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb90_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lis r0, 0xab00
+                g[0].set(0xab000000_u32);
+                // stw r0, 0x8(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x8_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // srwi r0, r3, 2
+                {
+                    let v = g[3].get().rotate_left(30) & 0x3fffffff_u32;
+                    g[0].set(v);
+                }
+                // lis r3, AlarmForTimeout@ha
+                g[3].set(0x804a0000_u32);
+                // stw r0, 0xc(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0xc_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // addi r31, r3, AlarmForTimeout@l
+                g[31].set(g[3].get().wrapping_add(0x74f0_u32));
+                // stw r0, 0x1c(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x1c_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lis r4, 0x8000
+                g[4].set(0x80000000_u32);
+                // addi r3, r31, 0x0
+                g[3].set(g[31].get());
+                // lwz r0, 0xf8(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0xf8_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // srwi r0, r0, 2
+                {
+                    let v = g[0].get().rotate_left(30) & 0x3fffffff_u32;
+                    g[0].set(v);
+                }
+                // mulli r30, r0, 0xa
+                g[30].set((g[0].get() as i32).wrapping_mul(10_i32) as u32);
+                // bl OSCreateAlarm
+                c::call(ctx, 0x8034376c_u32, 0x80337390_u32);
+                pc = 0x80337390_u32;
+            }
+            0x80337390_u32 => {
+                // lis r3, AlarmHandlerForTimeout@ha
+                g[3].set(0x80330000_u32);
+                // addi r7, r3, AlarmHandlerForTimeout@l
+                g[7].set(g[3].get().wrapping_add(0x6e98_u32));
+                // addi r3, r31, 0x0
+                g[3].set(g[31].get());
+                // addi r6, r30, 0x0
+                g[6].set(g[30].get());
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl OSSetAlarm
+                c::call(ctx, 0x803439c8_u32, 0x803373a8_u32);
+                pc = 0x803373a8_u32;
+            }
+            0x803373a8_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of DVDLowSeek");
+            }
+            _ => unreachable!("DVDLowSeek: no block at {pc:#010x}"),
+        }
+    }
 }
 
 pub fn DVDLowWaitCoverClose<'a>(ctx: &'a Ctx, callback: FnPtr<'a>) -> i32 {
@@ -456,50 +2043,292 @@ pub fn DVDLowReadDiskID<'a>(ctx: &'a Ctx, diskID: DVDDiskID<'a>, callback: FnPtr
     return 1_i32;
 }
 
-pub fn DVDLowStopMotor<'a>(ctx: &'a Ctx, callback: FnPtr<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x18);
-    let mut callback = callback;
-    statics::dolphin__dvd__dvdlow::StopAtNextInt(ctx).set(0_i32);
-    statics::dolphin__dvd__dvdlow::Callback(ctx).set(callback);
-    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 2_i32)).set(0xe3000000_u32);
-    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 7_i32)).set((1_i32 as u32));
-    inl_SetTimeoutAlarm_unfused(
-        ctx,
-        ((((10_i32) as u32).wrapping_mul(
-            (div_u32(
-                ((ptr::<Val<'a, u32>>(
-                    ctx,
-                    ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
-                ))
-                .get()),
-                (4_i32 as u32),
-            )),
-        )) as i64),
-    );
-    return 1_i32;
+pub fn DVDLowStopMotor<'a>(ctx: &'a Ctx, a0: FnPtr<'a>) -> i32 {
+    // Transliterated from its machine code: hardware register order.
+    (a0,).put_regs(ctx);
+    asm_DVDLowStopMotor(ctx);
+    Ret::get(ctx)
 }
 
-pub fn DVDLowRequestError<'a>(ctx: &'a Ctx, callback: FnPtr<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x18);
-    let mut callback = callback;
-    statics::dolphin__dvd__dvdlow::StopAtNextInt(ctx).set(0_i32);
-    statics::dolphin__dvd__dvdlow::Callback(ctx).set(callback);
-    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 2_i32)).set(0xe0000000_u32);
-    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 7_i32)).set((1_i32 as u32));
-    inl_SetTimeoutAlarm_unfused(
-        ctx,
-        ((((10_i32) as u32).wrapping_mul(
-            (div_u32(
-                ((ptr::<Val<'a, u32>>(
-                    ctx,
-                    ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
-                ))
-                .get()),
-                (4_i32 as u32),
-            )),
-        )) as i64),
-    );
-    return 1_i32;
+fn asm_DVDLowStopMotor(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80337494_u32;
+    loop {
+        match pc {
+            0x80337494_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // stw r3, Callback@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb98_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // lis r3, 0xcc00
+                g[3].set(0xcc000000_u32);
+                // addi r4, r3, 0x6000
+                g[4].set(g[3].get().wrapping_add(0x6000_u32));
+                // stw r0, StopAtNextInt@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb90_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lis r0, 0xe300
+                g[0].set(0xe3000000_u32);
+                // stw r0, 0x6008(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x6008_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // lis r3, AlarmForTimeout@ha
+                g[3].set(0x804a0000_u32);
+                // stw r0, 0x1c(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x1c_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lis r4, 0x8000
+                g[4].set(0x80000000_u32);
+                // addi r31, r3, AlarmForTimeout@l
+                g[31].set(g[3].get().wrapping_add(0x74f0_u32));
+                // lwz r0, 0xf8(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0xf8_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r3, r31, 0x0
+                g[3].set(g[31].get());
+                // srwi r0, r0, 2
+                {
+                    let v = g[0].get().rotate_left(30) & 0x3fffffff_u32;
+                    g[0].set(v);
+                }
+                // mulli r30, r0, 0xa
+                g[30].set((g[0].get() as i32).wrapping_mul(10_i32) as u32);
+                // bl OSCreateAlarm
+                c::call(ctx, 0x8034376c_u32, 0x803374ec_u32);
+                pc = 0x803374ec_u32;
+            }
+            0x803374ec_u32 => {
+                // lis r3, AlarmHandlerForTimeout@ha
+                g[3].set(0x80330000_u32);
+                // addi r7, r3, AlarmHandlerForTimeout@l
+                g[7].set(g[3].get().wrapping_add(0x6e98_u32));
+                // addi r3, r31, 0x0
+                g[3].set(g[31].get());
+                // addi r6, r30, 0x0
+                g[6].set(g[30].get());
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl OSSetAlarm
+                c::call(ctx, 0x803439c8_u32, 0x80337504_u32);
+                pc = 0x80337504_u32;
+            }
+            0x80337504_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of DVDLowStopMotor");
+            }
+            _ => unreachable!("DVDLowStopMotor: no block at {pc:#010x}"),
+        }
+    }
+}
+
+pub fn DVDLowRequestError<'a>(ctx: &'a Ctx, a0: FnPtr<'a>) -> i32 {
+    // Transliterated from its machine code: hardware register order.
+    (a0,).put_regs(ctx);
+    asm_DVDLowRequestError(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_DVDLowRequestError(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80337520_u32;
+    loop {
+        match pc {
+            0x80337520_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // stw r3, Callback@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb98_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // lis r3, 0xcc00
+                g[3].set(0xcc000000_u32);
+                // addi r4, r3, 0x6000
+                g[4].set(g[3].get().wrapping_add(0x6000_u32));
+                // stw r0, StopAtNextInt@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb90_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lis r0, 0xe000
+                g[0].set(0xe0000000_u32);
+                // stw r0, 0x6008(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x6008_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // lis r3, AlarmForTimeout@ha
+                g[3].set(0x804a0000_u32);
+                // stw r0, 0x1c(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x1c_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lis r4, 0x8000
+                g[4].set(0x80000000_u32);
+                // addi r31, r3, AlarmForTimeout@l
+                g[31].set(g[3].get().wrapping_add(0x74f0_u32));
+                // lwz r0, 0xf8(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0xf8_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r3, r31, 0x0
+                g[3].set(g[31].get());
+                // srwi r0, r0, 2
+                {
+                    let v = g[0].get().rotate_left(30) & 0x3fffffff_u32;
+                    g[0].set(v);
+                }
+                // mulli r30, r0, 0xa
+                g[30].set((g[0].get() as i32).wrapping_mul(10_i32) as u32);
+                // bl OSCreateAlarm
+                c::call(ctx, 0x8034376c_u32, 0x80337578_u32);
+                pc = 0x80337578_u32;
+            }
+            0x80337578_u32 => {
+                // lis r3, AlarmHandlerForTimeout@ha
+                g[3].set(0x80330000_u32);
+                // addi r7, r3, AlarmHandlerForTimeout@l
+                g[7].set(g[3].get().wrapping_add(0x6e98_u32));
+                // addi r3, r31, 0x0
+                g[3].set(g[31].get());
+                // addi r6, r30, 0x0
+                g[6].set(g[30].get());
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl OSSetAlarm
+                c::call(ctx, 0x803439c8_u32, 0x80337590_u32);
+                pc = 0x80337590_u32;
+            }
+            0x80337590_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of DVDLowRequestError");
+            }
+            _ => unreachable!("DVDLowRequestError: no block at {pc:#010x}"),
+        }
+    }
 }
 
 pub fn DVDLowInquiry<'a>(ctx: &'a Ctx, info: DVDDriveInfo<'a>, callback: FnPtr<'a>) -> i32 {
@@ -566,29 +2395,148 @@ pub fn DVDLowAudioStream<'a>(
     return 1_i32;
 }
 
-pub fn DVDLowRequestAudioStatus<'a>(ctx: &'a Ctx, subcmd: u32, callback: FnPtr<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x18);
-    let mut subcmd = subcmd;
-    let mut callback = callback;
-    statics::dolphin__dvd__dvdlow::StopAtNextInt(ctx).set(0_i32);
-    statics::dolphin__dvd__dvdlow::Callback(ctx).set(callback);
-    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 2_i32))
-        .set((subcmd | 0xe2000000_u32));
-    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 7_i32)).set((1_i32 as u32));
-    inl_SetTimeoutAlarm_unfused(
-        ctx,
-        ((((10_i32) as u32).wrapping_mul(
-            (div_u32(
-                ((ptr::<Val<'a, u32>>(
-                    ctx,
-                    ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
-                ))
-                .get()),
-                (4_i32 as u32),
-            )),
-        )) as i64),
-    );
-    return 1_i32;
+pub fn DVDLowRequestAudioStatus<'a>(ctx: &'a Ctx, a0: u32, a1: FnPtr<'a>) -> i32 {
+    // Transliterated from its machine code: hardware register order.
+    (a0, a1).put_regs(ctx);
+    asm_DVDLowRequestAudioStatus(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_DVDLowRequestAudioStatus(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x803376e0_u32;
+    loop {
+        match pc {
+            0x803376e0_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // stw r4, Callback@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb98_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // lis r4, 0xcc00
+                g[4].set(0xcc000000_u32);
+                // addi r4, r4, 0x6000
+                g[4].set(g[4].get().wrapping_add(0x6000_u32));
+                // stw r0, StopAtNextInt@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbb90_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // oris r0, r3, 0xe200
+                g[0].set(g[3].get() | 0xe2000000_u32);
+                // lis r3, AlarmForTimeout@ha
+                g[3].set(0x804a0000_u32);
+                // stw r0, 0x8(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x8_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // addi r31, r3, AlarmForTimeout@l
+                g[31].set(g[3].get().wrapping_add(0x74f0_u32));
+                // stw r0, 0x1c(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x1c_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lis r4, 0x8000
+                g[4].set(0x80000000_u32);
+                // addi r3, r31, 0x0
+                g[3].set(g[31].get());
+                // lwz r0, 0xf8(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0xf8_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // srwi r0, r0, 2
+                {
+                    let v = g[0].get().rotate_left(30) & 0x3fffffff_u32;
+                    g[0].set(v);
+                }
+                // mulli r30, r0, 0xa
+                g[30].set((g[0].get() as i32).wrapping_mul(10_i32) as u32);
+                // bl OSCreateAlarm
+                c::call(ctx, 0x8034376c_u32, 0x80337738_u32);
+                pc = 0x80337738_u32;
+            }
+            0x80337738_u32 => {
+                // lis r3, AlarmHandlerForTimeout@ha
+                g[3].set(0x80330000_u32);
+                // addi r7, r3, AlarmHandlerForTimeout@l
+                g[7].set(g[3].get().wrapping_add(0x6e98_u32));
+                // addi r3, r31, 0x0
+                g[3].set(g[31].get());
+                // addi r6, r30, 0x0
+                g[6].set(g[30].get());
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl OSSetAlarm
+                c::call(ctx, 0x803439c8_u32, 0x80337750_u32);
+                pc = 0x80337750_u32;
+            }
+            0x80337750_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of DVDLowRequestAudioStatus");
+            }
+            _ => unreachable!("DVDLowRequestAudioStatus: no block at {pc:#010x}"),
+        }
+    }
 }
 
 pub fn DVDLowAudioBufferConfig<'a>(
@@ -626,38 +2574,236 @@ pub fn DVDLowAudioBufferConfig<'a>(
 }
 
 pub fn DVDLowReset<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x20);
-    let mut reg: u32 = 0;
-    let mut resetStart: i64 = 0;
-    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc006000_u32 as u32)), 1_i32)).set((2_i32 as u32));
-    reg = (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc003000_u32 as u32)), 9_i32)).get();
-    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc003000_u32 as u32)), 9_i32))
-        .set(((reg & 0xfffffffb_u32) | (1_i32 as u32)));
-    resetStart = ctx.call::<_, i64>(0x8034c410, ());
-    'l1: while (ctx.call::<_, i64>(0x8034c410, ()).wrapping_sub(resetStart))
-        < ((div_u32(
-            (((12_i32) as u32).wrapping_mul(
-                (div_u32(
-                    (div_u32(
-                        ((ptr::<Val<'a, u32>>(
-                            ctx,
-                            ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
-                        ))
-                        .get()),
-                        (4_i32 as u32),
-                    )),
-                    (0x1e848_i32 as u32),
-                )),
-            )),
-            (8_i32 as u32),
-        )) as i64)
-    {
-        'c2: {}
+    // Transliterated from its machine code: hardware register order.
+    ().put_regs(ctx);
+    asm_DVDLowReset(ctx);
+}
+
+fn asm_DVDLowReset(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80337808_u32;
+    loop {
+        match pc {
+            0x80337808_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // lis r4, 0xcc00
+                g[4].set(0xcc000000_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // li r0, 0x2
+                g[0].set(0x2_u32);
+                // stwu r1, -0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stmw r26, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    for (i, reg) in (26..32).enumerate() {
+                        ctx.write_u32(ea.wrapping_add(4 * i as u32), g[reg].get());
+                    }
+                }
+                // addi r31, r4, 0x3000
+                g[31].set(g[4].get().wrapping_add(0x3000_u32));
+                // stw r0, 0x6004(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x6004_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lwz r30, 0x3024(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x3024_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // rlwinm r0, r30, 0, 30, 28
+                {
+                    let v = g[30].get().rotate_left(0) & 0xfffffffb_u32;
+                    g[0].set(v);
+                }
+                // ori r0, r0, 0x1
+                g[0].set(g[0].get() | 0x1_u32);
+                // stwu r0, 0x24(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x24_u32);
+                    ctx.write_u32(ea, g[0].get());
+                    g[31].set(ea);
+                }
+                // bl __OSGetSystemTime
+                c::call(ctx, 0x8034c410_u32, 0x8033783c_u32);
+                pc = 0x8033783c_u32;
+            }
+            0x8033783c_u32 => {
+                // lis r5, 0x8000
+                g[5].set(0x80000000_u32);
+                // lwz r0, 0xf8(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0xf8_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lis r5, 0x431c
+                g[5].set(0x431c0000_u32);
+                // subi r5, r5, 0x217d
+                g[5].set(g[5].get().wrapping_add(0xffffde83_u32));
+                // srwi r0, r0, 2
+                {
+                    let v = g[0].get().rotate_left(30) & 0x3fffffff_u32;
+                    g[0].set(v);
+                }
+                // mulhwu r0, r5, r0
+                {
+                    let (v, ov) = (
+                        (((u64::from(g[5].get()) * u64::from(g[0].get())) >> 32) as u32),
+                        false,
+                    );
+                    g[0].set(v);
+                    let _ = ov;
+                }
+                // srwi r0, r0, 15
+                {
+                    let v = g[0].get().rotate_left(17) & 0x1ffff_u32;
+                    g[0].set(v);
+                }
+                // mulli r0, r0, 0xc
+                g[0].set((g[0].get() as i32).wrapping_mul(12_i32) as u32);
+                // addi r26, r4, 0x0
+                g[26].set(g[4].get());
+                // addi r27, r3, 0x0
+                g[27].set(g[3].get());
+                // srwi r28, r0, 3
+                {
+                    let v = g[0].get().rotate_left(29) & 0x1fffffff_u32;
+                    g[28].set(v);
+                }
+                // li r29, 0x0
+                g[29].set(0_u32);
+                pc = 0x8033786c_u32;
+            }
+            0x8033786c_u32 => {
+                // bl __OSGetSystemTime
+                c::call(ctx, 0x8034c410_u32, 0x80337870_u32);
+                pc = 0x80337870_u32;
+            }
+            0x80337870_u32 => {
+                // subfc r5, r26, r4
+                {
+                    let (v, ca, ov) = c::add3(!g[26].get(), g[4].get(), 1);
+                    g[5].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // subfe r0, r27, r3
+                {
+                    let (v, ca, ov) = c::add3(!g[27].get(), g[3].get(), c::ca(ctx));
+                    g[0].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // xoris r4, r0, 0x8000
+                g[4].set(g[0].get() ^ 0x80000000_u32);
+                // xoris r3, r29, 0x8000
+                g[3].set(g[29].get() ^ 0x80000000_u32);
+                // subfc r0, r28, r5
+                {
+                    let (v, ca, ov) = c::add3(!g[28].get(), g[5].get(), 1);
+                    g[0].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // subfe r3, r3, r4
+                {
+                    let (v, ca, ov) = c::add3(!g[3].get(), g[4].get(), c::ca(ctx));
+                    g[3].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // subfe r3, r4, r4
+                {
+                    let (v, ca, ov) = c::add3(!g[4].get(), g[4].get(), c::ca(ctx));
+                    g[3].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // neg. r3, r3
+                {
+                    let (v, ca, ov) = c::add3(!g[3].get(), 0, 1);
+                    g[3].set(v);
+                    c::update_cr0(ctx, v);
+                    let _ = (ca, ov);
+                }
+                // bne .L_8033786C
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x8033786c_u32;
+                    continue;
+                }
+                pc = 0x80337894_u32;
+            }
+            0x80337894_u32 => {
+                // ori r0, r30, 0x5
+                g[0].set(g[30].get() | 0x5_u32);
+                // stw r0, 0x0(r31)
+                {
+                    let ea = g[31].get();
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // stw r0, ResetOccurred@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbba8_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // bl __OSGetSystemTime
+                c::call(ctx, 0x8034c410_u32, 0x803378a8_u32);
+                pc = 0x803378a8_u32;
+            }
+            0x803378a8_u32 => {
+                // stw r4, LastResetEnd+0x4@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbba4_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // stw r3, LastResetEnd@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbba0_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // lmw r26, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    for (i, reg) in (26..32).enumerate() {
+                        g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
+                    }
+                }
+                // lwz r0, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x20
+                g[1].set(g[1].get().wrapping_add(0x20_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of DVDLowReset");
+            }
+            _ => unreachable!("DVDLowReset: no block at {pc:#010x}"),
+        }
     }
-    (Handle::add((ptr::<Val<'a, u32>>(ctx, 0xcc003000_u32 as u32)), 9_i32))
-        .set(((reg | (4_i32 as u32)) | (1_i32 as u32)));
-    statics::dolphin__dvd__dvdlow::ResetOccurred(ctx).set((1_i32 as u32));
-    statics::dolphin__dvd__dvdlow::LastResetEnd(ctx).set(ctx.call::<_, i64>(0x8034c410, ()));
 }
 
 pub fn DVDLowBreak<'a>(ctx: &'a Ctx) -> i32 {
@@ -739,95 +2885,6 @@ fn inl_SetTimeoutAlarm_unfused<'a>(ctx: &'a Ctx, timeout: i64) {
     );
 }
 
-fn inl_DoJustRead_unfused<'a>(
-    ctx: &'a Ctx,
-    addr: Addr<'a>,
-    length: u32,
-    offset: u32,
-    callback: FnPtr<'a>,
-) {
-    let mut addr = addr;
-    let mut length = length;
-    let mut offset = offset;
-    let mut callback = callback;
-    statics::dolphin__dvd__dvdlow::CommandList(ctx)
-        .get(0_i32)
-        .set_cmd(1_i32.wrapping_neg());
-    statics::dolphin__dvd__dvdlow::NextCommandNumber(ctx).set(0_i32);
-    statics::dolphin__dvd__dvdlow::Read(ctx, addr, length, offset, callback);
-}
-
-fn inl_HitCache_unfused<'a>(ctx: &'a Ctx) -> i32 {
-    let mut uVar1: u32 = shr_u32(
-        (statics::dolphin__dvd__dvdlow::Prev(ctx)
-            .FSTLength()
-            .wrapping_add(statics::dolphin__dvd__dvdlow::Prev(ctx).FSTPosition())
-            .wrapping_sub((1_i32 as u32))),
-        (15_i32 as u32),
-    );
-    let mut uVar2: u32 = (shr_u32(
-        statics::dolphin__dvd__dvdlow::Curr(ctx).FSTLength(),
-        (15_i32 as u32),
-    ));
-    let mut iVar3: u32 = ((if ((if (((fns::DVDGetCurrentDiskID(ctx)).streaming() as i32) != 0) {
-        1_i32
-    } else {
-        0_i32
-    }) != 0)
-    {
-        5_i32
-    } else {
-        15_i32
-    }) as u32);
-    if (uVar2 > uVar1.wrapping_sub((2_i32 as u32)))
-        || (uVar2 < uVar1.wrapping_add(iVar3).wrapping_add((3_i32 as u32)))
-    {
-        return 1_i32;
-    }
-    return 0_i32;
-}
-
-fn inl_WaitBeforeRead_unfused<'a>(
-    ctx: &'a Ctx,
-    addr: Addr<'a>,
-    length: u32,
-    offset: u32,
-    callback: FnPtr<'a>,
-    timeout: i64,
-) {
-    let mut addr = addr;
-    let mut length = length;
-    let mut offset = offset;
-    let mut callback = callback;
-    let mut timeout = timeout;
-    statics::dolphin__dvd__dvdlow::CommandList(ctx)
-        .get(0_i32)
-        .set_cmd(1_i32);
-    statics::dolphin__dvd__dvdlow::CommandList(ctx)
-        .get(0_i32)
-        .set_addr(addr);
-    statics::dolphin__dvd__dvdlow::CommandList(ctx)
-        .get(0_i32)
-        .set_length(length);
-    statics::dolphin__dvd__dvdlow::CommandList(ctx)
-        .get(0_i32)
-        .set_offset(offset);
-    statics::dolphin__dvd__dvdlow::CommandList(ctx)
-        .get(0_i32)
-        .set_callback(callback);
-    statics::dolphin__dvd__dvdlow::CommandList(ctx)
-        .get(1_i32)
-        .set_cmd(1_i32.wrapping_neg());
-    statics::dolphin__dvd__dvdlow::NextCommandNumber(ctx).set(0_i32);
-    fns::OSCreateAlarm(ctx, statics::dolphin__dvd__dvdlow::AlarmForWA(ctx));
-    fns::OSSetAlarm(
-        ctx,
-        statics::dolphin__dvd__dvdlow::AlarmForWA(ctx),
-        timeout,
-        fnptr(ctx, 0x80336e14),
-    );
-}
-
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -837,14 +2894,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80336b20,
-        |ctx| {
-            let (a0, a1): (i16, OSContext<'_>) = Args::take_all(ctx);
-            Ret::put(__DVDInterruptHandler(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80336b20, asm___DVDInterruptHandler, Returns::Nothing);
     ctx.register_port(
         0x80336e14,
         |ctx| {
@@ -877,22 +2927,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80337098,
-        |ctx| {
-            let (a0, a1, a2, a3): (Addr<'_>, u32, u32, FnPtr<'_>) = Args::take_all(ctx);
-            Ret::put(DVDLowRead(ctx, a0, a1, a2, a3), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80337330,
-        |ctx| {
-            let (a0, a1): (u32, FnPtr<'_>) = Args::take_all(ctx);
-            Ret::put(DVDLowSeek(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80337098, asm_DVDLowRead, Returns::Int);
+    ctx.register_port(0x80337330, asm_DVDLowSeek, Returns::Int);
     ctx.register_port(
         0x803373c4,
         |ctx| {
@@ -909,22 +2945,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80337494,
-        |ctx| {
-            let (a0,): (FnPtr<'_>,) = Args::take_all(ctx);
-            Ret::put(DVDLowStopMotor(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80337520,
-        |ctx| {
-            let (a0,): (FnPtr<'_>,) = Args::take_all(ctx);
-            Ret::put(DVDLowRequestError(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80337494, asm_DVDLowStopMotor, Returns::Int);
+    ctx.register_port(0x80337520, asm_DVDLowRequestError, Returns::Int);
     ctx.register_port(
         0x803375ac,
         |ctx| {
@@ -941,14 +2963,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x803376e0,
-        |ctx| {
-            let (a0, a1): (u32, FnPtr<'_>) = Args::take_all(ctx);
-            Ret::put(DVDLowRequestAudioStatus(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803376e0, asm_DVDLowRequestAudioStatus, Returns::Int);
     ctx.register_port(
         0x8033776c,
         |ctx| {
@@ -957,13 +2972,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80337808,
-        |ctx| {
-            Ret::put(DVDLowReset(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80337808, asm_DVDLowReset, Returns::Nothing);
     ctx.register_port(
         0x803378c4,
         |ctx| {
