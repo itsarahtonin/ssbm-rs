@@ -425,7 +425,9 @@ fn run() -> ExitCode {
                     continue;
                 }
                 if let Some(p) = ssbm_game::playback::find(f, cs) {
-                    ctx.register_port(f, p.port, ssbm_rt::Returns::Unknown);
+                    // A function's own port says where its result is; a stub's code has none.
+                    let returns = ctx.entry(f).map_or(ssbm_rt::Returns::Unknown, |e| e.returns);
+                    ctx.register_port(f, p.port, returns);
                     with_codes.push(f);
                 }
             }
@@ -438,7 +440,10 @@ fn run() -> ExitCode {
                                 && !with_codes.contains(&caller)
                                 && let Some(p) = ssbm_game::playback::find(caller, &[])
                             {
-                                ctx.register_port(caller, p.port, ssbm_rt::Returns::Unknown);
+                                let returns = ctx
+                                    .entry(caller)
+                                    .map_or(ssbm_rt::Returns::Unknown, |e| e.returns);
+                                ctx.register_port(caller, p.port, returns);
                                 with_codes.push(caller);
                             }
                         }
