@@ -3696,7 +3696,13 @@ FROM_MACHINE_CODE = {
     "__va_arg": "register it leaves that other code reads",
     # MWCC drops its second, dead read of a video interface register, volatile as it is.
     "__VIRetraceHandler": "dead read of a hardware register that MWCC drops",
+    # Its loop reads dir_ptr before setting it the first time round, which clang does not see:
+    # the original takes whatever a register holds.
+    "it_802BA3BC": "pointer read before it is set, in a loop",
 }
+
+
+FUSED_REASON = "fused multiply-adds MWCC contracts otherwise than c2rs"
 
 
 def asm_port(unit, cursor, f, why="its source is assembly"):
@@ -3843,7 +3849,7 @@ def translate_unit(args):
             unit.skipped.append((name, f"translator error: {type(e).__name__}: {e} (line {tr.line})"))
             continue
         out_fns.append(code)
-        unit.fuse_check.append((name, unit.fused_ops.get(name), code))
+        unit.fuse_check.append((name, unit.fused_ops.get(name), code, c, f, len(out_fns) - 1))
         regs.append(f"    ctx.register_port({f['addr']:#x}, {unit.adapter(c, ident(name))}, "
                     f"Returns::{returns_of(unit, c)});")
         unit.ported.append(name)
@@ -3875,11 +3881,22 @@ def translate_unit(args):
         unit.ported.append(name)
     inline_code = unit.finish_inlines()
     fuse = []
-    local = {name: code for name, _, code in unit.fuse_check}
-    for name, asm_n, code in unit.fuse_check:
-        if asm_n is not None:
-            fuse.append((name, asm_n, fused_count(code.split("{", 1)[1], unit.inlines, (name,), local,
-                                                  unit.calls.get(name, {}))))
+    local = {name: code for name, _, code, *_ in unit.fuse_check}
+    for name, asm_n, code, c, f, at in unit.fuse_check:
+        if asm_n is None:
+            continue
+        n = fused_count(code.split("{", 1)[1], unit.inlines, (name,), local, unit.calls.get(name, {}))
+        if n != asm_n:
+            # MWCC contracts its multiply-adds otherwise than c2rs does: only its machine code
+            # rounds as the original's.
+            try:
+                out_fns[at] = asm_port(unit, c, f, FUSED_REASON)
+            except (Unsupported, asm2rs.AsmUnsupported):
+                fuse.append((name, asm_n, n))
+                continue
+            unit.transliterated.append(name)
+            n = asm_n
+        fuse.append((name, asm_n, n))
     unit.fuse_report = fuse
     inlining = {"fallbacks": unit.inline_fallbacks, "partial": sorted(unit.inline_partial)}
     if not out_fns and not regs:
