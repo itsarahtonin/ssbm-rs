@@ -998,14 +998,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80014fc8,
-        |ctx| {
-            let (a0, a1): (Handle_<'_>, u32) = Args::take_all(ctx);
-            Ret::put(lbMemory_80014FC8(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80014fc8, asm_lbMemory_80014FC8, Returns::Int);
     ctx.register_port(
         0x800150f0,
         |ctx| {

@@ -2298,13 +2298,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801a9094,
-        |ctx| {
-            Ret::put(gm_801A9094(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801a9094, asm_gm_801A9094, Returns::Nothing);
     ctx.register_port(
         0x801a9498,
         |ctx| {

@@ -1610,14 +1610,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800dd990,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_ThrowF_Coll(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800dd990, asm_ftCo_ThrowF_Coll, Returns::Nothing);
     ctx.register_port(
         0x800dda10,
         |ctx| {
@@ -1642,14 +1635,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800ddac0,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_ThrowB_Coll(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800ddac0, asm_ftCo_ThrowB_Coll, Returns::Nothing);
     ctx.register_port(
         0x800ddb40,
         |ctx| {
@@ -1674,14 +1660,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800ddbf0,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_ThrowHi_Coll(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800ddbf0, asm_ftCo_ThrowHi_Coll, Returns::Nothing);
     ctx.register_port(
         0x800ddc70,
         |ctx| {
@@ -1714,14 +1693,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800ddd64,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_ThrowLw_Coll(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800ddd64, asm_ftCo_ThrowLw_Coll, Returns::Nothing);
     ctx.register_port(
         0x800ddde4,
         |ctx| {

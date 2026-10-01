@@ -1068,14 +1068,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801a4014,
-        |ctx| {
-            let (a0,): (GameMode<'_>,) = Args::take_all(ctx);
-            Ret::put(gm_801A4014(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801a4014, asm_gm_801A4014, Returns::Nothing);
     ctx.register_port(
         0x801a427c,
         |ctx| {

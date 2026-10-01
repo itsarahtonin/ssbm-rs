@@ -1513,14 +1513,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80381fa8,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(hsdAllocMemPiece(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80381fa8, asm_hsdAllocMemPiece, Returns::Int);
     ctx.register_port(
         0x8038216c,
         |ctx| {
@@ -1529,14 +1522,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x803821c4,
-        |ctx| {
-            let (a0,): (_HSD_ClassInfo<'_>,) = Args::take_all(ctx);
-            Ret::put(_hsdClassAlloc(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803821c4, asm__hsdClassAlloc, Returns::Int);
     ctx.register_port(
         0x8038221c,
         |ctx| {

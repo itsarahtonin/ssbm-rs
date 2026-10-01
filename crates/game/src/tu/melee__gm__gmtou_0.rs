@@ -8529,22 +8529,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80193b58,
-        |ctx| {
-            let (a0, a1, a2): (Val<'_, i32>, u32, u32) = Args::take_all(ctx);
-            Ret::put(fn_80193B58(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80193fcc,
-        |ctx| {
-            let (a0, a1, a2): (Val<'_, i32>, u32, u32) = Args::take_all(ctx);
-            Ret::put(fn_80193FCC(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80193b58, asm_fn_80193B58, Returns::Nothing);
+    ctx.register_port(0x80193fcc, asm_fn_80193FCC, Returns::Nothing);
     ctx.register_port(
         0x80194658,
         |ctx| {

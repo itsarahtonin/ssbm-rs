@@ -267,20 +267,6 @@ fn asm_PSMTXMultVecSR(ctx: &Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x80342aa8,
-        |ctx| {
-            let (a0, a1, a2): (ArrV<'_, F32, 4>, Vec<'_>, Vec<'_>) = Args::take_all(ctx);
-            Ret::put(PSMTXMultVec(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80342afc,
-        |ctx| {
-            let (a0, a1, a2): (ArrV<'_, F32, 4>, Vec<'_>, Vec<'_>) = Args::take_all(ctx);
-            Ret::put(PSMTXMultVecSR(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80342aa8, asm_PSMTXMultVec, Returns::Nothing);
+    ctx.register_port(0x80342afc, asm_PSMTXMultVecSR, Returns::Nothing);
 }

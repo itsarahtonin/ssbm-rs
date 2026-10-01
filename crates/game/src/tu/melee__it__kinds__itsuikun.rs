@@ -564,14 +564,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802cfdac,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(itSuikun_UnkMotion0_Anim(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802cfdac, asm_itSuikun_UnkMotion0_Anim, Returns::Int);
     ctx.register_port(
         0x802cfea8,
         |ctx| {

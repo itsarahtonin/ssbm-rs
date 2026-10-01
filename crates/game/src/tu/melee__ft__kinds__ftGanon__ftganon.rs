@@ -366,14 +366,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8014ed38,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftGn_Init_OnItemInvisible(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8014ed38, asm_ftGn_Init_OnItemInvisible, Returns::Nothing);
     ctx.register_port(
         0x8014ed80,
         |ctx| {
@@ -382,14 +375,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8014edc8,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
-            Ret::put(ftGn_Init_OnItemDrop(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8014edc8, asm_ftGn_Init_OnItemDrop, Returns::Nothing);
     ctx.register_port(
         0x8014ee1c,
         |ctx| {

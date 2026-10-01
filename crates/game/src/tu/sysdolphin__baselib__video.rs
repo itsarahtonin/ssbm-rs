@@ -1344,13 +1344,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x803767b8,
-        |ctx| {
-            let (a0, a1, a2, a3): (_HSD_VIStatus<'_>, Addr<'_>, Addr<'_>, Addr<'_>) =
-                Args::take_all(ctx);
-            Ret::put(HSD_VIInit(ctx, a0, a1, a2, a3), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x803767b8, asm_HSD_VIInit, Returns::Nothing);
 }

@@ -774,15 +774,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801c9b20,
-        |ctx| {
-            let (a0, a1, a2): (HSD_JObj<'_>, DynamicsDesc<'_>, DynamicsDesc<'_>) =
-                Args::take_all(ctx);
-            Ret::put(grLib_801C9B20(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801c9b20, asm_grLib_801C9B20, Returns::Nothing);
     ctx.register_port(
         0x801c9b6c,
         |ctx| {

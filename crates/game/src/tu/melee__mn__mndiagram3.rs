@@ -6600,20 +6600,10 @@ fn inl_mnDiagram3_LoadJoint_unfused<'a>(
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
         0x80245ba4,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(mnDiagram3_PopulateRankings(ctx, a0), ctx);
-        },
+        asm_mnDiagram3_PopulateRankings,
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802461bc,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(mnDiagram3_HandleInput(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x802461bc, asm_mnDiagram3_HandleInput, Returns::Nothing);
     ctx.register_port(
         0x80246d40,
         |ctx| {
@@ -6662,12 +6652,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8024714c,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(mnDiagram3_Init(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8024714c, asm_mnDiagram3_Init, Returns::Nothing);
 }

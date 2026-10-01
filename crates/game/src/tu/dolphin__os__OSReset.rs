@@ -1017,14 +1017,7 @@ pub fn OSGetResetCode<'a>(ctx: &'a Ctx) -> u32 {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x80348394,
-        |ctx| {
-            let (a0,): (u32,) = Args::take_all(ctx);
-            Ret::put(Reset(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80348394, asm_Reset, Returns::Nothing);
     ctx.register_port(
         0x80348310,
         |ctx| {
@@ -1041,14 +1034,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8034844c,
-        |ctx| {
-            let (a0, a1, a2): (i32, u32, i32) = Args::take_all(ctx);
-            Ret::put(OSResetSystem(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8034844c, asm_OSResetSystem, Returns::Nothing);
     ctx.register_port(
         0x803486b4,
         |ctx| {

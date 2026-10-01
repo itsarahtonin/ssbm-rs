@@ -4720,13 +4720,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801af568,
-        |ctx| {
-            Ret::put(gm_Scene_MemCard_OnFrame(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801af568, asm_gm_Scene_MemCard_OnFrame, Returns::Nothing);
     ctx.register_port(
         0x801b0264,
         |ctx| {

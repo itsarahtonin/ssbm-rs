@@ -7690,22 +7690,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8035edc0,
-        |ctx| {
-            let (a0,): (_HSD_TlutDesc<'_>,) = Args::take_all(ctx);
-            Ret::put(HSD_TlutLoadDesc(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8035ee14,
-        |ctx| {
-            let (a0,): (_HSD_TObjTevDesc<'_>,) = Args::take_all(ctx);
-            Ret::put(HSD_TObjTevLoadDesc(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8035edc0, asm_HSD_TlutLoadDesc, Returns::Int);
+    ctx.register_port(0x8035ee14, asm_HSD_TObjTevLoadDesc, Returns::Int);
     ctx.register_port(
         0x8035ee68,
         |ctx| {
@@ -7754,36 +7740,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8035f7d0,
-        |ctx| {
-            let (a0, a1, a2, a3, a4, a5): (
-                u32,
-                HSD_TObj<'_>,
-                Ptr<'_, HSD_TExp<'_>>,
-                Ptr<'_, HSD_TExp<'_>>,
-                Ptr<'_, HSD_TExp<'_>>,
-                i32,
-            ) = Args::take_all(ctx);
-            Ret::put(MakeColorGenTExp(ctx, a0, a1, a2, a3, a4, a5), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x803600a0,
-        |ctx| {
-            let (a0, a1, a2, a3, a4, a5): (
-                HSD_TObj<'_>,
-                u32,
-                u32,
-                Ptr<'_, HSD_TExp<'_>>,
-                Ptr<'_, HSD_TExp<'_>>,
-                Ptr<'_, HSD_TExp<'_>>,
-            ) = Args::take_all(ctx);
-            Ret::put(TObjMakeTExp(ctx, a0, a1, a2, a3, a4, a5), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8035f7d0, asm_MakeColorGenTExp, Returns::Nothing);
+    ctx.register_port(0x803600a0, asm_TObjMakeTExp, Returns::Nothing);
     ctx.register_port(
         0x803606f0,
         |ctx| {
@@ -7895,13 +7853,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8036121c,
-        |ctx| {
-            Ret::put(HSD_TlutAlloc(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8036121c, asm_HSD_TlutAlloc, Returns::Int);
     ctx.register_port(
         0x80361274,
         |ctx| {
@@ -7910,20 +7862,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x803612a0,
-        |ctx| {
-            Ret::put(HSD_TObjTevAlloc(ctx), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x803612f8,
-        |ctx| {
-            Ret::put(HSD_ImageDescAlloc(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803612a0, asm_HSD_TObjTevAlloc, Returns::Int);
+    ctx.register_port(0x803612f8, asm_HSD_ImageDescAlloc, Returns::Int);
     ctx.register_port(
         0x80361350,
         |ctx| {

@@ -1136,14 +1136,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80352820,
-        |ctx| {
-            let (a0, a1): (OSAlarm<'_>, OSContext<'_>) = Args::take_all(ctx);
-            Ret::put(TimeoutHandler(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80352820, asm_TimeoutHandler, Returns::Nothing);
     ctx.register_port(
         0x803528c4,
         |ctx| {

@@ -684,14 +684,7 @@ fn asm___OSReboot(ctx: &Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x803480f8,
-        |ctx| {
-            let (a0,): (FnPtr<'_>,) = Args::take_all(ctx);
-            Ret::put(Run(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x803480f8, asm_Run, Returns::Nothing);
     ctx.register_port(
         0x80348138,
         |ctx| {
@@ -700,12 +693,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80348144,
-        |ctx| {
-            let (a0, a1): (u32, u32) = Args::take_all(ctx);
-            Ret::put(__OSReboot(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80348144, asm___OSReboot, Returns::Nothing);
 }

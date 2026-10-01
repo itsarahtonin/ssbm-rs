@@ -8507,14 +8507,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802b75fc,
-        |ctx| {
-            let (a0, a1, a2, a3): (Item<'_>, HSD_JObj<'_>, i32, Single) = Args::take_all(ctx);
-            Ret::put(it_802B75FC(ctx, a0, a1, a2, a3.0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802b75fc, asm_it_802B75FC, Returns::Int);
     ctx.register_port(
         0x802b7b84,
         |ctx| {
@@ -8523,14 +8516,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802b7c18,
-        |ctx| {
-            let (a0, a1, a2): (HSD_GObj<'_>, Vec<'_>, Single) = Args::take_all(ctx);
-            Ret::put(it_802B7C18(ctx, a0, a1, a2.0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802b7c18, asm_it_802B7C18, Returns::Int);
     ctx.register_port(
         0x802b7e34,
         |ctx| {
@@ -8547,14 +8533,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802b805c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(fn_802B805C(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x802b805c, asm_fn_802B805C, Returns::Nothing);
     ctx.register_port(
         0x802b8370,
         |ctx| {
@@ -8693,19 +8672,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802b9328,
-        |ctx| {
-            let (a0, a1, a2, a3): (
-                ItemLink<'_>,
-                Vec<'_>,
-                itSamusGrappleAttributes<'_>,
-                Fighter<'_>,
-            ) = Args::take_all(ctx);
-            Ret::put(it_802B9328(ctx, a0, a1, a2, a3), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802b9328, asm_it_802B9328, Returns::Int);
     ctx.register_port(
         0x802b99a0,
         |ctx| {
@@ -8759,20 +8726,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x802ba3bc,
-        |ctx| {
-            let (a0, a1, a2, a3, a4): (
-                ItemLink<'_>,
-                ItemLink<'_>,
-                Vec<'_>,
-                itSamusGrappleAttributes<'_>,
-                Single,
-            ) = Args::take_all(ctx);
-            Ret::put(it_802BA3BC(ctx, a0, a1, a2, a3, a4.0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802ba3bc, asm_it_802BA3BC, Returns::Int);
     ctx.register_port(
         0x802ba5dc,
         |ctx| {

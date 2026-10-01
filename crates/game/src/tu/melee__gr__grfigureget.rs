@@ -950,14 +950,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802196f0,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(grFigureGet_802196F0(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x802196f0, asm_grFigureGet_802196F0, Returns::Nothing);
     ctx.register_port(
         0x80219890,
         |ctx| {

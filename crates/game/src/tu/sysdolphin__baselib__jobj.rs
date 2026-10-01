@@ -8205,14 +8205,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8036fdc0,
-        |ctx| {
-            let (a0, a1, a2): (Addr<'_>, i32, HSD_ObjData<'_>) = Args::take_all(ctx);
-            Ret::put(JObjUpdateFunc(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8036fdc0, asm_JObjUpdateFunc, Returns::Nothing);
     ctx.register_port(
         0x80370780,
         |ctx| {
@@ -8451,14 +8444,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8037231c,
-        |ctx| {
-            let (a0,): (HSD_JObj<'_>,) = Args::take_all(ctx);
-            Ret::put(resolveIKJoint1(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8037231c, asm_resolveIKJoint1, Returns::Nothing);
     ctx.register_port(
         0x80372b08,
         |ctx| {

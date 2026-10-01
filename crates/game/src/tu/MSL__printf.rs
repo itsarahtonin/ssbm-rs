@@ -5302,22 +5302,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x803250c0,
-        |ctx| {
-            let (a0, a1, a2): (i32, Val<'_, i8>, print_format<'_>) = Args::take_all(ctx);
-            Ret::put(long2str(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80324de0,
-        |ctx| {
-            let (a0, a1, a2): (i64, Val<'_, i8>, print_format<'_>) = Args::take_all(ctx);
-            Ret::put(longlong2str(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803250c0, asm_long2str, Returns::Int);
+    ctx.register_port(0x80324de0, asm_longlong2str, Returns::Int);
     ctx.register_port(
         0x80324cac,
         |ctx| {
@@ -5335,15 +5321,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80324044,
-        |ctx| {
-            let (a0, a1, a2, a3): (FnPtr<'_>, Addr<'_>, Val<'_, i8>, __va_list_t<'_>) =
-                Args::take_all(ctx);
-            Ret::put(__pformatter(ctx, a0, a1, a2, a3), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80324044, asm___pformatter, Returns::Int);
     ctx.register_port(
         0x80323fec,
         |ctx| {

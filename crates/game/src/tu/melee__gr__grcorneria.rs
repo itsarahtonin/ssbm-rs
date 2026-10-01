@@ -10579,14 +10579,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801e03c8,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
-            Ret::put(grCorneria_801E03C8(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x801e03c8, asm_grCorneria_801E03C8, Returns::Int);
     ctx.register_port(
         0x801e0678,
         |ctx| {

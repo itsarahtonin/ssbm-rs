@@ -5233,22 +5233,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80243d40,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(mnDiagram2_HandleInput(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80244330,
-        |ctx| {
-            let (a0, a1, a2): (u8, u8, u8) = Args::take_all(ctx);
-            Ret::put(mnDiagram2_GetStatValue(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80243d40, asm_mnDiagram2_HandleInput, Returns::Nothing);
+    ctx.register_port(0x80244330, asm_mnDiagram2_GetStatValue, Returns::Int);
     ctx.register_port(
         0x8024469c,
         |ctx| {
@@ -5338,10 +5324,7 @@ pub fn register(ctx: &Ctx) {
     );
     ctx.register_port(
         0x8024589c,
-        |ctx| {
-            let (a0, a1, a2): (mnDiagram2_SortEntry<'_>, u8, u8) = Args::take_all(ctx);
-            Ret::put(mnDiagram2_GetAggregatedFighterRank(ctx, a0, a1, a2), ctx);
-        },
+        asm_mnDiagram2_GetAggregatedFighterRank,
         Returns::Nothing,
     );
     ctx.register_port(

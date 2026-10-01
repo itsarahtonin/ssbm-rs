@@ -318,28 +318,9 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80347ca4,
-        |ctx| {
-            Ret::put(Config24MB(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80347d24,
-        |ctx| {
-            Ret::put(Config48MB(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80347da4,
-        |ctx| {
-            let (a0,): (FnPtr<'_>,) = Args::take_all(ctx);
-            Ret::put(RealMode(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80347ca4, asm_Config24MB, Returns::Nothing);
+    ctx.register_port(0x80347d24, asm_Config48MB, Returns::Nothing);
+    ctx.register_port(0x80347da4, asm_RealMode, Returns::Nothing);
     ctx.register_port(
         0x80347dbc,
         |ctx| {

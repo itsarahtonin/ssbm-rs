@@ -1082,22 +1082,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x803490fc,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(__OSUnlockSram(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80349120,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(__OSUnlockSramEx(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803490fc, asm___OSUnlockSram, Returns::Int);
+    ctx.register_port(0x80349120, asm___OSUnlockSramEx, Returns::Int);
     ctx.register_port(
         0x80349144,
         |ctx| {
@@ -1105,21 +1091,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80349154,
-        |ctx| {
-            Ret::put(OSGetSoundMode(ctx), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x803491d4,
-        |ctx| {
-            let (a0,): (u32,) = Args::take_all(ctx);
-            Ret::put(OSSetSoundMode(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80349154, asm_OSGetSoundMode, Returns::Int);
+    ctx.register_port(0x803491d4, asm_OSSetSoundMode, Returns::Nothing);
     ctx.register_port(
         0x80349278,
         |ctx| {
@@ -1143,12 +1116,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int16,
     );
-    ctx.register_port(
-        0x80349410,
-        |ctx| {
-            let (a0, a1): (i32, u16) = Args::take_all(ctx);
-            Ret::put(OSSetWirelessID(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80349410, asm_OSSetWirelessID, Returns::Nothing);
 }

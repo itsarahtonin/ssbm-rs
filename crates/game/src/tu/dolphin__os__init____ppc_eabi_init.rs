@@ -178,21 +178,8 @@ pub fn _ExitProcess<'a>(ctx: &'a Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x8000541c,
-        |ctx| {
-            Ret::put(__init_hardware(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8000543c,
-        |ctx| {
-            let (a0, a1): (Addr<'_>, u32) = Args::take_all(ctx);
-            Ret::put(__flush_cache(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8000541c, asm___init_hardware, Returns::Nothing);
+    ctx.register_port(0x8000543c, asm___flush_cache, Returns::Nothing);
     ctx.register_port(
         0x8034cabc,
         |ctx| {

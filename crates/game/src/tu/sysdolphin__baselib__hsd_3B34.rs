@@ -6017,14 +6017,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x803b3cd8,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(hsd_803B3CD8(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x803b3cd8, asm_hsd_803B3CD8, Returns::Nothing);
     ctx.register_port(
         0x803b46d4,
         |ctx| {

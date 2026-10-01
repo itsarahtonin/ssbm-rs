@@ -5294,14 +5294,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8025441c,
-        |ctx| {
-            let (a0,): (u64,) = Args::take_all(ctx);
-            Ret::put(mnSnap_8025441C(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8025441c, asm_mnSnap_8025441C, Returns::Nothing);
     ctx.register_port(
         0x802545c4,
         |ctx| {

@@ -5982,30 +5982,9 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8036bbbc,
-        |ctx| {
-            let (a0,): (Ptr<'_, HSD_EnvelopeDesc<'_>>,) = Args::take_all(ctx);
-            Ret::put(loadEnvelopeDesc(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8036bc9c,
-        |ctx| {
-            let (a0,): (HSD_ShapeSetDesc<'_>,) = Args::take_all(ctx);
-            Ret::put(loadShapeSetDesc(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8036bda0,
-        |ctx| {
-            let (a0, a1): (HSD_PObj<'_>, HSD_PObjDesc<'_>) = Args::take_all(ctx);
-            Ret::put(PObjLoad(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8036bbbc, asm_loadEnvelopeDesc, Returns::Int);
+    ctx.register_port(0x8036bc9c, asm_loadShapeSetDesc, Returns::Int);
+    ctx.register_port(0x8036bda0, asm_PObjLoad, Returns::Int);
     ctx.register_port(
         0x8036be64,
         |ctx| {
@@ -6125,14 +6104,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8036d7e4,
-        |ctx| {
-            let (a0,): (HSD_PObj<'_>,) = Args::take_all(ctx);
-            Ret::put(drawShapeAnim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8036d7e4, asm_drawShapeAnim, Returns::Nothing);
     ctx.register_port(
         0x8036e034,
         |ctx| {
@@ -6193,15 +6165,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8036e8ac,
-        |ctx| {
-            let (a0, a1, a2, a3): (HSD_PObj<'_>, ArrV<'_, F32, 4>, ArrV<'_, F32, 4>, u32) =
-                Args::take_all(ctx);
-            Ret::put(HSD_PObjDisp(ctx, a0, a1, a2, a3), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8036e8ac, asm_HSD_PObjDisp, Returns::Nothing);
     ctx.register_port(
         0x8036e9f0,
         |ctx| {

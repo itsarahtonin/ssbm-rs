@@ -2105,47 +2105,11 @@ pub fn MTXLightOrtho<'a>(
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x803421a4,
-        |ctx| {
-            let (a0,): (ArrV<'_, F32, 4>,) = Args::take_all(ctx);
-            Ret::put(PSMTXIdentity(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x803421d0,
-        |ctx| {
-            let (a0, a1): (ArrV<'_, F32, 4>, ArrV<'_, F32, 4>) = Args::take_all(ctx);
-            Ret::put(PSMTXCopy(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80342204,
-        |ctx| {
-            let (a0, a1, a2): (ArrV<'_, F32, 4>, ArrV<'_, F32, 4>, ArrV<'_, F32, 4>) =
-                Args::take_all(ctx);
-            Ret::put(PSMTXConcat(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x803422d0,
-        |ctx| {
-            let (a0, a1): (ArrV<'_, F32, 4>, ArrV<'_, F32, 4>) = Args::take_all(ctx);
-            Ret::put(PSMTXTranspose(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80342320,
-        |ctx| {
-            let (a0, a1): (ArrV<'_, F32, 4>, ArrV<'_, F32, 4>) = Args::take_all(ctx);
-            Ret::put(PSMTXInverse(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803421a4, asm_PSMTXIdentity, Returns::Nothing);
+    ctx.register_port(0x803421d0, asm_PSMTXCopy, Returns::Nothing);
+    ctx.register_port(0x80342204, asm_PSMTXConcat, Returns::Nothing);
+    ctx.register_port(0x803422d0, asm_PSMTXTranspose, Returns::Nothing);
+    ctx.register_port(0x80342320, asm_PSMTXInverse, Returns::Int);
     ctx.register_port(
         0x80342418,
         |ctx| {
@@ -2154,46 +2118,11 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80342488,
-        |ctx| {
-            let (a0, a1, a2, a3): (ArrV<'_, F32, 4>, i8, Single, Single) = Args::take_all(ctx);
-            Ret::put(PSMTXRotTrig(ctx, a0, a1, a2.0, a3.0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80342530,
-        |ctx| {
-            let (a0, a1, a2): (ArrV<'_, F32, 4>, Vec<'_>, Single) = Args::take_all(ctx);
-            Ret::put(PSMTXRotAxisRad(ctx, a0, a1, a2.0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80342634,
-        |ctx| {
-            let (a0, a1, a2, a3): (ArrV<'_, F32, 4>, Single, Single, Single) = Args::take_all(ctx);
-            Ret::put(PSMTXTrans(ctx, a0, a1.0, a2.0, a3.0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80342668,
-        |ctx| {
-            let (a0, a1, a2, a3): (ArrV<'_, F32, 4>, Single, Single, Single) = Args::take_all(ctx);
-            Ret::put(PSMTXScale(ctx, a0, a1.0, a2.0, a3.0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80342690,
-        |ctx| {
-            let (a0, a1): (ArrV<'_, F32, 4>, Quaternion<'_>) = Args::take_all(ctx);
-            Ret::put(PSMTXQuat(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80342488, asm_PSMTXRotTrig, Returns::Nothing);
+    ctx.register_port(0x80342530, asm_PSMTXRotAxisRad, Returns::Nothing);
+    ctx.register_port(0x80342634, asm_PSMTXTrans, Returns::Nothing);
+    ctx.register_port(0x80342668, asm_PSMTXScale, Returns::Nothing);
+    ctx.register_port(0x80342690, asm_PSMTXQuat, Returns::Nothing);
     ctx.register_port(
         0x80342734,
         |ctx| {

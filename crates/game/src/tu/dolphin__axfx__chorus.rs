@@ -1513,22 +1513,8 @@ pub fn AXFXChorusCallback<'a>(
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x8035cea8,
-        |ctx| {
-            let (a0,): (AXFX_CHORUS_SRCINFO<'_>,) = Args::take_all(ctx);
-            Ret::put(do_src1(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8035d040,
-        |ctx| {
-            let (a0,): (AXFX_CHORUS_SRCINFO<'_>,) = Args::take_all(ctx);
-            Ret::put(do_src2(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8035cea8, asm_do_src1, Returns::Nothing);
+    ctx.register_port(0x8035d040, asm_do_src2, Returns::Nothing);
     ctx.register_port(
         0x8035d22c,
         |ctx| {

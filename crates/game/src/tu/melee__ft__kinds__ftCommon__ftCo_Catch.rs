@@ -578,22 +578,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800d8cc8,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_Catch_Anim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x800d8d24,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_CatchDash_Anim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800d8cc8, asm_ftCo_Catch_Anim, Returns::Nothing);
+    ctx.register_port(0x800d8d24, asm_ftCo_CatchDash_Anim, Returns::Nothing);
     ctx.register_port(
         0x800d8d80,
         |ctx| {

@@ -1017,22 +1017,8 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x8026f3ac,
-        |ctx| {
-            Ret::put(it_8026F3AC(ctx), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8026f3d4,
-        |ctx| {
-            let (a0, a1, a2, a3): (HSD_GObj<'_>, it_8026F3D4_arg1_t<'_>, i32, i32) =
-                Args::take_all(ctx);
-            Ret::put(it_8026F3D4(ctx, a0, a1, a2, a3), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8026f3ac, asm_it_8026F3AC, Returns::Int);
+    ctx.register_port(0x8026f3d4, asm_it_8026F3D4, Returns::Int);
     ctx.register_port(
         0x8026f53c,
         |ctx| {
@@ -1057,14 +1043,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8026f7c8,
-        |ctx| {
-            let (a0, a1, a2): (Vec<'_>, Vec<'_>, i32) = Args::take_all(ctx);
-            Ret::put(it_8026F7C8(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8026f7c8, asm_it_8026F7C8, Returns::Int);
     ctx.register_port(
         0x8026f8b4,
         |ctx| {

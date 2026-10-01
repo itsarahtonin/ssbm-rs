@@ -3983,14 +3983,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int8,
     );
-    ctx.register_port(
-        0x80035ee8,
-        |ctx| {
-            let (a0, a1): (i32, u8) = Args::take_all(ctx);
-            Ret::put(Player_SetFlagsAEBit1(ctx, a0, a1), ctx);
-        },
-        Returns::Int8,
-    );
+    ctx.register_port(0x80035ee8, asm_Player_SetFlagsAEBit1, Returns::Int8);
     ctx.register_port(
         0x80035f6c,
         |ctx| {

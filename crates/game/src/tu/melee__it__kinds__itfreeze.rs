@@ -1062,14 +1062,7 @@ fn inl_itFreeze_ResetToMotion0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x8028eb88,
-        |ctx| {
-            let (a0, a1, a2, a3): (HSD_GObj<'_>, Vec<'_>, Single, Single) = Args::take_all(ctx);
-            Ret::put(it_8028EB88(ctx, a0, a1, a2.0, a3.0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8028eb88, asm_it_8028EB88, Returns::Int);
     ctx.register_port(
         0x8028ec98,
         |ctx| {

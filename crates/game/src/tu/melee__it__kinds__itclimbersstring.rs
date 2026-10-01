@@ -1957,14 +1957,7 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x802c248c,
-        |ctx| {
-            let (a0, a1): (Item<'_>, HSD_JObj<'_>) = Args::take_all(ctx);
-            Ret::put(it_802C248C(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802c248c, asm_it_802C248C, Returns::Int);
     ctx.register_port(
         0x802c2750,
         |ctx| {
@@ -1973,14 +1966,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802c27d4,
-        |ctx| {
-            let (a0, a1, a2, a3): (HSD_GObj<'_>, Vec<'_>, i32, Single) = Args::take_all(ctx);
-            Ret::put(it_802C27D4(ctx, a0, a1, a2, a3.0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802c27d4, asm_it_802C27D4, Returns::Int);
     ctx.register_port(
         0x802c28b8,
         |ctx| {

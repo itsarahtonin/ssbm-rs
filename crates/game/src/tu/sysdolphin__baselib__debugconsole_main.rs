@@ -5721,14 +5721,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x803957c0,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(hsd_803957C0(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x803957c0, asm_hsd_803957C0, Returns::Nothing);
     ctx.register_port(
         0x80395970,
         |ctx| {
@@ -5954,13 +5947,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x803975d4,
-        |ctx| {
-            Ret::put(hsd_803975D4(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x803975d4, asm_hsd_803975D4, Returns::Nothing);
     ctx.register_port(
         0x80397814,
         |ctx| {

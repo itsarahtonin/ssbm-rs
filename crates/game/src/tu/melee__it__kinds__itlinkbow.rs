@@ -2061,30 +2061,13 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802af32c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(it_802AF32C(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x802af32c, asm_it_802AF32C, Returns::Nothing);
     ctx.register_port(
         0x802af434,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(itLinkBow_Logic100_PickedUp(ctx, a0), ctx);
-        },
+        asm_itLinkBow_Logic100_PickedUp,
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802af64c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(itLinkbow_UnkMotion5_Anim(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802af64c, asm_itLinkbow_UnkMotion5_Anim, Returns::Int);
     ctx.register_port(
         0x802af844,
         |ctx| {

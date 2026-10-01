@@ -1024,14 +1024,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8029914c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(itSscopebeam_UnkMotion9_Coll(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8029914c, asm_itSscopebeam_UnkMotion9_Coll, Returns::Int);
     ctx.register_port(
         0x80299360,
         |ctx| {

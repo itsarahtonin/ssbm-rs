@@ -529,60 +529,11 @@ fn asm_PSVECCrossProduct(ctx: &Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x80342d54,
-        |ctx| {
-            let (a0, a1, a2): (Vec<'_>, Vec<'_>, Vec<'_>) = Args::take_all(ctx);
-            Ret::put(PSVECAdd(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80342d78,
-        |ctx| {
-            let (a0, a1, a2): (Vec<'_>, Vec<'_>, Vec<'_>) = Args::take_all(ctx);
-            Ret::put(PSVECSubtract(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80342d9c,
-        |ctx| {
-            let (a0, a1, a2): (Vec<'_>, Vec<'_>, Single) = Args::take_all(ctx);
-            Ret::put(PSVECScale(ctx, a0, a1, a2.0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80342db8,
-        |ctx| {
-            let (a0, a1): (Vec<'_>, Vec<'_>) = Args::take_all(ctx);
-            Ret::put(PSVECNormalize(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80342dfc,
-        |ctx| {
-            let (a0,): (Vec<'_>,) = Args::take_all(ctx);
-            Ret::put(PSVECMag(ctx, a0), ctx);
-        },
-        Returns::Float,
-    );
-    ctx.register_port(
-        0x80342e38,
-        |ctx| {
-            let (a0, a1): (Vec<'_>, Vec<'_>) = Args::take_all(ctx);
-            Ret::put(PSVECDotProduct(ctx, a0, a1), ctx);
-        },
-        Returns::Float,
-    );
-    ctx.register_port(
-        0x80342e58,
-        |ctx| {
-            let (a0, a1, a2): (Vec<'_>, Vec<'_>, Vec<'_>) = Args::take_all(ctx);
-            Ret::put(PSVECCrossProduct(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80342d54, asm_PSVECAdd, Returns::Nothing);
+    ctx.register_port(0x80342d78, asm_PSVECSubtract, Returns::Nothing);
+    ctx.register_port(0x80342d9c, asm_PSVECScale, Returns::Nothing);
+    ctx.register_port(0x80342db8, asm_PSVECNormalize, Returns::Nothing);
+    ctx.register_port(0x80342dfc, asm_PSVECMag, Returns::Float);
+    ctx.register_port(0x80342e38, asm_PSVECDotProduct, Returns::Float);
+    ctx.register_port(0x80342e58, asm_PSVECCrossProduct, Returns::Nothing);
 }

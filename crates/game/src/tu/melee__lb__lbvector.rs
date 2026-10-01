@@ -2374,20 +2374,10 @@ pub fn register(ctx: &Ctx) {
     );
     ctx.register_port(
         0x8000d8f4,
-        |ctx| {
-            let (a0, a1, a2): (Vec<'_>, Vec<'_>, Single) = Args::take_all(ctx);
-            Ret::put(lbVector_RotateAboutUnitAxis(ctx, a0, a1, a2.0), ctx);
-        },
+        asm_lbVector_RotateAboutUnitAxis,
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8000db00,
-        |ctx| {
-            let (a0, a1, a2): (Vec<'_>, i32, Single) = Args::take_all(ctx);
-            Ret::put(lbVector_Rotate(ctx, a0, a1, a2.0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8000db00, asm_lbVector_Rotate, Returns::Nothing);
     ctx.register_port(
         0x8000dc6c,
         |ctx| {
@@ -2436,14 +2426,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8000e138,
-        |ctx| {
-            let (a0, a1): (Vec<'_>, Vec<'_>) = Args::take_all(ctx);
-            Ret::put(lbVector_ApplyEulerRotation(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8000e138, asm_lbVector_ApplyEulerRotation, Returns::Int);
     ctx.register_port(
         0x8000e19c,
         |ctx| {

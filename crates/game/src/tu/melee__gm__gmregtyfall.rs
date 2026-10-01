@@ -3853,21 +3853,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801a6ee4,
-        |ctx| {
-            Ret::put(gm_801A6EE4(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x801a7070,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(gm_Scene_ToyFall_OnEnter(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801a6ee4, asm_gm_801A6EE4, Returns::Nothing);
+    ctx.register_port(0x801a7070, asm_gm_Scene_ToyFall_OnEnter, Returns::Nothing);
     ctx.register_port(
         0x801a79d4,
         |ctx| {

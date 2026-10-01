@@ -1218,14 +1218,7 @@ fn inl_doColl_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x800e3eac,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCa_SpecialHi_800E3EAC(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800e3eac, asm_ftCa_SpecialHi_800E3EAC, Returns::Nothing);
     ctx.register_port(
         0x800e400c,
         |ctx| {
@@ -1306,14 +1299,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800e4408,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCa_SpecialLw_Phys(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800e4408, asm_ftCa_SpecialLw_Phys, Returns::Nothing);
     ctx.register_port(
         0x800e449c,
         |ctx| {
@@ -1330,14 +1316,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800e45e4,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCa_SpecialAirLw_Phys(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800e45e4, asm_ftCa_SpecialAirLw_Phys, Returns::Nothing);
     ctx.register_port(
         0x800e4618,
         |ctx| {

@@ -3951,14 +3951,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801ce054,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(grCastle_801CE054(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x801ce054, asm_grCastle_801CE054, Returns::Int);
     ctx.register_port(
         0x801ce19c,
         |ctx| {

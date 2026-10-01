@@ -2535,14 +2535,7 @@ fn inl_ReverbHICallback_unfused<'a>(
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x8035bd3c,
-        |ctx| {
-            let (a0, a1, a2): (Val<'_, i32>, AXFX_REVHI_WORK<'_>, i32) = Args::take_all(ctx);
-            Ret::put(HandleReverb(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8035bd3c, asm_HandleReverb, Returns::Nothing);
     ctx.register_port(
         0x8035b6c0,
         |ctx| {
@@ -2562,15 +2555,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8035bbac,
-        |ctx| {
-            let (a0, a1, a2, a3): (Val<'_, i32>, Val<'_, i32>, Single, Single) =
-                Args::take_all(ctx);
-            Ret::put(DoCrossTalk(ctx, a0, a1, a2.0, a3.0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8035bbac, asm_DoCrossTalk, Returns::Nothing);
     ctx.register_port(
         0x8035c248,
         |ctx| {

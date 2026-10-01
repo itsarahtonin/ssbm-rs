@@ -3273,14 +3273,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8037c4cc,
-        |ctx| {
-            let (a0, a1, a2, a3): (HSD_Exp<'_>, u32, Addr<'_>, FnPtr<'_>) = Args::take_all(ctx);
-            Ret::put(expEvaluate(ctx, a0, a1, a2, a3), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8037c4cc, asm_expEvaluate, Returns::Nothing);
     ctx.register_port(
         0x8037c950,
         |ctx| {

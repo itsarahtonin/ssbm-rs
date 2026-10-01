@@ -2154,12 +2154,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80346f90,
-        |ctx| {
-            let (a0, a1, a2): (i32, u32, Val<'_, u32>) = Args::take_all(ctx);
-            Ret::put(EXIGetID(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80346f90, asm_EXIGetID, Returns::Int);
 }

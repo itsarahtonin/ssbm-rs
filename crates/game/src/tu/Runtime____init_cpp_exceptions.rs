@@ -75,13 +75,7 @@ pub fn __init_cpp_exceptions<'a>(ctx: &'a Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x80322f20,
-        |ctx| {
-            Ret::put(GetR2(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80322f20, asm_GetR2, Returns::Int);
     ctx.register_port(
         0x80322f28,
         |ctx| {

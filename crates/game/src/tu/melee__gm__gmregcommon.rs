@@ -729,12 +729,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8017bec8,
-        |ctx| {
-            let (a0, a1, a2, a3): (i8, u8, Val<'_, i8>, Val<'_, u8>) = Args::take_all(ctx);
-            Ret::put(gmRegSetupEnemyColorTable(ctx, a0, a1, a2, a3), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8017bec8, asm_gmRegSetupEnemyColorTable, Returns::Nothing);
 }

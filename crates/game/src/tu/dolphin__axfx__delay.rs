@@ -460,14 +460,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8035dc64,
-        |ctx| {
-            let (a0,): (AXFX_DELAY<'_>,) = Args::take_all(ctx);
-            Ret::put(AXFXDelayInit(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8035dc64, asm_AXFXDelayInit, Returns::Int);
     ctx.register_port(
         0x8035dcac,
         |ctx| {

@@ -567,14 +567,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80354b5c,
-        |ctx| {
-            let (a0, a1, a2): (i32, u32, FnPtr<'_>) = Args::take_all(ctx);
-            Ret::put(__CARDAllocBlock(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80354b5c, asm___CARDAllocBlock, Returns::Int);
     ctx.register_port(
         0x80354c74,
         |ctx| {

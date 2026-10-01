@@ -3054,46 +3054,11 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80179990,
-        |ctx| {
-            let (a0, a1, a2): (HSD_GObj<'_>, i32, i32) = Args::take_all(ctx);
-            Ret::put(fn_80179990(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80179d3c,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
-            Ret::put(fn_80179D3C(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80179d60,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
-            Ret::put(fn_80179D60(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80179d84,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
-            Ret::put(fn_80179D84(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80179da8,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
-            Ret::put(fn_80179DA8(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80179990, asm_fn_80179990, Returns::Nothing);
+    ctx.register_port(0x80179d3c, asm_fn_80179D3C, Returns::Nothing);
+    ctx.register_port(0x80179d60, asm_fn_80179D60, Returns::Nothing);
+    ctx.register_port(0x80179d84, asm_fn_80179D84, Returns::Nothing);
+    ctx.register_port(0x80179da8, asm_fn_80179DA8, Returns::Nothing);
     ctx.register_port(
         0x80179dcc,
         |ctx| {
@@ -3157,14 +3122,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8017a318,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(fn_8017A318(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8017a318, asm_fn_8017A318, Returns::Int);
     ctx.register_port(
         0x8017a67c,
         |ctx| {

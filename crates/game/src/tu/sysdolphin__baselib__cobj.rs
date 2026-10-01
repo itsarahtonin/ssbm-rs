@@ -6062,14 +6062,7 @@ fn inl_HSD_WObjUnref_unfused<'a>(ctx: &'a Ctx, wobj: HSD_WObj<'a>) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x803676f8,
-        |ctx| {
-            let (a0, a1, a2, a3): (HSD_CObj<'_>, i32, i32, i32) = Args::take_all(ctx);
-            Ret::put(HSD_CObjEraseScreen(ctx, a0, a1, a2, a3), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x803676f8, asm_HSD_CObjEraseScreen, Returns::Nothing);
     ctx.register_port(
         0x80367874,
         |ctx| {
@@ -6110,38 +6103,10 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80367b68,
-        |ctx| {
-            let (a0, a1): (HSD_CObj<'_>, ArrV<'_, F32, 4>) = Args::take_all(ctx);
-            Ret::put(makeProjectionMtx(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80367c28,
-        |ctx| {
-            let (a0,): (HSD_CObj<'_>,) = Args::take_all(ctx);
-            Ret::put(setupNormalCamera(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80367eb0,
-        |ctx| {
-            let (a0,): (HSD_CObj<'_>,) = Args::take_all(ctx);
-            Ret::put(setupTopHalfCamera(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x803680f8,
-        |ctx| {
-            let (a0,): (HSD_CObj<'_>,) = Args::take_all(ctx);
-            Ret::put(setupBottomHalfCamera(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80367b68, asm_makeProjectionMtx, Returns::Int);
+    ctx.register_port(0x80367c28, asm_setupNormalCamera, Returns::Int);
+    ctx.register_port(0x80367eb0, asm_setupTopHalfCamera, Returns::Int);
+    ctx.register_port(0x803680f8, asm_setupBottomHalfCamera, Returns::Int);
     ctx.register_port(
         0x803683a4,
         |ctx| {
@@ -6150,14 +6115,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80368458,
-        |ctx| {
-            let (a0,): (HSD_CObj<'_>,) = Args::take_all(ctx);
-            Ret::put(HSD_CObjSetCurrent(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80368458, asm_HSD_CObjSetCurrent, Returns::Int);
     ctx.register_port(
         0x80368608,
         |ctx| {

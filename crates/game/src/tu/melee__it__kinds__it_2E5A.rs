@@ -1696,31 +1696,9 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x802e5f00,
-        |ctx| {
-            let (a0, a1, a2, a3): (HSD_GObj<'_>, Vec<'_>, Vec<'_>, i32) = Args::take_all(ctx);
-            Ret::put(it_802E5F00(ctx, a0, a1, a2, a3), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x802e5f8c,
-        |ctx| {
-            let (a0, a1, a2, a3, a4, a5): (HSD_GObj<'_>, Vec<'_>, i32, i32, Single, Single) =
-                Args::take_all(ctx);
-            Ret::put(it_802E5F8C(ctx, a0, a1, a2, a3, a4.0, a5.0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x802e609c,
-        |ctx| {
-            let (a0, a1): (it_802E5FXX_struct<'_>, SpawnItem<'_>) = Args::take_all(ctx);
-            Ret::put(it_802E609C(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802e5f00, asm_it_802E5F00, Returns::Nothing);
+    ctx.register_port(0x802e5f8c, asm_it_802E5F8C, Returns::Int);
+    ctx.register_port(0x802e609c, asm_it_802E609C, Returns::Int);
     ctx.register_port(
         0x802e614c,
         |ctx| {

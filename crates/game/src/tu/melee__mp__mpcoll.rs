@@ -29500,14 +29500,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80042d24,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_LoadECB(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80042d24, asm_mpColl_LoadECB, Returns::Nothing);
     ctx.register_port(
         0x80042db0,
         |ctx| {
@@ -29572,14 +29565,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80043754,
-        |ctx| {
-            let (a0, a1, a2): (FnPtr<'_>, CollData<'_>, u32) = Args::take_all(ctx);
-            Ret::put(mpColl_80043754(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80043754, asm_mpColl_80043754, Returns::Int);
     ctx.register_port(
         0x800439fc,
         |ctx| {
@@ -29628,22 +29614,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80044164,
-        |ctx| {
-            let (a0, a1): (CollData<'_>, Val<'_, i32>) = Args::take_all(ctx);
-            Ret::put(mpColl_80044164(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x800443c4,
-        |ctx| {
-            let (a0, a1): (CollData<'_>, Val<'_, i32>) = Args::take_all(ctx);
-            Ret::put(mpColl_800443C4(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80044164, asm_mpColl_80044164, Returns::Int);
+    ctx.register_port(0x800443c4, asm_mpColl_800443C4, Returns::Int);
     ctx.register_port(
         0x80044628,
         |ctx| {
@@ -29685,14 +29657,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80044e10,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_80044E10_RightWall(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80044e10, asm_mpColl_80044E10_RightWall, Returns::Int);
     ctx.register_port(
         0x800454a4,
         |ctx| {
@@ -29701,14 +29666,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80045b74,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_80045B74_LeftWall(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80045b74, asm_mpColl_80045B74_LeftWall, Returns::Int);
     ctx.register_port(
         0x80046224,
         |ctx| {
@@ -29717,30 +29675,9 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80046904,
-        |ctx| {
-            let (a0, a1): (CollData<'_>, u32) = Args::take_all(ctx);
-            Ret::put(mpColl_80046904(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80046f78,
-        |ctx| {
-            let (a0, a1): (CollData<'_>, u32) = Args::take_all(ctx);
-            Ret::put(mpColl_80046F78(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x800471f8,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_800471F8(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80046904, asm_mpColl_80046904, Returns::Int);
+    ctx.register_port(0x80046f78, asm_mpColl_80046F78, Returns::Int);
+    ctx.register_port(0x800471f8, asm_mpColl_800471F8, Returns::Int);
     ctx.register_port(
         0x8004730c,
         |ctx| {
@@ -29749,22 +29686,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x800473cc,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_800473CC(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x800474e0,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_800474E0(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x800473cc, asm_mpColl_800473CC, Returns::Int);
+    ctx.register_port(0x800474e0, asm_mpColl_800474E0, Returns::Int);
     ctx.register_port(
         0x800475f4,
         |ctx| {
@@ -29773,30 +29696,9 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x800476b4,
-        |ctx| {
-            let (a0, a1, a2): (CollData<'_>, FnPtr<'_>, HSD_GObj<'_>) = Args::take_all(ctx);
-            Ret::put(mpColl_800476B4(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x800477e0,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_800477E0(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x800478f4,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_800478F4(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x800476b4, asm_mpColl_800476B4, Returns::Int);
+    ctx.register_port(0x800477e0, asm_mpColl_800477E0, Returns::Int);
+    ctx.register_port(0x800478f4, asm_mpColl_800478F4, Returns::Int);
     ctx.register_port(
         0x80047a08,
         |ctx| {
@@ -29805,22 +29707,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80047ac8,
-        |ctx| {
-            let (a0, a1, a2): (CollData<'_>, FnPtr<'_>, HSD_GObj<'_>) = Args::take_all(ctx);
-            Ret::put(mpColl_80047AC8(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80047bf4,
-        |ctx| {
-            let (a0, a1, a2): (CollData<'_>, FnPtr<'_>, HSD_GObj<'_>) = Args::take_all(ctx);
-            Ret::put(mpColl_80047BF4(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80047ac8, asm_mpColl_80047AC8, Returns::Int);
+    ctx.register_port(0x80047bf4, asm_mpColl_80047BF4, Returns::Int);
     ctx.register_port(
         0x80047d20,
         |ctx| {
@@ -29829,22 +29717,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80047e14,
-        |ctx| {
-            let (a0, a1, a2): (CollData<'_>, FnPtr<'_>, HSD_GObj<'_>) = Args::take_all(ctx);
-            Ret::put(mpColl_80047E14(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80047f40,
-        |ctx| {
-            let (a0, a1, a2): (CollData<'_>, FnPtr<'_>, HSD_GObj<'_>) = Args::take_all(ctx);
-            Ret::put(mpColl_80047F40(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80047e14, asm_mpColl_80047E14, Returns::Int);
+    ctx.register_port(0x80047f40, asm_mpColl_80047F40, Returns::Int);
     ctx.register_port(
         0x8004806c,
         |ctx| {
@@ -29853,22 +29727,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80048160,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_80048160(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80048274,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_80048274(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80048160, asm_mpColl_80048160, Returns::Int);
+    ctx.register_port(0x80048274, asm_mpColl_80048274, Returns::Int);
     ctx.register_port(
         0x80048388,
         |ctx| {
@@ -29877,14 +29737,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80048464,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_80048464(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80048464, asm_mpColl_80048464, Returns::Int);
     ctx.register_port(
         0x80048578,
         |ctx| {
@@ -29893,14 +29746,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80048654,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_80048654(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80048654, asm_mpColl_80048654, Returns::Int);
     ctx.register_port(
         0x80048768,
         |ctx| {
@@ -29925,14 +29771,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80048ab0,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_80048AB0_RightWall(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80048ab0, asm_mpColl_80048AB0_RightWall, Returns::Int);
     ctx.register_port(
         0x800491c8,
         |ctx| {
@@ -29941,14 +29780,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80049778,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_80049778_LeftWall(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80049778, asm_mpColl_80049778_LeftWall, Returns::Int);
     ctx.register_port(
         0x80049eac,
         |ctx| {
@@ -29957,22 +29789,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8004a45c,
-        |ctx| {
-            let (a0, a1): (CollData<'_>, i32) = Args::take_all(ctx);
-            Ret::put(mpColl_8004A45C_Floor(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8004a678,
-        |ctx| {
-            let (a0, a1): (CollData<'_>, i32) = Args::take_all(ctx);
-            Ret::put(mpColl_8004A678_Floor(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8004a45c, asm_mpColl_8004A45C_Floor, Returns::Int);
+    ctx.register_port(0x8004a678, asm_mpColl_8004A678_Floor, Returns::Int);
     ctx.register_port(
         0x8004a908,
         |ctx| {
@@ -29989,22 +29807,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8004ace4,
-        |ctx| {
-            let (a0, a1): (CollData<'_>, i32) = Args::take_all(ctx);
-            Ret::put(mpColl_8004ACE4(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8004b108,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_8004B108(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8004ace4, asm_mpColl_8004ACE4, Returns::Int);
+    ctx.register_port(0x8004b108, asm_mpColl_8004B108, Returns::Int);
     ctx.register_port(
         0x8004b21c,
         |ctx| {
@@ -30013,14 +29817,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8004b2dc,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_8004B2DC(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8004b2dc, asm_mpColl_8004B2DC, Returns::Int);
     ctx.register_port(
         0x8004b3f0,
         |ctx| {
@@ -30029,22 +29826,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8004b4b0,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_8004B4B0(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8004b5c4,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_8004B5C4(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8004b4b0, asm_mpColl_8004B4B0, Returns::Int);
+    ctx.register_port(0x8004b5c4, asm_mpColl_8004B5C4, Returns::Int);
     ctx.register_port(
         0x8004b6d8,
         |ctx| {
@@ -30069,30 +29852,9 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8004c328,
-        |ctx| {
-            let (a0, a1): (CollData<'_>, i32) = Args::take_all(ctx);
-            Ret::put(mpColl_8004C328_Ceiling(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8004c534,
-        |ctx| {
-            let (a0, a1): (CollData<'_>, u32) = Args::take_all(ctx);
-            Ret::put(mpColl_8004C534(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8004c750,
-        |ctx| {
-            let (a0,): (CollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_8004C750(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8004c328, asm_mpColl_8004C328_Ceiling, Returns::Int);
+    ctx.register_port(0x8004c534, asm_mpColl_8004C534, Returns::Int);
+    ctx.register_port(0x8004c750, asm_mpColl_8004C750, Returns::Int);
     ctx.register_port(
         0x8004c864,
         |ctx| {
@@ -30181,12 +29943,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8004d024,
-        |ctx| {
-            let (a0,): (Vec<'_>,) = Args::take_all(ctx);
-            Ret::put(mpColl_8004D024(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8004d024, asm_mpColl_8004D024, Returns::Int);
 }

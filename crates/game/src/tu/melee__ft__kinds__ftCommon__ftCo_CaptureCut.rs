@@ -2000,14 +2000,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800dc890,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_CaptureCut_Coll(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800dc890, asm_ftCo_CaptureCut_Coll, Returns::Nothing);
     ctx.register_port(
         0x800dc8d8,
         |ctx| {
@@ -2024,14 +2017,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800dc920,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, HSD_GObj<'_>) = Args::take_all(ctx);
-            Ret::put(ftCo_800DC920(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800dc920, asm_ftCo_800DC920, Returns::Nothing);
     ctx.register_port(
         0x800dce34,
         |ctx| {

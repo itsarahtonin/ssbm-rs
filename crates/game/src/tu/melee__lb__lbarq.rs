@@ -501,11 +501,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80014d2c,
-        |ctx| {
-            Ret::put(lbArq_80014D2C(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80014d2c, asm_lbArq_80014D2C, Returns::Nothing);
 }

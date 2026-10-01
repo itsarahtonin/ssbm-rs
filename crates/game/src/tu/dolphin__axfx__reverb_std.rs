@@ -1537,14 +1537,7 @@ fn inl_ReverbSTDCallback_unfused<'a>(
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x8035c910,
-        |ctx| {
-            let (a0, a1): (Val<'_, i32>, AXFX_REVSTD_WORK<'_>) = Args::take_all(ctx);
-            Ret::put(HandleReverb(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8035c910, asm_HandleReverb, Returns::Nothing);
     ctx.register_port(
         0x8035c504,
         |ctx| {

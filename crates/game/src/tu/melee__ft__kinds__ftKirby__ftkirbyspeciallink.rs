@@ -5927,30 +5927,9 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x800fb500,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftKb_SpecialNLk800FB500(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x800fb5f4,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftKb_SpecialNLk800FB5F4(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x800fb6dc,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftKb_SpecialNLk800FB6DC(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800fb500, asm_ftKb_SpecialNLk800FB500, Returns::Int);
+    ctx.register_port(0x800fb5f4, asm_ftKb_SpecialNLk800FB5F4, Returns::Int);
+    ctx.register_port(0x800fb6dc, asm_ftKb_SpecialNLk800FB6DC, Returns::Nothing);
     ctx.register_port(
         0x800fb800,
         |ctx| {
@@ -5967,30 +5946,9 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800fb880,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftKb_SpecialNLk800FB880(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x800fba00,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftKb_SpecialNLk800FBA00(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x800fbbc4,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftKb_LkSpecialNStart_Anim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800fb880, asm_ftKb_SpecialNLk800FB880, Returns::Nothing);
+    ctx.register_port(0x800fba00, asm_ftKb_SpecialNLk800FBA00, Returns::Nothing);
+    ctx.register_port(0x800fbbc4, asm_ftKb_LkSpecialNStart_Anim, Returns::Nothing);
     ctx.register_port(
         0x800fbdfc,
         |ctx| {
@@ -6009,10 +5967,7 @@ pub fn register(ctx: &Ctx) {
     );
     ctx.register_port(
         0x800fbf34,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftKb_LkSpecialAirNStart_Anim(ctx, a0), ctx);
-        },
+        asm_ftKb_LkSpecialAirNStart_Anim,
         Returns::Nothing,
     );
     ctx.register_port(
@@ -6023,22 +5978,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800fc274,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftKb_LkSpecialAirNEnd_Anim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x800fc374,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftKb_LkSpecialNStart_IASA(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800fc274, asm_ftKb_LkSpecialAirNEnd_Anim, Returns::Nothing);
+    ctx.register_port(0x800fc374, asm_ftKb_LkSpecialNStart_IASA, Returns::Nothing);
     ctx.register_port(
         0x800fc46c,
         |ctx| {
@@ -6057,10 +5998,7 @@ pub fn register(ctx: &Ctx) {
     );
     ctx.register_port(
         0x800fc540,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftKb_LkSpecialAirNStart_IASA(ctx, a0), ctx);
-        },
+        asm_ftKb_LkSpecialAirNStart_IASA,
         Returns::Nothing,
     );
     ctx.register_port(
@@ -6143,14 +6081,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800fc934,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftKb_LkSpecialNEnd_Coll(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800fc934, asm_ftKb_LkSpecialNEnd_Coll, Returns::Nothing);
     ctx.register_port(
         0x800fc9f0,
         |ctx| {
@@ -6167,12 +6098,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800fcb58,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftKb_LkSpecialAirNEnd_Coll(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800fcb58, asm_ftKb_LkSpecialAirNEnd_Coll, Returns::Nothing);
 }

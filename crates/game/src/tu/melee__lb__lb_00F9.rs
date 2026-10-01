@@ -6970,14 +6970,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8000fd48,
-        |ctx| {
-            let (a0, a1, a2): (HSD_JObj<'_>, DynamicsDesc<'_>, u32) = Args::take_all(ctx);
-            Ret::put(lb_8000FD48(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8000fd48, asm_lb_8000FD48, Returns::Nothing);
     ctx.register_port(
         0x800100b0,
         |ctx| {
@@ -7011,23 +7004,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8001044c,
-        |ctx| {
-            let (a0, a1, a2, a3, a4, a5, a6, a7): (
-                DynamicsDesc<'_>,
-                Addr<'_>,
-                i32,
-                Single,
-                i32,
-                i32,
-                i32,
-                i32,
-            ) = Args::take_all(ctx);
-            Ret::put(lb_8001044C(ctx, a0, a1, a2, a3.0, a4, a5, a6, a7), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8001044c, asm_lb_8001044C, Returns::Nothing);
     ctx.register_port(
         0x800115f4,
         |ctx| {

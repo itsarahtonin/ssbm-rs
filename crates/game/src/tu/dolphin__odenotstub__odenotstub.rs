@@ -853,20 +853,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8032b680,
-        |ctx| {
-            Ret::put(DBInitInterrupts(ctx), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8032b6d4,
-        |ctx| {
-            Ret::put(DBQueryData(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8032b680, asm_DBInitInterrupts, Returns::Int);
+    ctx.register_port(0x8032b6d4, asm_DBQueryData, Returns::Int);
     ctx.register_port(
         0x8032b770,
         |ctx| {

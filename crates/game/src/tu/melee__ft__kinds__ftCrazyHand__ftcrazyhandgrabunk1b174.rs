@@ -840,14 +840,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8015b2c0,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(fn_8015B2C0(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8015b2c0, asm_fn_8015B2C0, Returns::Nothing);
     ctx.register_port(
         0x8015b4ec,
         |ctx| {

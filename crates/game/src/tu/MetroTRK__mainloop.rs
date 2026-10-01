@@ -429,14 +429,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8032673c,
-        |ctx| {
-            let (a0,): (NubEvent<'_>,) = Args::take_all(ctx);
-            Ret::put(TRKHandleSupportEvent(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8032673c, asm_TRKHandleSupportEvent, Returns::Nothing);
     ctx.register_port(
         0x8032675c,
         |ctx| {
@@ -444,11 +437,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80326788,
-        |ctx| {
-            Ret::put(TRKNubMainLoop(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80326788, asm_TRKNubMainLoop, Returns::Nothing);
 }

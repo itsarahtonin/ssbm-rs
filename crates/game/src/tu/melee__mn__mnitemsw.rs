@@ -6830,14 +6830,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80233e10,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(fn_80233E10(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80233e10, asm_fn_80233E10, Returns::Nothing);
     ctx.register_port(
         0x8023405c,
         |ctx| {
@@ -6854,22 +6847,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8023453c,
-        |ctx| {
-            let (a0, a1, a2): (HSD_GObj<'_>, u8, u8) = Args::take_all(ctx);
-            Ret::put(mnItemSw_8023453C(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80234c24,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(fn_80234C24(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8023453c, asm_mnItemSw_8023453C, Returns::Nothing);
+    ctx.register_port(0x80234c24, asm_fn_80234C24, Returns::Nothing);
     ctx.register_port(
         0x80235020,
         |ctx| {
@@ -6878,14 +6857,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x802351a0,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(mnItemSw_802351A0(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802351a0, asm_mnItemSw_802351A0, Returns::Int);
     ctx.register_port(
         0x802358c0,
         |ctx| {

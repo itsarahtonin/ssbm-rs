@@ -1277,13 +1277,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8033fcd4,
-        |ctx| {
-            Ret::put(__GXUpdateBPMask(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8033fcd4, asm___GXUpdateBPMask, Returns::Nothing);
     ctx.register_port(
         0x8033fda0,
         |ctx| {

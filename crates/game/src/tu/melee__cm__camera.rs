@@ -21385,14 +21385,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8002958c,
-        |ctx| {
-            let (a0, a1): (CameraBounds<'_>, CameraTransformState<'_>) = Args::take_all(ctx);
-            Ret::put(Camera_8002958C(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8002958c, asm_Camera_8002958C, Returns::Nothing);
     ctx.register_port(
         0x80029aac,
         |ctx| {
@@ -21459,14 +21452,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8002a768,
-        |ctx| {
-            let (a0, a1): (CameraTransformState<'_>, i32) = Args::take_all(ctx);
-            Ret::put(Camera_8002A768(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8002a768, asm_Camera_8002A768, Returns::Nothing);
     ctx.register_port(
         0x8002af68,
         |ctx| {
@@ -21490,22 +21476,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8002b3d4,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(Camera_8002B3D4(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8002b694,
-        |ctx| {
-            let (a0, a1): (CameraInputs<'_>, i32) = Args::take_all(ctx);
-            Ret::put(Camera_8002B694(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8002b3d4, asm_Camera_8002B3D4, Returns::Nothing);
+    ctx.register_port(0x8002b694, asm_Camera_8002B694, Returns::Nothing);
     ctx.register_port(
         0x8002ba00,
         |ctx| {
@@ -21553,22 +21525,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8002c5b4,
-        |ctx| {
-            let (a0,): (Camera_x2D0<'_>,) = Args::take_all(ctx);
-            Ret::put(Camera_8002C5B4(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8002c908,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(Camera_8002C908(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8002c5b4, asm_Camera_8002C5B4, Returns::Nothing);
+    ctx.register_port(0x8002c908, asm_Camera_8002C908, Returns::Nothing);
     ctx.register_port(
         0x8002cb0c,
         |ctx| {
@@ -21577,69 +21535,14 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8002cddc,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(Camera_8002CDDC(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8002d318,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(Camera_8002D318(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8002d85c,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(Camera_8002D85C(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8002ddc4,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(Camera_8002DDC4(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8002dfe4,
-        |ctx| {
-            let (a0, a1, a2): (Vec<'_>, Vec<'_>, Vec<'_>) = Args::take_all(ctx);
-            Ret::put(Camera_8002DFE4(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8002e158,
-        |ctx| {
-            let (a0, a1, a2): (Val<'_, F32>, Single, Single) = Args::take_all(ctx);
-            Ret::put(Camera_8002E158(ctx, a0, a1.0, a2.0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8002e234,
-        |ctx| {
-            Ret::put(Camera_8002E234(ctx), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8002e490,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(Camera_8002E490(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8002cddc, asm_Camera_8002CDDC, Returns::Nothing);
+    ctx.register_port(0x8002d318, asm_Camera_8002D318, Returns::Nothing);
+    ctx.register_port(0x8002d85c, asm_Camera_8002D85C, Returns::Nothing);
+    ctx.register_port(0x8002ddc4, asm_Camera_8002DDC4, Returns::Nothing);
+    ctx.register_port(0x8002dfe4, asm_Camera_8002DFE4, Returns::Int);
+    ctx.register_port(0x8002e158, asm_Camera_8002E158, Returns::Int);
+    ctx.register_port(0x8002e234, asm_Camera_8002E234, Returns::Int);
+    ctx.register_port(0x8002e490, asm_Camera_8002E490, Returns::Nothing);
     ctx.register_port(
         0x8002e6fc,
         |ctx| {
@@ -21704,13 +21607,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8002ef14,
-        |ctx| {
-            Ret::put(Camera_8002EF14(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8002ef14, asm_Camera_8002EF14, Returns::Nothing);
     ctx.register_port(
         0x8002f0e4,
         |ctx| {
@@ -22152,14 +22049,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80030e44,
-        |ctx| {
-            let (a0, a1): (i32, Vec<'_>) = Args::take_all(ctx);
-            Ret::put(Camera_RequestQuake(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80030e44, asm_Camera_RequestQuake, Returns::Nothing);
     ctx.register_port(
         0x80031044,
         |ctx| {

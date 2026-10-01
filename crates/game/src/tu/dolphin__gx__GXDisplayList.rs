@@ -179,12 +179,5 @@ fn asm_GXCallDisplayList(ctx: &Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x803410d8,
-        |ctx| {
-            let (a0, a1): (Addr<'_>, u32) = Args::take_all(ctx);
-            Ret::put(GXCallDisplayList(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x803410d8, asm_GXCallDisplayList, Returns::Nothing);
 }

@@ -5188,21 +5188,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80019c38,
-        |ctx| {
-            Ret::put(getNewTask(ctx), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80019cb0,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(executeNextTask(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80019c38, asm_getNewTask, Returns::Int);
+    ctx.register_port(0x80019cb0, asm_executeNextTask, Returns::Int);
     ctx.register_port(
         0x80019ef0,
         |ctx| {
@@ -5227,13 +5214,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8001a184,
-        |ctx| {
-            Ret::put(taskMount(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8001a184, asm_taskMount, Returns::Int);
     ctx.register_port(
         0x8001a3a4,
         |ctx| {
@@ -5241,14 +5222,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8001a4cc,
-        |ctx| {
-            let (a0, a1): (Val<'_, i8>, Addr<'_>) = Args::take_all(ctx);
-            Ret::put(setTaskFilename(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8001a4cc, asm_setTaskFilename, Returns::Nothing);
     ctx.register_port(
         0x8001a594,
         |ctx| {
@@ -5264,13 +5238,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8001a8a4,
-        |ctx| {
-            Ret::put(taskFormat(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8001a8a4, asm_taskFormat, Returns::Int);
     ctx.register_port(
         0x8001a9cc,
         |ctx| {
@@ -5325,13 +5293,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8001b14c,
-        |ctx| {
-            Ret::put(taskListSnapshots(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8001b14c, asm_taskListSnapshots, Returns::Int);
     ctx.register_port(
         0x8001b614,
         |ctx| {

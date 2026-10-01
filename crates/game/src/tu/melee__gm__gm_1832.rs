@@ -4940,13 +4940,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801851c0,
-        |ctx| {
-            Ret::put(fn_801851C0(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x801851c0, asm_fn_801851C0, Returns::Int);
     ctx.register_port(
         0x801852fc,
         |ctx| {
@@ -5011,13 +5005,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80185a0c,
-        |ctx| {
-            Ret::put(fn_80185A0C(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80185a0c, asm_fn_80185A0C, Returns::Int);
     ctx.register_port(
         0x80185d64,
         |ctx| {

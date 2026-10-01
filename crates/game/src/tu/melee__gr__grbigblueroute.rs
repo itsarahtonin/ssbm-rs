@@ -5714,14 +5714,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8020cd20,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(grBigBlueRoute_8020CD20(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8020cd20, asm_grBigBlueRoute_8020CD20, Returns::Nothing);
     ctx.register_port(
         0x8020da9c,
         |ctx| {

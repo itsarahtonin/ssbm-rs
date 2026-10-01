@@ -25659,69 +25659,16 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int8,
     );
-    ctx.register_port(
-        0x80331340,
-        |ctx| {
-            let (a0, a1, a2, a3): (_THPFileInfo<'_>, Addr<'_>, Addr<'_>, Addr<'_>) =
-                Args::take_all(ctx);
-            Ret::put(THPDec_80331340(ctx, a0, a1, a2, a3), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x803313d0,
-        |ctx| {
-            let (a0, a1, a2, a3, a4): (_THPFileInfo<'_>, Addr<'_>, Addr<'_>, Addr<'_>, u32) =
-                Args::take_all(ctx);
-            Ret::put(THPDec_803313D0(ctx, a0, a1, a2, a3, a4), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80331340, asm_THPDec_80331340, Returns::Nothing);
+    ctx.register_port(0x803313d0, asm_THPDec_803313D0, Returns::Nothing);
     ctx.register_port(
         0x80331470,
-        |ctx| {
-            let (a0,): (_THPFileInfo<'_>,) = Args::take_all(ctx);
-            Ret::put(__THPDecompressiMCURow640x480(ctx, a0), ctx);
-        },
+        asm___THPDecompressiMCURow640x480,
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80332e80,
-        |ctx| {
-            let (a0, a1): (_THPFileInfo<'_>, u32) = Args::take_all(ctx);
-            Ret::put(__THPDecompressiMCURowNxN(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80334880,
-        |ctx| {
-            let (a0, a1): (_THPFileInfo<'_>, Val<'_, i16>) = Args::take_all(ctx);
-            Ret::put(__THPHuffDecodeDCTCompY(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80334f00,
-        |ctx| {
-            let (a0, a1): (_THPFileInfo<'_>, Val<'_, i16>) = Args::take_all(ctx);
-            Ret::put(__THPHuffDecodeDCTCompU(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x803355b0,
-        |ctx| {
-            let (a0, a1): (_THPFileInfo<'_>, Val<'_, i16>) = Args::take_all(ctx);
-            Ret::put(__THPHuffDecodeDCTCompV(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80335c58,
-        |ctx| {
-            Ret::put(THPInit(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80332e80, asm___THPDecompressiMCURowNxN, Returns::Nothing);
+    ctx.register_port(0x80334880, asm___THPHuffDecodeDCTCompY, Returns::Nothing);
+    ctx.register_port(0x80334f00, asm___THPHuffDecodeDCTCompU, Returns::Nothing);
+    ctx.register_port(0x803355b0, asm___THPHuffDecodeDCTCompV, Returns::Nothing);
+    ctx.register_port(0x80335c58, asm_THPInit, Returns::Nothing);
 }

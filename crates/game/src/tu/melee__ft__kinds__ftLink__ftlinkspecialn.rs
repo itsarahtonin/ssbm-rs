@@ -1899,14 +1899,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800ee1a8,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftLk_SpecialNEnd_Coll(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800ee1a8, asm_ftLk_SpecialNEnd_Coll, Returns::Nothing);
     ctx.register_port(
         0x800ee2e0,
         |ctx| {
@@ -1923,12 +1916,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800ee3f0,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftLk_SpecialAirNEnd_Coll(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800ee3f0, asm_ftLk_SpecialAirNEnd_Coll, Returns::Nothing);
 }

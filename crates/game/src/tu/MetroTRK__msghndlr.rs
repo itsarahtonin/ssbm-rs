@@ -3938,14 +3938,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x803277d8,
-        |ctx| {
-            let (a0,): (MessageBuffer<'_>,) = Args::take_all(ctx);
-            Ret::put(TRKSendACK(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803277d8, asm_TRKSendACK, Returns::Int);
     ctx.register_port(
         0x80327828,
         |ctx| {
@@ -4010,46 +4003,11 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80327dd0,
-        |ctx| {
-            let (a0,): (MessageBuffer<'_>,) = Args::take_all(ctx);
-            Ret::put(TRKDoReadMemory(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80327fb8,
-        |ctx| {
-            let (a0,): (MessageBuffer<'_>,) = Args::take_all(ctx);
-            Ret::put(TRKDoWriteMemory(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x803281b4,
-        |ctx| {
-            let (a0,): (MessageBuffer<'_>,) = Args::take_all(ctx);
-            Ret::put(TRKDoReadRegisters(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x803283b8,
-        |ctx| {
-            let (a0,): (MessageBuffer<'_>,) = Args::take_all(ctx);
-            Ret::put(TRKDoWriteRegisters(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x803285c0,
-        |ctx| {
-            let (a0,): (MessageBuffer<'_>,) = Args::take_all(ctx);
-            Ret::put(TRKDoFlushCache(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80327dd0, asm_TRKDoReadMemory, Returns::Int);
+    ctx.register_port(0x80327fb8, asm_TRKDoWriteMemory, Returns::Int);
+    ctx.register_port(0x803281b4, asm_TRKDoReadRegisters, Returns::Int);
+    ctx.register_port(0x803283b8, asm_TRKDoWriteRegisters, Returns::Int);
+    ctx.register_port(0x803285c0, asm_TRKDoFlushCache, Returns::Int);
     ctx.register_port(
         0x803286f8,
         |ctx| {
@@ -4058,14 +4016,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8032875c,
-        |ctx| {
-            let (a0,): (MessageBuffer<'_>,) = Args::take_all(ctx);
-            Ret::put(TRKDoStep(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8032875c, asm_TRKDoStep, Returns::Int);
     ctx.register_port(
         0x80328960,
         |ctx| {

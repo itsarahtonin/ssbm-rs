@@ -6355,14 +6355,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800b658c,
-        |ctx| {
-            let (a0,): (Fighter<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_800B658C(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800b658c, asm_ftCo_800B658C, Returns::Nothing);
     ctx.register_port(
         0x800b683c,
         |ctx| {
@@ -6427,14 +6420,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x800b9020,
-        |ctx| {
-            let (a0,): (Fighter<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_800B9020(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800b9020, asm_ftCo_800B9020, Returns::Nothing);
     ctx.register_port(
         0x800b920c,
         |ctx| {
@@ -6459,14 +6445,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800b9504,
-        |ctx| {
-            let (a0,): (Fighter<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_800B9504(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800b9504, asm_ftCo_800B9504, Returns::Nothing);
     ctx.register_port(
         0x800b9704,
         |ctx| {

@@ -2142,13 +2142,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x803147c4,
-        |ctx| {
-            Ret::put(tyList_803147C4(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x803147c4, asm_tyList_803147C4, Returns::Nothing);
     ctx.register_port(
         0x803148e4,
         |ctx| {

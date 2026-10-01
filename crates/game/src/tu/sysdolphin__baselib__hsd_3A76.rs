@@ -6380,23 +6380,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x803a8134,
-        |ctx| {
-            let (a0, a1, a2, a3): (Val<'_, u8>, HSD_Text<'_>, Val<'_, F32>, Val<'_, F32>) =
-                Args::take_all(ctx);
-            Ret::put(HSD_SisLib_803A8134(ctx, a0, a1, a2, a3), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x803a84bc,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
-            Ret::put(HSD_SisLib_803A84BC(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x803a8134, asm_HSD_SisLib_803A8134, Returns::Nothing);
+    ctx.register_port(0x803a84bc, asm_HSD_SisLib_803A84BC, Returns::Nothing);
     ctx.register_port(
         0x803a945c,
         |ctx| {

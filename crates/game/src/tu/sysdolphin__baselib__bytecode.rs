@@ -6839,12 +6839,5 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x803805dc,
-        |ctx| {
-            let (a0, a1, a2): (Val<'_, u8>, Val<'_, F32>, i32) = Args::take_all(ctx);
-            Ret::put(HSD_ByteCodeEval(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Float,
-    );
+    ctx.register_port(0x803805dc, asm_HSD_ByteCodeEval, Returns::Float);
 }

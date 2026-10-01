@@ -538,20 +538,8 @@ fn inl___init_bss_section_unfused<'a>(ctx: &'a Ctx, dst: Addr<'a>, size: u32) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x800051ec,
-        |ctx| {
-            Ret::put(__check_pad3(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8000522c,
-        |ctx| {
-            Ret::put(__start(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800051ec, asm___check_pad3, Returns::Nothing);
+    ctx.register_port(0x8000522c, asm___start, Returns::Nothing);
     ctx.register_port(
         0x8000535c,
         |ctx| {

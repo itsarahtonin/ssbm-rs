@@ -17525,14 +17525,7 @@ pub fn efAsync_QueueInit<'a>(ctx: &'a Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x80063930,
-        |ctx| {
-            let (a0, a1, a2): (i32, HSD_GObj<'_>, __va_list_t<'_>) = Args::take_all(ctx);
-            Ret::put(efAsync_Dispatch(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80063930, asm_efAsync_Dispatch, Returns::Int);
     ctx.register_port(
         0x8006729c,
         |ctx| {
@@ -17541,22 +17534,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8006730c,
-        |ctx| {
-            let (a0, a1, a2, a3): (HSD_Archive<'_>, Val<'_, u8>, u32, i32) = Args::take_all(ctx);
-            Ret::put(efAsync_OnLoad(ctx, a0, a1, a2, a3), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8006737c,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(efAsync_LoadSync(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8006730c, asm_efAsync_OnLoad, Returns::Nothing);
+    ctx.register_port(0x8006737c, asm_efAsync_LoadSync, Returns::Nothing);
     ctx.register_port(
         0x8006744c,
         |ctx| {

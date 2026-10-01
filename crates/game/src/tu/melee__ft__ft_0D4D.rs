@@ -775,14 +775,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800d5470,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_Rebirth_Coll(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800d5470, asm_ftCo_Rebirth_Coll, Returns::Nothing);
     ctx.register_port(
         0x800d54a4,
         |ctx| {

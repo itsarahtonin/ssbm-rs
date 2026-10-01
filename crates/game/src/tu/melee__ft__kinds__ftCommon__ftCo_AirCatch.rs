@@ -2097,14 +2097,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800c3d6c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_AirCatch_Anim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800c3d6c, asm_ftCo_AirCatch_Anim, Returns::Nothing);
     ctx.register_port(
         0x800c4380,
         |ctx| {

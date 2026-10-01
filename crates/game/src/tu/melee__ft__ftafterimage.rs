@@ -3498,20 +3498,6 @@ fn asm_ftCo_800C2FD8(ctx: &Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x800c2600,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, u32) = Args::take_all(ctx);
-            Ret::put(ftCo_800C2600(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x800c2fd8,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_800C2FD8(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800c2600, asm_ftCo_800C2600, Returns::Nothing);
+    ctx.register_port(0x800c2fd8, asm_ftCo_800C2FD8, Returns::Nothing);
 }

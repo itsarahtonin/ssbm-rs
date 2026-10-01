@@ -203,14 +203,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8009b744,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_CargoWalk_Anim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8009b744, asm_ftCo_CargoWalk_Anim, Returns::Nothing);
     ctx.register_port(
         0x8009b764,
         |ctx| {

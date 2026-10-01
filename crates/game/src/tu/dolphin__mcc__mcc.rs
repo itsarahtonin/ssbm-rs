@@ -2920,14 +2920,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8032c848,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(MCCStreamClose(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8032c848, asm_MCCStreamClose, Returns::Int);
     ctx.register_port(
         0x8032c880,
         |ctx| {
@@ -3020,14 +3013,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8032d2b8,
-        |ctx| {
-            let (a0,): (u8,) = Args::take_all(ctx);
-            Ret::put(mccInitializeCheck(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8032d2b8, asm_mccInitializeCheck, Returns::Int);
     ctx.register_port(
         0x8032d5e8,
         |ctx| {

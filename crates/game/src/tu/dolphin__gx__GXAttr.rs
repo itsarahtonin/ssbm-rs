@@ -2500,14 +2500,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8033c8a8,
-        |ctx| {
-            let (a0, a1, a2, a3, a4, a5): (i32, i32, i32, u32, u8, u32) = Args::take_all(ctx);
-            Ret::put(GXSetTexCoordGen2(ctx, a0, a1, a2, a3, a4, a5), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8033c8a8, asm_GXSetTexCoordGen2, Returns::Nothing);
     ctx.register_port(
         0x8033cb78,
         |ctx| {

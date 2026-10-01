@@ -933,14 +933,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800d7938,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(fn_800D7938(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800d7938, asm_fn_800D7938, Returns::Nothing);
     ctx.register_port(
         0x800d79ac,
         |ctx| {
@@ -957,28 +950,11 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800d79b4,
-        |ctx| {
-            let (a0, a1, a2): (HSD_GObj<'_>, FnPtr<'_>, FnPtr<'_>) = Args::take_all(ctx);
-            Ret::put(fn_800D79B4(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x800d7aec,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_ItemScopeStart_IASA(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800d79b4, asm_fn_800D79B4, Returns::Nothing);
+    ctx.register_port(0x800d7aec, asm_ftCo_ItemScopeStart_IASA, Returns::Nothing);
     ctx.register_port(
         0x800d7b1c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_ItemScopeAirStart_IASA(ctx, a0), ctx);
-        },
+        asm_ftCo_ItemScopeAirStart_IASA,
         Returns::Nothing,
     );
     ctx.register_port(

@@ -879,14 +879,7 @@ fn inl_pl_80037BC0_inline_unfused<'a>(ctx: &'a Ctx, stats: plAttackStats<'a>, ev
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x80037b2c,
-        |ctx| {
-            let (a0, a1, a2): (plActionStats<'_>, i32, i32) = Args::take_all(ctx);
-            Ret::put(pl_80037B2C(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80037b2c, asm_pl_80037B2C, Returns::Int);
     ctx.register_port(
         0x80037bc0,
         |ctx| {

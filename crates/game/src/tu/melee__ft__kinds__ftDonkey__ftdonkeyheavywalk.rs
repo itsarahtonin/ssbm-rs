@@ -171,14 +171,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800dfb34,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftDk_HeavyWalk_Anim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800dfb34, asm_ftDk_HeavyWalk_Anim, Returns::Nothing);
     ctx.register_port(
         0x800dfb54,
         |ctx| {

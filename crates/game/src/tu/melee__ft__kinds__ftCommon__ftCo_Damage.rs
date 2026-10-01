@@ -8608,14 +8608,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8008da4c,
-        |ctx| {
-            let (a0, a1, a2): (HSD_GObj<'_>, i32, i32) = Args::take_all(ctx);
-            Ret::put(ftCo_8008DA4C(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8008da4c, asm_ftCo_8008DA4C, Returns::Int);
     ctx.register_port(
         0x8008db10,
         |ctx| {
@@ -8632,14 +8625,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8008dce0,
-        |ctx| {
-            let (a0, a1, a2): (HSD_GObj<'_>, i32, Single) = Args::take_all(ctx);
-            Ret::put(ftCo_8008DCE0(ctx, a0, a1, a2.0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8008dce0, asm_ftCo_8008DCE0, Returns::Nothing);
     ctx.register_port(
         0x8008e498,
         |ctx| {
@@ -8688,30 +8674,9 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8008e9d0,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_8008E9D0(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8008eb58,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_8008EB58(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8008ec90,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_8008EC90(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8008e9d0, asm_ftCo_8008E9D0, Returns::Nothing);
+    ctx.register_port(0x8008eb58, asm_ftCo_8008EB58, Returns::Nothing);
+    ctx.register_port(0x8008ec90, asm_ftCo_8008EC90, Returns::Nothing);
     ctx.register_port(
         0x8008f744,
         |ctx| {

@@ -983,11 +983,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8015feb4,
-        |ctx| {
-            Ret::put(main(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8015feb4, asm_main, Returns::Int);
 }

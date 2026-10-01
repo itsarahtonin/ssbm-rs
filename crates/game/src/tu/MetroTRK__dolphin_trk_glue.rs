@@ -350,14 +350,7 @@ pub fn TRK_board_display<'a>(ctx: &'a Ctx, str: Val<'a, i8>) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x8032ac28,
-        |ctx| {
-            let (a0, a1): (OSContext<'_>, u32) = Args::take_all(ctx);
-            Ret::put(TRKLoadContext(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8032ac28, asm_TRKLoadContext, Returns::Nothing);
     ctx.register_port(
         0x8032acb0,
         |ctx| {

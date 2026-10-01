@@ -2328,14 +2328,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80017ebc,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(lbDvd_GetPreloadedArchive(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80017ebc, asm_lbDvd_GetPreloadedArchive, Returns::Int);
     ctx.register_port(
         0x8001819c,
         |ctx| {

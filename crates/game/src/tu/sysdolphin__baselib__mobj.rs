@@ -1451,14 +1451,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80363144,
-        |ctx| {
-            let (a0, a1): (HSD_MObj<'_>, _HSD_MObjDesc<'_>) = Args::take_all(ctx);
-            Ret::put(MObjLoad(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80363144, asm_MObjLoad, Returns::Int);
     ctx.register_port(
         0x803631e4,
         |ctx| {
@@ -1555,13 +1548,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80363d00,
-        |ctx| {
-            Ret::put(HSD_MaterialAlloc(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80363d00, asm_HSD_MaterialAlloc, Returns::Int);
     ctx.register_port(
         0x80363d60,
         |ctx| {

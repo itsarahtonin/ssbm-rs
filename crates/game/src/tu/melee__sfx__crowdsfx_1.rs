@@ -402,12 +402,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80322598,
-        |ctx| {
-            let (a0, a1): (i32, Single) = Args::take_all(ctx);
-            Ret::put(un_80322598(ctx, a0, a1.0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80322598, asm_un_80322598, Returns::Int);
 }

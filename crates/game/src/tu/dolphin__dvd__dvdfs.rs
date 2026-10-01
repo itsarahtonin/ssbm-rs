@@ -1157,14 +1157,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8033796c,
-        |ctx| {
-            let (a0,): (Val<'_, i8>,) = Args::take_all(ctx);
-            Ret::put(DVDConvertPathToEntrynum(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8033796c, asm_DVDConvertPathToEntrynum, Returns::Int);
     ctx.register_port(
         0x80337c60,
         |ctx| {

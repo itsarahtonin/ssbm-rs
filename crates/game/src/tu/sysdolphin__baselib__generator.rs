@@ -7925,22 +7925,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8039dad4,
-        |ctx| {
-            let (a0,): (HSD_Generator<'_>,) = Args::take_all(ctx);
-            Ret::put(hsd_8039DAD4(ctx, a0), ctx);
-        },
-        Returns::Float,
-    );
-    ctx.register_port(
-        0x8039ee24,
-        |ctx| {
-            let (a0,): (u32,) = Args::take_all(ctx);
-            Ret::put(hsd_8039EE24(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8039dad4, asm_hsd_8039DAD4, Returns::Float);
+    ctx.register_port(0x8039ee24, asm_hsd_8039EE24, Returns::Nothing);
     ctx.register_port(
         0x8039efac,
         |ctx| {

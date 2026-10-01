@@ -1575,22 +1575,6 @@ fn asm_TRKRequestSend(ctx: &Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x803289e4,
-        |ctx| {
-            let (a0, a1, a2, a3, a4, a5): (u32, Val<'_, u8>, Val<'_, u32>, Val<'_, u8>, i32, i32) =
-                Args::take_all(ctx);
-            Ret::put(TRKSuppAccessFile(ctx, a0, a1, a2, a3, a4, a5), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80328cbc,
-        |ctx| {
-            let (a0, a1, a2, a3, a4): (MessageBuffer<'_>, Val<'_, i32>, u32, u32, i32) =
-                Args::take_all(ctx);
-            Ret::put(TRKRequestSend(ctx, a0, a1, a2, a3, a4), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803289e4, asm_TRKSuppAccessFile, Returns::Int);
+    ctx.register_port(0x80328cbc, asm_TRKRequestSend, Returns::Int);
 }

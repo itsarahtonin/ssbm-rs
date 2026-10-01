@@ -975,30 +975,9 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80341408,
-        |ctx| {
-            let (a0, a1): (ArrV<'_, F32, 4>, Val<'_, F32>) = Args::take_all(ctx);
-            Ret::put(WriteMTXPS4x3(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8034143c,
-        |ctx| {
-            let (a0, a1): (ArrV<'_, F32, 4>, Val<'_, F32>) = Args::take_all(ctx);
-            Ret::put(WriteMTXPS3x3from3x4(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80341470,
-        |ctx| {
-            let (a0, a1): (ArrV<'_, F32, 4>, Val<'_, F32>) = Args::take_all(ctx);
-            Ret::put(WriteMTXPS4x2(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80341408, asm_WriteMTXPS4x3, Returns::Nothing);
+    ctx.register_port(0x8034143c, asm_WriteMTXPS3x3from3x4, Returns::Nothing);
+    ctx.register_port(0x80341470, asm_WriteMTXPS4x2, Returns::Nothing);
     ctx.register_port(
         0x80341494,
         |ctx| {

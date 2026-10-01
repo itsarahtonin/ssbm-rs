@@ -6574,13 +6574,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8016deec,
-        |ctx| {
-            Ret::put(fn_8016DEEC(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8016deec, asm_fn_8016DEEC, Returns::Nothing);
     ctx.register_port(
         0x8016e124,
         |ctx| {
@@ -6588,13 +6582,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8016e2bc,
-        |ctx| {
-            Ret::put(fn_8016E2BC(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8016e2bc, asm_fn_8016E2BC, Returns::Nothing);
     ctx.register_port(
         0x8016e5c0,
         |ctx| {
@@ -6603,22 +6591,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8016e730,
-        |ctx| {
-            let (a0,): (StartMeleeData<'_>,) = Args::take_all(ctx);
-            Ret::put(fn_8016E730(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8016e934,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(gm_Scene_Vs_OnEnter(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8016e730, asm_fn_8016E730, Returns::Nothing);
+    ctx.register_port(0x8016e934, asm_gm_Scene_Vs_OnEnter, Returns::Nothing);
     ctx.register_port(
         0x8016e9c8,
         |ctx| {
@@ -6629,20 +6603,10 @@ pub fn register(ctx: &Ctx) {
     );
     ctx.register_port(
         0x8016ebc0,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(gm_Scene_SuddenDeath_OnEnter(ctx, a0), ctx);
-        },
+        asm_gm_Scene_SuddenDeath_OnEnter,
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8016ec28,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(gm_Scene_Training_OnEnter(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8016ec28, asm_gm_Scene_Training_OnEnter, Returns::Nothing);
     ctx.register_port(
         0x8016ece8,
         |ctx| {

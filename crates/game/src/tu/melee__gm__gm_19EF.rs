@@ -5850,14 +5850,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8019f9c4,
-        |ctx| {
-            let (a0,): (u32,) = Args::take_all(ctx);
-            Ret::put(fn_8019F9C4(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8019f9c4, asm_fn_8019F9C4, Returns::Nothing);
     ctx.register_port(
         0x801a0a10,
         |ctx| {

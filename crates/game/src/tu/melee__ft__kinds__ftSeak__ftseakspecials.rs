@@ -2278,30 +2278,9 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801110e8,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftSk_SpecialS_CheckInitChain(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x801112cc,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftSk_SpecialSStart_Anim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80111308,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftSk_SpecialAirSStart_Anim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801110e8, asm_ftSk_SpecialS_CheckInitChain, Returns::Int);
+    ctx.register_port(0x801112cc, asm_ftSk_SpecialSStart_Anim, Returns::Nothing);
+    ctx.register_port(0x80111308, asm_ftSk_SpecialAirSStart_Anim, Returns::Nothing);
     ctx.register_port(
         0x80111344,
         |ctx| {

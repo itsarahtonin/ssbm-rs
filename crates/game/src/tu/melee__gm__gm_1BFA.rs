@@ -936,14 +936,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x801bfcfc,
-        |ctx| {
-            let (a0,): (GameModeState<'_>,) = Args::take_all(ctx);
-            Ret::put(gm_ModeState_Prize_OnEnter(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801bfcfc, asm_gm_ModeState_Prize_OnEnter, Returns::Nothing);
     ctx.register_port(
         0x801bff7c,
         |ctx| {

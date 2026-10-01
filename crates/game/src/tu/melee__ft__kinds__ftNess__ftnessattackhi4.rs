@@ -3509,26 +3509,17 @@ pub fn register(ctx: &Ctx) {
     );
     ctx.register_port(
         0x80115114,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, Vec<'_>) = Args::take_all(ctx);
-            Ret::put(ftNs_AttackHi4_YoyoSetUnkPos(ctx, a0, a1), ctx);
-        },
+        asm_ftNs_AttackHi4_YoyoSetUnkPos,
         Returns::Nothing,
     );
     ctx.register_port(
         0x801151ec,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftNs_AttackHi4_YoyoSetHitPos(ctx, a0), ctx);
-        },
+        asm_ftNs_AttackHi4_YoyoSetHitPos,
         Returns::Nothing,
     );
     ctx.register_port(
         0x801152d0,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, Single) = Args::take_all(ctx);
-            Ret::put(ftNs_AttackHi4_YoyoSetHitPosUnk(ctx, a0, a1.0), ctx);
-        },
+        asm_ftNs_AttackHi4_YoyoSetHitPosUnk,
         Returns::Nothing,
     );
     ctx.register_port(
@@ -3565,10 +3556,7 @@ pub fn register(ctx: &Ctx) {
     );
     ctx.register_port(
         0x80115784,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftNs_AttackHi4_YoyoThink_IsRemove(ctx, a0), ctx);
-        },
+        asm_ftNs_AttackHi4_YoyoThink_IsRemove,
         Returns::Int,
     );
     ctx.register_port(
@@ -3581,10 +3569,7 @@ pub fn register(ctx: &Ctx) {
     );
     ctx.register_port(
         0x80115a08,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftNs_AttackHi4_YoyoCreateItem(ctx, a0), ctx);
-        },
+        asm_ftNs_AttackHi4_YoyoCreateItem,
         Returns::Nothing,
     );
     ctx.register_port(
@@ -3635,14 +3620,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80115c9c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftNs_AttackHi4_Anim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80115c9c, asm_ftNs_AttackHi4_Anim, Returns::Nothing);
     ctx.register_port(
         0x80115e74,
         |ctx| {
@@ -3707,14 +3685,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8011620c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftNs_AttackHi4Release_Anim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8011620c, asm_ftNs_AttackHi4Release_Anim, Returns::Nothing);
     ctx.register_port(
         0x801162b0,
         |ctx| {

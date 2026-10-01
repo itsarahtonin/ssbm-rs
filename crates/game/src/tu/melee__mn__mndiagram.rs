@@ -13547,14 +13547,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8023fed4,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(mnDiagram_InputProc(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8023fed4, asm_mnDiagram_InputProc, Returns::Nothing);
     ctx.register_port(
         0x80240b18,
         |ctx| {
@@ -13595,30 +13588,13 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80241730,
-        |ctx| {
-            let (a0, a1, a2): (HSD_GObj<'_>, i32, i32) = Args::take_all(ctx);
-            Ret::put(mnDiagram_RefreshGrid(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80241730, asm_mnDiagram_RefreshGrid, Returns::Nothing);
     ctx.register_port(
         0x802417d0,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(mnDiagram_UpdateScrollArrows(ctx, a0), ctx);
-        },
+        asm_mnDiagram_UpdateScrollArrows,
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80241ae8,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(mnDiagram_ExitAnimProc(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80241ae8, asm_mnDiagram_ExitAnimProc, Returns::Nothing);
     ctx.register_port(
         0x80241b4c,
         |ctx| {
@@ -13627,14 +13603,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80241bf8,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(mnDiagram_OnFrame(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80241bf8, asm_mnDiagram_OnFrame, Returns::Nothing);
     ctx.register_port(
         0x80241e78,
         |ctx| {
@@ -13643,14 +13612,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8024227c,
-        |ctx| {
-            let (a0, a1, a2, a3): (HSD_GObj<'_>, i32, i32, u8) = Args::take_all(ctx);
-            Ret::put(mnDiagram_DrawGridValues(ctx, a0, a1, a2, a3), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8024227c, asm_mnDiagram_DrawGridValues, Returns::Nothing);
     ctx.register_port(
         0x802427b4,
         |ctx| {
@@ -13690,20 +13652,6 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80243434,
-        |ctx| {
-            let (a0,): (u8,) = Args::take_all(ctx);
-            Ret::put(mnDiagram_CreateScreen(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x802437e8,
-        |ctx| {
-            let (a0, a1): (u8, u8) = Args::take_all(ctx);
-            Ret::put(mnDiagram_Init(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80243434, asm_mnDiagram_CreateScreen, Returns::Nothing);
+    ctx.register_port(0x802437e8, asm_mnDiagram_Init, Returns::Nothing);
 }

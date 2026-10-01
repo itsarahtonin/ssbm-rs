@@ -1968,14 +1968,7 @@ fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x802c4d10,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(it_802C4D10(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802c4d10, asm_it_802C4D10, Returns::Int);
     ctx.register_port(
         0x802c4f50,
         |ctx| {

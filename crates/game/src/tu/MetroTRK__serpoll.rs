@@ -348,13 +348,7 @@ pub fn TRKTerminateSerialHandler<'a>(ctx: &'a Ctx) -> i32 {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x803274dc,
-        |ctx| {
-            Ret::put(TRKTestForPacket(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803274dc, asm_TRKTestForPacket, Returns::Int);
     ctx.register_port(
         0x803275ac,
         |ctx| {

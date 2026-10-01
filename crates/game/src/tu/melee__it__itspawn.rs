@@ -1657,22 +1657,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8026c75c,
-        |ctx| {
-            let (a0,): (ItemPickTable<'_>,) = Args::take_all(ctx);
-            Ret::put(it_8026C75C(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8026c88c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(fn_8026C88C(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8026c75c, asm_it_8026C75C, Returns::Int);
+    ctx.register_port(0x8026c88c, asm_fn_8026C88C, Returns::Nothing);
     ctx.register_port(
         0x8026ca4c,
         |ctx| {
@@ -1682,14 +1668,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8026cb3c,
-        |ctx| {
-            let (a0,): (Vec<'_>,) = Args::take_all(ctx);
-            Ret::put(it_8026CB3C(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8026cb3c, asm_it_8026CB3C, Returns::Int);
     ctx.register_port(
         0x8026cb9c,
         |ctx| {

@@ -1510,10 +1510,7 @@ pub fn register(ctx: &Ctx) {
     );
     ctx.register_port(
         0x802b67e4,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(itSamusmissile_UnkMotion0_Phys(ctx, a0), ctx);
-        },
+        asm_itSamusmissile_UnkMotion0_Phys,
         Returns::Nothing,
     );
     ctx.register_port(

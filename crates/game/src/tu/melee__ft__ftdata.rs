@@ -1360,13 +1360,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800852b0,
-        |ctx| {
-            Ret::put(ft_800852B0(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800852b0, asm_ft_800852B0, Returns::Nothing);
     ctx.register_port(
         0x8008549c,
         |ctx| {

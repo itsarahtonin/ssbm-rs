@@ -988,14 +988,7 @@ fn inl_Item_ClearCmdVars_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x802b18b0,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(it_802B18B0(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x802b18b0, asm_it_802B18B0, Returns::Nothing);
     ctx.register_port(
         0x802b19ac,
         |ctx| {
@@ -1015,10 +1008,7 @@ pub fn register(ctx: &Ctx) {
     );
     ctx.register_port(
         0x802b1ad4,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(itSeakneedleheld_UnkMotion0_Anim(ctx, a0), ctx);
-        },
+        asm_itSeakneedleheld_UnkMotion0_Anim,
         Returns::Int,
     );
     ctx.register_port(

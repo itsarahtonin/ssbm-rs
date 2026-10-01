@@ -8799,14 +8799,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x801d881c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(grZebes_801D881C(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801d881c, asm_grZebes_801D881C, Returns::Nothing);
     ctx.register_port(
         0x801d90fc,
         |ctx| {
@@ -9096,14 +9089,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x801dbb60,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(grZebes_801DBB60(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x801dbb60, asm_grZebes_801DBB60, Returns::Int);
     ctx.register_port(
         0x801dc260,
         |ctx| {

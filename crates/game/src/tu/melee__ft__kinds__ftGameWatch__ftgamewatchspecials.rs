@@ -999,30 +999,9 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8014c6b4,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftGw_SpecialS_GetRandomInt(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8014c7a0,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftGw_SpecialS_Enter(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8014c828,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftGw_SpecialAirS_Enter(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8014c6b4, asm_ftGw_SpecialS_GetRandomInt, Returns::Int);
+    ctx.register_port(0x8014c7a0, asm_ftGw_SpecialS_Enter, Returns::Nothing);
+    ctx.register_port(0x8014c828, asm_ftGw_SpecialAirS_Enter, Returns::Nothing);
     ctx.register_port(
         0x8014c8bc,
         |ctx| {

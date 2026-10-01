@@ -1230,13 +1230,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8037f280,
-        |ctx| {
-            Ret::put(HSD_ShadowAlloc(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8037f280, asm_HSD_ShadowAlloc, Returns::Int);
     ctx.register_port(
         0x8037f380,
         |ctx| {

@@ -50964,14 +50964,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80304b94,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(Toy_80304B94(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80304b94, asm_Toy_80304B94, Returns::Int);
     ctx.register_port(
         0x80304cc8,
         |ctx| {
@@ -50980,13 +50973,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80304d30,
-        |ctx| {
-            Ret::put(_Toy_80304D30(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80304d30, asm__Toy_80304D30, Returns::Int);
     ctx.register_port(
         0x80305058,
         |ctx| {
@@ -51003,14 +50990,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8030562c,
-        |ctx| {
-            let (a0, a1): (i32, i32) = Args::take_all(ctx);
-            Ret::put(Toy_SetUnlockState(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8030562c, asm_Toy_SetUnlockState, Returns::Nothing);
     ctx.register_port(
         0x80305918,
         |ctx| {
@@ -51019,27 +50999,9 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80305b88,
-        |ctx| {
-            Ret::put(Toy_80305B88(ctx), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80305c44,
-        |ctx| {
-            Ret::put(Toy_80305C44(ctx), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80305d00,
-        |ctx| {
-            Ret::put(Toy_80305D00(ctx), ctx);
-        },
-        Returns::Float,
-    );
+    ctx.register_port(0x80305b88, asm_Toy_80305B88, Returns::Int);
+    ctx.register_port(0x80305c44, asm_Toy_80305C44, Returns::Int);
+    ctx.register_port(0x80305d00, asm_Toy_80305D00, Returns::Float);
     ctx.register_port(
         0x80305db0,
         |ctx| {
@@ -51061,14 +51023,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Float,
     );
-    ctx.register_port(
-        0x803060bc,
-        |ctx| {
-            let (a0, a1): (i32, i32) = Args::take_all(ctx);
-            Ret::put(Toy_803060BC(ctx, a0, a1), ctx);
-        },
-        Returns::Float,
-    );
+    ctx.register_port(0x803060bc, asm_Toy_803060BC, Returns::Float);
     ctx.register_port(
         0x803062bc,
         |ctx| {
@@ -51202,37 +51157,10 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80306d70,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(Toy_80306D70(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80306eec,
-        |ctx| {
-            let (a0, a1): (Ptr<'_, LightList<'_>>, Val<'_, i32>) = Args::take_all(ctx);
-            Ret::put(Toy_LoadLObjList(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80307018,
-        |ctx| {
-            Ret::put(_Toy_80307018(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8030715c,
-        |ctx| {
-            let (a0, a1): (Single, Single) = Args::take_all(ctx);
-            Ret::put(_Toy_8030715C(ctx, a0.0, a1.0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80306d70, asm_Toy_80306D70, Returns::Nothing);
+    ctx.register_port(0x80306eec, asm_Toy_LoadLObjList, Returns::Int);
+    ctx.register_port(0x80307018, asm__Toy_80307018, Returns::Nothing);
+    ctx.register_port(0x8030715c, asm__Toy_8030715C, Returns::Nothing);
     ctx.register_port(
         0x80307470,
         |ctx| {
@@ -51288,22 +51216,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8030813c,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(Toy_8030813C(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80308250,
-        |ctx| {
-            let (a0, a1, a2): (ToyListEntry<'_>, i16, i32) = Args::take_all(ctx);
-            Ret::put(Toy_80308250(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8030813c, asm_Toy_8030813C, Returns::Int);
+    ctx.register_port(0x80308250, asm_Toy_80308250, Returns::Nothing);
     ctx.register_port(
         0x803082f8,
         |ctx| {
@@ -51344,14 +51258,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x803087f4,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(Toy_803087F4(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803087f4, asm_Toy_803087F4, Returns::Int);
     ctx.register_port(
         0x80308dc8,
         |ctx| {
@@ -51376,30 +51283,9 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Float,
     );
-    ctx.register_port(
-        0x80309404,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(_Toy_80309404(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8030b530,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(_Toy_8030B530(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8030e110,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(_Toy_8030E110(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80309404, asm__Toy_80309404, Returns::Nothing);
+    ctx.register_port(0x8030b530, asm__Toy_8030B530, Returns::Nothing);
+    ctx.register_port(0x8030e110, asm__Toy_8030E110, Returns::Nothing);
     ctx.register_port(
         0x8030fa50,
         |ctx| {
@@ -51407,14 +51293,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8030fe48,
-        |ctx| {
-            let (a0, a1): (TyDisplayData<'_>, i32) = Args::take_all(ctx);
-            Ret::put(_Toy_8030FE48(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8030fe48, asm__Toy_8030FE48, Returns::Nothing);
     ctx.register_port(
         0x803102c4,
         |ctx| {
@@ -51430,13 +51309,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80310324,
-        |ctx| {
-            Ret::put(Toy_80310324(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80310324, asm_Toy_80310324, Returns::Nothing);
     ctx.register_port(
         0x80310660,
         |ctx| {
@@ -51453,14 +51326,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80310b48,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(_Toy_80310B48(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80310b48, asm__Toy_80310B48, Returns::Nothing);
     ctx.register_port(
         0x803114e8,
         |ctx| {
@@ -51489,14 +51355,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80311ab0,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(Toy_Scene_OnEnter(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80311ab0, asm_Toy_Scene_OnEnter, Returns::Nothing);
     ctx.register_port(
         0x80311f5c,
         |ctx| {

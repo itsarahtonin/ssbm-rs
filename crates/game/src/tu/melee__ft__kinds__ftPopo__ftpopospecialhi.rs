@@ -3210,22 +3210,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80120fe0,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftPp_SpecialS_80120FE0(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x801210c8,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftPp_SpecialS_801210C8(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80120fe0, asm_ftPp_SpecialS_80120FE0, Returns::Int);
+    ctx.register_port(0x801210c8, asm_ftPp_SpecialS_801210C8, Returns::Nothing);
     ctx.register_port(
         0x8012114c,
         |ctx| {
@@ -3258,20 +3244,10 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801212c4,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftPp_SpecialHiStart_0_Anim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801212c4, asm_ftPp_SpecialHiStart_0_Anim, Returns::Nothing);
     ctx.register_port(
         0x801213cc,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftPp_SpecialAirHiStart_0_Anim(ctx, a0), ctx);
-        },
+        asm_ftPp_SpecialAirHiStart_0_Anim,
         Returns::Nothing,
     );
     ctx.register_port(
@@ -3354,20 +3330,10 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80121944,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftPp_SpecialHiThrow_0_Anim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80121944, asm_ftPp_SpecialHiThrow_0_Anim, Returns::Nothing);
     ctx.register_port(
         0x801219f4,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftPp_SpecialAirHiThrow_0_Anim(ctx, a0), ctx);
-        },
+        asm_ftPp_SpecialAirHiThrow_0_Anim,
         Returns::Nothing,
     );
     ctx.register_port(
@@ -3634,20 +3600,10 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801223b8,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftPp_SpecialHiThrow2_Anim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801223b8, asm_ftPp_SpecialHiThrow2_Anim, Returns::Nothing);
     ctx.register_port(
         0x80122410,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftPp_SpecialAirHiThrow2_Anim(ctx, a0), ctx);
-        },
+        asm_ftPp_SpecialAirHiThrow2_Anim,
         Returns::Nothing,
     );
     ctx.register_port(

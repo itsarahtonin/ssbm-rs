@@ -567,22 +567,8 @@ fn asm_ftCo_StopWall_Coll(ctx: &Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x8009eda4,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_8009EDA4(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8009ee30,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_8009EE30(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8009eda4, asm_ftCo_8009EDA4, Returns::Int);
+    ctx.register_port(0x8009ee30, asm_ftCo_8009EE30, Returns::Nothing);
     ctx.register_port(
         0x8009ef04,
         |ctx| {
@@ -607,12 +593,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8009ef48,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_StopWall_Coll(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8009ef48, asm_ftCo_StopWall_Coll, Returns::Nothing);
 }

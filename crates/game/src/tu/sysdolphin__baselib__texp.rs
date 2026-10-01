@@ -3989,22 +3989,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x803830fc,
-        |ctx| {
-            let (a0,): (Ptr<'_, HSD_TExp<'_>>,) = Args::take_all(ctx);
-            Ret::put(HSD_TExpTev(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x803831bc,
-        |ctx| {
-            let (a0, a1, a2, a3): (Addr<'_>, i32, i32, Ptr<'_, HSD_TExp<'_>>) = Args::take_all(ctx);
-            Ret::put(HSD_TExpCnst(ctx, a0, a1, a2, a3), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803830fc, asm_HSD_TExpTev, Returns::Int);
+    ctx.register_port(0x803831bc, asm_HSD_TExpCnst, Returns::Int);
     ctx.register_port(
         0x803832d0,
         |ctx| {
@@ -4156,18 +4142,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x803854b4,
-        |ctx| {
-            let (a0, a1, a2): (
-                HSD_TExp<'_>,
-                Ptr<'_, _HSD_TExpTevDesc<'_>>,
-                Ptr<'_, HSD_TExp<'_>>,
-            ) = Args::take_all(ctx);
-            Ret::put(HSD_TExpCompile(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803854b4, asm_HSD_TExpCompile, Returns::Int);
     ctx.register_port(
         0x80385758,
         |ctx| {

@@ -8023,14 +8023,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801f2ab0,
-        |ctx| {
-            let (a0, a1): (i32, HSD_JObj<'_>) = Args::take_all(ctx);
-            Ret::put(grMuteCity_801F2AB0(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x801f2ab0, asm_grMuteCity_801F2AB0, Returns::Int);
     ctx.register_port(
         0x801f2b58,
         |ctx| {

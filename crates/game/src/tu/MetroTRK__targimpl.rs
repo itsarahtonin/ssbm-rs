@@ -3079,21 +3079,8 @@ pub fn asm_TRKExceptionHandler(ctx: &Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x8032904c,
-        |ctx| {
-            Ret::put(__TRK_get_MSR(ctx), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80329054,
-        |ctx| {
-            let (a0,): (u32,) = Args::take_all(ctx);
-            Ret::put(__TRK_set_MSR(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8032904c, asm___TRK_get_MSR, Returns::Int);
+    ctx.register_port(0x80329054, asm___TRK_set_MSR, Returns::Nothing);
     ctx.register_port(
         0x8032905c,
         |ctx| {
@@ -3102,14 +3089,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80329194,
-        |ctx| {
-            let (a0, a1, a2, a3, a4): (Addr<'_>, Addr<'_>, i32, u32, u32) = Args::take_all(ctx);
-            Ret::put(TRK_ppc_memcpy(ctx, a0, a1, a2, a3, a4), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80329194, asm_TRK_ppc_memcpy, Returns::Nothing);
     ctx.register_port(
         0x803291d0,
         |ctx| {
@@ -3144,15 +3124,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x803295c4,
-        |ctx| {
-            let (a0, a1, a2, a3, a4): (u32, u32, MessageBuffer<'_>, Val<'_, u32>, i32) =
-                Args::take_all(ctx);
-            Ret::put(TRKTargetAccessExtended1(ctx, a0, a1, a2, a3, a4), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803295c4, asm_TRKTargetAccessExtended1, Returns::Int);
     ctx.register_port(
         0x8032973c,
         |ctx| {
@@ -3186,14 +3158,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x803299ec,
-        |ctx| {
-            let (a0,): (u16,) = Args::take_all(ctx);
-            Ret::put(TRKInterruptHandler(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x803299ec, asm_TRKInterruptHandler, Returns::Nothing);
     ctx.register_port(
         0x80329c1c,
         |ctx| {
@@ -3201,44 +3166,15 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80329ccc,
-        |ctx| {
-            Ret::put(TRKSwapAndGo(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80329ccc, asm_TRKSwapAndGo, Returns::Nothing);
     ctx.register_port(
         0x80329d90,
-        |ctx| {
-            Ret::put(TRKInterruptHandlerEnableInterrupts(ctx), ctx);
-        },
+        asm_TRKInterruptHandlerEnableInterrupts,
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80329de4,
-        |ctx| {
-            let (a0,): (NubEvent<'_>,) = Args::take_all(ctx);
-            Ret::put(TRKTargetInterrupt(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80329e48,
-        |ctx| {
-            let (a0,): (MessageBuffer<'_>,) = Args::take_all(ctx);
-            Ret::put(TRKTargetAddStopInfo(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80329ed8,
-        |ctx| {
-            let (a0,): (MessageBuffer<'_>,) = Args::take_all(ctx);
-            Ret::put(TRKTargetAddExceptionInfo(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80329de4, asm_TRKTargetInterrupt, Returns::Int);
+    ctx.register_port(0x80329e48, asm_TRKTargetAddStopInfo, Returns::Int);
+    ctx.register_port(0x80329ed8, asm_TRKTargetAddExceptionInfo, Returns::Nothing);
     ctx.register_port(
         0x80329f60,
         |ctx| {
@@ -3291,13 +3227,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8032a194,
-        |ctx| {
-            Ret::put(TRKTargetSupportRequest(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8032a194, asm_TRKTargetSupportRequest, Returns::Int);
     ctx.register_port(
         0x8032a284,
         |ctx| {

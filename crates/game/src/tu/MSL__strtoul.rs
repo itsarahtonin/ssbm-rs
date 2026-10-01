@@ -1221,28 +1221,6 @@ fn asm_strtoul(ctx: &Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x80325bd0,
-        |ctx| {
-            let (a0, a1, a2, a3, a4, a5, a6): (
-                i32,
-                i32,
-                FnPtr<'_>,
-                Addr<'_>,
-                Val<'_, i32>,
-                Val<'_, i32>,
-                Val<'_, i32>,
-            ) = Args::take_all(ctx);
-            Ret::put(__strtoul(ctx, a0, a1, a2, a3, a4, a5, a6), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80325b24,
-        |ctx| {
-            let (a0, a1, a2): (Val<'_, i8>, Ptr<'_, Val<'_, i8>>, i32) = Args::take_all(ctx);
-            Ret::put(strtoul(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80325bd0, asm___strtoul, Returns::Int);
+    ctx.register_port(0x80325b24, asm_strtoul, Returns::Int);
 }

@@ -3348,30 +3348,9 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8005c904,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
-            Ret::put(efLib_render_callback(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8005c9a4,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(efLib_particles_proc_main(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8005c9d0,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(efLib_particles_proc_aux(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8005c904, asm_efLib_render_callback, Returns::Nothing);
+    ctx.register_port(0x8005c9a4, asm_efLib_particles_proc_main, Returns::Nothing);
+    ctx.register_port(0x8005c9d0, asm_efLib_particles_proc_aux, Returns::Nothing);
     ctx.register_port(
         0x8005c9fc,
         |ctx| {

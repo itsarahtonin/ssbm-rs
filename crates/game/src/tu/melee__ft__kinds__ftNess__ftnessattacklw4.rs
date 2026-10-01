@@ -608,14 +608,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80116638,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftNs_AttackLw4_Anim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80116638, asm_ftNs_AttackLw4_Anim, Returns::Nothing);
     ctx.register_port(
         0x801166d4,
         |ctx| {
@@ -680,14 +673,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80116958,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftNs_AttackLw4Release_Anim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80116958, asm_ftNs_AttackLw4Release_Anim, Returns::Nothing);
     ctx.register_port(
         0x801169bc,
         |ctx| {

@@ -30230,21 +30230,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802640a0,
-        |ctx| {
-            Ret::put(mnCharSel_802640A0(ctx), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8026688c,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(mnCharSel_Scene_OnEnter(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x802640a0, asm_mnCharSel_802640A0, Returns::Int);
+    ctx.register_port(0x8026688c, asm_mnCharSel_Scene_OnEnter, Returns::Nothing);
     ctx.register_port(
         0x802669f4,
         |ctx| {

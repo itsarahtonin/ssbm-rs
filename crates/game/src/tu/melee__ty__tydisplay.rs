@@ -18774,38 +18774,10 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80318b1c,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(_tyDisplay_80318B1C(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80318cb4,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(_tyDisplay_80318CB4(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80319540,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(_tyDisplay_80319540(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80319994,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(_tyDisplay_80319994(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80318b1c, asm__tyDisplay_80318B1C, Returns::Nothing);
+    ctx.register_port(0x80318cb4, asm__tyDisplay_80318CB4, Returns::Nothing);
+    ctx.register_port(0x80319540, asm__tyDisplay_80319540, Returns::Nothing);
+    ctx.register_port(0x80319994, asm__tyDisplay_80319994, Returns::Nothing);
     ctx.register_port(
         0x80319ef0,
         |ctx| {
@@ -18813,22 +18785,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8031a4ec,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(_tyDisplay_8031A4EC(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8031a94c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(_tyDisplay_8031A94C(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8031a4ec, asm__tyDisplay_8031A4EC, Returns::Nothing);
+    ctx.register_port(0x8031a94c, asm__tyDisplay_8031A94C, Returns::Nothing);
     ctx.register_port(
         0x8031b1fc,
         |ctx| {
@@ -18836,21 +18794,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8031b328,
-        |ctx| {
-            Ret::put(_tyDisplay_8031B328(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8031b460,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(tyDisplay_Scene_OnEnter(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8031b328, asm__tyDisplay_8031B328, Returns::Nothing);
+    ctx.register_port(0x8031b460, asm_tyDisplay_Scene_OnEnter, Returns::Nothing);
     ctx.register_port(
         0x8031b850,
         |ctx| {
@@ -18865,22 +18810,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8031b9dc,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(tyDisplay_8031B9DC(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8031ba78,
-        |ctx| {
-            let (a0, a1, a2): (i32, i32, Single) = Args::take_all(ctx);
-            Ret::put(_tyDisplay_8031BA78(ctx, a0, a1, a2.0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8031b9dc, asm_tyDisplay_8031B9DC, Returns::Int);
+    ctx.register_port(0x8031ba78, asm__tyDisplay_8031BA78, Returns::Nothing);
     ctx.register_port(
         0x8031bb34,
         |ctx| {
@@ -18905,22 +18836,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8031bc54,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(_tyDisplay_8031BC54(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8031bf34,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(_tyDisplay_8031BF34(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8031bc54, asm__tyDisplay_8031BC54, Returns::Int);
+    ctx.register_port(0x8031bf34, asm__tyDisplay_8031BF34, Returns::Nothing);
     ctx.register_port(
         0x8031c1d0,
         |ctx| {
@@ -18942,30 +18859,9 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8031c354,
-        |ctx| {
-            let (a0, a1, a2, a3): (i32, Val<'_, i32>, i32, i32) = Args::take_all(ctx);
-            Ret::put(tyDisplay_8031C354(ctx, a0, a1, a2, a3), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8031c454,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(tyDisplay_8031C454(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8031c5e4,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(tyDisplay_8031C5E4(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8031c354, asm_tyDisplay_8031C354, Returns::Int);
+    ctx.register_port(0x8031c454, asm_tyDisplay_8031C454, Returns::Int);
+    ctx.register_port(0x8031c5e4, asm_tyDisplay_8031C5E4, Returns::Int);
     ctx.register_port(
         0x8031c8b8,
         |ctx| {

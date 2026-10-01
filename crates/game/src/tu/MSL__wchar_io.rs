@@ -244,12 +244,5 @@ fn asm_fwide(ctx: &Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x80326098,
-        |ctx| {
-            let (a0, a1): (_IO_FILE<'_>, i32) = Args::take_all(ctx);
-            Ret::put(fwide(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80326098, asm_fwide, Returns::Int);
 }

@@ -2393,15 +2393,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8033f108,
-        |ctx| {
-            let (a0, a1, a2, a3, a4, a5): (_GXTexRegion<'_>, u8, u32, i32, u32, i32) =
-                Args::take_all(ctx);
-            Ret::put(GXInitTexCacheRegion(ctx, a0, a1, a2, a3, a4, a5), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8033f108, asm_GXInitTexCacheRegion, Returns::Nothing);
     ctx.register_port(
         0x8033f228,
         |ctx| {
@@ -2441,13 +2433,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8033f3ac,
-        |ctx| {
-            Ret::put(__GXSetSUTexRegs(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8033f3ac, asm___GXSetSUTexRegs, Returns::Nothing);
     ctx.register_port(
         0x8033f518,
         |ctx| {

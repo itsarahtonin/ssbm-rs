@@ -667,18 +667,6 @@ fn asm_TRKRestoreExtended1Block(ctx: &Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x8032a868,
-        |ctx| {
-            Ret::put(TRKSaveExtended1Block(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8032aa20,
-        |ctx| {
-            Ret::put(TRKRestoreExtended1Block(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8032a868, asm_TRKSaveExtended1Block, Returns::Nothing);
+    ctx.register_port(0x8032aa20, asm_TRKRestoreExtended1Block, Returns::Nothing);
 }

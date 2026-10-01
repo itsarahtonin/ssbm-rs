@@ -1253,36 +1253,8 @@ fn asm___copy_longs_rev_unaligned(ctx: &Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x80323c34,
-        |ctx| {
-            let (a0, a1, a2): (Addr<'_>, Addr<'_>, u32) = Args::take_all(ctx);
-            Ret::put(__copy_longs_aligned(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80323b88,
-        |ctx| {
-            let (a0, a1, a2): (Addr<'_>, Addr<'_>, u32) = Args::take_all(ctx);
-            Ret::put(__copy_longs_rev_aligned(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80323ac4,
-        |ctx| {
-            let (a0, a1, a2): (Addr<'_>, Addr<'_>, u32) = Args::take_all(ctx);
-            Ret::put(__copy_longs_unaligned(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80323a14,
-        |ctx| {
-            let (a0, a1, a2): (Addr<'_>, Addr<'_>, u32) = Args::take_all(ctx);
-            Ret::put(__copy_longs_rev_unaligned(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80323c34, asm___copy_longs_aligned, Returns::Nothing);
+    ctx.register_port(0x80323b88, asm___copy_longs_rev_aligned, Returns::Nothing);
+    ctx.register_port(0x80323ac4, asm___copy_longs_unaligned, Returns::Nothing);
+    ctx.register_port(0x80323a14, asm___copy_longs_rev_unaligned, Returns::Nothing);
 }

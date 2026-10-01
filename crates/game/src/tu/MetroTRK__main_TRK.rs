@@ -145,11 +145,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int8,
     );
-    ctx.register_port(
-        0x8032abe0,
-        |ctx| {
-            Ret::put(TRK_main(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8032abe0, asm_TRK_main, Returns::Int);
 }

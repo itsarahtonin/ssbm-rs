@@ -895,22 +895,8 @@ fn inl_grDatFiles_801C6228_unfused<'a>(ctx: &'a Ctx, arg0: UnkStageDat<'a>) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x801c5fc0,
-        |ctx| {
-            let (a0, a1, a2): (HSD_Archive<'_>, Addr<'_>, u32) = Args::take_all(ctx);
-            Ret::put(grDatFiles_801C5FC0(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x801c6038,
-        |ctx| {
-            let (a0, a1, a2): (Addr<'_>, i32, i32) = Args::take_all(ctx);
-            Ret::put(grDatFiles_801C6038(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801c5fc0, asm_grDatFiles_801C5FC0, Returns::Nothing);
+    ctx.register_port(0x801c6038, asm_grDatFiles_801C6038, Returns::Nothing);
     ctx.register_port(
         0x801c6228,
         |ctx| {

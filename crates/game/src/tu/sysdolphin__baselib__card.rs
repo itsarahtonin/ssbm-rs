@@ -34823,14 +34823,7 @@ fn inl_rollbackCardCommands_unfused<'a>(ctx: &'a Ctx, snap: i32) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x803a949c,
-        |ctx| {
-            let (a0, a1): (i32, i32) = Args::take_all(ctx);
-            Ret::put(hsd_803A949C(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x803a949c, asm_hsd_803A949C, Returns::Nothing);
     ctx.register_port(
         0x803aa790,
         |ctx| {
@@ -34838,13 +34831,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x803aaa48,
-        |ctx| {
-            Ret::put(hsd_803AAA48(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x803aaa48, asm_hsd_803AAA48, Returns::Nothing);
     ctx.register_port(
         0x803ac168,
         |ctx| {
@@ -34963,23 +34950,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x803acc0c,
-        |ctx| {
-            let (a0, a1, a2, a3, a4, a5): (CardState<'_>, i32, i32, i32, Addr<'_>, i32) =
-                Args::take_all(ctx);
-            Ret::put(fn_803ACC0C(ctx, a0, a1, a2, a3, a4, a5), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x803acd58,
-        |ctx| {
-            let (a0, a1, a2): (CardState<'_>, Addr<'_>, Addr<'_>) = Args::take_all(ctx);
-            Ret::put(fn_803ACD58(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803acc0c, asm_fn_803ACC0C, Returns::Int);
+    ctx.register_port(0x803acd58, asm_fn_803ACD58, Returns::Int);
     ctx.register_port(
         0x803acf30,
         |ctx| {
@@ -34989,15 +34961,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x803acfc0,
-        |ctx| {
-            let (a0, a1, a2, a3, a4, a5, a6): (CardState<'_>, i32, i32, i32, Addr<'_>, i32, i32) =
-                Args::take_all(ctx);
-            Ret::put(fn_803ACFC0(ctx, a0, a1, a2, a3, a4, a5, a6), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803acfc0, asm_fn_803ACFC0, Returns::Int);
     ctx.register_port(
         0x803ad16c,
         |ctx| {
@@ -35014,51 +34978,11 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x803adf90,
-        |ctx| {
-            let (a0, a1, a2, a3, a4): (CardState<'_>, i32, Val<'_, u8>, i32, FnPtr<'_>) =
-                Args::take_all(ctx);
-            Ret::put(fn_803ADF90(ctx, a0, a1, a2, a3, a4), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x803ae7f8,
-        |ctx| {
-            let (a0, a1, a2, a3, a4): (CardState<'_>, i32, Val<'_, u8>, i32, FnPtr<'_>) =
-                Args::take_all(ctx);
-            Ret::put(fn_803AE7F8(ctx, a0, a1, a2, a3, a4), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x803af3f0,
-        |ctx| {
-            let (a0, a1, a2, a3, a4): (CardState<'_>, i32, Val<'_, u8>, i32, FnPtr<'_>) =
-                Args::take_all(ctx);
-            Ret::put(fn_803AF3F0(ctx, a0, a1, a2, a3, a4), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x803b0120,
-        |ctx| {
-            let (a0, a1, a2, a3, a4): (CardState<'_>, i32, Val<'_, u8>, i32, FnPtr<'_>) =
-                Args::take_all(ctx);
-            Ret::put(fn_803B0120(ctx, a0, a1, a2, a3, a4), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x803b0e9c,
-        |ctx| {
-            let (a0, a1, a2, a3, a4): (CardState<'_>, Addr<'_>, Val<'_, u8>, i32, i32) =
-                Args::take_all(ctx);
-            Ret::put(fn_803B0E9C(ctx, a0, a1, a2, a3, a4), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803adf90, asm_fn_803ADF90, Returns::Int);
+    ctx.register_port(0x803ae7f8, asm_fn_803AE7F8, Returns::Int);
+    ctx.register_port(0x803af3f0, asm_fn_803AF3F0, Returns::Int);
+    ctx.register_port(0x803b0120, asm_fn_803B0120, Returns::Int);
+    ctx.register_port(0x803b0e9c, asm_fn_803B0E9C, Returns::Int);
     ctx.register_port(
         0x803b1338,
         |ctx| {
@@ -35100,14 +35024,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x803b2550,
-        |ctx| {
-            let (a0, a1, a2): (CardState<'_>, Val<'_, i8>, FnPtr<'_>) = Args::take_all(ctx);
-            Ret::put(hsd_803B2550(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803b2550, asm_hsd_803B2550, Returns::Int);
     ctx.register_port(
         0x803b2674,
         |ctx| {

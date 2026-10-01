@@ -1609,14 +1609,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8034ddac,
-        |ctx| {
-            let (a0,): (u32,) = Args::take_all(ctx);
-            Ret::put(PADSetSamplingRate(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8034ddac, asm_PADSetSamplingRate, Returns::Nothing);
     ctx.register_port(
         0x8034de98,
         |ctx| {

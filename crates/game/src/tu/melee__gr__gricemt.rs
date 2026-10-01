@@ -7096,13 +7096,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801f686c,
-        |ctx| {
-            Ret::put(grIceMt_801F686C(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801f686c, asm_grIceMt_801F686C, Returns::Nothing);
     ctx.register_port(
         0x801f7080,
         |ctx| {
@@ -7228,14 +7222,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x801f7a2c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(stageGObj10_GObjProc(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801f7a2c, asm_stageGObj10_GObjProc, Returns::Nothing);
     ctx.register_port(
         0x801f7d90,
         |ctx| {
@@ -7578,14 +7565,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801f96e0,
-        |ctx| {
-            let (a0, a1): (grIceMt_GObj9_GObj10_UnderUpperIdPair<'_>, Single) = Args::take_all(ctx);
-            Ret::put(grIceMt_801F96E0(ctx, a0, a1.0), ctx);
-        },
-        Returns::Float,
-    );
+    ctx.register_port(0x801f96e0, asm_grIceMt_801F96E0, Returns::Float);
     ctx.register_port(
         0x801f98a8,
         |ctx| {

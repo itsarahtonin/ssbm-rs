@@ -7062,14 +7062,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8006aba0,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(Fighter_procCpu(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8006aba0, asm_Fighter_procCpu, Returns::Nothing);
     ctx.register_port(
         0x8006abec,
         |ctx| {
@@ -7142,14 +7135,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8006cb94,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(Fighter_procAttackColl(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8006cb94, asm_Fighter_procAttackColl, Returns::Nothing);
     ctx.register_port(
         0x8006cc30,
         |ctx| {
@@ -7214,22 +7200,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8006d1ec,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(Fighter_procCollResolve(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8006d9ac,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(Fighter_procDynamics(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8006d1ec, asm_Fighter_procCollResolve, Returns::Nothing);
+    ctx.register_port(0x8006d9ac, asm_Fighter_procDynamics, Returns::Nothing);
     ctx.register_port(
         0x8006d9ec,
         |ctx| {

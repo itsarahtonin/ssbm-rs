@@ -1838,14 +1838,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8000cdc0,
-        |ctx| {
-            let (a0,): (HSD_LObj<'_>,) = Args::take_all(ctx);
-            Ret::put(lb_8000CDC0(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8000cdc0, asm_lb_8000CDC0, Returns::Int);
     ctx.register_port(
         0x8000ce30,
         |ctx| {

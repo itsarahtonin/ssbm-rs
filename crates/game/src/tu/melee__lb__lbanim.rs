@@ -967,31 +967,9 @@ fn inl_lbAnim_JObjSortAnim_unfused<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x8001e560,
-        |ctx| {
-            let (a0, a1): (FigaTrack<'_>, i8) = Args::take_all(ctx);
-            Ret::put(lbAnim_InitFrames(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8001e60c,
-        |ctx| {
-            let (a0, a1): (FigaTrack<'_>, i8) = Args::take_all(ctx);
-            Ret::put(fn_8001E60C(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8001e6d8,
-        |ctx| {
-            let (a0, a1, a2, a3): (HSD_JObj<'_>, FigaTree<'_>, FigaTrack<'_>, i8) =
-                Args::take_all(ctx);
-            Ret::put(lbAnim_8001E6D8(ctx, a0, a1, a2, a3), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8001e560, asm_lbAnim_InitFrames, Returns::Int);
+    ctx.register_port(0x8001e60c, asm_fn_8001E60C, Returns::Int);
+    ctx.register_port(0x8001e6d8, asm_lbAnim_8001E6D8, Returns::Nothing);
     ctx.register_port(
         0x8001e7e8,
         |ctx| {

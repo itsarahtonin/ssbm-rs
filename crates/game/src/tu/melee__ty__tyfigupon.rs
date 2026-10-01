@@ -5904,22 +5904,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80316420,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(_tyFigupon_80316420(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x803168dc,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(_tyFigupon_803168DC(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80316420, asm__tyFigupon_80316420, Returns::Nothing);
+    ctx.register_port(0x803168dc, asm__tyFigupon_803168DC, Returns::Nothing);
     ctx.register_port(
         0x80316bf8,
         |ctx| {
@@ -5950,14 +5936,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80317d80,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(tyFigupon_Scene_OnEnter(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80317d80, asm_tyFigupon_Scene_OnEnter, Returns::Nothing);
     ctx.register_port(
         0x803181bc,
         |ctx| {

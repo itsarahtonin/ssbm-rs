@@ -3579,14 +3579,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802d9ef4,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(itLikelike_UnkMotion0_Coll(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802d9ef4, asm_itLikelike_UnkMotion0_Coll, Returns::Int);
     ctx.register_port(
         0x802d9f9c,
         |ctx| {
@@ -3603,14 +3596,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802da05c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(itLikelike_UnkMotion7_Coll(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802da05c, asm_itLikelike_UnkMotion7_Coll, Returns::Int);
     ctx.register_port(
         0x802da104,
         |ctx| {
@@ -3667,14 +3653,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802da730,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(itLikelike_UnkMotion2_Coll(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802da730, asm_itLikelike_UnkMotion2_Coll, Returns::Int);
     ctx.register_port(
         0x802da8d8,
         |ctx| {
@@ -3819,14 +3798,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802dafcc,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(itLikelike_UnkMotion16_Coll(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802dafcc, asm_itLikelike_UnkMotion16_Coll, Returns::Int);
     ctx.register_port(
         0x802db074,
         |ctx| {
@@ -3851,14 +3823,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802db2b0,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(itLikelike_UnkMotion8_Coll(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802db2b0, asm_itLikelike_UnkMotion8_Coll, Returns::Int);
     ctx.register_port(
         0x802db358,
         |ctx| {
@@ -4155,14 +4120,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802dc268,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(itLikelike_UnkMotion6_Coll(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802dc268, asm_itLikelike_UnkMotion6_Coll, Returns::Int);
     ctx.register_port(
         0x802dc310,
         |ctx| {

@@ -3333,14 +3333,7 @@ fn inl_cntlzd_unfused<'a>(ctx: &'a Ctx, bit: u64) -> i32 {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x8034e964,
-        |ctx| {
-            let (a0, a1): (i16, OSContext<'_>) = Args::take_all(ctx);
-            Ret::put(__VIRetraceHandler(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8034e964, asm___VIRetraceHandler, Returns::Nothing);
     ctx.register_port(
         0x8034eb8c,
         |ctx| {
@@ -3365,14 +3358,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8034eca4,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(__VIInit(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8034eca4, asm___VIInit, Returns::Nothing);
     ctx.register_port(
         0x8034ee9c,
         |ctx| {
@@ -3451,34 +3437,10 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80350184,
-        |ctx| {
-            Ret::put(getCurrentFieldEvenOdd(ctx), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x803501ec,
-        |ctx| {
-            Ret::put(VIGetNextField(ctx), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80350294,
-        |ctx| {
-            Ret::put(VIGetCurrentLine(ctx), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8035032c,
-        |ctx| {
-            Ret::put(VIGetTvFormat(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80350184, asm_getCurrentFieldEvenOdd, Returns::Int);
+    ctx.register_port(0x803501ec, asm_VIGetNextField, Returns::Int);
+    ctx.register_port(0x80350294, asm_VIGetCurrentLine, Returns::Int);
+    ctx.register_port(0x8035032c, asm_VIGetTvFormat, Returns::Int);
     ctx.register_port(
         0x803503a8,
         |ctx| {

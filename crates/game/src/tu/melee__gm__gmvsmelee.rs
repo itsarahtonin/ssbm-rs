@@ -1282,14 +1282,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x801a5360,
-        |ctx| {
-            let (a0,): (MatchEnd<'_>,) = Args::take_all(ctx);
-            Ret::put(findSmallestLoser(ctx, a0), ctx);
-        },
-        Returns::Int8,
-    );
+    ctx.register_port(0x801a5360, asm_findSmallestLoser, Returns::Int8);
     ctx.register_port(
         0x801a5598,
         |ctx| {

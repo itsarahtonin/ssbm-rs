@@ -729,14 +729,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800dfddc,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftWalkCommon_800DFDDC(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800dfddc, asm_ftWalkCommon_800DFDDC, Returns::Nothing);
     ctx.register_port(
         0x800dfec8,
         |ctx| {

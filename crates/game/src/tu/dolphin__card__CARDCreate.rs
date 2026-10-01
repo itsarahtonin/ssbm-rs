@@ -834,13 +834,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80357838,
-        |ctx| {
-            let (a0, a1, a2, a3, a4): (i32, Val<'_, i8>, u32, CARDFileInfo<'_>, FnPtr<'_>) =
-                Args::take_all(ctx);
-            Ret::put(CARDCreateAsync(ctx, a0, a1, a2, a3, a4), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80357838, asm_CARDCreateAsync, Returns::Int);
 }

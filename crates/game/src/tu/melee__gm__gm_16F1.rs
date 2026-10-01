@@ -3867,14 +3867,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80171ba4,
-        |ctx| {
-            let (a0,): (Addr<'_>,) = Args::take_all(ctx);
-            Ret::put(fn_80171BA4(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80171ba4, asm_fn_80171BA4, Returns::Int);
     ctx.register_port(
         0x80171dc4,
         |ctx| {

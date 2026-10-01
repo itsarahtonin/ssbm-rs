@@ -534,14 +534,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80142468,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftLg_Init_OnItemInvisible(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80142468, asm_ftLg_Init_OnItemInvisible, Returns::Nothing);
     ctx.register_port(
         0x801424b0,
         |ctx| {
@@ -550,14 +543,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801424f8,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
-            Ret::put(ftLg_Init_OnItemDrop(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801424f8, asm_ftLg_Init_OnItemDrop, Returns::Nothing);
     ctx.register_port(
         0x8014254c,
         |ctx| {
@@ -590,12 +576,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80142640,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(ftLg_Init_GetMotionFileString(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80142640, asm_ftLg_Init_GetMotionFileString, Returns::Int);
 }

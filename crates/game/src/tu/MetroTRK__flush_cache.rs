@@ -107,12 +107,5 @@ fn asm_TRK_flush_cache(ctx: &Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x80328f50,
-        |ctx| {
-            let (a0, a1): (u32, u32) = Args::take_all(ctx);
-            Ret::put(TRK_flush_cache(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80328f50, asm_TRK_flush_cache, Returns::Nothing);
 }

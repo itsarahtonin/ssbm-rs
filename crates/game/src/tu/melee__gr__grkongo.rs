@@ -7151,14 +7151,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x801d557c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(grKongo_801D557C(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801d557c, asm_grKongo_801D557C, Returns::Nothing);
     ctx.register_port(
         0x801d55d4,
         |ctx| {
@@ -7359,14 +7352,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801d651c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(grKongo_801D651C(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801d651c, asm_grKongo_801D651C, Returns::Nothing);
     ctx.register_port(
         0x801d6660,
         |ctx| {
@@ -7375,14 +7361,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x801d6668,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(grKongo_801D6668(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801d6668, asm_grKongo_801D6668, Returns::Nothing);
     ctx.register_port(
         0x801d69ac,
         |ctx| {
@@ -7431,14 +7410,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801d7bbc,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(grKongo_801D7BBC(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801d7bbc, asm_grKongo_801D7BBC, Returns::Nothing);
     ctx.register_port(
         0x801d7e60,
         |ctx| {

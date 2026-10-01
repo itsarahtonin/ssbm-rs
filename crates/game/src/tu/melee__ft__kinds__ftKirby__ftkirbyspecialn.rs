@@ -3603,14 +3603,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800f7e78,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftKb_EatWalk_Anim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800f7e78, asm_ftKb_EatWalk_Anim, Returns::Nothing);
     ctx.register_port(
         0x800f7e98,
         |ctx| {

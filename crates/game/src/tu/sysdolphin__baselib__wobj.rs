@@ -784,14 +784,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8037d14c,
-        |ctx| {
-            let (a0, a1, a2): (Addr<'_>, i32, HSD_ObjData<'_>) = Args::take_all(ctx);
-            Ret::put(WObjUpdateFunc(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8037d14c, asm_WObjUpdateFunc, Returns::Nothing);
     ctx.register_port(
         0x8037d29c,
         |ctx| {

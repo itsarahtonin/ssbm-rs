@@ -5884,14 +5884,7 @@ fn inl_mnRulePlus_GetDescIdx_unfused<'a>(ctx: &'a Ctx, sel: u8, confirmed: u8) -
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x8023201c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(fn_8023201C(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8023201c, asm_fn_8023201C, Returns::Nothing);
     ctx.register_port(
         0x80232458,
         |ctx| {
@@ -5908,14 +5901,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80232660,
-        |ctx| {
-            let (a0, a1, a2): (HSD_GObj<'_>, HSD_JObj<'_>, u8) = Args::take_all(ctx);
-            Ret::put(mn_80232660(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80232660, asm_mn_80232660, Returns::Nothing);
     ctx.register_port(
         0x802327a4,
         |ctx| {
@@ -5932,27 +5918,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80232f44,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(fn_80232F44(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80233218,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(mn_80233218(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x802339fc,
-        |ctx| {
-            Ret::put(mn_802339FC(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80232f44, asm_fn_80232F44, Returns::Nothing);
+    ctx.register_port(0x80233218, asm_mn_80233218, Returns::Int);
+    ctx.register_port(0x802339fc, asm_mn_802339FC, Returns::Nothing);
 }

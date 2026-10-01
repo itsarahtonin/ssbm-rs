@@ -18246,12 +18246,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x803a0088,
-        |ctx| {
-            let (a0, a1): (u32, u32) = Args::take_all(ctx);
-            Ret::put(psDispParticles(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x803a0088, asm_psDispParticles, Returns::Nothing);
 }

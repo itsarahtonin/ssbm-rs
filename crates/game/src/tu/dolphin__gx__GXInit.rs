@@ -3903,19 +3903,6 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8033a780,
-        |ctx| {
-            let (a0, a1): (Addr<'_>, u32) = Args::take_all(ctx);
-            Ret::put(GXInit(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8033af40,
-        |ctx| {
-            Ret::put(__GXInitGX(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8033a780, asm_GXInit, Returns::Int);
+    ctx.register_port(0x8033af40, asm___GXInitGX, Returns::Nothing);
 }

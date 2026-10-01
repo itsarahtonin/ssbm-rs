@@ -461,10 +461,7 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
         0x8008d5fc,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_LandingAir_EnterWithLag(ctx, a0), ctx);
-        },
+        asm_ftCo_LandingAir_EnterWithLag,
         Returns::Nothing,
     );
     ctx.register_port(

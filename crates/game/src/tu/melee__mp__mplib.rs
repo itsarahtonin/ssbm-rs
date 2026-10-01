@@ -29113,14 +29113,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8004d288,
-        |ctx| {
-            let (a0,): (MapCollData<'_>,) = Args::take_all(ctx);
-            Ret::put(mpLibLoad(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8004d288, asm_mpLibLoad, Returns::Nothing);
     ctx.register_port(
         0x8004db78,
         |ctx| {
@@ -29242,48 +29235,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8004ed5c,
-        |ctx| {
-            let (a0, a1, a2, a3, a4): (
-                i32,
-                Val<'_, F32>,
-                Val<'_, F32>,
-                Val<'_, F32>,
-                Val<'_, F32>,
-            ) = Args::take_all(ctx);
-            Ret::put(mpLib_8004ED5C(ctx, a0, a1, a2, a3, a4), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8004f008,
-        |ctx| {
-            let (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13): (
-                Single,
-                Single,
-                Single,
-                Single,
-                Single,
-                Vec<'_>,
-                Val<'_, i32>,
-                Val<'_, u32>,
-                Vec<'_>,
-                i32,
-                i32,
-                i32,
-                FnPtr<'_>,
-                HSD_GObj<'_>,
-            ) = Args::take_all(ctx);
-            Ret::put(
-                mpCheckFloor(
-                    ctx, a0.0, a1.0, a2.0, a3.0, a4.0, a5, a6, a7, a8, a9, a10, a11, a12, a13,
-                ),
-                ctx,
-            );
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8004ed5c, asm_mpLib_8004ED5C, Returns::Nothing);
+    ctx.register_port(0x8004f008, asm_mpCheckFloor, Returns::Int);
     ctx.register_port(
         0x8004f400,
         |ctx| {
@@ -29312,50 +29265,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8004f8a4,
-        |ctx| {
-            let (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9): (
-                Single,
-                Single,
-                Single,
-                Single,
-                Vec<'_>,
-                Val<'_, i32>,
-                Val<'_, u32>,
-                Vec<'_>,
-                i32,
-                i32,
-            ) = Args::take_all(ctx);
-            Ret::put(
-                mpCheckCeiling(ctx, a0.0, a1.0, a2.0, a3.0, a4, a5, a6, a7, a8, a9),
-                ctx,
-            );
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x8004fc2c,
-        |ctx| {
-            let (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9): (
-                Single,
-                Single,
-                Single,
-                Single,
-                Vec<'_>,
-                Val<'_, i32>,
-                Val<'_, u32>,
-                Vec<'_>,
-                i32,
-                i32,
-            ) = Args::take_all(ctx);
-            Ret::put(
-                mpCheckCeilingRemap(ctx, a0.0, a1.0, a2.0, a3.0, a4, a5, a6, a7, a8, a9),
-                ctx,
-            );
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8004f8a4, asm_mpCheckCeiling, Returns::Int);
+    ctx.register_port(0x8004fc2c, asm_mpCheckCeilingRemap, Returns::Int);
     ctx.register_port(
         0x80050068,
         |ctx| {
@@ -29523,50 +29434,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80051ba8,
-        |ctx| {
-            let (a0, a1, a2, a3, a4, a5, a6, a7, a8): (
-                Vec<'_>,
-                i32,
-                i32,
-                i32,
-                i32,
-                Single,
-                Single,
-                Single,
-                Single,
-            ) = Args::take_all(ctx);
-            Ret::put(
-                mpLib_80051BA8_Floor(ctx, a0, a1, a2, a3, a4, a5.0, a6.0, a7.0, a8.0),
-                ctx,
-            );
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80051ec8,
-        |ctx| {
-            let (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10): (
-                Single,
-                Single,
-                Single,
-                Single,
-                Vec<'_>,
-                Val<'_, i32>,
-                Val<'_, u32>,
-                Vec<'_>,
-                u32,
-                i32,
-                i32,
-            ) = Args::take_all(ctx);
-            Ret::put(
-                mpCheckMultiple(ctx, a0.0, a1.0, a2.0, a3.0, a4, a5, a6, a7, a8, a9, a10),
-                ctx,
-            );
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80051ba8, asm_mpLib_80051BA8_Floor, Returns::Int);
+    ctx.register_port(0x80051ec8, asm_mpCheckMultiple, Returns::Int);
     ctx.register_port(
         0x800524dc,
         |ctx| {
@@ -30051,23 +29920,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80056c54,
-        |ctx| {
-            let (a0, a1, a2, a3, a4, a5, a6, a7): (
-                i32,
-                Vec<'_>,
-                Val<'_, i32>,
-                Vec<'_>,
-                Val<'_, u32>,
-                Vec<'_>,
-                Single,
-                Single,
-            ) = Args::take_all(ctx);
-            Ret::put(mpLib_80056C54(ctx, a0, a1, a2, a3, a4, a5, a6.0, a7.0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80056c54, asm_mpLib_80056C54, Returns::Int);
     ctx.register_port(
         0x80057424,
         |ctx| {
@@ -30298,14 +30151,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80059404,
-        |ctx| {
-            let (a0, a1, a2): (i32, i32, _GXColor<'_>) = Args::take_all(ctx);
-            Ret::put(mpLib_DrawMatchingLines(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80059404, asm_mpLib_DrawMatchingLines, Returns::Nothing);
     ctx.register_port(
         0x80059554,
         |ctx| {

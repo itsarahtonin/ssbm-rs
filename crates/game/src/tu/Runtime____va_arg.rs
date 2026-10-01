@@ -348,12 +348,5 @@ fn asm___va_arg(ctx: &Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x80322620,
-        |ctx| {
-            let (a0, a1): (__va_list_t<'_>, u8) = Args::take_all(ctx);
-            Ret::put(__va_arg(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80322620, asm___va_arg, Returns::Int);
 }

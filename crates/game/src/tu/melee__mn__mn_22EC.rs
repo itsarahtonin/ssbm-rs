@@ -743,11 +743,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8022f4cc,
-        |ctx| {
-            Ret::put(mn_8022F4CC(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8022f4cc, asm_mn_8022F4CC, Returns::Nothing);
 }

@@ -1553,14 +1553,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8029ef84,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(itLinkbomb_UnkMotion3_Anim(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8029ef84, asm_itLinkbomb_UnkMotion3_Anim, Returns::Int);
     ctx.register_port(
         0x8029f04c,
         |ctx| {

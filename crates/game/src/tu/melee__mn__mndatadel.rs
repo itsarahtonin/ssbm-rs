@@ -2306,13 +2306,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8024ea6c,
-        |ctx| {
-            Ret::put(mnDataDel_8024EA6C(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8024ea6c, asm_mnDataDel_8024EA6C, Returns::Nothing);
     ctx.register_port(
         0x8024ebc8,
         |ctx| {
@@ -2336,14 +2330,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8024f1d4,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(fn_8024F1D4(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8024f1d4, asm_fn_8024F1D4, Returns::Nothing);
     ctx.register_port(
         0x8024f318,
         |ctx| {

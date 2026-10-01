@@ -921,13 +921,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802f390c,
-        |ctx| {
-            Ret::put(ifAll_802F390C(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x802f390c, asm_ifAll_802F390C, Returns::Nothing);
     ctx.register_port(
         0x802f3a64,
         |ctx| {

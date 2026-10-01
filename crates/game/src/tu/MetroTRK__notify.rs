@@ -306,12 +306,5 @@ fn asm_TRKDoNotifyStopped(ctx: &Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x80328e78,
-        |ctx| {
-            let (a0,): (u8,) = Args::take_all(ctx);
-            Ret::put(TRKDoNotifyStopped(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80328e78, asm_TRKDoNotifyStopped, Returns::Int);
 }

@@ -4315,10 +4315,7 @@ pub fn register(ctx: &Ctx) {
     );
     ctx.register_port(
         0x80117f24,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, CollData<'_>) = Args::take_all(ctx);
-            Ret::put(ftNs_SpecialAirHi_CollisionModVel(ctx, a0, a1), ctx);
-        },
+        asm_ftNs_SpecialAirHi_CollisionModVel,
         Returns::Nothing,
     );
     ctx.register_port(
@@ -4625,14 +4622,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801198dc,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftNs_SpecialAirHi_Coll(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801198dc, asm_ftNs_SpecialAirHi_Coll, Returns::Nothing);
     ctx.register_port(
         0x80119d58,
         |ctx| {

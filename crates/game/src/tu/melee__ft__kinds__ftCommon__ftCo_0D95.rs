@@ -2211,22 +2211,8 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x800d9558,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(fn_800D9558(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x800d9930,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(fn_800D9930(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x800d9558, asm_fn_800D9558, Returns::Int);
+    ctx.register_port(0x800d9930, asm_fn_800D9930, Returns::Int);
     ctx.register_port(
         0x800d9c64,
         |ctx| {

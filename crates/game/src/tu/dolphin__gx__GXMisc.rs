@@ -724,13 +724,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8033cc38,
-        |ctx| {
-            Ret::put(GXSetDrawDone(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8033cc38, asm_GXSetDrawDone, Returns::Nothing);
     ctx.register_port(
         0x8033ccd0,
         |ctx| {

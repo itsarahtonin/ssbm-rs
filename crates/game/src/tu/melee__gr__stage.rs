@@ -1280,14 +1280,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Float,
     );
-    ctx.register_port(
-        0x80224cac,
-        |ctx| {
-            let (a0,): (Vec<'_>,) = Args::take_all(ctx);
-            Ret::put(Stage_80224CAC(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80224cac, asm_Stage_80224CAC, Returns::Nothing);
     ctx.register_port(
         0x80224d94,
         |ctx| {
@@ -1319,14 +1312,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80224e64,
-        |ctx| {
-            let (a0, a1): (i32, Vec<'_>) = Args::take_all(ctx);
-            Ret::put(Stage_80224E64(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80224e64, asm_Stage_80224E64, Returns::Nothing);
     ctx.register_port(
         0x80224fdc,
         |ctx| {

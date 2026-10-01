@@ -3861,7 +3861,9 @@ FUSED_REASON = "fused multiply-adds MWCC contracts otherwise than c2rs"
 def asm_port(unit, cursor, f, why="its source is assembly"):
     """A port of the function at `cursor` transliterated from its machine code, for code whose
     source is assembly and the rest `why` names: its C prototype as the signature, its
-    instructions as the body."""
+    instructions as the body, `asm_NAME`. That is what dispatch registers, run on the registers
+    as the caller left them, as the original's code reads them: the arguments' C types would
+    re-extend a narrow integer and round a float the caller passed otherwise."""
     name = cursor.spelling
     ft = unit.ctype(cursor.type)
     if ft["params"] is None:
@@ -3955,7 +3957,7 @@ def translate_unit(args):
                 continue
             out_fns.append(code)
             unit.transliterated.append(name)
-            regs.append(f"    ctx.register_port({f['addr']:#x}, {unit.adapter(c, ident(name))}, "
+            regs.append(f"    ctx.register_port({f['addr']:#x}, asm_{name}, "
                         f"Returns::{returns_of(unit, c)});")
             unit.ported.append(name)
             continue
@@ -3980,7 +3982,7 @@ def translate_unit(args):
         if code is not None:
             out_fns.append(code)
             unit.transliterated.append(name)
-            regs.append(f"    ctx.register_port({f['addr']:#x}, {unit.adapter(c, ident(name))}, "
+            regs.append(f"    ctx.register_port({f['addr']:#x}, asm_{name}, "
                         f"Returns::{returns_of(unit, c)});")
             unit.ported.append(name)
             continue
@@ -4000,7 +4002,7 @@ def translate_unit(args):
                     continue
                 out_fns.append(code)
                 unit.transliterated.append(name)
-                regs.append(f"    ctx.register_port({f['addr']:#x}, {unit.adapter(c, ident(name))}, "
+                regs.append(f"    ctx.register_port({f['addr']:#x}, asm_{name}, "
                             f"Returns::{returns_of(unit, c)});")
                 unit.ported.append(name)
                 continue
@@ -4020,7 +4022,7 @@ def translate_unit(args):
                 unset.add(name)
                 out_fns.append(code)
                 unit.transliterated.append(name)
-                regs.append(f"    ctx.register_port({f['addr']:#x}, {unit.adapter(c, ident(name))}, "
+                regs.append(f"    ctx.register_port({f['addr']:#x}, asm_{name}, "
                             f"Returns::{returns_of(unit, c)});")
                 unit.ported.append(name)
                 continue

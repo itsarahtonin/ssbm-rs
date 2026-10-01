@@ -479,13 +479,7 @@ pub fn lb_80019AAC<'a>(ctx: &'a Ctx, arg0: FnPtr<'a>) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x8001955c,
-        |ctx| {
-            Ret::put(lb_8001955C(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8001955c, asm_lb_8001955C, Returns::Nothing);
     ctx.register_port(
         0x800195d0,
         |ctx| {

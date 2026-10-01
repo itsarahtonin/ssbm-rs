@@ -769,14 +769,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80015bd0,
-        |ctx| {
-            let (a0, a1): (i32, u32) = Args::take_all(ctx);
-            Ret::put(lbHeap_80015BD0(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80015bd0, asm_lbHeap_80015BD0, Returns::Int);
     ctx.register_port(
         0x80015ca8,
         |ctx| {

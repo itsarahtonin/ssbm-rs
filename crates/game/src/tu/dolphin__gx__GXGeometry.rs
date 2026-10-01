@@ -793,21 +793,8 @@ pub fn __GXSetGenMode<'a>(ctx: &'a Ctx) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x8033d050,
-        |ctx| {
-            Ret::put(__GXSetDirtyState(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8033d0dc,
-        |ctx| {
-            let (a0, a1, a2): (i32, i32, u16) = Args::take_all(ctx);
-            Ret::put(GXBegin(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8033d050, asm___GXSetDirtyState, Returns::Nothing);
+    ctx.register_port(0x8033d0dc, asm_GXBegin, Returns::Nothing);
     ctx.register_port(
         0x8033d1b8,
         |ctx| {

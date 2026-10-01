@@ -8683,29 +8683,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80398614,
-        |ctx| {
-            let (a0, a1, a2): (HSD_Archive<'_>, HSD_Archive<'_>, Val<'_, i32>) =
-                Args::take_all(ctx);
-            Ret::put(psInitDataBankLocate(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x803989a0,
-        |ctx| {
-            let (a0, a1, a2, a3, a4): (
-                i32,
-                Val<'_, i32>,
-                Val<'_, i32>,
-                Val<'_, u32>,
-                Val<'_, i32>,
-            ) = Args::take_all(ctx);
-            Ret::put(psInitDataBank(ctx, a0, a1, a2, a3, a4), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80398614, asm_psInitDataBankLocate, Returns::Nothing);
+    ctx.register_port(0x803989a0, asm_psInitDataBank, Returns::Nothing);
     ctx.register_port(
         0x80398a08,
         |ctx| {

@@ -1728,14 +1728,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802aab70,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(itNesspkflash_UnkMotion0_Anim(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802aab70, asm_itNesspkflash_UnkMotion0_Anim, Returns::Int);
     ctx.register_port(
         0x802aad48,
         |ctx| {
@@ -1754,10 +1747,7 @@ pub fn register(ctx: &Ctx) {
     );
     ctx.register_port(
         0x802aafdc,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(itNesspkflash_UnkMotion0_Phys(ctx, a0), ctx);
-        },
+        asm_itNesspkflash_UnkMotion0_Phys,
         Returns::Nothing,
     );
     ctx.register_port(

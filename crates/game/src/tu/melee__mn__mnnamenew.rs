@@ -9563,14 +9563,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8023b224,
-        |ctx| {
-            let (a0,): (u8,) = Args::take_all(ctx);
-            Ret::put(mnNameNew_8023B224(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8023b224, asm_mnNameNew_8023B224, Returns::Nothing);
     ctx.register_port(
         0x8023b314,
         |ctx| {
@@ -9579,14 +9572,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8023b3fc,
-        |ctx| {
-            let (a0, a1): (NameNewEntry<'_>, u8) = Args::take_all(ctx);
-            Ret::put(mnNameNew_KeySetup(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8023b3fc, asm_mnNameNew_KeySetup, Returns::Int);
     ctx.register_port(
         0x8023baa8,
         |ctx| {
@@ -9628,20 +9614,10 @@ pub fn register(ctx: &Ctx) {
     );
     ctx.register_port(
         0x8023c290,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(mnNameNew_GlyphVariantInput(ctx, a0), ctx);
-        },
+        asm_mnNameNew_GlyphVariantInput,
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8023c54c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(mnNameNew_MainInput(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8023c54c, asm_mnNameNew_MainInput, Returns::Nothing);
     ctx.register_port(
         0x8023ce4c,
         |ctx| {
@@ -9721,14 +9697,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8023e32c,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(mnNameNew_8023E32C(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8023e32c, asm_mnNameNew_8023E32C, Returns::Nothing);
     ctx.register_port(
         0x8023e630,
         |ctx| {
@@ -9739,10 +9708,7 @@ pub fn register(ctx: &Ctx) {
     );
     ctx.register_port(
         0x8023e6d0,
-        |ctx| {
-            let (a0, a1): (HSD_Archive<'_>, i32) = Args::take_all(ctx);
-            Ret::put(mnNameNew_EnterFromMnCharSel(ctx, a0, a1), ctx);
-        },
+        asm_mnNameNew_EnterFromMnCharSel,
         Returns::Nothing,
     );
     ctx.register_port(

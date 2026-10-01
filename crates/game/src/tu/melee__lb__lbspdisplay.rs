@@ -3386,14 +3386,7 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x80011ac4,
-        |ctx| {
-            let (a0,): (Ptr<'_, LightList<'_>>,) = Args::take_all(ctx);
-            Ret::put(lb_80011AC4(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80011ac4, asm_lb_80011AC4, Returns::Int);
     ctx.register_port(
         0x80011b74,
         |ctx| {
@@ -3418,15 +3411,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8001204c,
-        |ctx| {
-            let (a0, a1, a2, a3): (HSD_JObj<'_>, Ptr<'_, HSD_JObj<'_>>, Val<'_, u16>, i32) =
-                Args::take_all(ctx);
-            Ret::put(lb_8001204C(ctx, a0, a1, a2, a3), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8001204c, asm_lb_8001204C, Returns::Int);
     ctx.register_port(
         0x800121fc,
         |ctx| {
@@ -3530,26 +3515,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800138ec,
-        |ctx| {
-            let (a0, a1, a2, a3, a4, a5, a6, a7): (
-                HSD_ImageDesc<'_>,
-                FnPtr<'_>,
-                i32,
-                i8,
-                Single,
-                Single,
-                Single,
-                Single,
-            ) = Args::take_all(ctx);
-            Ret::put(
-                lb_800138EC(ctx, a0, a1, a2, a3, a4.0, a5.0, a6.0, a7.0),
-                ctx,
-            );
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x800138ec, asm_lb_800138EC, Returns::Int);
     ctx.register_port(
         0x80013b14,
         |ctx| {

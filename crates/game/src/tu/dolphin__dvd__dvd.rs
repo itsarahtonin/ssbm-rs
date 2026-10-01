@@ -2128,13 +2128,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80339f50,
-        |ctx| {
-            Ret::put(DVDCheckDisk(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80339f50, asm_DVDCheckDisk, Returns::Int);
     ctx.register_port(
         0x8033a034,
         |ctx| {

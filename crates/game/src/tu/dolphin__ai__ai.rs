@@ -1172,14 +1172,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int8,
     );
-    ctx.register_port(
-        0x803507e0,
-        |ctx| {
-            let (a0,): (Val<'_, u8>,) = Args::take_all(ctx);
-            Ret::put(AIInit(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x803507e0, asm_AIInit, Returns::Nothing);
     ctx.register_port(
         0x80350944,
         |ctx| {

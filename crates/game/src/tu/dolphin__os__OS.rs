@@ -1112,13 +1112,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8034330c,
-        |ctx| {
-            Ret::put(OSExceptionInit(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8034330c, asm_OSExceptionInit, Returns::Nothing);
     ctx.register_port(
         0x803435b4,
         |ctx| {

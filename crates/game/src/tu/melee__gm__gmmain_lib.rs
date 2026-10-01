@@ -4883,22 +4883,8 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8015f600,
-        |ctx| {
-            let (a0, a1): (i32, i32) = Args::take_all(ctx);
-            Ret::put(gmMainLib_8015F600(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8015fa34,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(gmMainLib_8015FA34(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8015f600, asm_gmMainLib_8015F600, Returns::Nothing);
+    ctx.register_port(0x8015fa34, asm_gmMainLib_8015FA34, Returns::Nothing);
     ctx.register_port(
         0x8015fb68,
         |ctx| {
@@ -4906,13 +4892,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8015fba4,
-        |ctx| {
-            Ret::put(gmMainLib_8015FBA4(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8015fba4, asm_gmMainLib_8015FBA4, Returns::Nothing);
     ctx.register_port(
         0x8015fc74,
         |ctx| {

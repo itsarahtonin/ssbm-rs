@@ -913,14 +913,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800fa254,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftKb_PkSpecialAirN_Anim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800fa254, asm_ftKb_PkSpecialAirN_Anim, Returns::Nothing);
     ctx.register_port(
         0x800fa418,
         |ctx| {

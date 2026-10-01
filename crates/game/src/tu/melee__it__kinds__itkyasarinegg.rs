@@ -464,14 +464,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x802efe08,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(itKyasarinegg_UnkMotion4_Anim(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x802efe08, asm_itKyasarinegg_UnkMotion4_Anim, Returns::Int);
     ctx.register_port(
         0x802efe28,
         |ctx| {

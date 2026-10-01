@@ -265,13 +265,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8032a628,
-        |ctx| {
-            Ret::put(InitMetroTRK(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8032a628, asm_InitMetroTRK, Returns::Nothing);
     ctx.register_port(
         0x8032a6bc,
         |ctx| {

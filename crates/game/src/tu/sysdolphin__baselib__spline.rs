@@ -3068,20 +3068,6 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80378f38,
-        |ctx| {
-            let (a0, a1): (HSD_Spline<'_>, Single) = Args::take_all(ctx);
-            Ret::put(splArcLengthGetParameter(ctx, a0, a1.0), ctx);
-        },
-        Returns::Float,
-    );
-    ctx.register_port(
-        0x803792c8,
-        |ctx| {
-            let (a0, a1, a2): (Vec<'_>, HSD_Spline<'_>, Single) = Args::take_all(ctx);
-            Ret::put(splArcLengthPoint(ctx, a0, a1, a2.0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80378f38, asm_splArcLengthGetParameter, Returns::Float);
+    ctx.register_port(0x803792c8, asm_splArcLengthPoint, Returns::Nothing);
 }

@@ -2009,46 +2009,11 @@ fn inl_OSClearContext_unfused<'a>(ctx: &'a Ctx, context: OSContext<'a>) {
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x80344e30,
-        |ctx| {
-            let (a0, a1): (u32, OSContext<'_>) = Args::take_all(ctx);
-            Ret::put(__OSLoadFPUContext(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80344f54,
-        |ctx| {
-            let (a0, a1, a2): (u32, u32, OSContext<'_>) = Args::take_all(ctx);
-            Ret::put(__OSSaveFPUContext(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8034507c,
-        |ctx| {
-            let (a0,): (OSContext<'_>,) = Args::take_all(ctx);
-            Ret::put(OSLoadFPUContext(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x80345084,
-        |ctx| {
-            let (a0,): (OSContext<'_>,) = Args::take_all(ctx);
-            Ret::put(OSSaveFPUContext(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8034508c,
-        |ctx| {
-            let (a0,): (OSContext<'_>,) = Args::take_all(ctx);
-            Ret::put(OSSetCurrentContext(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80344e30, asm___OSLoadFPUContext, Returns::Nothing);
+    ctx.register_port(0x80344f54, asm___OSSaveFPUContext, Returns::Nothing);
+    ctx.register_port(0x8034507c, asm_OSLoadFPUContext, Returns::Nothing);
+    ctx.register_port(0x80345084, asm_OSSaveFPUContext, Returns::Nothing);
+    ctx.register_port(0x8034508c, asm_OSSetCurrentContext, Returns::Nothing);
     ctx.register_port(
         0x803450e8,
         |ctx| {
@@ -2056,29 +2021,9 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x803450f4,
-        |ctx| {
-            let (a0,): (OSContext<'_>,) = Args::take_all(ctx);
-            Ret::put(OSSaveContext(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
-    ctx.register_port(
-        0x80345174,
-        |ctx| {
-            let (a0,): (OSContext<'_>,) = Args::take_all(ctx);
-            Ret::put(OSLoadContext(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
-    ctx.register_port(
-        0x8034524c,
-        |ctx| {
-            Ret::put(OSGetStackPointer(ctx), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803450f4, asm_OSSaveContext, Returns::Int);
+    ctx.register_port(0x80345174, asm_OSLoadContext, Returns::Nothing);
+    ctx.register_port(0x8034524c, asm_OSGetStackPointer, Returns::Int);
     ctx.register_port(
         0x80345254,
         |ctx| {
@@ -2087,14 +2032,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80345278,
-        |ctx| {
-            let (a0, a1, a2): (OSContext<'_>, u32, u32) = Args::take_all(ctx);
-            Ret::put(OSInitContext(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80345278, asm_OSInitContext, Returns::Nothing);
     ctx.register_port(
         0x80345334,
         |ctx| {
@@ -2103,14 +2041,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x803455dc,
-        |ctx| {
-            let (a0, a1): (u8, OSContext<'_>) = Args::take_all(ctx);
-            Ret::put(OSSwitchFPUContext(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x803455dc, asm_OSSwitchFPUContext, Returns::Nothing);
     ctx.register_port(
         0x80345660,
         |ctx| {
