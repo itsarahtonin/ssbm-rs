@@ -5,8 +5,8 @@
 //! the VS stages, items and a short time limit, where the mode would give its defaults; `--monkey`
 //! plays the humans. `MATCH_STAGES` and `MATCH_FIGHTERS` list other stages and fighters to pick
 //! from, by StKind and CKind, and `MATCH_TIME` sets the time limit in seconds: the results screen
-//! can't show the bosses, so a run with them needs a match that outlasts it. Deterministic for a
-//! seed.
+//! can't show the bosses, so a run with them needs a match that outlasts it. `MATCH_RULES=1`
+//! varies the rules too. Deterministic for a seed.
 
 use std::cell::Cell;
 use std::rc::Rc;
@@ -127,9 +127,48 @@ fn choose(ctx: &Ctx, rng: &Rng, stages: &[i32], fighters: &[i32], time: u32) {
     } else {
         rng.below(5) as i8
     });
+    // MATCH_RULES=1 varies the rules as the VS rules and Special Melee do: stock and coin
+    // matches, teams with and without friendly fire, damage ratios, Slo-Mo and Lightning
+    // speeds and single-button play; and for each player, metal, invisible, Giant and Tiny.
+    let varied = std::env::var_os("MATCH_RULES").is_some();
+    if varied {
+        let kind = match rng.below(10) {
+            0..=5 => MatchKind_Time,
+            6..=8 => MatchKind_Stock,
+            _ => MatchKind_Coin,
+        };
+        rules.set_match_kind(kind as u32);
+        rules.set_is_stock(u32::from(kind == MatchKind_Stock));
+        let teams = rng.chance(30);
+        rules.set_is_teams(u8::from(teams));
+        rules.set_friendly_fire(u32::from(teams && rng.chance(50)));
+        rules.set_single_button(u32::from(rng.chance(10)));
+        // Each match's rules start from the defaults, not the last match's.
+        rules.set_x30(if rng.chance(20) {
+            0.5 + rng.below(16) as f64 * 0.1
+        } else {
+            1.0
+        });
+        rules.set_game_speed(match rng.below(20) {
+            0..=1 => 0.5,
+            2 => 1.25,
+            _ => 1.0,
+        });
+    }
     let mut chosen = Vec::new();
     for i in 0..4 {
         let p = data.players().get(i);
+        if varied {
+            p.set_stocks(1 + rng.below(4) as i8);
+            p.set_team(rng.below(3) as u8);
+            p.set_vs_metal(u8::from(rng.chance(10)));
+            p.set_vs_invisible(u8::from(rng.chance(10)));
+            p.set_model_scale(match rng.below(14) {
+                0 => 1.8,
+                1 => 0.35,
+                _ => 1.0,
+            });
+        }
         let fighter = fighters[rng.below(fighters.len() as u64) as usize] as usize;
         // Bosses and the other special fighters only play as CPUs, as in the modes that have
         // them: the game crashes with some of them under a player's control.
