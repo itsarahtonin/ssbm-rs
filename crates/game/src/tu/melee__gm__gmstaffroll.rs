@@ -710,7 +710,7 @@ pub fn fn_801AAB74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     || (entry_idx == 197_i32)))
                 && ((entry_idx != 94_i32) || (fns::lbLang_IsSavedLanguageJP(ctx) != 0_i32))
             {
-                inl_HSD_JObjSetupMatrix_unfused(ctx, leaf);
+                ctx.call::<_, ()>(0x80007d68, (leaf,));
                 (Handle::add(
                     statics::melee__gm__gmstaffroll::staffInfoSortBuf(ctx).get(),
                     statics::melee__gm__gmstaffroll::gm_804D6800(ctx).get(),
@@ -7585,36 +7585,6 @@ fn inl_HSD_GObjGetHSDObj_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'
     return (gobj).hsd_obj();
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803dbfdc),
-            (0x234_i32 as u32),
-            cstr(ctx, 0x803dbfdc),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
-}
-
-fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
-    let mut jobj = jobj;
-    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
-        return;
-    }
-    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
-}
-
 fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 4> {
     let mut jobj = jobj;
     (if !Handle::is_null((jobj)) {
@@ -7627,7 +7597,7 @@ fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'
             cstr(ctx, 0x803dbfdc),
         )
     });
-    inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+    ctx.call::<_, ()>(0x80007d68, (jobj,));
     return (jobj).mtx().get(0);
 }
 

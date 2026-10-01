@@ -3638,6 +3638,22 @@ pub fn ftAnim_80070FD0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     return 0_i32;
 }
 
+fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 4> {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803c0660),
+            (0x478_i32 as u32),
+            cstr(ctx, 0x803c0660),
+        )
+    });
+    ctx.call::<_, ()>(0x80007d68, (jobj,));
+    return (jobj).mtx().get(0);
+}
+
 fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     let mut jobj = jobj;
     let mut result: i32 = 0;
@@ -3658,30 +3674,6 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
         result = 1_i32;
     }
     return result;
-}
-
-fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
-    let mut jobj = jobj;
-    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
-        return;
-    }
-    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
-}
-
-fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 4> {
-    let mut jobj = jobj;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803c0660),
-            (0x478_i32 as u32),
-            cstr(ctx, 0x803c0660),
-        )
-    });
-    inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
-    return (jobj).mtx().get(0);
 }
 
 fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {

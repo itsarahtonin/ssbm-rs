@@ -2843,7 +2843,7 @@ pub fn Fighter_UnkApplyTransformation_8006C0F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<
     if (fp).x34_scale().z() != 1.0 {
         let mut jobj: HSD_JObj<'a> =
             (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
-        inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+        ctx.call::<_, ()>(0x80007d68, (jobj,));
         fns::HSD_MtxInverse(ctx, inl_HSD_JObjGetMtxPtr_unfused(ctx, jobj), mtx1.get(0));
         inl_HSD_JObjGetScale_unfused(ctx, jobj, scale);
         scale.set_x(fns::ftCommon_GetModelScale(ctx, fp));
@@ -6722,14 +6722,6 @@ fn inl___fpclassifyd<'a>(ctx: &'a Ctx, x: f64) -> i32 {
     return 0;
 }
 
-fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
-    let mut jobj = jobj;
-    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
-        return;
-    }
-    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
-}
-
 fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 4> {
     let mut jobj = jobj;
     (if !Handle::is_null((jobj)) {
@@ -6742,7 +6734,7 @@ fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'
             cstr(ctx, 0x803b7488),
         )
     });
-    inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+    ctx.call::<_, ()>(0x80007d68, (jobj,));
     return (jobj).mtx().get(0);
 }
 
@@ -6865,7 +6857,7 @@ fn inl_Fighter_UnkApplyTransformation_8006C0F0_unfused<'a>(
     if (fp).x34_scale().z() != 1.0 {
         let mut jobj: HSD_JObj<'a> =
             (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
-        inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+        ctx.call::<_, ()>(0x80007d68, (jobj,));
         fns::HSD_MtxInverse(ctx, inl_HSD_JObjGetMtxPtr_unfused(ctx, jobj), mtx1.get(0));
         inl_HSD_JObjGetScale_unfused(ctx, jobj, scale);
         scale.set_x(fns::ftCommon_GetModelScale(ctx, fp));

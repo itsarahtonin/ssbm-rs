@@ -524,6 +524,22 @@ fn inl_HSD_JObjGetParent<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
     return null(ctx);
 }
 
+fn inl_HSD_JObjGetMtxPtr<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 4> {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bb084),
+            (0x478_i32 as u32),
+            cstr(ctx, 0x803bb084),
+        )
+    });
+    ctx.call::<_, ()>(0x80007d68, (jobj,));
+    return (jobj).mtx().get(0);
+}
+
 fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     let mut jobj = jobj;
     let mut result: i32 = 0;
@@ -552,22 +568,6 @@ fn inl_HSD_JObjSetupMatrix<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
         return;
     }
     fns::HSD_JObjSetupMatrixSub(ctx, jobj);
-}
-
-fn inl_HSD_JObjGetMtxPtr<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 4> {
-    let mut jobj = jobj;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803bb084),
-            (0x478_i32 as u32),
-            cstr(ctx, 0x803bb084),
-        )
-    });
-    inl_HSD_JObjSetupMatrix(ctx, jobj);
-    return (jobj).mtx().get(0);
 }
 
 fn inl_HSD_JObjGetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {

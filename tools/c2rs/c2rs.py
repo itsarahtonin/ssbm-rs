@@ -318,6 +318,9 @@ class Program:
         self.globals_by_name = defaultdict(list)
         for g in self.data["globals"]:
             self.globals_by_name[g["name"]].append(g)
+        self.symbols_by_name = defaultdict(list)
+        for sym in self.data["symbols"]:
+            self.symbols_by_name[sym["name"]].append(sym)
         # Static locals, which MWCC names `name$n`, n growing in declaration order.
         self.static_locals = defaultdict(list)
         for sym in self.data["symbols"]:
@@ -2813,6 +2816,11 @@ class Translator:
                 if t["k"] == "void" or st["ret"]["k"] == "void":
                     return Expr(res.code, t, False)
                 return self.convert(res, t, explicit=True)
+            copy = self.out_of_line_copy(name, ft)
+            if copy is not None:
+                # MWCC kept calls to an out-of-line copy of this inline function: call it, as
+                # compiled there, rather than inline the C.
+                return self.raw_call(copy, ft, args, t)
             defn = ref.get_definition()
             if defn is None:
                 raise Unsupported(f"call to {name}, which has no address or body")
@@ -2849,6 +2857,28 @@ class Translator:
             raise Unsupported("struct return through a pointer")
         rty = "()" if t["k"] == "void" else self.u.rust_value_ty(t)
         return Expr(f"{fp_.code}.call::<_, {rty}>(({''.join(a + ', ' for a in argv)}))", t, False)
+
+    def out_of_line_copy(self, name, ft):
+        """The address of the copy of inline function `name` the original calls here: the
+        unit's own, or the one weak copy the linker kept. `extern inline` functions' copies
+        have C++ names, such as `sqrtf__Ff`."""
+        if self.asm is None:
+            return None
+        names = [name]
+        params = ft.get("params") or []
+        if params and all(is_float(p) for p in params):
+            names.append(name + "__F" + "".join("f" if p["size"] == 4 else "d" for p in params))
+        for sym in names:
+            if not self.asm.get(sym, 0):
+                continue
+            words = asm2rs.function_words(self.u.listing, sym)
+            if words:
+                return words[0][0]
+            kept = [s for s in self.u.prog.symbols_by_name.get(sym, [])
+                    if s["type"] == "function" and s["scope"] in ("weak", "global")]
+            if len(kept) == 1:
+                return kept[0]["addr"]
+        return None
 
     def inlined_in_original(self, name, ref):
         """Whether MWCC inlined the calls to `name` here, whose body is in this unit to inline:

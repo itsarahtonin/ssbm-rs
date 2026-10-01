@@ -967,25 +967,14 @@ pub fn asm_fmodf(ctx: &Ctx) {
     }
 }
 
-fn inl_fmodf_unfused<'a>(ctx: &'a Ctx, a: f64, b: f64) -> f64 {
-    let mut a = a;
-    let mut b = b;
-    let mut quotient: i64 = 0;
-    if {
-        let __t1 = fp::fabs(a);
-        fp::fabs(b) > __t1
-    } {
-        return a;
-    }
-    quotient = (fns::__cvt_dbl_usll(ctx, fp::fdivs(a, b)) as i64);
-    return fp::fsubs(a, fp::fmuls(b, fns::__cvt_sll_flt(ctx, quotient)));
-}
-
 fn inl_getLoopedFrame_unfused<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) -> f64 {
     let mut aobj = aobj;
     let mut y: f64 = fp::fsubs((aobj).end_frame(), (aobj).rewind_frame());
     let mut x: f64 = fp::fsubs((aobj).curr_frame(), (aobj).rewind_frame());
-    return fp::fadds(inl_fmodf_unfused(ctx, x, y), (aobj).rewind_frame());
+    return fp::fadds(
+        ctx.call::<_, f64>(0x80364340, (Single(fp::frsp(x)), Single(fp::frsp(y)))),
+        (aobj).rewind_frame(),
+    );
 }
 
 fn inl_HSD_AObjStopAnim_unfused<'a>(

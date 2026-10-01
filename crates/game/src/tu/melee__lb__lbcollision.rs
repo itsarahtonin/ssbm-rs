@@ -3346,7 +3346,7 @@ pub fn lbColl_8000A460<'a>(ctx: &'a Ctx, hurt: Fighter_x1670_t<'a>, arg1: u32) -
         var_r0 = (2_i32 as u32);
     }
     if var_r0 == arg1 {
-        inl_HSD_JObjSetupMatrix_unfused(ctx, (hurt).jobj());
+        ctx.call::<_, ()>(0x80007d68, ((hurt).jobj(),));
         fns::lbColl_800096B4(
             ctx,
             inl_HSD_JObjGetMtxPtr_unfused(ctx, (hurt).jobj()),
@@ -3823,36 +3823,6 @@ fn inl_sqrtf_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
     return x;
 }
 
-fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b9880),
-            (0x234_i32 as u32),
-            cstr(ctx, 0x803b9880),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
-}
-
-fn inl_HSD_JObjSetupMatrix_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
-    let mut jobj = jobj;
-    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
-        return;
-    }
-    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
-}
-
 fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 4> {
     let mut jobj = jobj;
     (if !Handle::is_null((jobj)) {
@@ -3865,7 +3835,7 @@ fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'
             cstr(ctx, 0x803b9880),
         )
     });
-    inl_HSD_JObjSetupMatrix_unfused(ctx, jobj);
+    ctx.call::<_, ()>(0x80007d68, (jobj,));
     return (jobj).mtx().get(0);
 }
 

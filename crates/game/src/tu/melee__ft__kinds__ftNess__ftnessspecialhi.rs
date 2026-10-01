@@ -4200,37 +4200,14 @@ fn inl_getFtSpecialAttrs2<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> Addr<'a> {
     return (fp).dat_attrs();
 }
 
-fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
-    let mut x = x;
-    let mut y: f64 = 0.0;
-    if x > 0.0 {
-        let mut guess: f64 = fp::frsqrte(x);
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
-        );
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
-        );
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(fp::fmul(guess, guess), x, 3.0)),
-        );
-        y = fp::frsp((fp::fmul(x, guess)));
-        return y;
-    }
-    return x;
-}
-
 fn inl_lbVector_Len_xy<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     let mut vec = vec;
-    return inl_sqrtf(
-        ctx,
-        fp::fadds(
+    return ctx.call::<_, f64>(
+        0x8000d5bc,
+        (Single(fp::frsp(fp::fadds(
             fp::fmuls((vec).x(), (vec).x()),
             fp::fmuls((vec).y(), (vec).y()),
-        ),
+        ))),),
     );
 }
 

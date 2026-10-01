@@ -2728,36 +2728,6 @@ fn inl_jobj_parent<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
     return (jobj).parent();
 }
 
-fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
-    let mut jobj = jobj;
-    let mut result: i32 = 0;
-    (if !Handle::is_null((jobj)) {
-        ({ () })
-    } else {
-        fns::__assert(
-            ctx,
-            cstr(ctx, 0x803b9580),
-            (0x234_i32 as u32),
-            cstr(ctx, 0x803b9580),
-        )
-    });
-    result = 0_i32;
-    if (!(((jobj).flags() & ((shl_i32(1_i32, (23_i32 as u32))) as u32)) != 0))
-        && (((jobj).flags() & ((shl_i32(1_i32, (6_i32 as u32))) as u32)) != 0)
-    {
-        result = 1_i32;
-    }
-    return result;
-}
-
-fn inl_HSD_JObjSetupMatrix<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
-    let mut jobj = jobj;
-    if (!(!Handle::is_null(jobj))) || (!(inl_HSD_JObjMtxIsDirty(ctx, jobj) != 0)) {
-        return;
-    }
-    fns::HSD_JObjSetupMatrixSub(ctx, jobj);
-}
-
 fn inl_HSD_JObjGetMtxPtr<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 4> {
     let mut jobj = jobj;
     (if !Handle::is_null((jobj)) {
@@ -2770,7 +2740,7 @@ fn inl_HSD_JObjGetMtxPtr<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 
             cstr(ctx, 0x803b9580),
         )
     });
-    inl_HSD_JObjSetupMatrix(ctx, jobj);
+    ctx.call::<_, ()>(0x80007d68, (jobj,));
     return (jobj).mtx().get(0);
 }
 
