@@ -4,11 +4,12 @@
 //! objects. `PROBES=FILE` lists them, as `tools/lockstep/probes.py` writes them: address, the
 //! GObj class of the first object parameter (-1 for any), a fighter kind (-1 for any), and one
 //! letter per parameter: g a game object, F/I/R a fighter's, item's or ground's user data, j/c/l
-//! a game object's joint, camera or light, p zeroed scratch memory, i an integer, f a float.
-//! Once a video field, outside any check, the next `PROBE_RATE` of them (default 8) whose
-//! objects are around run under lockstep, and everything they do is undone; `PROBE_LIMIT`
-//! (default 20) probes each function at most. Deterministic for `PROBE_SEED`. `PROBE_LOG=1`
-//! names each probe as it starts.
+//! a game object's joint, camera or light, p scratch memory (zeroed, or holding small numbers or
+//! floats), i an integer, f a float. Once a video field, outside any check, the next
+//! `PROBE_RATE` of them (default 8) whose objects are around run under lockstep, and everything
+//! they do is undone; a probe for a fighter kind that isn't around takes another fighter a
+//! quarter of the time. `PROBE_LIMIT` (default 20) probes each function at most. Deterministic
+//! for `PROBE_SEED`. `PROBE_LOG=1` names each probe as it starts.
 
 use std::cell::Cell;
 use std::rc::Rc;
@@ -142,12 +143,14 @@ fn objects(ctx: &Ctx) -> Vec<Object> {
 }
 
 /// The value a probe passes for parameter letter `k`: `first` is whether it is the first object
-/// parameter, which takes the probe's class and kind. None if no object fits.
+/// parameter, which takes the probe's class and kind, or only its class with `any_kind`. None
+/// if no object fits.
 fn object_for(
     ctx: &Ctx,
     p: &Probe,
     k: u8,
     first: bool,
+    any_kind: bool,
     objects: &[Object],
     rng: &Rng,
 ) -> Option<u32> {
@@ -157,7 +160,7 @@ fn object_for(
         let (want, kind) = if first { (p.class, p.kind) } else { (-1, -1) };
         class.is_none_or(|c| o.class == c)
             && (want < 0 || i32::from(o.class) == want)
-            && (kind < 0 || o.kind == kind)
+            && (kind < 0 || any_kind || o.kind == kind)
     };
     match k {
         b'g' => pick(objects.iter().filter(|o| class_fits(o, None)).map(|o| o.gobj).collect()),
@@ -192,6 +195,25 @@ fn object_for(
     }
 }
 
+/// An integer argument: mostly small, as kinds, indices and flags are, and now and then any.
+fn int(rng: &Rng) -> u32 {
+    match rng.below(10) {
+        0..=4 => rng.below(5) as u32,
+        5 | 6 => rng.below(64) as u32,
+        7 => u32::MAX,
+        8 => rng.below(0x1_0000) as u32,
+        _ => rng.below(1 << 32) as u32,
+    }
+}
+
+/// A float argument: mostly one of a few round values, otherwise any up to a hundred.
+fn float(rng: &Rng) -> f32 {
+    match rng.below(8) {
+        0..=5 => [0.0, 1.0, -1.0, 0.5, 2.0, 10.0][rng.below(6) as usize],
+        _ => (rng.below(20_001) as f32 - 10_000.0) / 100.0,
+    }
+}
+
 fn probe_some(ctx: &Ctx, state: &State) {
     if state.probes.is_empty() {
         return;
@@ -210,26 +232,26 @@ fn probe_some(ctx: &Ctx, state: &State) {
             continue;
         }
         // The objects first, so a probe without them doesn't run.
-        let mut values = Vec::new();
-        let mut first = true;
-        let mut missing = false;
-        for &k in &p.params {
-            if b"gFIRjcl".contains(&k) {
-                match object_for(ctx, p, k, first && b"gFIR".contains(&k), &objects, &state.rng) {
-                    Some(v) => values.push(Some(v)),
-                    None => {
-                        missing = true;
-                        break;
-                    }
+        let choose = |any_kind: bool| -> Option<Vec<Option<u32>>> {
+            let mut values = Vec::new();
+            let mut first = true;
+            for &k in &p.params {
+                if b"gFIRjcl".contains(&k) {
+                    let is_first = first && b"gFIR".contains(&k);
+                    let v = object_for(ctx, p, k, is_first, any_kind, &objects, &state.rng)?;
+                    values.push(Some(v));
+                    first &= !b"gFIR".contains(&k);
+                } else {
+                    values.push(None);
                 }
-                first &= !b"gFIR".contains(&k);
-            } else {
-                values.push(None);
             }
-        }
-        if missing {
+            Some(values)
+        };
+        let Some(values) = choose(false)
+            .or_else(|| (p.kind >= 0 && state.rng.chance(25)).then(|| choose(true)).flatten())
+        else {
             continue;
-        }
+        };
         if state.log {
             eprintln!("probe {} on {values:08X?}", ctx.name_of(p.addr));
         }
@@ -242,17 +264,26 @@ fn probe_some(ctx: &Ctx, state: &State) {
             let base = (sp - SCRATCH_ROOM - scratch) & !0x1F;
             let low = base - SCRATCH_ROOM;
             let _ = ctx.mem.write_bytes(low, &vec![0; (sp - low) as usize]);
+            // Half the time the scratch memory holds small numbers or floats instead of zeros.
+            match rng.below(4) {
+                2 => (base..base + scratch)
+                    .step_by(4)
+                    .for_each(|a| ctx.write_u32(a, rng.below(8) as u32)),
+                3 => (base..base + scratch)
+                    .step_by(4)
+                    .for_each(|a| ctx.write_u32(a, float(rng).to_bits())),
+                _ => {}
+            }
             ctx.regs.set_r(1, (low - 0x20) & !0xF);
             let (mut r, mut f, mut next) = (3, 1, base);
             for (&k, v) in p.params.iter().zip(&values) {
                 match k {
                     b'f' => {
-                        let x = [0.0, 1.0, -1.0, 0.5, 2.0, 10.0][rng.below(6) as usize];
-                        ctx.regs.set_f(f, x);
+                        ctx.regs.set_f(f, f64::from(float(rng)));
                         f += 1;
                     }
                     b'i' => {
-                        ctx.regs.set_r(r, rng.below(5) as u32);
+                        ctx.regs.set_r(r, int(rng));
                         r += 1;
                     }
                     b'p' => {
