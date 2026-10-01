@@ -46,32 +46,136 @@ pub fn OnReset<'a>(ctx: &'a Ctx, r#final: i32) -> i32 {
     return 1_i32;
 }
 
-pub fn MEMIntrruptHandler<'a>(ctx: &'a Ctx, interrupt: i16, context: OSContext<'a>) {
-    let __frame = ctx.stack_frame(0x8);
-    let mut interrupt = interrupt;
-    let mut context = context;
-    let mut cause: u32 =
-        ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc004000_u32 as u32)), 15_i32)).get() as u32);
-    let mut addr: u32 = ({
-        let __t1 =
-            ((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc004000_u32 as u32)), 17_i32)).get() as i32);
-        ((shl_i32(
-            (((Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc004000_u32 as u32)), 18_i32)).get()
-                as i32)
-                & 0x3ff_i32),
-            (16_i32 as u32),
-        )) | __t1)
-    } as u32);
-    (Handle::add((ptr::<Val<'a, u16>>(ctx, 0xcc004000_u32 as u32)), 16_i32)).set((0_i32 as u16));
-    if !Handle::is_null(fns::OSErrorTable(ctx).at(15_i32).get()) {
-        ctx.call_variadic::<_, ()>(
-            Handle::addr(fns::OSErrorTable(ctx).at(15_i32).get()),
-            ((15_i32 as u16), context),
-            &[VarArg::Int(cause as u32), VarArg::Int(addr as u32)],
-        );
-        return;
+pub fn MEMIntrruptHandler<'a>(ctx: &'a Ctx, a0: i16, a1: OSContext<'a>) {
+    // Transliterated from its machine code: hardware register order.
+    (a0, a1).put_regs(ctx);
+    asm_MEMIntrruptHandler(ctx);
+}
+
+fn asm_MEMIntrruptHandler(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80347c38_u32;
+    loop {
+        match pc {
+            0x80347c38_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // lis r3, 0xcc00
+                g[3].set(0xcc000000_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // addi r8, r3, 0x4000
+                g[8].set(g[3].get().wrapping_add(0x4000_u32));
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // lhz r7, 0x4024(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x4024_u32);
+                    g[7].set(u32::from(ctx.read_u16(ea)));
+                }
+                // lis r3, OSErrorTable@ha
+                g[3].set(0x804a0000_u32);
+                // lhz r6, 0x22(r8)
+                {
+                    let ea = g[8].get().wrapping_add(0x22_u32);
+                    g[6].set(u32::from(ctx.read_u16(ea)));
+                }
+                // addi r3, r3, OSErrorTable@l
+                g[3].set(g[3].get().wrapping_add(0x7c40_u32));
+                // lhz r5, 0x1e(r8)
+                {
+                    let ea = g[8].get().wrapping_add(0x1e_u32);
+                    g[5].set(u32::from(ctx.read_u16(ea)));
+                }
+                // rlwimi r6, r7, 16, 6, 15
+                {
+                    let v = (g[7].get().rotate_left(16) & 0x3ff0000_u32)
+                        | (g[6].get() & 0xfc00ffff_u32);
+                    g[6].set(v);
+                }
+                // sth r0, 0x20(r8)
+                {
+                    let ea = g[8].get().wrapping_add(0x20_u32);
+                    ctx.write_u16(ea, g[0].get() as u16);
+                }
+                // lwz r12, 0x3c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x3c_u32);
+                    g[12].set(ctx.read_u32(ea));
+                }
+                // cmplwi r12, 0x0
+                {
+                    let (x, y) = (g[12].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80347C8C
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80347c8c_u32;
+                    continue;
+                }
+                pc = 0x80347c78_u32;
+            }
+            0x80347c78_u32 => {
+                // mtlr r12
+                ctx.regs.set_spr(8, g[12].get());
+                // li r3, 0xf
+                g[3].set(0xf_u32);
+                // crclr cr1eq
+                {
+                    let (x, y) = (c::cr_bit(ctx, 6), c::cr_bit(ctx, 6));
+                    c::set_cr_bit(ctx, 6, x ^ y);
+                }
+                // blrl
+                c::call(ctx, ctx.regs.lr.get() & !3, 0x80347c88_u32);
+                pc = 0x80347c88_u32;
+            }
+            0x80347c88_u32 => {
+                // b .L_80347C94
+                pc = 0x80347c94_u32;
+                continue;
+                pc = 0x80347c8c_u32;
+            }
+            0x80347c8c_u32 => {
+                // li r3, 0xf
+                g[3].set(0xf_u32);
+                // bl __OSUnhandledException
+                c::call(ctx, 0x80345870_u32, 0x80347c94_u32);
+                pc = 0x80347c94_u32;
+            }
+            0x80347c94_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of MEMIntrruptHandler");
+            }
+            _ => unreachable!("MEMIntrruptHandler: no block at {pc:#010x}"),
+        }
     }
-    fns::__OSUnhandledException(ctx, (15_i32 as u8), context, cause, addr);
 }
 
 pub fn Config24MB<'a>(ctx: &'a Ctx) {
@@ -310,14 +414,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80347c38,
-        |ctx| {
-            let (a0, a1): (i16, OSContext<'_>) = Args::take_all(ctx);
-            Ret::put(MEMIntrruptHandler(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80347c38, asm_MEMIntrruptHandler, Returns::Nothing);
     ctx.register_port(0x80347ca4, asm_Config24MB, Returns::Nothing);
     ctx.register_port(0x80347d24, asm_Config48MB, Returns::Nothing);
     ctx.register_port(0x80347da4, asm_RealMode, Returns::Nothing);

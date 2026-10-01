@@ -3847,6 +3847,12 @@ FROM_MACHINE_CODE = {
     "VIGetCurrentLine": "hardware register order",
     "VIGetNextField": "hardware register order",
     "getCurrentFieldEvenOdd": "hardware register order",
+    # MWCC reads their hardware registers in another order than the source, volatile as they
+    # are: the serial interface's status before its communication control (OSSerial's), the
+    # DSP's mailbox halves, the memory interface's error registers.
+    "CompleteTransfer": "hardware register order",
+    "__OSStopAudioSystem": "hardware register order",
+    "MEMIntrruptHandler": "hardware register order",
     # Its loop reads dir_ptr before setting it the first time round, which clang does not see:
     # the original takes whatever a register holds.
     "it_802BA3BC": "pointer read before it is set, in a loop",
