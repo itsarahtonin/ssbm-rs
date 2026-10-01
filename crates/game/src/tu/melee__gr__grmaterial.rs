@@ -594,9 +594,8 @@ pub fn grMaterial_801C9490<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInf
 }
 
 pub fn grMaterial_801C94D8<'a>(ctx: &'a Ctx, obj: Addr<'a>) {
-    let __frame = ctx.stack_frame(0x40);
+    let __frame = ctx.stack_frame(0x38);
     let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x18);
     let mut obj = obj;
     let mut hsd_obj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>(obj);
     let mut var_r30: HSD_DObj<'a> = null(ctx);
@@ -642,7 +641,7 @@ pub fn grMaterial_801C94D8<'a>(ctx: &'a Ctx, obj: Addr<'a>) {
         }
         'l3: while !Handle::is_null(var_r30_2) {
             'c4: {
-                inl_grMaterial_801C92C0_unfused(ctx, var_r30_2, Handle::addr(__inl));
+                fns::grMaterial_801C92C0(ctx, var_r30_2);
                 if Handle::is_null(var_r30_2) {
                     var_r30_2 = null::<HSD_JObj<'a>>(ctx);
                 } else {

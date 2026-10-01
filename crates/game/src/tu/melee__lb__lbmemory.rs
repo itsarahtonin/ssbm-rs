@@ -323,7 +323,13 @@ pub fn lbMemory_8001529C<'a>(ctx: &'a Ctx, h: Handle_<'a>, cb: FnPtr<'a>, arg: u
         'l1: while !Handle::is_null(block) {
             'c2: {
                 if Handle::addr((block).addr()) != (fns::lbMemory_804318B0(ctx).compact_cursor()) {
-                    inl_lbMemory_80015320_unfused(ctx, 0, Handle::addr(block), null(ctx), 0_i32);
+                    statics::melee__lb__lbmemory::lbMemory_80015320(
+                        ctx,
+                        0_i32,
+                        Handle::addr(block),
+                        null::<Addr<'a>>(ctx),
+                        0_i32,
+                    );
                     return (1_i32 as u32);
                 }
                 fns::lbMemory_804318B0(ctx)

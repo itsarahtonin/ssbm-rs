@@ -2325,7 +2325,7 @@ pub fn Camera_8002C1A8<'a>(ctx: &'a Ctx) {
     if dir != 0_i32 {
         scale = inl_getPauseScale(ctx);
         statics::melee__cm__camera::game_camera(ctx).set_x304(
-            (inl_Camera_8002BA00(
+            (fns::Camera_8002BA00(
                 ctx,
                 (statics::melee__cm__camera::game_camera(ctx).x304() as i32),
                 dir,
@@ -5915,7 +5915,7 @@ pub fn Camera_8002F9E4<'a>(ctx: &'a Ctx, arg0: i8, arg1: i8) {
     let mut scale: f64 = 0.0;
     statics::melee__cm__camera::game_camera(ctx).set_mode((enums::CAMERA_FREE as i32));
     statics::melee__cm__camera::game_camera(ctx)
-        .set_x304((inl_Camera_8002BA00(ctx, (arg0 as i32).wrapping_sub(1_i32), 1_i32) as i8));
+        .set_x304((fns::Camera_8002BA00(ctx, (arg0 as i32).wrapping_sub(1_i32), 1_i32) as i8));
     statics::melee__cm__camera::game_camera(ctx).set_x305(arg1);
     statics::melee__cm__camera::game_camera(ctx).set_x32C(fns::cm_803BCCA0(ctx).x40());
     statics::melee__cm__camera::game_camera(ctx)
@@ -6087,7 +6087,7 @@ pub fn Camera_8002FC7C<'a>(ctx: &'a Ctx, arg0: i8, arg1: i8) {
     let mut x304_check: i8 = 0;
     statics::melee__cm__camera::game_camera(ctx).set_mode((enums::CAMERA_FREE as i32));
     statics::melee__cm__camera::game_camera(ctx)
-        .set_x304((inl_Camera_8002BA00(ctx, (arg0 as i32).wrapping_sub(1_i32), 1_i32) as i8));
+        .set_x304((fns::Camera_8002BA00(ctx, (arg0 as i32).wrapping_sub(1_i32), 1_i32) as i8));
     statics::melee__cm__camera::game_camera(ctx).set_x305(arg1);
     statics::melee__cm__camera::game_camera(ctx).set_x32C(fns::cm_803BCCA0(ctx).x40());
     statics::melee__cm__camera::game_camera(ctx)
@@ -8108,32 +8108,6 @@ fn inl_getPauseScale<'a>(ctx: &'a Ctx) -> f64 {
     );
 }
 
-fn inl_Camera_8002BA00<'a>(ctx: &'a Ctx, slot: i32, arg1: i32) -> i32 {
-    let mut slot = slot;
-    let mut arg1 = arg1;
-    if slot == 10_i32 {
-        if arg1 > 0_i32 {
-            slot = 0_i32;
-        } else if arg1 < 0_i32 {
-            slot = 5_i32;
-        }
-    } else {
-        slot = slot.wrapping_add(arg1);
-        if slot < 0_i32 {
-            slot = 10_i32;
-        } else if slot > 5_i32 {
-            slot = 10_i32;
-        }
-    }
-    if slot == 10_i32 {
-        return 10_i32;
-    }
-    if !Handle::is_null(fns::Player_GetEntity(ctx, slot)) {
-        return slot;
-    }
-    return fns::Camera_8002BA00(ctx, slot, arg1);
-}
-
 fn inl_lbVector_Len<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     let mut vec = vec;
     return inl_sqrtf(
@@ -8170,6 +8144,32 @@ fn inl_eye_offset_len<'a>(ctx: &'a Ctx, offset: Vec<'a>) -> f64 {
             )),
         ),
     );
+}
+
+fn inl_Camera_8002BA00<'a>(ctx: &'a Ctx, slot: i32, arg1: i32) -> i32 {
+    let mut slot = slot;
+    let mut arg1 = arg1;
+    if slot == 10_i32 {
+        if arg1 > 0_i32 {
+            slot = 0_i32;
+        } else if arg1 < 0_i32 {
+            slot = 5_i32;
+        }
+    } else {
+        slot = slot.wrapping_add(arg1);
+        if slot < 0_i32 {
+            slot = 10_i32;
+        } else if slot > 5_i32 {
+            slot = 10_i32;
+        }
+    }
+    if slot == 10_i32 {
+        return 10_i32;
+    }
+    if !Handle::is_null(fns::Player_GetEntity(ctx, slot)) {
+        return slot;
+    }
+    return fns::Camera_8002BA00(ctx, slot, arg1);
 }
 
 fn inl_get_subject_pos<'a>(ctx: &'a Ctx, pos: Vec<'a>, slot_ptr: Val<'a, i8>) -> i32 {

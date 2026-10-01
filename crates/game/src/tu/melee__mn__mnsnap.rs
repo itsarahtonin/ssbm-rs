@@ -211,7 +211,7 @@ pub fn mnSnap_8025329C<'a>(ctx: &'a Ctx) {
                 (p52).set((p52).get().wrapping_add(1_i32));
                 (p51).set((p51).get().wrapping_sub(1_i32));
                 if (p51).get() != 0_i32 {
-                    inl_mnSnap_80253184_unfused(ctx);
+                    fns::mnSnap_80253184(ctx);
                 }
             }
         }
@@ -236,7 +236,7 @@ pub fn mnSnap_8025329C<'a>(ctx: &'a Ctx) {
                 (p52).set((p52).get().wrapping_add(1_i32));
                 (p51).set((p51).get().wrapping_sub(1_i32));
                 if (p51).get() != 0_i32 {
-                    inl_mnSnap_80253184_unfused(ctx);
+                    fns::mnSnap_80253184(ctx);
                 }
             }
         }
@@ -402,7 +402,7 @@ pub fn mnSnap_80253640<'a>(ctx: &'a Ctx, page: i32) {
         (p52).set((p52).get().wrapping_add(1_i32));
         (p51).set((p51).get().wrapping_sub(1_i32));
         if (p51).get() != 0_i32 {
-            inl_mnSnap_80253184_unfused(ctx);
+            fns::mnSnap_80253184(ctx);
         }
     }
     if (p50).get() == 0_i32 {

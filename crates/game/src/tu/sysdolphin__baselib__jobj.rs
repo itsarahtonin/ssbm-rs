@@ -311,7 +311,7 @@ pub fn HSD_JObjRemoveAnim<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
 pub fn HSD_JObjRemoveAnimAll<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut jobj = jobj;
-    inl_HSD_JObjRemoveAnimAllByFlags_unfused(ctx, jobj, (0x7ff_i32 as u32));
+    fns::HSD_JObjRemoveAnimAllByFlags(ctx, jobj, (0x7ff_i32 as u32));
 }
 
 pub fn HSD_JObjReqAnimByFlags<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, flags: u32, frame: f64) {
@@ -362,7 +362,7 @@ pub fn HSD_JObjReqAnimAll<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, frame: f64) {
     let __frame = ctx.stack_frame(0x20);
     let mut jobj = jobj;
     let mut frame = frame;
-    inl_HSD_JObjReqAnimAllByFlags_unfused(ctx, jobj, (0x7ff_i32 as u32), frame);
+    fns::HSD_JObjReqAnimAllByFlags(ctx, jobj, (0x7ff_i32 as u32), frame);
 }
 
 pub fn HSD_JObjReqAnim<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, frame: f64) {
@@ -869,7 +869,7 @@ pub fn HSD_JObjAnimAll<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
     let mut jobj = jobj;
     if !Handle::is_null(jobj) {
         fns::HSD_AObjInitEndCallBack(ctx);
-        inl_JObjAnimAll_unfused(ctx, jobj);
+        fns::JObjAnimAll(ctx, jobj);
         fns::HSD_AObjInvokeCallBacks(ctx);
     }
 }
@@ -1030,10 +1030,9 @@ pub fn JObjLoad<'a>(
 
 pub fn HSD_JObjLoadJoint<'a>(ctx: &'a Ctx, arg0: HSD_Joint<'a>) -> HSD_JObj<'a> {
     let __frame = ctx.stack_frame(0x18);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut jobj: HSD_JObj<'a> = inl_JObjLoadJointSub_unfused(ctx, arg0, null::<HSD_JObj<'a>>(ctx));
-    inl_HSD_JObjResolveRefsAll_unfused(ctx, jobj, arg0, Handle::addr(__inl));
+    fns::HSD_JObjResolveRefsAll(ctx, jobj, arg0);
     return jobj;
 }
 
@@ -1089,7 +1088,7 @@ pub fn HSD_JObjResolveRefsAll<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, joint: HSD_J
         'c2: {
             fns::HSD_JObjResolveRefs(ctx, jobj, joint);
             if !(((jobj).flags() & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
-                inl_HSD_JObjResolveRefsAll_unfused_2(
+                inl_HSD_JObjResolveRefsAll_unfused(
                     ctx,
                     (jobj).child(),
                     (joint).child(),
@@ -5149,6 +5148,52 @@ fn inl_JObjLoadJointSub_unfused<'a>(
     return jobj;
 }
 
+fn inl_ref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
+    let mut o = o;
+    if !Handle::is_null(o) {
+        (Handle::cast::<HSD_Obj<'a>>(o))
+            .set_ref_count((Handle::cast::<HSD_Obj<'a>>(o)).ref_count().wrapping_add(1));
+        (if ((Handle::cast::<HSD_Obj<'a>>(o)).ref_count() as i32)
+            != ((1_i32.wrapping_neg() as u16) as i32)
+        {
+            ({ () })
+        } else {
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x803b94c4),
+                (93_i32 as u32),
+                cstr(ctx, 0x803b94c4),
+            )
+        });
+    }
+}
+
+fn inl_HSD_JObjRef_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
+    let mut jobj = jobj;
+    inl_ref_INC_unfused(ctx, Handle::cast::<Addr<'a>>(jobj));
+}
+
+fn inl_HSD_JObjResolveRefsAll_unfused<'a>(
+    ctx: &'a Ctx,
+    jobj: HSD_JObj<'a>,
+    joint: HSD_Joint<'a>,
+    __in_caller: u32,
+) {
+    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0x0);
+    let mut jobj = jobj;
+    let mut joint = joint;
+    'l1: while (!Handle::is_null(jobj)) && (!Handle::is_null(joint)) {
+        'c2: {
+            fns::HSD_JObjResolveRefs(ctx, jobj, joint);
+            if !(((jobj).flags() & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
+                fns::HSD_JObjResolveRefsAll(ctx, (jobj).child(), (joint).child());
+            }
+            jobj = (jobj).next();
+            joint = (joint).next();
+        }
+    }
+}
+
 fn inl_ref_DEC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) -> i32 {
     let mut o = o;
     let mut ret: i32 = 0;
@@ -5226,6 +5271,19 @@ fn inl_iref_DEC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) -> i32 {
     return (((Handle::cast::<HSD_Obj<'a>>(o)).ref_count_individual() as i32) == 0_i32) as i32;
 }
 
+fn inl_ref_CNT_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) -> i32 {
+    let mut o = o;
+    if ((Handle::cast::<HSD_Obj<'a>>(o)).ref_count() as i32)
+        == ((1_i32.wrapping_neg() as u16) as i32)
+    {
+        return 1_i32.wrapping_neg();
+    } else {
+        return ((Handle::cast::<HSD_Obj<'a>>(o)).ref_count() as i32);
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
 fn inl_HSD_JObjUnref_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
     let mut jobj = jobj;
     if (!Handle::is_null(jobj)) && (inl_ref_DEC_unfused(ctx, Handle::cast::<Addr<'a>>(jobj)) != 0) {
@@ -5241,133 +5299,6 @@ fn inl_HSD_JObjUnref_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
             }
         }
     }
-}
-
-fn inl_ref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
-    let mut o = o;
-    if !Handle::is_null(o) {
-        (Handle::cast::<HSD_Obj<'a>>(o))
-            .set_ref_count((Handle::cast::<HSD_Obj<'a>>(o)).ref_count().wrapping_add(1));
-        (if ((Handle::cast::<HSD_Obj<'a>>(o)).ref_count() as i32)
-            != ((1_i32.wrapping_neg() as u16) as i32)
-        {
-            ({ () })
-        } else {
-            fns::__assert(
-                ctx,
-                cstr(ctx, 0x803b94c4),
-                (93_i32 as u32),
-                cstr(ctx, 0x803b94c4),
-            )
-        });
-    }
-}
-
-fn inl_HSD_JObjRef_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
-    let mut jobj = jobj;
-    inl_ref_INC_unfused(ctx, Handle::cast::<Addr<'a>>(jobj));
-}
-
-fn inl_HSD_JObjResolveRefs_unfused<'a>(
-    ctx: &'a Ctx,
-    jobj: HSD_JObj<'a>,
-    joint: HSD_Joint<'a>,
-    __in_caller: u32,
-) {
-    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0x0);
-    let mut jobj = jobj;
-    let mut joint = joint;
-    if (Handle::is_null(jobj)) || (Handle::is_null(joint)) {
-        return;
-    }
-    fns::HSD_RObjResolveRefsAll(ctx, (jobj).robj(), (joint).robjdesc());
-    if !(!(((jobj).flags() & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0)) {
-        inl_HSD_JObjUnref_unfused(ctx, (jobj).child());
-        (jobj).set_child(Handle::cast::<HSD_JObj<'a>>(fns::HSD_IDGetDataFromTable(
-            ctx,
-            null::<_HSD_IDTable<'a>>(ctx),
-            Handle::addr((joint).child()),
-            null::<Val<'a, i32>>(ctx),
-        )));
-        (if !Handle::is_null(((jobj).child())) {
-            ({ () })
-        } else {
-            fns::__assert(
-                ctx,
-                cstr(ctx, 0x803b94c4),
-                (0x454_i32 as u32),
-                cstr(ctx, 0x803b94c4),
-            )
-        });
-        inl_HSD_JObjRef_unfused(ctx, (jobj).child());
-    }
-    if ((if (((jobj).flags()
-        & (((shl_i32(1_i32, (5_i32 as u32))) | (shl_i32(1_i32, (14_i32 as u32)))) as u32))
-        != 0)
-    {
-        0_i32
-    } else {
-        1_i32
-    }) != 0)
-    {
-        fns::HSD_DObjResolveRefsAll(ctx, (jobj).u().dobj(), (joint).u().dobjdesc());
-    }
-}
-
-fn inl_HSD_JObjResolveRefsAll_unfused<'a>(
-    ctx: &'a Ctx,
-    jobj: HSD_JObj<'a>,
-    joint: HSD_Joint<'a>,
-    __in_caller: u32,
-) {
-    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0x0);
-    let __inl: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x8);
-    let mut jobj = jobj;
-    let mut joint = joint;
-    'l1: while (!Handle::is_null(jobj)) && (!Handle::is_null(joint)) {
-        'c2: {
-            inl_HSD_JObjResolveRefs_unfused(ctx, jobj, joint, Handle::addr(__inl));
-            if !(((jobj).flags() & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
-                fns::HSD_JObjResolveRefsAll(ctx, (jobj).child(), (joint).child());
-            }
-            jobj = (jobj).next();
-            joint = (joint).next();
-        }
-    }
-}
-
-fn inl_HSD_JObjResolveRefsAll_unfused_2<'a>(
-    ctx: &'a Ctx,
-    jobj: HSD_JObj<'a>,
-    joint: HSD_Joint<'a>,
-    __in_caller: u32,
-) {
-    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0x0);
-    let mut jobj = jobj;
-    let mut joint = joint;
-    'l1: while (!Handle::is_null(jobj)) && (!Handle::is_null(joint)) {
-        'c2: {
-            fns::HSD_JObjResolveRefs(ctx, jobj, joint);
-            if !(((jobj).flags() & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
-                fns::HSD_JObjResolveRefsAll(ctx, (jobj).child(), (joint).child());
-            }
-            jobj = (jobj).next();
-            joint = (joint).next();
-        }
-    }
-}
-
-fn inl_ref_CNT_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) -> i32 {
-    let mut o = o;
-    if ((Handle::cast::<HSD_Obj<'a>>(o)).ref_count() as i32)
-        == ((1_i32.wrapping_neg() as u16) as i32)
-    {
-        return 1_i32.wrapping_neg();
-    } else {
-        return ((Handle::cast::<HSD_Obj<'a>>(o)).ref_count() as i32);
-    }
-    #[allow(unreachable_code)]
-    return 0;
 }
 
 fn inl_UpdateParentTrspBits_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, child: HSD_JObj<'a>) {

@@ -69,10 +69,10 @@ pub fn lb_80011C18<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, flags: u32) {
     let mut jobj = jobj;
     let mut flags = flags;
     if !Handle::is_null((jobj).child()) {
-        inl_lb_80011C18_unfused(ctx, (jobj).child(), flags);
+        fns::lb_80011C18(ctx, (jobj).child(), flags);
     }
     if !Handle::is_null((jobj).next()) {
-        inl_lb_80011C18_unfused(ctx, (jobj).next(), flags);
+        fns::lb_80011C18(ctx, (jobj).next(), flags);
     }
     if (inl_checkJObjFlags_unfused(ctx, jobj) != 0) {
         if !Handle::is_null((jobj).u().dobj()) {
@@ -1874,22 +1874,6 @@ fn inl_checkJObjFlags_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         1_i32
     });
-}
-
-fn inl_lb_80011C18_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, flags: u32) {
-    let mut jobj = jobj;
-    let mut flags = flags;
-    if !Handle::is_null((jobj).child()) {
-        fns::lb_80011C18(ctx, (jobj).child(), flags);
-    }
-    if !Handle::is_null((jobj).next()) {
-        fns::lb_80011C18(ctx, (jobj).next(), flags);
-    }
-    if (inl_checkJObjFlags_unfused(ctx, jobj) != 0) {
-        if !Handle::is_null((jobj).u().dobj()) {
-            fns::lb_80011B74(ctx, (jobj).u().dobj(), flags);
-        }
-    }
 }
 
 fn inl_HSD_JObjGetChild_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {

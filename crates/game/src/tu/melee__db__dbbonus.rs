@@ -363,7 +363,7 @@ pub fn fn_CheckBonusInfo<'a>(ctx: &'a Ctx, player: i32) {
         if !Handle::is_null(fns::Player_GetEntity(ctx, player)) {
             fns::pl_80039450(ctx, player);
         }
-        inl_fn_80228E54_unfused(ctx, player, 0_i32, 0_i32);
+        statics::melee__db__dbbonus::fn_80228E54(ctx, player, 0_i32, 0_i32);
     }
 }
 

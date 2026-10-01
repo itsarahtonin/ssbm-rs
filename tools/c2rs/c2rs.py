@@ -2806,7 +2806,12 @@ class Translator:
         own = sum(1 for y in defn.walk_preorder()
                   if y.kind == CK.CALL_EXPR and y.referenced is not None and y.referenced.spelling == ref.spelling)
         if own and sites and n == sites * own:
-            return True
+            # As many calls as one plain call each would make too: inlined, the function's
+            # other calls would be this one's as well, but for failed assertions, which
+            # inlining can prove never fail.
+            theirs = self.u.calls.get(name) or {}
+            return all(self.asm.get(c, 0) >= sites * k for c, k in theirs.items()
+                       if c != name and c not in ("__assert", "OSPanic", "HSD_Panic"))
         if n < sites:
             # Some calls inlined, some not; which ones is not known, so all stay calls.
             self.u.inline_partial.add((self.f.cursor.spelling, name, n, sites))

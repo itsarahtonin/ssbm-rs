@@ -247,8 +247,8 @@ pub fn lb_8000B804<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, joint: HSD_Joint<'a>) {
     Handle::copy_from((jobj).translate(), (joint).position());
     fns::HSD_JObjClearFlags(ctx, jobj, ((shl_i32(1_i32, (17_i32 as u32))) as u32));
     fns::HSD_JObjSetFlags(ctx, jobj, ((shl_i32(1_i32, (6_i32 as u32))) as u32));
-    inl_lb_8000B804_unfused(ctx, (jobj).next(), (joint).next());
-    inl_lb_8000B804_unfused(ctx, (jobj).child(), (joint).child());
+    fns::lb_8000B804(ctx, (jobj).next(), (joint).next());
+    fns::lb_8000B804(ctx, (jobj).child(), (joint).child());
 }
 
 pub fn lb_8000B9D8<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: Ptr<'a, Val<'a, F32>>, arg2: i32) {
@@ -1397,23 +1397,6 @@ fn inl_HSD_JObjGetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
         )
     });
     Handle::copy_from((scale), (jobj).scale());
-}
-
-fn inl_lb_8000B804_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, joint: HSD_Joint<'a>) {
-    let mut jobj = jobj;
-    let mut joint = joint;
-    if (Handle::is_null(jobj)) || (Handle::is_null(joint)) {
-        return;
-    }
-    (jobj).rotate().set_x((joint).rotation().x());
-    (jobj).rotate().set_y((joint).rotation().y());
-    (jobj).rotate().set_z((joint).rotation().z());
-    Handle::copy_from((jobj).scale(), (joint).scale());
-    Handle::copy_from((jobj).translate(), (joint).position());
-    fns::HSD_JObjClearFlags(ctx, jobj, ((shl_i32(1_i32, (17_i32 as u32))) as u32));
-    fns::HSD_JObjSetFlags(ctx, jobj, ((shl_i32(1_i32, (6_i32 as u32))) as u32));
-    fns::lb_8000B804(ctx, (jobj).next(), (joint).next());
-    fns::lb_8000B804(ctx, (jobj).child(), (joint).child());
 }
 
 fn inl_lbFindJObjWithAObj_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
