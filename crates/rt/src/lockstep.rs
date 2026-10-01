@@ -764,7 +764,10 @@ fn mutated_checks(
 }
 
 /// Changes a call's inputs at random: some of the bytes its pointer arguments reach, and some
-/// of its other integer and float arguments.
+/// of its other integer and float arguments. Code and words that hold pointers stay as they
+/// are: only the original runs code from memory, a pointer changed sends both sides through
+/// memory where they differ only in what ports keep out of it, and counts, flags and floats
+/// are what reach the branches real calls miss.
 fn mutate(ctx: &Ctx) {
     let state = &ctx.lockstep;
     let next = || {
@@ -776,12 +779,13 @@ fn mutate(ctx: &Ctx) {
         x
     };
     let ram = |a: u32| (0x8000_0000..0x8180_0000).contains(&a);
+    let (code_start, code_end) = state.code.get();
     for r in 3..=10 {
         let v = ctx.regs.r(r);
         if ram(v) {
             for _ in 0..=next() % 3 {
                 let at = v.wrapping_add((next() % 0x80) as u32);
-                if ram(at) {
+                if ram(at) && !(code_start..code_end).contains(&at) && !ram(ctx.read_u32(at & !3)) {
                     let old = ctx.read_u8(at);
                     let new = if next() % 2 == 0 {
                         old ^ (1 << (next() % 8))
