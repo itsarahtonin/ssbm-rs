@@ -116,6 +116,8 @@ pub struct Ctx {
     mmio: OnceCell<Box<dyn Mmio>>,
     names: OnceCell<Box<dyn Fn(u32) -> Option<String>>>,
     hooks: RefCell<HashMap<u32, Hook>>,
+    /// When the hooks set with `set_hook_unless` do nothing.
+    hook_skips: RefCell<HashMap<u32, fn(&Ctx) -> bool>>,
     /// Per MEM1 word: `FLAG_NATIVE` and `FLAG_HOOK`, so the interpreter checks cheaply.
     flags: Box<[Cell<u8>]>,
     pub lockstep: lockstep::State,
@@ -209,6 +211,7 @@ impl Ctx {
             mmio: OnceCell::new(),
             names: OnceCell::new(),
             hooks: RefCell::default(),
+            hook_skips: RefCell::default(),
             flags: vec![Cell::new(0); (MEM1_SIZE / 4) as usize].into_boxed_slice(),
             lockstep: lockstep::State::default(),
             ext: RefCell::default(),
@@ -882,9 +885,18 @@ impl Ctx {
         self.hooks.borrow_mut().insert(addr, hook);
     }
 
+    /// Like `set_hook`, for a hook with nothing to do when `skip` holds on reaching `addr`. It
+    /// then doesn't run, and reaching it is no interaction with the layer that set it, so checks
+    /// go on there.
+    pub fn set_hook_unless(&self, addr: u32, skip: fn(&Ctx) -> bool, hook: Hook) {
+        self.set_hook(addr, hook);
+        self.hook_skips.borrow_mut().insert(addr, skip);
+    }
+
     pub fn remove_hook(&self, addr: u32) {
         self.set_flag(addr, FLAG_HOOK, false);
         self.hooks.borrow_mut().remove(&addr);
+        self.hook_skips.borrow_mut().remove(&addr);
     }
 
     pub fn has_hook(&self, addr: u32) -> bool {
@@ -892,6 +904,10 @@ impl Ctx {
     }
 
     pub fn run_hook(&self, addr: u32) {
+        let skip = self.hook_skips.borrow().get(&addr).copied();
+        if skip.is_some_and(|skip| skip(self)) {
+            return;
+        }
         let hook = self.hooks.borrow().get(&addr).cloned();
         if let Some(hook) = hook {
             let original = self.running_original.replace(false);

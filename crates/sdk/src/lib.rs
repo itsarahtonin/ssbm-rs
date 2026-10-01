@@ -323,6 +323,43 @@ pub fn install(ctx: &Ctx, disc: Disc, card: Option<Card>) -> Rc<Sdk> {
             Rc::new(|ctx| Sdk::wait(ctx, GAME_WAIT_STEP)),
         );
     }
+    // The other loops that spin on what interrupts change pass no wait point, so time passes on
+    // reaching them until they would end: those at the start of a function that call nothing (a
+    // stream start waiting for the last stream's first reads, a sound bank load for room in the
+    // load queue, the crash screen for the frame buffers to be shown), and the calls each spin
+    // of the others makes, which nothing else makes (for an ARAM transfer, the movie player's
+    // reads, and the disc requests at a reset). Loops that would end at once take no time.
+    let spins: [(&str, fn(&Ctx) -> bool); 6] = [
+        ("HSD_SynthPStreamStart", |ctx| {
+            ctx.read_u8(sym("HSD_Synth_804D7778")) == 0
+        }),
+        ("HSD_SynthSFXLoad", |ctx| {
+            (ctx.read_u32(sym("HSD_Synth_804D772C")) as i32) < 6
+        }),
+        ("HSD_VIWaitXFBFlushNoYield", xfbs_flushed),
+        ("lbArq_80014ABC", |ctx| {
+            let node = ssbm_types::records::lbArqNode(ssbm_rt::At::new(ctx, ctx.regs.r(3)));
+            node.state() == ssbm_types::enums::LB_ARQ_STATE_DONE
+        }),
+        ("fn_8001F294", |ctx| {
+            let player = ssbm_types::records::THPDecComp(ssbm_rt::At::new(ctx, sym("MoviePlayer")));
+            player.unk_110() == 0
+        }),
+        ("HSD_DevComIsBusy", |ctx| {
+            ctx.read_u32(sym("devComStatus") + 4 * (ctx.regs.r(3) & 3)) == 0
+        }),
+    ];
+    for (name, done) in spins {
+        ctx.set_hook_unless(
+            sym(name),
+            done,
+            Rc::new(move |ctx| {
+                while !done(ctx) {
+                    Sdk::wait(ctx, GAME_WAIT_STEP);
+                }
+            }),
+        );
+    }
     ctx.set_interrupt_check(Rc::new(Sdk::take_interrupts));
     // Everything the SDK layer stands in for lives outside game memory.
     for addr in ctx.registered() {
@@ -333,3 +370,15 @@ pub fn install(ctx: &Ctx, disc: Disc, card: Option<Card>) -> Rc<Sdk> {
 
 /// Most time that passes per spin of one of the game's wait loops: a quarter millisecond.
 const GAME_WAIT_STEP: u64 = TB_HZ / 4000;
+
+/// Whether `HSD_VIWaitXFBFlushNoYield` would return at once: one frame buffer, or none waiting
+/// to be drawn or shown.
+fn xfbs_flushed(ctx: &Ctx) -> bool {
+    use ssbm_types::enums::{HSD_VI_XFB_DRAWDONE, HSD_VI_XFB_NEXT, HSD_VI_XFB_WAITDONE};
+    let vi = ssbm_types::records::_HSD_VIInfo(ssbm_rt::At::new(ctx, sym("HSD_VIData")));
+    vi.nb_xfb() < 2
+        || (0..3).all(|i| {
+            let status = vi.xfb().get(i).status();
+            ![HSD_VI_XFB_WAITDONE, HSD_VI_XFB_DRAWDONE, HSD_VI_XFB_NEXT].contains(&status)
+        })
+}
