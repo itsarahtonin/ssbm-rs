@@ -30,6 +30,26 @@ pub use regs::{Regs, RegsSnapshot, spr};
 /// Code run when execution reaches an address.
 pub type Hook = Rc<dyn Fn(&Ctx)>;
 
+/// Calls through dispatch a mutated check may nest: the game's deepest recursion takes a few
+/// dozen.
+const MUTATED_DEPTH: u32 = 4000;
+
+/// Counts a call through dispatch while it runs, unwinding included.
+struct InvokeDepth<'a>(&'a Ctx);
+
+impl<'a> InvokeDepth<'a> {
+    fn enter(ctx: &'a Ctx) -> Self {
+        ctx.invoke_depth.set(ctx.invoke_depth.get() + 1);
+        Self(ctx)
+    }
+}
+
+impl Drop for InvokeDepth<'_> {
+    fn drop(&mut self) {
+        self.0.invoke_depth.set(self.0.invoke_depth.get() - 1);
+    }
+}
+
 /// The interpreter's record of the original calls it is in, to see each keep the calling
 /// convention, and the first function seen breaking it.
 #[derive(Default)]
@@ -147,6 +167,8 @@ pub struct Ctx {
     interrupt_check: RefCell<Option<Hook>>,
     /// Ports running, innermost last. A panic leaves it as it was, for the report.
     natives: RefCell<Vec<u32>>,
+    /// How many calls through dispatch are running, each a few Rust frames deep.
+    invoke_depth: Cell<u32>,
     /// Jump buffers and where they were saved, latest last.
     jump_targets: RefCell<Vec<(u32, jump::Target)>>,
     /// Every jump buffer ever saved to.
@@ -238,6 +260,7 @@ impl Ctx {
             heartbeat: RefCell::default(),
             interrupt_check: RefCell::default(),
             natives: RefCell::default(),
+            invoke_depth: Cell::new(0),
             jump_targets: RefCell::default(),
             jump_buffers: RefCell::default(),
             current_run: Cell::new(0),
@@ -772,12 +795,14 @@ impl Ctx {
     /// Runs the function at `addr` with arguments already in registers.
     pub fn invoke(&self, addr: u32) {
         if let Some(n) = self.lockstep.calls_left.get() {
-            if n == 0 {
-                // A mutated check's side that calls on and on.
+            if n == 0 || self.invoke_depth.get() >= MUTATED_DEPTH {
+                // A mutated check's side that calls on and on, or recurses deeper than the
+                // game ever does, which would run out of stack first.
                 std::panic::panic_any(lockstep::Runaway);
             }
             self.lockstep.calls_left.set(Some(n - 1));
         }
+        let _depth = InvokeDepth::enter(self);
         if !self.lockstep.trace_calls.get() {
             return self.invoke_traced(addr);
         }
