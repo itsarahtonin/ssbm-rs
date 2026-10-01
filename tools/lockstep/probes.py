@@ -1,16 +1,22 @@
 """Lists functions for ssbm-run's probes: those coverage leaves below the bar whose parameters a
-probe can give, a game object and numbers.
+probe can give: game objects, their parts, numbers and scratch memory.
 
     python tools/lockstep/probes.py <decomp root> local/typegen/types.json REPORT_CSV OUT
         [--bar 0.9]
 
-A probe calls the function, under lockstep, on a live object of the kind its unit works on: a
-fighter of its fighter kind (any fighter for common code), an item, or the stage's ground
-objects; or with no object, for functions that take only numbers. Each line of OUT is
-`address form class kind params # name`: the form says what the first parameter is (g a game
-object, u the object's user data, such as its Fighter, n no object), the class is the object's
-GObj class or -1 for any, the kind a fighter kind or -1 for any, and params one letter per
-further parameter, i for an integer and f for a float.
+A probe calls the function, under lockstep, with live game objects of the kind its unit works
+on (a fighter of its fighter kind, any fighter for common code, an item, the stage's ground
+objects) and small numbers. Each line of OUT is `address class kind params # name`: the class
+is the GObj class of its first object parameter (-1 for any), the kind a fighter kind (-1 for
+any), and params one letter per parameter:
+
+    g  a game object (HSD_GObj)
+    F  a fighter (its Fighter), I  an item (its Item), R  a ground (its Ground)
+    j  a joint (HSD_JObj), c  a camera (HSD_CObj), l  a light (HSD_LObj): a game object's own
+    p  zeroed scratch memory, for any other pointer
+    i  an integer, f  a float
+
+or `-` for none.
 """
 
 import argparse
@@ -28,8 +34,13 @@ FIGHTER_KINDS = {
     "ftZakoBoy": 29, "ftZakoGirl": 30, "ftGigaKoopa": 31, "ftSandbag": 32,
 }
 CLASS_FIGHTER, CLASS_ITEM, CLASS_GROUND = 4, 6, 13
-# The GObj classes whose user data is each of these.
-USER_DATA = {"Fighter": CLASS_FIGHTER, "Item": CLASS_ITEM, "Ground": CLASS_GROUND}
+# Code a call out of context says nothing about: it jumps elsewhere for good, or saves and loads
+# the CPU's registers, whose contents ports don't keep as the original's are.
+NOT_PROBED = re.compile(r"longjmp|setjmp|Context|SwitchThread|SelectThread|Exception|Interrupt"
+                        r"Handler|__OSDispatchInterrupt|OSResetSystem|__start")
+# Letters for the records a probe can give.
+RECORDS = {"HSD_GObj": "g", "Fighter": "F", "Item": "I", "Ground": "R", "HSD_JObj": "j",
+           "HSD_CObj": "c", "HSD_LObj": "l"}
 
 
 def unit_class(unit):
@@ -47,24 +58,19 @@ def unit_class(unit):
     return -1, -1
 
 
-def record_name(t, records):
-    if t.get("k") != "ptr":
-        return None
-    to = t.get("to") or {}
-    return records.get(to.get("id"), {}).get("name") if to.get("k") == "rec" else None
-
-
-def letters(params):
-    """One letter per numeric parameter, or None if one is not a number."""
-    out = []
-    for p in params:
-        if p.get("k") in ("int", "enum") and p.get("size", 4) <= 4:
-            out.append("i")
-        elif p.get("k") == "float":
-            out.append("f")
-        else:
+def letter(p, records):
+    k = p.get("k")
+    if k in ("int", "enum") and p.get("size", 4) <= 4:
+        return "i"
+    if k == "float":
+        return "f"
+    if k == "ptr":
+        to = p.get("to") or {}
+        if to.get("k") == "fn":
             return None
-    return "".join(out) or "-"
+        name = records.get(to.get("id"), {}).get("name") if to.get("k") == "rec" else None
+        return RECORDS.get(name, "p")
+    return None
 
 
 def main():
@@ -83,26 +89,25 @@ def main():
         if float(r["share"]) >= args.bar and int(r["mismatches"]) == 0:
             continue
         addr = int(r["address"], 16)
-        cls, kind = unit_class(r["unit"])
+        if NOT_PROBED.search(r["name"]):
+            skipped["control flow or registers"] = skipped.get("control flow or registers", 0) + 1
+            continue
         ft = sigs.get(addr)
         if ft is None or ft.get("variadic"):
             skipped["no prototype"] = skipped.get("no prototype", 0) + 1
             continue
-        params = ft.get("params") or []
-        first = record_name(params[0], records) if params else None
-        if first == "HSD_GObj":
-            form, rest = "g", letters(params[1:])
-        elif first in USER_DATA:
-            form, cls, rest = "u", USER_DATA[first], letters(params[1:])
-            kind = kind if cls == CLASS_FIGHTER else -1
-        else:
-            form, cls, kind, rest = "n", -1, -1, letters(params)
-        if rest is None:
-            skipped["other parameters"] = skipped.get("other parameters", 0) + 1
+        params = [letter(p, records) for p in ft.get("params") or []]
+        if None in params:
+            skipped["function pointers or structs"] = skipped.get("function pointers or structs", 0) + 1
             continue
-        lines.append(f"{addr:#010x} {form} {cls} {kind} {rest} # {r['name']}")
+        cls, kind = unit_class(r["unit"])
+        first = next((x for x in params if x in "gFIR"), None)
+        if first in ("F", "I", "R"):
+            cls = {"F": CLASS_FIGHTER, "I": CLASS_ITEM, "R": CLASS_GROUND}[first]
+            kind = kind if first == "F" else -1
+        lines.append(f"{addr:#010x} {cls} {kind} {''.join(params) or '-'} # {r['name']}")
     with open(args.out, "w", encoding="utf-8", newline="\n") as w:
-        w.write("# Functions to probe: address, object form, object class, fighter kind, parameters\n")
+        w.write("# Functions to probe: address, object class, fighter kind, parameters\n")
         w.write("\n".join(lines) + "\n")
     print(f"{len(lines)} functions to probe; left out: " +
           ", ".join(f"{n} {why}" for why, n in sorted(skipped.items(), key=lambda x: -x[1])))

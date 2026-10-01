@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 //! Probes: lockstep checks of functions no input has reached, called directly on live game
-//! objects. `PROBES=FILE` lists them, as `tools/lockstep/probes.py` writes them (address, what
-//! the first parameter is: g a game object, u its user data, n no object; the object's GObj
-//! class or -1 for any; a fighter kind or -1; one letter per further parameter: i an integer, f
-//! a float). Once a video field, outside any check, the next `PROBE_RATE` of them (default 8)
-//! whose object is around run under lockstep, each on an object of its class (and fighter kind)
-//! with small numbers for the rest, and everything they do is undone; `PROBE_LIMIT` (default
-//! 20) probes each function at most. Deterministic for `PROBE_SEED`. `PROBE_LOG=1` names each
-//! probe as it starts.
+//! objects. `PROBES=FILE` lists them, as `tools/lockstep/probes.py` writes them: address, the
+//! GObj class of the first object parameter (-1 for any), a fighter kind (-1 for any), and one
+//! letter per parameter: g a game object, F/I/R a fighter's, item's or ground's user data, j/c/l
+//! a game object's joint, camera or light, p zeroed scratch memory, i an integer, f a float.
+//! Once a video field, outside any check, the next `PROBE_RATE` of them (default 8) whose
+//! objects are around run under lockstep, and everything they do is undone; `PROBE_LIMIT`
+//! (default 20) probes each function at most. Deterministic for `PROBE_SEED`. `PROBE_LOG=1`
+//! names each probe as it starts.
 
 use std::cell::Cell;
 use std::rc::Rc;
@@ -20,22 +20,21 @@ use crate::monkey::Rng;
 
 /// GObj fields.
 const CLASSIFIER: u32 = 0x0;
+const OBJ_KIND: u32 = 0x6;
 const NEXT: u32 = 0x8;
+const HSD_OBJ: u32 = 0x28;
 const USER_DATA: u32 = 0x2C;
 /// `Fighter.kind`.
 const FIGHTER_KIND: u32 = 0x4;
 const CLASS_FIGHTER: u16 = 4;
-
-#[derive(Clone, Copy, PartialEq)]
-enum Form {
-    Object,
-    UserData,
-    None,
-}
+const CLASS_ITEM: u16 = 6;
+const CLASS_GROUND: u16 = 13;
+/// Bytes of zeroed scratch memory each pointer parameter gets, and kept clear around them.
+const SCRATCH: u32 = 0x100;
+const SCRATCH_ROOM: u32 = 0x400;
 
 struct Probe {
     addr: u32,
-    form: Form,
     class: i32,
     kind: i32,
     params: Vec<u8>,
@@ -51,6 +50,17 @@ struct State {
     log: bool,
 }
 
+/// A live game object.
+#[derive(Clone, Copy)]
+struct Object {
+    gobj: u32,
+    class: u16,
+    kind: i32,
+    obj_kind: u8,
+    hsd_obj: u32,
+    user_data: u32,
+}
+
 pub fn install(sdk: &Rc<Sdk>, path: &str) {
     let text = std::fs::read_to_string(path).unwrap_or_else(|e| panic!("{path}: {e}"));
     let probes: Vec<Probe> = text
@@ -59,17 +69,11 @@ pub fn install(sdk: &Rc<Sdk>, path: &str) {
             let l = l.split('#').next()?.trim();
             let mut f = l.split_whitespace();
             let addr = u32::from_str_radix(f.next()?.trim_start_matches("0x"), 16).ok()?;
-            let form = match f.next()? {
-                "g" => Form::Object,
-                "u" => Form::UserData,
-                _ => Form::None,
-            };
             let class = f.next()?.parse().ok()?;
             let kind = f.next()?.parse().ok()?;
             let params = f.next()?.bytes().filter(|&b| b != b'-').collect();
             Some(Probe {
                 addr,
-                form,
                 class,
                 kind,
                 params,
@@ -103,35 +107,89 @@ fn schedule(sdk: &Rc<Sdk>, state: Rc<State>, field: u64) {
     });
 }
 
-/// Live game objects: (GObj, its class, the fighter kind for fighters).
-fn objects(ctx: &Ctx) -> Vec<(u32, u16, i32)> {
+fn objects(ctx: &Ctx) -> Vec<Object> {
     let heads = ctx.mem.read_u32(ssbm_sdk::sym("HSD_GObjPLinkHead")).unwrap_or(0);
     let links = ctx.mem.read_u8(ssbm_sdk::sym("HSD_GObjLibInitData")).unwrap_or(0);
     let mut out = Vec::new();
     if heads == 0 {
         return out;
     }
+    let word = |a: u32| ctx.mem.read_u32(a).unwrap_or(0);
     for p in 0..u32::from(links) {
-        let mut g = ctx.mem.read_u32(heads + 4 * p).unwrap_or(0);
+        let mut g = word(heads + 4 * p);
         let mut n = 0;
         while g != 0 && n < 4096 {
             let class = ctx.mem.read_u16(g + CLASSIFIER).unwrap_or(0);
-            let kind = if class == CLASS_FIGHTER {
-                ctx.mem
-                    .read_u32(g + USER_DATA)
-                    .ok()
-                    .filter(|&d| d != 0)
-                    .and_then(|d| ctx.mem.read_u32(d + FIGHTER_KIND).ok())
-                    .map_or(-1, |k| k as i32)
+            let user_data = word(g + USER_DATA);
+            let kind = if class == CLASS_FIGHTER && user_data != 0 {
+                word(user_data + FIGHTER_KIND) as i32
             } else {
                 -1
             };
-            out.push((g, class, kind));
-            g = ctx.mem.read_u32(g + NEXT).unwrap_or(0);
+            out.push(Object {
+                gobj: g,
+                class,
+                kind,
+                obj_kind: ctx.mem.read_u8(g + OBJ_KIND).unwrap_or(0xFF),
+                hsd_obj: word(g + HSD_OBJ),
+                user_data,
+            });
+            g = word(g + NEXT);
             n += 1;
         }
     }
     out
+}
+
+/// The value a probe passes for parameter letter `k`: `first` is whether it is the first object
+/// parameter, which takes the probe's class and kind. None if no object fits.
+fn object_for(
+    ctx: &Ctx,
+    p: &Probe,
+    k: u8,
+    first: bool,
+    objects: &[Object],
+    rng: &Rng,
+) -> Option<u32> {
+    let kind_of = |name: &str| ctx.mem.read_u8(ssbm_sdk::sym(name)).unwrap_or(0xFE);
+    let pick = |fits: Vec<u32>| (!fits.is_empty()).then(|| fits[rng.below(fits.len() as u64) as usize]);
+    let class_fits = |o: &Object, class: Option<u16>| {
+        let (want, kind) = if first { (p.class, p.kind) } else { (-1, -1) };
+        class.is_none_or(|c| o.class == c)
+            && (want < 0 || i32::from(o.class) == want)
+            && (kind < 0 || o.kind == kind)
+    };
+    match k {
+        b'g' => pick(objects.iter().filter(|o| class_fits(o, None)).map(|o| o.gobj).collect()),
+        b'F' | b'I' | b'R' => {
+            let class = match k {
+                b'F' => CLASS_FIGHTER,
+                b'I' => CLASS_ITEM,
+                _ => CLASS_GROUND,
+            };
+            pick(
+                objects
+                    .iter()
+                    .filter(|o| class_fits(o, Some(class)) && o.user_data != 0)
+                    .map(|o| o.user_data)
+                    .collect(),
+            )
+        }
+        _ => {
+            let want = kind_of(match k {
+                b'j' => "HSD_GObj_JObjKind",
+                b'c' => "HSD_GObj_CameraKind",
+                _ => "HSD_GObj_LightKind",
+            });
+            pick(
+                objects
+                    .iter()
+                    .filter(|o| o.obj_kind == want && o.hsd_obj != 0)
+                    .map(|o| o.hsd_obj)
+                    .collect(),
+            )
+        }
+    }
 }
 
 fn probe_some(ctx: &Ctx, state: &State) {
@@ -151,47 +209,61 @@ fn probe_some(ctx: &Ctx, state: &State) {
         if p.done.get() >= state.limit {
             continue;
         }
-        let object = if p.form == Form::None {
-            None
-        } else {
-            let fits: Vec<u32> = objects
-                .iter()
-                .filter(|&&(_, class, kind)| {
-                    (p.class < 0 || i32::from(class) == p.class) && (p.kind < 0 || kind == p.kind)
-                })
-                .map(|&(g, ..)| g)
-                .collect();
-            if fits.is_empty() {
-                continue;
+        // The objects first, so a probe without them doesn't run.
+        let mut values = Vec::new();
+        let mut first = true;
+        let mut missing = false;
+        for &k in &p.params {
+            if b"gFIRjcl".contains(&k) {
+                match object_for(ctx, p, k, first && b"gFIR".contains(&k), &objects, &state.rng) {
+                    Some(v) => values.push(Some(v)),
+                    None => {
+                        missing = true;
+                        break;
+                    }
+                }
+                first &= !b"gFIR".contains(&k);
+            } else {
+                values.push(None);
             }
-            let g = fits[state.rng.below(fits.len() as u64) as usize];
-            match p.form {
-                Form::UserData => match ctx.mem.read_u32(g + USER_DATA) {
-                    Ok(d) if d != 0 => Some(d),
-                    _ => continue,
-                },
-                _ => Some(g),
-            }
-        };
-        let rng = &state.rng;
-        if state.log {
-            eprintln!("probe {} on {object:08X?}", ctx.name_of(p.addr));
         }
+        if missing {
+            continue;
+        }
+        if state.log {
+            eprintln!("probe {} on {values:08X?}", ctx.name_of(p.addr));
+        }
+        let rng = &state.rng;
         let ran_it = ssbm_rt::lockstep::probe(ctx, p.addr, |ctx| {
-            let mut r = 3;
-            if let Some(o) = object {
-                ctx.regs.set_r(r, o);
-                r += 1;
-            }
-            let mut f = 1;
-            for &k in &p.params {
-                if k == b'f' {
-                    let v = [0.0, 1.0, -1.0, 0.5, 2.0, 10.0][rng.below(6) as usize];
-                    ctx.regs.set_f(f, v);
-                    f += 1;
-                } else {
-                    ctx.regs.set_r(r, rng.below(5) as u32);
-                    r += 1;
+            // Scratch memory sits above a lowered stack pointer, with zeroed room around it for
+            // the headers and neighbors code may reach for, so the callee's frames stay apart.
+            let scratch = p.params.iter().filter(|&&k| k == b'p').count() as u32 * SCRATCH;
+            let sp = ctx.regs.r(1);
+            let base = (sp - SCRATCH_ROOM - scratch) & !0x1F;
+            let low = base - SCRATCH_ROOM;
+            let _ = ctx.mem.write_bytes(low, &vec![0; (sp - low) as usize]);
+            ctx.regs.set_r(1, (low - 0x20) & !0xF);
+            let (mut r, mut f, mut next) = (3, 1, base);
+            for (&k, v) in p.params.iter().zip(&values) {
+                match k {
+                    b'f' => {
+                        let x = [0.0, 1.0, -1.0, 0.5, 2.0, 10.0][rng.below(6) as usize];
+                        ctx.regs.set_f(f, x);
+                        f += 1;
+                    }
+                    b'i' => {
+                        ctx.regs.set_r(r, rng.below(5) as u32);
+                        r += 1;
+                    }
+                    b'p' => {
+                        ctx.regs.set_r(r, next);
+                        next += SCRATCH;
+                        r += 1;
+                    }
+                    _ => {
+                        ctx.regs.set_r(r, v.unwrap_or(0));
+                        r += 1;
+                    }
                 }
             }
         });
