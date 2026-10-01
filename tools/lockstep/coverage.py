@@ -90,13 +90,15 @@ def covered(bits, addr):
 
 
 def load_ledgers(paths):
-    rows = collections.defaultdict(lambda: [0, 0, 0])
+    """address -> [calls, mismatches, uninitialized, mismatches with inputs no real call gave]"""
+    rows = collections.defaultdict(lambda: [0, 0, 0, 0])
     for p in paths:
         for r in csv.DictReader(open(p, encoding="utf-8")):
             a = int(r["address"], 16)
             rows[a][0] += int(r["calls"])
             rows[a][1] += int(r["mismatches"])
             rows[a][2] += int(r["uninitialized"])
+            rows[a][3] += int(r.get("mutated") or 0)
     return rows
 
 
@@ -128,9 +130,10 @@ def main():
                                               for _, m, ops in b)]
         done = sum(1 for b in countable if any(covered(bits, a) for a, _, _ in b))
         start = insns[0][0]
-        calls, bad, uninit = ledger.get(start, (0, 0, 0))
+        calls, bad, uninit, mutated = ledger.get(start, (0, 0, 0, 0))
         share = done / len(countable) if countable else 1.0
-        rows.append((start, name, unit, len(bs), len(countable), done, share, calls, bad, uninit))
+        rows.append((start, name, unit, len(bs), len(countable), done, share, calls, bad, uninit,
+                     mutated))
 
     apart = [r for r in rows if r[1] in dead or r[1] in stand_ins]
     rows = [r for r in rows if r not in apart]
@@ -148,6 +151,8 @@ def main():
           f"({100 * blocks_done / max(blocks_all, 1):.1f}%)")
     print(f"verified at {args.bar:.0%} of their blocks, with no mismatch: {len(verified)}")
     print(f"with mismatches: {len(mismatching)}")
+    print(f"with mismatches only from changed inputs (mutations, probes), to review: "
+          f"{sum(1 for r in rows if r[10] > 0 and r[8] == 0)}")
     by_area = collections.defaultdict(lambda: [0, 0])
     for r in rows:
         area = "/".join(r[2].split("/")[:2])
@@ -161,10 +166,10 @@ def main():
         with open(args.csv, "w", newline="", encoding="utf-8") as f:
             w = csv.writer(f)
             w.writerow(["address", "name", "unit", "blocks", "countable", "verified_blocks",
-                        "share", "calls", "mismatches", "uninitialized"])
+                        "share", "calls", "mismatches", "uninitialized", "mutated"])
             for r in rows:
                 w.writerow([f"{r[0]:#010x}", r[1], r[2], r[3], r[4], r[5], f"{r[6]:.3f}",
-                            r[7], r[8], r[9]])
+                            r[7], r[8], r[9], r[10]])
     if args.done:
         with open(args.done, "w", encoding="utf-8") as f:
             f.write(f"# Functions verified at {args.bar:.0%} of their blocks with no mismatch\n")
