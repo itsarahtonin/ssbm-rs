@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 //! Matches of every fighter, stage and item, for exploring under lockstep. In the debug VS mode
-//! (`--mode e`), each match gets, from a seed, random fighters with some of them CPUs, a VS
-//! stage, items and a short time limit, where the mode would give its defaults; `--monkey`
+//! (`--mode e`), each match gets, from a seed, random fighters with some of them CPUs, one of
+//! the VS stages, items and a short time limit, where the mode would give its defaults; `--monkey`
 //! plays the humans. Deterministic for a seed.
 
 use std::cell::Cell;
@@ -16,6 +16,17 @@ use crate::monkey::Rng;
 
 /// Time limit of each match, in seconds.
 const TIME_LIMIT: u32 = 90;
+
+/// The stages the VS stage select offers. Akaneia and Icetop have no VS stage parameters: the
+/// game reports them missing and stops there.
+const STAGES: [i32; 29] = [
+    St_Kind_Izumi, St_Kind_PStadium, St_Kind_Castle, St_Kind_Kongo, St_Kind_Zebes,
+    St_Kind_Corneria, St_Kind_Story, St_Kind_Onett, St_Kind_MuteCity, St_Kind_RCruise,
+    St_Kind_Garden, St_Kind_GreatBay, St_Kind_Shrine, St_Kind_Kraid, St_Kind_Yoster,
+    St_Kind_Greens, St_Kind_Fourside, St_Kind_Inishie1, St_Kind_Inishie2, St_Kind_Venom,
+    St_Kind_Pura, St_Kind_BigBlue, St_Kind_Icemt, St_Kind_Flatzone, St_Kind_OldPupupu,
+    St_Kind_OldYoshi, St_Kind_OldKongo, St_Kind_Battle, St_Kind_Last,
+];
 
 /// The playable fighters, by CKind.
 const FIGHTERS: [&str; 26] = [
@@ -48,7 +59,7 @@ pub fn install(ctx: &Ctx, seed: u64) {
 fn choose(ctx: &Ctx, rng: &Rng) {
     let data = StartMeleeData(At::new(ctx, ssbm_sdk::sym("gmVsMelee_StartData")));
     let rules = data.rules();
-    let stage = St_Kind_Izumi + rng.below((St_Kind_Last - St_Kind_Izumi + 1) as u64) as i32;
+    let stage = STAGES[rng.below(STAGES.len() as u64) as usize];
     rules.set_stkind(stage as u16);
     rules.set_match_kind(MatchKind_Time as u32);
     rules.set_timer_enabled(1);
