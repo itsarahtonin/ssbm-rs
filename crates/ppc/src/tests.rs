@@ -154,6 +154,11 @@ fn notes_calls_that_break_the_calling_convention() {
     ctx.check_conventions(true);
     ctx.run_original(CODE);
     assert_eq!(ctx.check_conventions(false), Some(CODE));
+    // One that returns with its stack pointer above the one it found (addi r1, r1, 16).
+    let ctx = machine(&[addi(1, 1, 16), BLR]);
+    ctx.check_conventions(true);
+    ctx.run_original(CODE);
+    assert_eq!(ctx.check_conventions(false), Some(CODE));
 }
 
 #[test]

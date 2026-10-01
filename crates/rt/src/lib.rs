@@ -1017,10 +1017,17 @@ impl Ctx {
         let (g, f) = (&self.regs.gpr, &self.regs.fpr);
         let sp = g[1].get();
         // Calls a jump past them, such as a longjmp, left.
+        let mut left = None;
         while c.calls.last().is_some_and(|call| call.sp < sp) {
-            c.calls.pop();
+            left = c.calls.pop().map(|call| call.function);
         }
-        let Some(call) = c.calls.last() else { return };
+        let Some(call) = c.calls.last() else {
+            // A jump past the first call too returned from it with another stack pointer.
+            if c.broken.is_none() {
+                c.broken = left;
+            }
+            return;
+        };
         let kept = call.sp == sp
             && call.ret == to
             && (0..18).all(|i| {
