@@ -741,8 +741,10 @@ struct Outcome<'a> {
 /// and memory.
 fn compare(ctx: &Ctx, a: &Outcome, b: &Outcome, returns: Returns, sp: u32) -> Vec<Diff> {
     let mut diffs = Vec::new();
-    // The same panic on both sides, such as the same longjmp, is the same behavior.
-    if a.panic != b.panic {
+    // The same panic on both sides, such as the same longjmp, is the same behavior; the ports a
+    // port's names as running then are only where it happened.
+    let cause = |p: &Option<String>| p.as_ref().map(|t| t.split(" (in ").next().unwrap_or(t).to_owned());
+    if cause(&a.panic) != cause(&b.panic) {
         diffs.push(Diff::Panic {
             original: a.panic.clone(),
             port: b.panic.clone(),
