@@ -1066,6 +1066,9 @@ fn mutate(ctx: &Ctx, reads: &[u32]) -> Vec<String> {
             for _ in 0..=next() % 3 {
                 change_byte(v.wrapping_add((next() % 0x80) as u32));
             }
+        } else if (0xCC00_0000..=0xCC01_0000).contains(&v) {
+            // A pointer to the hardware registers, such as the write-gather pipe's base that
+            // MWCC keeps 0x8000 past it, stays as it is.
         } else if next() % 3 == 0 {
             let new = match next() % 6 {
                 0 => 0,
