@@ -6,9 +6,11 @@ probe can give, a game object and numbers.
 
 A probe calls the function, under lockstep, on a live object of the kind its unit works on: a
 fighter of its fighter kind (any fighter for common code), an item, or the stage's ground
-objects. Each line of OUT is `address class kind params # name`: the class is the object's
-GObj class, the kind a fighter kind or -1 for any, and params one letter per parameter after
-the object, i for an integer and f for a float.
+objects; or with no object, for functions that take only numbers. Each line of OUT is
+`address form class kind params # name`: the form says what the first parameter is (g a game
+object, u the object's user data, such as its Fighter, n no object), the class is the object's
+GObj class or -1 for any, the kind a fighter kind or -1 for any, and params one letter per
+further parameter, i for an integer and f for a float.
 """
 
 import argparse
@@ -26,10 +28,13 @@ FIGHTER_KINDS = {
     "ftZakoBoy": 29, "ftZakoGirl": 30, "ftGigaKoopa": 31, "ftSandbag": 32,
 }
 CLASS_FIGHTER, CLASS_ITEM, CLASS_GROUND = 4, 6, 13
+# The GObj classes whose user data is each of these.
+USER_DATA = {"Fighter": CLASS_FIGHTER, "Item": CLASS_ITEM, "Ground": CLASS_GROUND}
 
 
-def object_class(unit):
-    """The GObj class a unit's functions work on, and the fighter kind, if any."""
+def unit_class(unit):
+    """The GObj class a unit's functions work on (-1 if it isn't known), and the fighter kind
+    (-1 for any)."""
     m = re.match(r"melee/ft/kinds/(ft\w+)/", unit)
     if m:
         return CLASS_FIGHTER, FIGHTER_KINDS.get(m.group(1), -1)
@@ -39,14 +44,27 @@ def object_class(unit):
         return CLASS_ITEM, -1
     if unit.startswith("melee/gr/"):
         return CLASS_GROUND, -1
-    return None, None
+    return -1, -1
 
 
-def is_gobj(t, records):
+def record_name(t, records):
     if t.get("k") != "ptr":
-        return False
+        return None
     to = t.get("to") or {}
-    return to.get("k") == "rec" and records.get(to.get("id"), {}).get("name") == "HSD_GObj"
+    return records.get(to.get("id"), {}).get("name") if to.get("k") == "rec" else None
+
+
+def letters(params):
+    """One letter per numeric parameter, or None if one is not a number."""
+    out = []
+    for p in params:
+        if p.get("k") in ("int", "enum") and p.get("size", 4) <= 4:
+            out.append("i")
+        elif p.get("k") == "float":
+            out.append("f")
+        else:
+            return None
+    return "".join(out) or "-"
 
 
 def main():
@@ -59,42 +77,32 @@ def main():
     args = ap.parse_args()
     types = json.load(open(args.types, encoding="utf-8"))
     records = types["records"]
-    sigs = {}
-    for f in types["functions"]:
-        if f.get("addr") is not None:
-            sigs[f["addr"]] = f["type"]
+    sigs = {f["addr"]: f["type"] for f in types["functions"] if f.get("addr") is not None}
     lines, skipped = [], {}
     for r in csv.DictReader(open(args.report, encoding="utf-8")):
         if float(r["share"]) >= args.bar and int(r["mismatches"]) == 0:
             continue
         addr = int(r["address"], 16)
-        cls, kind = object_class(r["unit"])
+        cls, kind = unit_class(r["unit"])
         ft = sigs.get(addr)
-        why = None
-        if cls is None:
-            why = "no object class"
-        elif ft is None or ft.get("variadic"):
-            why = "no prototype"
+        if ft is None or ft.get("variadic"):
+            skipped["no prototype"] = skipped.get("no prototype", 0) + 1
+            continue
+        params = ft.get("params") or []
+        first = record_name(params[0], records) if params else None
+        if first == "HSD_GObj":
+            form, rest = "g", letters(params[1:])
+        elif first in USER_DATA:
+            form, cls, rest = "u", USER_DATA[first], letters(params[1:])
+            kind = kind if cls == CLASS_FIGHTER else -1
         else:
-            params = ft.get("params") or []
-            if not params or not is_gobj(params[0], records):
-                why = "first parameter not an object"
-            else:
-                letters = []
-                for p in params[1:]:
-                    if p.get("k") in ("int", "enum") and p.get("size", 4) <= 4:
-                        letters.append("i")
-                    elif p.get("k") == "float":
-                        letters.append("f")
-                    else:
-                        why = "other parameters"
-                        break
-                if why is None:
-                    lines.append(f"{addr:#010x} {cls} {kind} {''.join(letters) or '-'} # {r['name']}")
-        if why:
-            skipped[why] = skipped.get(why, 0) + 1
+            form, cls, kind, rest = "n", -1, -1, letters(params)
+        if rest is None:
+            skipped["other parameters"] = skipped.get("other parameters", 0) + 1
+            continue
+        lines.append(f"{addr:#010x} {form} {cls} {kind} {rest} # {r['name']}")
     with open(args.out, "w", encoding="utf-8", newline="\n") as w:
-        w.write("# Functions to probe: address, object class, fighter kind, parameters\n")
+        w.write("# Functions to probe: address, object form, object class, fighter kind, parameters\n")
         w.write("\n".join(lines) + "\n")
     print(f"{len(lines)} functions to probe; left out: " +
           ", ".join(f"{n} {why}" for why, n in sorted(skipped.items(), key=lambda x: -x[1])))

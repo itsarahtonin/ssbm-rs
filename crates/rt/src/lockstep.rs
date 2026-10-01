@@ -336,7 +336,10 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     }
     let recording = ctx.coverage.begin(addr);
     let executed = ctx.executed();
+    // A mutated check's original may loop in ports it calls, where no heartbeat sees it.
+    let calls_left = state.calls_left.replace(state.mutating.get().then_some(MUTATED_CALLS));
     let original_panic = passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr))));
+    state.calls_left.set(calls_left);
     let cost = ctx.executed() - executed;
     let hits = ctx.coverage.end(recording);
     if shadowed {
@@ -616,7 +619,8 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
 /// Panic payload that ends a mutated check that reached the SDK layer.
 struct ReachedSdk;
 
-/// Panic payload that ends a mutated check whose original runs on and on, from the heartbeat.
+/// Panic payload that ends a mutated check whose original runs on and on, from the heartbeat or
+/// the limit on its calls.
 pub struct Runaway;
 
 /// Checks the port of `addr` from a call no code made, whose arguments `setup` puts in place,

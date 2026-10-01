@@ -748,7 +748,10 @@ impl Ctx {
     /// Runs the function at `addr` with arguments already in registers.
     pub fn invoke(&self, addr: u32) {
         if let Some(n) = self.lockstep.calls_left.get() {
-            assert!(n > 0, "a mutated check's port made too many calls");
+            if n == 0 {
+                // A mutated check's side that calls on and on.
+                std::panic::panic_any(lockstep::Runaway);
+            }
             self.lockstep.calls_left.set(Some(n - 1));
         }
         if !self.lockstep.trace_calls.get() {
