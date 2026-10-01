@@ -514,10 +514,9 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     let wrote_code = state.mutating.get() && state.wrote_code(ctx, &j1);
     if wrote_code
         || broke_convention
-        || original_panic.as_ref().is_some_and(|p| p.is::<ReachedSdk>() || p.is::<Runaway>())
+        || original_panic.as_ref().is_some_and(|p| p.is::<Runaway>())
     {
-        // A mutated call that reaches the SDK layer would change its state, which no journal
-        // undoes, and one that runs on and on may never return on the port's side. One that
+        // A mutated call that runs on and on may never return on the port's side. One that
         // writes over code then runs what ports never read, and one that writes over a frame's
         // saved registers or return address then returns with what ports never saved: drop
         // it.
@@ -628,7 +627,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         let again = passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr))));
         dropped |= again
             .as_ref()
-            .is_some_and(|p| p.is::<ReachedSdk>() || p.is::<Runaway>());
+            .is_some_and(|p| p.is::<Runaway>());
         let _ = ctx.take_resume_at();
         let j3 = ctx.mem.end_journal();
         let regs3 = ctx.regs.snapshot();
@@ -804,9 +803,6 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     }
 }
 
-/// Panic payload that ends a mutated check that reached the SDK layer.
-struct ReachedSdk;
-
 /// Panic payload that ends the check enclosing a mutated one that had to be dropped.
 struct Dropped;
 
@@ -865,6 +861,9 @@ pub fn probe(ctx: &Ctx, addr: u32, setup: impl FnOnce(&Ctx)) -> bool {
 
 /// Calls a port under a mutated check may make: a runaway loop makes many more.
 const MUTATED_CALLS: u64 = 10_000_000;
+
+/// Interactions with the hardware and SDK layer that answer nothing a mutated check may make.
+const NULL_LOG_MAX: usize = 1 << 16;
 
 /// Main memory.
 const RAM_LO: u32 = 0x8000_0000;
@@ -1127,19 +1126,33 @@ fn interact(ctx: &Ctx, kind: Kind, f: impl FnOnce() -> u32) -> u32 {
     let state = &ctx.lockstep;
     match state.phase.get() {
         Phase::Original if state.depth.get() == 0 => {
-            if state.mutating.get() {
-                panic_any(ReachedSdk);
-            }
-            state.depth.set(1);
             let sp = ctx.regs.r(1);
             let lr = ctx.regs.lr.get();
-            ctx.mem.begin_log();
-            let result = catch_unwind(AssertUnwindSafe(f));
-            let writes = ctx.mem.end_log();
-            state.depth.set(0);
-            let value = match result {
-                Ok(v) => v,
-                Err(p) => resume_unwind(p),
+            let (value, writes) = if state.mutating.get() {
+                // A mutated check's calls must change nothing outside memory, which its
+                // journals undo: its original meets hardware that reads as 0 and takes no
+                // writes, stand-ins that return 0 without running, and no interrupts. The port
+                // then replays the same. A hook stands in for a wait, which would never end,
+                // and so would a loop polling hardware for what it never answers.
+                if matches!(kind, Kind::Hook(_)) || state.log.borrow().len() >= NULL_LOG_MAX {
+                    panic_any(Runaway);
+                }
+                if let Kind::Call(_) = kind {
+                    ctx.regs.set_r(3, 0);
+                    ctx.regs.set_r(4, 0);
+                    ctx.regs.set_f(1, 0.0);
+                }
+                (0, Vec::new())
+            } else {
+                state.depth.set(1);
+                ctx.mem.begin_log();
+                let result = catch_unwind(AssertUnwindSafe(f));
+                let writes = ctx.mem.end_log();
+                state.depth.set(0);
+                match result {
+                    Ok(v) => (v, writes),
+                    Err(p) => resume_unwind(p),
+                }
             };
             let regs = &ctx.regs;
             state.log.borrow_mut().push(Interaction {

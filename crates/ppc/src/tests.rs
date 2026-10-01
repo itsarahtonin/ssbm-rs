@@ -262,6 +262,36 @@ fn mutated_checks_reach_what_a_loaded_value_decides() {
 }
 
 #[test]
+fn mutated_checks_meet_hardware_that_answers_nothing() {
+    // f: return *(u32*) 0xCC006000, a register of a device that counts its reads.
+    static READS: std::sync::atomic::AtomicU32 = std::sync::atomic::AtomicU32::new(0);
+    struct Device;
+    impl ssbm_rt::Mmio for Device {
+        fn read(&self, _: &Ctx, _: u32, _: u32) -> u32 {
+            READS.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+            5
+        }
+        fn write(&self, _: &Ctx, _: u32, _: u32, _: u32) {}
+    }
+    let ctx = machine(&[0x3C80_CC00, 0x8064_6000, BLR]); // lis r4, 0xCC00; lwz r3, 0x6000(r4)
+    ctx.set_mmio(Box::new(Device));
+    ctx.register_port(
+        CODE,
+        |ctx| ctx.regs.set_r(3, ctx.read_u32(0xCC00_6000)),
+        ssbm_rt::lockstep::Returns::Int,
+    );
+    ctx.set_mode(CODE, Mode::Lockstep);
+    ctx.lockstep.mutations.set(20);
+    ctx.lockstep.rng.set(1);
+    ctx.invoke(CODE);
+    assert_eq!(ctx.regs.r(3), 5);
+    assert!(ctx.lockstep.mismatches.borrow().is_empty());
+    // Every mutated check ran to the end, and only the real call reached the device.
+    assert_eq!(ctx.lockstep.stats.borrow()[&CODE].calls, 21);
+    assert_eq!(READS.load(std::sync::atomic::Ordering::Relaxed), 1);
+}
+
+#[test]
 fn lockstep_flags_a_wrong_port() {
     let body = [li(3, 5), 0x9061_0000 | 0x2000, BLR]; // stw r3, 0x2000(r1)
     let good = machine(&body);
