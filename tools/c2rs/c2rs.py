@@ -3842,6 +3842,11 @@ FROM_MACHINE_CODE = {
     "__va_arg": "register it leaves that other code reads",
     # MWCC drops its second, dead read of a video interface register, volatile as it is.
     "__VIRetraceHandler": "dead read of a hardware register that MWCC drops",
+    # They inline getCurrentHalfLine, whose loop MWCC compiles reading the vertical beam
+    # position before the horizontal one, the other way round from the source.
+    "VIGetCurrentLine": "hardware register order",
+    "VIGetNextField": "hardware register order",
+    "getCurrentFieldEvenOdd": "hardware register order",
     # Its loop reads dir_ptr before setting it the first time round, which clang does not see:
     # the original takes whatever a register holds.
     "it_802BA3BC": "pointer read before it is set, in a loop",
