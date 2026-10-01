@@ -11,14 +11,24 @@ The full plan lives in the [Melee Rust Port Plan](https://claude.ai/code/artifac
 
 ## Status
 
-Phase 0: foundations.
+Phase 3: everything else. Every function of the game is in Rust: `tools/c2rs` translates the decomp's C, and transliterates from machine code what only MWCC can compile. Lockstep checks each port against the original code, call by call, and the replay oracle checks whole games against their Slippi recordings.
 
 | Crate | Purpose |
 | --- | --- |
 | [`gekko-fp`](crates/gekko-fp) | Bit-exact Gekko (GameCube CPU) floating-point operations |
 | [`ssbm-mem`](crates/mem) | GameCube main memory: 24 MB, big-endian, 32-bit addresses |
 | [`ssbm-disc`](crates/disc) | Disc image loading and verification, through nod |
+| [`ssbm-rt`](crates/rt) | Runtime core: machine context, handles, calls and lockstep |
+| [`ssbm-ppc`](crates/ppc) | Gekko interpreter that runs the original code in dev builds |
+| [`ssbm-sdk`](crates/sdk) | Stand-ins for the hardware and the parts of Nintendo's SDK that talk to it |
+| [`ssbm-types`](crates/types) | Generated handles, constants, globals and call stubs for the decomp's types and functions |
+| [`ssbm-game`](crates/game) | The game's code ported to Rust |
+| [`ssbm-slippi`](crates/slippi) | Slippi replay playback and recording |
+| [`ssbm-run`](tools/run) | Runs the game headless, with lockstep, probes and the replay oracle |
 | [`replay-sort`](tools/replay-sort) | Sorts Slippi replays and picks the smoke set |
+| [`fp-fuzz`](tools/fp-fuzz) | Differential fuzzing of `gekko-fp` against Dolphin |
+
+The Python tools in `tools/typegen`, `tools/c2rs` and `tools/lockstep` generate the types and ports and track lockstep coverage.
 
 ## Building
 
