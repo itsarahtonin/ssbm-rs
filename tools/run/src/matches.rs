@@ -114,6 +114,20 @@ fn choose(ctx: &Ctx, rng: &Rng, stages: &[i32], fighters: &[i32], time: u32) {
         p.set_slot_type(if cpu { Gm_PKind_Cpu } else { Gm_PKind_Human } as u8);
         p.set_cpu_level(if cpu { 1 + rng.below(9) as u8 } else { 0 });
         p.set_color(0);
+        // The special fighters start standing, as the modes that have them start them (the
+        // entry animation they lack faults), and the hands with the stamina Classic gives them.
+        if fighter >= PLAYABLE {
+            p.set_xD_b2(1);
+        }
+        if [CKind_MasterH, CKind_CrezyH].contains(&(fighter as i32)) {
+            p.set_xC_b7(1);
+            p.set_hp(300);
+            p.set_xD_b0(1);
+            p.set_spawn_dir(-1);
+        }
+        if fighter as i32 == CKind_GKoops {
+            p.set_xC_b1(0);
+        }
         chosen.push(format!("{}{}", FIGHTERS[fighter], if cpu { " (CPU)" } else { "" }));
     }
     let field = ctx.ext::<ssbm_sdk::Sdk>().hw.fields.get();
