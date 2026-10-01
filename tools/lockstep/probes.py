@@ -15,7 +15,8 @@ any), and params one letter per parameter:
     j  a joint (HSD_JObj), c  a camera (HSD_CObj), l  a light (HSD_LObj): a game object's own
     p  scratch memory, for any other pointer or a struct passed by value
     x  a function that returns at once, for a function pointer
-    i  an integer, w  a 64-bit integer, f  a float
+    i  an integer, b/B  an unsigned/signed byte, h/H  an unsigned/signed halfword,
+    w  a 64-bit integer, f  a float
 
 or `-` for none. --dead adds the functions reach.py found nothing calls (`name unit` lines), which
 only probes can check.
@@ -63,7 +64,12 @@ def unit_class(unit):
 def letter(p, records):
     k = p.get("k")
     if k in ("int", "enum"):
-        return "i" if p.get("size", 4) <= 4 else "w"
+        size = p.get("size", 4)
+        if size == 1:
+            return "B" if p.get("signed") else "b"
+        if size == 2:
+            return "H" if p.get("signed") else "h"
+        return "i" if size <= 4 else "w"
     if k == "float":
         return "f"
     if k == "rec":

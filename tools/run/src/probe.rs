@@ -5,12 +5,13 @@
 //! GObj class of the first object parameter (-1 for any), a fighter kind (-1 for any), and one
 //! letter per parameter: g a game object, F/I/R a fighter's, item's or ground's user data, j/c/l
 //! a game object's joint, camera or light, p scratch memory (zeroed, or holding small numbers or
-//! floats), x a function that returns at once, i an integer, w a 64-bit integer, f a float.
-//! Once a video field, outside any check, the next
-//! `PROBE_RATE` of them (default 8) whose objects are around run under lockstep, and everything
-//! they do is undone; a probe for a fighter kind that isn't around takes another fighter a
-//! quarter of the time. `PROBE_LIMIT` (default 20) probes each function at most. Deterministic
-//! for `PROBE_SEED`. `PROBE_LOG=1` names each probe as it starts.
+//! floats), x a function that returns at once, i an integer, b/B an unsigned/signed byte, h/H
+//! an unsigned/signed halfword, w a 64-bit integer, f a float;
+//! a tenth of pointers are null. Once a video field, outside any check, the next `PROBE_RATE`
+//! of them (default 8) whose objects are around run under lockstep, and everything they do is
+//! undone; a probe for a fighter kind that isn't around takes another fighter a quarter of the
+//! time. `PROBE_LIMIT` (default 20) probes each function at most. Deterministic for
+//! `PROBE_SEED`. `PROBE_LOG=1` names each probe and its arguments as it starts.
 
 use std::cell::Cell;
 use std::rc::Rc;
@@ -305,6 +306,17 @@ fn probe_some(ctx: &Ctx, state: &State) {
                         ctx.regs.set_r(r, int(rng));
                         r += 1;
                     }
+                    // Narrower integers extended as a C caller passes them.
+                    b'b' | b'B' | b'h' | b'H' => {
+                        let v = int(rng);
+                        ctx.regs.set_r(r, match k {
+                            b'b' => v & 0xFF,
+                            b'B' => v as u8 as i8 as u32,
+                            b'h' => v & 0xFFFF,
+                            _ => v as u16 as i16 as u32,
+                        });
+                        r += 1;
+                    }
                     b'w' => {
                         // In the next pair of registers that starts at an odd one.
                         r |= 1;
@@ -313,17 +325,18 @@ fn probe_some(ctx: &Ctx, state: &State) {
                         ctx.regs.set_r(r + 1, int(rng));
                         r += 2;
                     }
+                    // A tenth of pointers are null, for the checks of them that real calls pass.
                     b'x' => {
-                        ctx.regs.set_r(r, noop(ctx));
+                        ctx.regs.set_r(r, if rng.chance(10) { 0 } else { noop(ctx) });
                         r += 1;
                     }
                     b'p' => {
-                        ctx.regs.set_r(r, next);
+                        ctx.regs.set_r(r, if rng.chance(10) { 0 } else { next });
                         next += SCRATCH;
                         r += 1;
                     }
                     _ => {
-                        ctx.regs.set_r(r, v.unwrap_or(0));
+                        ctx.regs.set_r(r, if rng.chance(10) { 0 } else { v.unwrap_or(0) });
                         r += 1;
                     }
                 }
