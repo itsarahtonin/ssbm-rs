@@ -2,7 +2,7 @@
 probe can give: game objects, their parts, numbers and scratch memory.
 
     python tools/lockstep/probes.py <decomp root> local/typegen/types.json REPORT_CSV OUT
-        [--bar 0.9]
+        [--bar 0.9] [--dead FILE]
 
 A probe calls the function, under lockstep, with live game objects of the kind its unit works
 on (a fighter of its fighter kind, any fighter for common code, an item, the stage's ground
@@ -16,7 +16,8 @@ any), and params one letter per parameter:
     p  zeroed scratch memory, for any other pointer
     i  an integer, f  a float
 
-or `-` for none.
+or `-` for none. --dead adds the functions reach.py found nothing calls (`name unit` lines), which
+only probes can check.
 """
 
 import argparse
@@ -80,14 +81,22 @@ def main():
     ap.add_argument("report")
     ap.add_argument("out")
     ap.add_argument("--bar", type=float, default=0.9)
+    ap.add_argument("--dead")
     args = ap.parse_args()
     types = json.load(open(args.types, encoding="utf-8"))
     records = types["records"]
     sigs = {f["addr"]: f["type"] for f in types["functions"] if f.get("addr") is not None}
+    targets = [r for r in csv.DictReader(open(args.report, encoding="utf-8"))
+               if float(r["share"]) < args.bar or int(r["mismatches"]) > 0]
+    if args.dead:
+        addrs = {(f["name"], f.get("tu")): f["addr"] for f in types["functions"]
+                 if f.get("addr") is not None and f.get("defined")}
+        for line in open(args.dead, encoding="utf-8"):
+            w = line.split("#")[0].split()
+            if len(w) == 2 and (w[0], w[1]) in addrs:
+                targets.append({"address": hex(addrs[w[0], w[1]]), "name": w[0], "unit": w[1]})
     lines, skipped = [], {}
-    for r in csv.DictReader(open(args.report, encoding="utf-8")):
-        if float(r["share"]) >= args.bar and int(r["mismatches"]) == 0:
-            continue
+    for r in targets:
         addr = int(r["address"], 16)
         if NOT_PROBED.search(r["name"]):
             skipped["control flow or registers"] = skipped.get("control flow or registers", 0) + 1

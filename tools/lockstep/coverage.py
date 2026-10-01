@@ -167,9 +167,12 @@ def main():
     mismatching = [r for r in rows if r[8] > 0]
     blocks_all = sum(r[4] for r in rows)
     blocks_done = sum(r[5] for r in rows)
+    never = [r for r in apart if r[1] in dead]
+    probed = sum(1 for r in never if r[6] >= args.bar and r[8] == 0 and r[7] > 0)
     print(f"{len(rows) + len(apart)} functions: {len(apart)} no run can reach "
-          f"({sum(r[1] in dead for r in apart)} never called, {sum(r[1] in stand_ins for r in apart)} "
-          f"that the SDK layer stands in for), {len(rows)} to check")
+          f"({len(never)} never called, {probed} of them verified by probes; "
+          f"{sum(r[1] in stand_ins for r in apart)} that the SDK layer stands in for), "
+          f"{len(rows)} to check")
     print(f"{blocks_all} blocks of these that can run "
           f"({sum(r[3] - r[4] for r in rows)} more only fail an assertion)")
     print(f"checked: {len(checked)} functions; blocks verified: {blocks_done} "
