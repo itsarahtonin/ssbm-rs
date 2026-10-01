@@ -1400,26 +1400,122 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
 
 pub fn psInitDataBank<'a>(
     ctx: &'a Ctx,
-    bank: i32,
-    cmdBank: Val<'a, i32>,
-    texBank: Val<'a, i32>,
-    r#ref: Val<'a, u32>,
-    formBank: Val<'a, i32>,
+    a0: i32,
+    a1: Val<'a, i32>,
+    a2: Val<'a, i32>,
+    a3: Val<'a, u32>,
+    a4: Val<'a, i32>,
 ) {
-    let __frame = ctx.stack_frame(0x38);
-    let mut bank = bank;
-    let mut cmdBank = cmdBank;
-    let mut texBank = texBank;
-    let mut r#ref = r#ref;
-    let mut formBank = formBank;
-    if bank < 65_i32 {
-        fns::psInitDataBankLocate(
-            ctx,
-            Handle::cast::<HSD_Archive<'a>>(cmdBank),
-            Handle::cast::<HSD_Archive<'a>>(texBank),
-            formBank,
-        );
-        fns::psInitDataBankLoad(ctx, bank, cmdBank, texBank, r#ref, formBank);
+    // Transliterated from its machine code: calls psInitDataBankLocate, which reads registers its caller sets without passing them.
+    (a0, a1, a2, a3, a4).put_regs(ctx);
+    asm_psInitDataBank(ctx);
+}
+
+fn asm_psInitDataBank(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x803989a0_u32;
+    loop {
+        match pc {
+            0x803989a0_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x38(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffc8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stmw r27, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    for (i, reg) in (27..32).enumerate() {
+                        ctx.write_u32(ea.wrapping_add(4 * i as u32), g[reg].get());
+                    }
+                }
+                // addi r27, r3, 0x0
+                g[27].set(g[3].get());
+                // cmpwi r27, 0x41
+                {
+                    let (x, y) = (g[27].get() as i32, 65_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // addi r28, r4, 0x0
+                g[28].set(g[4].get());
+                // addi r29, r5, 0x0
+                g[29].set(g[5].get());
+                // addi r30, r6, 0x0
+                g[30].set(g[6].get());
+                // addi r31, r7, 0x0
+                g[31].set(g[7].get());
+                // bge .L_803989F4
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x803989f4_u32;
+                    continue;
+                }
+                pc = 0x803989cc_u32;
+            }
+            0x803989cc_u32 => {
+                // addi r3, r28, 0x0
+                g[3].set(g[28].get());
+                // addi r4, r29, 0x0
+                g[4].set(g[29].get());
+                // addi r5, r31, 0x0
+                g[5].set(g[31].get());
+                // bl psInitDataBankLocate
+                c::call(ctx, 0x80398614_u32, 0x803989dc_u32);
+                pc = 0x803989dc_u32;
+            }
+            0x803989dc_u32 => {
+                // addi r3, r27, 0x0
+                g[3].set(g[27].get());
+                // addi r4, r28, 0x0
+                g[4].set(g[28].get());
+                // addi r5, r29, 0x0
+                g[5].set(g[29].get());
+                // addi r6, r30, 0x0
+                g[6].set(g[30].get());
+                // addi r7, r31, 0x0
+                g[7].set(g[31].get());
+                // bl psInitDataBankLoad
+                c::call(ctx, 0x803984f4_u32, 0x803989f4_u32);
+                pc = 0x803989f4_u32;
+            }
+            0x803989f4_u32 => {
+                // lmw r27, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    for (i, reg) in (27..32).enumerate() {
+                        g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
+                    }
+                }
+                // lwz r0, 0x3c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x3c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x38
+                g[1].set(g[1].get().wrapping_add(0x38_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of psInitDataBank");
+            }
+            _ => unreachable!("psInitDataBank: no block at {pc:#010x}"),
+        }
     }
 }
 

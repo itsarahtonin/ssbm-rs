@@ -27,6 +27,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 import extract  # noqa: E402
 
 import asm2rs  # noqa: E402
+import regflow  # noqa: E402
 from gen_rust import Gen, ident, tu_mod  # noqa: E402
 
 CK = ci.CursorKind
@@ -3675,6 +3676,7 @@ def returns_of(unit, cursor):
 # there is whatever a register or the stack held, which only its machine code reproduces.
 UNSET_WARNINGS = {"-Wreturn-type", "-Wuninitialized", "-Wsometimes-uninitialized"}
 UNSET_REASON = "returns or uses a value its C never sets"
+CALLER_REASON = "calls {}, which reads registers its caller sets without passing them"
 
 
 def unset_values(tu, source):
@@ -3739,6 +3741,8 @@ FROM_MACHINE_CODE = {
     # the original takes whatever a register holds.
     "it_802BA3BC": "pointer read before it is set, in a loop",
 }
+# Those of them that read values they never set, as the functions clang finds doing so do.
+UNSET_FROM_MACHINE_CODE = {"it_802BA3BC"}
 
 
 FUSED_REASON = "fused multiply-adds MWCC contracts otherwise than c2rs"
@@ -3789,7 +3793,7 @@ def manual_ports(out_dir, unit_name):
 
 
 def translate_unit(args):
-    root, types_path, unit_name, source, only, out_dir = args
+    root, types_path, unit_name, source, only, out_dir, callers = args
     os.chdir(root)
     prog = PROGRAM[0] if PROGRAM else Program(root, types_path)
     if not PROGRAM:
@@ -3807,7 +3811,7 @@ def translate_unit(args):
         # Every function the unit defines is left to the original.
         names = sorted({f["name"] for f in prog.data["functions"]
                         if f.get("tu") == unit_name and f.get("addr") is not None}) or ["*"]
-        return unit_name, source, None, [(n, "parse error: " + errors[0]) for n in names], [], [], {}
+        return unit_name, source, None, [(n, "parse error: " + errors[0]) for n in names], [], [], {}, []
     unit = Unit(prog, unit_name, source)
     unit.gekko = gekko
     manual = manual_ports(out_dir, unit_name)
@@ -3851,8 +3855,16 @@ def translate_unit(args):
                         f"Returns::{returns_of(unit, c)});")
             unit.ported.append(name)
             continue
-        if name in FROM_MACHINE_CODE or name in unset:
-            code = asm_port(unit, c, f, FROM_MACHINE_CODE.get(name) or UNSET_REASON)
+        why = FROM_MACHINE_CODE.get(name) or (UNSET_REASON if name in unset else None) or (
+            CALLER_REASON.format(callers[name]) if name in callers else None)
+        code = None
+        if why:
+            try:
+                code = asm_port(unit, c, f, why)
+            except (Unsupported, asm2rs.AsmUnsupported):
+                if name not in callers:
+                    raise
+        if code is not None:
             out_fns.append(code)
             unit.transliterated.append(name)
             regs.append(f"    ctx.register_port({f['addr']:#x}, {unit.adapter(c, ident(name))}, "
@@ -3939,7 +3951,7 @@ def translate_unit(args):
     unit.fuse_report = fuse
     inlining = {"fallbacks": unit.inline_fallbacks, "partial": sorted(unit.inline_partial)}
     if not out_fns and not regs:
-        return unit_name, source, None, unit.skipped, unit.ported, fuse, inlining
+        return unit_name, source, None, unit.skipped, unit.ported, fuse, inlining, sorted(unset)
     text = HEADER.format(source=source.replace("\\", "/"), unit=unit_name)
     if manual:
         text += f"use crate::manual::{tu_mod(unit_name)} as manual;\n"
@@ -3948,7 +3960,7 @@ def translate_unit(args):
     text += "\n"
     text += "\n\n".join(out_fns + inline_code) + "\n\n"
     text += "/// Registers this unit's ports.\npub fn register(ctx: &Ctx) {\n" + "\n".join(regs) + "\n}\n"
-    return unit_name, source, text, unit.skipped, unit.ported, fuse, inlining
+    return unit_name, source, text, unit.skipped, unit.ported, fuse, inlining, sorted(unset)
 
 
 PROGRAM = []
@@ -4075,6 +4087,23 @@ Unit.request_inline = _request_inline
 Unit.finish_inlines = _finish_inlines
 
 
+def unset_elsewhere(out, units):
+    """The functions the units not translated this run port from machine code for values their
+    C never sets, from their generated modules."""
+    found = set()
+    tu = os.path.join(out, "tu")
+    for fname in sorted(os.listdir(tu)) if os.path.isdir(tu) else []:
+        if not fname.endswith(".rs") or fname == "mod.rs":
+            continue
+        text = open(os.path.join(tu, fname), encoding="utf-8").read()
+        m = re.search(r"^// unit: (\S+)$", text[:512], re.M)
+        if m and m.group(1) in units:
+            continue
+        found.update(re.findall(r"^pub fn (\w+)<[^\n]*\n    // Transliterated from its machine code: "
+                                + re.escape(UNSET_REASON), text, re.M))
+    return found
+
+
 def main():
     root, types_path, out = (os.path.abspath(a) for a in sys.argv[1:4])
     wanted = sys.argv[4:]
@@ -4095,12 +4124,25 @@ def main():
         units = sorted(set(sel))
     os.makedirs(os.path.join(out, "tu"), exist_ok=True)
     results = []
-    jobs = [(root, types_path, u, s, only.get(u), out) for u, s in units]
+    jobs = [(root, types_path, u, s, only.get(u), out, {}) for u, s in units]
     if len(jobs) == 1:
         results = [translate_unit(jobs[0])]
     else:
         with ProcessPoolExecutor() as pool:
             results = list(pool.map(translate_unit, jobs, chunksize=4))
+    # Callers of the functions ported from machine code for values their C never sets, which
+    # their machine code may take from registers the callers set without passing them: ported
+    # from machine code too, as far up as those registers' values come from.
+    unset = {n for r in results for n in r[7]} | unset_elsewhere(out, {r[0] for r in results}) \
+        | UNSET_FROM_MACHINE_CODE
+    flow = regflow.Program(root, types_path)
+    callers = flow.callers_to_port(unset)
+    redo = [(root, types_path, u, s, only.get(u), out,
+             {c: f for c, f in callers.items() if flow.units.get(c) == u})
+            for u, s in units if any(flow.units.get(c) == u for c in callers)]
+    if redo:
+        again = {r[0]: r for r in map(translate_unit, redo)}
+        results = [again.get(r[0], r) for r in results]
     mods = []
     report = {}
     written = []
@@ -4108,7 +4150,7 @@ def main():
     fuse_total = fuse_match = 0
     fuse_examples = []
     fallbacks = partial = 0
-    for unit_name, source, text, skipped, ported, fuse, inlining in results:
+    for unit_name, source, text, skipped, ported, fuse, inlining, _ in results:
         fallbacks += len(inlining.get("fallbacks", []))
         partial += len(inlining.get("partial", []))
         for name, asm_n, ours in fuse:

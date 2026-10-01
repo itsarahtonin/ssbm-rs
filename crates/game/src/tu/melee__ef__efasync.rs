@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn efAsync_Dispatch<'a>(
     ctx: &'a Ctx,
@@ -4234,94 +4235,402 @@ pub fn efAsync_LoadAsync<'a>(ctx: &'a Ctx, index: i32) {
     );
 }
 
-pub fn efAsync_OnLoad<'a>(
-    ctx: &'a Ctx,
-    archive: HSD_Archive<'a>,
-    data: Val<'a, u8>,
-    length: u32,
-    index: i32,
-) {
-    let __frame = ctx.stack_frame(0x20);
-    let mut archive = archive;
-    let mut data = data;
-    let mut length = length;
-    let mut index = index;
-    let mut result: EF_DAT_Entry<'a> = null(ctx);
-    fns::lbArchive_InitializeDAT(ctx, archive, Handle::cast::<Addr<'a>>(data), length);
-    result = Handle::cast::<EF_DAT_Entry<'a>>(fns::HSD_ArchiveGetPublicAddress(
-        ctx,
-        archive,
-        fns::efAsync_DatEntries(ctx).get(index).effDataTable_name(),
-    ));
-    if ((Handle::addr((result).ef_DAT_file()) | Handle::addr((result).effDataTable_name())) != 0) {
-        fns::psInitDataBankLocate(
-            ctx,
-            Handle::cast::<HSD_Archive<'a>>((result).ef_DAT_file()),
-            Handle::cast::<HSD_Archive<'a>>((result).effDataTable_name()),
-            null::<Val<'a, i32>>(ctx),
-        );
+pub fn efAsync_OnLoad<'a>(ctx: &'a Ctx, a0: HSD_Archive<'a>, a1: Val<'a, u8>, a2: u32, a3: i32) {
+    // Transliterated from its machine code: calls psInitDataBankLocate, which reads registers its caller sets without passing them.
+    (a0, a1, a2, a3).put_regs(ctx);
+    asm_efAsync_OnLoad(ctx);
+}
+
+fn asm_efAsync_OnLoad(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8006730c_u32;
+    loop {
+        match pc {
+            0x8006730c_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // addi r31, r6, 0x0
+                g[31].set(g[6].get());
+                // stw r30, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // addi r30, r3, 0x0
+                g[30].set(g[3].get());
+                // bl lbArchive_InitializeDAT
+                c::call(ctx, 0x80016a54_u32, 0x8006732c_u32);
+                pc = 0x8006732c_u32;
+            }
+            0x8006732c_u32 => {
+                // mulli r0, r31, 0xc
+                g[0].set((g[31].get() as i32).wrapping_mul(12_i32) as u32);
+                // lis r3, efAsync_DatEntries@ha
+                g[3].set(0x803c0000_u32);
+                // addi r3, r3, efAsync_DatEntries@l
+                g[3].set(g[3].get().wrapping_add(0x25c_u32));
+                // add r3, r3, r0
+                {
+                    let (v, ca, ov) = c::add3(g[3].get(), g[0].get(), 0);
+                    g[3].set(v);
+                    let _ = (ca, ov);
+                }
+                // lwz r4, 0x4(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x4_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // bl HSD_ArchiveGetPublicAddress
+                c::call(ctx, 0x80380358_u32, 0x80067348_u32);
+                pc = 0x80067348_u32;
+            }
+            0x80067348_u32 => {
+                // lwz r5, 0x0(r3)
+                {
+                    let ea = g[3].get();
+                    g[5].set(ctx.read_u32(ea));
+                }
+                // lwz r4, 0x4(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x4_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // or. r0, r5, r4
+                {
+                    let v = g[5].get() | g[4].get();
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80067364
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80067364_u32;
+                    continue;
+                }
+                pc = 0x80067358_u32;
+            }
+            0x80067358_u32 => {
+                // addi r3, r5, 0x0
+                g[3].set(g[5].get());
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl psInitDataBankLocate
+                c::call(ctx, 0x80398614_u32, 0x80067364_u32);
+                pc = 0x80067364_u32;
+            }
+            0x80067364_u32 => {
+                // lwz r0, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x20
+                g[1].set(g[1].get().wrapping_add(0x20_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of efAsync_OnLoad");
+            }
+            _ => unreachable!("efAsync_OnLoad: no block at {pc:#010x}"),
+        }
     }
 }
 
-pub fn efAsync_LoadSync<'a>(ctx: &'a Ctx, idx: i32) {
-    let __frame = ctx.stack_frame(0x18);
-    let spC: Ptr<'a, EF_DAT_Entry<'a>> = frame_at(ctx, &__frame, 0x4);
-    let mut idx = idx;
-    let mut lookup: EF_DAT_Entry<'a> = null(ctx);
-    lookup = fns::efAsync_DatEntries(ctx).get(idx);
-    if (idx >= 50_i32) || (idx < 0_i32) {
-        return;
-    }
-    if !(!Handle::is_null((lookup).ef_DAT_file())) {
-        return;
-    }
-    if !Handle::is_null((lookup).data()) {
-        return;
-    }
-    {
-        let mut chk: i32 = fns::lbArchive_80017040(
-            ctx,
-            null::<Ptr<'a, HSD_Archive<'a>>>(ctx),
-            (lookup).ef_DAT_file(),
-            Handle::cast::<Addr<'a>>(spC),
-            &[
-                VarArg::Int(Handle::addr((lookup).effDataTable_name())),
-                VarArg::Int(0_i32 as u32),
-            ],
-        );
-        if ((Handle::addr((spC.get()).ef_DAT_file())
-            | Handle::addr((spC.get()).effDataTable_name()))
-            != 0)
-        {
-            if (chk != 0) {
-                fns::psInitDataBankLoad(
-                    ctx,
-                    idx,
-                    Handle::cast::<Val<'a, i32>>(Handle::cast::<Addr<'a>>(
-                        (spC.get()).ef_DAT_file(),
-                    )),
-                    Handle::cast::<Val<'a, i32>>(Handle::cast::<Addr<'a>>(
-                        (spC.get()).effDataTable_name(),
-                    )),
-                    null::<Val<'a, u32>>(ctx),
-                    null::<Val<'a, i32>>(ctx),
-                );
-            } else {
-                fns::psInitDataBank(
-                    ctx,
-                    idx,
-                    Handle::cast::<Val<'a, i32>>(Handle::cast::<Addr<'a>>(
-                        (spC.get()).ef_DAT_file(),
-                    )),
-                    Handle::cast::<Val<'a, i32>>(Handle::cast::<Addr<'a>>(
-                        (spC.get()).effDataTable_name(),
-                    )),
-                    null::<Val<'a, u32>>(ctx),
-                    null::<Val<'a, i32>>(ctx),
-                );
+pub fn efAsync_LoadSync<'a>(ctx: &'a Ctx, a0: i32) {
+    // Transliterated from its machine code: calls psInitDataBank, which reads registers its caller sets without passing them.
+    (a0,).put_regs(ctx);
+    asm_efAsync_LoadSync(ctx);
+}
+
+fn asm_efAsync_LoadSync(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8006737c_u32;
+    loop {
+        match pc {
+            0x8006737c_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // addi r30, r3, 0x0
+                g[30].set(g[3].get());
+                // mulli r4, r30, 0xc
+                g[4].set((g[30].get() as i32).wrapping_mul(12_i32) as u32);
+                // lis r3, efAsync_DatEntries@ha
+                g[3].set(0x803c0000_u32);
+                // addi r0, r3, efAsync_DatEntries@l
+                g[0].set(g[3].get().wrapping_add(0x25c_u32));
+                // cmpwi r30, 0x32
+                {
+                    let (x, y) = (g[30].get() as i32, 50_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // add r31, r0, r4
+                {
+                    let (v, ca, ov) = c::add3(g[0].get(), g[4].get(), 0);
+                    g[31].set(v);
+                    let _ = (ca, ov);
+                }
+                // bge .L_80067434
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x80067434_u32;
+                    continue;
+                }
+                pc = 0x800673ac_u32;
             }
+            0x800673ac_u32 => {
+                // cmpwi r30, 0x0
+                {
+                    let (x, y) = (g[30].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bge .L_800673B8
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x800673b8_u32;
+                    continue;
+                }
+                pc = 0x800673b4_u32;
+            }
+            0x800673b4_u32 => {
+                // b .L_80067434
+                pc = 0x80067434_u32;
+                continue;
+                pc = 0x800673b8_u32;
+            }
+            0x800673b8_u32 => {
+                // lwz r4, 0x0(r31)
+                {
+                    let ea = g[31].get();
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // cmplwi r4, 0x0
+                {
+                    let (x, y) = (g[4].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80067434
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80067434_u32;
+                    continue;
+                }
+                pc = 0x800673c4_u32;
+            }
+            0x800673c4_u32 => {
+                // lwz r0, 0x8(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x8_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmplwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80067434
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80067434_u32;
+                    continue;
+                }
+                pc = 0x800673d0_u32;
+            }
+            0x800673d0_u32 => {
+                // lwz r6, 0x4(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x4_u32);
+                    g[6].set(ctx.read_u32(ea));
+                }
+                // addi r5, r1, 0xc
+                g[5].set(g[1].get().wrapping_add(0xc_u32));
+                // crclr cr1eq
+                {
+                    let (x, y) = (c::cr_bit(ctx, 6), c::cr_bit(ctx, 6));
+                    c::set_cr_bit(ctx, 6, x ^ y);
+                }
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r7, 0x0
+                g[7].set(0_u32);
+                // bl lbArchive_80017040
+                c::call(ctx, 0x80017040_u32, 0x800673e8_u32);
+                pc = 0x800673e8_u32;
+            }
+            0x800673e8_u32 => {
+                // lwz r5, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[5].set(ctx.read_u32(ea));
+                }
+                // lwz r4, 0x0(r5)
+                {
+                    let ea = g[5].get();
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // lwz r5, 0x4(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x4_u32);
+                    g[5].set(ctx.read_u32(ea));
+                }
+                // or. r0, r4, r5
+                {
+                    let v = g[4].get() | g[5].get();
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80067428
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80067428_u32;
+                    continue;
+                }
+                pc = 0x800673fc_u32;
+            }
+            0x800673fc_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80067418
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80067418_u32;
+                    continue;
+                }
+                pc = 0x80067404_u32;
+            }
+            0x80067404_u32 => {
+                // addi r3, r30, 0x0
+                g[3].set(g[30].get());
+                // li r6, 0x0
+                g[6].set(0_u32);
+                // li r7, 0x0
+                g[7].set(0_u32);
+                // bl psInitDataBankLoad
+                c::call(ctx, 0x803984f4_u32, 0x80067414_u32);
+                pc = 0x80067414_u32;
+            }
+            0x80067414_u32 => {
+                // b .L_80067428
+                pc = 0x80067428_u32;
+                continue;
+                pc = 0x80067418_u32;
+            }
+            0x80067418_u32 => {
+                // addi r3, r30, 0x0
+                g[3].set(g[30].get());
+                // li r6, 0x0
+                g[6].set(0_u32);
+                // li r7, 0x0
+                g[7].set(0_u32);
+                // bl psInitDataBank
+                c::call(ctx, 0x803989a0_u32, 0x80067428_u32);
+                pc = 0x80067428_u32;
+            }
+            0x80067428_u32 => {
+                // lwz r3, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // addi r0, r3, 0x8
+                g[0].set(g[3].get().wrapping_add(0x8_u32));
+                // stw r0, 0x8(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x8_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                pc = 0x80067434_u32;
+            }
+            0x80067434_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of efAsync_LoadSync");
+            }
+            _ => unreachable!("efAsync_LoadSync: no block at {pc:#010x}"),
         }
-        (lookup).set_data(Handle::cast::<Addr<'a>>((spC.get()).data_ref()));
     }
 }
 

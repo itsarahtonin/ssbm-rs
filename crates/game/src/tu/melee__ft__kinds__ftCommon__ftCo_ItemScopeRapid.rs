@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn fn_800D7BDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
@@ -295,12 +296,108 @@ pub fn ftCo_ItemScopeAirRapid_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ft_80082C74(ctx, gobj, fnptr(ctx, 0x800d7cec));
 }
 
-pub fn fn_800D80F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let mut gobj = gobj;
-    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    if !Handle::is_null((fp).item_gobj()) {
-        fns::fn_800D84D4(ctx, gobj, fns::it_80291DAC(ctx, (fp).item_gobj(), 0_i32));
+pub fn fn_800D80F4<'a>(ctx: &'a Ctx, a0: HSD_GObj<'a>) {
+    // Transliterated from its machine code: calls it_80291DAC, which reads registers its caller sets without passing them.
+    (a0,).put_regs(ctx);
+    asm_fn_800D80F4(ctx);
+}
+
+fn asm_fn_800D80F4(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x800d80f4_u32;
+    loop {
+        match pc {
+            0x800d80f4_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // mr r31, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[31].set(v);
+                }
+                // lwz r3, 0x2c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x2c_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // lwz r3, 0x1974(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x1974_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // cmplwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_800D812C
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x800d812c_u32;
+                    continue;
+                }
+                pc = 0x800d8118_u32;
+            }
+            0x800d8118_u32 => {
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // bl it_80291DAC
+                c::call(ctx, 0x80291dac_u32, 0x800d8120_u32);
+                pc = 0x800d8120_u32;
+            }
+            0x800d8120_u32 => {
+                // addi r4, r3, 0x0
+                g[4].set(g[3].get());
+                // addi r3, r31, 0x0
+                g[3].set(g[31].get());
+                // bl fn_800D84D4
+                c::call(ctx, 0x800d84d4_u32, 0x800d812c_u32);
+                pc = 0x800d812c_u32;
+            }
+            0x800d812c_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of fn_800D80F4");
+            }
+            _ => unreachable!("fn_800D80F4: no block at {pc:#010x}"),
+        }
     }
 }
 

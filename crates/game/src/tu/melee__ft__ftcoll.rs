@@ -6767,36 +6767,182 @@ fn asm_ftColl_8007A06C(ctx: &Ctx) {
     }
 }
 
-pub fn ftColl_8007AB48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x8);
-    let mut gobj = gobj;
-    let mut fp: Fighter<'a> =
-        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    fns::ftColl_8007A06C(
-        ctx,
-        gobj,
-        Handle::cast::<Addr<'a>>((fp).dmg().facing_dir_1_ref()),
-        Handle::cast::<Addr<'a>>(statics::melee__ft__ftcoll::dmg_log0(ctx).get(0)),
-        (statics::melee__ft__ftcoll::dmg_log0_idx(ctx).get() as u32),
-        1_i32,
-    );
+pub fn ftColl_8007AB48<'a>(ctx: &'a Ctx, a0: HSD_GObj<'a>) {
+    // Transliterated from its machine code: calls ftColl_8007A06C, which reads registers its caller sets without passing them.
+    (a0,).put_regs(ctx);
+    asm_ftColl_8007AB48(ctx);
 }
 
-pub fn ftColl_8007AB80<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let mut gobj = gobj;
-    let mut fp: Fighter<'a> =
-        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    (fp).dmg().set_x187c(0.0);
-    fns::ftColl_8007A06C(
-        ctx,
-        gobj,
-        Handle::cast::<Addr<'a>>((fp).dmg().x1870_ref()),
-        Handle::cast::<Addr<'a>>(fns::dmg_log1(ctx).get(0)),
-        (statics::melee__ft__ftcoll::dmg_log1_idx(ctx).get() as u32),
-        0_i32,
-    );
-    (fp).dmg().set_x18a0((fp).dmg().x187c());
+fn asm_ftColl_8007AB48(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8007ab48_u32;
+    loop {
+        match pc {
+            0x8007ab48_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // lis r4, dmg_log0@ha
+                g[4].set(0x80460000_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // addi r5, r4, dmg_log0@l
+                g[5].set(g[4].get().wrapping_add(0xffff9278_u32));
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // lwz r7, 0x2c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x2c_u32);
+                    g[7].set(ctx.read_u32(ea));
+                }
+                // lwz r6, dmg_log0_idx@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffaeb8_u32);
+                    g[6].set(ctx.read_u32(ea));
+                }
+                // addi r4, r7, 0x1844
+                g[4].set(g[7].get().wrapping_add(0x1844_u32));
+                // li r7, 0x1
+                g[7].set(0x1_u32);
+                // bl ftColl_8007A06C
+                c::call(ctx, 0x8007a06c_u32, 0x8007ab70_u32);
+                pc = 0x8007ab70_u32;
+            }
+            0x8007ab70_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of ftColl_8007AB48");
+            }
+            _ => unreachable!("ftColl_8007AB48: no block at {pc:#010x}"),
+        }
+    }
+}
+
+pub fn ftColl_8007AB80<'a>(ctx: &'a Ctx, a0: HSD_GObj<'a>) {
+    // Transliterated from its machine code: calls ftColl_8007A06C, which reads registers its caller sets without passing them.
+    (a0,).put_regs(ctx);
+    asm_ftColl_8007AB80(ctx);
+}
+
+fn asm_ftColl_8007AB80(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8007ab80_u32;
+    loop {
+        match pc {
+            0x8007ab80_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // lis r4, dmg_log1@ha
+                g[4].set(0x80460000_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // addi r5, r4, dmg_log1@l
+                g[5].set(g[4].get().wrapping_add(0xffff9598_u32));
+                // li r7, 0x0
+                g[7].set(0_u32);
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // lwz r31, 0x2c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x2c_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lfs f0, "@246"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffff8900_u32);
+                    c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
+                }
+                // addi r4, r31, 0x1870
+                g[4].set(g[31].get().wrapping_add(0x1870_u32));
+                // stfs f0, 0x187c(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x187c_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+                }
+                // lwz r6, dmg_log1_idx@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffaebc_u32);
+                    g[6].set(ctx.read_u32(ea));
+                }
+                // bl ftColl_8007A06C
+                c::call(ctx, 0x8007a06c_u32, 0x8007abb4_u32);
+                pc = 0x8007abb4_u32;
+            }
+            0x8007abb4_u32 => {
+                // lfs f0, 0x187c(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x187c_u32);
+                    c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
+                }
+                // stfs f0, 0x18a0(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x18a0_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+                }
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of ftColl_8007AB80");
+            }
+            _ => unreachable!("ftColl_8007AB80: no block at {pc:#010x}"),
+        }
+    }
 }
 
 pub fn ftColl_8007ABD0<'a>(ctx: &'a Ctx, arg0: HitCapsule<'a>, arg1: u32, arg2: HSD_GObj<'a>) {
