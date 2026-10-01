@@ -185,6 +185,8 @@ int_scalar!(u64, read_u64, write_u64, 8);
 int_scalar!(i64, read_u64, write_u64, 8);
 
 /// A C `float`. Reads widen like `lfs`; writes round like C assignment, then store like `stfs`.
+/// A NaN stores as it is: rounding would quiet a signaling one, which MWCC's float copies,
+/// `lfs` then `stfs`, keep.
 pub struct F32;
 
 impl Scalar for F32 {
@@ -196,7 +198,8 @@ impl Scalar for F32 {
     }
     #[inline]
     fn write(at: At<'_>, v: f64) {
-        at.ctx.write_u32(at.addr, gekko_fp::stfs(gekko_fp::frsp(v)))
+        let v = if v.is_nan() { v } else { gekko_fp::frsp(v) };
+        at.ctx.write_u32(at.addr, gekko_fp::stfs(v))
     }
 }
 
