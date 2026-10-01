@@ -389,6 +389,9 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
 
     ctx.mem.restore(&j1);
     ctx.regs.restore(&regs0);
+    // The original's caller is the interpreter's return sentinel: the port's is too, for code
+    // that reads the link register as a value.
+    ctx.regs.lr.set(crate::RETURN_SENTINEL);
     state.phase.set(Phase::Port);
     state.cursor.set(start);
     if traced && let Some(t) = state.traces.borrow_mut().last_mut() {
@@ -487,6 +490,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
             let s3 = ctx.mem.capture(j3.keys());
             ctx.mem.restore(&j3);
             ctx.regs.restore(&regs0);
+            ctx.regs.lr.set(crate::RETURN_SENTINEL);
             state.phase.set(Phase::Port);
             state.cursor.set(start);
             if traced && let Some(t) = state.traces.borrow_mut().last_mut() {
