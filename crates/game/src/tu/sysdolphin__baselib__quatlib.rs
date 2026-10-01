@@ -278,7 +278,6 @@ pub fn HSD_QuatLib_8037EC4C<'a>(
     out: Quaternion<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut p = p;
     let mut q = q;
     let mut out = out;

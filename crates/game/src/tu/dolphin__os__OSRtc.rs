@@ -362,7 +362,6 @@ pub fn OSSetProgressiveMode<'a>(ctx: &'a Ctx, mode: u32) {
 
 pub fn OSGetWirelessID<'a>(ctx: &'a Ctx, arg0: i32) -> u16 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut var_r3: Val<'a, u16> = null(ctx);
     let mut id: u16 = 0;

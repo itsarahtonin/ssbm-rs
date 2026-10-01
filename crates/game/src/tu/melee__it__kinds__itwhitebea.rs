@@ -180,7 +180,6 @@ pub fn itOldottosea_UnkMotion11_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i3
 pub fn it_802E35CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
     let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attrs: itOldottoseaAttributes<'a> = Handle::cast::<itOldottoseaAttributes<'a>>(
@@ -308,7 +307,6 @@ pub fn it_802E37BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802E3884<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itWhiteBeaAttributes<'a> =
@@ -337,7 +335,6 @@ pub fn it_802E3884<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn fn_802E398C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -351,7 +348,6 @@ pub fn fn_802E398C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itWhitebea_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -367,7 +363,6 @@ pub fn itWhitebea_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itWhitebea_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -399,7 +394,6 @@ pub fn itWhitebea_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802E3AC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itWhiteBeaAttributes<'a> =
@@ -444,7 +438,6 @@ pub fn it_802E3AC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itWhitebea_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
     let local: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut sfx: Val<'a, i32> = null(ctx);
@@ -479,7 +472,6 @@ pub fn itWhitebea_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itWhitebea_UnkMotion1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut attrs: itWhiteBeaAttributes<'a> =
@@ -521,7 +513,6 @@ pub fn itWhitebea_UnkMotion1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itWhitebea_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -541,7 +532,6 @@ pub fn itWhitebea_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802E3DA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut attrs: itWhiteBeaAttributes<'a> =
@@ -590,7 +580,6 @@ pub fn itWhitebea_UnkMotion3_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itWhitebea_UnkMotion3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -604,7 +593,6 @@ pub fn itWhitebea_UnkMotion3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802E3ED0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut facing: i32 = 0;
@@ -640,7 +628,6 @@ pub fn it_802E3ED0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itWhitebea_UnkMotion4_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -684,7 +671,6 @@ pub fn itWhitebea_UnkMotion4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802E40A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj));
     let mut attrs: itWhiteBeaAttributes<'a> =
@@ -738,7 +724,6 @@ pub fn it_802E4190<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itWhitebea_UnkMotion2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj));
     let mut attrs: itWhiteBeaAttributes<'a> = null(ctx);
@@ -847,7 +832,6 @@ pub fn itWhitebea_UnkMotion5_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802E4464<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut attrs: itWhiteBeaAttributes<'a> =
@@ -885,7 +869,6 @@ pub fn itWhitebea_UnkMotion6_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itWhitebea_UnkMotion6_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -910,7 +893,6 @@ pub fn it_802E4558<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itWhitebea_UnkMotion7_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut attrs: itWhiteBeaAttributes<'a> =
@@ -938,7 +920,6 @@ pub fn itWhitebea_UnkMotion7_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itWhitebea_UnkMotion7_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -971,7 +952,6 @@ pub fn itWhitebea_UnkMotion8_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_2725_Logic9_Dropped<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
     let mut attrs: itWhiteBeaAttributes<'a> = null(ctx);

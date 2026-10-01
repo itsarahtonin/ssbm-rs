@@ -67,7 +67,6 @@ pub fn itGameWatchBreath_Logic76_Destroyed<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj
 
 pub fn it_802C7340<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let pad: ArrV<'a, i32, 1> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
@@ -111,7 +110,6 @@ pub fn it_802C7424<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn itGamewatchbreath_UnkMotion1_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let pad: ArrV<'a, i32, 3> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> = null(ctx);
     let mut var_r3: i32 = 0;

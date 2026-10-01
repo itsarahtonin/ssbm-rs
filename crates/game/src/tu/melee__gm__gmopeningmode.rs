@@ -421,7 +421,6 @@ pub fn gm_801BF718<'a>(ctx: &'a Ctx) -> u8 {
 
 pub fn onEnterCutsceneLuigi<'a>(ctx: &'a Ctx, arg: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg = arg;
     let mut temp_r31: i32 = 0;
     let mut temp_r31_2: i32 = 0;
@@ -466,7 +465,6 @@ pub fn onExitRegendCongrats<'a>(ctx: &'a Ctx, arg: GameModeState<'a>) {
 
 pub fn onEnterMovie<'a>(ctx: &'a Ctx, arg: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg = arg;
     let mut temp_r31: PreloadedGameModeState<'a> = fns::lbDvd_GetPreloadCacheScene(ctx);
     'l1: loop {

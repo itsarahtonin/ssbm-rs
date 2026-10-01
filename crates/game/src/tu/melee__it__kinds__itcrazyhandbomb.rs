@@ -36,7 +36,6 @@ pub fn it_802F0F6C<'a>(
 ) {
     let __frame = ctx.stack_frame(0x80);
     let spawnitem: SpawnItem<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut owner = owner;
     let mut prev_pos = prev_pos;
     let mut pos = pos;
@@ -61,7 +60,6 @@ pub fn it_802F0F6C<'a>(
 
 pub fn it_802F1030<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -184,7 +182,6 @@ pub fn it_802F1340<'a>(ctx: &'a Ctx) {}
 
 pub fn it_802F1344<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {

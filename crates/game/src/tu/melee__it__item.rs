@@ -739,7 +739,6 @@ pub fn Item_802680CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn Item_8026814C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> =
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
@@ -1207,7 +1206,6 @@ pub fn Item_80268E5C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32, flags: i32
     let __frame = ctx.stack_frame(0x88);
     let sp4C: Vec<'a> = frame_at(ctx, &__frame, 0x44);
     let scl: Vec<'a> = frame_at(ctx, &__frame, 0x38);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut msid = msid;
     let mut flags = flags;
@@ -1404,7 +1402,6 @@ pub fn Item_802694CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn Item_80269528<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut item_data: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1496,7 +1493,6 @@ pub fn Item_802696CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn Item_802697D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut item_data: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1645,7 +1641,6 @@ pub fn Item_80269BE4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn Item_80269C5C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -2067,7 +2062,6 @@ pub fn Item_8026A8EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn Item_8026AB54<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, owner_gobj: HSD_GObj<'a>, part: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut owner_gobj = owner_gobj;
     let mut part = part;
@@ -2087,7 +2081,6 @@ pub fn Item_8026AB54<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, owner_gobj: HSD_GObj<
 
 pub fn Item_8026ABD8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>, arg2: f64) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut arg2 = arg2;

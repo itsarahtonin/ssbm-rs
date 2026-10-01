@@ -611,7 +611,6 @@ pub fn HSD_DevComDVDMemCallback<'a>(ctx: &'a Ctx, result: i32, unused: DVDFileIn
 
 pub fn HSD_DevComDVDCallback<'a>(ctx: &'a Ctx, result: i32, unused: DVDFileInfo<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut result = result;
     let mut unused = unused;
     let mut dc: HSD_DevCom<'a> = null(ctx);

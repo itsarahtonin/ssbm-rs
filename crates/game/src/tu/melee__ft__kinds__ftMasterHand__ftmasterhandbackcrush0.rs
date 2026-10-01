@@ -34,7 +34,6 @@ pub fn ftMh_MS_370_80153D2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let scl: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut jobj: HSD_JObj<'a> = inl_get_jobj_unfused(ctx, gobj);
@@ -145,7 +144,6 @@ pub fn ftMh_BackCrush_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMh_BackCrush_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

@@ -424,7 +424,6 @@ pub fn fn_8017E318<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn fn_8017E3C8<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0_i32;
     'l1: loop {
         'c2: {}

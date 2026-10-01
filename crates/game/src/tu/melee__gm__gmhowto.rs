@@ -32,7 +32,6 @@ pub fn gm_801ACC94<'a>(ctx: &'a Ctx) -> Addr<'a> {
 
 pub fn gm_Scene_HowTo_OnEnter<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut unused = unused;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     'l1: loop {
@@ -83,7 +82,6 @@ pub fn gm_Scene_HowTo_OnEnter<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
 
 pub fn gm_Scene_HowTo_OnFrame<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut var_r31: i32 = 0_i32;
     'l1: loop {
         'c2: {}

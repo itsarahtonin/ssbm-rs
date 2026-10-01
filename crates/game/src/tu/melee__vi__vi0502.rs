@@ -43,7 +43,6 @@ pub fn vi0502_8031E124<'a>(
 ) {
     let __frame = ctx.stack_frame(0x58);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
     let mut player_kind = player_kind;
     let mut player_costume = player_costume;
     let mut kirby_costume = kirby_costume;

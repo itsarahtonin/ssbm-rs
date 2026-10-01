@@ -557,7 +557,6 @@ pub fn grOldYoshi_8020F080<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 pub fn grOldYoshi_8020F088<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
     let local34: grOy_803B83F0_t<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg = arg;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((arg).user_data());
     let mut dVar9: f64 = 0.0;

@@ -261,7 +261,6 @@ pub fn it_802DE040<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802DE0F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -474,7 +473,6 @@ pub fn itZrshell_UnkMotion4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802DE6F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itZGShell_Attrs<'a> =
@@ -613,7 +611,6 @@ pub fn itZrshell_UnkMotion6_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itZrshell_UnkMotion6_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut attrs: itZGShell_Attrs<'a> = null(ctx);
     let mut ip: Item<'a> = null(ctx);
@@ -639,7 +636,6 @@ pub fn itZrshell_UnkMotion6_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802DEC80<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itZGShell_Attrs<'a> =
@@ -741,7 +737,6 @@ pub fn itZrshell_UnkMotion9_Anim<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
 
 pub fn itZrshell_UnkMotion9_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itZGShell_Attrs<'a> =
@@ -789,7 +784,6 @@ pub fn itZrshell_UnkMotion9_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itZrshell_UnkMotion9_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut attrs: itZGShell_Attrs<'a> = null(ctx);
     let mut ip: Item<'a> = null(ctx);
@@ -918,7 +912,6 @@ pub fn it_802DF230<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itZrshell_UnkMotion11_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut spawn: HSD_GObj<'a> = null(ctx);
@@ -1046,7 +1039,6 @@ pub fn it_802DF9F8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itZrshell_UnkMotion10_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -1132,7 +1124,6 @@ pub fn itZGShell_Logic11_DmgDealt<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itZGShell_Logic11_DmgReceived<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -1256,7 +1247,6 @@ pub fn it_802DFFB8<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, ip: Item<'a>) {
 pub fn it_802E0100<'a>(ctx: &'a Ctx, arg0: i32, pos: Vec<'a>, facing_int: i32) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x50);
     let vel: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut pos = pos;
     let mut facing_int = facing_int;

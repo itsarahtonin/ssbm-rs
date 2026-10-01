@@ -164,7 +164,6 @@ pub fn ftNn_Init_80123B10<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn ftNn_Init_80123B3C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -194,7 +193,6 @@ pub fn ftNn_Init_80123B3C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftNn_Init_80123BF0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -242,7 +240,6 @@ pub fn ftPp_SpecialS_0_Anim<'a>(ctx: &'a Ctx, nana_gobj: HSD_GObj<'a>) {
 
 pub fn ftPp_SpecialS_1_Anim<'a>(ctx: &'a Ctx, nana_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut nana_gobj = nana_gobj;
     let mut nana_fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, nana_gobj)));
@@ -284,7 +281,6 @@ pub fn ftPp_SpecialS_1_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPp_SpecialS_0_Phys<'a>(ctx: &'a Ctx, nana_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut nana_gobj = nana_gobj;
     let mut nana_fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, nana_gobj)));
@@ -316,7 +312,6 @@ pub fn ftPp_SpecialS_0_Phys<'a>(ctx: &'a Ctx, nana_gobj: HSD_GObj<'a>) {
 
 pub fn ftPp_SpecialS_1_Phys<'a>(ctx: &'a Ctx, nana_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut nana_gobj = nana_gobj;
     let mut nana_fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, nana_gobj)));
@@ -348,7 +343,6 @@ pub fn ftPp_SpecialS_1_Phys<'a>(ctx: &'a Ctx, nana_gobj: HSD_GObj<'a>) {
 
 pub fn ftPp_SpecialS_0_Coll<'a>(ctx: &'a Ctx, nana_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut nana_gobj = nana_gobj;
     let mut nana_fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, nana_gobj)));
@@ -356,21 +350,13 @@ pub fn ftPp_SpecialS_0_Coll<'a>(ctx: &'a Ctx, nana_gobj: HSD_GObj<'a>) {
         fns::Player_GetEntityAtIndex(ctx, ((nana_fp).player_idx() as i32), 0_i32);
     let mut popo_fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, popo_gobj)));
-    inl_ftPp_SpecialS_0_Coll_inline4(
-        ctx,
-        nana_gobj,
-        popo_fp,
-        nana_fp,
-        popo_gobj,
-        Handle::addr(__inl),
-    );
+    inl_ftPp_SpecialS_0_Coll_inline4(ctx, nana_gobj, popo_fp, nana_fp, popo_gobj);
     inl_ftPp_SpecialS_0_Coll_inline(ctx, nana_gobj);
     inl_ftPp_SpecialS_0_Coll_inline2(ctx, nana_gobj);
 }
 
 pub fn ftPp_SpecialS_1_Coll<'a>(ctx: &'a Ctx, nana_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut nana_gobj = nana_gobj;
     let mut nana_fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, nana_gobj)));
@@ -378,14 +364,7 @@ pub fn ftPp_SpecialS_1_Coll<'a>(ctx: &'a Ctx, nana_gobj: HSD_GObj<'a>) {
         fns::Player_GetEntityAtIndex(ctx, ((nana_fp).player_idx() as i32), 0_i32);
     let mut popo_fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, popo_gobj)));
-    inl_ftPp_SpecialS_1_Coll_inline4(
-        ctx,
-        nana_gobj,
-        popo_fp,
-        nana_fp,
-        popo_gobj,
-        Handle::addr(__inl),
-    );
+    inl_ftPp_SpecialS_1_Coll_inline4(ctx, nana_gobj, popo_fp, nana_fp, popo_gobj);
     inl_ftPp_SpecialS_0_Coll_inline(ctx, nana_gobj);
     inl_ftPp_SpecialS_0_Coll_inline2(ctx, nana_gobj);
 }
@@ -499,9 +478,7 @@ fn inl_ftPp_SpecialS_0_Coll_inline4<'a>(
     popo_fp: Fighter<'a>,
     nana_fp: Fighter<'a>,
     popo_gobj: HSD_GObj<'a>,
-    __in_caller: u32,
 ) {
-    let unused: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
     let mut nana_gobj = nana_gobj;
     let mut popo_fp = popo_fp;
     let mut nana_fp = nana_fp;
@@ -602,9 +579,7 @@ fn inl_ftPp_SpecialS_1_Coll_inline4<'a>(
     popo_fp: Fighter<'a>,
     nana_fp: Fighter<'a>,
     popo_gobj: HSD_GObj<'a>,
-    __in_caller: u32,
 ) {
-    let unused: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
     let mut nana_gobj = nana_gobj;
     let mut popo_fp = popo_fp;
     let mut nana_fp = nana_fp;

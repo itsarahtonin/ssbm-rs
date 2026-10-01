@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn ftCl_AppealS_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp0: Fighter<'a> = null(ctx);
     let mut fp1: Fighter<'a> = null(ctx);

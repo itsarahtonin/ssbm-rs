@@ -470,7 +470,6 @@ pub fn it_8026B7E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_8026B7F8<'a>(ctx: &'a Ctx, fighter_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut fighter_gobj = fighter_gobj;
     let mut cur: HSD_GObj<'a> = null(ctx);
     let mut owner: HSD_GObj<'a> = null(ctx);
@@ -861,7 +860,6 @@ pub fn it_8026BE28<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_8026BE84<'a>(ctx: &'a Ctx, bobOmbRain: BobOmbRain<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut bobOmbRain = bobOmbRain;
     let mut bobomb_id: i32 = 0;
     let mut kind0: i32 = 0;

@@ -1365,7 +1365,6 @@ pub fn hsd_80391AC8<'a>(
 pub fn hsd_80391E18<'a>(ctx: &'a Ctx, list: Val<'a, u8>, x1: f64, y1: f64, x2: f64, y2: f64) {
     let __frame = ctx.stack_frame(0x70);
     let color: Val<'a, u32> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut list = list;
     let mut x1 = x1;
     let mut y1 = y1;

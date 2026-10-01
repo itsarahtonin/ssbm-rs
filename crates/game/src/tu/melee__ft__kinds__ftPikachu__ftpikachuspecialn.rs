@@ -41,7 +41,6 @@ pub fn ftPk_SpecialAirN_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftPk_SpecialN_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut pika_attr: _ftPikachuAttributes<'a> =
@@ -106,7 +105,6 @@ pub fn ftPk_SpecialN_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftPk_SpecialAirN_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let it_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut pika_attr: _ftPikachuAttributes<'a> =

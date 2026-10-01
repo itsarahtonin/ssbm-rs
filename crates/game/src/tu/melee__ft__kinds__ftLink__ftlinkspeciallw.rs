@@ -59,7 +59,6 @@ pub fn updateBomb<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) -> i32 {
 pub fn spawnBomb<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

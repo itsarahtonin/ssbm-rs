@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn it_2725_Logic24_Spawned<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itHitodemanAttributes<'a> =
@@ -112,7 +111,6 @@ pub fn it_802D43EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802D4494<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itHitodemanAttributes<'a> =
@@ -132,7 +130,6 @@ pub fn it_802D4494<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802D4510<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itHitodemanAttributes<'a> =
@@ -152,7 +149,6 @@ pub fn it_802D4510<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn it_802D4564<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x48);
     let target_pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (ip).xDAC_itcmd_var0() != (0_i32 as u32) {
@@ -326,7 +322,6 @@ pub fn it_802D4990<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itHitodeman_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut timer: f64 = 0.0;
@@ -498,7 +493,6 @@ pub fn it_802D4C74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_2725_Logic43_Spawned<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

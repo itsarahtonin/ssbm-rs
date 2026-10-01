@@ -378,7 +378,6 @@ pub fn setupNormalCamera<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
 pub fn setupTopHalfCamera<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x88);
     let p: Arr<'a, ArrV<'a, F32, 4>, 4> = frame_at(ctx, &__frame, 0x8);
-    let unused_2: ArrV<'a, i32, 1> = frame_at(ctx, &__frame, 0x0);
     let mut cobj = cobj;
     let mut projection_type: i32 = 0;
     let mut h_scale: f64 = 0.0;
@@ -1088,7 +1087,6 @@ pub fn HSD_CObjGetViewingMtxPtr<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> ArrV<'a
     let interest: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let up_vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let eyepos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x24);
     let mut cobj = cobj;
     'l1: loop {
         'c2: {}
@@ -1116,7 +1114,6 @@ pub fn HSD_CObjGetInvViewingMtxPtr<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> ArrV
     let interest: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let up_vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let eyepos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x24);
     let mut cobj = cobj;
     'l1: loop {
         'c2: {}

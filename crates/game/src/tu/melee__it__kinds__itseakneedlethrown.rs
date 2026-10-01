@@ -34,9 +34,7 @@ pub fn it_802AFD8C<'a>(
     facing_dir: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x88);
-    let _padA: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
-    let _padB: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut parent = parent;
     let mut pos = pos;
     let mut kind = kind;
@@ -98,7 +96,6 @@ pub fn itSeakNeedleThrown_Logic109_Destroyed<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a
 
 pub fn it_802AFF08<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, owner: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut owner = owner;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
@@ -172,7 +169,6 @@ pub fn it_802AFF08<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, owner: HSD_GObj<'a>) {
 
 pub fn it_802B00F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, owner: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut owner = owner;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -220,7 +216,6 @@ pub fn itSeakneedlethrown_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
 
 pub fn itSeakneedlethrown_UnkMotion2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut child: HSD_JObj<'a> =
@@ -302,7 +297,6 @@ pub fn itSeakneedlethrown_UnkMotion4_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
 pub fn itSeakneedlethrown_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
     let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut attr: itSeakNeedleThrownAttributes<'a> = Handle::cast::<itSeakNeedleThrownAttributes<'a>>(
@@ -406,7 +400,6 @@ pub fn itSeakneedlethrown_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
 
 pub fn itSeakneedlethrown_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -437,8 +430,7 @@ pub fn itSeakneedlethrown_UnkMotion3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
 
 pub fn itSeakneedlethrown_UnkMotion4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itSeakNeedleThrownAttributes<'a> = Handle::cast::<itSeakNeedleThrownAttributes<'a>>(
@@ -577,7 +569,6 @@ pub fn it_2725_Logic109_DmgReceived<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32
 
 pub fn it_2725_Logic109_Reflected<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());

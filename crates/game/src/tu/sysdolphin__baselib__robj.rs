@@ -407,7 +407,6 @@ pub fn resolveCnsOrientation<'a>(
 ) {
     let __frame = ctx.stack_frame(0xf8);
     let mtx0: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x78);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let v: Vec<'a> = frame_at(ctx, &__frame, 0x68);
     let mtx1: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x38);
     let mut robj = robj;
@@ -913,7 +912,6 @@ pub fn expEvaluate<'a>(
     let __frame = ctx.stack_frame(0x98);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0x34);
     let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let sp1C: HSD_ObjData<'a> = frame_at(ctx, &__frame, 0x14);
     let mut exp = exp;
     let mut r#type = r#type;

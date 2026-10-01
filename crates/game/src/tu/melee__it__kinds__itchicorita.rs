@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn it_802C9588<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> = null(ctx);
     let mut attr: itChicoritaAttr<'a> = null(ctx);
@@ -73,7 +72,6 @@ pub fn itChicorita_Logic1_EvtUnk<'a>(
 
 pub fn it_802C963C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     'l1: loop {
         'c2: {}
@@ -283,7 +281,6 @@ pub fn it_802C9B20<'a>(ctx: &'a Ctx, chicorita_gobj: HSD_GObj<'a>) {
 
 pub fn itChicoritaLeaf_Logic30_Spawned<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> = null(ctx);
     'l1: loop {

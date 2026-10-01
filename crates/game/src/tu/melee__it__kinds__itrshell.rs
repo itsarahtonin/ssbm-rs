@@ -29,7 +29,6 @@ use crate::support::*;
 pub fn it_8028CFE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let v: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itRShell_Attrs<'a> =
@@ -232,7 +231,6 @@ pub fn it_8028D390<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_8028D3B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -429,7 +427,6 @@ pub fn itRshell_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itRShell_Logic15_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -593,7 +590,6 @@ pub fn itRshell_UnkMotion5_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn itRshell_UnkMotion5_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
     let target_pos: Vec<'a> = frame_at(ctx, &__frame, 0x34);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itRShell_Attrs<'a> =
@@ -730,7 +726,6 @@ pub fn itRshell_UnkMotion7_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itRshell_UnkMotion7_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut attrs: itRShell_Attrs<'a> = null(ctx);
     let mut ip: Item<'a> = null(ctx);
@@ -970,7 +965,6 @@ fn inl_itRshell_ClampVel_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 fn inl_it_8028CFE0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
     let v: Vec<'a> = ptr(ctx, __in_caller + 0x0);
-    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itRShell_Attrs<'a> =

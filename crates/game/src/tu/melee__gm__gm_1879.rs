@@ -29,7 +29,6 @@ use crate::support::*;
 pub fn fn_80187910<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut data: gm_1832_804736C0_t<'a> = null(ctx);
     let mut cobj: HSD_CObj<'a> = null(ctx);
@@ -85,7 +84,6 @@ pub fn fn_80187910<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn fn_80187AB4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut data: gm_1832_804736C0_t<'a> = statics::melee__gm__gm_1879::lbl_804736C0(ctx);
     let mut jobj: HSD_JObj<'a> =
@@ -229,7 +227,6 @@ pub fn fn_80187CF4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn gm_Scene_IntroNormal_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     'l1: loop {
         'c2: {}

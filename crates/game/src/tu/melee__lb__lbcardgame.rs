@@ -254,7 +254,6 @@ pub fn lb_8001CC4C<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn lb_8001CC84<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {

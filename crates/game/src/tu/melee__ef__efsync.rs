@@ -32,7 +32,6 @@ pub fn efSync_Spawn<'a>(ctx: &'a Ctx, gfx_id: i32, gobj: HSD_GObj<'a>) -> Addr<'
     let vlist: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
     let translate: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0x78);
-    let unused: ArrV<'a, u8, 44> = frame_at(ctx, &__frame, 0x84);
     let mut gfx_id = gfx_id;
     let mut gobj = gobj;
     let mut psAppSRT: HSD_psAppSRT<'a> = null(ctx);

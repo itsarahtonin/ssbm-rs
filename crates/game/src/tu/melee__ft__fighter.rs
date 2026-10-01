@@ -2843,7 +2843,6 @@ pub fn Fighter_procIK<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn Fighter_procAccessory<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -3223,7 +3222,6 @@ pub fn Fighter_TakeDamage_8006CC7C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, damage_amo
 pub fn Fighter_8006CDA4<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x38);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut arg1 = arg1;
     let mut temp_bool: i32 = 0;

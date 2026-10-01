@@ -458,15 +458,14 @@ pub fn lbVector_WorldToScreen<'a>(
     d: i32,
 ) -> Vec<'a> {
     let __frame = ctx.stack_frame(0x108);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let projMtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x10);
-    let projection: ArrV<'a, F32, 7> = frame_at(ctx, &__frame, 0x40);
-    let viewport: ArrV<'a, F32, 6> = frame_at(ctx, &__frame, 0x5c);
-    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x74);
-    let point: Vec<'a> = frame_at(ctx, &__frame, 0xa4);
-    let upVec: Vec<'a> = frame_at(ctx, &__frame, 0xb0);
-    let camPos: Vec<'a> = frame_at(ctx, &__frame, 0xbc);
-    let target: Vec<'a> = frame_at(ctx, &__frame, 0xc8);
+    let projMtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x0);
+    let projection: ArrV<'a, F32, 7> = frame_at(ctx, &__frame, 0x30);
+    let viewport: ArrV<'a, F32, 6> = frame_at(ctx, &__frame, 0x4c);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x64);
+    let point: Vec<'a> = frame_at(ctx, &__frame, 0x94);
+    let upVec: Vec<'a> = frame_at(ctx, &__frame, 0xa0);
+    let camPos: Vec<'a> = frame_at(ctx, &__frame, 0xac);
+    let target: Vec<'a> = frame_at(ctx, &__frame, 0xb8);
     let mut cobj = cobj;
     let mut pos3d = pos3d;
     let mut screenCoords = screenCoords;

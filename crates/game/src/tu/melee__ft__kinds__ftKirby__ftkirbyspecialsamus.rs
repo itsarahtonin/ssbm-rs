@@ -33,7 +33,6 @@ pub fn ftKb_SpecialNSs_800FCC14<'a>(
     out2: Val<'a, i32>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut out1 = out1;
     let mut out2 = out2;
@@ -140,10 +139,8 @@ pub fn ftKb_SpecialNSs_800FCD60<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_SpecialNSs_800FCDE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x78);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x34);
     let offset: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let unused_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -218,7 +215,6 @@ pub fn ftKb_SpecialNSs_800FCDE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_SpecialNSs_800FCF74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -250,7 +246,6 @@ pub fn ftKb_SpecialNSs_800FCF74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_SpecialNSs_800FD020<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -282,7 +277,6 @@ pub fn ftKb_SsSpecialNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let offset: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -361,7 +355,6 @@ pub fn ftKb_SsSpecialNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_SsSpecialNHold_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp3: Fighter<'a> = null(ctx);
     let mut fp: Fighter<'a> =
@@ -436,7 +429,6 @@ pub fn ftKb_SsSpecialNHold_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_SsSpecialNCancel_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -452,7 +444,6 @@ pub fn ftKb_SsSpecialNCancel_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_SsSpecialN_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     fns::ftKb_SpecialNSs_800FCDE0(ctx, gobj);
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
@@ -464,7 +455,6 @@ pub fn ftKb_SsSpecialAirNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
     let offset: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -518,7 +508,6 @@ pub fn ftKb_SsSpecialAirNStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_SsSpecialAirN_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -553,7 +542,6 @@ pub fn ftKb_SsSpecialNStart_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftKb_SsSpecialNHold_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

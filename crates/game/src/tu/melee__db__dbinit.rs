@@ -153,7 +153,6 @@ pub fn db_ButtonsRepeat<'a>(ctx: &'a Ctx, player: i32) -> u32 {
 
 pub fn db_PrintEntityCounts<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let stack: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
     fns::OSReport(ctx, cstr(ctx, 0x803ea708), &[]);
     {
@@ -224,7 +223,6 @@ pub fn db_PrintThreadInfo<'a>(ctx: &'a Ctx) {
 
 pub fn db_RunEveryFrame<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let stack: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
     let mut num_players: i32 = 0;
     if fns::DbLevel(ctx).get() < (((enums::DbLKind_DebugRom as i32) as u32) as i32) {

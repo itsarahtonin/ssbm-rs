@@ -475,7 +475,6 @@ pub fn grBigBlueRoute_8020C210<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn grBigBlueRoute_8020C238<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let spline_pt: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut root_jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -662,15 +661,12 @@ pub fn grBigBlueRoute_8020CD20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x194);
     let rot: Vec<'a> = frame_at(ctx, &__frame, 0x188);
     let fighter_pos: Vec<'a> = frame_at(ctx, &__frame, 0x17c);
-    let pad0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let c2_road: Vec<'a> = frame_at(ctx, &__frame, 0x16c);
     let c2_air: Vec<'a> = frame_at(ctx, &__frame, 0x160);
     let c2_road_rot: Vec<'a> = frame_at(ctx, &__frame, 0x154);
-    let pad1: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x4);
     let c3_air: Vec<'a> = frame_at(ctx, &__frame, 0x13c);
     let c3_road: Vec<'a> = frame_at(ctx, &__frame, 0x130);
     let c3_air_rot: Vec<'a> = frame_at(ctx, &__frame, 0x124);
-    let pad2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x10);
     let c0_tangent: Vec<'a> = frame_at(ctx, &__frame, 0x10c);
     let c0_p1: Vec<'a> = frame_at(ctx, &__frame, 0x100);
     let c0_p0: Vec<'a> = frame_at(ctx, &__frame, 0xf4);
@@ -692,7 +688,6 @@ pub fn grBigBlueRoute_8020CD20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let c3_road_tan: Vec<'a> = frame_at(ctx, &__frame, 0x34);
     let c3_p1: Vec<'a> = frame_at(ctx, &__frame, 0x28);
     let c3_p0: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let pad3: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x1a0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut gp: Ground<'a> = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));

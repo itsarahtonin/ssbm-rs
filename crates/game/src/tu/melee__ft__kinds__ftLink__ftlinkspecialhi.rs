@@ -91,7 +91,6 @@ pub fn ftLk_SpecialHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftLk_SpecialAirHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -116,7 +115,6 @@ pub fn ftLk_SpecialAirHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftLk_SpecialHi_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
         fns::ft_8008A2BC(ctx, gobj);
@@ -125,7 +123,6 @@ pub fn ftLk_SpecialHi_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftLk_SpecialAirHi_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut da: ftLk_DatAttrs<'a> = Handle::cast::<ftLk_DatAttrs<'a>>(
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).dat_attrs(),
@@ -153,7 +150,6 @@ pub fn ftLk_SpecialAirHi_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftLk_SpecialAirHi_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -179,13 +175,11 @@ pub fn ftLk_SpecialAirHi_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftLk_SpecialHi_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
-        inl_ftLk_SpecialAirHi_Phys_unfused(ctx, gobj, Handle::addr(__inl));
+        inl_ftLk_SpecialAirHi_Phys_unfused(ctx, gobj);
     } else {
         fns::ft_80084F3C(ctx, gobj);
     }
@@ -193,7 +187,6 @@ pub fn ftLk_SpecialHi_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftLk_SpecialHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     if !(fns::ft_80082708(ctx, gobj) != 0) {
         statics::melee__ft__kinds__ftLink__ftlinkspecialhi::doColl(ctx, gobj);
@@ -202,7 +195,6 @@ pub fn ftLk_SpecialHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftLk_SpecialAirHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>(
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).dat_attrs(),
@@ -216,7 +208,6 @@ pub fn ftLk_SpecialAirHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn doColl<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut coll_mf: u32 = (((((((((2_u32 | 8_u32) | 128_u32) | 0x1000_u32) | 0x4000_u32)
         | 0x40000_u32)
@@ -278,8 +269,7 @@ fn inl_Fighter_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a
     (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
 }
 
-fn inl_ftLk_SpecialAirHi_Phys_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
-    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
+fn inl_ftLk_SpecialAirHi_Phys_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

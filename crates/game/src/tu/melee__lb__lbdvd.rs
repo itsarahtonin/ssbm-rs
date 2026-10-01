@@ -248,7 +248,6 @@ pub fn lbDvd_800178E8<'a>(
     arg8: i32,
 ) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut name = name;
     let mut arg2 = arg2;
@@ -275,7 +274,6 @@ pub fn lbDvd_800178E8<'a>(
 
 pub fn lbDvd_80017960<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut j: i32 = 0;
     let mut game_cache: GameCache<'a> = statics::melee__lb__lbdvd::preloadCache(ctx)
         .new_scene()

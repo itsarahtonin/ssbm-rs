@@ -39,7 +39,6 @@ pub fn ftMt_SpecialS_SetFlags<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMt_SpecialS_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -67,7 +66,6 @@ pub fn ftMt_SpecialS_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMt_SpecialAirS_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

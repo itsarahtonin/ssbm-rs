@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn mnHyaku_8024C68C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut events: u64 = 0;
     let mut menu: Menu<'a> = (Handle::cast::<Menu<'a>>(inl_HSD_GObjGetUserData_unfused(
@@ -165,7 +164,6 @@ pub fn mnHyaku_8024CA50<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnHyaku_8024CAC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut gobj_proc: HSD_GObjProc<'a> = null(ctx);

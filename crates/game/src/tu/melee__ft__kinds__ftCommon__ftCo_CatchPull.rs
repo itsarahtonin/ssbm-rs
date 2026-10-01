@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn fn_800D9CE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -113,7 +112,6 @@ pub fn fn_800D9CE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_CatchPull_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -225,7 +223,6 @@ pub fn fn_800DA054<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x78);
     let victimPos: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
     let selfPos: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut victim: Fighter<'a> = null(ctx);

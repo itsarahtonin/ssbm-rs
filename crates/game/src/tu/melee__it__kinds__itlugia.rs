@@ -205,7 +205,6 @@ pub fn itLugia_UnkMotion3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802D1830<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut prod: f64 = 0.0;
@@ -479,7 +478,6 @@ pub fn it_802D1E8C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, kind: i32, param: f64) 
 pub fn it_802D1F64<'a>(ctx: &'a Ctx, __ret: Vec<'a>, gobj: HSD_GObj<'a>, param: f64) {
     let __frame = ctx.stack_frame(0x40);
     let diff: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut param = param;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));

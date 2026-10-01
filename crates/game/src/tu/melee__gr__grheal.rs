@@ -145,7 +145,6 @@ pub fn stageGObj0_Callback3<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn stageGObj1_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xc0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let coin_pos: Vec<'a> = frame_at(ctx, &__frame, 0x8c);
     let next_players: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x88);
     let next_jobjs: ArrP<'a, HSD_JObj<'a>, 3> = frame_at(ctx, &__frame, 0x7c);
@@ -475,7 +474,6 @@ pub fn grHeal_8021F70C<'a>(ctx: &'a Ctx, character_id: i32) -> i32 {
 pub fn grHeal_8021F79C<'a>(ctx: &'a Ctx, arg0: i32, idx: i32, arg2: i32) {
     let __frame = ctx.stack_frame(0x48);
     let bobomb_rain: BobOmbRain<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut idx = idx;
     let mut arg2 = arg2;

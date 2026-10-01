@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn itHassam_802CDBE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itHassam_ItemVars<'a> =
@@ -60,7 +59,6 @@ pub fn itHassam_802CDC60<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, r#ref: HSD_GObj<'
 
 pub fn itHassam_802CDC80<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -133,7 +131,6 @@ pub fn itHassam_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn itHassam_802CDE1C<'a>(ctx: &'a Ctx, vec: Vec<'a>, gobj: HSD_GObj<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x50);
     let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut vec = vec;
     let mut gobj = gobj;
     let mut cur_fp: Fighter<'a> = null(ctx);

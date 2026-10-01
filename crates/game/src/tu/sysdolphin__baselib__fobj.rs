@@ -374,7 +374,6 @@ pub fn HSD_FObjInterpretAnim<'a>(
     rate: f64,
 ) {
     let __frame = ctx.stack_frame(0xa8);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut fobj = fobj;
     let mut obj = obj;
     let mut obj_update = obj_update;

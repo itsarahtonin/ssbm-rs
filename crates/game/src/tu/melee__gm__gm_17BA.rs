@@ -42,7 +42,6 @@ pub fn fn_8017BB30<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 
 pub fn fn_8017BB94<'a>(ctx: &'a Ctx, arg0: i32) -> Val<'a, i8> {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     'l1: loop {
         'c2: {}
@@ -55,7 +54,6 @@ pub fn fn_8017BB94<'a>(ctx: &'a Ctx, arg0: i32) -> Val<'a, i8> {
 
 pub fn fn_8017BC50<'a>(ctx: &'a Ctx, arg0: i32) -> Val<'a, i8> {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     'l1: loop {
         'c2: {}
@@ -68,7 +66,6 @@ pub fn fn_8017BC50<'a>(ctx: &'a Ctx, arg0: i32) -> Val<'a, i8> {
 
 pub fn fn_8017BD0C<'a>(ctx: &'a Ctx, arg0: i32) -> Val<'a, i8> {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     'l1: loop {
         'c2: {}
@@ -81,7 +78,6 @@ pub fn fn_8017BD0C<'a>(ctx: &'a Ctx, arg0: i32) -> Val<'a, i8> {
 
 pub fn fn_8017BDC8<'a>(ctx: &'a Ctx, arg0: i32) -> Val<'a, i8> {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     'l1: loop {
         'c2: {}

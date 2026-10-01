@@ -249,7 +249,6 @@ pub fn mnSnap_8025329C<'a>(ctx: &'a Ctx) {
 
 pub fn mnSnap_80253640<'a>(ctx: &'a Ctx, page: i32) {
     let __frame = ctx.stack_frame(0x60);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut page = page;
     let mut count: i32 = 0;
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -432,7 +431,6 @@ pub fn mnSnap_80253640<'a>(ctx: &'a Ctx, page: i32) {
 
 pub fn mnSnap_80253964<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut page: i32 = statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).cur_page();
@@ -865,7 +863,6 @@ pub fn mnSnap_8025409C<'a>(ctx: &'a Ctx, dlg_type: i32) {
 
 pub fn mnSnap_80254298<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut jobj_slot: Ptr<'a, HSD_JObj<'a>> = null(ctx);
     let mut text_slot: Ptr<'a, HSD_Text<'a>> = null(ctx);
     let mut p50: Val<'a, i32> = statics::melee__mn__mnsnap::mnSnap_804A0A10(ctx).active_slot_ref();
@@ -1445,7 +1442,6 @@ fn asm_mnSnap_8025441C(ctx: &Ctx) {
 pub fn fn_802545C4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x1b8);
     let cursor: fn_802545C4_cursor<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 236> = frame_at(ctx, &__frame, 0x4);
     let mut buttons: u64 = 0;
     let mut state: i32 = 0;
     let mut t: f64 = 0.0;

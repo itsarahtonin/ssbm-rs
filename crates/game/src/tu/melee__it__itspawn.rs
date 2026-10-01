@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn it_8026C47C<'a>(ctx: &'a Ctx, arg_struct: it_8026C47C_arg0_t<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg_struct = arg_struct;
     let mut it_kind: u32 = 0;
     let mut unused: u32 = 0;
@@ -123,7 +122,6 @@ pub fn it_8026C704<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn it_8026C75C<'a>(ctx: &'a Ctx, table: ItemPickTable<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut table = table;
     let mut chk1: i32 = 0;
     let mut saved: i32 = 0;

@@ -56,7 +56,6 @@ pub fn mnCount_GetDisasterMaster<'a>(ctx: &'a Ctx, selkind: i32) -> u32 {
 
 pub fn mnCount_8025035C<'a>(ctx: &'a Ctx, skip_count: i32, get_val_func: FnPtr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x108);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let sp18: Arr<'a, CountEntry<'a>, 25> = frame_at(ctx, &__frame, 0x10);
     let temp: CountEntry<'a> = frame_at(ctx, &__frame, 0x8);
     let mut skip_count = skip_count;
@@ -373,7 +372,6 @@ pub fn mnCount_8025072C<'a>(
 
 pub fn mnCount_8025092C<'a>(ctx: &'a Ctx, rank: i32, getVal: FnPtr<'a>, mode: i32) -> i32 {
     let __frame = ctx.stack_frame(0x118);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let entries: Arr<'a, CountEntry<'a>, 25> = frame_at(ctx, &__frame, 0x14);
     let tmp: CountEntry<'a> = frame_at(ctx, &__frame, 0xc);
     let mut rank = rank;
@@ -926,8 +924,7 @@ pub fn fn_802514B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_802514D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x14);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut userdata: MnCountData<'a> =
         (Handle::cast::<MnCountData<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -942,7 +939,6 @@ pub fn fn_802514D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_80251640<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut proc: HSD_GObjProc<'a> = null(ctx);
     let mut userdata: MnCountData<'a> =
@@ -1277,8 +1273,7 @@ fn inl_fn_802514D8_inline_unfused<'a>(
     gobj: HSD_GObj<'a>,
     __in_caller: u32,
 ) {
-    let unused: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
-    let child: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x10);
+    let child: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x0);
     let mut userdata = userdata;
     let mut gobj = gobj;
     let mut proc: HSD_GObjProc<'a> = null(ctx);

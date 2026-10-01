@@ -248,7 +248,6 @@ pub fn Camera_800290D4<'a>(ctx: &'a Ctx, subject: CmSubject<'a>) {
 
 pub fn Camera_80029124<'a>(ctx: &'a Ctx, subject_pos: Vec<'a>, distance: i32) -> u32 {
     let __frame = ctx.stack_frame(0x50);
-    let _PAD: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let slope: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
     let intercept: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
     let mut subject_pos = subject_pos;
@@ -819,7 +818,6 @@ pub fn Camera_80029CF8<'a>(
     transform: CameraTransformState<'a>,
 ) {
     let __frame = ctx.stack_frame(0x80);
-    let _pad: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut bounds = bounds;
@@ -1129,7 +1127,6 @@ pub fn Camera_SetQuakeOffset<'a>(ctx: &'a Ctx, x: f64, y: f64) {
 
 pub fn Camera_UpdateQuakes<'a>(ctx: &'a Ctx, bounds: CameraBounds<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut bounds = bounds;
     let mut quakes_remaining: i32 = 0;
     let mut i: i32 = 0;
@@ -1635,9 +1632,7 @@ pub fn Camera_8002A768<'a>(ctx: &'a Ctx, transform: CameraTransformState<'a>, ar
 
 pub fn Camera_8002AF68<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, transform: CameraTransformState<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let _1: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let _2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut cobj = cobj;
     let mut transform = transform;
     let mut eye_y_bound: f64 = 0.0;
@@ -3714,7 +3709,6 @@ pub fn Camera_8002C5B4<'a>(ctx: &'a Ctx, arg0: Camera_x2D0<'a>) {
 pub fn Camera_8002C908<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x70);
     let bounds: CameraBounds<'a> = frame_at(ctx, &__frame, 0x38);
-    let pad: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x20);
     let eye_diff: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let interest_diff: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
@@ -4031,7 +4025,6 @@ pub fn Camera_8002CDDC<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
 
 pub fn Camera_8002D318<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     let __frame = ctx.stack_frame(0xb0);
-    let _pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x54);
     let bounds_copy: CameraBounds<'a> = frame_at(ctx, &__frame, 0x3c);
     let bounds: CameraBounds<'a> = frame_at(ctx, &__frame, 0x24);
     let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
@@ -4373,7 +4366,6 @@ pub fn Camera_8002D318<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
 
 pub fn Camera_8002D85C<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     let __frame = ctx.stack_frame(0xb0);
-    let _pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x54);
     let bounds2: CameraBounds<'a> = frame_at(ctx, &__frame, 0x3c);
     let bounds: CameraBounds<'a> = frame_at(ctx, &__frame, 0x24);
     let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
@@ -7260,7 +7252,6 @@ pub fn Camera_SetBounds<'a>(ctx: &'a Ctx, arg0: Quaternion<'a>) -> i32 {
 
 pub fn Camera_SetUpPauseCamera<'a>(ctx: &'a Ctx, pauserSlot: i8, pauserId: i8, arg2: i32) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut pauserSlot = pauserSlot;
     let mut pauserId = pauserId;
     let mut arg2 = arg2;
@@ -8492,7 +8483,6 @@ pub fn Camera_80030CFC<'a>(ctx: &'a Ctx, cam_box: CmSubject<'a>, tolerance: f64)
     let eye_pos: Vec<'a> = frame_at(ctx, &__frame, 0x48);
     let interest: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
     let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let _PAD: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut cam_box = cam_box;
     let mut tolerance = tolerance;

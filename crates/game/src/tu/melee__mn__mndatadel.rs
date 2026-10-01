@@ -104,9 +104,7 @@ pub fn mnDataDel_8024E940<'a>(ctx: &'a Ctx) {
 
 pub fn mnDataDel_8024EA6C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x48);
-    let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let sp18: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
     let mut temp_f30: f64 = 0.0;
     let mut temp_r31: MnDataDelGObjUserData<'a> = null(ctx);
     let mut data: Val<'a, u32> = null(ctx);
@@ -231,8 +229,7 @@ pub fn fn_8024ECCC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let panel: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x34);
     let exclaim: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x30);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x8);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut data: WarnCmnData<'a> = null(ctx);
     let mut root: HSD_JObj<'a> = null(ctx);
@@ -263,7 +260,6 @@ pub fn mnDataDel_8024EEC0<'a>(ctx: &'a Ctx) {
     let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x2c);
     let cursor_yes: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x28);
     let cursor_no: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let no: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x14);
     let yes: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x10);
     let mut wrn_modal: HSD_GObj<'a> = null(ctx);
@@ -388,7 +384,6 @@ pub fn mnDataDel_8024EEC0<'a>(ctx: &'a Ctx) {
 
 pub fn fn_8024F1D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut proc: HSD_GObjProc<'a> = null(ctx);
     let mut data: WarnCmnData<'a> = null(ctx);
@@ -431,12 +426,10 @@ pub fn fn_8024F1D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_8024F318<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb0);
-    let _pad0: ArrV<'a, u8, 44> = frame_at(ctx, &__frame, 0x0);
     let sp68: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x60);
     let sp60: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x58);
     let sp58: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x50);
     let sp50: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x48);
-    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x64);
     let mut gobj = gobj;
     let mut _pad1: u32 = 0;
     let mut _pad2: u32 = 0;
@@ -713,7 +706,6 @@ pub fn fn_8024F318<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn fn_8024F840<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
     let user_data: Ptr<'a, MnDataDelGObjUserData<'a>> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut zero: i32 = 0;
     let mut proc: HSD_GObjProc<'a> = null(ctx);
@@ -824,7 +816,6 @@ pub fn fn_8024F840<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_8024FBA4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut i: i32 = 0;
     let mut frame: f64 = 0.0;
@@ -949,7 +940,6 @@ pub fn fn_8024FC48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_8024FD40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut frame: f64 = 0.0;
     let mut user_data: Val<'a, u8> = null(ctx);
@@ -1022,7 +1012,6 @@ pub fn fn_8024FD40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn mnDataDel_8024FE4C<'a>(ctx: &'a Ctx, arg0: u8) {
     let __frame = ctx.stack_frame(0x68);
     let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut proc: HSD_GObjProc<'a> = null(ctx);

@@ -319,7 +319,6 @@ pub fn it_802ABA4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itNesspkthunderball_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -406,7 +405,6 @@ pub fn itNesspkthunderball_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>)
     let __frame = ctx.stack_frame(0x40);
     let stick: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let cross: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attr: itPKThunderAttributes<'a> =
@@ -544,7 +542,6 @@ pub fn itNesspkthunderball_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>)
 
 pub fn itNesspkthunderball_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -576,7 +573,6 @@ pub fn it_802AC074<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802AC098<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut i: i32 = 0;
@@ -670,7 +666,6 @@ pub fn it_802AC338<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802AC35C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {

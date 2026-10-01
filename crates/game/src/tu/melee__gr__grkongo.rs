@@ -139,7 +139,6 @@ pub fn fn_801D542C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn grKongo_801D5490<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_r31: Ground<'a> = null(ctx);
     'l1: loop {
@@ -216,7 +215,6 @@ pub fn grKongo_801D55D4<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 pub fn grKongo_801D55D8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_r31: Ground<'a> = null(ctx);
     let mut temp_r28: Addr<'a> = null(ctx);
@@ -3034,7 +3032,6 @@ pub fn grKongo_801D5FE0<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn grKongo_801D5FE4<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_r31: Ground<'a> = null(ctx);
     'l1: loop {
@@ -3083,7 +3080,6 @@ pub fn grKongo_801D6070<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn grKongo_801D6074<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_r31: Ground<'a> = null(ctx);
     let mut temp_r30: HSD_JObj<'a> = null(ctx);
@@ -3122,7 +3118,6 @@ pub fn grKongo_801D6190<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 
 pub fn grKongo_801D6198<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_r3: Ground<'a> = null(ctx);
     'l1: loop {
@@ -3214,7 +3209,6 @@ pub fn grKongo_801D6378<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn grKongo_801D637C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_r31: Ground<'a> = null(ctx);
     let mut temp_r30: HSD_JObj<'a> = null(ctx);
@@ -3269,7 +3263,6 @@ pub fn grKongo_801D651C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let list: Arr<'a, grKg_SplineChoice<'a>, 3> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -3313,7 +3306,6 @@ pub fn grKongo_801D6668<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let sp34: Quaternion<'a> = frame_at(ctx, &__frame, 0x2c);
     let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut length: f64 = 0.0;
     let mut dx: f64 = 0.0;
@@ -3711,7 +3703,6 @@ pub fn grKongo_801D6AFC<'a>(ctx: &'a Ctx) {
 
 pub fn grKongo_801D7134<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x68);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut i: u32 = 0;
@@ -3919,7 +3910,6 @@ pub fn fn_801D7700<'a>(
 
 pub fn grKongo_801D77E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
@@ -4218,7 +4208,6 @@ pub fn fn_801D7E60<'a>(
 
 pub fn grKongo_801D7E78<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) -> Vec<'a> {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
@@ -4262,7 +4251,6 @@ pub fn grKongo_801D7F78<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x58);
     let pos1: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let pos2: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut _pre: f64 = 0.0;
     let mut cur: HSD_GObj<'a> = null(ctx);

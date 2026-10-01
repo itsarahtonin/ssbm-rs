@@ -1233,7 +1233,6 @@ pub fn mnItemSw_8023453C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u8, arg2: u
 
 pub fn fn_80234C24<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut data: MnItemSwData<'a> = null(ctx);
     let mut anims: Val<'a, F32> = null(ctx);

@@ -459,7 +459,6 @@ pub fn grRCruise_801FF920<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn grRCruise_801FF924<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -2627,7 +2626,6 @@ pub fn fn_80200460<'a>(
     delta_y: f64,
 ) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut user_data = user_data;
     let mut joint_id = joint_id;
     let mut coll = coll;
@@ -2711,9 +2709,7 @@ pub fn grRCruise_80200578<'a>(
     delta_y: f64,
 ) {
     let __frame = ctx.stack_frame(0x60);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut user_data = user_data;
     let mut joint_id = joint_id;
     let mut coll = coll;
@@ -3528,7 +3524,6 @@ pub fn grRCruise_80201988<'a>(ctx: &'a Ctx, line_id: i32) -> i32 {
 
 pub fn grRCruise_80201B60<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, clear: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut jobj = jobj;
     let mut clear = clear;
     let mut dobj: HSD_DObj<'a> = fns::HSD_JObjGetDObj(ctx, jobj);

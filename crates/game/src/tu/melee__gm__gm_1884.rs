@@ -160,7 +160,6 @@ pub fn fn_80188550<'a>(ctx: &'a Ctx, arg0: i32) {
 pub fn fn_80188644<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x38);
     let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
     let mut saved_count: i32 = 0;
     'l1: loop {
@@ -486,7 +485,6 @@ pub fn fn_80188D3C<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>) {
 
 pub fn fn_80188EE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut state: TrainingModeState<'a> = statics::melee__gm__gm_1884::lbl_80473700(ctx);
     let mut sub: CssSubStruct<'a> = fns::gm_80473814(ctx);
@@ -628,7 +626,6 @@ pub fn fn_801891F4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x78);
     let speed_stack: TrainingSpeedStack<'a> = frame_at(ctx, &__frame, 0x24);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut sub: CssSubStruct<'a> = null(ctx);
     let mut buttons: u64 = 0;
     buttons = fns::gm_801A36C0(
@@ -1182,7 +1179,6 @@ pub fn gm_80189CDC<'a>(ctx: &'a Ctx, arg0: StartMeleeData<'a>) {
 
 pub fn fn_8018A000<'a>(ctx: &'a Ctx) -> HSD_Text<'a> {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut state: TrainingModeState<'a> = null(ctx);
     let mut data: Val<'a, u8> = null(ctx);
     let mut text_ptr: Ptr<'a, HSD_Text<'a>> = null(ctx);

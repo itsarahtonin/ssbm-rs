@@ -34,7 +34,6 @@ pub fn __read_console<'a>(
     unused: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut buf = buf;
     let mut n = n;
@@ -81,7 +80,6 @@ pub fn __write_console<'a>(
     unused: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut buf = buf;
     let mut n = n;

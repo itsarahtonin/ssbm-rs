@@ -36,7 +36,6 @@ pub fn it_802EAF34<'a>(
     let __frame = ctx.stack_frame(0xa8);
     let unused: Quaternion<'a> = frame_at(ctx, &__frame, 0x0);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused_2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x10);
     let mut owner = owner;
     let mut offset = offset;
     let mut r#type = r#type;
@@ -115,7 +114,6 @@ pub fn it_802EAF34<'a>(
 
 pub fn it_802EB1EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -147,7 +145,6 @@ pub fn it_802EB268<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itGreatfoxlaser_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
     let offset: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itGreatFoxLaser_Attrs<'a> =
@@ -225,10 +222,8 @@ pub fn itGreatFoxLaser_Logic27_Absorbed<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a
 
 pub fn it_2725_Logic27_Reflected<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let reflect_pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let laser_pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> = null(ctx);

@@ -513,7 +513,6 @@ pub fn pl_80039450<'a>(ctx: &'a Ctx, player: i32) {
 
 pub fn fn_80039618<'a>(ctx: &'a Ctx, player: i32) {
     let __frame = ctx.stack_frame(0xc8);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut player = player;
     let mut table: pl_StaleMoveTableExt_t<'a> = fns::Player_GetStaleMoveTableIndexPtr2(ctx, player);
     let mut stats: plActionStats<'a> = fns::Player_GetActionStats(ctx, player);

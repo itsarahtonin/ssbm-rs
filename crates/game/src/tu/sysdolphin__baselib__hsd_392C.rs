@@ -202,7 +202,6 @@ pub fn fn_80392E2C<'a>(ctx: &'a Ctx, event_type: i32) {
 pub fn hsd_80392E80<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x48);
     let status: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut event: i32 = 0;
     let mut head: i32 = 0;
     let mut startTick: i32 = 0;
@@ -346,7 +345,6 @@ pub fn hsd_80392E80<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn hsd_803931A4<'a>(ctx: &'a Ctx, exi_channel: i32) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut exi_channel = exi_channel;
     let mut channel: i32 = 0;
     let mut channel_flags: Val<'a, i32> = null(ctx);

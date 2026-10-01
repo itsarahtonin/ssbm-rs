@@ -674,7 +674,6 @@ pub fn ftCo_800A101C<'a>(ctx: &'a Ctx, arg0: Fighter<'a>, arg1: i32, arg2: i32, 
     let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
     let sp34: Val<'a, i32> = frame_at(ctx, &__frame, 0x2c);
     let sp30: Val<'a, u32> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1064,7 +1063,6 @@ pub fn ftCo_800A1CA8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
 
 pub fn ftCo_800A1CC4<'a>(ctx: &'a Ctx, fp: Fighter<'a>, var_r29: ftCo_803C6594_t<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut var_r29 = var_r29;
     let mut data: CpuFighter<'a> = null(ctx);
@@ -1173,7 +1171,6 @@ pub fn ftCo_800A1F98<'a>(ctx: &'a Ctx, x: i32, y: f64) -> i32 {
     let __frame = ctx.stack_frame(0x38);
     let slope: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
     let intercept: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut x = x;
     let mut y = y;
     'l1: loop {
@@ -1516,7 +1513,6 @@ pub fn ftCo_800A2170<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, fp1: Fighter<'a>) -> i3
 pub fn ftCo_800A21FC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x48);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 36> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut data0: mp_UnkStruct0<'a> = null(ctx);
     let mut data1: CpuFighter<'a> = (fp).cpu();
@@ -2966,7 +2962,6 @@ fn asm_ftCo_800A229C(ctx: &Ctx) {
 
 pub fn ftCo_800A2718<'a>(ctx: &'a Ctx, arg0: mp_UnkStruct0<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut island: mp_UnkStruct0<'a> = arg0;
     if Handle::is_null(arg0) {
@@ -3516,7 +3511,6 @@ pub fn ftCo_800A3234<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x58);
     let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
     let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x14);
     let sp18: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
     let sp14: Val<'a, u32> = frame_at(ctx, &__frame, 0xc);
     let mut fp = fp;
@@ -3642,7 +3636,7 @@ pub fn ftCo_800A3498<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
 
 pub fn ftCo_800A3554<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: f64) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let __inl: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x0);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
     let mut fp = fp;
     let mut arg1 = arg1;
     let mut data: CpuFighter<'a> = (fp).cpu();
@@ -3740,7 +3734,6 @@ pub fn ftCo_IsAlly<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, fp1: Fighter<'a>) -> i32 
 pub fn ftCo_800A3908<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
     let __frame = ctx.stack_frame(0x148);
     let island_pos: Vec<'a> = frame_at(ctx, &__frame, 0x84);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x4);
     let sqrt_time_store: Val<'a, F32> = frame_at(ctx, &__frame, 0x74);
     let sqrt_terminal_store: Val<'a, F32> = frame_at(ctx, &__frame, 0x70);
     let flags0: Val<'a, u32> = frame_at(ctx, &__frame, 0x6c);
@@ -3752,7 +3745,6 @@ pub fn ftCo_800A3908<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
     let floor_normal1: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
     let floor_pos1: Vec<'a> = frame_at(ctx, &__frame, 0x30);
     let sqrt_dist_store: Val<'a, F32> = frame_at(ctx, &__frame, 0x2c);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let mut fp = fp;
     let mut arg1 = arg1;
     let mut ez: f64 = 0.0;
@@ -3982,7 +3974,6 @@ pub fn ftCo_800A4038<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 {
     let floor_normal_2: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
     let floor_pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x30);
     let sqrt_dist_store: Val<'a, F32> = frame_at(ctx, &__frame, 0x2c);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let mut fp = fp;
     let mut arg1 = arg1;
     let mut ez: f64 = 0.0;
@@ -5758,7 +5749,6 @@ fn asm_ftCo_800A4BEC(ctx: &Ctx) {
 
 pub fn ftCo_800A4E8C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>) -> Fighter<'a> {
     let __frame = ctx.stack_frame(0x68);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut arg1 = arg1;
     let mut cur_fp: Fighter<'a> = null(ctx);
@@ -6443,7 +6433,6 @@ fn asm_ftCo_800A50D4(ctx: &Ctx) {
 
 pub fn ftCo_800A5294<'a>(ctx: &'a Ctx, fp: Fighter<'a>, player_id: i32) -> Fighter<'a> {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut player_id = player_id;
     'l1: loop {
@@ -9442,7 +9431,6 @@ pub fn ftCo_800A6700<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>, arg2: Vec
 
 pub fn ftCo_800A6A98<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0xb8);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let b: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
     let a: Vec<'a> = frame_at(ctx, &__frame, 0x30);
     let floor_pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
@@ -9550,7 +9538,6 @@ pub fn ftCo_800A6D2C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>) -> i32 {
     let floor_normal: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x18);
     let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut fp = fp;
     let mut arg1 = arg1;
     let mut dist: f64 = 0.0;
@@ -9645,7 +9632,6 @@ pub fn ftCo_800A6D2C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>) -> i32 {
 
 pub fn ftCo_800A6FC4<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>, arg2: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x108);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let b: Vec<'a> = frame_at(ctx, &__frame, 0x60);
     let a: Vec<'a> = frame_at(ctx, &__frame, 0x54);
     let floor_pos: Vec<'a> = frame_at(ctx, &__frame, 0x48);
@@ -9653,7 +9639,6 @@ pub fn ftCo_800A6FC4<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>, arg2: Vec
     let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x38);
     let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x34);
     let dir: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let unused_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
     let mut fp = fp;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -9890,7 +9875,6 @@ pub fn ftCo_800A75DC<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, fp1: Fighter<'a>) {
     let floor_normal: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
     let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x38);
     let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x34);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x1c);
     let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut fp0 = fp0;
     let mut fp1 = fp1;
@@ -10079,9 +10063,7 @@ pub fn ftCo_800A7AAC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let floor_normal: Vec<'a> = frame_at(ctx, &__frame, 0x58);
     let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x54);
     let flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x50);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x4);
     let partner_pos: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
-    let unused_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x1c);
     let mut fp = fp;
     let mut partner: Fighter<'a> = null(ctx);
     let mut data: CpuFighter<'a> = (fp).cpu();
@@ -10321,7 +10303,6 @@ pub fn ftCo_800A8210<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x48);
     let out: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let dir: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut arg1 = arg1;
     let mut left: f64 = 0.0;
@@ -12048,7 +12029,6 @@ fn asm_ftCo_800A8940(ctx: &Ctx) {
 
 pub fn ftCo_800A8DE4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut data: CpuFighter<'a> = (fp).cpu();
     'l1: loop {
@@ -12305,7 +12285,6 @@ pub fn ftCo_800A949C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, unused: i32) {
 
 pub fn ftCo_800A963C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, unused: i32) {
     let __frame = ctx.stack_frame(0x50);
-    let unused_2: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut unused = unused;
     'l1: loop {
@@ -12344,7 +12323,6 @@ pub fn ftCo_800A963C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, unused: i32) {
 
 pub fn ftCo_800A96B8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut data: CpuFighter<'a> = (fp).cpu();
     let mut sum: f64 = fp::fadds(
@@ -12471,11 +12449,9 @@ pub fn ftCo_800A96B8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ftCo_800A9904<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x78);
-    let _top: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let ceiling: ftCo_800A9904_ceiling<'a> = frame_at(ctx, &__frame, 0x2c);
     let sqrt_time_store: Val<'a, F32> = frame_at(ctx, &__frame, 0x28);
     let sqrt_terminal_store: Val<'a, F32> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x8);
     let mut fp = fp;
     let mut x_time: f64 = 0.0;
     let mut gravity: f64 = 0.0;
@@ -12670,9 +12646,7 @@ pub fn ftCo_800A9904<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ftCo_800A9CB4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x90);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x40);
     let stage_pos: Vec<'a> = frame_at(ctx, &__frame, 0x34);
-    let unused_2: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut unused_time_tmp: f64 = 0.0;
     let mut sqrt_x_time_store: f64 = 0.0;
@@ -12990,7 +12964,6 @@ pub fn ftCo_800AA42C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let stick: Val<'a, i32> = frame_at(ctx, &__frame, 0x1c);
     let clamp: Val<'a, i32> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut data: CpuFighter<'a> = null(ctx);
     let mut near: f64 = 0.0;
@@ -13197,7 +13170,6 @@ pub fn ftCo_800AA844<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ftCo_800AABC8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
     let stick: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
     let clamp: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
     let mut fp = fp;
@@ -13266,12 +13238,10 @@ pub fn ftCo_800AABC8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ftCo_800AACD0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let stick: Val<'a, i32> = frame_at(ctx, &__frame, 0x2c);
     let clamp: Val<'a, i32> = frame_at(ctx, &__frame, 0x28);
     let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused_2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x30);
     let mut fp = fp;
     let mut data: CpuFighter<'a> = (fp).cpu();
     let mut temp_r3_2: mp_UnkStruct0<'a> = null(ctx);
@@ -13333,7 +13303,6 @@ pub fn ftCo_800AAF48<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
     let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let sp28: Val<'a, i32> = frame_at(ctx, &__frame, 0x20);
     let sp24: Val<'a, u32> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x10);
     let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut fp = fp;
     let mut temp_r29: CpuFighter<'a> = (fp).cpu();
@@ -13480,13 +13449,11 @@ pub fn ftCo_800AAF48<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
 
 pub fn ftCo_800AB224<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0xb0);
-    let unused: ArrV<'a, u8, 60> = frame_at(ctx, &__frame, 0x48);
     let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
     let sp40: Val<'a, u32> = frame_at(ctx, &__frame, 0x38);
     let sp3C: Val<'a, i32> = frame_at(ctx, &__frame, 0x34);
     let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x28);
     let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused_2: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut temp_r31: CpuFighter<'a> = null(ctx);
     let mut temp_f1: f64 = 0.0;
@@ -16285,7 +16252,6 @@ fn asm_ftCo_800ABBA8(ctx: &Ctx) {
 
 pub fn ftCo_800AC30C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut data: CpuFighter<'a> = (fp).cpu();
     'l1: loop {
@@ -16327,8 +16293,6 @@ pub fn ftCo_800AC434<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let f: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x14);
     let mut fp = fp;
     let mut data: CpuFighter<'a> = (fp).cpu();
     let mut barrel_state: i32 = inl_inlineH0_unfused(ctx, fp);
@@ -18487,7 +18451,6 @@ fn asm_ftCo_800ACB44(ctx: &Ctx) {
 
 pub fn ftCo_800ACD5C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut data: CpuFighter<'a> = (fp).cpu();
     'l1: loop {
@@ -18658,10 +18621,8 @@ pub fn ftCo_800AD42C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ftCo_800AD54C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let stick: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
     let clamp: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x14);
     let mut fp = fp;
     'l1: loop {
         'c2: {}
@@ -31339,7 +31300,7 @@ fn asm_ftCo_800AFE3C(ctx: &Ctx) {
 }
 
 pub fn ftCo_800B00F8<'a>(ctx: &'a Ctx, a0: Fighter<'a>) {
-    // Transliterated from its machine code: calls ftCo_800ADE48, which reads registers its caller sets without passing them.
+    // Transliterated from its machine code: calls ftCo_800A8940, which reads registers its caller sets without passing them.
     (a0,).put_regs(ctx);
     asm_ftCo_800B00F8(ctx);
 }
@@ -34215,7 +34176,6 @@ pub fn ftCo_800B0E98<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, fp1: Fighter<'a>) -> i3
 
 pub fn ftCo_800B101C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut var_r4: HSD_GObj<'a> = null(ctx);
     let mut temp_f0: f64 = 0.0;
@@ -34267,7 +34227,7 @@ pub fn ftCo_800B101C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 }
 
 pub fn ftCo_800B126C<'a>(ctx: &'a Ctx, a0: Fighter<'a>) {
-    // Transliterated from its machine code: calls ftCo_800ADE48, which reads registers its caller sets without passing them.
+    // Transliterated from its machine code: calls ftCo_800A8940, which reads registers its caller sets without passing them.
     (a0,).put_regs(ctx);
     asm_ftCo_800B126C(ctx);
 }
@@ -37996,7 +37956,7 @@ fn asm_ftCo_800B1AB8(ctx: &Ctx) {
 }
 
 pub fn ftCo_800B1DA0<'a>(ctx: &'a Ctx, a0: Fighter<'a>) {
-    // Transliterated from its machine code: calls ftCo_800ADE48, which reads registers its caller sets without passing them.
+    // Transliterated from its machine code: calls ftCo_800A8940, which reads registers its caller sets without passing them.
     (a0,).put_regs(ctx);
     asm_ftCo_800B1DA0(ctx);
 }
@@ -45544,7 +45504,6 @@ pub fn ftCo_800B33B0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ftCo_800B3900<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -46148,7 +46107,6 @@ fn inl_inlineC0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 {
 
 fn inl_ftCo_800A21FC<'a>(ctx: &'a Ctx, fp: Fighter<'a>, __in_caller: u32) -> i32 {
     let vec: Vec<'a> = ptr(ctx, __in_caller + 0x0);
-    let unused: ArrV<'a, u8, 36> = ptr(ctx, __in_caller + 0xc);
     let mut fp = fp;
     let mut data0: mp_UnkStruct0<'a> = null(ctx);
     let mut data1: CpuFighter<'a> = (fp).cpu();
@@ -47511,13 +47469,7 @@ fn inl_ftCo_800AABC8_dontinline_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     statics::melee__ft__kinds__ftCommon__ftCo_0A01::ftCo_800AABC8(ctx, fp);
 }
 
-fn inl_ftCo_800ABBA8_blk155144r<'a>(
-    ctx: &'a Ctx,
-    fp: Fighter<'a>,
-    target: Ptr<'a, Fighter<'a>>,
-    __in_caller: u32,
-) {
-    let unused: ArrV<'a, u8, 40> = ptr(ctx, __in_caller + 0x0);
+fn inl_ftCo_800ABBA8_blk155144r<'a>(ctx: &'a Ctx, fp: Fighter<'a>, target: Ptr<'a, Fighter<'a>>) {
     let mut fp = fp;
     let mut target = target;
     let mut data: CpuFighter<'a> = (fp).cpu();

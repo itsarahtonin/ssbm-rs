@@ -153,7 +153,6 @@ pub fn lb_8000FD18<'a>(ctx: &'a Ctx, desc: DynamicsDesc<'a>) {
 
 pub fn lb_8000FD48<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, desc: DynamicsDesc<'a>, max_count: u32) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut jobj = jobj;
     let mut desc = desc;
     let mut max_count = max_count;
@@ -5713,7 +5712,6 @@ pub fn lb_800117F4<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0x88);
     let view_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x38);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

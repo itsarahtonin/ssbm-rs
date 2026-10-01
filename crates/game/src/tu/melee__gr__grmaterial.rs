@@ -61,9 +61,7 @@ pub fn grMaterial_801C87D0<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, flags: u32) {
 }
 
 pub fn grMaterial_801C8858<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: u32) {
-    let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u32, 8> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x20);
+    let __frame = ctx.stack_frame(0x40);
     let mut jobj = jobj;
     let mut arg1 = arg1;
     if Handle::is_null(jobj) {
@@ -77,7 +75,7 @@ pub fn grMaterial_801C8858<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: u32) {
     });
     'l1: while !Handle::is_null(jobj) {
         'c2: {
-            inl_grMaterial_801C8858_unfused(ctx, jobj, arg1, Handle::addr(__inl));
+            inl_grMaterial_801C8858_unfused(ctx, jobj, arg1);
             jobj = (if Handle::is_null(jobj) {
                 null::<HSD_JObj<'a>>(ctx)
             } else {
@@ -122,9 +120,7 @@ pub fn grMaterial_801C897C<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, flags: u32) {
 }
 
 pub fn grMaterial_801C8A04<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: u32) {
-    let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u32, 8> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x20);
+    let __frame = ctx.stack_frame(0x40);
     let mut jobj = jobj;
     let mut arg1 = arg1;
     if Handle::is_null(jobj) {
@@ -138,7 +134,7 @@ pub fn grMaterial_801C8A04<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: u32) {
     });
     'l1: while !Handle::is_null(jobj) {
         'c2: {
-            inl_grMaterial_801C8A04_unfused(ctx, jobj, arg1, Handle::addr(__inl));
+            inl_grMaterial_801C8A04_unfused(ctx, jobj, arg1);
             jobj = (if Handle::is_null(jobj) {
                 null::<HSD_JObj<'a>>(ctx)
             } else {
@@ -468,9 +464,7 @@ pub fn fn_801C8EF8<'a>(ctx: &'a Ctx, mobj: HSD_MObj<'a>, rendermode: u32) {
 }
 
 pub fn grMaterial_801C92C0<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
-    let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u32, 8> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x20);
+    let __frame = ctx.stack_frame(0x40);
     let mut jobj = jobj;
     let mut dobj: HSD_DObj<'a> = null(ctx);
     let mut grandchild: HSD_JObj<'a> = null(ctx);
@@ -567,7 +561,7 @@ pub fn grMaterial_801C92C0<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
                 }
                 'l7: while !Handle::is_null(grandchild) {
                     'c8: {
-                        inl_grMaterial_801C92C0_unfused(ctx, grandchild, Handle::addr(__inl));
+                        inl_grMaterial_801C92C0_unfused(ctx, grandchild);
                         if Handle::is_null(grandchild) {
                             grandchild = null::<HSD_JObj<'a>>(ctx);
                         } else {
@@ -607,7 +601,6 @@ pub fn grMaterial_801C9490<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInf
 
 pub fn grMaterial_801C94D8<'a>(ctx: &'a Ctx, obj: Addr<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut obj = obj;
     let mut hsd_obj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>(obj);
     let mut var_r30: HSD_DObj<'a> = null(ctx);
@@ -719,13 +712,7 @@ pub fn grMaterial_801C9698<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
-fn inl_grMaterial_801C8858_unfused<'a>(
-    ctx: &'a Ctx,
-    jobj: HSD_JObj<'a>,
-    arg1: u32,
-    __in_caller: u32,
-) {
-    let unused: ArrV<'a, u32, 8> = ptr(ctx, __in_caller + 0x0);
+fn inl_grMaterial_801C8858_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: u32) {
     let mut jobj = jobj;
     let mut arg1 = arg1;
     if Handle::is_null(jobj) {
@@ -749,13 +736,7 @@ fn inl_grMaterial_801C8858_unfused<'a>(
     }
 }
 
-fn inl_grMaterial_801C8A04_unfused<'a>(
-    ctx: &'a Ctx,
-    jobj: HSD_JObj<'a>,
-    arg1: u32,
-    __in_caller: u32,
-) {
-    let unused: ArrV<'a, u32, 8> = ptr(ctx, __in_caller + 0x0);
+fn inl_grMaterial_801C8A04_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, arg1: u32) {
     let mut jobj = jobj;
     let mut arg1 = arg1;
     if Handle::is_null(jobj) {
@@ -1066,8 +1047,7 @@ fn inl_fn_801C8EF8_inline_unfused<'a>(
     }
 }
 
-fn inl_grMaterial_801C92C0_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, __in_caller: u32) {
-    let unused: ArrV<'a, u32, 8> = ptr(ctx, __in_caller + 0x0);
+fn inl_grMaterial_801C92C0_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
     let mut jobj = jobj;
     let mut dobj: HSD_DObj<'a> = null(ctx);
     let mut grandchild: HSD_JObj<'a> = null(ctx);

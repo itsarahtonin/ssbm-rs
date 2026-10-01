@@ -35,7 +35,6 @@ pub fn it_802C1590<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x98);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x2c);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut parent_gobj = parent_gobj;
     let mut pos = pos;
     let mut kind = kind;
@@ -70,7 +69,6 @@ pub fn it_802C1590<'a>(
 
 pub fn it_802C16F8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut sa: itClimbersIceAttributes<'a> = Handle::cast::<itClimbersIceAttributes<'a>>(
@@ -169,7 +167,6 @@ pub fn it_802C1950<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itClimbersice_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
@@ -246,7 +243,6 @@ pub fn itClimbersice_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i3
 
 pub fn it_802C1AE4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -302,7 +298,6 @@ pub fn itClimbersice_UnkMotion3_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itClimbersice_UnkMotion3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}

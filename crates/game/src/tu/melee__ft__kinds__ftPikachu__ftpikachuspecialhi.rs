@@ -58,7 +58,6 @@ pub fn ftPk_SpecialHi_UpdateVel<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPk_SpecialHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut sa: _ftPikachuAttributes<'a> = null(ctx);
     let mut fp: Fighter<'a> =
@@ -88,7 +87,6 @@ pub fn ftPk_SpecialHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPk_SpecialAirHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut sa: _ftPikachuAttributes<'a> = null(ctx);
     let mut fp: Fighter<'a> =
@@ -148,7 +146,6 @@ pub fn ftPk_SpecialHiStart0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPk_SpecialAirHiStart0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -218,7 +215,6 @@ pub fn ftPk_SpecialHiStart1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     (fp).mv()
@@ -278,7 +274,6 @@ pub fn ftPk_SpecialAirHiStart1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     (fp).mv()
@@ -442,7 +437,6 @@ pub fn ftPk_SpecialAirHiStart1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftPk_SpecialHiStart1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let scl: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fighter2: Fighter<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -495,7 +489,6 @@ pub fn ftPk_SpecialHiStart1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPk_SpecialAirHiStart1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut bool0: i32 = 0;
     let mut fp: Fighter<'a> =
@@ -540,7 +533,6 @@ pub fn ftPk_SpecialAirHiStart1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPk_SpecialHi_ChangeMotion_Unk02<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     fns::ftCommon_8007D60C(ctx, fp);
@@ -561,7 +553,6 @@ pub fn ftPk_SpecialHi_ChangeMotion_Unk02<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftPk_SpecialHi_ChangeMotion_Unk03<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let scl: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut collData: CollData<'a> = null(ctx);
     let mut pika_attr: _ftPikachuAttributes<'a> = null(ctx);
@@ -812,7 +803,6 @@ pub fn ftPk_SpecialHi_80127064<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut pika_attr: _ftPikachuAttributes<'a> =
@@ -872,7 +862,6 @@ pub fn ftPk_SpecialHiEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPk_SpecialAirHiEnd_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -911,7 +900,6 @@ pub fn ftPk_SpecialHiEnd_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPk_SpecialAirHiEnd_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -948,7 +936,6 @@ pub fn ftPk_SpecialHiEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPk_SpecialAirHiEnd_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -982,7 +969,6 @@ pub fn ftPk_SpecialHi_ChangeMotion_Unk04<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPk_SpecialHi_MotionChangeUpdateVel_Unk0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut pika_attr: _ftPikachuAttributes<'a> = null(ctx);
     let mut fp: Fighter<'a> =
@@ -1013,7 +999,6 @@ pub fn ftPk_SpecialHi_MotionChangeUpdateVel_Unk0<'a>(ctx: &'a Ctx, gobj: HSD_GOb
 
 pub fn ftPk_SpecialHi_MotionChangeUpdateVel_Unk1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut pika_attr: _ftPikachuAttributes<'a> = null(ctx);
     let mut fp: Fighter<'a> =

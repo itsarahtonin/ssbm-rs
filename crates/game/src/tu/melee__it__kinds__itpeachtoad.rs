@@ -86,7 +86,6 @@ pub fn it_802BDFC0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn itPeachToad_Logic91_PickedUp<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     fns::Item_80268E5C(ctx, item_gobj, 0_i32, (enums::ITEM_ANIM_UPDATE as i32));
     fns::Item_802694CC(ctx, item_gobj);
@@ -116,7 +115,6 @@ pub fn itPeachtoad_UnkMotion0_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) ->
 
 pub fn it_802BE100<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut hsd_jobj: HSD_JObj<'a> = null(ctx);
     hsd_jobj = Handle::cast::<HSD_JObj<'a>>((item_gobj).hsd_obj());

@@ -35,7 +35,6 @@ pub fn itNesspkfirepillar_802AA494<'a>(
 ) {
     let __frame = ctx.stack_frame(0x80);
     let spawnitem: SpawnItem<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut parent1_gobj = parent1_gobj;
     let mut parent2_gobj = parent2_gobj;
     let mut offset = offset;

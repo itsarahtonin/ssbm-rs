@@ -53,7 +53,6 @@ pub fn un_8031F9B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn un_8031F9D8<'a>(ctx: &'a Ctx, char_index: i32, costume_id: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut char_index = char_index;
     let mut costume_id = costume_id;
     'l1: loop {

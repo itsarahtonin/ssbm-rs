@@ -121,7 +121,6 @@ pub fn ft_8007C2E0<'a>(
     hit1: HitCapsule<'a>,
 ) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut fp0 = fp0;
     let mut hit0 = hit0;
     let mut fp1 = fp1;
@@ -219,7 +218,6 @@ pub fn ft_8007C2E0<'a>(
 
 pub fn ft_8007C4BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

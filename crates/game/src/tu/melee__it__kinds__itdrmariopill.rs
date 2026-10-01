@@ -203,7 +203,6 @@ pub fn itDrMarioPill_802C0B5C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itDrMarioPill_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
     'l1: loop {
@@ -290,7 +289,6 @@ pub fn itDrMarioPill_802C0DF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itDrMarioPill_Motion2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x58);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
     let mut child: HSD_JObj<'a> = null(ctx);
@@ -381,7 +379,6 @@ pub fn itDrMarioPill_802C1180<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
 
 pub fn itDrMarioPill_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut attrs: itDrMarioPillAttributes<'a> = null(ctx);
     'l1: loop {

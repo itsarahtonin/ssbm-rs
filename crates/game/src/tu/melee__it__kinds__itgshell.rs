@@ -29,7 +29,6 @@ use crate::support::*;
 pub fn it_8028B8D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let v: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itGShell_Attrs<'a> =
@@ -170,7 +169,6 @@ pub fn it_8028BAD8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_8028BC2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itGShell_Attrs<'a> =
@@ -259,7 +257,6 @@ pub fn itGShell_Logic14_Spawned<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_8028BE54<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -454,7 +451,6 @@ pub fn itGshell_UnkMotion4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_8028C3A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itGShell_Attrs<'a> =
@@ -558,7 +554,6 @@ pub fn itGshell_UnkMotion6_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itGshell_UnkMotion6_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut attrs: itGShell_Attrs<'a> = null(ctx);
     let mut ip: Item<'a> = null(ctx);
@@ -584,7 +579,6 @@ pub fn itGshell_UnkMotion6_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_8028C898<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itGShell_Attrs<'a> =
@@ -687,7 +681,6 @@ pub fn itGshell_UnkMotion9_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itGshell_UnkMotion9_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut attrs: itGShell_Attrs<'a> = null(ctx);
     let mut ip: Item<'a> = null(ctx);
@@ -728,7 +721,6 @@ pub fn itGShell_Logic14_DmgDealt<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itGShell_Logic14_DmgReceived<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -924,7 +916,6 @@ fn inl_itGshell_UnkMotion3_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) ->
 
 fn inl_it_8028B8D8_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
     let v: Vec<'a> = ptr(ctx, __in_caller + 0x0);
-    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itGShell_Attrs<'a> =

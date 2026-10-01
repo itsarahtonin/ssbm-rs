@@ -80,7 +80,6 @@ pub fn it_802D9B78<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802D9BA8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itLikelikeAttributes<'a> = (Handle::cast::<itLikelikeAttributes<'a>>(
@@ -128,7 +127,6 @@ pub fn it_802D9BA8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_2725_Logic5_DmgReceived<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itLikelikeAttributes<'a> = (Handle::cast::<itLikelikeAttributes<'a>>(
@@ -161,7 +159,6 @@ pub fn it_2725_Logic5_DmgReceived<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802D9DDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -206,7 +203,6 @@ pub fn itLikelike_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r31: CollData<'a> = null(ctx);
     let mut temp_cr0_eq: i32 = 0;
@@ -264,7 +260,6 @@ pub fn itLikelike_UnkMotion7_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion7_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r31: CollData<'a> = null(ctx);
     let mut ip: Item<'a> = null(ctx);
@@ -293,7 +288,6 @@ pub fn itLikelike_UnkMotion7_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802DA104<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itLikelikeAttributes<'a> = (Handle::cast::<itLikelikeAttributes<'a>>(
@@ -318,7 +312,6 @@ pub fn it_802DA104<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -339,7 +332,6 @@ pub fn itLikelike_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itLikelike_UnkMotion1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut attr: itLikelikeAttributes<'a> = null(ctx);
     let mut ip: Item<'a> = null(ctx);
@@ -439,7 +431,6 @@ pub fn itLikelike_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802DA4C0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itLikelikeAttributes<'a> = (Handle::cast::<itLikelikeAttributes<'a>>(
@@ -464,7 +455,6 @@ pub fn it_802DA4C0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -555,7 +545,6 @@ pub fn itLikelike_UnkMotion2_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r31: CollData<'a> = null(ctx);
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -624,7 +613,6 @@ pub fn itLikelike_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802DA8D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let ecb: _itECB<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
@@ -639,9 +627,7 @@ pub fn it_802DA8D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802DA960<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let _1: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let ecb: _itECB<'a> = frame_at(ctx, &__frame, 0x10);
-    let _2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     fns::it_802762BC(ctx, ip);
@@ -659,9 +645,7 @@ pub fn it_802DA960<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802DAA10<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let ecb: _itECB<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -692,7 +676,6 @@ pub fn itLikelike_UnkMotion5_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itLikelike_UnkMotion5_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut temp_r4: ItemAttr<'a> = null(ctx);
@@ -717,7 +700,6 @@ pub fn itLikelike_UnkMotion5_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -731,7 +713,6 @@ pub fn itLikelike_UnkMotion4_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itLikelike_UnkMotion5_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -745,7 +726,6 @@ pub fn itLikelike_UnkMotion5_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802DABC0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -764,8 +744,6 @@ pub fn it_802DABC0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion17_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -775,7 +753,7 @@ pub fn itLikelike_UnkMotion17_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
     }
     if fns::it_80272C6C(ctx, gobj) == 0_i32 {
         let _ = fns::it_8026D5CC(ctx, gobj);
-        inl_it_802D9DDC_unfused(ctx, gobj, Handle::addr(__inl));
+        inl_it_802D9DDC_unfused(ctx, gobj);
     }
     return 0_i32;
 }
@@ -795,7 +773,6 @@ pub fn itLikelike_UnkMotion17_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion17_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -809,7 +786,6 @@ pub fn itLikelike_UnkMotion17_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
 
 pub fn it_802DAD18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -843,7 +819,6 @@ pub fn itLikelike_UnkMotion3_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -857,7 +832,6 @@ pub fn itLikelike_UnkMotion3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802DAE6C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -871,7 +845,6 @@ pub fn it_802DAE6C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion16_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut ip2: Item<'a> = null(ctx);
@@ -928,7 +901,6 @@ pub fn itLikelike_UnkMotion16_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion16_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r31: CollData<'a> = null(ctx);
     let mut ip: Item<'a> = null(ctx);
@@ -957,7 +929,6 @@ pub fn itLikelike_UnkMotion16_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
 
 pub fn it_802DB074<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itLikelikeAttributes<'a> = (Handle::cast::<itLikelikeAttributes<'a>>(
@@ -980,7 +951,6 @@ pub fn it_802DB074<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion8_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -997,9 +967,6 @@ pub fn itLikelike_UnkMotion8_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn itLikelike_UnkMotion8_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
-    let __inl_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x38);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
     let mut temp_r3: i32 = 0;
@@ -1017,7 +984,7 @@ pub fn itLikelike_UnkMotion8_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (ip).xDD4_itemVar()
             .likelike()
             .set_x50(null::<HSD_GObj<'a>>(ctx));
-        inl_it_802D9DDC_unfused(ctx, gobj, Handle::addr(__inl));
+        inl_it_802D9DDC_unfused(ctx, gobj);
         return;
     }
     (ip).xDD4_itemVar()
@@ -1047,7 +1014,7 @@ pub fn itLikelike_UnkMotion8_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
     } else {
         (ip).xDD4_itemVar().likelike().set_x4C(120_i32);
-        inl_it_802D9DDC_unfused(ctx, gobj, Handle::addr(__inl_2));
+        inl_it_802D9DDC_unfused(ctx, gobj);
         return;
     }
     fns::it_8027C8D0(
@@ -1061,7 +1028,6 @@ pub fn itLikelike_UnkMotion8_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion8_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r31: CollData<'a> = null(ctx);
     let mut ip: Item<'a> = null(ctx);
@@ -1099,7 +1065,6 @@ pub fn it_802DB358<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802DB398<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -1130,8 +1095,6 @@ pub fn it_802DB398<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion12_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
     'l1: loop {
@@ -1146,7 +1109,7 @@ pub fn itLikelike_UnkMotion12_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
         if !Handle::is_null((ip).xDD4_itemVar().likelike().x50()) {
             fns::it_802DB8A8(ctx, gobj);
         } else {
-            inl_it_802D9DDC_unfused(ctx, gobj, Handle::addr(__inl));
+            inl_it_802D9DDC_unfused(ctx, gobj);
         }
     }
     return 0_i32;
@@ -1193,7 +1156,6 @@ pub fn itLikelike_UnkMotion12_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
 
 pub fn it_802DB5F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -1219,8 +1181,6 @@ pub fn it_802DB5F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion9_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -1234,7 +1194,7 @@ pub fn itLikelike_UnkMotion9_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         if !Handle::is_null((ip).xDD4_itemVar().likelike().x50()) {
             fns::it_802DB8A8(ctx, gobj);
         } else {
-            inl_it_802D9DDC_unfused(ctx, gobj, Handle::addr(__inl));
+            inl_it_802D9DDC_unfused(ctx, gobj);
         }
     }
     return 0_i32;
@@ -1246,7 +1206,6 @@ pub fn itLikelike_UnkMotion9_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion9_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -1260,7 +1219,6 @@ pub fn itLikelike_UnkMotion9_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802DB74C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -1286,8 +1244,6 @@ pub fn it_802DB74C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion10_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -1301,7 +1257,7 @@ pub fn itLikelike_UnkMotion10_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
         if !Handle::is_null((ip).xDD4_itemVar().likelike().x50()) {
             fns::it_802DB8A8(ctx, gobj);
         } else {
-            inl_it_802D9DDC_unfused(ctx, gobj, Handle::addr(__inl));
+            inl_it_802D9DDC_unfused(ctx, gobj);
         }
     }
     return 0_i32;
@@ -1313,7 +1269,6 @@ pub fn itLikelike_UnkMotion10_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion10_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -1327,7 +1282,6 @@ pub fn itLikelike_UnkMotion10_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
 
 pub fn it_802DB8A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -1345,7 +1299,6 @@ pub fn it_802DB8A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion13_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -1360,8 +1313,7 @@ pub fn itLikelike_UnkMotion13_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
 }
 
 pub fn itLikelike_UnkMotion13_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __frame = ctx.stack_frame(0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itLikelikeAttributes<'a> = (Handle::cast::<itLikelikeAttributes<'a>>(
@@ -1387,7 +1339,6 @@ pub fn itLikelike_UnkMotion13_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion13_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -1401,7 +1352,6 @@ pub fn itLikelike_UnkMotion13_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
 
 pub fn it_802DB9F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -1421,8 +1371,6 @@ pub fn it_802DB9F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802DBA68<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -1434,7 +1382,7 @@ pub fn it_802DBA68<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::it_80273454(ctx, gobj);
     fns::it_802DBAF0(ctx, gobj, 0_i32, 1_i32);
     (ip).xDD4_itemVar().likelike().set_x4C(120_i32);
-    inl_it_802D9DDC_unfused(ctx, gobj, Handle::addr(__inl));
+    inl_it_802D9DDC_unfused(ctx, gobj);
 }
 
 pub fn it_802DBAF0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32, arg2: i32) {
@@ -1511,8 +1459,6 @@ pub fn it_802DBAF0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32, arg2: i32) {
 
 pub fn itLikelike_UnkMotion14_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut temp_r3: i32 = 0;
@@ -1533,7 +1479,7 @@ pub fn itLikelike_UnkMotion14_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
     temp_r3 = (ip).xDD4_itemVar().likelike().x4C();
     if temp_r3 >= 40_i32 {
         (ip).xDD4_itemVar().likelike().set_x4C(120_i32);
-        inl_it_802D9DDC_unfused(ctx, gobj, Handle::addr(__inl));
+        inl_it_802D9DDC_unfused(ctx, gobj);
     } else {
         (ip).xDD4_itemVar()
             .likelike()
@@ -1548,7 +1494,6 @@ pub fn itLikelike_UnkMotion14_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion14_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -1562,8 +1507,6 @@ pub fn itLikelike_UnkMotion14_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
 
 pub fn itLikelike_UnkMotion15_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut temp_r3: i32 = 0;
@@ -1584,7 +1527,7 @@ pub fn itLikelike_UnkMotion15_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
     temp_r3 = (ip).xDD4_itemVar().likelike().x4C();
     if temp_r3 >= 40_i32 {
         (ip).xDD4_itemVar().likelike().set_x4C(120_i32);
-        inl_it_802D9DDC_unfused(ctx, gobj, Handle::addr(__inl));
+        inl_it_802D9DDC_unfused(ctx, gobj);
     } else {
         (ip).xDD4_itemVar()
             .likelike()
@@ -1599,7 +1542,6 @@ pub fn itLikelike_UnkMotion15_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion15_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -1613,7 +1555,6 @@ pub fn itLikelike_UnkMotion15_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
 
 pub fn itLikeLike_Logic5_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -1627,7 +1568,6 @@ pub fn itLikeLike_Logic5_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion18_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -1649,7 +1589,6 @@ pub fn itLikelike_UnkMotion18_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn it_2725_Logic5_Dropped<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let ecb: _itECB<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut ip2: Item<'a> = null(ctx);
@@ -1713,7 +1652,6 @@ pub fn itLikelike_UnkMotion19_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
 
 pub fn it_802DC0AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itLikelikeAttributes<'a> = (Handle::cast::<itLikelikeAttributes<'a>>(
@@ -1738,14 +1676,12 @@ pub fn itLikelike_UnkMotion6_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itLikelike_UnkMotion6_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let ecb: _itECB<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (ip).xDD4_itemVar().likelike().x4C() == 0_i32 {
         if (ip).xDD4_itemVar().likelike().x38() == 0_i32 {
-            inl_it_802DA104_unfused(ctx, gobj, Handle::addr(__inl));
+            inl_it_802DA104_unfused(ctx, gobj);
             return;
         }
         {
@@ -1780,7 +1716,6 @@ pub fn itLikelike_UnkMotion6_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLikelike_UnkMotion6_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r31: CollData<'a> = null(ctx);
     let mut ip: Item<'a> = null(ctx);
@@ -1872,11 +1807,9 @@ pub fn itLikeLike_Logic5_Destroyed<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 }
 
 pub fn it_802DC4BC<'a>(ctx: &'a Ctx, arg0: i32, arg1: Vec<'a>, arg2: i32) -> HSD_GObj<'a> {
-    let __frame = ctx.stack_frame(0x80);
+    let __frame = ctx.stack_frame(0x70);
     let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x48);
     let ecb: _itECB<'a> = frame_at(ctx, &__frame, 0x38);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x58);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1903,7 +1836,7 @@ pub fn it_802DC4BC<'a>(ctx: &'a Ctx, arg0: i32, arg1: Vec<'a>, arg2: i32) -> HSD
         if arg0 == 0_i32 {
             inl_it_802DC4BC_ptr_unfused(ctx, gobj, ecb);
         } else {
-            inl_it_802DAD18_unfused(ctx, gobj, Handle::addr(__inl));
+            inl_it_802DAD18_unfused(ctx, gobj);
         }
     }
     return gobj;
@@ -1979,8 +1912,7 @@ fn inl_likelikeVelocity_unfused<'a>(
     }
 }
 
-fn inl_it_802D9DDC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
-    let unused: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
+fn inl_it_802D9DDC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -2055,8 +1987,7 @@ fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64
     }
 }
 
-fn inl_it_802DA104_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
-    let unused: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
+fn inl_it_802DA104_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itLikelikeAttributes<'a> = (Handle::cast::<itLikelikeAttributes<'a>>(
@@ -2106,8 +2037,7 @@ fn inl_it_802DC4BC_ptr_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ecb: _itECB
     fns::Item_80268E5C(ctx, gobj, 5_i32, (enums::ITEM_ANIM_UPDATE as i32));
 }
 
-fn inl_it_802DAD18_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
-    let unused: ArrV<'a, u8, 32> = ptr(ctx, __in_caller + 0x0);
+fn inl_it_802DAD18_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {

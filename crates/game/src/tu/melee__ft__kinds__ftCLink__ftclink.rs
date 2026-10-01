@@ -45,7 +45,6 @@ pub fn ftCl_Init_OnDeath<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCl_Init_OnLoad<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut ftdata: ftData<'a> = (fp).ft_data();
@@ -98,7 +97,6 @@ pub fn ftCl_Init_OnLoad<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCl_Init_OnItemPickupExt<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flag: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut flag = flag;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -123,7 +121,6 @@ pub fn ftCl_Init_OnItemVisible<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCl_Init_OnItemDropExt<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flag: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut flag = flag;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -143,7 +140,6 @@ pub fn ftCl_Init_OnItemPickup<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flag: i32) {
 
 pub fn ftCl_Init_OnItemDrop<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flag: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut flag = flag;
     inl_Fighter_OnItemDrop_unfused(ctx, gobj, flag, 1_i32, 1_i32);
@@ -185,7 +181,6 @@ pub fn ftCl_Init_80149114<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCl_Init_8014919C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -226,7 +221,6 @@ pub fn ftCl_Init_8014920C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn ftCl_Init_80149268<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     inl_checkFighter2244_unfused(ctx, gobj);
 }

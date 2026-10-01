@@ -57,7 +57,6 @@ pub fn mnVibration_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x118);
     let panel_jobj2: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc8);
     let panel_jobj3: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc4);
-    let unused: ArrV<'a, u8, 96> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut data: MnVibrationData<'a> =
         Handle::cast::<MnVibrationData<'a>>((fns::mnVibration_804D6C28(ctx).get()).user_data());
@@ -677,7 +676,6 @@ pub fn mnVibration_OnAnimComplete<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn mnVibration_Think<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x80);
     let port_anim_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x3c);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut data: MnVibrationData<'a> = Handle::cast::<MnVibrationData<'a>>((gobj).user_data());
     let mut panel_jobj: HSD_JObj<'a> = null(ctx);
@@ -819,7 +817,6 @@ pub fn mnVibration_Think<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnVibration_IntroProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb0);
-    let unused: ArrV<'a, u8, 64> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut data: MnVibrationData<'a> = null(ctx);
     let mut frame: f64 = 0.0;
@@ -1033,7 +1030,6 @@ pub fn mnVibration_IntroProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn mnVibration_CreateScreen<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut assets: MnVibrationJointAssets<'a> = null(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);

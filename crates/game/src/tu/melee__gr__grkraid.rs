@@ -502,7 +502,6 @@ pub fn grKraid_801FE9F8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grKraid_801FEA00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xa0);
-    let unused: ArrV<'a, u8, 112> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut cVar3: i8 = 0;
     let mut gp: Ground<'a> =
@@ -684,7 +683,6 @@ pub fn grKraid_801FEA00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grKraid_801FEE54<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut iVar3: i32 = 0;
     let mut gp: Ground<'a> =
@@ -757,7 +755,6 @@ pub fn grKraid_801FEE54<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grKraid_801FF068<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, val: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut val = val;
     let mut temp: i32 = 0;

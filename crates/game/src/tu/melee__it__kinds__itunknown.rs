@@ -231,7 +231,6 @@ pub fn it_802CE8D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itUnknown_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itUnknownAttributes<'a> = null(ctx);

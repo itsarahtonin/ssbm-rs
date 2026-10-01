@@ -81,7 +81,6 @@ pub fn grStory_801E30D8<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
 
 pub fn grStory_801E31C0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -109,7 +108,6 @@ pub fn grStory_801E3230<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grStory_801E3234<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -149,7 +147,6 @@ pub fn grStory_801E336C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grStory_801E3370<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -187,7 +184,6 @@ pub fn grStory_801E3414<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn grStory_801E3418<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x80);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut spawn_pattern: i32 = 0;
     let mut i: i32 = 0;

@@ -392,7 +392,6 @@ pub fn fn_80180C60<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_80181598<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut state: lbl_80472E48_with_ec8<'a> =
         Handle::cast::<lbl_80472E48_with_ec8<'a>>(statics::melee__gm__gm_180A::lbl_80472E48(ctx));
     let mut unk_4: Val<'a, i32> = null(ctx);

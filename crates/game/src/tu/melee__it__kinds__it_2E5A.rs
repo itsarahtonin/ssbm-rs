@@ -33,7 +33,6 @@ pub fn it_802E5AC4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg_check: i32) ->
     let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let sqrt_0: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
     let sqrt_1: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg_check = arg_check;
     let mut item: Item<'a> = null(ctx);
@@ -615,7 +614,6 @@ pub fn it_802E628C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg8: f64, arg9: f
 
 pub fn it_802E6380<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: it_802E5FXX_struct<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     let mut item: Item<'a> =
@@ -730,7 +728,6 @@ pub fn it_802E6658<'a>(ctx: &'a Ctx) {
 
 pub fn it_802E66A0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> = Handle::cast::<Item<'a>>((item_gobj).user_data());
     'l1: loop {
@@ -794,7 +791,6 @@ pub fn it_2E5A_UnkMotion1_Phys<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn it_2E5A_UnkMotion0_Coll<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 10> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
@@ -841,7 +837,6 @@ pub fn it_2E5A_UnkMotion2_Phys<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn it_2E5A_UnkMotion2_Coll<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 42> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> = Handle::cast::<Item<'a>>((item_gobj).user_data());
     'l1: loop {

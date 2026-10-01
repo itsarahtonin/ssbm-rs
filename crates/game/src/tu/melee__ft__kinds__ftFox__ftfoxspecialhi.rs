@@ -174,7 +174,6 @@ pub fn ftFx_SpecialHiHold_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftFx_SpecialHiHoldAir_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -623,7 +622,6 @@ pub fn ftFx_SpecialAirHi_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftFx_SpecialHi_GroundToAir<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -779,7 +777,6 @@ pub fn ftFx_SpecialAirHi_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftFx_SpecialHiLanding_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
         fns::ft_8008A2BC(ctx, gobj);
@@ -852,7 +849,6 @@ pub fn ftFx_SpecialHiLanding_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftFx_SpecialHiFall_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     if (fns::ft_CheckGroundAndLedge(ctx, gobj, 0_i32) != 0) {
         fns::ftFx_SpecialHiFall_Enter(ctx, gobj);
@@ -926,7 +922,6 @@ pub fn ftFx_SpecialHiLanding_GroundToAir<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftFx_SpecialHiBound_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ca: ftCo_DatAttrs<'a> = null(ctx);
     let mut fp: Fighter<'a> = null(ctx);

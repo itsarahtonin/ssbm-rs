@@ -46,7 +46,6 @@ pub fn ftCo_8009F834<'a>(
     let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x7c);
     let sp80: Val<'a, F32> = frame_at(ctx, &__frame, 0x78);
     let sp7C: Val<'a, F32> = frame_at(ctx, &__frame, 0x74);
-    let unused: ArrV<'a, u8, 68> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut part = part;

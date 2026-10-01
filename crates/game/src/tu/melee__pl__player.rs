@@ -122,7 +122,6 @@ pub fn Player_80031900<'a>(ctx: &'a Ctx) {
 
 pub fn Player_800319C4<'a>(ctx: &'a Ctx, slot: i32, arg1: i32) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut arg1 = arg1;
     let mut i: i32 = 0;
@@ -170,9 +169,7 @@ pub fn Player_800319C4<'a>(ctx: &'a Ctx, slot: i32, arg1: i32) -> i32 {
 pub fn Player_80031AD0<'a>(ctx: &'a Ctx, slot: i32) {
     let __frame = ctx.stack_frame(0x48);
     let first_struct: plAllocInfo<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let second_struct: plAllocInfo<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused1: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x4);
     let mut slot = slot;
     let mut internal_id: i32 = 0;
     let mut has_transformation: i32 = 0;
@@ -370,7 +367,6 @@ pub fn Player_80031EBC<'a>(ctx: &'a Ctx, slot: i32) {
 
 pub fn Player_80031FB0<'a>(ctx: &'a Ctx, slot: i32, entity_index: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut entity_index = entity_index;
     let mut player: _StaticPlayer<'a> = null(ctx);
@@ -491,7 +487,6 @@ pub fn Player_GetPlayerState<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
 
 pub fn Player_GetPlayerCharacter<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut player: _StaticPlayer<'a> = null(ctx);
     inl_Player_CheckSlot_unfused(ctx, slot);
@@ -636,7 +631,6 @@ pub fn Player_80032828<'a>(ctx: &'a Ctx, slot: i32, index: i32, arg_vec: Vec<'a>
 
 pub fn Player_800328D4<'a>(ctx: &'a Ctx, slot: i32, arg_vec: Vec<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut arg_vec = arg_vec;
     let mut player: _StaticPlayer<'a> = null(ctx);
@@ -877,7 +871,6 @@ pub fn Player_80032F30<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
 
 pub fn Player_80032FA4<'a>(ctx: &'a Ctx, slot: i32, arg: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut arg = arg;
     let mut player: _StaticPlayer<'a> = null(ctx);
@@ -888,7 +881,6 @@ pub fn Player_80032FA4<'a>(ctx: &'a Ctx, slot: i32, arg: i32) {
 
 pub fn Player_GetFacingDirection<'a>(ctx: &'a Ctx, slot: i32) -> f64 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut player: _StaticPlayer<'a> = null(ctx);
     inl_Player_CheckSlot_unfused(ctx, slot);
@@ -908,7 +900,6 @@ pub fn Player_SetFacingDirection<'a>(ctx: &'a Ctx, slot: i32, direction: f64) {
 
 pub fn Player_SetFacingDirectionConditional<'a>(ctx: &'a Ctx, slot: i32, b: i32, direction: f64) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut b = b;
     let mut direction = direction;
@@ -1665,7 +1656,6 @@ pub fn Player_GetFallsByIndex<'a>(ctx: &'a Ctx, slot: i32, arg1: i32) -> i32 {
 
 pub fn Player_SetFalls<'a>(ctx: &'a Ctx, slot: i32, falls: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut falls = falls;
     let mut player: _StaticPlayer<'a> = null(ctx);
@@ -1703,7 +1693,6 @@ pub fn Player_GetKOsByPlayerIndex<'a>(ctx: &'a Ctx, slot: i32, idx: i32) -> i32 
 
 pub fn Player_UpdateKOsBySlot<'a>(ctx: &'a Ctx, slot: i32, bool_arg: i32, other_slot: i32) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut bool_arg = bool_arg;
     let mut other_slot = other_slot;
@@ -1758,7 +1747,6 @@ pub fn Player_GetMatchFrameCount<'a>(ctx: &'a Ctx, slot: i32) -> u32 {
 
 pub fn Player_UpdateMatchFrameCount<'a>(ctx: &'a Ctx, slot: i32, condition: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut condition = condition;
     let mut player: _StaticPlayer<'a> = null(ctx);
@@ -1835,7 +1823,6 @@ pub fn Player_800353BC<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
 
 pub fn Player_8003544C<'a>(ctx: &'a Ctx, slot: i32, condition: i32) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut condition = condition;
     if !(condition != 0) {
@@ -1903,7 +1890,6 @@ pub fn Player_SetFlagsBit1<'a>(ctx: &'a Ctx, slot: i32) {
 
 pub fn Player_UnsetFlagsBit1<'a>(ctx: &'a Ctx, slot: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 1> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut player: _StaticPlayer<'a> = null(ctx);
     inl_Player_CheckSlot_unfused(ctx, slot);
@@ -2543,7 +2529,6 @@ pub fn Player_800368F8<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
 
 pub fn Player_80036978<'a>(ctx: &'a Ctx, slot: i32, pos: Vec<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut pos = pos;
     let mut player: _StaticPlayer<'a> = null(ctx);
@@ -2561,7 +2546,6 @@ pub fn Player_80036978<'a>(ctx: &'a Ctx, slot: i32, pos: Vec<'a>) {
 
 pub fn Player_InitOrResetPlayer<'a>(ctx: &'a Ctx, slot: i32) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut player: _StaticPlayer<'a> = null(ctx);
     let mut transformed0: Val<'a, u8> = null(ctx);

@@ -318,9 +318,7 @@ pub fn hsd_8039D688<'a>(
 
 pub fn hsd_8039D71C<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) {
     let __frame = ctx.stack_frame(0x90);
-    let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x20);
     let col: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut r#gen = r#gen;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut col0_x: f64 = 0.0;
@@ -462,7 +460,6 @@ pub fn hsd_8039D71C<'a>(ctx: &'a Ctx, r#gen: HSD_Generator<'a>) {
 
 pub fn hsd_8039D9C8<'a>(ctx: &'a Ctx) -> HSD_Generator<'a> {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut r#gen: HSD_Generator<'a> = null(ctx);
     'l1: loop {
         'c2: {}

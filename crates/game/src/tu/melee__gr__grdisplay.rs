@@ -36,7 +36,6 @@ pub fn grDisplay_801C5B90<'a>(
     let __frame = ctx.stack_frame(0x90);
     let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x34);
     let fighter_pos: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u32, 6> = frame_at(ctx, &__frame, 0x0);
     let mut jobj = jobj;
     let mut vmtx = vmtx;
     let mut flags = flags;
@@ -133,7 +132,6 @@ pub fn grDisplay_801C5B90<'a>(
 
 pub fn grDisplay_801C5DB0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
     let __frame = ctx.stack_frame(0x78);
-    let unused: ArrV<'a, u32, 14> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut code = code;
     let mut gp: Ground<'a> = null(ctx);

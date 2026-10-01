@@ -30,7 +30,6 @@ pub fn it_8029A114<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>, facing_di
     let __frame = ctx.stack_frame(0x80);
     let facing_dir__slot: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut pos = pos;
     facing_dir__slot.set(facing_dir);
@@ -188,7 +187,6 @@ pub fn it_8029A31C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, owner: HSD_GObj<'a>, un
 
 pub fn it_8029A498<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, owner: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut owner = owner;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -290,7 +288,6 @@ pub fn itLipstickSpore_Logic37_Absorbed<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) ->
 
 pub fn itLipstickSpore_Logic37_Reflected<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());

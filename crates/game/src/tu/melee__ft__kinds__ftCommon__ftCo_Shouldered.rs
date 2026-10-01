@@ -56,7 +56,6 @@ pub fn ftCo_8009C5A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
 
 pub fn ftCo_8009C640<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut msid = msid;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -86,7 +85,6 @@ pub fn ftCo_8009C640<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
 pub fn ftCo_8009C744<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut vic_gobj: HSD_GObj<'a> = (fp).victim_gobj();
@@ -135,7 +133,6 @@ pub fn ftCo_8009C744<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_Shouldered_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut hit: HitCapsule<'a> = null(ctx);
     let mut fp2: Fighter<'a> = null(ctx);

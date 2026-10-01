@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn fn_801A0E34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut x: f64 = 0.0;
     let mut y: f64 = 0.0;

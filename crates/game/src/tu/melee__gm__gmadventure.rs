@@ -78,7 +78,6 @@ pub fn gm_801B3F40<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
 
 pub fn gm_801B4064<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut temp_r31: gm_803DE650_t<'a> = null(ctx);
     let mut var_r30: i32 = 0;

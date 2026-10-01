@@ -69,7 +69,6 @@ pub fn ftPe_8011BAD8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn ftPe_8011BB6C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> =

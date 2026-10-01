@@ -53,7 +53,6 @@ pub fn un_803204E4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn un_80320508<'a>(ctx: &'a Ctx, char_kind: i32, costume: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut char_kind = char_kind;
     let mut costume = costume;
     'l1: loop {
@@ -87,7 +86,6 @@ pub fn un_80320508<'a>(ctx: &'a Ctx, char_kind: i32, costume: i32) {
 
 pub fn un_803205F4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
     'l1: loop {
@@ -153,7 +151,6 @@ pub fn un_803205F4<'a>(ctx: &'a Ctx) {
 
 pub fn un_8032074C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> =
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));

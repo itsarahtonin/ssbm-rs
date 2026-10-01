@@ -103,7 +103,6 @@ pub fn itTogepy_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802D3848<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut it: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut ap: Article<'a> = (it).xC4_article_data();

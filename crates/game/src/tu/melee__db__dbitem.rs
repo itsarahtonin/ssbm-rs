@@ -247,7 +247,6 @@ pub fn db_80225DD8<'a>(ctx: &'a Ctx, item: HSD_GObj<'a>, owner: HSD_GObj<'a>) {
 
 pub fn fn_80225E6C<'a>(ctx: &'a Ctx, owner: HSD_GObj<'a>, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let stack: ArrV<'a, i32, 2> = frame_at(ctx, &__frame, 0x0);
     let mut owner = owner;
     let mut fp = fp;
     let mut item_gobj: HSD_GObj<'a> = null(ctx);

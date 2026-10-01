@@ -48,7 +48,6 @@ pub fn it_8029BAB8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>, facing_di
 
 pub fn it_8029BB90<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, owner: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut owner = owner;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -105,7 +104,6 @@ pub fn itKirbycutterbeam_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -
 
 pub fn itKirbycutterbeam_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut attr: itKirbyCutterBeamAttributes<'a> = null(ctx);
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
@@ -166,7 +164,6 @@ pub fn itKirbycutterbeam_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itKirbycutterbeam_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
     let normal: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());

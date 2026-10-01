@@ -63,7 +63,6 @@ pub fn itMarioCape_Logic41_Destroyed<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802B2674<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -114,10 +113,8 @@ pub fn it_2725_Logic41_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itMariocape_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
-    inl_inlineA0_unfused(ctx, gobj, Handle::addr(__inl));
+    inl_inlineA0_unfused(ctx, gobj);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -213,8 +210,7 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
-fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
-    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
+fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut removed: i32 = 0;

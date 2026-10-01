@@ -37,7 +37,6 @@ pub fn it_802AC43C<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x90);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ball = ball;
     let mut pos = pos;

@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn __DSPHandler<'a>(ctx: &'a Ctx, intr: i16, context: OSContext<'a>) {
     let __frame = ctx.stack_frame(0x2e8);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let exceptionContext: OSContext<'a> = frame_at(ctx, &__frame, 0x8);
     let mut intr = intr;
     let mut context = context;

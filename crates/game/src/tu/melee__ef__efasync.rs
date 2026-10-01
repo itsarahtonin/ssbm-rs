@@ -37,7 +37,6 @@ pub fn efAsync_Dispatch<'a>(
     let translate: Vec<'a> = frame_at(ctx, &__frame, 0x1c4);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0x1b8);
     let state: efAsync_Dispatch_state<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut gfx_id = gfx_id;
     let mut gobj = gobj;
     let mut vlist = vlist;
@@ -4843,7 +4842,6 @@ pub fn efAsync_Spawn<'a>(
     let __frame = ctx.stack_frame(0xb0);
     __frame.save_varargs();
     let vlist: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x6c);
     let mut gobj = gobj;
     let mut queue_head = queue_head;
     let mut spawn_kind = spawn_kind;

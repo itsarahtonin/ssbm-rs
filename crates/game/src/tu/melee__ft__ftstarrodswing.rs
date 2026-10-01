@@ -70,7 +70,6 @@ pub fn ft_800CD914<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let v2: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let v: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let f: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

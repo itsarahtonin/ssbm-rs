@@ -36,7 +36,6 @@ pub fn assign_reg<'a>(
     let __frame = ctx.stack_frame(0x50);
     let color_refs: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
     let alpha_refs: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut num = num;
     let mut arg1 = arg1;
     let mut list = list;

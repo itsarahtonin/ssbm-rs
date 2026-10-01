@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn fn_80186EFC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> =
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
@@ -53,7 +52,6 @@ pub fn fn_80186EFC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn fn_80186F6C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((arg0).hsd_obj());
     let mut child: HSD_JObj<'a> = fns::lbl_804736B0(ctx).x8();
@@ -144,7 +142,6 @@ pub fn fn_801873F0<'a>(ctx: &'a Ctx) -> HSD_GObjProc<'a> {
 
 pub fn fn_80187494<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut temp_ret: i32 =
@@ -273,7 +270,6 @@ pub fn gm_Scene_IntroAllstar_OnFrame<'a>(ctx: &'a Ctx) {
 
 pub fn gm_Scene_IntroAllstar_OnEnter<'a>(ctx: &'a Ctx, arg0_: Addr<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0_ = arg0_;
     let mut arg0: enterdata<'a> = Handle::cast::<enterdata<'a>>(arg0_);
     'l1: loop {

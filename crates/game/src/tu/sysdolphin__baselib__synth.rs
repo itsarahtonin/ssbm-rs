@@ -932,7 +932,6 @@ pub fn HSD_SynthSetSoundMode<'a>(ctx: &'a Ctx, mode: i32) {
 
 pub fn HSD_SynthSFXStopNode<'a>(ctx: &'a Ctx, node: HSD_SynthSFXNode<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut node = node;
     let mut i: i32 = 0;
     'l1: loop {
@@ -966,7 +965,6 @@ pub fn HSD_SynthSFXStopNode<'a>(ctx: &'a Ctx, node: HSD_SynthSFXNode<'a>) {
 
 pub fn dropcallback<'a>(ctx: &'a Ctx, dropped: Addr<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut dropped = dropped;
     let mut voice: _AXVPB<'a> = Handle::cast::<_AXVPB<'a>>(dropped);
     let mut node: HSD_SynthSFXNode<'a> = null(ctx);
@@ -1062,9 +1060,7 @@ pub fn HSD_Synth_80389334<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0xd0);
     let voices: ArrP<'a, _AXVPB<'a>, 2> = frame_at(ctx, &__frame, 0x44);
-    let stack_pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let ve: _AXPBVE<'a> = frame_at(ctx, &__frame, 0x38);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x8);
     let mut sfx_id = sfx_id;
     let mut vol = vol;
     let mut vol2 = vol2;
@@ -1300,7 +1296,6 @@ pub fn HSD_SynthSFXPlayWithGroup<'a>(
     mix_auxB: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x88);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut sfx_id = sfx_id;
     let mut vol = vol;
     let mut vol2 = vol2;
@@ -1372,7 +1367,6 @@ pub fn HSD_SynthSFXPlayWithGroup<'a>(
 
 pub fn HSD_SynthSFXKeyOff<'a>(ctx: &'a Ctx, id: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut id = id;
     let mut node: HSD_SynthSFXNode<'a> = null(ctx);
     let mut i: i32 = 0;
@@ -2102,8 +2096,6 @@ pub fn HSD_SynthSFXSetDriverPauseCallback<'a>(ctx: &'a Ctx, callback: FnPtr<'a>)
 
 pub fn HSD_SynthCallback<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut enabled: i32 = 0;
@@ -2159,7 +2151,7 @@ pub fn HSD_SynthCallback<'a>(ctx: &'a Ctx) {
                         && ((((node).voice_count() as i32) == 1_i32)
                             || ((((node).voice().at(1_i32).get()).pb().state() as i32) == 0_i32))
                     {
-                        inl_HSD_SynthSFXStopNode_unfused(ctx, node, Handle::addr(__inl));
+                        inl_HSD_SynthSFXStopNode_unfused(ctx, node);
                     }
                 }
             }
@@ -2358,7 +2350,6 @@ pub fn HSD_SynthPStreamMasterClockCallback<'a>(ctx: &'a Ctx) {
 pub fn HSD_SynthPStreamFirstHakoDataCallback<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x48);
     let ve: _AXPBVE<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
     let mut enabled: i32 = 0;
     let mut node: HSD_SynthSFXNode<'a> = null(ctx);
@@ -2687,7 +2678,6 @@ pub fn HSD_SynthPStreamStart<'a>(
     channel: i32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut entrynum = entrynum;
     let mut vol = vol;
     let mut vol2 = vol2;
@@ -3264,12 +3254,7 @@ fn inl_updateAllVolume_unfused<'a>(ctx: &'a Ctx, mask: u32) {
     }
 }
 
-fn inl_HSD_SynthSFXStopNode_unfused<'a>(
-    ctx: &'a Ctx,
-    node: HSD_SynthSFXNode<'a>,
-    __in_caller: u32,
-) {
-    let unused: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
+fn inl_HSD_SynthSFXStopNode_unfused<'a>(ctx: &'a Ctx, node: HSD_SynthSFXNode<'a>) {
     let mut node = node;
     let mut i: i32 = 0;
     'l1: loop {

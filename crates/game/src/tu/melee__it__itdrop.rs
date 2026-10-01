@@ -39,11 +39,8 @@ pub fn it_8026F3D4<'a>(
     arg3: i32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x108);
-    let _padA: ArrV<'a, u8, 76> = frame_at(ctx, &__frame, 0x48);
-    let _padB: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x94);
     let sp30: ArrV<'a, i32, 8> = frame_at(ctx, &__frame, 0x28);
     let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let _padC: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     let mut num = num;
@@ -138,7 +135,6 @@ pub fn it_8026F5C8<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x78);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut kind = kind;
     let mut pos = pos;
@@ -191,7 +187,6 @@ pub fn it_8026F6BC<'a>(
     chk: i32,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x88);
-    let unused: ArrV<'a, u8, 88> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     let mut vel = vel;
@@ -234,7 +229,6 @@ pub fn it_8026F6BC<'a>(
 
 pub fn it_8026F7C8<'a>(ctx: &'a Ctx, arg0: Vec<'a>, vel: Vec<'a>, chk: i32) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x78);
-    let unused: ArrV<'a, u8, 80> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut vel = vel;
     let mut chk = chk;
@@ -280,7 +274,6 @@ pub fn it_8026F8B4<'a>(
     chk: i32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

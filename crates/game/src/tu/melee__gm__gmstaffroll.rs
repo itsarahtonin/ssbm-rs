@@ -40,7 +40,6 @@ pub fn gm_801AA664<'a>(ctx: &'a Ctx, ckind: i16) -> i32 {
 
 pub fn gm_801AA688<'a>(ctx: &'a Ctx, arg0: i16) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     'l1: loop {
         'c2: {}
@@ -61,7 +60,6 @@ pub fn gm_801AA6D8<'a>(ctx: &'a Ctx, arg0: i16) -> i32 {
 
 pub fn gm_801AA6FC<'a>(ctx: &'a Ctx, arg0: i16) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     'l1: loop {
         'c2: {}
@@ -75,7 +73,6 @@ pub fn gm_801AA6FC<'a>(ctx: &'a Ctx, arg0: i16) -> i32 {
 
 pub fn gm_801AA774<'a>(ctx: &'a Ctx, arg0: i16) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     'l1: loop {
         'c2: {}
@@ -356,7 +353,6 @@ pub fn fn_801AAB18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn fn_801AAB74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xa8);
     let bsort_temp: SortBufEntry<'a> = frame_at(ctx, &__frame, 0x2c);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> =
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
@@ -1820,7 +1816,6 @@ pub fn fn_801AC67C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn gm_Scene_StaffRoll_OnEnter<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let jobj_arr: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x14);
-    let unused_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut unused = unused;
     let mut cobj: HSD_CObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);

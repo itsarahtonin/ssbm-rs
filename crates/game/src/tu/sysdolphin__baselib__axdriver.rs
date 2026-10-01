@@ -94,7 +94,6 @@ pub fn AXDriverUnlink<'a>(ctx: &'a Ctx, v: HSD_SM<'a>, head: Ptr<'a, HSD_SM<'a>>
 
 pub fn HSD_AudioSFXKeyOff<'a>(ctx: &'a Ctx, vid: i32) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut vid = vid;
     let mut result: i32 = 0;
     let mut idx: i32 = 0;
@@ -127,7 +126,6 @@ pub fn HSD_AudioSFXKeyOff<'a>(ctx: &'a Ctx, vid: i32) -> i32 {
 
 pub fn HSD_AudioSFXKeyOffAll<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut enabled: i32 = fns::OSDisableInterrupts(ctx);
     let mut v: HSD_SM<'a> = statics::sysdolphin__baselib__axdriver::AXDriver_804D7794(ctx).get();
     'l1: loop {
@@ -440,7 +438,6 @@ pub fn parseWait<'a>(ctx: &'a Ctx, param_type: u32, param_value: u32) -> u32 {
 
 pub fn AXDriverInterp<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut v = v;
     let mut cmd_type: u32 = 0;
     let mut cmd_word: u32 = 0;
@@ -761,7 +758,6 @@ pub fn AXDriverInterp<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) {
 
 pub fn AXDriverCallback<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut v: HSD_SM<'a> = null(ctx);
     let mut next: HSD_SM<'a> = null(ctx);
     'l1: loop {

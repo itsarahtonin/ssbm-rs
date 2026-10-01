@@ -251,7 +251,6 @@ fn asm_RealMode(ctx: &Ctx) {
 
 pub fn __OSInitMemoryProtection<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
     let mut simulated_mem: u32 = inl_OSGetConsoleSimulatedMemSize_unfused(ctx);
     let mut enabled: i32 = fns::OSDisableInterrupts(ctx);
     if simulated_mem <= (24_i32.wrapping_mul(0x400_i32).wrapping_mul(0x400_i32) as u32) {

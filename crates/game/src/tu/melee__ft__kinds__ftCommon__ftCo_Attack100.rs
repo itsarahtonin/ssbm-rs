@@ -186,7 +186,6 @@ pub fn ftCo_800D6B00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
 
 pub fn fn_800D6B8C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -243,7 +242,6 @@ pub fn ftCo_800D6C60<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, callback: FnPtr<'a>) 
 
 pub fn ftCo_Attack100Loop_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

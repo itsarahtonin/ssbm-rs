@@ -291,7 +291,6 @@ pub fn ftCo_800CF6E8<'a>(ctx: &'a Ctx, attr: ftCo_DatAttrs<'a>, scale: f64) {
 
 pub fn ftCo_800D0CBC<'a>(ctx: &'a Ctx, fgp: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut fgp = fgp;
     let mut temp_r30: Fighter_x2D0_t<'a> = null(ctx);
     let mut fp: Fighter<'a> = null(ctx);
@@ -369,7 +368,6 @@ pub fn ftCo_800D0FA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800D105C<'a>(ctx: &'a Ctx, fgp: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 36> = frame_at(ctx, &__frame, 0x0);
     let mut fgp = fgp;
     let mut fp: Fighter<'a> = null(ctx);
     let mut attr: _ftDonkeyAttributes<'a> = null(ctx);

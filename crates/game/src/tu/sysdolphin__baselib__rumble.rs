@@ -111,7 +111,6 @@ pub fn HSD_PadRumbleRemoveId<'a>(ctx: &'a Ctx, no: u8, id: i32) {
 
 pub fn HSD_PadRumblePauseAll<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
     {
         i = 0_i32;
@@ -126,7 +125,6 @@ pub fn HSD_PadRumblePauseAll<'a>(ctx: &'a Ctx) {
 
 pub fn HSD_PadRumbleUnpauseAll<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
     {
         i = 0_i32;

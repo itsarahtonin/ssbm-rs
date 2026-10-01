@@ -304,7 +304,6 @@ pub fn MObjMakeTExp<'a>(
     let spec: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0x30);
     let ext: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0x2c);
     let alpha: Ptr<'a, HSD_TExp<'a>> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x4);
     let mut mobj = mobj;
     let mut tobj_top = tobj_top;
     let mut list = list;

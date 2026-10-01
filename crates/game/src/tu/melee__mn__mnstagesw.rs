@@ -1590,7 +1590,6 @@ pub fn mnStageSw_80236548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u8, arg2: 
 pub fn fn_80236998<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut current_data: MnStageSwData<'a> = Handle::cast::<MnStageSwData<'a>>((gobj).user_data());

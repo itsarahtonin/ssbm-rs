@@ -85,7 +85,6 @@ pub fn lb_80011E24<'a>(ctx: &'a Ctx, root: HSD_JObj<'a>, result: Ptr<'a, HSD_JOb
     let __frame = ctx.stack_frame(0x98);
     __frame.save_varargs();
     let ap: Arr<'a, __va_list_t<'a>, 1> = frame_at(ctx, &__frame, 0x60);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x6c);
     let mut root = root;
     let mut result = result;
     let mut found: i32 = 0;
@@ -1290,7 +1289,6 @@ pub fn lb_8001271C<'a>(
     scale_y: f64,
 ) {
     let __frame = ctx.stack_frame(0x90);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut x0 = x0;
     let mut arg2 = arg2;
@@ -1354,7 +1352,6 @@ pub fn lb_8001271C<'a>(
 
 pub fn lb_8001285C<'a>(ctx: &'a Ctx, image_desc: HSD_ImageDesc<'a>, tex_obj: _GXTexObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut image_desc = image_desc;
     let mut tex_obj = tex_obj;
     'l1: loop {
@@ -1445,7 +1442,6 @@ pub fn lb_80012994<'a>(
 ) {
     let __frame = ctx.stack_frame(0x2b8);
     let tex: _GXTexObj<'a> = frame_at(ctx, &__frame, 0xcc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc0);
     let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xb8);
     let __inl_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xb0);
@@ -1738,11 +1734,10 @@ pub fn lb_80012994<'a>(
 
 pub fn fn_80013614<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xf0);
-    let pad8: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let view_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x68);
     let view_mtx2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x38);
     let tex_obj: _GXTexObj<'a> = frame_at(ctx, &__frame, 0x18);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut data: CameraBlurData<'a> =
         Handle::cast::<CameraBlurData<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj));

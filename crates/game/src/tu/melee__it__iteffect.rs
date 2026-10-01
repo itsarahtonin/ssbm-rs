@@ -106,7 +106,6 @@ pub fn it_80278800<'a>(
     let sp64: Val<'a, F32> = frame_at(ctx, &__frame, 0x5c);
     let sp60: Val<'a, F32> = frame_at(ctx, &__frame, 0x58);
     let sp5C: Val<'a, F32> = frame_at(ctx, &__frame, 0x54);
-    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut ef_id = ef_id;
     let mut arg2 = arg2;

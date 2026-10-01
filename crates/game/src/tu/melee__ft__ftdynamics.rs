@@ -35,7 +35,6 @@ pub fn ftCo_8009CB40<'a>(
     arg3: FigaTree<'a>,
 ) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut bone_idx = bone_idx;
     let mut arg2 = arg2;
@@ -414,7 +413,6 @@ pub fn ftCo_8009D704<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ftCo_8009D81C<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut hat: KirbyHatStruct<'a> = fns::ft_80459B88(ctx)
         .hats()
@@ -555,7 +553,6 @@ pub fn ftCo_8009DA38<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ftCo_8009DB50<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut hat: KirbyHatStruct<'a> = fns::ft_80459B88(ctx)
         .hats()
@@ -722,7 +719,6 @@ pub fn ftCo_8009DC54<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ftCo_8009DD94<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> =
@@ -908,7 +904,6 @@ pub fn ftCo_UnloadDynamicBones<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ftCo_8009E140<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut arg1 = arg1;
     let mut i: i32 = 0;

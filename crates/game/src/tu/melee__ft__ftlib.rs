@@ -43,7 +43,6 @@ pub fn ftLib_CountFighters<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn ftLib_IsMasterHandPresent<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut cur: HSD_GObj<'a> = null(ctx);
     {
         cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
@@ -62,7 +61,6 @@ pub fn ftLib_IsMasterHandPresent<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn ftLib_IsCrazyHandPresent<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut cur: HSD_GObj<'a> = null(ctx);
     {
         cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
@@ -81,7 +79,6 @@ pub fn ftLib_IsCrazyHandPresent<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn ftLib_FindLowestPercentOpponent<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut cur: HSD_GObj<'a> = null(ctx);
@@ -127,7 +124,6 @@ pub fn ftLib_FindNearestOpponent<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x50);
     let cur_v: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut pos = pos;
     let mut gobj = gobj;
     let mut dist: f64 = 0.0;
@@ -181,7 +177,6 @@ pub fn ftLib_FindNearestOpponentInDir<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x68);
     let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut v = v;
     let mut gobj = gobj;
     let mut facing_dir = facing_dir;
@@ -236,7 +231,6 @@ pub fn ftLib_FindNearestOpponentInDir<'a>(
 pub fn ftLib_GetOpponentsDir<'a>(ctx: &'a Ctx, v: Vec<'a>, gobj: HSD_GObj<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x50);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut v = v;
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
@@ -448,7 +442,6 @@ pub fn ftLib_DisableInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftLib_DisableAllInput<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut cur: HSD_GObj<'a> = null(ctx);
     {
         cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
@@ -703,7 +696,6 @@ pub fn ftLib_StartRumble<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: 
 
 pub fn ftLib_StartRumbleAll<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut cur: HSD_GObj<'a> = null(ctx);
@@ -728,7 +720,6 @@ pub fn ftLib_StartItemRumble<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32, ar
 
 pub fn ftLib_StartItemRumbleAll<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut cur: HSD_GObj<'a> = null(ctx);

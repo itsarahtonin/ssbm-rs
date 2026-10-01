@@ -128,7 +128,6 @@ pub fn gm_801A48A4<'a>(ctx: &'a Ctx, arg0: u8) -> u64 {
 
 pub fn gm_801A4970<'a>(ctx: &'a Ctx, db_input: gm_DbPauseInputHandlers<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut db_input = db_input;
     let mut temp_r3: HSD_PadStatus<'a> = null(ctx);
     let mut var_r26: i8 = 0;
@@ -290,7 +289,6 @@ pub fn fn_801A4BD0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn gm_801A4BD4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -376,7 +374,6 @@ pub fn gm_FindGameSceneHandler<'a>(ctx: &'a Ctx, kind: u8) -> GameScene<'a> {
 
 pub fn gm_801A4D34<'a>(ctx: &'a Ctx, on_frame: FnPtr<'a>, info: GameSceneInfo<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x0);
     let mut on_frame = on_frame;
     let mut info = info;
     let mut pad_queue_count: i32 = 0;

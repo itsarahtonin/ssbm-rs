@@ -193,7 +193,6 @@ pub fn it_802946B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_3F14_Logic29_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     'l1: loop {
@@ -229,12 +228,10 @@ pub fn itWStar_Logic29_Dropped<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802947CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let item_pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let saved_xD90: Struct2070<'a> = frame_at(ctx, &__frame, 0x20);
     let saved_xD9C: Struct207C<'a> = frame_at(ctx, &__frame, 0x14);
     let saved_xD94: S32Vec2<'a> = frame_at(ctx, &__frame, 0xc);
-    let _pad2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());

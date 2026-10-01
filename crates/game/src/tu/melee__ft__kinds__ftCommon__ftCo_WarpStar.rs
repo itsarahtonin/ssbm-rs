@@ -248,7 +248,6 @@ pub fn ftCo_WarpStarFall_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800C4C60<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let param: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;

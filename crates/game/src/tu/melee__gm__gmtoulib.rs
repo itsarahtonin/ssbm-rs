@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn fn_8018A514<'a>(ctx: &'a Ctx, count: i32, val: f64) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut count = count;
     let mut val = val;
     let mut region: i32 = 0;
@@ -548,7 +547,6 @@ pub fn fn_8018AA74<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, entry_idx: i32, slot_id
 pub fn fn_8018B090<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xd0);
     let sp: lbl_803B7C80_t<'a> = frame_at(ctx, &__frame, 0x4c);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut entries: BracketEntry<'a> = fns::lbl_80473AB8(ctx).get(0);
     let mut tm: TmData<'a> = fns::gm_GetTournamentData(ctx);
@@ -2598,7 +2596,6 @@ pub fn fn_8018E46C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
 pub fn fn_8018E618<'a>(ctx: &'a Ctx, arg0: i32, farg0: f64, arg1: i32) {
     let __frame = ctx.stack_frame(0x78);
     let cam: HSD_CameraDescPerspective<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut farg0 = farg0;
     let mut arg1 = arg1;
@@ -3420,7 +3417,6 @@ pub fn fn_8018F888<'a>(ctx: &'a Ctx) {
 
 pub fn fn_8018FA24<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut ptr_: Val<'a, u8> = null(ctx);
     let mut dst: Val<'a, u8> = null(ctx);
     let mut tmdata: Val<'a, u8> = null(ctx);
@@ -3690,7 +3686,6 @@ pub fn fn_8019027C<'a>(ctx: &'a Ctx, lights: Addr<'a>) {
 
 pub fn fn_801902F0<'a>(ctx: &'a Ctx, sis_param: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut sis_param = sis_param;
     let mut value: i32 = 0;
     'l1: loop {
@@ -3836,7 +3831,6 @@ pub fn fn_80190520<'a>(ctx: &'a Ctx, x: f64, y: f64, z: f64) {
 
 pub fn gm_801905F0<'a>(ctx: &'a Ctx, arg0: StartMeleeData<'a>) {
     let __frame = ctx.stack_frame(0x88);
-    let _padA: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let sp18: TmVsData<'a> = frame_at(ctx, &__frame, 0x10);
     let mut arg0 = arg0;
     let mut i: i32 = 0;

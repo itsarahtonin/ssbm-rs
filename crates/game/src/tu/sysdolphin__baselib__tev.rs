@@ -609,7 +609,6 @@ pub fn HSD_StateSetNumTevStages<'a>(ctx: &'a Ctx) {
 
 pub fn HSD_SetupTevStage<'a>(ctx: &'a Ctx, desc: _HSD_TevDesc<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut desc = desc;
     fns::GXSetTevOrder(
         ctx,

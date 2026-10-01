@@ -30,7 +30,6 @@ pub fn fn_80020AEC<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, out: ArrV<'a, F32, 4>) 
     let __frame = ctx.stack_frame(0xa8);
     let tmp: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
     let col: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut jobj = jobj;
     let mut out = out;
     let mut cur: HSD_JObj<'a> = null(ctx);
@@ -145,7 +144,6 @@ pub fn lbBgFlash_80020E38<'a>(
     unused: f64,
 ) {
     let __frame = ctx.stack_frame(0xf0);
-    let _1: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let quatMtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x88);
     let rotMtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x58);
     let resultMtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x28);
@@ -223,7 +221,6 @@ pub fn fn_8002113C<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, axis: Vec<'a>, angle: f
     let rot2: Quaternion<'a> = frame_at(ctx, &__frame, 0x58);
     let localAxis: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
     let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut jobj = jobj;
     let mut axis = axis;
     let mut angle = angle;
@@ -255,9 +252,7 @@ pub fn fn_8002113C<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, axis: Vec<'a>, angle: f
 
 pub fn lbBgFlash_80021410<'a>(ctx: &'a Ctx, data: IKState<'a>) {
     let __frame = ctx.stack_frame(0xb8);
-    let pad_hi: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x64);
     let axis: Vec<'a> = frame_at(ctx, &__frame, 0x58);
-    let pad_mid: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let diff_pos0_pos1: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
     let pos1_from_pos0: Vec<'a> = frame_at(ctx, &__frame, 0x30);
     let temp_delta: Vec<'a> = frame_at(ctx, &__frame, 0x24);
@@ -265,7 +260,6 @@ pub fn lbBgFlash_80021410<'a>(ctx: &'a Ctx, data: IKState<'a>) {
     let len_ab_mag: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
     let len_bc_mag: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
     let len_ac_mag: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x48);
     let mut data = data;
     let mut eleven: f64 = 0.0;
     let mut dot: f64 = 0.0;

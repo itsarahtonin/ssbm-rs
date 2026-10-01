@@ -4689,7 +4689,6 @@ pub fn hsd_803B46D4<'a>(ctx: &'a Ctx) {
 
 pub fn hsd_803B4A2C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
     'l1: loop {
         'c2: {}
@@ -5123,8 +5122,7 @@ pub fn hsd_803B51C8<'a>(
     let huff_dc_chroma: JpegHuffDc<'a> = frame_at(ctx, &__frame, 0x1ac);
     let huff_ac_luma: JpegHuffAc<'a> = frame_at(ctx, &__frame, 0xf8);
     let huff_ac_chroma: JpegHuffAc<'a> = frame_at(ctx, &__frame, 0x44);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

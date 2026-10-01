@@ -30,7 +30,6 @@ pub fn it_8026EB18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: Vec<'a
     let __frame = ctx.stack_frame(0x88);
     let m2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x40);
     let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

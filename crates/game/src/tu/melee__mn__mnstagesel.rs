@@ -168,7 +168,6 @@ pub fn mnStageSel_802599EC<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn mnStageSel_80259C28<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u64, 2> = frame_at(ctx, &__frame, 0x0);
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     'goto_skip_randomize: {
@@ -345,7 +344,6 @@ pub fn fn_80259D84<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnStageSel_80259ED8<'a>(ctx: &'a Ctx, id: i32) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut id = id;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -675,11 +673,9 @@ pub fn fn_8025A974<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
 pub fn mnStageSel_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x160);
     let spDC: ArrP<'a, HSD_JObj<'a>, 19> = frame_at(ctx, &__frame, 0xd4);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let spCC: Vec<'a> = frame_at(ctx, &__frame, 0xc4);
-    let unused_2: ArrV<'a, u8, 140> = frame_at(ctx, &__frame, 0x4);
-    let temp_r22_4: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x90);
-    let temp_r22_6: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x94);
+    let temp_r22_4: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let temp_r22_6: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut i: i32 = 0;
     let mut sss_data_table: MnSelectStageDataTable<'a> = null(ctx);

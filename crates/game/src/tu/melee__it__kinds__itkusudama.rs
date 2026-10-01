@@ -92,7 +92,6 @@ pub fn it_802897C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, angle: f64) {
 
 pub fn it_80289910<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, angle: f64) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut angle = angle;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -172,10 +171,8 @@ pub fn it_80289BE8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, food_weight:
     let spawned: ArrV<'a, i32, 15> = frame_at(ctx, &__frame, 0x98);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8c);
     let vel: Vec<'a> = frame_at(ctx, &__frame, 0x80);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let vel_2: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
     let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x60);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let vel_3: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
     let pos_3: Vec<'a> = frame_at(ctx, &__frame, 0x40);
     let mut gobj = gobj;
@@ -545,7 +542,6 @@ pub fn it_8028A114<'a>(
 
 pub fn it_8028A190<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -653,7 +649,6 @@ pub fn itKusudama_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_8028A544<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itKusudamaAttributes<'a> =
@@ -681,7 +676,6 @@ pub fn it_8028A544<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itKusudama_UnkMotion3_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -707,7 +701,6 @@ pub fn itKusudama_UnkMotion3_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itKusudama_UnkMotion3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut coll: CollData<'a> = (ip).x378_itemColl();
@@ -813,7 +806,6 @@ pub fn itKusudama_UnkMotion6_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_8028AC74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
@@ -855,7 +847,6 @@ pub fn itKusudama_UnkMotion7_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_8028AD44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {

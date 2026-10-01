@@ -401,7 +401,6 @@ pub fn it_802AE608<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn it_802AE63C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut target_jobj: HSD_JObj<'a> = null(ctx);
     let mut item: Item<'a> = null(ctx);

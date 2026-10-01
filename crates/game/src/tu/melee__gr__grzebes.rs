@@ -103,7 +103,6 @@ pub fn grZebes_801D8558<'a>(ctx: &'a Ctx, id: i32) -> HSD_GObj<'a> {
 pub fn grZebes_801D8644<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -197,7 +196,6 @@ pub fn grZebes_801D881C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let spot_pos: Vec<'a> = frame_at(ctx, &__frame, 0x78);
     let spot_interest: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
     let vertex_idx: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x5c);
     let column_heights: ArrV<'a, F32, 6> = frame_at(ctx, &__frame, 0x44);
     let column_x: ArrV<'a, F32, 6> = frame_at(ctx, &__frame, 0x2c);
     let upper_point_pos: Vec<'a> = frame_at(ctx, &__frame, 0x20);
@@ -737,7 +735,6 @@ pub fn fn_801D94F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grZebes_801D9508<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -777,7 +774,6 @@ pub fn grZebes_801D95B0<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 pub fn grZebes_801D95B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1983,7 +1979,6 @@ pub fn fn_801DAC90<'a>(
 pub fn grZebes_801DAE70<'a>(ctx: &'a Ctx, arg0: i32, arg1: u8, x: f64, y: f64, scale: f64) {
     let __frame = ctx.stack_frame(0x78);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut x = x;
@@ -2963,7 +2958,6 @@ pub fn grZebes_801DBB60<'a>(ctx: &'a Ctx, yaku: HSD_GObj<'a>) -> i32 {
 pub fn grZebes_801DC260<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x38);
     let v: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut entry: grZe_BubbleEntry<'a> = null(ctx);
     let mut i: i32 = 0;
     {
@@ -3894,7 +3888,6 @@ fn asm_grZebes_801DC744(ctx: &Ctx) {
 
 pub fn grZebes_801DC9DC<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut i: i32 = 0;
     'l1: loop {

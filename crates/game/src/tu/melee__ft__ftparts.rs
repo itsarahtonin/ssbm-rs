@@ -509,7 +509,6 @@ pub fn ftParts_80074194<'a>(
     tree_depth: u32,
 ) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut fighter = fighter;
     let mut bone = bone;
     let mut jobj = jobj;
@@ -845,7 +844,6 @@ pub fn ftParts_8007487C<'a>(
     arg4: DObjList<'a>,
 ) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut desc = desc;
     let mut vis = vis;
     let mut costume_id = costume_id;
@@ -1434,7 +1432,6 @@ pub fn ftParts_800750C8<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32, arg2: i32)
 
 pub fn ftParts_80075240<'a>(ctx: &'a Ctx, arg0: DObjList<'a>, n: i32) -> HSD_TObj<'a> {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut n = n;
     let mut tobj_i: i32 = 0;
@@ -1662,7 +1659,6 @@ pub fn ftParts_80075650<'a>(
     arg2: DObjList<'a>,
 ) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut jobj = jobj;
     let mut arg2 = arg2;

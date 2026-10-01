@@ -89,7 +89,6 @@ pub fn ftCo_800D4E50<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>, arg2: i32
 pub fn ftCo_800D4F24<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, index: i32) {
     let __frame = ctx.stack_frame(0x28);
     let sp1C: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut index = index;
     let mut fp: Fighter<'a> =
@@ -123,7 +122,6 @@ pub fn ftCo_800D4FF4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let pos_vec: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     fns::Fighter_Spawn(ctx, gobj);
@@ -245,7 +243,6 @@ pub fn ftCo_Rebirth_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let cur_pos: Vec<'a> = frame_at(ctx, &__frame, 0x28);
     let player_pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let stage_pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut new_var: Fighter<'a> = null(ctx);
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -307,7 +304,6 @@ pub fn ftCo_Rebirth_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn fn_800D54A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let sp: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut other_gobj: HSD_GObj<'a> =
@@ -401,7 +397,6 @@ pub fn ftCo_RebirthWait_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_RebirthWait_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut var_r30: i32 = 0_i32;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -455,7 +450,6 @@ pub fn ftCo_RebirthWait_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x28);
     let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut new_var: Fighter<'a> = null(ctx);
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());

@@ -949,7 +949,6 @@ pub fn it_802C53F0<'a>(
     let __frame = ctx.stack_frame(0x78);
     let rot: Vec<'a> = frame_at(ctx, &__frame, 0x28);
     let tr: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut angle = angle;
@@ -1151,7 +1150,6 @@ pub fn it_802C573C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_2725_Logic101_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     'l1: loop {
@@ -1168,7 +1166,6 @@ pub fn itMewtwoshadowball_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
     let __frame = ctx.stack_frame(0x50);
     let trans: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut attr: itMewtwoShadowball_DatAttrs<'a> = Handle::cast::<itMewtwoShadowball_DatAttrs<'a>>(
@@ -1348,7 +1345,6 @@ pub fn it_802C5B18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
 
 pub fn itMewtwoshadowball_UnkMotion8_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
@@ -1385,7 +1381,6 @@ pub fn itMewtwoshadowball_UnkMotion8_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) 
 
 pub fn itMewtwoshadowball_UnkMotion8_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -1487,7 +1482,6 @@ pub fn it_802C5E5C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itMewtwoshadowball_UnkMotion17_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
@@ -1581,7 +1575,6 @@ pub fn itMewtwoShadowball_Logic101_HitShield<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a
 
 pub fn it_2725_Logic101_ShieldBounced<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     'l1: loop {

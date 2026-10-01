@@ -92,7 +92,6 @@ pub fn lbArq_80014BD0<'a>(
     callback_arg: Addr<'a>,
 ) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut source = source;
     let mut dest = dest;
     let mut length = length;
@@ -187,7 +186,6 @@ pub fn lbArq_80014BD0<'a>(
 
 pub fn lbArq_80014D2C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut global: lbArqGlobal<'a> = fns::lbArq_804316C0(ctx);
     let mut nodes: lbArqNode<'a> = (global).nodes().get(0);
     let mut node: lbArqNode<'a> = null(ctx);

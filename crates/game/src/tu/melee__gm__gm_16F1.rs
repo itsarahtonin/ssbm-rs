@@ -143,7 +143,6 @@ pub fn fn_8016F39C<'a>(
     arg5: u8,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -214,7 +213,6 @@ pub fn fn_8016F39C<'a>(
 
 pub fn fn_8016F548<'a>(ctx: &'a Ctx, arg0: Addr<'a>, arg1: u16, mask: u8, player_id: u8) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut mask = mask;
@@ -302,7 +300,6 @@ pub fn fn_8016F548<'a>(ctx: &'a Ctx, arg0: Addr<'a>, arg1: u16, mask: u8, player
 
 pub fn fn_8016F740<'a>(ctx: &'a Ctx, arg0: Addr<'a>, arg1: u16, mask: u8, player_id: u8) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut mask = mask;
@@ -413,7 +410,6 @@ pub fn fn_8016F870<'a>(ctx: &'a Ctx, arg0: Addr<'a>, arg1: u16, mask: u8, player
 
 pub fn fn_8016F9A8<'a>(ctx: &'a Ctx, arg0: Addr<'a>, arg1: u16, mask: u8, player_id: u8) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut mask = mask;
@@ -628,7 +624,6 @@ pub fn fn_8016FAD4<'a>(
 
 pub fn fn_8016FFD4<'a>(ctx: &'a Ctx, arg0: MatchEnd<'a>, arg1: i32, arg2: u8) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -2661,7 +2656,6 @@ pub fn gm_80172D78<'a>(ctx: &'a Ctx) -> u8 {
 
 pub fn gm_80172DD4<'a>(ctx: &'a Ctx, arg0: u32) -> u8 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut var_r29: lbl_803B7AD0_t<'a> = inl_inline1_unfused(ctx, arg0);
     'l1: loop {

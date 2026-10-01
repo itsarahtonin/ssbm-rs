@@ -153,7 +153,6 @@ pub fn ifStatus_802F7034<'a>(ctx: &'a Ctx, arg0: FnPtr<'a>) {
 
 pub fn ifStatus_802F7134<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let models: Ptr<'a, Ptr<'a, DynamicModelDesc<'a>>> = frame_at(ctx, &__frame, 0x14);
     let mut archive: Ptr<'a, HSD_Archive<'a>> = null(ctx);
     let mut i: i32 = 0;

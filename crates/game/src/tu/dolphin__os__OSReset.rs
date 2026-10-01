@@ -220,7 +220,6 @@ pub fn __OSDoHotReset<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn OSResetSystem<'a>(ctx: &'a Ctx, reset: i32, resetCode: u32, forceMenu: i32) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut reset = reset;
     let mut resetCode = resetCode;
     let mut forceMenu = forceMenu;

@@ -31,7 +31,6 @@ pub fn fn_800D9558<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let bonePos: Vec<'a> = frame_at(ctx, &__frame, 0x38);
     let effPos: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
     let vel: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attrs: _ftSamusAttributes<'a> = null(ctx);
@@ -168,7 +167,6 @@ pub fn fn_800D9930<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let bonePos: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
     let effPos: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let vel: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attrs: _ftSamusAttributes<'a> = null(ctx);

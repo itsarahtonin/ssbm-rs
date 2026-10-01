@@ -209,7 +209,6 @@ pub fn fn_8001FC08<'a>(ctx: &'a Ctx) {
 
 pub fn fn_8001FEC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
     let __frame = ctx.stack_frame(0x90);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut code = code;
     let mut data: BgFlashData<'a> = fns::lbl_80433658(ctx);
@@ -782,7 +781,6 @@ pub fn lbBgFlash_800208EC<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn lbBgFlash_800209F4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut flash: BgFlashData<'a> = fns::lbl_80433658(ctx);
     let mut gobj1_slot: Ptr<'a, HSD_GObj<'a>> = null(ctx);
     let mut gobj2_slot: Ptr<'a, HSD_GObj<'a>> = null(ctx);

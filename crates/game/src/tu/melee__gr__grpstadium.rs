@@ -572,7 +572,6 @@ pub fn grStadium_801D1E1C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn grStadium_801D1E20<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
     let spC: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     if fns::HSD_Randi(ctx, 200_i32) == 0_i32 {
         spC.set_x(fp::frsp(0_i32 as f64));
         spC.set_y(fp::frsp(100_i32.wrapping_neg() as f64));
@@ -599,7 +598,6 @@ pub fn grStadium_801D1E20<'a>(ctx: &'a Ctx) {
 
 pub fn grStadium_801D1EF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut gp: Ground<'a> =
@@ -961,7 +959,6 @@ pub fn grStadium_801D2344<'a>(ctx: &'a Ctx, g: HSD_GObj<'a>) {
 
 pub fn grStadium_801D2528<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i32) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1352,7 +1349,6 @@ pub fn grStadium_801D2A60<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grStadium_801D2BEC<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut cobj: HSD_CObj<'a> = null(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut text: TextWrapper<'a> = null(ctx);
@@ -1484,7 +1480,6 @@ pub fn grStadium_801D2E24<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
 
 pub fn fn_801D2ED0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut unused = unused;
     let mut wrapper: ImageDescWrapper<'a> = null(ctx);
@@ -1714,7 +1709,6 @@ pub fn grStadium_801D32D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x58);
     let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut cobj: HSD_CObj<'a> = null(ctx);
     let mut gp: Ground<'a> = null(ctx);
@@ -1795,7 +1789,6 @@ pub fn grStadium_801D3460<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
     let sp48: _GXColor<'a> = frame_at(ctx, &__frame, 0x40);
     let sp38: ArrP<'a, Val<'a, i8>, 4> = frame_at(ctx, &__frame, 0x30);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r3: HSD_Text<'a> = null(ctx);
     let mut temp_r3_2: HSD_Text<'a> = null(ctx);
@@ -2020,9 +2013,7 @@ pub fn grStadium_801D3460<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grStadium_801D384C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let sp2C: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused_2: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut temp_r3: HSD_GObj<'a> = null(ctx);
     let mut temp_r3_2: HSD_Text<'a> = null(ctx);
@@ -2118,7 +2109,6 @@ pub fn grStadium_801D39A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn grStadium_801D3A0C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let sp24: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r3: HSD_Text<'a> = null(ctx);
     let mut gp: Ground<'a> =
@@ -2208,8 +2198,7 @@ pub fn grStadium_801D3B4C<'a>(ctx: &'a Ctx, arg0: i32, slot_type: i32) {
 pub fn grStadium_801D3BBC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xa0);
     let colors: grStadium_801D3BBC_colors<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut pad: u64 = 0;
     let mut dynamic_text: HSD_Text<'a> = null(ctx);
@@ -2369,7 +2358,6 @@ pub fn grStadium_801D3BBC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn grStadium_801D3F40<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut gp: Ground<'a> =
@@ -2496,7 +2484,6 @@ pub fn grStadium_801D4150<'a>(ctx: &'a Ctx) {
 
 pub fn grStadium_801D4194<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg0)));

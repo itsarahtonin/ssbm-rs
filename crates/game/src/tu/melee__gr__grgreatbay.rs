@@ -735,7 +735,6 @@ pub fn grGreatBay_801F5914<'a>(
     delta_y: f64,
 ) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut user_data = user_data;
     let mut joint_id = joint_id;
     let mut coll = coll;
@@ -839,7 +838,6 @@ pub fn grGreatBay_801F5AF0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grGreatBay_801F5AF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -948,7 +946,6 @@ pub fn grGreatBay_801F5D48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grGreatBay_801F5D4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1004,7 +1001,6 @@ pub fn grGreatBay_801F5D4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grGreatBay_801F5E28<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> = (gp).u().greatbay3().jobj();
@@ -1080,7 +1076,6 @@ pub fn grGreatBay_801F60C4<'a>(
     delta_y: f64,
 ) {
     let __frame = ctx.stack_frame(0x60);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut user_data = user_data;
     let mut joint_id = joint_id;
@@ -1300,7 +1295,6 @@ pub fn grGreatBay_801F63F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let rot: Vec<'a> = frame_at(ctx, &__frame, 0x64);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x58);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut padding: i32 = 0;
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -1449,7 +1443,6 @@ pub fn grGreatBay_801F6708<'a>(ctx: &'a Ctx, unk: u32, gobj: HSD_GObj<'a>) -> i3
     let __frame = ctx.stack_frame(0x38);
     let current: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let previous: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut unk = unk;
     let mut gobj = gobj;
     let mut arg: f64 = 0.0;

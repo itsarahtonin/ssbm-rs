@@ -36,7 +36,6 @@ pub fn it_802C837C<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x88);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut parent = parent;
     let mut pos = pos;
     let mut kind = kind;
@@ -112,7 +111,6 @@ pub fn it_802C84A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, index: i32) {
 
 pub fn itGamewatchchef_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
@@ -181,7 +179,6 @@ pub fn itGamewatchchef_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> 
 
 pub fn it_802C875C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itGamewatchchefAttributes<'a> = Handle::cast::<itGamewatchchefAttributes<'a>>(
@@ -222,8 +219,6 @@ pub fn itGamewatchchef_UnkMotion1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itGamewatchchef_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -231,12 +226,11 @@ pub fn itGamewatchchef_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> 
             break 'l1;
         }
     }
-    return inl_itGamewatchchef_UnkMotion0_Coll_unfused(ctx, gobj, Handle::addr(__inl));
+    return inl_itGamewatchchef_UnkMotion0_Coll_unfused(ctx, gobj);
 }
 
 pub fn it_2725_Logic112_Clanked<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itGamewatchchefAttributes<'a> = Handle::cast::<itGamewatchchefAttributes<'a>>(
@@ -257,7 +251,6 @@ pub fn it_2725_Logic112_Clanked<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_2725_Logic112_HitShield<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itGamewatchchefAttributes<'a> = Handle::cast::<itGamewatchchefAttributes<'a>>(
@@ -278,7 +271,6 @@ pub fn it_2725_Logic112_HitShield<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_2725_Logic112_Absorbed<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itGamewatchchefAttributes<'a> = Handle::cast::<itGamewatchchefAttributes<'a>>(
@@ -410,8 +402,7 @@ fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64
     }
 }
 
-fn inl_it_802C875C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
-    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
+fn inl_it_802C875C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itGamewatchchefAttributes<'a> = Handle::cast::<itGamewatchchefAttributes<'a>>(
@@ -429,12 +420,7 @@ fn inl_it_802C875C_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u3
     fns::Item_80268E5C(ctx, gobj, 1_i32, (enums::ITEM_ANIM_UPDATE as i32));
 }
 
-fn inl_itGamewatchchef_UnkMotion0_Coll_unfused<'a>(
-    ctx: &'a Ctx,
-    gobj: HSD_GObj<'a>,
-    __in_caller: u32,
-) -> i32 {
-    let __inl: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
+fn inl_itGamewatchchef_UnkMotion0_Coll_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itGamewatchchefAttributes<'a> = Handle::cast::<itGamewatchchefAttributes<'a>>(
@@ -447,7 +433,7 @@ fn inl_itGamewatchchef_UnkMotion0_Coll_unfused<'a>(
                 .set_x(fp::fmuls((ip).x40_vel().x(), fp::fneg((attrs).x4())));
         }
         if ((result & 3_i32) != 0) {
-            inl_it_802C875C_unfused(ctx, gobj, Handle::addr(__inl));
+            inl_it_802C875C_unfused(ctx, gobj);
         }
     }
     return 0_i32;

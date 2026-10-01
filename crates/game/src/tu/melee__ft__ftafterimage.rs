@@ -35,7 +35,6 @@ pub fn ftCo_800C2600<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: u32) {
     let delta: Vec<'a> = frame_at(ctx, &__frame, 0x54);
     let crossProd: Vec<'a> = frame_at(ctx, &__frame, 0x48);
     let tempDir: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> = null(ctx);

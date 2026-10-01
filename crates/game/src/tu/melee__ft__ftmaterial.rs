@@ -264,9 +264,7 @@ pub fn ftMaterial_800BF6BC<'a>(
 ) {
     let __frame = ctx.stack_frame(0x188);
     let sp168: _GXColor<'a> = frame_at(ctx, &__frame, 0x160);
-    let _padA: ArrV<'a, u8, 84> = frame_at(ctx, &__frame, 0xa0);
     let sp_cnst1: _HSD_TECnst<'a> = frame_at(ctx, &__frame, 0xf4);
-    let _padB: ArrV<'a, u8, 84> = frame_at(ctx, &__frame, 0x10c);
     let sp_cnst2: _HSD_TECnst<'a> = frame_at(ctx, &__frame, 0x88);
     let sp_tevdesc: _HSD_TevDesc<'a> = frame_at(ctx, &__frame, 0x14);
     let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);

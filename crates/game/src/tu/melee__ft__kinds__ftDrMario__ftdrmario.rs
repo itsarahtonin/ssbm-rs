@@ -39,7 +39,6 @@ pub fn ftDr_Init_OnDeath<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftDr_Init_OnLoad<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut items: Ptr<'a, Addr<'a>> = null(ctx);
@@ -112,7 +111,6 @@ pub fn ftDr_Init_OnKnockbackExit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftDr_Init_801497CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     if !Handle::is_null(gobj) {

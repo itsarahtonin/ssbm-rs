@@ -91,7 +91,6 @@ pub fn ftPk_Init_OnLoad<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPk_Init_OnDeath<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     fns::ftParts_80074A4C(ctx, gobj, 0_i32, 0_i32);
     fns::ftParts_80074A4C(ctx, gobj, 1_i32, 0_i32);
@@ -125,7 +124,6 @@ pub fn ftPk_Init_OnItemDrop<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, bool1: i32) {
 
 pub fn ftPk_Init_UnkMotionStates1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     fns::ftParts_80074A4C(ctx, gobj, 1_i32, 1_i32.wrapping_neg());
     fns::ftParts_80074B0C(ctx, gobj, 1_i32, 0_i32);
@@ -133,7 +131,6 @@ pub fn ftPk_Init_UnkMotionStates1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPk_Init_UnkMotionStates2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     fns::ftParts_80074A4C(ctx, gobj, 1_i32, 0_i32);
     fns::ftParts_80074B0C(ctx, gobj, 1_i32, 0_i32);

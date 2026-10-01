@@ -173,7 +173,6 @@ pub fn ftPe_Init_LoadSpecialAttrs<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPe_Init_8011B93C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut result: i32 = fns::ftParts_80074A74(ctx, gobj, 2_i32);
     if result == 1_i32.wrapping_neg() {

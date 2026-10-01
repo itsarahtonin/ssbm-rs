@@ -3874,7 +3874,6 @@ pub fn SetupSharedVtxModelMtx<'a>(
     let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x1c);
     let obj: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x0);
     let mark: Val<'a, u32> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
     let mut pobj = pobj;
     let mut vmtx = vmtx;
     let mut pmtx = pmtx;

@@ -111,7 +111,6 @@ pub fn gm_801ADE1C<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: f64, arg3: f64)
 
 pub fn gm_801AE050<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32, arg3: f64, arg4: f64) -> i32 {
     let __frame = ctx.stack_frame(0x98);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -493,7 +492,6 @@ pub fn fn_801AE948<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn gm_801AEBB0<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     'l1: loop {
         'c2: {}

@@ -112,7 +112,6 @@ pub fn ftMr_SpecialN_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftMr_SpecialN_ItemFireSpawn<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
     let coords: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);

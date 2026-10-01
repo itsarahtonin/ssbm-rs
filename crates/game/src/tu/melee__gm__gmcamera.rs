@@ -296,7 +296,6 @@ pub fn gmCamera_801A2650<'a>(ctx: &'a Ctx) {
 
 pub fn gmCamera_801A26C0<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut hud: VsSceneController<'a> = null(ctx);
     'l1: loop {
         'c2: {}
@@ -408,7 +407,6 @@ pub fn gmCamera_801A28AC<'a>(ctx: &'a Ctx) {
 
 pub fn gmCamera_801A292C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut text: HSD_Text<'a> = null(ctx);
     let mut i: i32 = 0;
     let mut new_var: f64 = 0.0;
@@ -637,7 +635,6 @@ pub fn gmCamera_801A2D44<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x38);
     let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x1c);
     let jobj_b: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gcus: _gmCameraUnkStruct<'a> = statics::melee__gm__gmcamera::gmCamera_VsCamUiState(ctx);
     'l1: loop {
         'c2: {}
@@ -792,7 +789,6 @@ pub fn fn_801A31D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn gmCamera_801A31FC<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {

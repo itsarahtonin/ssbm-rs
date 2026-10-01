@@ -54,10 +54,8 @@ pub fn ftCo_80090984<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800909D0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let offset: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x20);
     let mut fp = fp;
     {
         let mut radius: f64 = fp::fmuls((fp).x34_scale().y(), (fp).co_attrs().damageice_ice_size());
@@ -155,14 +153,11 @@ pub fn ftCo_DamageIce_Init<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let spEC: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xe4);
     let rot_y: Quaternion<'a> = frame_at(ctx, &__frame, 0xd4);
     let rot_mtx_y: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0xa4);
-    let _p4: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let rot_x: Quaternion<'a> = frame_at(ctx, &__frame, 0x90);
     let rot_mtx_x: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x60);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let param: Val<'a, F32> = frame_at(ctx, &__frame, 0x54);
     let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x2c);
     let offset: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let _q: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut xrotn: HSD_JObj<'a> = null(ctx);
     let mut yrotn: HSD_JObj<'a> = null(ctx);
@@ -311,7 +306,6 @@ pub fn ftCo_DamageIce_Init<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_DamageIce_HitWhileFrozen<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let param: Val<'a, F32> = frame_at(ctx, &__frame, 0x4c);
     let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x24);
     let offset: Vec<'a> = frame_at(ctx, &__frame, 0x18);
@@ -464,7 +458,6 @@ pub fn ftCo_DamageIce_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_DamageIce_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut co: ftCo_DatAttrs<'a> = (fp).co_attrs();
@@ -498,7 +491,6 @@ pub fn ftCo_DamageIce_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_DamageIce_InAirUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut coll_data: CollData<'a> = null(ctx);
@@ -560,7 +552,6 @@ pub fn ftCo_DamageIce_InAirUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_DamageIce_Collide<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, normal: Vec<'a>, vec: Vec<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let _s: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let next_pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
@@ -617,7 +608,6 @@ pub fn ftCo_80091854<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let sp24: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut fp: Fighter<'a> = null(ctx);

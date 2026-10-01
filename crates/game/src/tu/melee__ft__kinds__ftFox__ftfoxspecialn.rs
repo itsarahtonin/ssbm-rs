@@ -50,7 +50,6 @@ pub fn ftFx_SpecialN_ItGetHoldJoint<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: V
 
 pub fn ftFx_SpecialN_OnChangeAction<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -169,7 +168,6 @@ pub fn ftFx_SpecialN_RemoveBlaster<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftFx_SpecialN_CreateBlasterShot<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
     let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut da: ftFox_DatAttrs<'a> = null(ctx);

@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn it_802CA49C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut sa: itPokemonAttributes<'a> =
@@ -65,7 +64,6 @@ pub fn it_802CA538<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ref_gobj: HSD_GObj<'a>)
 
 pub fn it_802CA558<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}

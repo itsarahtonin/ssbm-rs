@@ -798,7 +798,6 @@ pub fn grLast_8021B2E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grLast_8021B5C4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = null(ctx);
     let mut i: i32 = 0;
@@ -956,11 +955,10 @@ pub fn grLast_8021B5C4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn grLast_8021B920<'a>(ctx: &'a Ctx, gobj_: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x70);
     let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x38);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
-    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
-    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
-    let __arg_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
+    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
+    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __arg_4: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj_ = gobj_;
     let mut arg1 = arg1;
     let mut gobj: HSD_GObj<'a> = gobj_;

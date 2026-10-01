@@ -32,11 +32,9 @@ pub fn ftDrawCommon_8008051C<'a>(
     arg2: ArrV<'a, F32, 4>,
 ) -> ArrV<'a, F32, 4> {
     let __frame = ctx.stack_frame(0x78);
-    let unused0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let sp54: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let sp18: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x1c);
-    let unused2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4c);
+    let sp54: Vec<'a> = frame_at(ctx, &__frame, 0x0);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0xc);
+    let sp18: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x18);
     let mut arg1 = arg1;
     let mut arg2 = arg2;
     v.set_x({
@@ -74,10 +72,8 @@ pub fn ftDrawCommon_800805C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, ar
     let spA8: _GXColor<'a> = frame_at(ctx, &__frame, 0xa0);
     let sp78: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x70);
     let sp18: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x40);
-    let _pad: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let sp54: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let v: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x18);
+    let v: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -392,7 +388,6 @@ pub fn ftDrawCommon_80080C28<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flag_index: i
     let sp18: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x38);
     let v1: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let v2: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut flag_index = flag_index;
     let mut unused: Val<'a, F32> = null(ctx);
@@ -534,7 +529,6 @@ pub fn ftDrawCommon_80081140<'a>(ctx: &'a Ctx) {
 
 pub fn ftDrawCommon_80081168<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut cur: HSD_GObj<'a> = null(ctx);
     {
         cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
@@ -562,7 +556,6 @@ pub fn ftDrawCommon_80081168<'a>(ctx: &'a Ctx) {
 
 pub fn ftDrawCommon_80081200<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut cur: HSD_GObj<'a> = null(ctx);
     {
         cur = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();

@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn mnSoundTest_8024A790<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_f31: f64 = 0.0;
     let mut temp_f30: f64 = 0.0;
@@ -387,13 +386,9 @@ pub fn mnSoundTest_8024AD58<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: u8) {
 
 pub fn fn_8024AED0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb0);
-    let operand_pad: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let sp7C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x74);
-    let array_pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
     let string1: ArrV<'a, i8, 20> = frame_at(ctx, &__frame, 0x5c);
     let string2: ArrV<'a, i8, 20> = frame_at(ctx, &__frame, 0x48);
-    let low_pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x20);
     let mut arg0 = arg0;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut sp50: Addr<'a> = null(ctx);
@@ -522,11 +517,8 @@ pub fn fn_8024AED0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn fn_8024B2B0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xa8);
-    let high_pad: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
     let sp54: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4c);
-    let stack_pad1: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x28);
     let sp48: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x40);
-    let stack_pad2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x38);
     let sp3C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x34);
     let mut arg0 = arg0;
     let mut md2: soundtest_user_data<'a> = null(ctx);
@@ -964,9 +956,7 @@ pub fn fn_8024BAF0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn mnSoundTest_8024BCA0<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x50);
-    let pad: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let category_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x20);
     let mut arg0 = arg0;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);

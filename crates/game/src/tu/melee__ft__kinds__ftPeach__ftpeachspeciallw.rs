@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn pickVeg<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut a: ftPe_DatAttrs<'a> = Handle::cast::<ftPe_DatAttrs<'a>>(
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).dat_attrs(),
@@ -106,8 +105,6 @@ pub fn ftPe_SpecialLw_8011CFA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn spawnVeg<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
-    let p1: Vec<'a> = frame_at(ctx, &__frame, 0x0);
-    let p2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -183,7 +180,6 @@ pub fn handleColl<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftPe_SpecialLw_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     inl_doAnim_unfused(ctx, gobj, fnptr(ctx, 0x8008a2bc));
 }

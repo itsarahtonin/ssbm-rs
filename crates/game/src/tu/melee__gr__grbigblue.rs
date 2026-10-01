@@ -32,10 +32,8 @@ pub fn grBigBlue_801E57BC<'a>(ctx: &'a Ctx, arg: i32) {
 }
 
 pub fn grBigBlue_801E57C0<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x30);
-    let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __frame = ctx.stack_frame(0x28);
     let direction: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x18);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -186,7 +184,6 @@ pub fn grBigBlue_801E5B1C<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn grBigBlue_801E5B20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
     'l1: loop {
@@ -274,7 +271,6 @@ pub fn fn_801E6124<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grBigBlue_801E613C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -305,7 +301,6 @@ pub fn grBigBlue_801E61BC<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 
 pub fn grBigBlue_801E61C4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -395,7 +390,6 @@ pub fn grBigBlue_801E6360<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 pub fn grBigBlue_801E6364<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
     let mut car_gobj: HSD_GObj<'a> = null(ctx);
@@ -622,7 +616,6 @@ pub fn grBigBlue_801E68B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn grBigBlue_801E6904<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -2367,7 +2360,6 @@ pub fn fn_801E8560<'a>(
 ) {
     let __frame = ctx.stack_frame(0x68);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut user_data = user_data;
     let mut joint_id = joint_id;
     let mut coll = coll;
@@ -2690,7 +2682,6 @@ pub fn grBigBlue_801E8A1C<'a>(ctx: &'a Ctx, idx: i32) {
 
 pub fn grBigBlue_801E8B84<'a>(ctx: &'a Ctx, right: f64, left: f64, bottom: f64, top: f64) -> f64 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut right = right;
     let mut left = left;
     let mut bottom = bottom;
@@ -2824,7 +2815,6 @@ pub fn grBigBlue_801E8D64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x34);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0x28);
     let translate: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused_2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -2908,9 +2898,7 @@ pub fn grBigBlue_801E93D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let back: Vec<'a> = frame_at(ctx, &__frame, 0xb0);
     let normal: Vec<'a> = frame_at(ctx, &__frame, 0xa4);
     let euler: Vec<'a> = frame_at(ctx, &__frame, 0x98);
-    let pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let check_pos: Vec<'a> = frame_at(ctx, &__frame, 0x88);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
     let mut bp: Val<'a, u8> = Handle::cast::<Val<'a, u8>>(gp);
@@ -3350,7 +3338,6 @@ pub fn grBigBlue_801E9F38<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 pub fn grBigBlue_801E9F3C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let v: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> =
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
@@ -6902,7 +6889,6 @@ pub fn grBigBlue_801EAB50<'a>(
     rangeY: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x98);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut pos = pos;
     let mut flag = flag;
     let mut rangeX = rangeX;
@@ -8538,15 +8524,12 @@ pub fn grBigBlue_801EB4AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grBigBlue_801EBAF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x90);
-    let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let bone_pos: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
     let vel: Vec<'a> = frame_at(ctx, &__frame, 0x40);
     let prev: Vec<'a> = frame_at(ctx, &__frame, 0x34);
     let center: Vec<'a> = frame_at(ctx, &__frame, 0x28);
     let normal_out: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let target: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x58);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -15675,7 +15658,6 @@ fn asm_grBigBlue_801ED694(ctx: &Ctx) {
 
 pub fn grBigBlue_801EDF44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, index: i32) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut index = index;
     let mut gp: Ground<'a> = null(ctx);
@@ -16518,7 +16500,6 @@ pub fn fn_801EF60C<'a>(
     delta_y: f64,
 ) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut user_data = user_data;
     let mut joint_id = joint_id;
     let mut coll = coll;

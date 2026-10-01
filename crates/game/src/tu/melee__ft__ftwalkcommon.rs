@@ -90,7 +90,6 @@ pub fn ftWalkCommon_800DFCA4<'a>(
     accel_mul: f64,
 ) {
     let __frame = ctx.stack_frame(0x98);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut msid = msid;
     let mut ms_flags = ms_flags;
@@ -245,13 +244,12 @@ pub fn ftWalkCommon_800DFEC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg_cb: FnPtr
 
 pub fn ftWalkCommon_800E0060<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut accel_mul: f64 = (fp).mv().co().walk().accel_mul();
     {
-        let mut unused_2: f64 = accel_mul;
+        let mut unused: f64 = accel_mul;
     }
     {
         let mut accel: f64 = fp::fmuls(

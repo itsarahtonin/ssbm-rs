@@ -91,9 +91,7 @@ pub fn ftCo_LiftWait_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_80096E68<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     if !Handle::is_null((fp).item_gobj()) {
@@ -162,7 +160,6 @@ pub fn ftCo_80096F48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_LiftWalk_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     if (!(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0))
         && (!(inl_ftCo_80096EF8_unfused(ctx, gobj) != 0))
@@ -248,7 +245,6 @@ pub fn ftCo_80097130<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_LiftTurn_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut part: i32 = fns::ftParts_GetBoneIndex(ctx, fp, (enums::FtPart_TransN as i32));

@@ -231,7 +231,6 @@ pub fn ftCo_800D34E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800D35FC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut cur_gobj: HSD_GObj<'a> = null(ctx);
     fns::ftCommon_8007EBAC(
@@ -351,7 +350,6 @@ pub fn ftCo_DeadRight_Cam<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_800D3BC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -398,7 +396,6 @@ pub fn ftCo_DeadDown_Cam<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_800D3E40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -450,7 +447,6 @@ pub fn ftCo_DeadUp_Cam<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800D40B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r31: Val<'a, i32> = ({ (fns::p_ftCommonData(ctx).get()).x504_ref() });
     let mut fp: Fighter<'a> =
@@ -640,9 +636,7 @@ pub fn ftCo_DeadUpStar_Cam<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800D4580<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x50);
-    let _2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let q: Quaternion<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> = null(ctx);
@@ -724,9 +718,7 @@ pub fn ftCo_800D47B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800D481C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x60);
-    let _1: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let q: Quaternion<'a> = frame_at(ctx, &__frame, 0x30);
-    let _2: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> = null(ctx);
@@ -794,7 +786,6 @@ pub fn ftCo_800D481C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
 
 pub fn ftCo_DeadUpFall_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

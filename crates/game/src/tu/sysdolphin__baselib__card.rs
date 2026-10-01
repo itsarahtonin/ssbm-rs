@@ -3074,7 +3074,6 @@ pub fn fn_803ACC0C<'a>(
     data_size: i32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut state = state;
     let mut block_idx = block_idx;
     let mut block_id = block_id;
@@ -3351,7 +3350,6 @@ pub fn fn_803ACF30<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0x58);
     let buf: CardCmd<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut state = state;
     let mut comment = comment;
     let mut banner = banner;
@@ -3401,7 +3399,6 @@ pub fn fn_803ACFC0<'a>(
     file_idx: i32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x60);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut state = state;
     let mut block_idx = block_idx;
     let mut block_id = block_id;
@@ -3555,12 +3552,11 @@ pub fn fn_803AD16C<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
     let newmap: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0x350);
     let filemap: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0x24c);
     let chosen: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0x14c);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x38);
-    let __inl_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x60);
-    let __inl_3: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x88);
-    let __inl_4: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0xb0);
-    let __inl_5: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0xd8);
+    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x28);
+    let __inl_3: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x50);
+    let __inl_4: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x78);
+    let __inl_5: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0xa0);
     let mut state = state;
     let mut offset: i32 = 0;
     let mut result: i32 = 0;
@@ -3968,7 +3964,6 @@ pub fn fn_803ADE4C<'a>(
     let __frame = ctx.stack_frame(0x80);
     let cmd_open: CardCmd<'a> = frame_at(ctx, &__frame, 0x40);
     let cmd_scan: CardCmd<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut state = state;
     let mut file_no = file_no;
     let mut callback = callback;
@@ -4043,10 +4038,9 @@ pub fn fn_803ADF90<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0x250);
     let block_map: ArrV<'a, i32, 64> = frame_at(ctx, &__frame, 0xfc);
-    let unused: ArrV<'a, u8, 44> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x30);
-    let __inl_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x58);
-    let __inl_3: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x80);
+    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x28);
+    let __inl_3: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x50);
     let mut state = state;
     let mut file_idx = file_idx;
     let mut buf = buf;
@@ -4292,9 +4286,7 @@ pub fn fn_803AE7F8<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0x4f8);
     let block_map: Arr<'a, ArrV<'a, i32, 64>, 3> = frame_at(ctx, &__frame, 0x1a0);
-    let pad_block_map: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let cmd_done: CardCmd<'a> = frame_at(ctx, &__frame, 0x15c);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x20);
     let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x11c);
     let cmd_2: CardCmd<'a> = frame_at(ctx, &__frame, 0xf4);
     let init_cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0xcc);
@@ -4926,13 +4918,12 @@ pub fn fn_803AF3F0<'a>(
     let total_blocks: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
     let free_blk: fn_803AF3F0_free_blk<'a> = frame_at(ctx, &__frame, 0xc);
     let write_blk: fn_803AF3F0_write_blk<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
-    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x28);
-    let __inl_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x50);
+    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x18);
+    let __inl_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x40);
     let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x1bc);
-    let __inl_3: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x78);
-    let __inl_4: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0xc0);
-    let __inl_5: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x108);
+    let __inl_3: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x68);
+    let __inl_4: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0xb0);
+    let __inl_5: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0xf8);
     let mut state = state;
     let mut file_idx = file_idx;
     let mut buf = buf;
@@ -5461,14 +5452,12 @@ pub fn fn_803B0120<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0x548);
     let block_map: Arr<'a, ArrV<'a, i32, 64>, 3> = frame_at(ctx, &__frame, 0x1f8);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x10);
-    let __inl_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x38);
+    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x28);
     let cmd: CardCmd<'a> = frame_at(ctx, &__frame, 0x1bc);
-    let __inl_3: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x60);
-    let __inl_4: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0xa8);
-    let __inl_5: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0xf0);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x138);
+    let __inl_3: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x50);
+    let __inl_4: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x98);
+    let __inl_5: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0xe0);
     let mut state = state;
     let mut file_idx = file_idx;
     let mut buf = buf;
@@ -5974,13 +5963,9 @@ pub fn fn_803B0E9C<'a>(
     let digest: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0xfc);
     let cmd_done: CardCmd<'a> = frame_at(ctx, &__frame, 0xd8);
     let cmd_clear: CardCmd<'a> = frame_at(ctx, &__frame, 0xb4);
-    let pad_cmd_clear: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let cmd_patch: CardCmd<'a> = frame_at(ctx, &__frame, 0x8c);
-    let pad_cmd_patch: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let cmd_write_header: CardCmd<'a> = frame_at(ctx, &__frame, 0x60);
-    let pad_cmd_write_header: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
     let cmd_verify_header: CardCmd<'a> = frame_at(ctx, &__frame, 0x2c);
-    let pad_cmd_verify_header: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
     let mut state = state;
     let mut banner = banner;
     let mut icons = icons;
@@ -6259,7 +6244,6 @@ pub fn fn_803B0E9C<'a>(
 
 pub fn fn_803B1338<'a>(ctx: &'a Ctx, state: CardState<'a>, r#async: i32) -> i32 {
     let __frame = ctx.stack_frame(0x410);
-    let unused: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x0);
     let cmd0: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x358);
     let cmd1: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x330);
     let cmd2: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x308);
@@ -6272,13 +6256,12 @@ pub fn fn_803B1338<'a>(ctx: &'a Ctx, state: CardState<'a>, r#async: i32) -> i32 
     let cmd9: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x1f0);
     let cmd10: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x1c8);
     let cmd11: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x1a0);
-    let cmd12: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x48);
+    let cmd12: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x0);
     let cmd13: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x150);
     let cmd14: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x128);
     let cmd15: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0x100);
     let cmd16: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0xd8);
     let cmd17: CardCmdBuf<'a> = frame_at(ctx, &__frame, 0xb0);
-    let unused_2: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x70);
     let mut state = state;
     let mut r#async = r#async;
     'l1: loop {
@@ -6796,7 +6779,6 @@ pub fn fn_803B1F78<'a>(
     let __frame = ctx.stack_frame(0x88);
     let cmd_create: CardCmd<'a> = frame_at(ctx, &__frame, 0x44);
     let cmd_set_status: CardCmd<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut state = state;
     let mut filename = filename;
     let mut banner = banner;
@@ -6942,7 +6924,6 @@ pub fn fn_803B21E8<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0x58);
     let cmd_set_status: CardCmd<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut state = state;
     let mut banner = banner;
     let mut icons = icons;
@@ -7195,7 +7176,6 @@ pub fn fn_803B26CC<'a>(
     callback: FnPtr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x78);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x20);
     let mut state = state;
     let mut comment = comment;

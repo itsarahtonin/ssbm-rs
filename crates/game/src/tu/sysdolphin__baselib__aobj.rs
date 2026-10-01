@@ -203,7 +203,6 @@ pub fn HSD_AObjInterpretAnim<'a>(
 
 pub fn HSD_AObjLoadDesc<'a>(ctx: &'a Ctx, aobjdesc: HSD_AObjDesc<'a>) -> HSD_AObj<'a> {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut aobjdesc = aobjdesc;
     let mut fobjdesc: _HSD_FObjDesc<'a> = null(ctx);
     let mut aobj: HSD_AObj<'a> = null(ctx);

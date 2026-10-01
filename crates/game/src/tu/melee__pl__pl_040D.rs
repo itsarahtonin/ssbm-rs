@@ -247,7 +247,6 @@ pub fn pl_8004134C<'a>(ctx: &'a Ctx, slot: i32) -> i32 {
 
 pub fn fn_8004138C<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut temp_r3: pl_x5EC_t<'a> = fns::Player_GetUnk6A8Ptr(ctx, arg0);

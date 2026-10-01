@@ -74,7 +74,6 @@ pub fn it_802AA8C0<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x88);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut kind = kind;
@@ -164,7 +163,6 @@ pub fn it_802AAA50<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802AAA80<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attr: itFlashAttributes<'a> =

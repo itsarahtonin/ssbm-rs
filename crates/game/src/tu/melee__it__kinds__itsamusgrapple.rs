@@ -37,7 +37,6 @@ pub fn itSamusGrapple_Logic53_Spawned<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802B7160<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, data: itSamusGrapple_HitboxData<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut data = data;
     let mut damage: Val<'a, u16> = null(ctx);
@@ -270,7 +269,6 @@ pub fn it_802B75FC<'a>(
 ) -> HSD_JObj<'a> {
     let __frame = ctx.stack_frame(0x78);
     let zero_vel: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut ip = ip;
     let mut jobj_arg = jobj_arg;
     let mut arg2 = arg2;
@@ -470,7 +468,6 @@ pub fn it_802B7C18<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x98);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut owner = owner;
     let mut pos = pos;
     let mut facing_dir = facing_dir;
@@ -575,7 +572,6 @@ pub fn it_802B7C18<'a>(
 pub fn fn_802B7E34<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x80);
     let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x2c);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut fp: Fighter<'a> =
@@ -607,9 +603,7 @@ pub fn fn_802B805C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x74);
     let normal: Vec<'a> = frame_at(ctx, &__frame, 0x68);
     let pos2: Vec<'a> = frame_at(ctx, &__frame, 0x5c);
-    let _padA: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itSamusGrappleAttributes<'a> = null(ctx);
@@ -721,9 +715,7 @@ pub fn fn_802B8384<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x90);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x60);
     let sp5C: Vec<'a> = frame_at(ctx, &__frame, 0x54);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut owner: HSD_GObj<'a> = (ip).owner();
@@ -783,9 +775,7 @@ pub fn itSamusgrapple_UnkMotion2_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn fn_802B8524<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x88);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x5c);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itSamusGrappleAttributes<'a> = Handle::cast::<itSamusGrappleAttributes<'a>>(
@@ -827,9 +817,7 @@ pub fn itSamusgrapple_UnkMotion3_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn fn_802B8684<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x80);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x54);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut fp2: Fighter<'a> = null(ctx);
@@ -878,9 +866,7 @@ pub fn itSamusgrapple_UnkMotion4_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn fn_802B8814<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x88);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x58);
-    let _pad2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itSamusGrappleAttributes<'a> = Handle::cast::<itSamusGrappleAttributes<'a>>(
@@ -919,9 +905,7 @@ pub fn itSamusgrapple_UnkMotion5_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn fn_802B895C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x80);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x54);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itSamusGrappleAttributes<'a> = Handle::cast::<itSamusGrappleAttributes<'a>>(
@@ -971,10 +955,7 @@ pub fn itSamusgrapple_UnkMotion6_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn fn_802B8B54<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb8);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x74);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let _pad2: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x4);
     let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x58);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itSamusGrappleAttributes<'a> = Handle::cast::<itSamusGrappleAttributes<'a>>(
@@ -1040,11 +1021,8 @@ pub fn itSamusgrapple_UnkMotion7_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn fn_802B8D38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xa8);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
-    let _pad2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let saved_pos: Vec<'a> = frame_at(ctx, &__frame, 0x54);
-    let _pad3: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
     let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x20);
-    let _pad: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x78);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itSamusGrappleAttributes<'a> = Handle::cast::<itSamusGrappleAttributes<'a>>(
@@ -1141,7 +1119,6 @@ pub fn it_802B900C<'a>(
     dist: f64,
 ) {
     let __frame = ctx.stack_frame(0x60);
-    let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let dir: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut link = link;
     let mut pos = pos;
@@ -1195,7 +1172,6 @@ pub fn it_802B91C4<'a>(
     dist: f64,
 ) {
     let __frame = ctx.stack_frame(0x48);
-    let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let dir: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut link = link;
     let mut pos = pos;
@@ -1250,24 +1226,15 @@ pub fn it_802B9328<'a>(
     fp: Fighter<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x190);
-    let _padA: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let dir: Vec<'a> = frame_at(ctx, &__frame, 0x12c);
     let d2: Vec<'a> = frame_at(ctx, &__frame, 0x120);
-    let _padB: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
     let attach_pos_1: Vec<'a> = frame_at(ctx, &__frame, 0x110);
-    let _padC: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x14);
     let attach_pos_2: Vec<'a> = frame_at(ctx, &__frame, 0xfc);
-    let _padD: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
     let attach_pos_3: Vec<'a> = frame_at(ctx, &__frame, 0xe8);
-    let _padE: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x24);
     let hitbox_data: itSamusGrapple_HitboxData<'a> = frame_at(ctx, &__frame, 0xcc);
-    let _padF: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x28);
     let m1: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x98);
-    let _padG: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x2c);
     let m2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x64);
-    let _padH: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x60);
     let m3: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x30);
-    let _padI: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x138);
     let mut link = link;
     let mut pos = pos;
     let mut attrs = attrs;
@@ -1403,10 +1370,8 @@ pub fn it_802B99A0<'a>(
     fp: Fighter<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x88);
-    let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let dir: Vec<'a> = frame_at(ctx, &__frame, 0x30);
     let hitbox_data: itSamusGrapple_HitboxData<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut link = link;
     let mut pos = pos;
     let mut attrs = attrs;
@@ -1526,10 +1491,8 @@ pub fn it_802B9CE8<'a>(
     fp: Fighter<'a>,
 ) {
     let __frame = ctx.stack_frame(0x88);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let dir: Vec<'a> = frame_at(ctx, &__frame, 0x30);
     let hitbox_data: itSamusGrapple_HitboxData<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let mut link = link;
     let mut pos = pos;
     let mut attrs = attrs;
@@ -2126,7 +2089,6 @@ pub fn it_802BA2D8<'a>(
     let next: Ptr<'a, ItemLink<'a>> = frame_at(ctx, &__frame, 0x0);
     let cur: Ptr<'a, ItemLink<'a>> = frame_at(ctx, &__frame, 0x4);
     let remaining: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
-    let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x20);
     let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut link = link;
     let mut pos = pos;
@@ -2831,7 +2793,6 @@ pub fn it_802BA5DC<'a>(
 ) {
     let __frame = ctx.stack_frame(0x58);
     let saved_pos: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let _padA: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let dir: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut tail = tail;
     let mut head = head;
@@ -2927,7 +2888,6 @@ pub fn it_802BA760<'a>(
     fp: Fighter<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let _padA: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let dir: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut link = link;
     let mut pos = pos;
@@ -2997,7 +2957,6 @@ pub fn it_802BA760<'a>(
 
 pub fn itSamusGrapple_Logic53_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -3011,7 +2970,6 @@ pub fn itSamusGrapple_Logic53_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802BA9B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -3027,7 +2985,6 @@ pub fn it_802BA9B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802BAA08<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -3043,7 +3000,6 @@ pub fn it_802BAA08<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802BAA58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -3058,7 +3014,6 @@ pub fn it_802BAA58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802BAA94<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -3085,7 +3040,6 @@ pub fn it_802BAAE4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vel: Vec<'a>) {
 
 pub fn it_802BAB40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -3099,7 +3053,6 @@ pub fn it_802BAB40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802BAB7C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -3113,7 +3066,6 @@ pub fn it_802BAB7C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802BABB8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>(((ip).owner()).user_data());
@@ -3167,7 +3119,6 @@ pub fn it_802BAC80<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn it_802BACC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb0);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x84);
-    let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x4c);
     let m2: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;

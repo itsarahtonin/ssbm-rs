@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn ftCo_8009CA0C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vic_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut vic_gobj = vic_gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());

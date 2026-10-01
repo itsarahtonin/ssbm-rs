@@ -596,7 +596,6 @@ pub fn WaitAMinute<'a>(ctx: &'a Ctx, timeout: i32, flag: Val<'a, i32>, value: i3
 pub fn MailboxCheck<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x38);
     let mailbox: Val<'a, u32> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, i32, 3> = frame_at(ctx, &__frame, 0x0);
     let mut isNotify: i32 = 0;
     let mut chID: u8 = 0;
     let mut value: u32 = 0;
@@ -753,7 +752,6 @@ pub fn MCCRxCallback<'a>(ctx: &'a Ctx) {
 
 pub fn mccInitializeCheck<'a>(ctx: &'a Ctx, timeout: u8) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, i32, 3> = frame_at(ctx, &__frame, 0x0);
     let mut timeout = timeout;
     let mut dmyFlag: i32 = 0;
     let mut i: i32 = 0;
@@ -829,7 +827,6 @@ pub fn MCCInit<'a>(ctx: &'a Ctx, exiChannel: i32, timeout: u8, callbackSysEvent:
     let dmyFlag: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
     let mailbox: Val<'a, u32> = frame_at(ctx, &__frame, 0x30);
     let status: Val<'a, u32> = frame_at(ctx, &__frame, 0x2c);
-    let unused: ArrV<'a, i32, 3> = frame_at(ctx, &__frame, 0x4);
     let mut exiChannel = exiChannel;
     let mut timeout = timeout;
     let mut callbackSysEvent = callbackSysEvent;
@@ -923,7 +920,6 @@ pub fn MCCEnumDevices<'a>(ctx: &'a Ctx, callbackEnumDevices: FnPtr<'a>) -> i32 {
 
 pub fn MCCGetFreeBlocks<'a>(ctx: &'a Ctx, mode: i32) -> u8 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, i32, 3> = frame_at(ctx, &__frame, 0x0);
     let mut mode = mode;
     inl_mccDebugPrint_unfused(ctx, null(ctx));
     if statics::dolphin__mcc__mcc::gMccInitialized(ctx).get() == 0_i32 {
@@ -959,7 +955,6 @@ pub fn MCCGetLastError<'a>(ctx: &'a Ctx) -> u8 {
 
 pub fn MCCGetChannelInfo<'a>(ctx: &'a Ctx, chID: i32, info: MCC_Info<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, i32, 3> = frame_at(ctx, &__frame, 0x0);
     let mut chID = chID;
     let mut info = info;
     inl_mccDebugPrint_unfused(ctx, null(ctx));
@@ -999,7 +994,6 @@ pub fn MCCGetChannelInfo<'a>(ctx: &'a Ctx, chID: i32, info: MCC_Info<'a>) -> i32
 pub fn MCCGetConnectionStatus<'a>(ctx: &'a Ctx, chID: i32, connect: Val<'a, i32>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
     let info: MCC_Info<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, i32, 2> = frame_at(ctx, &__frame, 0x0);
     let mut chID = chID;
     let mut connect = connect;
     inl_mccDebugPrint_unfused(ctx, null(ctx));
@@ -1031,7 +1025,6 @@ pub fn MCCGetConnectionStatus<'a>(ctx: &'a Ctx, chID: i32, connect: Val<'a, i32>
 pub fn MCCNotify<'a>(ctx: &'a Ctx, chID: i32, notify: u32) -> i32 {
     let __frame = ctx.stack_frame(0x28);
     let connect: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, i32, 3> = frame_at(ctx, &__frame, 0x0);
     let mut chID = chID;
     let mut notify = notify;
     inl_mccDebugPrint_unfused(ctx, null(ctx));
@@ -1062,7 +1055,6 @@ pub fn MCCNotify<'a>(ctx: &'a Ctx, chID: i32, notify: u32) -> i32 {
 
 pub fn MCCSetChannelEventMask<'a>(ctx: &'a Ctx, chID: i32, event: u32) -> u32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, i32, 2> = frame_at(ctx, &__frame, 0x0);
     let mut chID = chID;
     let mut event = event;
     let mut oldMask: u32 = 0;
@@ -1095,8 +1087,6 @@ pub fn MCCSetChannelEventMask<'a>(ctx: &'a Ctx, chID: i32, event: u32) -> u32 {
 pub fn MCCOpen<'a>(ctx: &'a Ctx, chID: i32, blockSize: u8, callbackEvent: FnPtr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x58);
     let blockIndex: Val<'a, u8> = frame_at(ctx, &__frame, 0x2c);
-    let unused2: ArrV<'a, i32, 2> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, i32, 6> = frame_at(ctx, &__frame, 0x8);
     let mut chID = chID;
     let mut blockSize = blockSize;
     let mut callbackEvent = callbackEvent;
@@ -1248,7 +1238,6 @@ pub fn MCCOpen<'a>(ctx: &'a Ctx, chID: i32, blockSize: u8, callbackEvent: FnPtr<
 
 pub fn MCCClose<'a>(ctx: &'a Ctx, chID: i32) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x0);
     let mut chID = chID;
     let mut connectSide: u8 = 0;
     'goto_exit: {
@@ -1352,8 +1341,6 @@ pub fn MCCRead<'a>(
     r#async: i32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x70);
-    let unused: ArrV<'a, i32, 11> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x30);
     let mut chID = chID;
     let mut offset = offset;
     let mut data = data;
@@ -1480,7 +1467,7 @@ pub fn MCCRead<'a>(
             & (16_i32 as u32))
             != 0)
         {
-            let _ = inl_NotifyChannelEvent_unfused(ctx, chID, (16_i32 as u32), Handle::addr(__inl));
+            let _ = inl_NotifyChannelEvent_unfused(ctx, chID, (16_i32 as u32));
         }
         if (((!(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
             .get(chID)
@@ -1513,8 +1500,6 @@ pub fn MCCWrite<'a>(
     r#async: i32,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x70);
-    let unused: ArrV<'a, i32, 11> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x30);
     let mut chID = chID;
     let mut offset = offset;
     let mut data = data;
@@ -1651,7 +1636,7 @@ pub fn MCCWrite<'a>(
             & (32_i32 as u32))
             != 0)
         {
-            let _ = inl_NotifyChannelEvent_unfused(ctx, chID, (32_i32 as u32), Handle::addr(__inl));
+            let _ = inl_NotifyChannelEvent_unfused(ctx, chID, (32_i32 as u32));
         }
         if (((!(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
             .get(chID)
@@ -1679,9 +1664,6 @@ pub fn MCCWrite<'a>(
 
 pub fn MCCCheckAsyncDone<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, i32, 5> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
-    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x20);
     let mut stat: u16 = 0;
     let mut mode: u16 = 0;
     let mut chID: u8 = 0;
@@ -1703,12 +1685,7 @@ pub fn MCCCheckAsyncDone<'a>(ctx: &'a Ctx) -> i32 {
                 & (16_i32 as u32))
                 != 0)
             {
-                let _ = inl_NotifyChannelEvent_unfused(
-                    ctx,
-                    (chID as i32),
-                    (16_i32 as u32),
-                    Handle::addr(__inl),
-                );
+                let _ = inl_NotifyChannelEvent_unfused(ctx, (chID as i32), (16_i32 as u32));
             }
             if (((!(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
                 .get((chID as i32))
@@ -1733,12 +1710,7 @@ pub fn MCCCheckAsyncDone<'a>(ctx: &'a Ctx) -> i32 {
                 & (32_i32 as u32))
                 != 0)
             {
-                let _ = inl_NotifyChannelEvent_unfused(
-                    ctx,
-                    (chID as i32),
-                    (32_i32 as u32),
-                    Handle::addr(__inl_2),
-                );
+                let _ = inl_NotifyChannelEvent_unfused(ctx, (chID as i32), (32_i32 as u32));
             }
             if (((!(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
                 .get((chID as i32))
@@ -2037,13 +2009,7 @@ fn inl_AsyncResourceStateBusy_unfused<'a>(ctx: &'a Ctx, channel: u8, mode: u16) 
     );
 }
 
-fn inl_NotifyChannelEvent_unfused<'a>(
-    ctx: &'a Ctx,
-    chID: i32,
-    notify: u32,
-    __in_caller: u32,
-) -> i32 {
-    let unused: ArrV<'a, i32, 2> = ptr(ctx, __in_caller + 0x0);
+fn inl_NotifyChannelEvent_unfused<'a>(ctx: &'a Ctx, chID: i32, notify: u32) -> i32 {
     let mut chID = chID;
     let mut notify = notify;
     if statics::dolphin__mcc__mcc::LoadChannelInfo(

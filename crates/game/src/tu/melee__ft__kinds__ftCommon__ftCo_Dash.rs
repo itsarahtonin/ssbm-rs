@@ -50,7 +50,6 @@ pub fn ftCo_Dash_CheckInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn ftCo_Dash_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> =
@@ -520,9 +519,8 @@ pub fn ftCo_Dash_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_Dash_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 1> = frame_at(ctx, &__frame, 0x0);
-    let accel: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
-    let target_vel: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
+    let accel: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
+    let target_vel: Val<'a, F32> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

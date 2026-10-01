@@ -188,7 +188,6 @@ pub fn fn_8001EB14<'a>(ctx: &'a Ctx, data: THPDecComp<'a>, path: Val<'a, i8>) ->
 
 pub fn fn_8001EBF0<'a>(ctx: &'a Ctx, data: THPDecComp<'a>) -> u32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut data = data;
     let mut size: i32 = 0_i32;
     let mut unk_104_val: u32 = 0;
@@ -697,7 +696,6 @@ pub fn lbMthp_8001F410<'a>(
 
 pub fn lbMthp_8001F578<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut intr: i32 = 0;
     'l1: loop {
         'c2: {}
@@ -769,7 +767,6 @@ pub fn lbMthp_8001F624<'a>(
 
 pub fn lbMthp_8001F67C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut streamPlayer: THPDecComp<'a> = statics::melee__lb__lbmthp::MoviePlayer(ctx);

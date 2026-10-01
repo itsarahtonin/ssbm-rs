@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn gm_801B1B74<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut vs_data: VsModeData<'a> = null(ctx);
     let mut css: CSSData<'a> = null(ctx);
@@ -81,7 +80,6 @@ pub fn gm_801B1B74<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
 
 pub fn gm_801B1C24<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut vs: VsModeData<'a> = (fns::gmMainLib_804D3EE0(ctx).get())
         .modes()

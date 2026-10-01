@@ -73,7 +73,6 @@ pub fn lb_80019230<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn lb_800192A8<'a>(ctx: &'a Ctx, cb: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut cb = cb;
     let mut prev_i: i32 = 1_i32.wrapping_neg();
     let mut i: i32 = statics::melee__lb__lb_0192::lb_80019230(ctx);

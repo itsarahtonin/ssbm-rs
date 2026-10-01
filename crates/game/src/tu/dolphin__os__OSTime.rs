@@ -41,7 +41,6 @@ pub fn __OSGetSystemTime<'a>(ctx: &'a Ctx) -> i64 {
 
 pub fn __OSTimeToSystemTime<'a>(ctx: &'a Ctx, time: i64) -> i64 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut time = time;
     let mut enabled: i32 = 0;
     let mut timeAdjustAddr: Val<'a, i64> = null(ctx);

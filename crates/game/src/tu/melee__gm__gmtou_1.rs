@@ -1239,7 +1239,6 @@ pub fn fn_801975C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_801976D4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut counter: Val<'a, u8> = null(ctx);
@@ -1447,7 +1446,6 @@ pub fn fn_80197AF0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_80197D4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut counter: Val<'a, u8> = null(ctx);
@@ -1769,7 +1767,6 @@ pub fn fn_80198BA0<'a>(ctx: &'a Ctx) {
 
 pub fn fn_80198C60<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut td: TmData<'a> = null(ctx);
     let mut text: HSD_Text<'a> = null(ctx);
     'l1: loop {
@@ -1808,9 +1805,7 @@ pub fn fn_80198C60<'a>(ctx: &'a Ctx) {
 }
 
 pub fn fn_80198D18<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x18);
+    let __frame = ctx.stack_frame(0x28);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     'l1: loop {
         'c2: {}
@@ -1862,7 +1857,7 @@ pub fn fn_80198D18<'a>(ctx: &'a Ctx) {
         fnptr(ctx, 0x80196e30),
         80.0,
     );
-    inl_fn_80198C60_unfused(ctx, Handle::addr(__inl));
+    inl_fn_80198C60_unfused(ctx);
     gobj = fns::GObj_Create(ctx, (14_i32 as u16), (26_i32 as u8), (0_i32 as u8));
     {
         let __t1 = Handle::cast::<Addr<'a>>(
@@ -1891,7 +1886,6 @@ pub fn fn_80198D18<'a>(ctx: &'a Ctx) {
 
 pub fn fn_80198EBC<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x108);
-    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut td: TmData<'a> = null(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -1902,7 +1896,7 @@ pub fn fn_80198EBC<'a>(ctx: &'a Ctx) {
     let mut jobj2: HSD_JObj<'a> = null(ctx);
     let mut j16: HSD_JObj<'a> = null(ctx);
     td = fns::gm_GetTournamentData(ctx);
-    inl_fn_80198D18(ctx, Handle::addr(__inl));
+    inl_fn_80198D18(ctx);
     {
         i = 0_i32;
         'l1: while i < ((td).x30() as i32) {
@@ -2281,11 +2275,8 @@ pub fn fn_80198EBC<'a>(ctx: &'a Ctx) {
 
 pub fn fn_80199AF0<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let local1: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
     let local2: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
-    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x10);
     let mut td1: TmData<'a> = null(ctx);
     let mut td2: TmData<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -2339,7 +2330,7 @@ pub fn fn_80199AF0<'a>(ctx: &'a Ctx) {
         }
     }
     bracket_idx = fns::fn_8018F74C(ctx);
-    inl_fn_80198D18_unfused(ctx, Handle::addr(__inl));
+    inl_fn_80198D18_unfused(ctx);
     if ((td1).x33() as i32) == 5_i32 {
         mode = 2_i32;
     }
@@ -2446,7 +2437,6 @@ pub fn fn_8019A158<'a>(ctx: &'a Ctx) {
     let state: fn_8019A158_state<'a> = frame_at(ctx, &__frame, 0x0);
     let local1: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
     let local2: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut base_ptr: Lbl804799D8Text<'a> = null(ctx);
     let mut x48_ptr: Ptr<'a, MatchEnd<'a>> = null(ctx);
     let mut td1: TmData<'a> = null(ctx);
@@ -2818,7 +2808,6 @@ pub fn gm_8019A828<'a>(ctx: &'a Ctx) {
 
 pub fn fn_8019A86C<'a>(ctx: &'a Ctx, tm: TmData<'a>, arg1: u32, arg2: u32) {
     let __frame = ctx.stack_frame(0x60);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut tm = tm;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -3453,7 +3442,6 @@ pub fn fn_8019AF50<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>, arg1: u32, arg2: u32) {
 pub fn gm_Scene_TouBracket_OnFrame<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x50);
     let sp: ArrV<'a, i32, 13> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg1: u32 = 0;
     let mut data: TmData<'a> = null(ctx);
     let mut arg2: u32 = 0;
@@ -3528,7 +3516,6 @@ pub fn gm_Scene_TouBracket_OnFrame<'a>(ctx: &'a Ctx) {
 pub fn fn_8019B458<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>) {
     let __frame = ctx.stack_frame(0x58);
     let req: Preload<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut tm: TmData<'a> = Handle::cast::<TmData<'a>>(arg0);
     let mut d8: Lbl804799D8_t<'a> = statics::melee__gm__gmtou_1::lbl_804799D8(ctx);
@@ -4073,8 +4060,7 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     }
 }
 
-fn inl_fn_80198C60_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) {
-    let unused: ArrV<'a, u8, 24> = ptr(ctx, __in_caller + 0x0);
+fn inl_fn_80198C60_unfused<'a>(ctx: &'a Ctx) {
     let mut td: TmData<'a> = null(ctx);
     let mut text: HSD_Text<'a> = null(ctx);
     'l1: loop {
@@ -4112,8 +4098,7 @@ fn inl_fn_80198C60_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) {
     fns::HSD_SisLib_803A7548(ctx, (td).x524().at(3_i32).get(), 0_i32, 1.5, 1.5);
 }
 
-fn inl_fn_80198D18<'a>(ctx: &'a Ctx, __in_caller: u32) {
-    let unused: ArrV<'a, u8, 24> = ptr(ctx, __in_caller + 0x0);
+fn inl_fn_80198D18<'a>(ctx: &'a Ctx) {
     let mut gobj: HSD_GObj<'a> = null(ctx);
     'l1: loop {
         'c2: {}
@@ -4252,8 +4237,7 @@ fn inl_HSD_JObjGetTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     return (jobj).translate().y();
 }
 
-fn inl_fn_80198D18_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) {
-    let unused: ArrV<'a, u8, 24> = ptr(ctx, __in_caller + 0x0);
+fn inl_fn_80198D18_unfused<'a>(ctx: &'a Ctx) {
     let mut gobj: HSD_GObj<'a> = null(ctx);
     'l1: loop {
         'c2: {}

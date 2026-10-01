@@ -161,7 +161,6 @@ pub fn itLGunRay_Logic35_Reflected<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
 
 pub fn itLGunRay_Logic35_ShieldBounced<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}

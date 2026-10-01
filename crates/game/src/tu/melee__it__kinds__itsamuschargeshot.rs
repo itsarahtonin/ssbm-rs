@@ -104,7 +104,6 @@ pub fn it_802B56E4<'a>(
     farg2: f64,
 ) {
     let __frame = ctx.stack_frame(0x78);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
@@ -311,7 +310,6 @@ pub fn it_2725_Logic108_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itSamuschargeshot_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut attr: itSamusChargeShot_Attributes<'a> = Handle::cast::<itSamusChargeShot_Attributes<'a>>(
@@ -414,7 +412,6 @@ pub fn itSamuschargeshot_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -
 
 pub fn it_802B5CBC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut unused = unused;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -452,7 +449,6 @@ pub fn it_802B5CBC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: HSD_GObj<'a>) {
 
 pub fn itSamuschargeshot_UnkMotion8_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());

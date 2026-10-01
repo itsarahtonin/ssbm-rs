@@ -336,7 +336,6 @@ pub fn fn_8001A0B0<'a>(ctx: &'a Ctx, file_idx: i32, hsd_error: i32) {
 
 pub fn taskMount<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut pending_ops: i32 = 0;
     let mut saved_error: i32 = 0;
     let mut probe_result: i32 = 0;
@@ -410,7 +409,6 @@ pub fn taskMount<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn taskCheck<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut pending_ops: i32 = 0;
     let mut saved_error: i32 = 0;
     let mut enabled: i32 = 0;
@@ -474,7 +472,6 @@ pub fn setTaskFilename<'a>(ctx: &'a Ctx, filename: Val<'a, i8>, file_entries: Ad
 
 pub fn taskOpen<'a>(ctx: &'a Ctx, filename: Val<'a, i8>, entries: LbCardEntry<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x60);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut filename = filename;
     let mut entries = entries;
     let mut open_result: i32 = 0;
@@ -643,7 +640,6 @@ pub fn taskFormat<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn taskDelete<'a>(ctx: &'a Ctx, filename: Val<'a, i8>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut filename = filename;
     let mut unused: i32 = 0;
     let mut pending_ops: i32 = 0;
@@ -679,7 +675,6 @@ pub fn taskDelete<'a>(ctx: &'a Ctx, filename: Val<'a, i8>) -> i32 {
 
 pub fn taskRename<'a>(ctx: &'a Ctx, old_name: Val<'a, i8>, new_name: Val<'a, i8>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut old_name = old_name;
     let mut new_name = new_name;
     let mut unused: i32 = 0;
@@ -717,7 +712,6 @@ pub fn taskRename<'a>(ctx: &'a Ctx, old_name: Val<'a, i8>, new_name: Val<'a, i8>
 
 pub fn taskCreate<'a>(ctx: &'a Ctx, filename: Val<'a, i8>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut filename = filename;
     let mut hsd_result: i32 = 0;
     'l1: loop {
@@ -752,7 +746,6 @@ pub fn taskCreate<'a>(ctx: &'a Ctx, filename: Val<'a, i8>) -> i32 {
 
 pub fn taskRead<'a>(ctx: &'a Ctx, entries: LbCardEntry<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut entries = entries;
     let mut file_error: i32 = 0;
     let mut hsd_result: i32 = 0;
@@ -831,7 +824,6 @@ pub fn taskRead<'a>(ctx: &'a Ctx, entries: LbCardEntry<'a>) -> i32 {
 
 pub fn taskWrite<'a>(ctx: &'a Ctx, entries: LbCardEntry<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut entries = entries;
     let mut file_error: i32 = 0;
     let mut hsd_result: i32 = 0;
@@ -1175,7 +1167,6 @@ pub fn lb_8001B7E0<'a>(
     status_out: Val<'a, i32>,
 ) -> u32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut chan = chan;
     let mut filename = filename;
     let mut file_entries = file_entries;
@@ -1227,7 +1218,6 @@ pub fn lb_8001B7E0<'a>(
 
 pub fn lb_8001B8C8<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut chan = chan;
     let mut unused_1: i32 = 0;
     let mut unused_2: i32 = 0;
@@ -1321,7 +1311,6 @@ pub fn lb_8001BA44<'a>(
     status_out: Addr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut chan = chan;
     let mut filename = filename;
     let mut status_out = status_out;
@@ -1430,7 +1419,6 @@ pub fn lb_8001BC18<'a>(
     status_out: Val<'a, i32>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x60);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut chan = chan;
     let mut filename = filename;
     let mut file_entries = file_entries;
@@ -1492,7 +1480,6 @@ pub fn lb_8001BD34<'a>(
     status_out: Addr<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut chan = chan;
     let mut filename = filename;
     let mut file_entries = file_entries;
@@ -1633,7 +1620,6 @@ pub fn lb_8001BFD8<'a>(
     free_files: Val<'a, i32>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut chan = chan;
     let mut snapshot_entries = snapshot_entries;
     let mut free_blocks = free_blocks;

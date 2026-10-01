@@ -35,7 +35,6 @@ pub fn mpColl_80041C78<'a>(ctx: &'a Ctx) {
 
 pub fn mpCollPrev<'a>(ctx: &'a Ctx, cd: CollData<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut cd = cd;
     statics::melee__mp__mpcoll::mpColl_804D64A0(ctx).set(null::<FnPtr<'a>>(ctx));
     statics::melee__mp__mpcoll::mpColl_804D64A4(ctx).set(null::<HSD_GObj<'a>>(ctx));
@@ -899,8 +898,7 @@ pub fn mpColl_80043268<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32, arg2:
 
 pub fn mpCollEnd<'a>(ctx: &'a Ctx, coll: CollData<'a>, arg1: i32, arg2: i32) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut coll = coll;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1094,7 +1092,6 @@ pub fn mpColl_800436E4<'a>(ctx: &'a Ctx, coll: CollData<'a>, arg1: f64) {
 pub fn mpColl_80043754<'a>(ctx: &'a Ctx, cb: FnPtr<'a>, coll: CollData<'a>, flags: u32) -> i32 {
     let __frame = ctx.stack_frame(0x88);
     let vel: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut cb = cb;
     let mut coll = coll;
     let mut flags = flags;
@@ -1582,7 +1579,6 @@ pub fn mpColl_80043F40<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32, ignor
 
 pub fn mpColl_80044164<'a>(ctx: &'a Ctx, cd: CollData<'a>, p_ledge_id: Val<'a, i32>) -> i32 {
     let __frame = ctx.stack_frame(0x60);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let edge: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
     let mut cd = cd;
@@ -1696,7 +1692,6 @@ pub fn mpColl_80044164<'a>(ctx: &'a Ctx, cd: CollData<'a>, p_ledge_id: Val<'a, i
 
 pub fn mpColl_800443C4<'a>(ctx: &'a Ctx, cd: CollData<'a>, p_ledge_id: Val<'a, i32>) -> i32 {
     let __frame = ctx.stack_frame(0x60);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let edge: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
     let mut cd = cd;
@@ -2216,7 +2211,6 @@ pub fn mpColl_80044C74_Ceiling<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 pub fn mpColl_80044E10_RightWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x70);
     let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut coll = coll;
     let mut left_x: f64 = 0.0;
     let mut left_y: f64 = 0.0;
@@ -2368,7 +2362,6 @@ pub fn mpColl_800454A4_RightWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x60);
     let top_2: Vec<'a> = frame_at(ctx, &__frame, 0x54);
     let nrm: Vec<'a> = frame_at(ctx, &__frame, 0x48);
-    let unused: ArrV<'a, u8, 68> = frame_at(ctx, &__frame, 0x0);
     let mut coll = coll;
     let mut line_id: i32 = 0;
     let mut i: i32 = 0;
@@ -2662,7 +2655,6 @@ pub fn mpColl_800454A4_RightWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 pub fn mpColl_80045B74_LeftWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x60);
     let line_id: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut coll = coll;
     let mut right_x: f64 = 0.0;
     let mut right_y: f64 = 0.0;
@@ -2819,7 +2811,6 @@ pub fn mpColl_80046224_LeftWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x60);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x54);
     let nrm: Vec<'a> = frame_at(ctx, &__frame, 0x48);
-    let unused: ArrV<'a, u8, 68> = frame_at(ctx, &__frame, 0x0);
     let mut coll = coll;
     let mut line_id: i32 = 0;
     let mut arr: Val<'a, i32> = statics::melee__mp__mpcoll::mpColl_80458810(ctx)
@@ -3118,11 +3109,10 @@ pub fn mpColl_80046224_LeftWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 
 pub fn mpColl_80046904<'a>(ctx: &'a Ctx, coll: CollData<'a>, flags: u32) -> i32 {
     let __frame = ctx.stack_frame(0x78);
-    let _wpad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let wid_floorA: Val<'a, i32> = frame_at(ctx, &__frame, 0x1c);
     let wid_floorB: Val<'a, i32> = frame_at(ctx, &__frame, 0x18);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
-    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut coll = coll;
     let mut flags = flags;
     let mut prev_b6: i32 = 0;
@@ -4319,10 +4309,8 @@ pub fn mpColl_80048844<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 pub fn mpColl_800488F4<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
     let bottom: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
     let edge: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
     let mut coll = coll;
     let mut floor_id: i32 = 0;
     let mut line_id: i32 = 0;
@@ -4559,7 +4547,6 @@ pub fn mpColl_800491C8_RightWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
     let normal: Vec<'a> = frame_at(ctx, &__frame, 0x40);
     let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x3c);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
     let mut coll = coll;
     let mut line_id: i32 = 0;
     let mut i: i32 = 0;
@@ -4982,7 +4969,6 @@ pub fn mpColl_80049EAC_LeftWall<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
     let normal: Vec<'a> = frame_at(ctx, &__frame, 0x40);
     let x: Val<'a, F32> = frame_at(ctx, &__frame, 0x3c);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
     let mut coll = coll;
     let mut line_id: i32 = 0;
     let mut arr: Val<'a, i32> = statics::melee__mp__mpcoll::mpColl_80458810(ctx)
@@ -5846,10 +5832,8 @@ pub fn mpColl_8004B5C4<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
 pub fn mpColl_8004B6D8<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
     let top: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let y: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
     let ceiling_end: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1c);
     let mut coll = coll;
     let mut ceiling_id: i32 = 0;
     let mut new_ceiling: i32 = 0;

@@ -169,7 +169,6 @@ pub fn fn_80208A38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let flags: ArrV<'a, u8, 6> = frame_at(ctx, &__frame, 0x28);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut flag: Val<'a, u8> = flags.at(0);
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
@@ -253,7 +252,6 @@ pub fn fn_80208A38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn grShrineRoute_80208D14<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
     let center: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
     let mut i: i32 = 0;
@@ -410,7 +408,6 @@ pub fn grShrineRoute_80208F70<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let sp5C: Vec<'a> = frame_at(ctx, &__frame, 0x54);
     let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x48);
     let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut unused1: f64 = 0.0;
     let mut unused2: f64 = 0.0;
@@ -1662,7 +1659,6 @@ pub fn grShrineRoute_8020AA40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn grShrineRoute_8020AB58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<'a> {
     let __frame = ctx.stack_frame(0x28);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut new_lobj: HSD_LObj<'a> = null(ctx);
     let mut lobj: HSD_LObj<'a> = null(ctx);
@@ -1713,7 +1709,6 @@ pub fn grShrineRoute_8020AB58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<
 pub fn grShrineRoute_8020AC44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<'a> {
     let __frame = ctx.stack_frame(0x28);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut new_lobj: HSD_LObj<'a> = null(ctx);
     let mut lobj: HSD_LObj<'a> = null(ctx);
@@ -1778,7 +1773,6 @@ pub fn onJointCollision<'a>(
     delta_y: f64,
 ) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut user_data = user_data;
     let mut joint_id = joint_id;
     let mut coll = coll;
@@ -1860,7 +1854,6 @@ pub fn grShrineRoute_8020AE08<'a>(
 pub fn grShrineRoute_8020AF38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x38);
     let scale: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut ix: i32 = arg1.wrapping_sub(189_i32);

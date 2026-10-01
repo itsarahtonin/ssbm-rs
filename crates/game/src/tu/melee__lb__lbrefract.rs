@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn lbRefract_80021CE8<'a>(ctx: &'a Ctx, cb: lbRefract_CallbackData<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0xc0);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut cb = cb;
     let mut arg1 = arg1;
     let mut param_idx: i32 = arg1.wrapping_mul(2_i32);
@@ -473,7 +472,6 @@ pub fn lbRefract_8002219C<'a>(
 pub fn lbRefract_800222A4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x58);
     let cb: lbRefract_CallbackData<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut image_width: i32 = 0x140_i32;
     let mut image_height: i32 = 240_i32;
     let mut data: lbRefract_DataLayout<'a> =

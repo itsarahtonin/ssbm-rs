@@ -138,7 +138,6 @@ pub fn fn_8017F294<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn fn_8017F2A4<'a>(ctx: &'a Ctx, arg0: Ptr<'a, HSD_Text<'a>>, farg0: f64, farg1: f64) -> i32 {
     let __frame = ctx.stack_frame(0x88);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut farg0 = farg0;
     let mut farg1 = farg1;
@@ -222,7 +221,6 @@ pub fn fn_8017F2A4<'a>(ctx: &'a Ctx, arg0: Ptr<'a, HSD_Text<'a>>, farg0: f64, fa
 
 pub fn fn_8017F47C<'a>(ctx: &'a Ctx, arg0: Ptr<'a, HSD_Text<'a>>, arg1: i32) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut mask: u8 = 0;
@@ -342,7 +340,6 @@ pub fn fn_8017F608<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x60);
     let sp4C: Vec<'a> = frame_at(ctx, &__frame, 0x44);
     let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x38);
-    let unused: ArrV<'a, u8, 36> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut p: lbl_80472D28_t<'a> = Handle::cast::<lbl_80472D28_t<'a>>(arg0);
     let mut text: HSD_Text<'a> = null(ctx);
@@ -544,7 +541,6 @@ pub fn fn_8017F608<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
 pub fn fn_8017FA1C<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
     let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut p: lbl_80472D28_t<'a> = Handle::cast::<lbl_80472D28_t<'a>>(arg0);
     let mut step: i32 = 0;
@@ -629,7 +625,6 @@ pub fn fn_8017FA1C<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> i32 {
 pub fn fn_8017FBA4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x48);
     let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut p: lbl_80472D28_t<'a> = Handle::cast::<lbl_80472D28_t<'a>>(arg0);
     let mut tmp: i32 = 0;
@@ -797,7 +792,6 @@ pub fn fn_8017FF1C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let data: fn_8017FF1C_data<'a> = frame_at(ctx, &__frame, 0x0);
     let sp28: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut result: i32 = 0;
@@ -1050,7 +1044,6 @@ pub fn fn_8017FF1C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn fn_801803FC<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
     let sp10: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut p: lbl_80472D28_t<'a> = Handle::cast::<lbl_80472D28_t<'a>>(arg0);
     let mut state: lbl_80472D28_t<'a> = statics::melee__gm__gmregclear::lbl_80472D28(ctx);
@@ -1180,9 +1173,7 @@ pub fn fn_80180630<'a>(
     let coin_count: Val<'a, i32> = frame_at(ctx, &__frame, 0x50);
     let cam_gobj: Ptr<'a, HSD_GObj<'a>> = frame_at(ctx, &__frame, 0x0);
     let data: fn_80180630_data<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x8);
     let scene_data: Ptr<'a, SceneDesc<'a>> = frame_at(ctx, &__frame, 0x30);
-    let unused_2: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x34);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

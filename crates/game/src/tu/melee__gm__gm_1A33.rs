@@ -175,7 +175,6 @@ pub fn gm_Scene_CameraVs_OnFrame<'a>(ctx: &'a Ctx) {
 
 pub fn gm_Scene_CameraVs_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut state: Val<'a, u32> = Handle::cast::<Val<'a, u32>>(arg0);
     'l1: loop {

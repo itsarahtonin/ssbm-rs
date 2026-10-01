@@ -299,7 +299,6 @@ pub fn lbColl_80006094<'a>(
     let __frame = ctx.stack_frame(0x188);
     let arg4_offset: Vec<'a> = frame_at(ctx, &__frame, 0xe8);
     let arg5_offset: Vec<'a> = frame_at(ctx, &__frame, 0xdc);
-    let unused: ArrV<'a, u8, 60> = frame_at(ctx, &__frame, 0xa0);
     let candidate0_arg5_scl: Val<'a, F32> = frame_at(ctx, &__frame, 0x9c);
     let candidate1_arg4_scl: Val<'a, F32> = frame_at(ctx, &__frame, 0x98);
     let a2: Vec<'a> = frame_at(ctx, &__frame, 0x80);
@@ -733,7 +732,6 @@ pub fn lbColl_800067F8<'a>(
     let c1: Vec<'a> = frame_at(ctx, &__frame, 0xdc);
     let diff_ba: Vec2<'a> = frame_at(ctx, &__frame, 0x0);
     let diff_dc: Vec2<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0xa0);
     let out0: Val<'a, F32> = frame_at(ctx, &__frame, 0x9c);
     let out1: Val<'a, F32> = frame_at(ctx, &__frame, 0x98);
     let a2: Vec<'a> = frame_at(ctx, &__frame, 0x80);
@@ -1090,15 +1088,11 @@ pub fn lbColl_80006E58<'a>(
     let candidate_hurt_param: Val<'a, F32> = frame_at(ctx, &__frame, 0xc8);
     let candidate_hit_param: Val<'a, F32> = frame_at(ctx, &__frame, 0xc4);
     let inv_hurt_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x94);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x30);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x40);
-    let unused_3: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x44);
     let a2: Vec<'a> = frame_at(ctx, &__frame, 0x7c);
-    let d1: Vec<'a> = frame_at(ctx, &__frame, 0x58);
+    let d1: Vec<'a> = frame_at(ctx, &__frame, 0x40);
     let c3: Vec<'a> = frame_at(ctx, &__frame, 0x64);
-    let unused_4: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x48);
     let b0: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
-    let d1_2: Vec<'a> = frame_at(ctx, &__frame, 0x70);
+    let d1_2: Vec<'a> = frame_at(ctx, &__frame, 0x58);
     let c2: Vec<'a> = frame_at(ctx, &__frame, 0x34);
     let mut hit_start = hit_start;
     let mut hit_end = hit_end;
@@ -3010,7 +3004,6 @@ pub fn lbColl_800096B4<'a>(
 pub fn lbColl_80009DD4<'a>(ctx: &'a Ctx, v0: Vec<'a>, v1: Vec<'a>, clr: _GXColor<'a>) {
     let __frame = ctx.stack_frame(0x78);
     let viewMtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x2c);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut v0 = v0;
     let mut v1 = v1;
     let mut clr = clr;
@@ -3383,11 +3376,10 @@ pub fn lbColl_8000A584<'a>(
     arg8: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0xf8);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let spA0: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x98);
     let sp94: Vec<'a> = frame_at(ctx, &__frame, 0x8c);
     let sp88: Vec<'a> = frame_at(ctx, &__frame, 0x80);
-    let __inl: ArrV<'a, u8, 96> = frame_at(ctx, &__frame, 0x8);
+    let __inl: ArrV<'a, u8, 96> = frame_at(ctx, &__frame, 0x0);
     let mut hurt = hurt;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

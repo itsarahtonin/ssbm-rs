@@ -34,7 +34,6 @@ pub fn efAlt_Spawn<'a>(
 ) -> Addr<'a> {
     let __frame = ctx.stack_frame(0x170);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0x128);
-    let unused: ArrV<'a, u8, 80> = frame_at(ctx, &__frame, 0x0);
     let mut gfx_id = gfx_id;
     let mut gobj = gobj;
     let mut vlist_arg = vlist_arg;

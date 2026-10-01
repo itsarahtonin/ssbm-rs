@@ -116,7 +116,6 @@ pub fn it_8027B730<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn it_8027B798<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, out_vel: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let v: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut out_vel = out_vel;
@@ -598,7 +597,6 @@ pub fn it_8027C0CC<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg4: f64, arg5: f
 
 pub fn it_8027C0F0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: Vec<'a>, arg8: f64, arg9: f64) {
     let __frame = ctx.stack_frame(0xc0);
-    let _padA: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let sp74: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
     let sp68: Vec<'a> = frame_at(ctx, &__frame, 0x60);
     let sp5C: Vec<'a> = frame_at(ctx, &__frame, 0x54);
@@ -719,7 +717,6 @@ pub fn it_8027C794<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_8027C79C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> = null(ctx);
     'l1: loop {
@@ -884,7 +881,6 @@ pub fn it_8027CBA4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn it_8027CBFC<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut ret_val: i32 = 0;
     'l1: loop {
@@ -931,10 +927,8 @@ pub fn it_8027CBFC<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> f64 {
 
 pub fn it_8027CC88<'a>(ctx: &'a Ctx, item_gobj_arg: HSD_GObj<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0xb8);
-    let pad: ArrV<'a, u32, 20> = frame_at(ctx, &__frame, 0x48);
     let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
     let sp1C: ArrV<'a, i32, 10> = frame_at(ctx, &__frame, 0x14);
-    let pad2: ArrV<'a, u32, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj_arg = item_gobj_arg;
     let mut temp_r3: i32 = 0;
     let mut temp_r3_2: i32 = 0;
@@ -1008,7 +1002,6 @@ pub fn it_8027CE64<'a>(
 ) {
     let __frame = ctx.stack_frame(0x30);
     let sp18: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
-    let pad: ArrV<'a, u32, 1> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut fighter_gobj = fighter_gobj;
     let mut arg_attr_address = arg_attr_address;

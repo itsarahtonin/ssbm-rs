@@ -2280,10 +2280,8 @@ pub fn it_802A8C7C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itLinkarrow_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x70);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0x44);
-    let pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let scale1: Vec<'a> = frame_at(ctx, &__frame, 0x34);
     let scale2: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     {
@@ -2331,8 +2329,7 @@ pub fn itLinkarrow_UnkMotion1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLinkarrow_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itLinkArrowAttributes<'a> = Handle::cast::<itLinkArrowAttributes<'a>>(
@@ -2398,7 +2395,6 @@ pub fn itLinkarrow_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
 
 pub fn itLinkarrow_UnkMotion2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let pad: ArrV<'a, F32, 1> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut item: Item<'a> = null(ctx);
     item = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -2522,7 +2518,6 @@ pub fn it_802A9458<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLinkarrow_UnkMotion4_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut var_f31: f64 = 0.0;
     let mut zero: i32 = 0;
@@ -2654,9 +2649,7 @@ pub fn itLinkArrow_Logic98_DmgDealt<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32
 
 pub fn itLinkArrow_Logic98_HitShield<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x60);
-    let pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
     'goto_end: {
@@ -2730,7 +2723,6 @@ pub fn itLinkArrow_Logic98_Clanked<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
 
 pub fn itLinkArrow_Logic98_Reflected<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let pad: ArrV<'a, F32, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut item: Item<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);

@@ -101,7 +101,6 @@ pub fn grMuteCity_801EFD0C<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
 pub fn grMuteCity_801EFDF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -438,7 +437,6 @@ pub fn grMuteCity_801F04B4<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn grMuteCity_801F04B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> =
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
@@ -1221,7 +1219,6 @@ pub fn grMuteCity_801F106C<'a>(ctx: &'a Ctx, i: i32) {
 
 pub fn grMuteCity_801F1328<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arr: Val<'a, i32> = statics::melee__gr__grmutecity::grMc_8049F440(ctx).at(0);
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -6983,7 +6980,6 @@ pub fn grMuteCity_801F2BBC<'a>(ctx: &'a Ctx, arg0: i32) -> DynamicsDesc<'a> {
 
 pub fn grMuteCity_801F2C10<'a>(ctx: &'a Ctx, pos: Vec<'a>, arg: i32, jobj: HSD_JObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut pos = pos;
     let mut arg = arg;
     let mut jobj = jobj;

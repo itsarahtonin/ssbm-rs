@@ -29,7 +29,6 @@ use crate::support::*;
 pub fn gm_801AD088<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
     let spC: Ptr<'a, SceneDesc<'a>> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut cobj: HSD_CObj<'a> = null(ctx);
@@ -119,7 +118,6 @@ pub fn gm_801AD088<'a>(ctx: &'a Ctx) {
 
 pub fn gm_801AD254<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut jobj: HSD_JObj<'a> = statics::melee__gm__gmprogressive::gm_80480D70(ctx).x4();
     'l1: loop {
@@ -203,7 +201,6 @@ pub fn gm_801AD254<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn gm_Scene_ProgScan_OnFrame<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {

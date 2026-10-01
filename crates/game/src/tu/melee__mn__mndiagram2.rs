@@ -152,7 +152,6 @@ pub fn mnDiagram2_UpdateHeader<'a>(
 ) {
     let __frame = ctx.stack_frame(0x38);
     let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut is_name_mode = is_name_mode;
     let mut entity_idx = entity_idx;
@@ -248,7 +247,6 @@ pub fn mnDiagram2_UpdateHeader<'a>(
 
 pub fn mnDiagram2_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut data: Diagram2<'a> = null(ctx);
     let mut result: i32 = 0;
@@ -1999,7 +1997,6 @@ pub fn mnDiagram2_UpdateScrollArrows<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnDiagram2_Think<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut data: Diagram2<'a> = null(ctx);
     let mut src: Val<'a, u8> = null(ctx);

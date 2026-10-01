@@ -2177,7 +2177,6 @@ pub fn getCurrentFieldEvenOdd<'a>(ctx: &'a Ctx) -> u32 {
 
 pub fn VIGetNextField<'a>(ctx: &'a Ctx) -> u32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut nextField: i32 = 0;
     let mut enabled: i32 = 0;
     enabled = fns::OSDisableInterrupts(ctx);

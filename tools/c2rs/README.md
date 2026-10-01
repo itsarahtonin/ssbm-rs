@@ -35,7 +35,7 @@ The original's frame layouts come from MWCC itself: `frames.py` compiles every C
 python tools/c2rs/frames.py <decomp root> local/typegen/frames.json [unit ...]
 ```
 
-It lists each function's parameters and locals in the order MWCC does, each in its register or at its offset from r1. c2rs matches a function's C locals to these by name and order, where both have as many of a name, and lays out the rest of its frame around them. Without the file, frames are laid out in declaration order.
+It lists each function's parameters and locals in the order MWCC does, each in its register or at its offset from r1. c2rs matches a function's C locals to these by name and order, where both have as many of a name, and lays out the rest of its frame around them: in declaration order, reversed as MWCC lays them out, or largest first, whichever fits in the original's frame. Locals the C never names, the decomp's padding for MWCC's frames, get no slot. The port's frame keeps the original's size where it can, so the frames of the functions it calls lie at the original's addresses, which pointers to their locals carry into memory. Without the file, frames are laid out in declaration order.
 
 ## Slippi's playback codes
 

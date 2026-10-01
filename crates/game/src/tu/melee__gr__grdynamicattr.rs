@@ -61,7 +61,6 @@ pub fn grDynamicAttr_801CA0F8<'a>(
     arg3: i32,
 ) -> grDynamicAttr_UnkStruct<'a> {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut v = v;
     let mut floor_id = floor_id;

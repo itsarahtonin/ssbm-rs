@@ -96,7 +96,6 @@ pub fn ftCh_GrabUnk1_8015B998<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCh_GrabUnk1_8015BA34<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>, pos: Vec<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut cb = cb;
     let mut pos = pos;
@@ -167,8 +166,6 @@ pub fn ftCh_TagCancel_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCh_GrabUnk1_8015BC88<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -179,7 +176,7 @@ pub fn ftCh_GrabUnk1_8015BC88<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     pos.set_y((da).x1C());
     pos.set_z(fp::frsp(0_i32 as f64));
     (fp).u().mh().set_x2258(0x184_i32);
-    inl_ftCh_GrabUnk1_8015BA34_unfused(ctx, gobj, fnptr(ctx, 0x80156198), pos, Handle::addr(__inl));
+    inl_ftCh_GrabUnk1_8015BA34_unfused(ctx, gobj, fnptr(ctx, 0x80156198), pos);
 }
 
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
@@ -278,9 +275,7 @@ fn inl_ftCh_GrabUnk1_8015BA34_unfused<'a>(
     gobj: HSD_GObj<'a>,
     cb: FnPtr<'a>,
     pos: Vec<'a>,
-    __in_caller: u32,
 ) {
-    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut cb = cb;
     let mut pos = pos;

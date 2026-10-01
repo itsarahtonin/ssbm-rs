@@ -32,7 +32,6 @@ pub fn grOldPupupu_802107DC<'a>(ctx: &'a Ctx, arg: i32) {
 
 pub fn grOldPupupu_802107E0<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -273,7 +272,6 @@ pub fn grOldPupupu_80210C2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grOldPupupu_80210C34<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -333,7 +331,6 @@ pub fn grOldPupupu_80210D10<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let cam_left: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
     let cam_right: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
     let cam_center: Val<'a, F32> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut gp: Ground<'a> = null(ctx);
@@ -488,7 +485,6 @@ pub fn grOldPupupu_8021110C<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn grOldPupupu_80211110<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
@@ -920,7 +916,6 @@ pub fn grOldPupupu_80211C14<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grOldPupupu_80211C1C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
     let mut other_gp: Ground<'a> =

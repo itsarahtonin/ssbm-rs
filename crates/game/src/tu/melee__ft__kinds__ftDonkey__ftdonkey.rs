@@ -143,7 +143,6 @@ pub fn ftDk_Init_OnKnockbackExit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftDk_Init_8010DB3C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x90);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let vec_list: Arr<'a, Vec<'a>, 4> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());

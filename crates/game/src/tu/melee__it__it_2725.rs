@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn it_80272560<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, idx: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let stack: ArrV<'a, i32, 2> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut idx = idx;
     let mut item: Item<'a> = null(ctx);
@@ -241,7 +240,6 @@ pub fn it_80272860<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: f64, arg2: f
 
 pub fn it_802728C8<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut rem: u32 = 0;
     let mut item_jobj2: HSD_JObj<'a> = null(ctx);
@@ -523,7 +521,6 @@ pub fn it_80273030<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itColl_BounceOffShield<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> = null(ctx);
     let mut dir: f64 = 0.0;
@@ -859,7 +856,6 @@ pub fn it_80273748<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, pos: Vec<'a>, vel:
     let sp54: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
     let sp48: Vec<'a> = frame_at(ctx, &__frame, 0x40);
     let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0x34);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut pos = pos;
     let mut vel = vel;
@@ -990,7 +986,6 @@ pub fn it_80273748<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, pos: Vec<'a>, vel:
 
 pub fn it_80273B50<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, vel: Vec<'a>) {
     let __frame = ctx.stack_frame(0xa0);
-    let stack_top: ArrV<'a, i32, 9> = frame_at(ctx, &__frame, 0x0);
     let sp40: Vec<'a> = frame_at(ctx, &__frame, 0x38);
     let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
     let mut item_gobj = item_gobj;
@@ -1198,7 +1193,6 @@ pub fn it_802741F4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, chk: i32) {
 
 pub fn it_80274250<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: Vec<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     let mut owner_gobj: HSD_GObj<'a> = null(ctx);
@@ -1220,7 +1214,6 @@ pub fn it_80274250<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: Vec<'a>) {
 
 pub fn it_8027429C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: Vec<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     let mut owner_gobj: HSD_GObj<'a> = null(ctx);
@@ -1245,7 +1238,6 @@ pub fn it_8027429C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: Vec<'a>) {
 
 pub fn it_802742F4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, gobj: HSD_GObj<'a>, ftpart: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut gobj = gobj;
     let mut ftpart = ftpart;
@@ -1337,7 +1329,6 @@ pub fn it_80274574<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 pub fn it_80274594<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
@@ -1433,7 +1424,6 @@ pub fn it_802746F8<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> HSD_JObj<'a> {
 
 pub fn it_80274740<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item_jobj: HSD_JObj<'a> = null(ctx);
     let mut item: Item<'a> = null(ctx);
@@ -1478,7 +1468,6 @@ pub fn it_80274740<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn it_80274990<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut bit_chk: u32 = 0;
     let mut var_ctr: i32 = 0;
@@ -1522,7 +1511,6 @@ pub fn it_80274990<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> f64 {
 
 pub fn it_80274A64<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item_jobj: HSD_JObj<'a> = null(ctx);
     let mut item: Item<'a> = null(ctx);
@@ -1601,7 +1589,6 @@ pub fn it_80274D04<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: lb_80014638_
     let __frame = ctx.stack_frame(0x38);
     let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     'l1: loop {
@@ -1753,7 +1740,6 @@ pub fn it_80274F48<'a>(
     part_idx: i32,
 ) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut bone_id = bone_id;
     let mut arg2_gobj = arg2_gobj;
@@ -1770,7 +1756,6 @@ pub fn it_80274FDC<'a>(
     part_idx: i32,
 ) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut bone_id = bone_id;
     let mut arg2_gobj = arg2_gobj;
@@ -1780,8 +1765,7 @@ pub fn it_80274FDC<'a>(
 }
 
 pub fn it_80275070<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, bone_id: i32) {
-    let __frame = ctx.stack_frame(0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __frame = ctx.stack_frame(0x8);
     let mut item_gobj = item_gobj;
     let mut bone_id = bone_id;
     let mut jobj: HSD_JObj<'a> = inl_get_bone_by_id_unfused(ctx, item_gobj, bone_id);

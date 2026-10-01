@@ -164,7 +164,6 @@ pub fn itFoxlaser_UnkMotion1_Phys<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 pub fn itFoxlaser_UnkMotion1_Coll<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
@@ -216,7 +215,6 @@ pub fn itFoxLaser_Logic94_Absorbed<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 
 
 pub fn itFoxLaser_Logic94_ShieldBounced<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     'l1: loop {
         'c2: {}

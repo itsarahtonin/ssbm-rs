@@ -47,7 +47,6 @@ pub fn itPikachuThunderJolt_Spawn<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x98);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x24);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let coll_normal: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut owner = owner;
     let mut pos = pos;
@@ -109,7 +108,6 @@ pub fn it_802B3544<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802B3554<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, owner: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut owner = owner;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -335,7 +333,6 @@ pub fn itPikachutjoltground_UnkMotion1_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>
 
 pub fn itPikachutjoltground_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ground_angle: f64 = 0.0;
     let mut angle_diff: f64 = 0.0;
@@ -422,7 +419,6 @@ pub fn itPikachutjoltground_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>
 
 pub fn itPikachutjoltground_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {

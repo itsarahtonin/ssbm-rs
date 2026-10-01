@@ -146,7 +146,6 @@ pub fn ftLk_SpecialS_RemoveBoomerang1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn calcAnglePos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>, dist: f64) -> f64 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut dist = dist;
@@ -201,9 +200,7 @@ pub fn calcAnglePos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>, dist: f6
 pub fn onAccessory4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

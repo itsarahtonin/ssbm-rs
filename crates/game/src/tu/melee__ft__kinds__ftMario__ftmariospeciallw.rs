@@ -36,8 +36,6 @@ pub fn updateRot<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMr_SpecialLw_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x20);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     let mut sa: ftMario_DatAttrs<'a> = Handle::cast::<ftMario_DatAttrs<'a>>((fp).dat_attrs());
@@ -58,15 +56,13 @@ pub fn ftMr_SpecialLw_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (sa).speciallw().tap_y_vel_max(),
     ));
     fns::ftCommon_ClampSelfVelX(ctx, fp, (sa).speciallw().air_momentum_x());
-    inl_doStartMotion_unfused(ctx, gobj, Handle::addr(__inl));
+    inl_doStartMotion_unfused(ctx, gobj);
     (fp).set_pre_hitlag_cb(fnptr(ctx, 0x8005ba40));
     (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
 }
 
 pub fn ftMr_SpecialAirLw_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x20);
     let mut gobj = gobj;
     let mut sub_val: f64 = 0.0;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -91,14 +87,13 @@ pub fn ftMr_SpecialAirLw_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).self_vel()
         .set_y((fp::fsubs((sa).speciallw().vel_y(), sub_val)));
     fns::ftCommon_ClampSelfVelX(ctx, fp, (sa).speciallw().air_momentum_x());
-    inl_doStartMotion_unfused(ctx, gobj, Handle::addr(__inl));
+    inl_doStartMotion_unfused(ctx, gobj);
     (fp).set_pre_hitlag_cb(fnptr(ctx, 0x8005ba40));
     (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
 }
 
 pub fn ftMr_SpecialLw_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
         inl_unsetCallbacks_unfused(ctx, gobj);
@@ -144,7 +139,6 @@ pub fn ftMr_SpecialAirLw_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMr_SpecialLw_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp0: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -184,7 +178,6 @@ pub fn ftMr_SpecialLw_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMr_SpecialAirLw_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut flt_var: f64 = 0.0;
     let mut sa: ftMario_DatAttrs<'a> = null(ctx);
@@ -230,7 +223,6 @@ pub fn ftMr_SpecialAirLw_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMr_SpecialLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -264,7 +256,6 @@ pub fn ftMr_SpecialLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMr_SpecialAirLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -318,8 +309,7 @@ fn inl_setGfx_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
 }
 
-fn inl_doStartMotion_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
-    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0x0);
+fn inl_doStartMotion_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut sa: ftMario_DatAttrs<'a> = null(ctx);

@@ -227,7 +227,6 @@ pub fn grInishie1_801FAD80<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grInishie1_801FAD84<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut block_table: block_table_struct<'a> = null(ctx);
@@ -531,7 +530,6 @@ pub fn grInishie1_801FB3F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x98);
     let dobj: Ptr<'a, HSD_DObj<'a>> = frame_at(ctx, &__frame, 0x0);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x38);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut vars: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
     let mut index: i32 = 0;
@@ -882,7 +880,6 @@ pub fn grInishie1_801FBA34<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, jobj: HSD_JObj<
 pub fn grInishie1_801FBAA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ix: i32) {
     let __frame = ctx.stack_frame(0x38);
     let position: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ix = ix;
     let mut hatena_jobj: HSD_JObj<'a> = null(ctx);
@@ -1080,7 +1077,6 @@ pub fn fn_801FBF6C<'a>(
     arg4: f64,
 ) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut gp = gp;
     let mut pos = pos;
@@ -1132,7 +1128,6 @@ pub fn fn_801FBF6C<'a>(
 
 pub fn grInishie1_801FC018<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
     (gp).u().inishie1().set_xEE((0_i32 as i16));

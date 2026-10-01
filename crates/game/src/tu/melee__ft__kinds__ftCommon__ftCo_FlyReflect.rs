@@ -124,8 +124,6 @@ pub fn ftCo_800C1718<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn ftCo_800C17CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let unused_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut coll: CollData<'a> = null(ctx);
     let mut fp: Fighter<'a> = null(ctx);

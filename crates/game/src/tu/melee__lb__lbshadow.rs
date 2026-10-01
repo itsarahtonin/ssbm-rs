@@ -1220,7 +1220,6 @@ pub fn lbShadow_8000EEE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn lbShadow_8000EFEC<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut count: i32 = 0;
     let mut var_r30: HSD_GObj<'a> = null(ctx);
     let mut cur: HSD_GObj<'a> = null(ctx);
@@ -1345,8 +1344,7 @@ pub fn lbShadow_8000F38C<'a>(ctx: &'a Ctx, arg0: i32) {
     let eyePos: Vec<'a> = frame_at(ctx, &__frame, 0x70);
     let interestPos: Vec<'a> = frame_at(ctx, &__frame, 0x64);
     let camPos: Vec<'a> = frame_at(ctx, &__frame, 0x58);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x10);
+    let __inl: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut dist: f64 = 0.0;
     let mut noLight: i32 = 0;

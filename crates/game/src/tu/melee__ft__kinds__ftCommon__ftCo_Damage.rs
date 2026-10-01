@@ -510,7 +510,6 @@ pub fn ftCo_8008DCE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, facing_dir
     let scaled_kb: ftCo_8008DCE0_scaled_kb<'a> = frame_at(ctx, &__frame, 0x0);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
     let sp40: Val<'a, F32> = frame_at(ctx, &__frame, 0x38);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut facing_dir = facing_dir;
@@ -1074,7 +1073,6 @@ pub fn ftCo_8008EB58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_8008EC90<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb0);
-    let unused: ArrV<'a, u8, 96> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ret0: i32 = 0;
     let mut fp: Fighter<'a> = null(ctx);
@@ -1590,7 +1588,6 @@ pub fn ftCo_80090184<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_DamageFlyRoll_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x1c);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =

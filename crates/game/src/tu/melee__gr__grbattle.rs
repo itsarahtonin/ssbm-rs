@@ -248,7 +248,6 @@ pub fn grBattle_GObj4_Callback3<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grBattle_BG_Callback0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -275,7 +274,6 @@ pub fn grBattle_BG_Callback1<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
 pub fn grBattle_BG_Callback2<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let indices: ArrV<'a, i16, 3> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

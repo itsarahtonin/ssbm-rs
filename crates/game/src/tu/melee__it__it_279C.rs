@@ -88,7 +88,6 @@ pub fn it_80279D5C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, scale: f64) {
 
 pub fn it_80279E24<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item_jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((item_gobj).hsd_obj());
     let mut item: Item<'a> =
@@ -144,7 +143,6 @@ pub fn it_80279E24<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn it_80279FF8<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item_jobj: HSD_JObj<'a> = null(ctx);
     let mut item: Item<'a> =
@@ -178,7 +176,6 @@ pub fn it_80279FF8<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn it_8027A09C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> = null(ctx);
     'l1: loop {
@@ -380,7 +377,6 @@ pub fn it_8027A4D4<'a>(ctx: &'a Ctx, item: Item<'a>) -> i32 {
 
 pub fn it_8027A780<'a>(ctx: &'a Ctx, item: Item<'a>, arg1: Addr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x118);
-    let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let weights: Arr<'a, PokemonSpawnWeight<'a>, 30> = frame_at(ctx, &__frame, 0x8);
     let mut item = item;
     let mut arg1 = arg1;
@@ -541,9 +537,7 @@ pub fn it_8027AAA0<'a>(ctx: &'a Ctx, item1_gobj: HSD_GObj<'a>, item2: Item<'a>, 
 
 pub fn it_8027AB64<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x88);
-    let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x60);
     let mut item_gobj = item_gobj;
     let mut item2: Item<'a> = null(ctx);
     let mut item: Item<'a> = null(ctx);
@@ -663,7 +657,6 @@ pub fn it_8027ADEC<'a>(
 pub fn it_8027AE34<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
     let rotate: Quaternion<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item_jobj: HSD_JObj<'a> = null(ctx);
     let mut item: Item<'a> = null(ctx);
@@ -720,7 +713,6 @@ pub fn it_8027B070<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, owner_gobj: HSD_GO
 
 pub fn it_8027B0C4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, spawn: SpawnItem<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let _2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let sp24: Struct2070<'a> = frame_at(ctx, &__frame, 0x1c);
     let mut item_gobj = item_gobj;
     let mut spawn = spawn;
@@ -776,7 +768,6 @@ pub fn it_8027B1F4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 pub fn it_8027B288<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: u32) {
     let __frame = ctx.stack_frame(0x20);
     let sp14: Struct2070<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     let mut item: Item<'a> = null(ctx);
@@ -824,7 +815,6 @@ pub fn it_8027B378<'a>(
     arg2: f64,
 ) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut fighter_gobj = fighter_gobj;
     let mut item_gobj = item_gobj;
     let mut arg2 = arg2;

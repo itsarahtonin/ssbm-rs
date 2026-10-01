@@ -32,9 +32,7 @@ pub fn grShrine_80201C60<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn grShrine_80201C64<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let unused0: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let v: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused1: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     statics::melee__gr__grshrine::yakumono_param(ctx).set(fns::Ground_GetYakumonoParam(ctx));
     let _ = statics::melee__gr__grshrine::grShrine_80201D20(ctx, 0_i32);
     let _ = statics::melee__gr__grshrine::grShrine_80201D20(ctx, 1_i32);
@@ -140,7 +138,6 @@ pub fn grShrine_80201E98<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn grShrine_80201E9C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
     let _ = fns::Ground_InitMapColl(

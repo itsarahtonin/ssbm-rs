@@ -92,7 +92,6 @@ pub fn ftCo_LandingAir_EnterWithLag<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_LandingAir_EnterWithMsidLag<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32, lag: f64) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut msid = msid;
     let mut lag = lag;

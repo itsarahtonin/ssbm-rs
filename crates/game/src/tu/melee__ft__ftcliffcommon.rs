@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn ftCliffCommon_80081298<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut other_fp: Fighter<'a> = null(ctx);
     let mut other_gobj: HSD_GObj<'a> = null(ctx);
@@ -185,7 +184,6 @@ pub fn ftCo_CliffCatch_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_CliffCatch_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     if (fns::ft_800821DC(ctx, gobj) != 0) {
         fns::ft_80082B1C(ctx, gobj);

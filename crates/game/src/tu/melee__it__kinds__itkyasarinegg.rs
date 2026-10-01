@@ -29,7 +29,6 @@ use ssbm_rt::cpu as c;
 
 pub fn it_802EFA44<'a>(ctx: &'a Ctx, catherine: HSD_GObj<'a>, pos: Vec<'a>, dir: f64) {
     let __frame = ctx.stack_frame(0x78);
-    let unused: ArrV<'a, u8, 80> = frame_at(ctx, &__frame, 0x0);
     let mut catherine = catherine;
     let mut pos = pos;
     let mut dir = dir;
@@ -230,7 +229,6 @@ fn asm_itKyasarinegg_UnkMotion4_Anim(ctx: &Ctx) {
 
 pub fn it_2725_Logic28_DmgDealt<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -243,7 +241,6 @@ pub fn it_2725_Logic28_DmgDealt<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_2725_Logic28_Clanked<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -256,7 +253,6 @@ pub fn it_2725_Logic28_Clanked<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_2725_Logic28_HitShield<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -269,7 +265,6 @@ pub fn it_2725_Logic28_HitShield<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_2725_Logic28_Reflected<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -292,7 +287,6 @@ pub fn itKyasarinEgg_Logic28_ShieldBounced<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>)
 
 pub fn it_802F022C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}

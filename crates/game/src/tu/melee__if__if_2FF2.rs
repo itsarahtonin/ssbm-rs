@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn fn_802FF218<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut slot: i32 = 0;
     let mut thing: un_804A1F58_x8_t<'a> = null(ctx);
@@ -71,7 +70,6 @@ pub fn fn_802FF360<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
 
 pub fn un_802FF364<'a>(ctx: &'a Ctx, slot: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut score: i32 = 0;
     let mut pos: Vec<'a> = null(ctx);
@@ -123,7 +121,6 @@ pub fn un_802FF364<'a>(ctx: &'a Ctx, slot: i32) {
 
 pub fn un_802FF498<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {

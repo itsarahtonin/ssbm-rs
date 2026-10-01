@@ -106,7 +106,6 @@ pub fn itFoxIllusion_Logic14_DmgDealt<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>)
 
 pub fn itFoxIllusion_Logic14_Destroyed<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
@@ -123,7 +122,6 @@ pub fn itFoxIllusion_Logic14_Destroyed<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>
 
 pub fn it_8029CFF0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));

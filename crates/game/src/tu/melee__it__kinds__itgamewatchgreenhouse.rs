@@ -131,7 +131,6 @@ pub fn itGamewatchGreenhouse_802C64A8<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>)
 
 pub fn itGamewatchGreenhouse_Motion3_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> = null(ctx);
     'l1: loop {
@@ -149,7 +148,6 @@ pub fn itGamewatchGreenhouse_Motion3_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<
 
 pub fn itGamewatchGreenhouse_Motion2_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> = null(ctx);
     'l1: loop {

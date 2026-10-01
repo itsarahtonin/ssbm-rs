@@ -127,7 +127,6 @@ pub fn grKinokoRoute_8020754C<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
 pub fn grKinokoRoute_80207634<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let origin: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let operand_pad: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x10);
     let cam_offset: Vec<'a> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
@@ -440,7 +439,6 @@ pub fn grKinokoRoute_80207C88<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let zone_point: Vec<'a> = frame_at(ctx, &__frame, 0x58);
     let cam_target: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
     let cam_offset: Vec<'a> = frame_at(ctx, &__frame, 0x40);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let spawn_point: Vec<'a> = frame_at(ctx, &__frame, 0x30);
     let boundary_point: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let translate: Vec<'a> = frame_at(ctx, &__frame, 0x18);
@@ -667,7 +665,6 @@ pub fn grKinokoRoute_80208368<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn grKinokoRoute_8020836C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut jobj: HSD_JObj<'a> = fns::Ground_801C3FA4(ctx, gobj, 83_i32);
@@ -735,7 +732,6 @@ pub fn grKinokoRoute_80208480<'a>(ctx: &'a Ctx, arg: i32) -> i32 {
 pub fn grKinokoRoute_802084B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let sp_vec: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gobj2: HSD_GObj<'a> = null(ctx);
     let mut gp: grKinokoRoute_802084B4_gp<'a> =
@@ -807,7 +803,6 @@ pub fn grKinokoRoute_80208660<'a>(ctx: &'a Ctx, unused: i32, gobj: HSD_GObj<'a>)
     let __frame = ctx.stack_frame(0x38);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let vel: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut unused = unused;
     let mut gobj = gobj;
     fns::ftLib_GetPos(ctx, gobj, pos);

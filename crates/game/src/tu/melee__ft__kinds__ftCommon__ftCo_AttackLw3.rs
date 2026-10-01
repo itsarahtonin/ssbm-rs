@@ -49,7 +49,6 @@ pub fn ftCo_AttackLw3_CheckInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn callUnk<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     fns::ft_800892A0(ctx, gobj);
     fns::ft_80089824(ctx, gobj);

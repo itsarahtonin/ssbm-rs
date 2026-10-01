@@ -136,7 +136,6 @@ pub fn fn_802FCC44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let vec2: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut slot: Val<'a, u8> =
         Handle::cast::<Val<'a, u8>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj));
@@ -211,7 +210,6 @@ pub fn fn_802FCC44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn NameTag_Create<'a>(ctx: &'a Ctx, slot: i32) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut gobj: HSD_GObj<'a> =
         fns::GObj_Create(ctx, (14_i32 as u16), (15_i32 as u8), (0_i32 as u8));
@@ -277,7 +275,6 @@ pub fn NameTag_Create<'a>(ctx: &'a Ctx, slot: i32) {
 
 pub fn un_802FD28C<'a>(ctx: &'a Ctx, slot: i32) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut f: f64 = 0.0;
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>(
@@ -362,7 +359,6 @@ pub fn un_802FD468<'a>(ctx: &'a Ctx) {
 
 pub fn un_802FD4C8<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut cobj: HSD_CObj<'a> = null(ctx);
     let mut i: i32 = 0;

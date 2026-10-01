@@ -29,8 +29,6 @@ use crate::support::*;
 pub fn mnDeflicker_8024A168<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let asd: ArrP<'a, HSD_JObj<'a>, 2> = frame_at(ctx, &__frame, 0x28);
-    let stack: ArrV<'a, i32, 5> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     let mut events: u64 = 0;
     let mut menu: Menu<'a> = (Handle::cast::<Menu<'a>>(inl_HSD_GObjGetUserData_unfused(
@@ -86,7 +84,6 @@ pub fn mnDeflicker_8024A168<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnDeflicker_8024A2E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let x: ArrV<'a, i32, 2> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut f: f64 = fns::mn_8022EC18(
         ctx,
@@ -151,9 +148,7 @@ pub fn mnDeflicker_8024A3E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnDeflicker_8024A4BC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let fake1: ArrV<'a, i32, 3> = frame_at(ctx, &__frame, 0x0);
     let sp1C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut proc: HSD_GObjProc<'a> = null(ctx);

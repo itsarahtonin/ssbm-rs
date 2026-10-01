@@ -290,7 +290,6 @@ pub fn lbFile_80016580<'a>(
     args: u32,
 ) {
     let __frame = ctx.stack_frame(0x80);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let __inl: ArrV<'a, u8, 64> = frame_at(ctx, &__frame, 0x14);
     let mut basename = basename;
     let mut dst = dst;
@@ -339,7 +338,6 @@ pub fn lbFile_80016580<'a>(
 
 pub fn lbFile_8001668C<'a>(ctx: &'a Ctx, basename: Val<'a, i8>, dst: Addr<'a>, size: Val<'a, u32>) {
     let __frame = ctx.stack_frame(0x30);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut basename = basename;
     let mut dst = dst;
     let mut size = size;
@@ -351,7 +349,6 @@ pub fn lbFile_8001668C<'a>(ctx: &'a Ctx, basename: Val<'a, i8>, dst: Addr<'a>, s
         size,
         fnptr(ctx, 0x8001615c),
         (0_i32 as u32),
-        Handle::addr(__inl),
     );
     inl_waitForDisc_unfused(ctx);
 }
@@ -363,12 +360,11 @@ pub fn lbFile_80016760<'a>(
     size: Val<'a, u32>,
 ) {
     let __frame = ctx.stack_frame(0x30);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut basename = basename;
     let mut dst = dst;
     let mut size = size;
     statics::melee__lb__lbfile::cancel(ctx).set(0_i32);
-    inl_loadFile_unfused(ctx, 0_i32, basename, dst, size, Handle::addr(__inl));
+    inl_loadFile_unfused(ctx, 0_i32, basename, dst, size);
 }
 
 pub fn lbFile_800168A0<'a>(
@@ -379,7 +375,6 @@ pub fn lbFile_800168A0<'a>(
     size: Val<'a, u32>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut heap_id = heap_id;
     let mut basename = basename;
     let mut dst = dst;
@@ -395,7 +390,7 @@ pub fn lbFile_800168A0<'a>(
         return 1_i32;
     } else {
         statics::melee__lb__lbfile::cancel(ctx).set(0_i32);
-        inl_loadFile_unfused(ctx, heap_id, basename, dst, size, Handle::addr(__inl));
+        inl_loadFile_unfused(ctx, heap_id, basename, dst, size);
         return 0_i32;
     }
     #[allow(unreachable_code)]
@@ -520,9 +515,7 @@ fn inl_lbFile_80016580_unfused<'a>(
     size: Val<'a, u32>,
     callback: FnPtr<'a>,
     args: u32,
-    __in_caller: u32,
 ) {
-    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0x0);
     let mut basename = basename;
     let mut dst = dst;
     let mut size = size;
@@ -601,9 +594,7 @@ fn inl_loadFile_unfused<'a>(
     basename: Val<'a, i8>,
     dst: Ptr<'a, Addr<'a>>,
     size: Val<'a, u32>,
-    __in_caller: u32,
 ) {
-    let __inl: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
     let mut heap_id = heap_id;
     let mut basename = basename;
     let mut dst = dst;
@@ -624,7 +615,6 @@ fn inl_loadFile_unfused<'a>(
         size,
         fnptr(ctx, 0x8001615c),
         (0_i32 as u32),
-        Handle::addr(__inl),
     );
     inl_waitForDisc_unfused(ctx);
 }

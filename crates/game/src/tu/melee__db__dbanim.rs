@@ -173,7 +173,6 @@ pub fn fn_8022697C<'a>(ctx: &'a Ctx, owner: HSD_GObj<'a>) -> u8 {
 
 pub fn fn_UpdateAnimationInfo<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let stack: ArrV<'a, i32, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut ft: Fighter<'a> = null(ctx);
     let mut text: DevText<'a> = null(ctx);
@@ -293,7 +292,6 @@ pub fn fn_UpdateAnimationInfo<'a>(ctx: &'a Ctx) {
 
 pub fn fn_CheckAnimationInfo<'a>(ctx: &'a Ctx, player: i32) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut player = player;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut ft: Fighter<'a> = null(ctx);

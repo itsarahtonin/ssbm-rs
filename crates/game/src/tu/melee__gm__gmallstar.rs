@@ -30,7 +30,6 @@ pub fn gm_801B5324<'a>(ctx: &'a Ctx, arg0: UnkAllstarData<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x50);
     let chars: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x20);
     let colors: ArrV<'a, u8, 3> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut chars_ptr: Val<'a, i8> = null(ctx);
@@ -140,7 +139,6 @@ pub fn gm_801B5324<'a>(ctx: &'a Ctx, arg0: UnkAllstarData<'a>, arg1: i32) {
 pub fn gm_801B5624<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x80);
     let chars: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x48);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x24);
     let mut arg0 = arg0;
     let mut data: StartMeleeData<'a> = null(ctx);
     let mut allstar: UnkAllstarData<'a> = null(ctx);
@@ -303,7 +301,6 @@ pub fn fn_801B5AA8<'a>(ctx: &'a Ctx, arg0: i32) {
 pub fn gm_801B5ACC<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x60);
     let chars: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x30);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut color: u8 = 0;
     let mut round: u16 = 0;
@@ -552,7 +549,6 @@ pub fn gm_801B607C<'a>(ctx: &'a Ctx, unused: GameModeState<'a>) {
 pub fn gm_Mode_AllStar_OnLoad<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
     let tmp: AllStarOpponent<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut data: UnkAllstarData<'a> = null(ctx);
     let mut index: u32 = 0;
     'l1: loop {

@@ -178,7 +178,6 @@ pub fn gm_801B65D4<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let sp14: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
     let sp10: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_r25: i32 = 0;
     let mut temp_r25_2: u8 = 0;
@@ -330,7 +329,6 @@ pub fn gm_Mode_10ManVs_OnLoad<'a>(ctx: &'a Ctx) {
 
 pub fn gm_801B688C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_r31: i32 = 0;
     let mut temp_r30: i32 = 0;
@@ -442,7 +440,6 @@ pub fn gm_801B6AD8<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B6B70<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut scene = scene;
     let mut data: VsModeData<'a> = null(ctx);
     let mut css_data: CSSData<'a> = null(ctx);
@@ -466,7 +463,6 @@ pub fn gm_801B6B70<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B6BE8<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut scene = scene;
     let mut temp_r31: VsModeData<'a> = null(ctx);
     let mut temp_r30: UnkMultimanData<'a> = null(ctx);
@@ -535,7 +531,6 @@ pub fn gm_801B6BE8<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B6F44<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut scene = scene;
     let mut temp_r3_2: UnkMultimanData<'a> = null(ctx);
     let mut temp_r29: VsModeData<'a> = null(ctx);
@@ -583,7 +578,6 @@ pub fn gm_801B7044<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B70DC<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut scene = scene;
     let mut data: VsModeData<'a> = null(ctx);
     let mut css_data: CSSData<'a> = null(ctx);
@@ -607,7 +601,6 @@ pub fn gm_801B70DC<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B7154<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut scene = scene;
     let mut temp_r31: VsModeData<'a> = null(ctx);
     let mut temp_r30: UnkMultimanData<'a> = null(ctx);
@@ -676,7 +669,6 @@ pub fn gm_801B7154<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B74F0<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut scene = scene;
     let mut temp_r3_2: UnkMultimanData<'a> = null(ctx);
     let mut temp_r29: VsModeData<'a> = null(ctx);
@@ -724,7 +716,6 @@ pub fn gm_801B75F0<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B7688<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut scene = scene;
     let mut data: VsModeData<'a> = null(ctx);
     let mut css_data: CSSData<'a> = null(ctx);
@@ -769,7 +760,6 @@ pub fn gm_801B7700<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B7AA0<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut scene = scene;
     let mut temp_r3_2: UnkMultimanData<'a> = null(ctx);
     let mut temp_r30: VsModeData<'a> = null(ctx);
@@ -811,7 +801,6 @@ pub fn gm_801B7B74<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B7C0C<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut scene = scene;
     let mut data: VsModeData<'a> = null(ctx);
     let mut css_data: CSSData<'a> = null(ctx);
@@ -835,7 +824,6 @@ pub fn gm_801B7C0C<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B7C84<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut scene = scene;
     let mut temp_r30: VsModeData<'a> = null(ctx);
     let mut temp_r3: StartMeleeData<'a> = null(ctx);
@@ -862,7 +850,6 @@ pub fn gm_801B7C84<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B8024<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut scene = scene;
     let mut temp_r3_2: UnkMultimanData<'a> = null(ctx);
     let mut temp_r29: VsModeData<'a> = null(ctx);
@@ -904,7 +891,6 @@ pub fn gm_801B8110<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B81A8<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut scene = scene;
     let mut data: VsModeData<'a> = null(ctx);
     let mut css_data: CSSData<'a> = null(ctx);
@@ -928,7 +914,6 @@ pub fn gm_801B81A8<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B8220<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut scene = scene;
     let mut temp_r30: VsModeData<'a> = (fns::gmMainLib_804D3EE0(ctx).get())
         .modes()
@@ -957,7 +942,6 @@ pub fn gm_801B8220<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B8580<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut scene = scene;
     let mut temp_r3_2: UnkMultimanData<'a> = null(ctx);
     let mut temp_r30: VsModeData<'a> = null(ctx);
@@ -999,7 +983,6 @@ pub fn gm_801B863C<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B86D4<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut scene = scene;
     let mut data: VsModeData<'a> = null(ctx);
     let mut css_data: CSSData<'a> = null(ctx);
@@ -1023,7 +1006,6 @@ pub fn gm_801B86D4<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B874C<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut scene = scene;
     let mut temp_r29: VsModeData<'a> = (fns::gmMainLib_804D3EE0(ctx).get())
         .modes()
@@ -1091,7 +1073,6 @@ pub fn gm_801B874C<'a>(ctx: &'a Ctx, scene: GameModeState<'a>) {
 
 pub fn gm_801B8AF8<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_r3_2: UnkMultimanData<'a> = null(ctx);
     let mut temp_r30: VsModeData<'a> = null(ctx);

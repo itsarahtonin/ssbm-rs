@@ -818,7 +818,6 @@ fn asm_it_80291DAC(ctx: &Ctx) {
 
 pub fn it_80291F14<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, charge_level: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut charge_level = charge_level;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -843,8 +842,6 @@ pub fn it_80291FA8<'a>(
     scale: f64,
 ) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut charge_level = charge_level;
@@ -856,7 +853,7 @@ pub fn it_80291FA8<'a>(
             break 'l1;
         }
     }
-    inl_it_80291F14_unfused(ctx, gobj, charge_level, Handle::addr(__inl));
+    inl_it_80291F14_unfused(ctx, gobj, charge_level);
     fns::it_80298DEC(ctx, (ip).owner(), pos, charge_level, scale);
 }
 
@@ -1095,13 +1092,7 @@ fn inl_it_80291D38_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, charge_level: i
     return 0;
 }
 
-fn inl_it_80291F14_unfused<'a>(
-    ctx: &'a Ctx,
-    gobj: HSD_GObj<'a>,
-    charge_level: i32,
-    __in_caller: u32,
-) {
-    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
+fn inl_it_80291F14_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, charge_level: i32) {
     let mut gobj = gobj;
     let mut charge_level = charge_level;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

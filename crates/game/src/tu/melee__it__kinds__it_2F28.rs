@@ -47,7 +47,6 @@ pub fn it_802F28C8<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: i32, arg2: f
 pub fn it_802F295C<'a>(ctx: &'a Ctx, owner_gobj: HSD_GObj<'a>, attr: itUnk2_DatAttrs<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x78);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut owner_gobj = owner_gobj;
     let mut attr = attr;
     let mut item_gobj: HSD_GObj<'a> = null(ctx);

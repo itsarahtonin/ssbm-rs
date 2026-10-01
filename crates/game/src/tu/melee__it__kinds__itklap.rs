@@ -54,7 +54,6 @@ pub fn itKlap_Logic10_Destroyed<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn it_802E18B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x30);
     let v: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut spawned_gobj: HSD_GObj<'a> = null::<HSD_GObj<'a>>(ctx);
     'l1: loop {
@@ -250,7 +249,6 @@ pub fn itKlap_UnkMotion4_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn itKlap_UnkMotion4_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let quat: Quaternion<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
@@ -357,7 +355,6 @@ pub fn it_802E2330<'a>(
 ) {
     let __frame = ctx.stack_frame(0x170);
     let hit: SmallerHitCapsule<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut pos = pos;
     let mut arg2 = arg2;

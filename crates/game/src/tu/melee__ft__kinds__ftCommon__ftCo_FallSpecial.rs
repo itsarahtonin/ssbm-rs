@@ -82,7 +82,6 @@ pub fn ftCo_800969D8<'a>(
     arg6: f64,
 ) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

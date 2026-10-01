@@ -94,7 +94,6 @@ pub fn _tyList_80312834<'a>(ctx: &'a Ctx, buf: Val<'a, u8>, num: u32) -> Val<'a,
 
 pub fn _tyList_80312904<'a>(ctx: &'a Ctx, arg0: Addr<'a>, arg1: i8) {
     let __frame = ctx.stack_frame(0xb0);
-    let unused: ArrV<'a, u8, 96> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut state: TyListState<'a> = statics::melee__ty__tylist::_tyList_804A2AC0(ctx);
@@ -302,7 +301,6 @@ pub fn _tyList_80312BAC<'a>(ctx: &'a Ctx, state: TyListState<'a>, arg1: i8) {
 
 pub fn _tyList_80312E88<'a>(ctx: &'a Ctx, arg: TyListArg<'a>, delta: f64) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg = arg;
     let mut delta = delta;
     let mut i: i32 = 0;
@@ -364,7 +362,6 @@ pub fn _tyList_8031305C<'a>(
     movedFlag: i8,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut a = a;
     let mut state = state;
     let mut movedFlag = movedFlag;
@@ -544,7 +541,6 @@ pub fn _tyList_80313358<'a>(ctx: &'a Ctx, state: TyListState<'a>, arg2: i8, arg3
 
 pub fn _tyList_80313464<'a>(ctx: &'a Ctx, arg: TyListArg<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut arg = arg;
     let mut state: TyListState<'a> = statics::melee__ty__tylist::_tyList_804A2AC0(ctx);
     let mut val: i32 = 0;
@@ -583,7 +579,6 @@ pub fn _tyList_80313508<'a>(
     z: f64,
 ) -> Addr<'a> {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut parent = parent;
     let mut symbol_name = symbol_name;
     let mut x = x;
@@ -652,7 +647,6 @@ pub fn _tyList_80313508<'a>(
 
 pub fn _tyList_80313774<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x80);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
     let mut state: TyListState<'a> = statics::melee__ty__tylist::_tyList_804A2AC0(ctx);
     let mut mode: TyModeState<'a> = Handle::cast::<TyModeState<'a>>(fns::Toy_804A284C(ctx).at(0));
     let mut disp: ToyGlobalsS_<'a> =
@@ -1212,7 +1206,6 @@ pub fn _tyList_80313BD8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn _tyList_8031438C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut state: TyListState<'a> = statics::melee__ty__tylist::_tyList_804A2AC0(ctx);
     let mut entry: TyListGobjEntry<'a> = statics::melee__ty__tylist::_tyList_804A2D6C(ctx);
@@ -1307,12 +1300,10 @@ pub fn _tyList_80314504<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
 
 pub fn _tyList_8031457C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x48);
-    let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let viewport: _HSD_RectS16<'a> = frame_at(ctx, &__frame, 0x28);
     let scissor: _Scissor<'a> = frame_at(ctx, &__frame, 0x20);
     let interest: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let eye: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x30);
     let mut entry: TyListGobjEntry<'a> = statics::melee__ty__tylist::_tyList_804A2D6C(ctx);
     let mut archive: ToyED8Data<'a> = fns::Toy_sbss_804D6ED8(ctx).get();
     let mut desc: HSD_CameraDescPerspective<'a> = null(ctx);
@@ -1492,7 +1483,6 @@ pub fn tyList_803147C4<'a>(ctx: &'a Ctx) {
 
 pub fn _tyList_803148E4<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut state: TyListState<'a> = statics::melee__ty__tylist::_tyList_804A2AC0(ctx);
     let mut entry: TyListGobjEntry<'a> = statics::melee__ty__tylist::_tyList_804A2D6C(ctx);

@@ -287,7 +287,6 @@ pub fn fn_801A396C<'a>(ctx: &'a Ctx, idx: i32) {
 
 pub fn gm_EvaluateAllControllerInputs<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut controller: gm_controller_map<'a> =
         statics::melee__gm__gm_1A36::controller_map(ctx).x0().get(0);
     let mut i: i32 = 0;

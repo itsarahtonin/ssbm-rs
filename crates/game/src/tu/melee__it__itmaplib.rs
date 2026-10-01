@@ -31,9 +31,7 @@ pub fn it_802759DC<'a>(ctx: &'a Ctx, item_gobj1: HSD_GObj<'a>, item_gobj2: HSD_G
     let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
     let sp40: Val<'a, F32> = frame_at(ctx, &__frame, 0x38);
     let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
-    let _1: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let _2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut item_gobj1 = item_gobj1;
     let mut item_gobj2 = item_gobj2;
     let mut coll1: CollData<'a> = null(ctx);
@@ -160,7 +158,6 @@ pub fn it_80275BC8<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg_gobj: HSD_GObj
 
 pub fn it_80275D5C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg_ecb: _itECB<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg_ecb = arg_ecb;
     let mut scale: f64 = 0.0;
@@ -194,7 +191,6 @@ pub fn it_80275D5C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg_ecb: _itECB<'a
 
 pub fn it_80275DFC<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 14> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> = null(ctx);
     let mut scale: f64 = 0.0;
@@ -227,7 +223,6 @@ pub fn it_80275DFC<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn it_80275E98<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, spawn: SpawnItem<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 18> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut spawn = spawn;
     let mut item1: Item<'a> = null(ctx);
@@ -487,7 +482,6 @@ pub fn it_8027649C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x40);
     let normal: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let up: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut angle: f64 = 0.0;
     let mut ip: Item<'a> =
@@ -522,9 +516,9 @@ pub fn it_8027649C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> f64 {
 
 pub fn it_802765BC<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0xb8);
-    let __inl: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
-    let __inl_2: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x20);
-    let __inl_3: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x40);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x18);
+    let __inl_3: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x30);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     let mut ip: Item<'a> =
@@ -547,16 +541,12 @@ pub fn it_802765BC<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: i32) {
 
 pub fn it_80276934<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0xb8);
-    let _pad0: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let sp80: Vec<'a> = frame_at(ctx, &__frame, 0x78);
     let sp74: Vec<'a> = frame_at(ctx, &__frame, 0x6c);
-    let _pad1: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
     let sp64: Vec<'a> = frame_at(ctx, &__frame, 0x5c);
     let sp58: Vec<'a> = frame_at(ctx, &__frame, 0x50);
-    let _pad2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
     let sp48: Vec<'a> = frame_at(ctx, &__frame, 0x40);
     let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0x34);
-    let unused: ArrV<'a, u8, 44> = frame_at(ctx, &__frame, 0x84);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -674,7 +664,6 @@ pub fn it_80276CEC<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 pub fn it_80276D9C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: i32) -> i32 {
     let __frame = ctx.stack_frame(0x50);
     let sp34: _itECB<'a> = frame_at(ctx, &__frame, 0x2c);
-    let unused: ArrV<'a, u8, 36> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     let mut coll: CollData<'a> = null(ctx);
@@ -788,14 +777,12 @@ pub fn it_80276FC4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: i32) {
 
 pub fn it_80277040<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x90);
-    let _top: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let normal: Vec<'a> = frame_at(ctx, &__frame, 0x54);
     let down: Vec<'a> = frame_at(ctx, &__frame, 0x48);
     let cross: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
     let slope: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let _mid: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x4);
     let up: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x60);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut coll: CollData<'a> = null(ctx);
     let mut item1: Item<'a> = null(ctx);
@@ -1036,7 +1023,6 @@ pub fn it_8027737C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, pos: Vec<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let sqrt_0: Val<'a, F32> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut pos = pos;
     let mut item: Item<'a> = null(ctx);
@@ -1160,7 +1146,6 @@ pub fn it_802775F0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: Vec<'a>) {
 pub fn it_8027770C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
     let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let unused: ArrV<'a, u8, 44> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut mult: f64 = 0.0;
     let mut ret_val: i32 = 0;
@@ -1219,7 +1204,6 @@ pub fn it_8027770C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_8027781C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x78);
-    let stack: ArrV<'a, i32, 2> = frame_at(ctx, &__frame, 0x0);
     let sp48: Vec<'a> = frame_at(ctx, &__frame, 0x40);
     let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0x34);
     let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x28);
@@ -1373,7 +1357,6 @@ fn inl_it_80276408_unfused<'a>(
 fn inl_it_8027649C_unfused<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, __in_caller: u32) -> f64 {
     let normal: Vec<'a> = ptr(ctx, __in_caller + 0x0);
     let up: Vec<'a> = ptr(ctx, __in_caller + 0xc);
-    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0x18);
     let mut item_gobj = item_gobj;
     let mut angle: f64 = 0.0;
     let mut ip: Item<'a> =

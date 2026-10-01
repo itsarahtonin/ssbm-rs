@@ -541,7 +541,6 @@ pub fn fn_8019F6EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_8019F810<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut trigger: u32 = 0;
     'l1: loop {
         'c2: {}
@@ -1351,7 +1350,6 @@ pub fn fn_801A0B60<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn gm_Scene_ComingSoon_OnEnter<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let sp10: Ptr<'a, SceneDesc<'a>> = frame_at(ctx, &__frame, 0x8);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut unused = unused;
     let mut temp_r30: HSD_GObj<'a> = null(ctx);
     let mut temp_r30_2: HSD_GObj<'a> = null(ctx);

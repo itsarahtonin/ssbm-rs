@@ -32,7 +32,6 @@ pub fn grTest_80206E2C<'a>(ctx: &'a Ctx, unused: i32) {
 
 pub fn grTest_80206E30<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
     'l1: loop {
@@ -121,7 +120,6 @@ pub fn grTest_802071BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn grTest_802071C4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut iVar2: HSD_JObj<'a> = null(ctx);
     let mut uVar3: u32 = 0;

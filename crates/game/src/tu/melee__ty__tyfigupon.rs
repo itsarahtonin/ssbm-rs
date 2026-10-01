@@ -34,7 +34,6 @@ pub fn _tyFigupon_80314AA8<'a>(
     shapeanim_str: Val<'a, i8>,
 ) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut jobj = jobj;
     let mut anim_str = anim_str;
     let mut matanim_str = matanim_str;
@@ -134,7 +133,6 @@ pub fn _tyFigupon_80314BE4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
 
 pub fn _tyFigupon_80314C5C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xe8);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut tp1: Toy<'a> = (Handle::cast::<Toy<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     let mut tmp_jobj: HSD_JObj<'a> =
@@ -405,8 +403,7 @@ pub fn _tyFigupon_80315574<'a>(ctx: &'a Ctx) {
 
 pub fn _tyFigupon_803155C8<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let remaining: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
+    let remaining: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
     let mut aa8: ToyAnimState<'a> = fns::Toy_804A2AA8(ctx);
     let mut ef4: un_804D6EF4_t<'a> = statics::melee__ty__tyfigupon::_tyFigupon_804D6EF4(ctx).get();
     let mut data: TyFiguponData<'a> = statics::melee__ty__tyfigupon::_tyFigupon_804D6EF0(ctx).get();
@@ -618,7 +615,6 @@ pub fn _tyFigupon_803155C8<'a>(ctx: &'a Ctx) {
 
 pub fn _tyFigupon_80315C44<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut ef4: un_804D6EF4_t<'a> = statics::melee__ty__tyfigupon::_tyFigupon_804D6EF4(ctx).get();
     let mut ud: TyFiguponUD<'a> = null(ctx);
@@ -840,7 +836,6 @@ pub fn _tyFigupon_8031638C<'a>(ctx: &'a Ctx, arg0: i16) -> i32 {
 
 pub fn _tyFigupon_80316420<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut id: i16 = (arg0 as i16);
     let mut ef4: un_804D6EF4_t<'a> = statics::melee__ty__tyfigupon::_tyFigupon_804D6EF4(ctx).get();
@@ -924,14 +919,12 @@ pub fn _tyFigupon_80316420<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn _tyFigupon_803168DC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xb0);
-    let _padA: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let interest: Vec<'a> = frame_at(ctx, &__frame, 0x70);
     let eye_pos: Vec<'a> = frame_at(ctx, &__frame, 0x64);
     let up_copy: Vec<'a> = frame_at(ctx, &__frame, 0x58);
     let cross: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
     let eye_vec: Vec<'a> = frame_at(ctx, &__frame, 0x40);
     let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x7c);
     let mut arg0 = arg0;
     let mut data: ToyAnimState<'a> = fns::Toy_804A2AA8(ctx);
     let mut cobj: HSD_CObj<'a> = Handle::cast::<HSD_CObj<'a>>((arg0).hsd_obj());
@@ -1066,7 +1059,6 @@ pub fn _tyFigupon_80316BF8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn _tyFigupon_80316C24<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut ef4: un_804D6EF4_t<'a> = statics::melee__ty__tyfigupon::_tyFigupon_804D6EF4(ctx).get();
     let mut data: TyFiguponData<'a> = statics::melee__ty__tyfigupon::_tyFigupon_804D6EF0(ctx).get();
@@ -1322,8 +1314,7 @@ pub fn _tyFigupon_8031753C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x60);
     let remaining: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
     let panel: _tyFigupon_8031753C_panel<'a> = frame_at(ctx, &__frame, 0x4);
-    let _padA: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
-    let digits_s: TyFiguponDigitInit<'a> = frame_at(ctx, &__frame, 0x18);
+    let digits_s: TyFiguponDigitInit<'a> = frame_at(ctx, &__frame, 0x8);
     let mut count: i32 = 0;
     let mut joint: HSD_Joint<'a> = null(ctx);
     let mut bet_joint: HSD_Joint<'a> = null(ctx);
@@ -1646,7 +1637,6 @@ pub fn _tyFigupon_8031753C<'a>(ctx: &'a Ctx) {
 
 pub fn _tyFigupon_80317A60<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
     let mut data: TyFiguponData<'a> = statics::melee__ty__tyfigupon::_tyFigupon_804D6EF0(ctx).get();
     let mut cam_desc: HSD_CameraDescPerspective<'a> = null(ctx);
     let mut cobj: HSD_CObj<'a> = null(ctx);
@@ -1703,7 +1693,7 @@ pub fn _tyFigupon_80317A60<'a>(ctx: &'a Ctx) {
     (gobj).set_gxlink_prios(0x2680000000000000_u64);
     {
         let mut is_jp: i32 = fns::lbLang_IsSavedLanguageJP(ctx);
-        let mut unused_2: i32 = (is_jp != 0_i32) as i32;
+        let mut unused: i32 = (is_jp != 0_i32) as i32;
         if is_jp != 0_i32 {
             fns::HSD_SisLib_803A62A0(ctx, 0_i32, cstr(ctx, 0x803fef34), cstr(ctx, 0x803fef40));
         } else {
@@ -1797,7 +1787,6 @@ pub fn tyFigupon_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let ef4_2: Ptr<'a, un_804D6EF4_t<'a>> = frame_at(ctx, &__frame, 0x0);
     let sp20: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut data: TyFiguponData<'a> = null(ctx);
     let mut ef4: un_804D6EF4_t<'a> = null(ctx);
@@ -1978,7 +1967,6 @@ pub fn tyFigupon_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
 
 pub fn _tyFigupon_803181BC<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut temp_r31: TyFiguponData<'a> = null(ctx);
     let mut ef4: un_804D6EF4_t<'a> = null(ctx);
     let mut ed4: TyFiguponED4<'a> = null(ctx);

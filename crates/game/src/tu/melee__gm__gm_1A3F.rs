@@ -68,7 +68,6 @@ pub fn preloadState<'a>(ctx: &'a Ctx, state: GameModeState<'a>) {
 
 pub fn gm_801A4014<'a>(ctx: &'a Ctx, mode: GameMode<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut mode = mode;
     let mut scene: GameScene<'a> = null(ctx);
     let mut state: GameModeState<'a> = null(ctx);
@@ -261,7 +260,6 @@ pub fn gm_Is1PMode<'a>(ctx: &'a Ctx, mode: u8) -> i32 {
 
 pub fn runGameMode<'a>(ctx: &'a Ctx, mode_kind: u8) -> u8 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut mode_kind = mode_kind;
     let mut r#override: u8 = 0;
     let mut mode: GameMode<'a> = null(ctx);
@@ -331,7 +329,6 @@ pub fn runGameMode<'a>(ctx: &'a Ctx, mode_kind: u8) -> u8 {
 
 pub fn gm_801A4510<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut modes: GameMode<'a> = null(ctx);
     let mut gamestate: stateMachine<'a> = statics::melee__gm__gm_1A3F::state_machine(ctx);
     let mut i: i32 = 0;

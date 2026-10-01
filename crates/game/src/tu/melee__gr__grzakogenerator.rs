@@ -68,7 +68,6 @@ pub fn grZakoGenerator_801CA43C<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0x58);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut config = config;
     let mut jobj = jobj;
     let mut height = height;
@@ -159,7 +158,6 @@ pub fn grZakoGenerator_801CA43C<'a>(
 
 pub fn grZakoGenerator_801CA67C<'a>(ctx: &'a Ctx) -> grZakoGenerator_Data<'a> {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut pointp: grZakoGenerator_Data<'a> =
         Handle::cast::<grZakoGenerator_Data<'a>>(fns::HSD_MemAlloc(ctx, (0x3cc_u32 as i32)));
     let mut i: i32 = 0;
@@ -604,7 +602,6 @@ pub fn grZakoGenerator_801CAEF0<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn grZakoGenerator_801CAF08<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut next: HSD_GObj<'a> = null(ctx);
     let mut cur: HSD_GObj<'a> = null(ctx);
     'l1: loop {

@@ -55,7 +55,6 @@ pub fn it_80294DC0<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> HSD_GObj<'a> {
 
 pub fn it_80294E78<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: f64) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     'l1: loop {
@@ -75,7 +74,6 @@ pub fn it_80294EB0<'a>(
 ) {
     let __frame = ctx.stack_frame(0x38);
     let pos_var: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut input_pos1 = input_pos1;
     let mut input_pos2 = input_pos2;
@@ -102,7 +100,6 @@ pub fn it_80294EB0<'a>(
 
 pub fn it_802950D4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     let mut item_jobj: HSD_JObj<'a> = null(ctx);
@@ -187,7 +184,6 @@ pub fn itRabbitc_UnkMotion1_Coll<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i
 
 pub fn itRabbitC_Logic31_PickedUp<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     'l1: loop {
         'c2: {}
@@ -206,7 +202,6 @@ pub fn itRabbitc_UnkMotion2_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i
 
 pub fn itRabbitC_Logic31_Dropped<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     'l1: loop {
         'c2: {}

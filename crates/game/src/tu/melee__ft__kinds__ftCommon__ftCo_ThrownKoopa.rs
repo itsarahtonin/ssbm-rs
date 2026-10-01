@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn ftCo_800BCDE0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut msid = msid;
     inl_ftCo_Thrown_Enter_unfused(ctx, gobj, msid, 0_u32, fp::frsp(0_i32 as f64));

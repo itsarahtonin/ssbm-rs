@@ -35,7 +35,6 @@ pub fn lb_80014638<'a>(
     let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x28);
     let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     'l1: loop {
@@ -80,7 +79,6 @@ pub fn lb_80014638<'a>(
 
 pub fn lb_80014770<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: i32) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     if (arg1 as u32) == 2_u32 {
@@ -229,7 +227,6 @@ pub fn lb_80014770<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: i32) -> i32 {
 
 pub fn lb_800149E0<'a>(ctx: &'a Ctx, arg0: ArrV<'a, F32, 4>, arg1: u32) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     'l1: loop {

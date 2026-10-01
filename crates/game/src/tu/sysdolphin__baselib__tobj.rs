@@ -684,7 +684,6 @@ pub fn MakeTextureMtx<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
     let m: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x28);
     let trans: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let rot: Quaternion<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x58);
     let mut tobj = tobj;
     'l1: loop {
         'c2: {}

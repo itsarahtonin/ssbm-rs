@@ -422,9 +422,7 @@ pub fn ftData_800859A8<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 pub fn ftData_80085A14<'a>(ctx: &'a Ctx, kind: i32) {
     let __frame = ctx.stack_frame(0x38);
     let sp18: Ptr<'a, Addr<'a>> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let sp10: Val<'a, u32> = frame_at(ctx, &__frame, 0x8);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut kind = kind;
     let mut a_head: Addr<'a> = null(ctx);
     let mut temp_r27: ftData<'a> = fns::gFtDataList(ctx).at(kind).get();

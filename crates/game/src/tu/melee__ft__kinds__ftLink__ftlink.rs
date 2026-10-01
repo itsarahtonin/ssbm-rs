@@ -200,7 +200,6 @@ pub fn ftLk_Init_OnItemPickup<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flag: i32) {
 
 pub fn ftLk_Init_OnItemDrop<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, bool1: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut bool1 = bool1;
     inl_Fighter_OnItemDrop_unfused(ctx, gobj, bool1, 1_i32, 1_i32);

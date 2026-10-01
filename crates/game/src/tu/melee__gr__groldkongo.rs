@@ -191,7 +191,6 @@ pub fn stageGObj1_Callback1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn stageGObj1_GObjProc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x90);
     let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0x34);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let hit: lbColl_80008D30_arg1<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = null(ctx);

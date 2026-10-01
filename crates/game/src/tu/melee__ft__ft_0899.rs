@@ -28,13 +28,10 @@ use crate::support::*;
 
 pub fn fn_8008998C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, ik: IKState<'a>, normal: Vec<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let jobj_pos: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let v_: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
     let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let floor_y: Val<'a, F32> = frame_at(ctx, &__frame, 0x14);
     let floor_flags: Val<'a, u32> = frame_at(ctx, &__frame, 0x10);
-    let v__2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x24);
     let mut fp = fp;
     let mut ik = ik;
     let mut normal = normal;
@@ -95,7 +92,6 @@ pub fn fn_8008998C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, ik: IKState<'a>, normal: V
 
 pub fn ft_80089B08<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x130);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let ik: IKState<'a> = frame_at(ctx, &__frame, 0xa8);
     let spA4: Vec<'a> = frame_at(ctx, &__frame, 0x9c);
     let rot_save0: Quaternion<'a> = frame_at(ctx, &__frame, 0x8c);
@@ -108,7 +104,6 @@ pub fn ft_80089B08<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let line_len_sqrt: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
     let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x100);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     if (!((fp).x2219_b5() != 0))

@@ -461,7 +461,6 @@ pub fn fn_80191240<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_801913BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x88);
-    let unused: ArrV<'a, u8, 96> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut tm: TmData<'a> = null(ctx);
     let mut idx: u32 = 0;
@@ -593,7 +592,6 @@ pub fn fn_80191678<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_8019175C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let jobjs: ArrP<'a, HSD_JObj<'a>, 3> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut first_child: HSD_JObj<'a> = null(ctx);
@@ -1376,7 +1374,6 @@ pub fn fn_80192758<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_80192938<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut state: Lbl804799B8_t<'a> = statics::melee__gm__gmtou_0::lbl_804799B8(ctx);
     let mut i: i32 = 0;
     let mut tm: TmData<'a> = null(ctx);
@@ -2327,7 +2324,6 @@ fn asm_fn_80192BB0(ctx: &Ctx) {
 
 pub fn fn_80192E6C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x68);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut new_var: i32 = 0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut new_var3: HSD_JObj<'a> = null(ctx);
@@ -2577,7 +2573,6 @@ pub fn fn_80192E6C<'a>(ctx: &'a Ctx) {
 
 pub fn fn_80193230<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut fog: HSD_Fog<'a> = null(ctx);
     'l1: loop {
@@ -2645,7 +2640,6 @@ pub fn fn_80193230<'a>(ctx: &'a Ctx) {
 pub fn fn_80193308<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x90);
     let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
     let mut created_text2: HSD_Text<'a> = null(ctx);
     let mut text_color_word: Val<'a, i32> = null(ctx);
     let mut tm: TmData<'a> = null(ctx);

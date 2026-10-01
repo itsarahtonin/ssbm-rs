@@ -75,7 +75,6 @@ pub fn gm_Scene_Omake15_OnEnter<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
 
 pub fn gm_Scene_Omake15_OnFrame<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut var_r31: i32 = 0_i32;
     'l1: loop {
         'c2: {}

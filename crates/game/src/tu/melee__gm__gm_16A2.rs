@@ -53,7 +53,6 @@ pub fn fn_801693A8<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn gm_801693BC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut ckind: u8 = 0;
     'l1: loop {
@@ -95,7 +94,6 @@ pub fn fn_80169444<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 
 pub fn gm_801694A0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut i: i32 = 0;
     let mut count: i32 = ((inl_gm_1601_GetUnkData_unfused(ctx)).x7() as i32);
@@ -730,7 +728,6 @@ pub fn fn_80169F50<'a>(ctx: &'a Ctx, arg0: i8, arg1: i8) {
 
 pub fn fn_8016A09C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
     let mut var_r29: i32 = 0;
     let mut j: i32 = 0;
@@ -782,7 +779,6 @@ pub fn fn_8016A09C<'a>(ctx: &'a Ctx) {
 
 pub fn gm_8016A164<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
     let mut gp: lbl_8046B488_t<'a> = inl_gm_1601_GetUnkData_unfused(ctx);
     let mut scene_state: VsSceneState<'a> = fns::gmVs_GetSceneState(ctx);
@@ -999,7 +995,6 @@ pub fn fn_8016A488<'a>(ctx: &'a Ctx, arg0: i32) {
 pub fn fn_8016A4C8<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x118);
     let spawn_pos: Vec<'a> = frame_at(ctx, &__frame, 0xd4);
-    let unused: ArrV<'a, u8, 196> = frame_at(ctx, &__frame, 0x0);
     let mut gp: lbl_8046B488_t<'a> = null(ctx);
     let mut has_active_spawn: i32 = 0;
     let mut spawn_enabled: i32 = 0;

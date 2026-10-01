@@ -156,7 +156,6 @@ pub fn ftAction_800711DC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
 
 pub fn ftAction_8007121C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut cmd = cmd;
     let mut fp: Fighter<'a> = null(ctx);
@@ -1177,7 +1176,6 @@ pub fn ftAction_80071F0C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<
 
 pub fn ftAction_80071F34<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut cmd = cmd;
     'l1: loop {
@@ -2956,7 +2954,6 @@ pub fn ftAction_80073354<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftAction_8007349C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

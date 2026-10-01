@@ -162,7 +162,6 @@ pub fn ftCo_800CE1D4<'a>(ctx: &'a Ctx, fighter_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let pos2: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let pos1: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut fighter_gobj = fighter_gobj;
     let mut f0: f64 = 0.0;
     let mut fighter: Fighter<'a> = null(ctx);

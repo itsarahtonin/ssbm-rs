@@ -2260,7 +2260,6 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
 
 pub fn mnCharSel_8025EE8C<'a>(ctx: &'a Ctx, idx: u8) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let sp14: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xc);
     let result_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
     let spC: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
@@ -2417,7 +2416,6 @@ pub fn fn_8025F0E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let sp34: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x2c);
     let sp30: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x28);
     let sp2C: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj(ctx, gobj)));
     let mut hole: i32 = 0;
@@ -15018,7 +15016,6 @@ pub fn fn_80262648<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_80262F44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut i: i32 = 0;
@@ -15694,7 +15691,6 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xd8);
     let list_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x7c);
     let arrow_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x78);
-    let unk7C: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let white: _GXColor<'a> = frame_at(ctx, &__frame, 0x70);
     let gray: _GXColor<'a> = frame_at(ctx, &__frame, 0x6c);
     let list_origin_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x68);
@@ -15703,9 +15699,7 @@ pub fn fn_802633B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let row_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x54);
     let used_row_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x50);
     let white_copy: _GXColor<'a> = frame_at(ctx, &__frame, 0x4c);
-    let unk34: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x4);
     let handicap_slider_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x2c);
     let mut gobj = gobj;
     let mut tag: CSSTagData<'a> = null(ctx);
     let mut port: i32 = 0;
@@ -17064,7 +17058,6 @@ pub fn fn_8026407C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x1e8);
     let sp108: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x100);
-    let unkF8: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let spEC: Vec<'a> = frame_at(ctx, &__frame, 0xe4);
     let spE8: _GXColor<'a> = frame_at(ctx, &__frame, 0xe0);
     let spE4: _GXColor<'a> = frame_at(ctx, &__frame, 0xdc);
@@ -17079,14 +17072,10 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
     let color5: _GXColor<'a> = frame_at(ctx, &__frame, 0xb8);
     let color6: _GXColor<'a> = frame_at(ctx, &__frame, 0xb4);
     let color7: _GXColor<'a> = frame_at(ctx, &__frame, 0xb0);
-    let unkA8: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let spA4: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x9c);
-    let unkA0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x20);
     let tag_name_jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x94);
-    let unk74: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x24);
     let sp70: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x68);
     let jobj43: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x5c);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x6c);
     let mut row_b: i32 = 0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -20378,7 +20367,6 @@ pub fn mnCharSel_802640A0<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn mnCharSel_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     'l1: loop {
         'c2: {}
@@ -20468,7 +20456,6 @@ pub fn mnCharSel_Scene_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
 
 pub fn mnCharSel_Scene_OnFrame<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut num_slots: i32 = 0;
     let mut slot_type: u8 = 0;
     let mut cache: GameCache<'a> = null(ctx);

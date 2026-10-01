@@ -239,7 +239,6 @@ pub fn onEnterApproach<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
 
 pub fn onEnterResults1<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut sfx_result: u64 = (0_i32 as u64);
     let mut i: i32 = 0;

@@ -30,10 +30,7 @@ pub fn ftGw_SpecialN_CreateSausage<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
     let vec0: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
     let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let chefStruct: ftGameWatchChef<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
-    let unused_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     {
         let mut i: i32 = 0;
@@ -169,7 +166,6 @@ pub fn ftGw_SpecialAirN_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftGw_SpecialN_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     inl_ftGameWatch_SpecialN_ChefLoop_unfused(ctx, gobj);
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
@@ -179,7 +175,6 @@ pub fn ftGw_SpecialN_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftGw_SpecialAirN_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     inl_ftGameWatch_SpecialAirN_ChefLoop_unfused(ctx, gobj);
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
@@ -291,7 +286,6 @@ pub fn ftGw_SpecialAirN_AirToGround<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftGw_SpecialN_Loop<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, anim_frame: f64) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut anim_frame = anim_frame;
     let mut fp: Fighter<'a> = null(ctx);
@@ -320,7 +314,6 @@ pub fn ftGw_SpecialN_Loop<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, anim_frame: f64)
 
 pub fn ftGw_SpecialAirN_Loop<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, anim_frame: f64) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut anim_frame = anim_frame;
     let mut fp: Fighter<'a> = null(ctx);

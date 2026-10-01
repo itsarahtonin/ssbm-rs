@@ -2093,7 +2093,6 @@ fn asm_fn_8022F538(ctx: &Ctx) {
 pub fn mn_8022FB88<'a>(ctx: &'a Ctx, arg0: u8, arg1: Addr<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let digit_indices: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut data: mn_802307F8_t<'a> = Handle::cast::<mn_802307F8_t<'a>>(arg1);
@@ -2198,7 +2197,6 @@ pub fn mn_8022FB88<'a>(ctx: &'a Ctx, arg0: u8, arg1: Addr<'a>) {
 
 pub fn mn_8022FD18<'a>(ctx: &'a Ctx, arg0: u8) {
     let __frame = ctx.stack_frame(0x48);
-    let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let stock_digits: JObjIndices2<'a> = frame_at(ctx, &__frame, 0xc);
     let time_indices: JObjIndices5<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
@@ -2335,7 +2333,6 @@ pub fn mn_8022FD18<'a>(ctx: &'a Ctx, arg0: u8) {
 
 pub fn mn_8022FEC8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_JObj<'a>, arg2: u8, arg3: u8) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -2408,7 +2405,6 @@ pub fn mn_8022FEC8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_JObj<'a>, arg
 
 pub fn mn_80230198<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, jobj: HSD_JObj<'a>, mode: u8) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj = jobj;
     let mut mode = mode;
@@ -2467,11 +2463,8 @@ pub fn mn_80230274<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32, arg2: i32) {
     let __frame = ctx.stack_frame(0x100);
     let option_roots: ArrP<'a, HSD_JObj<'a>, 8> = frame_at(ctx, &__frame, 0xa4);
     let roots: ArrP<'a, HSD_JObj<'a>, 17> = frame_at(ctx, &__frame, 0x60);
-    let pad_: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let indices: ArrV<'a, u16, 17> = frame_at(ctx, &__frame, 0x38);
-    let pad_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
-    let i: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0xc);
+    let i: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -2869,7 +2862,6 @@ pub fn mn_802308F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i32) {
 
 pub fn fn_802309F0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut rules: GameRules<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);

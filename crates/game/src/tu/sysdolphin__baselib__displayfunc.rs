@@ -744,7 +744,6 @@ pub fn HSD_EraseRect<'a>(
     let __frame = ctx.stack_frame(0x98);
     let texobj: _GXTexObj<'a> = frame_at(ctx, &__frame, 0x34);
     let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut top = top;
     let mut bottom = bottom;
     let mut left = left;

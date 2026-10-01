@@ -142,7 +142,6 @@ pub fn hsd_80392528<'a>(ctx: &'a Ctx, event: FnPtr<'a>) {
 pub fn hsd_8039254C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0xd0);
     let default_col: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x18);
     let bg_col0: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
     let bg_col1: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
     let txt_col: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);

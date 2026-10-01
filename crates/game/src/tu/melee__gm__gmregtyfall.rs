@@ -190,7 +190,6 @@ pub fn fn_801A6868<'a>(ctx: &'a Ctx, unused: HSD_GObj<'a>) {
 
 pub fn gm_801A68D8<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut temp_r3: HSD_GObj<'a> = null(ctx);
     let mut temp_r3_2: HSD_GObj<'a> = null(ctx);
     let mut temp_f31: f64 = 0.0;
@@ -273,7 +272,6 @@ pub fn fn_801A6A48<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
 
 pub fn fn_801A6ACC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let unused_2: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut unused = unused;
     'l1: loop {
@@ -446,7 +444,6 @@ pub fn gm_801A6C54<'a>(ctx: &'a Ctx) {
 
 pub fn fn_801A6D78<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let unused_2: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut unused = unused;
     'l1: loop {
@@ -537,7 +534,6 @@ pub fn gm_801A6DC0<'a>(ctx: &'a Ctx) {
 
 pub fn gm_801A6EE4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
     let mut var_r29: i32 = 0;
     'l1: loop {
         'c2: {}
@@ -650,7 +646,6 @@ pub fn gm_801A6EE4<'a>(ctx: &'a Ctx) {
 
 pub fn gm_Scene_ToyFall_OnEnter<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     let __frame = ctx.stack_frame(0xa0);
-    let unused_2: ArrV<'a, u8, 44> = frame_at(ctx, &__frame, 0x0);
     let mut unused = unused;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut lobj: HSD_LObj<'a> = null(ctx);

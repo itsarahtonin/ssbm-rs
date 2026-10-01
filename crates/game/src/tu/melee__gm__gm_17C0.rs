@@ -51,7 +51,6 @@ pub fn fn_8017C0C8<'a>(ctx: &'a Ctx) {
 
 pub fn fn_8017C1A4<'a>(ctx: &'a Ctx, unused: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut unused = unused;
     let mut tmp: lbl_804706C0_t<'a> = statics::melee__gm__gm_17C0::lbl_804706C0(ctx);
     let mut temp_r29: i32 = 0;
@@ -297,7 +296,6 @@ pub fn fn_8017C7EC<'a>(ctx: &'a Ctx) {
 pub fn gm_8017C838<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
     let sp10: ArrV<'a, i8, 3> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut temp_r3: VsSceneController<'a> = null(ctx);
     let mut i: i32 = 0;
     let mut var_r3: i8 = 0;
@@ -389,7 +387,6 @@ pub fn gm_8017C984<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
 
 pub fn gm_8017C9A8<'a>(ctx: &'a Ctx, arg0: DebugGameOverData<'a>, arg1: Unk1PData<'a>, arg2: u8) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -607,7 +604,6 @@ pub fn gm_8017CE34<'a>(
 ) {
     let __frame = ctx.stack_frame(0xd0);
     let colors: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x50);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x24);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

@@ -121,15 +121,13 @@ pub fn ifMagnify_802FB73C<'a>(
 
 pub fn ifMagnify_802FB8C0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
     let __frame = ctx.stack_frame(0x80);
-    let top_pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let screen_pos: S32Vec2<'a> = frame_at(ctx, &__frame, 0x38);
     let edge_pos: Vec2<'a> = frame_at(ctx, &__frame, 0x30);
     let dir: Vec2<'a> = frame_at(ctx, &__frame, 0x28);
     let translate: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
     let color_copy: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
-    let operand_pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x40);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut code = code;
     let mut cp: _GXColor<'a> = null(ctx);
@@ -194,13 +192,12 @@ pub fn ifMagnify_802FB8C0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
 
 pub fn ifMagnify_802FBBDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
     let __frame = ctx.stack_frame(0x170);
-    let top_pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let top: Val<'a, F32> = frame_at(ctx, &__frame, 0x4c);
     let bottom: Val<'a, F32> = frame_at(ctx, &__frame, 0x48);
     let left: Val<'a, F32> = frame_at(ctx, &__frame, 0x44);
     let right: Val<'a, F32> = frame_at(ctx, &__frame, 0x40);
     let interest_pos: Vec<'a> = frame_at(ctx, &__frame, 0x34);
-    let result: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
+    let result: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let colors: Arr<'a, _GXColor<'a>, 4> = frame_at(ctx, &__frame, 0x20);
     let world_pos: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;

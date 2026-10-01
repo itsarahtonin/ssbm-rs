@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn grVenom_8020362C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x68);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut data: grVe_Data<'a> = statics::melee__gr__grvenom::grVe_803E5348(ctx);
     let mut group_b: i32 = 0;
     let mut group_a: i32 = 0;
@@ -310,7 +309,6 @@ pub fn grVenom_80203B14<'a>(ctx: &'a Ctx, arg: i32) {
 
 pub fn grVenom_80203B18<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x60);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let position: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     'l1: loop {
         'c2: {}
@@ -573,7 +571,6 @@ pub fn grVenom_80203FD0<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn grVenom_80203FD4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj1: HSD_JObj<'a> = null(ctx);
     let mut jobj4: HSD_JObj<'a> = null(ctx);
@@ -752,7 +749,6 @@ pub fn grVenom_80204424<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn grVenom_80204428<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -802,7 +798,6 @@ pub fn grVenom_80204544<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 {
 
 pub fn grVenom_8020454C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let position: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut gobj = gobj;
     'l1: loop {
@@ -1104,7 +1099,6 @@ pub fn grVenom_80204DB0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grVenom_80204DD4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
@@ -1136,7 +1130,6 @@ pub fn grVenom_80204F1C<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn grVenom_80204F20<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut base: Val<'a, i32> = null(ctx);
     let mut gp: Ground<'a> = null(ctx);
@@ -1292,7 +1285,6 @@ pub fn grVenom_802053B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
     let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ptr_: Val<'a, i32> = null(ctx);
     let mut gp2: Ground<'a> = null(ctx);
@@ -1632,11 +1624,8 @@ pub fn grVenom_80205F30<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xc8);
     let sp94: Vec<'a> = frame_at(ctx, &__frame, 0x8c);
     let sp88: Vec<'a> = frame_at(ctx, &__frame, 0x80);
-    let pad70: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let sp64: Vec<'a> = frame_at(ctx, &__frame, 0x5c);
-    let pad5C: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
     let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x48);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x20);
     let mut gobj = gobj;
     let mut padA8: u64 = 0;
     let mut gp: Ground<'a> = null(ctx);
@@ -2279,7 +2268,6 @@ pub fn grVenom_80206BEC<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn grVenom_80206BF0<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut var_r30: i32 = 0;
     let mut wgobj: HSD_GObj<'a> = null(ctx);

@@ -823,7 +823,6 @@ pub fn un_80304168<'a>(
     arg3: i32,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

@@ -791,8 +791,7 @@ pub fn fn_803B6820<'a>(
 
 pub fn hsd_803B6BE4<'a>(ctx: &'a Ctx, src: Val<'a, i8>, size: i32, dst: Addr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x88);
-    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x30);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut src = src;
     let mut size = size;
     let mut dst = dst;

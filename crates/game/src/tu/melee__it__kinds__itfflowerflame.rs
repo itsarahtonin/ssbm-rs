@@ -81,7 +81,6 @@ pub fn it_8029A748<'a>(
 
 pub fn it_8029A89C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: f64) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut temp_r3: HSD_JObj<'a> = null(ctx);

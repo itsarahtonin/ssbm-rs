@@ -863,7 +863,6 @@ pub fn HSD_LObjSetCurrentAll<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) {
 
 pub fn HSD_LObj_803668EC<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut lobj = lobj;
     'l1: loop {
         'c2: {}
@@ -1362,7 +1361,6 @@ pub fn HSD_LObjAddAnimAll<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, lanim: HSD_Light
 
 pub fn LObjRelease<'a>(ctx: &'a Ctx, o: _HSD_Class<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut o = o;
     let mut lobj: HSD_LObj<'a> = (Handle::cast::<HSD_LObj<'a>>((o)));
     fns::HSD_AObjRemove(ctx, (lobj).aobj());

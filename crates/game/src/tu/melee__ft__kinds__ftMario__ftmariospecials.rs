@@ -29,7 +29,6 @@ use crate::support::*;
 pub fn ftMr_SpecialS_CreateCape<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let coords: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -121,7 +120,6 @@ pub fn ftMr_SpecialS_CheckItemCapeRemove<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -
 
 pub fn ftMr_SpecialS_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -131,7 +129,6 @@ pub fn ftMr_SpecialS_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMr_SpecialAirS_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -169,9 +166,7 @@ pub fn ftMr_SpecialAirS_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMr_SpecialS_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let coords: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused1: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     {
         let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
@@ -208,9 +203,7 @@ pub fn ftMr_SpecialS_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMr_SpecialAirS_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused0: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let coords: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused1: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut ftcmd_var0_tmp: u32 = 0;
     let mut fp: Fighter<'a> = null(ctx);
@@ -300,7 +293,6 @@ pub fn ftMr_SpecialS_GroundToAir<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftMr_SpecialAirS_AirToGround<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     fp = Handle::cast::<Fighter<'a>>((gobj).user_data());

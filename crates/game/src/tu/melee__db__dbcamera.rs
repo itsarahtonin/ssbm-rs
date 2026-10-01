@@ -483,7 +483,6 @@ pub fn fn_CheckCameraInfo<'a>(
 
 pub fn fn_802277E8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, port: i32) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut port = port;
     let mut temp_r3: HSD_PadStatus<'a> = null(ctx);
@@ -647,7 +646,6 @@ pub fn fn_80227BA8<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: 
     let __frame = ctx.stack_frame(0x48);
     let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut camera = camera;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -879,12 +877,10 @@ pub fn fn_80227FE0<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, cstick_x: f64, cstick
 
 pub fn fn_80228124<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: f64, arg3: f64) {
     let __frame = ctx.stack_frame(0x80);
-    let _2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
     let sp38: Vec<'a> = frame_at(ctx, &__frame, 0x30);
     let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut camera = camera;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

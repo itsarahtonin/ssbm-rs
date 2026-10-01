@@ -386,7 +386,6 @@ pub fn grFlatzone_802176B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn grFlatzone_802176BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x34);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let ret: Val<'a, i32> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
@@ -804,7 +803,6 @@ pub fn grFlatzone_8021805C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grFlatzone_80218060<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut gp: Ground<'a> = null(ctx);
@@ -908,7 +906,6 @@ pub fn grFlatzone_80218060<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn grFlatzone_802181B4<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {

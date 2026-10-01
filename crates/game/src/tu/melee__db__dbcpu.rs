@@ -102,7 +102,6 @@ pub fn fn_SetupCpuHandicapInfo<'a>(ctx: &'a Ctx) {
 
 pub fn fn_UpdateCpuHandicapInfo<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
-    let stack: ArrV<'a, i32, 2> = frame_at(ctx, &__frame, 0x0);
     let mut text: DevText<'a> = null(ctx);
     let mut player: _StaticPlayer<'a> = null(ctx);
     let mut slot: i32 = 0;

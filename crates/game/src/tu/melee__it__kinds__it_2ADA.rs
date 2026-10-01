@@ -59,7 +59,6 @@ pub fn it_802ADA1C<'a>(ctx: &'a Ctx, pos: Vec<'a>, vel: Vec<'a>, facing_dir: f64
 
 pub fn it_802ADAF0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     fns::it_8026B3A8(ctx, gobj);

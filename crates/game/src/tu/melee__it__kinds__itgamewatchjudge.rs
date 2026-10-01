@@ -36,7 +36,6 @@ pub fn it_802C7774<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x88);
     let si: SpawnItem<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut facing_dir = facing_dir;
     let mut parent_gobj = parent_gobj;
     let mut pos = pos;
@@ -139,7 +138,6 @@ pub fn it_2725_Logic77_PickedUp<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn itGamewatchjudge_UnkMotion0_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut remove: i32 = 0;
     'l1: loop {

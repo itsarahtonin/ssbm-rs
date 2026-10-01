@@ -1100,7 +1100,6 @@ pub fn DVDReset<'a>(ctx: &'a Ctx) {
 
 pub fn DVDGetDriveStatus<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut block: DVDCommandBlock<'a> = null(ctx);
     let mut result: i32 = 0;
     let mut enabled: i32 = fns::OSDisableInterrupts(ctx);

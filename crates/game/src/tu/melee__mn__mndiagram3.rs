@@ -372,13 +372,9 @@ pub fn mnDiagram3_PopulateRankings<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnDiagram3_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x140);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mode_label_pos: Vec<'a> = frame_at(ctx, &__frame, 0xd4);
-    let unused_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x20);
     let up_label_pos: Vec<'a> = frame_at(ctx, &__frame, 0xb8);
-    let unused_3: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x30);
     let down_label_pos: Vec<'a> = frame_at(ctx, &__frame, 0x9c);
-    let unused_4: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x3c);
     let mut gobj = gobj;
     let mut base: Val<'a, i8> = Handle::cast::<Val<'a, i8>>(fns::mnDiagram3_803EEC10(ctx));
     let mut data: Diagram3<'a> =
@@ -585,7 +581,6 @@ pub fn mnDiagram3_OnAnimComplete<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnDiagram3_Think<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut data: Diagram3<'a> = null(ctx);
     let mut src: Val<'a, u8> = null(ctx);
@@ -626,7 +621,6 @@ pub fn mnDiagram3_FreeUserData<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
 
 pub fn mnDiagram3_InitUserData<'a>(ctx: &'a Ctx, data: Diagram3<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut data = data;
     let mut arg1 = arg1;
     let mut src: Val<'a, u8> = null(ctx);

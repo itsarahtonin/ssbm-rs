@@ -173,7 +173,6 @@ pub fn grPushOn_8021859C<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn grPushOn_802185A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
@@ -242,7 +241,6 @@ pub fn fn_80218678<'a>(ctx: &'a Ctx) -> i32 {
 pub fn grPushOn_802186C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = Handle::cast::<Ground<'a>>((gobj).user_data());
     'l1: loop {
@@ -285,7 +283,6 @@ pub fn grPushOn_802187A4<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 
 pub fn grPushOn_802187A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> =
         (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -595,7 +592,6 @@ pub fn grPushOn_80218ED0<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) {
 pub fn grPushOn_80218ED4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<'a> {
     let __frame = ctx.stack_frame(0x28);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut new_lobj: HSD_LObj<'a> = null(ctx);
     let mut lobj: HSD_LObj<'a> = null(ctx);
@@ -644,7 +640,6 @@ pub fn grPushOn_80218ED4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<'a> {
 pub fn grPushOn_80218FC0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<'a> {
     let __frame = ctx.stack_frame(0x28);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut new_lobj: HSD_LObj<'a> = null(ctx);
     let mut lobj: HSD_LObj<'a> = null(ctx);

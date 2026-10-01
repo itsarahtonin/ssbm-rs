@@ -30,7 +30,6 @@ pub fn it_80278F2C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'
     let __frame = ctx.stack_frame(0x78);
     let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let sp14: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut cmd = cmd;
     let mut arg2: i32 = 0;
@@ -109,7 +108,6 @@ pub fn it_80278F2C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'
 
 pub fn it_802790C0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let _padA: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut cmd = cmd;
     let mut item: Item<'a> = Handle::cast::<Item<'a>>((item_gobj).user_data());
@@ -268,7 +266,6 @@ pub fn it_802790C0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'
 
 pub fn it_80279544<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut cmd = cmd;
     let mut item: Item<'a> = Handle::cast::<Item<'a>>((item_gobj).user_data());
@@ -302,7 +299,6 @@ pub fn it_80279544<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'
 
 pub fn it_802795EC<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut cmd = cmd;
     let mut idx: i32 = (((cmd).x8().u()).set_hitbox_scale().idx() as i32);
@@ -380,7 +376,6 @@ pub fn it_80279768<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
 
 pub fn it_8027978C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut cmd = cmd;
     let mut item: Item<'a> = Handle::cast::<Item<'a>>((item_gobj).user_data());
@@ -459,7 +454,6 @@ pub fn it_8027978C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'
 
 pub fn it_80279888<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut cmd = cmd;
     'l1: loop {
@@ -486,7 +480,6 @@ pub fn it_80279888<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'
 
 pub fn it_802798D4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut cmd = cmd;
     'l1: loop {
@@ -508,7 +501,6 @@ pub fn it_802798D4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'
 
 pub fn it_8027990C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut cmd = cmd;
     'l1: loop {

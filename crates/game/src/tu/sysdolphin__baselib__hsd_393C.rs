@@ -134,7 +134,6 @@ pub fn hsd_80393D2C<'a>(ctx: &'a Ctx, enable: i32) -> i32 {
 
 pub fn hsd_80393DA0<'a>(ctx: &'a Ctx, buf: Val<'a, u8>, size: u32) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut buf = buf;
     let mut size = size;
     'l1: loop {
@@ -396,7 +395,6 @@ pub fn hsd_80394128<'a>(ctx: &'a Ctx, col: i32, row: i32) -> u8 {
 
 pub fn hsd_803941E8<'a>(ctx: &'a Ctx, xfb_out_ptr: Addr<'a>, xfb_cur_ptr: Addr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut xfb_out_ptr = xfb_out_ptr;
     let mut xfb_cur_ptr = xfb_cur_ptr;
     let mut xfb_out: Val<'a, i32> = Handle::cast::<Val<'a, i32>>(xfb_out_ptr);

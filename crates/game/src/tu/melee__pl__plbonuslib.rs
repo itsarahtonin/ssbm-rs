@@ -980,7 +980,6 @@ pub fn pl_8003EB30<'a>(
     arg5: i32,
 ) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1289,7 +1288,6 @@ pub fn fn_8003EE2C<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
 
 pub fn fn_8003F294<'a>(ctx: &'a Ctx, slot: i32, index: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut index = index;
     let mut table: pl_StaleMoveTableExt_t<'a> = fns::Player_GetStaleMoveTableIndexPtr2(ctx, slot);
@@ -1712,7 +1710,6 @@ pub fn fn_8003F654<'a>(ctx: &'a Ctx, slot: i32, index: i32, pos: Vec<'a>, prevPo
 
 pub fn pl_8003FAA8<'a>(ctx: &'a Ctx, slot: i32, index: i32, pos: Vec<'a>, prevPos: Vec<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut index = index;
     let mut pos = pos;
@@ -1979,7 +1976,6 @@ pub fn pl_8003FFDC<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, arg2: i32, arg3: i32,
 
 pub fn pl_80040048<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut temp_r3: HSD_GObj<'a> = null(ctx);
@@ -2194,7 +2190,6 @@ pub fn pl_80040374<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
 
 pub fn pl_800403C0<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     'l1: loop {
@@ -2464,7 +2459,6 @@ pub fn pl_80040924<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 
 pub fn pl_80040948<'a>(ctx: &'a Ctx, arg0: i32) -> f64 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut total: u32 = 0;
     let mut temp_r30: u32 = 0;

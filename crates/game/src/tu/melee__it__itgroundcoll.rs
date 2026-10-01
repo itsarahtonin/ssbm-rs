@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn it_8026D564<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut test: i32 = 0;
     let mut ip: Item<'a> =
@@ -69,7 +68,6 @@ pub fn it_8026D604<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_8026D62C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut coll: CollData<'a> = null(ctx);
@@ -101,7 +99,6 @@ pub fn it_8026D62C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
 
 pub fn it_8026D6F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut coll: CollData<'a> = null(ctx);
@@ -128,7 +125,6 @@ pub fn it_8026D6F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
 
 pub fn it_8026D78C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut coll: CollData<'a> = null(ctx);
@@ -156,7 +152,6 @@ pub fn it_8026D78C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
 
 pub fn it_8026D82C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut coll: CollData<'a> = null(ctx);
     let mut ip: Item<'a> = null(ctx);
@@ -182,7 +177,6 @@ pub fn it_8026D82C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_8026D8A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut test: i32 = 0;
@@ -224,7 +218,6 @@ pub fn it_8026D938<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
 
 pub fn it_8026D9A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut coll_data: CollData<'a> = (item).x378_itemColl();
@@ -243,7 +236,6 @@ pub fn it_8026D9A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_8026DA08<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
     let mut coll: CollData<'a> = null(ctx);
@@ -276,7 +268,6 @@ pub fn it_8026DA70<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_8026DAA8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut coll: CollData<'a> = null(ctx);
     let mut ip: Item<'a> = null(ctx);
@@ -302,7 +293,6 @@ pub fn it_8026DAA8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_8026DB40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut coll: CollData<'a> = null(ctx);
     let mut ip: Item<'a> = null(ctx);
@@ -538,7 +528,6 @@ pub fn it_8026DE98<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_8026DF34<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut cond: i32 = 0;
     let mut coll: CollData<'a> = null(ctx);
@@ -565,7 +554,6 @@ pub fn it_8026DF34<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_8026DFB0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 26> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut cond: i32 = 0;
     let mut coll: CollData<'a> = null(ctx);
@@ -594,7 +582,6 @@ pub fn it_8026DFB0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_8026E058<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 26> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut cond: i32 = 0;
     let mut coll: CollData<'a> = null(ctx);
@@ -622,7 +609,6 @@ pub fn it_8026E058<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_8026E0F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut cond: i32 = 0;
     let mut coll: CollData<'a> = null(ctx);
@@ -645,12 +631,10 @@ pub fn it_8026E0F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_8026E15C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 22> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut res2: i32 = 0;
-    let mut res: i32 = inl_it_8026E_inline_unfused(ctx, gobj, Handle::addr(__inl));
+    let mut res: i32 = inl_it_8026E_inline_unfused(ctx, gobj);
     if ((res & 15_i32) != 0) {
         fns::it_80276FC4(ctx, gobj, res);
         if ((res & 1_i32) != 0) {
@@ -671,11 +655,9 @@ pub fn it_8026E15C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
 
 pub fn it_8026E248<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 18> = frame_at(ctx, &__frame, 0x18);
     let mut gobj = gobj;
     let mut arg1 = arg1;
-    let mut res: i32 = inl_it_8026E_inline_unfused(ctx, gobj, Handle::addr(__inl));
+    let mut res: i32 = inl_it_8026E_inline_unfused(ctx, gobj);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -694,11 +676,9 @@ pub fn it_8026E248<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
 
 pub fn it_8026E32C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x18);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
-    let mut res: i32 = inl_it_8026E_inline_unfused(ctx, item_gobj, Handle::addr(__inl));
+    let mut res: i32 = inl_it_8026E_inline_unfused(ctx, item_gobj);
     'l1: loop {
         'c2: {}
         if !(0_i32 != 0) {
@@ -718,7 +698,6 @@ pub fn it_8026E32C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) -
 
 pub fn it_8026E414<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     let mut coll: CollData<'a> = null(ctx);
@@ -754,7 +733,6 @@ pub fn it_8026E414<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
 
 pub fn it_8026E4D0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 34> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     let mut coll: CollData<'a> = null(ctx);
@@ -793,7 +771,6 @@ pub fn it_8026E4D0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
 
 pub fn it_8026E5A0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     let mut coll: CollData<'a> = null(ctx);
@@ -831,7 +808,6 @@ pub fn it_8026E5A0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
 
 pub fn it_8026E664<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     let mut coll: CollData<'a> = null(ctx);
@@ -868,7 +844,6 @@ pub fn it_8026E664<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
 
 pub fn it_8026E71C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     let mut coll: CollData<'a> = null(ctx);
@@ -906,7 +881,6 @@ pub fn it_8026E71C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
 
 pub fn it_8026E7E0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 38> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     let mut coll: CollData<'a> = null(ctx);
@@ -942,7 +916,6 @@ pub fn it_8026E7E0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: FnPtr<'a>) {
 
 pub fn it_8026E8C4<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: FnPtr<'a>, arg2: FnPtr<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 14> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -986,9 +959,7 @@ pub fn it_8026E9A4<'a>(
     arg3: Vec<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let p: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1030,7 +1001,6 @@ pub fn it_8026EA20<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0x40);
     let p: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1076,7 +1046,6 @@ pub fn it_8026EA9C<'a>(
 ) -> i32 {
     let __frame = ctx.stack_frame(0x40);
     let p: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1128,8 +1097,7 @@ fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
     });
 }
 
-fn inl_it_8026E_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) -> i32 {
-    let unused: ArrV<'a, u8, 24> = ptr(ctx, __in_caller + 0x0);
+fn inl_it_8026E_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut cond: i32 = 0;

@@ -138,9 +138,7 @@ pub fn fn_800DAA40<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
 
 pub fn fn_800DAADC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> =
@@ -178,7 +176,6 @@ pub fn fn_800DAC78<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: Vec<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> =
@@ -219,7 +216,6 @@ pub fn fn_800DAD18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let tmp: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut temp_r31: Fighter<'a> = null(ctx);
     let mut var_r3: i32 = 0;
@@ -283,7 +279,6 @@ pub fn ftCo_CapturePulledHi_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let tmp: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x24);
     let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -347,7 +342,6 @@ pub fn fn_800DAECC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_800DAEEC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let pad10: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
     let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let mut gobj = gobj;
@@ -418,10 +412,8 @@ pub fn ftCo_CapturePulledLw_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_CapturePulledLw_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let pad10: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let sp2C: Vec<'a> = frame_at(ctx, &__frame, 0x34);
     let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let pad8: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut temp_r30: HSD_GObj<'a> = null(ctx);
     let mut temp_r31: Fighter<'a> = null(ctx);
@@ -493,7 +485,6 @@ pub fn ftCo_CapturePulledLw_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_800DB230<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -507,7 +498,6 @@ pub fn fn_800DB230<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_800DB368<'a>(ctx: &'a Ctx, attacker_fp: Fighter<'a>, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let rotate: Quaternion<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut attacker_fp = attacker_fp;
     let mut fp = fp;
     let mut jobj: HSD_JObj<'a> = null(ctx);

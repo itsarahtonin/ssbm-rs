@@ -150,7 +150,6 @@ pub fn efLib_Destroy<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn efLib_DestroyAll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gobj_1: HSD_GObj<'a> = null(ctx);
     let mut gobj_2: HSD_GObj<'a> = null(ctx);
@@ -782,7 +781,6 @@ pub fn efLib_Create_AttachChild_Scale<'a>(
 ) -> EF_Effect<'a> {
     let __frame = ctx.stack_frame(0x48);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gfx_id = gfx_id;
     let mut gobj = gobj;
     let mut jobj = jobj;
@@ -827,7 +825,6 @@ pub fn efLib_Create_Attach_Scale_FacingDir<'a>(
     jobj: HSD_JObj<'a>,
 ) -> EF_Effect<'a> {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut gfx_id = gfx_id;
     let mut gobj = gobj;
@@ -1273,7 +1270,6 @@ pub fn efLib_SpawnParticleEffect<'a>(
 ) {
     let __frame = ctx.stack_frame(0x78);
     let generator: Ptr<'a, HSD_Generator<'a>> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x4);
     let mut bank = bank;
     let mut gfx_id = gfx_id;
     let mut jobj = jobj;
@@ -1830,7 +1826,6 @@ pub fn efLib_Cb_SetScaleRotY_FromFighter<'a>(ctx: &'a Ctx, effect: EF_Effect<'a>
     let __frame = ctx.stack_frame(0x60);
     let scale_1: Vec<'a> = frame_at(ctx, &__frame, 0x30);
     let scale_2: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut effect = effect;
     let mut half_pi: f64 = 0.0;
     let mut jobj_2: HSD_JObj<'a> = null(ctx);
@@ -2163,7 +2158,6 @@ pub fn efLib_SetParamGfxId<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, gfx_id: i32) {
 
 pub fn efLib_Cb_ApplyStoredAlpha<'a>(ctx: &'a Ctx, effect: EF_Effect<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut effect = effect;
     let mut dobj: HSD_DObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);

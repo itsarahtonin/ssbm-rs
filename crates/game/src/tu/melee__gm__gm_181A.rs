@@ -259,7 +259,6 @@ pub fn fn_80181C80<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn fn_80181E18<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut data: lbl_80472ED8_t<'a> = fns::lbl_80472ED8(ctx);
     let mut x4: Val<'a, i32> = null(ctx);
     let mut field: Val<'a, i32> = null(ctx);
@@ -422,7 +421,6 @@ pub fn fn_80181E18<'a>(ctx: &'a Ctx) {
 
 pub fn gm_80182174<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
     let mut i: i32 = 0;
     let mut src: RegClearSpawnEntry<'a> = null(ctx);
     let mut dst: RegClearSpawnEntry<'a> = null(ctx);
@@ -710,7 +708,6 @@ pub fn gm_80182554<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
 
 pub fn gm_80182578<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x70);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
     let mut data: RegClearRecordOverlay<'a> =
         Handle::cast::<RegClearRecordOverlay<'a>>(fns::lbl_80472ED8(ctx));
     let mut idx_ptr: Val<'a, i32> = null(ctx);

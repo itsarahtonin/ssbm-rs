@@ -465,7 +465,6 @@ pub fn grInishie2_801FD4CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn grInishie2_801FD4F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut spawn_side: i32 = 0;
     let mut gp: Ground<'a> = null(ctx);
@@ -541,7 +540,6 @@ pub fn grInishie2_801FD64C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn grInishie2_801FD654<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gp: Ground<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -621,7 +619,6 @@ pub fn grInishie2_801FD7A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn grInishie2_801FD824<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let spawn_pos: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut spawn_side: i32 = 0;
     let mut gp: Ground<'a> = null(ctx);
@@ -690,7 +687,6 @@ pub fn grInishie2_801FD824<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn grInishie2_801FD9EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x78);
-    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut gp: Ground<'a> = null(ctx);

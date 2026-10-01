@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn ftCo_8009B170<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     if (fns::ftCo_Jump_GetInput(ctx, gobj) != 0) {
         statics::melee__ft__kinds__ftCommon__ftCo_CliffJump::ftCo_8009B1B8(ctx, gobj);

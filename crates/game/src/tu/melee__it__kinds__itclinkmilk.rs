@@ -35,7 +35,6 @@ pub fn it_802C8B28<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x80);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut parent = parent;
     let mut pos = pos;
     let mut bone = bone;
@@ -95,9 +94,7 @@ pub fn it_2725_Logic80_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itClinkmilk_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let sv: Vec<'a> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut child: HSD_JObj<'a> =

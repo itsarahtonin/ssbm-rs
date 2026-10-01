@@ -119,7 +119,6 @@ pub fn it_2E6A_UnkMotion19_Phys<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let sp14: Quaternion<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut jobj1: HSD_JObj<'a> = null(ctx);
     let mut jobj2: HSD_JObj<'a> = null(ctx);

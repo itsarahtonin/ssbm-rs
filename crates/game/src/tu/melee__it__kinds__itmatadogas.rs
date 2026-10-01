@@ -82,7 +82,6 @@ pub fn it_802CB150<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itMatadogas_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -115,7 +114,6 @@ pub fn itMatadogas_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
 
 pub fn it_802CB2B0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -172,7 +170,6 @@ pub fn itMatadogas_UnkMotion2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
 
 pub fn itMatadogas_UnkMotion2_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut item: Item<'a> = null(ctx);
     let mut item2: Item<'a> = null(ctx);
@@ -284,7 +281,6 @@ pub fn it_802CB4F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, kind: i32, radius: f64)
 pub fn it_2725_Logic32_Spawned<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let scale: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
     scale.set(1.0);
@@ -318,7 +314,6 @@ pub fn it_2725_Logic32_Spawned<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn it_2725_Logic33_Spawned<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let scale: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut _pad: u32 = 0;
     let mut jobj: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>((gobj).hsd_obj());
@@ -359,7 +354,6 @@ pub fn itMatadogas_Logic33_EvtUnk<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ref_gobj
 
 pub fn it_802CB798<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut attrs: itMatadogasAttributes<'a> =

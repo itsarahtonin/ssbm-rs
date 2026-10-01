@@ -278,7 +278,6 @@ pub fn gmTitle_801A1944<'a>(ctx: &'a Ctx) {
 
 pub fn gmTitle_801A19AC<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj: HSD_GObj<'a> =
         fns::GObj_Create(ctx, (11_i32 as u16), (3_i32 as u8), (128_i32 as u8));
     let mut lobj: HSD_LObj<'a> =
@@ -485,8 +484,7 @@ pub fn gmTitle_801A1D38<'a>(ctx: &'a Ctx, src: Val<'a, i8>, dst: Val<'a, i8>) ->
 
 pub fn gm_Scene_Title_OnEnter<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     let __frame = ctx.stack_frame(0x98);
-    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x5c);
-    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x50);
+    let __inl: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x48);
     let mut unused = unused;
     let mut text: HSD_Text<'a> = null(ctx);
     let mut scale: i32 = 0;
@@ -502,7 +500,7 @@ pub fn gm_Scene_Title_OnEnter<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     fns::lbAudioAx_8002702C(ctx, (2_i32 as u32), (4_i32 as u64));
     fns::lbAudioAx_80027168(ctx);
     let _ = inl_gmTitle_801A1A3C_unfused(ctx);
-    inl_gmTitle_801A19AC_unfused(ctx, Handle::addr(__inl_2));
+    inl_gmTitle_801A19AC_unfused(ctx);
     inl_gmTitle_801A1944_unfused(ctx);
     inl_gmTitle_801A185C_unfused(ctx);
     let _ = fns::gmTitle_801A165C(ctx);
@@ -747,8 +745,7 @@ fn inl_gmTitle_801A1A3C_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     return gobj;
 }
 
-fn inl_gmTitle_801A19AC_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) {
-    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0x0);
+fn inl_gmTitle_801A19AC_unfused<'a>(ctx: &'a Ctx) {
     let mut gobj: HSD_GObj<'a> =
         fns::GObj_Create(ctx, (11_i32 as u16), (3_i32 as u8), (128_i32 as u8));
     let mut lobj: HSD_LObj<'a> =

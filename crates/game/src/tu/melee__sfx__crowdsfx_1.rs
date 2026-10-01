@@ -78,7 +78,6 @@ pub fn un_80322314<'a>(ctx: &'a Ctx) {
 
 pub fn un_8032233C<'a>(ctx: &'a Ctx, arg0: u32, arg1: u32) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut cat: i32 = 0;

@@ -838,7 +838,6 @@ pub fn HSD_MtxGetTranslate<'a>(ctx: &'a Ctx, mat: ArrV<'a, F32, 4>, vec: Vec<'a>
 
 pub fn HSD_MtxGetScale<'a>(ctx: &'a Ctx, arg0: ArrV<'a, F32, 4>, arg1: Vec<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let vec1: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
     let vec2: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let vec3: Vec<'a> = frame_at(ctx, &__frame, 0x14);

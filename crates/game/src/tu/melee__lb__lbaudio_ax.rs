@@ -123,7 +123,6 @@ pub fn lbAudioAx_80023220<'a>(ctx: &'a Ctx, idx: i32) -> i32 {
 pub fn fn_80023254<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x100);
     let used: ArrV<'a, i32, 56> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut count: i32 = 0;
     let mut index: i32 = 0;
@@ -434,7 +433,6 @@ pub fn lbAudioAx_80023A44<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) -> i32 {
 
 pub fn lbAudioAx_80023B24<'a>(ctx: &'a Ctx, id: i32) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut id = id;
     let mut slot: i32 = inl_lbAudioAx_80023130_unfused(ctx, id);
     'l1: loop {
@@ -1531,7 +1529,6 @@ pub fn lbAudioAx_80025098<'a>(ctx: &'a Ctx, debug: i32) {
 
 pub fn calcPan<'a>(ctx: &'a Ctx, current: i32, end: i32, left: i32, right: i32) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut current = current;
     let mut end = end;
     let mut left = left;
@@ -1648,8 +1645,6 @@ pub fn fn_800251EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn fn_800253D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     if !Handle::is_null(gobj) {
         let mut ud: lbAudioAx_UserData<'a> =
@@ -1662,7 +1657,6 @@ pub fn fn_800253D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                     (ud).end_frame(),
                     (ud).pan_left(),
                     (ud).pan_right(),
-                    Handle::addr(__inl),
                 ));
             } else {
                 (ud).set_pan(127_i32.wrapping_sub(inl_calcPan_unfused(
@@ -1671,7 +1665,6 @@ pub fn fn_800253D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                     (ud).end_frame(),
                     (ud).pan_left(),
                     (ud).pan_right(),
-                    Handle::addr(__inl_2),
                 )));
             }
         }
@@ -1681,8 +1674,6 @@ pub fn fn_800253D8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn fn_800256BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     if !Handle::is_null(gobj) {
         let mut ud: lbAudioAx_UserData<'a> =
@@ -1695,7 +1686,6 @@ pub fn fn_800256BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                     (ud).end_frame(),
                     (ud).pan_left(),
                     (ud).pan_right(),
-                    Handle::addr(__inl),
                 ));
             } else {
                 (ud).set_pan(127_i32.wrapping_sub(inl_calcPan_unfused(
@@ -1704,7 +1694,6 @@ pub fn fn_800256BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                     (ud).end_frame(),
                     (ud).pan_left(),
                     (ud).pan_right(),
-                    Handle::addr(__inl_2),
                 )));
             }
         }
@@ -1762,7 +1751,6 @@ pub fn fn_80025A98<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn fn_80025B44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ud: lbAudioAx_UserData<'a> = null(ctx);
     if !Handle::is_null(gobj) {
@@ -1774,7 +1762,6 @@ pub fn fn_80025B44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                 (ud).end_frame(),
                 (ud).pan_left(),
                 (ud).pan_right(),
-                Handle::addr(__inl),
             ));
         }
     }
@@ -1783,7 +1770,6 @@ pub fn fn_80025B44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn fn_80025CBC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ud: lbAudioAx_UserData<'a> = null(ctx);
     if !Handle::is_null(gobj) {
@@ -1795,7 +1781,6 @@ pub fn fn_80025CBC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
                 (ud).end_frame(),
                 (ud).pan_left(),
                 (ud).pan_right(),
-                Handle::addr(__inl),
             )));
         }
     }
@@ -1878,7 +1863,6 @@ pub fn fn_80025FAC<'a>(
     sp: SoundParams<'a>,
 ) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ud = ud;
     let mut sp = sp;
@@ -2145,7 +2129,6 @@ pub fn lbAudioAx_800264E4<'a>(ctx: &'a Ctx, data: HSD_GObj<'a>) -> i32 {
 
 pub fn lbAudioAx_80026510<'a>(ctx: &'a Ctx, target: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut target = target;
     let mut next: HSD_GObj<'a> = null(ctx);
     let mut cur: HSD_GObj<'a> = null(ctx);
@@ -2186,7 +2169,6 @@ pub fn lbAudioAx_80026510<'a>(ctx: &'a Ctx, target: HSD_GObj<'a>) -> i32 {
 
 pub fn lbAudioAx_800265C4<'a>(ctx: &'a Ctx, target_obj: HSD_GObj<'a>, voice: i32) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut target_obj = target_obj;
     let mut voice = voice;
     let mut cur: HSD_GObj<'a> = null(ctx);
@@ -2434,7 +2416,6 @@ pub fn fn_800268B4<'a>(ctx: &'a Ctx) {
 
 pub fn fn_800269AC<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
     'l1: loop {
         'c2: {}
@@ -3044,8 +3025,6 @@ pub fn lbAudioAx_80027DBC<'a>(ctx: &'a Ctx) {
 
 pub fn lbAudioAx_80027DF8<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
     let mut carry: i32 = 0;
     'l1: loop {
         'c2: {}
@@ -3990,15 +3969,7 @@ fn inl_soundGetPosition_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'
     return 1_i32;
 }
 
-fn inl_calcPan_unfused<'a>(
-    ctx: &'a Ctx,
-    current: i32,
-    end: i32,
-    left: i32,
-    right: i32,
-    __in_caller: u32,
-) -> i32 {
-    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
+fn inl_calcPan_unfused<'a>(ctx: &'a Ctx, current: i32, end: i32, left: i32, right: i32) -> i32 {
     let mut current = current;
     let mut end = end;
     let mut left = left;

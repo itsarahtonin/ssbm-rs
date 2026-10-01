@@ -47,7 +47,6 @@ pub fn ftDk_SpecialLw_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftDk_SpecialLwStart_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
         statics::melee__ft__kinds__ftDonkey__ftdonkeyspeciallw::doAnim(ctx, gobj);
@@ -119,7 +118,6 @@ pub fn callback<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn doAnim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -135,13 +133,12 @@ pub fn doAnim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         fp::frsp(0_i32 as f64),
         null::<HSD_GObj<'a>>(ctx),
     );
-    inl_ftDonkey_8010DE88_inner_unfused(ctx, gobj, Handle::addr(__inl));
+    inl_ftDonkey_8010DE88_inner_unfused(ctx, gobj);
     (fp).set_accessory4_cb(fnptr(ctx, 0x8010db3c));
 }
 
 pub fn ftDk_SpecialLwEnd0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
         fns::ft_8008A2BC(ctx, gobj);
@@ -258,8 +255,7 @@ fn inl_Fighter_SetEffectHitlagCallbacks_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a
     (fp).set_post_hitlag_cb(fnptr(ctx, 0x8005bac4));
 }
 
-fn inl_ftDonkey_8010DE88_inner_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
-    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
+fn inl_ftDonkey_8010DE88_inner_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

@@ -122,7 +122,6 @@ pub fn ft_800895E0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) {
     let val: Struct2070<'a> = frame_at(ctx, &__frame, 0x14);
     let sp18: Struct2070<'a> = frame_at(ctx, &__frame, 0x10);
     let sp14: Struct2070<'a> = frame_at(ctx, &__frame, 0xc);
-    let spC: Struct2070<'a> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     arg1__slot.set(arg1);
     Handle::copy_from(val, (Handle::cast::<Struct2070<'a>>(arg1__slot)));

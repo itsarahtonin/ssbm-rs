@@ -177,7 +177,6 @@ pub fn it_802996D0<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x90);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut owner_gobj = owner_gobj;
     let mut pos = pos;
     let mut arg2 = arg2;
@@ -286,10 +285,8 @@ pub fn it_802996D0<'a>(
 
 pub fn it_802998A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, fighter_gobj: HSD_GObj<'a>, arg2: i32) {
     let __frame = ctx.stack_frame(0x1f0);
-    let unused: ArrV<'a, u8, 408> = frame_at(ctx, &__frame, 0x34);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x28);
     let sp2C: Val<'a, F32> = frame_at(ctx, &__frame, 0x24);
-    let unused_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fighter_gobj = fighter_gobj;
     let mut arg2 = arg2;
@@ -338,7 +335,6 @@ pub fn it_802998A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, fighter_gobj: HSD_GObj<
 
 pub fn itLgunbeam_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -355,7 +351,6 @@ pub fn itLgunbeam_UnkMotion0_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itLgunbeam_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -391,7 +386,6 @@ pub fn itLgunbeam_UnkMotion0_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLgunbeam_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x200);
-    let unused: ArrV<'a, u8, 480> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut flags: i32 = 0;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

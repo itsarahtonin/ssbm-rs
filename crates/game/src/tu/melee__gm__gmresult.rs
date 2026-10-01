@@ -33,7 +33,6 @@ pub fn fn_80174274<'a>(ctx: &'a Ctx) -> MatchEnd<'a> {
 
 pub fn fn_80174284<'a>(ctx: &'a Ctx, slot: u8) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut i: i32 = 0;
     let mut count: i32 = 0;
@@ -131,7 +130,6 @@ pub fn fn_80174468<'a>(
     entry_idx: i32,
 ) {
     let __frame = ctx.stack_frame(0x68);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut text1 = text1;
     let mut text2 = text2;
@@ -608,10 +606,7 @@ pub fn fn_80174B4C<'a>(ctx: &'a Ctx, data: ResultsData<'a>, slot: i32) {
     let __frame = ctx.stack_frame(0xc0);
     let pdata: Ptr<'a, ResultsPlayerData<'a>> = frame_at(ctx, &__frame, 0x0);
     let list_base: Ptr<'a, StatsList<'a>> = frame_at(ctx, &__frame, 0x4);
-    let pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x38);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x10);
-    let __inl: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x48);
     let mut data = data;
     let mut slot = slot;
     let mut list: StatsList<'a> = null(ctx);
@@ -630,7 +625,7 @@ pub fn fn_80174B4C<'a>(ctx: &'a Ctx, data: ResultsData<'a>, slot: i32) {
             break 'l1;
         }
     }
-    inl_fn_80174B4C_blk14829(ctx, data, slot, pdata, list_base, Handle::addr(__inl));
+    inl_fn_80174B4C_blk14829(ctx, data, slot, pdata, list_base);
     list = list_base.get();
     if ((pdata.get()).page() as i32) != 2_i32 {
         'l3: while ((list).mode() as i32) != ((pdata.get()).page() as i32) {
@@ -769,15 +764,14 @@ pub fn fn_80175038<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, flag: i32) {
 }
 
 pub fn fn_8017507C<'a>(ctx: &'a Ctx, __ret: _GXColor<'a>, slot: i32) {
-    let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
+    let __frame = ctx.stack_frame(0x28);
     let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
     let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
-    let __ret_tmp_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
-    let __ret_tmp_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
-    let __ret_tmp_5: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
-    let __ret_tmp_6: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
+    let __ret_tmp_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __ret_tmp_3: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
+    let __ret_tmp_4: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
+    let __ret_tmp_5: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
+    let __ret_tmp_6: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
     let mut slot = slot;
     let mut current_color: f64 = 0.0;
     if ((fns::lbl_8046DBE8(ctx).x94()).is_teams() as i32) == 1_i32 {
@@ -884,8 +878,7 @@ pub fn fn_80175240<'a>(ctx: &'a Ctx, slot: i32) {
     let empty_first_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
     let empty_second_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
     let empty_third_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut color_ptr: _GXColor<'a> = null(ctx);
     let mut ko_count: HSD_Text<'a> = null(ctx);
@@ -1370,11 +1363,9 @@ pub fn fn_80175880<'a>(ctx: &'a Ctx, slot: i32) {
 pub fn fn_80175A94<'a>(ctx: &'a Ctx, slot: i32, position: Vec<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let sp18: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
     let sp14: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused_3: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
-    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
+    let __ret_tmp: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
     let mut slot = slot;
     let mut position = position;
     let mut player: u32 = (slot as u32);
@@ -1487,9 +1478,7 @@ pub fn fn_80175A94<'a>(ctx: &'a Ctx, slot: i32, position: Vec<'a>) {
 
 pub fn fn_80175C5C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let position: Vec<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x10);
     let mut i: i32 = 0;
     'l1: loop {
         'c2: {}
@@ -1537,9 +1526,7 @@ pub fn fn_80175C5C<'a>(ctx: &'a Ctx) {
 
 pub fn fn_80175D34<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
     let mut data: ResultsData<'a> = null(ctx);
     let mut ko_count: HSD_Text<'a> = null(ctx);
     let mut ko_time: HSD_Text<'a> = null(ctx);
@@ -1584,7 +1571,6 @@ pub fn fn_80175D34<'a>(ctx: &'a Ctx) {
 
 pub fn fn_80175DC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x140);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let sp108: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x100);
     let sp104: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xfc);
     let sp100: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0xf8);
@@ -1612,7 +1598,6 @@ pub fn fn_80175DC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let sp3C: Vec<'a> = frame_at(ctx, &__frame, 0x34);
     let sp30: Vec<'a> = frame_at(ctx, &__frame, 0x28);
     let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused_2: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x104);
     let mut gobj = gobj;
     let mut me: MatchEnd<'a> = null(ctx);
     let mut data_iter: ResultsData<'a> = null(ctx);
@@ -2940,9 +2925,7 @@ pub fn fn_80176D18<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_80176D3C<'a>(ctx: &'a Ctx, positions: Vec<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let models: ArrP<'a, DynamicModelDesc<'a>, 3> = frame_at(ctx, &__frame, 0xc);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
     let mut positions = positions;
     let mut data: ResultsData<'a> = fns::lbl_8046DBE8(ctx);
     let mut me: MatchEnd<'a> = null(ctx);
@@ -3178,7 +3161,6 @@ pub fn fn_801771C0<'a>(ctx: &'a Ctx, data: ResultsData<'a>) {
 
 pub fn gm_Scene_Results_OnEnter<'a>(ctx: &'a Ctx, arg0_: Addr<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
     let mut arg0_ = arg0_;
     let mut arg0: ResultsMatchInfo<'a> = Handle::cast::<ResultsMatchInfo<'a>>(arg0_);
     let mut light_gobj: HSD_GObj<'a> = null(ctx);
@@ -3454,9 +3436,7 @@ fn inl_fn_80174B4C_blk14829<'a>(
     slot: i32,
     pdata: Ptr<'a, ResultsPlayerData<'a>>,
     list: Ptr<'a, StatsList<'a>>,
-    __in_caller: u32,
 ) {
-    let unused: ArrV<'a, u8, 56> = ptr(ctx, __in_caller + 0x0);
     let mut data = data;
     let mut slot = slot;
     let mut pdata = pdata;

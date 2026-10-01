@@ -357,7 +357,6 @@ pub fn it_802D2D04<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802D2D2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x98);
-    let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x28);
     let hit_pos: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
     let tmp: Vec<'a> = frame_at(ctx, &__frame, 0x10);
@@ -424,7 +423,6 @@ pub fn it_802D2D2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_2725_Logic42_Spawned<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> = null(ctx);
     let mut attr: itHououAttr<'a> = null(ctx);

@@ -31,7 +31,6 @@ pub fn fn_80179854<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x40);
     let color1: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
     let color2: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut disp: ResultsDisplayLayout<'a> =
         Handle::cast::<ResultsDisplayLayout<'a>>(fns::lbl_8046E1B0(ctx));
     color1.set_r((0_i32 as u8));
@@ -86,9 +85,8 @@ pub fn fn_80179854<'a>(ctx: &'a Ctx) {
 
 pub fn fn_80179990<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32, arg2: i32) {
     let __frame = ctx.stack_frame(0x60);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
-    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -1480,7 +1478,6 @@ pub fn fn_8017A67C<'a>(ctx: &'a Ctx, kind: i32, arg1: i32, arg2: i32) -> HSD_GOb
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x34);
     let pos2: Vec<'a> = frame_at(ctx, &__frame, 0x28);
     let sp: ArrV<'a, F32, 4> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut kind = kind;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

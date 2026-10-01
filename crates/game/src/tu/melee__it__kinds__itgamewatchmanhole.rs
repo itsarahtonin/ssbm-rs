@@ -66,7 +66,6 @@ pub fn itGameWatchManhole_Logic72_Destroyed<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>
 
 pub fn it_802C6718<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -97,7 +96,6 @@ pub fn it_802C6784<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itGameWatchManhole_Logic72_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {

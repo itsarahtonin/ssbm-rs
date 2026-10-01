@@ -96,7 +96,6 @@ pub fn ftCo_800BDA74<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, normal: Vec<'a>) {
 pub fn ftCo_800BDB58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, thrower_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0x48);
-    let unused: ArrV<'a, u8, 36> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut thrower_gobj = thrower_gobj;
     let mut fp: Fighter<'a> =
@@ -184,7 +183,6 @@ pub fn ftCo_ThrownKirbyStar_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_800BE000<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, thrower_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut thrower_gobj = thrower_gobj;
     let mut fp: Fighter<'a> =
@@ -343,7 +341,6 @@ pub fn ftCo_ThrownKirby_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_ThrownKirby_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

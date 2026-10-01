@@ -153,14 +153,12 @@ pub fn ftCo_800CE650<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let spC4: Vec<'a> = frame_at(ctx, &__frame, 0xbc);
     let spB8: Vec<'a> = frame_at(ctx, &__frame, 0xb0);
     let spB4: Val<'a, F32> = frame_at(ctx, &__frame, 0xac);
-    let padA: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let spA0: Vec<'a> = frame_at(ctx, &__frame, 0x98);
     let sp94: Vec<'a> = frame_at(ctx, &__frame, 0x8c);
     let sp90: Val<'a, F32> = frame_at(ctx, &__frame, 0x88);
     let sp84: Vec<'a> = frame_at(ctx, &__frame, 0x7c);
     let sp78: Vec<'a> = frame_at(ctx, &__frame, 0x70);
     let sp6C: Vec<'a> = frame_at(ctx, &__frame, 0x64);
-    let padB: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let sp58: Vec<'a> = frame_at(ctx, &__frame, 0x50);
     let sp4C: Vec<'a> = frame_at(ctx, &__frame, 0x44);
     let sp48: Val<'a, F32> = frame_at(ctx, &__frame, 0x40);

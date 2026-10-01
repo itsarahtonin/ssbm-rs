@@ -191,7 +191,6 @@ pub fn DevText_SetupCObj<'a>(ctx: &'a Ctx) {
 
 pub fn DevText_Draw<'a>(ctx: &'a Ctx, text: DevText<'a>) {
     let __frame = ctx.stack_frame(0x90);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
     let color_2: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
     let color_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);

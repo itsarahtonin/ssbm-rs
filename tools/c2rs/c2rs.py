@@ -244,6 +244,7 @@ class FnCtx:
         self.frame_size = 0  # bytes kept at the frame's start, past the outgoing arguments
         # Locals the original's frame holds: vkey -> offset from r1.
         self.placed = {}
+        self.referenced = set()  # vkeys of the variables the body names
         self.inline_regions = 0  # regions this frame keeps for inline copies' locals
         # Bytes at 8(r1) that calls from this frame pass arguments in, past the registers.
         self.outgoing = 0
@@ -753,7 +754,7 @@ class Translator:
             raise Unsupported("variadic function that passes arguments on the stack")
         has_frame = bool(self.f.frame) or out
         self.place_inline_regions(name)
-        offsets = self.frame_layout(out)
+        offsets = self.frame_layout(out, original - 8 - out if original else None)
         top = max([self.f.frame_size] + [off + slot[2] for off, slot in zip(offsets, self.f.frame)])
         needed = (8 + out + top + 7) & ~7 if has_frame else 0
         size = max(original, needed)
@@ -828,6 +829,8 @@ class Translator:
             if n.kind == CK.BINARY_OPERATOR and \
                     BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(n)) in ("+", "-"):
                 self.note_reach(n)
+            if n.kind == CK.DECL_REF_EXPR and n.referenced is not None:
+                self.f.referenced.add(vkey(n.referenced))
         self.find_aliases(node)
 
     def check_gotos(self, body):
@@ -982,12 +985,15 @@ class Translator:
         for k, (i, slot) in zip(free, regions):
             self.f.frame[i] = slot[:4] + (k,)
 
-    def frame_layout(self, out):
+    def frame_layout(self, out, room=None):
         """Each frame slot's offset past the outgoing arguments: a local the original's frame
-        holds at its own offset there, the rest in order after the bytes the frame keeps at
-        its start, each at the first place it fits around those, so the frame grows past the
-        original's no more than it must. Locals the original keeps in registers can share a
-        spill slot in its debug info, but not in the port's frame: only the first keeps it."""
+        holds at its own offset there, the rest after the bytes the frame keeps at its start,
+        each at the first place it fits around those, so the frame grows past the original's
+        no more than it must. They go in the order of their declarations, or the reverse, as
+        MWCC lays them out last declared lowest, or largest first, whichever first fits in the
+        `room` the original's frame has for them. Locals the original keeps in registers can
+        share a spill slot in its debug info, but not in the port's frame: only the first
+        keeps it."""
         fixed, places = [], {}
         for i, (_, _, size, _, at) in enumerate(self.f.frame):
             if at is None:
@@ -999,21 +1005,27 @@ class Translator:
         if any(lo < self.f.frame_size for lo, _ in fixed):
             # In the port's outgoing arguments or kept bytes: the original's layout does not fit.
             fixed, places = [], {}
-        taken = list(fixed)
-        offsets = []
-        for i, (_, _, size, align, at) in enumerate(self.f.frame):
-            if i in places:
-                offsets.append(places[i])
-                continue
-            off = (self.f.frame_size + align - 1) & ~(align - 1)
-            while True:
-                clash = [hi for lo, hi in taken if off < hi and lo < off + size]
-                if not clash:
-                    break
-                off = (max(clash) + align - 1) & ~(align - 1)
-            offsets.append(off)
-            taken.append((off, off + size))
-        return offsets
+        rest = [i for i in range(len(self.f.frame)) if i not in places]
+        best = None
+        for order in (rest, rest[::-1], sorted(rest, key=lambda i: -self.f.frame[i][2])):
+            taken = list(fixed)
+            offsets = dict(places)
+            for i in order:
+                _, _, size, align, _ = self.f.frame[i]
+                off = (self.f.frame_size + align - 1) & ~(align - 1)
+                while True:
+                    clash = [hi for lo, hi in taken if off < hi and lo < off + size]
+                    if not clash:
+                        break
+                    off = (max(clash) + align - 1) & ~(align - 1)
+                offsets[i] = off
+                taken.append((off, off + size))
+            top = max([0] + [hi for _, hi in taken])
+            if best is None or top < best[0]:
+                best = (top, offsets)
+            if room is None or top <= room:
+                break
+        return [best[1][i] for i in range(len(self.f.frame))]
 
     # Statements.
 
@@ -1551,6 +1563,10 @@ class Translator:
             rname = self.f.locals[key][0]
             return [f"{ident(rname)} = {self.convert(self.expr(init), t).code};"]
         on_stack = t["k"] in ("rec", "arr") or key in self.f.escaping
+        if on_stack and init is None and key not in self.f.referenced and key not in self.f.placed:
+            # Never used, as the decomp's padding for MWCC's frame: the port keeps the
+            # original's frame size, and the room for what does need a slot.
+            return []
         if on_stack:
             slot = self.stack_slot(base, t, key)
             self.f.locals[key] = (slot, t, "stack")

@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn ftYs_Init_8012B6E8<'a>(ctx: &'a Ctx, fp: Fighter<'a>, unk_struct_arg: S_UNK_YOSHI1<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut unk_struct_arg = unk_struct_arg;
     let mut unk_struct1: S_UNK_YOSHI1<'a> = null(ctx);
@@ -100,7 +99,6 @@ pub fn ftYs_Init_8012B804<'a>(
     start_frame: f64,
 ) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut unk_struct_arg = unk_struct_arg;
     let mut start_frame = start_frame;
@@ -139,7 +137,6 @@ pub fn ftYs_Init_8012B804<'a>(
 
 pub fn ftYs_Init_8012B8A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

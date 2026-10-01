@@ -322,7 +322,6 @@ pub fn mnDiagram_GetFighterTotalKOs<'a>(ctx: &'a Ctx, field_index: u8) -> i32 {
 
 pub fn mnDiagram_GetFighterTotalFalls<'a>(ctx: &'a Ctx, field_index: u8) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut field_index = field_index;
     'l1: loop {
         'c2: {}
@@ -761,7 +760,6 @@ pub fn mnDiagram_GetLeastPlayedFighter<'a>(ctx: &'a Ctx, name_idx: u8) -> u8 {
 pub fn mnDiagram_SortFightersByKOs<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0xa0);
     let totals: ArrV<'a, u32, 25> = frame_at(ctx, &__frame, 0x10);
-    let sp: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut dst: Val<'a, u8> = fns::mnDiagram_FighterDisplayOrder(ctx).at(0);
     let mut dst_iter: Val<'a, u8> = null(ctx);
     let mut candidate: Val<'a, u8> = null(ctx);
@@ -5336,7 +5334,6 @@ fn asm_mnDiagram_CursorProc(ctx: &Ctx) {
 
 pub fn mnDiagram_CreateCursor<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
     let mut model: StaticModelDesc<'a> = null(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -5367,7 +5364,6 @@ pub fn mnDiagram_CreateCursor<'a>(ctx: &'a Ctx) {
 
 pub fn mnDiagram_CreateScreen<'a>(ctx: &'a Ctx, arg0: u8) {
     let __frame = ctx.stack_frame(0x48);
-    let __inl: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut col_idx: i32 = 0;
     let mut row_idx: i32 = 0;
@@ -5473,7 +5469,7 @@ pub fn mnDiagram_CreateScreen<'a>(ctx: &'a Ctx, arg0: u8) {
             statics::melee__mn__mndiagram::mnDiagram_IntroAnim(ctx).end_frame(),
         );
         fns::HSD_JObjAnimAll(ctx, anim_jobj);
-        inl_mnDiagram_CreateCursor_unfused(ctx, Handle::addr(__inl));
+        inl_mnDiagram_CreateCursor_unfused(ctx);
         count = inl_getEntryCount_unfused(ctx, user_data);
         inl_updateScrollArrowVisibility_unfused(
             ctx,
@@ -6630,8 +6626,7 @@ fn inl_getRowReferenceY<'a>(ctx: &'a Ctx, data: Diagram<'a>) -> f64 {
     return inl_HSD_JObjGetTranslationY(ctx, (data).jobjs().at(9_i32).get());
 }
 
-fn inl_mnDiagram_CreateCursor_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) {
-    let unused: ArrV<'a, u8, 40> = ptr(ctx, __in_caller + 0x0);
+fn inl_mnDiagram_CreateCursor_unfused<'a>(ctx: &'a Ctx) {
     let mut model: StaticModelDesc<'a> = null(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut jobj: HSD_JObj<'a> = null(ctx);

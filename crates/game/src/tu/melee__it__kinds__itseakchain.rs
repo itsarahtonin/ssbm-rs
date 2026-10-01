@@ -188,7 +188,6 @@ pub fn itSeakChain_Spawn<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0xa8);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x38);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut parent_gobj = parent_gobj;
     let mut arg1 = arg1;
     let mut facing_dir = facing_dir;
@@ -363,7 +362,6 @@ pub fn fn_802BB784<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itSeakchain_UnkMotion4_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -434,7 +432,6 @@ pub fn it_802BBB0C<'a>(
     scale: f64,
 ) {
     let __frame = ctx.stack_frame(0x48);
-    let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut link = link;
     let mut offset = offset;
@@ -478,9 +475,7 @@ pub fn it_802BBC38<'a>(
     scale: f64,
 ) {
     let __frame = ctx.stack_frame(0x50);
-    let _pad: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let origin: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let _pad2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
     let mut link = link;
     let mut offset = offset;
     let mut sa = sa;
@@ -528,7 +523,6 @@ pub fn it_802BBD64<'a>(
     sa: itSeakChain_Attrs<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let _pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut link = link;
     let mut arg1 = arg1;
@@ -589,7 +583,6 @@ pub fn it_802BBED0<'a>(
     sa: itSeakChain_Attrs<'a>,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let _pad: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut link = link;
     let mut arg1 = arg1;
@@ -655,7 +648,6 @@ pub fn it_802BBED0<'a>(
 pub fn it_802BC080<'a>(ctx: &'a Ctx, link: ItemLink<'a>, target: Vec<'a>, ip: Item<'a>) {
     let __frame = ctx.stack_frame(0xc0);
     let stack: it_802BC080_stack<'a> = frame_at(ctx, &__frame, 0x3c);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut link = link;
     let mut target = target;
     let mut ip = ip;
@@ -992,10 +984,9 @@ pub fn it_802BC94C<'a>(
     farg0: f64,
 ) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let _padA: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let var_r30: Ptr<'a, ItemLink<'a>> = frame_at(ctx, &__frame, 0x8);
-    let var_r29: Ptr<'a, ItemLink<'a>> = frame_at(ctx, &__frame, 0xc);
-    let var_f1: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
+    let var_r30: Ptr<'a, ItemLink<'a>> = frame_at(ctx, &__frame, 0x0);
+    let var_r29: Ptr<'a, ItemLink<'a>> = frame_at(ctx, &__frame, 0x4);
+    let var_f1: Val<'a, F32> = frame_at(ctx, &__frame, 0x8);
     let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
@@ -1023,7 +1014,6 @@ pub fn it_802BCA30<'a>(ctx: &'a Ctx, ip: Item<'a>) {
     let __frame = ctx.stack_frame(0x68);
     let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x1c);
     let vec: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut ip = ip;
     let mut link: ItemLink<'a> = (ip).xDD4_itemVar().seakchain().x0();
     let mut jobj0: HSD_JObj<'a> = Handle::cast::<HSD_JObj<'a>>(((link).gobj()).hsd_obj());
@@ -1180,7 +1170,6 @@ pub fn it_802BCB88<'a>(ctx: &'a Ctx, ip: Item<'a>, vec: Vec<'a>) {
 
 pub fn it_2725_Logic54_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut item: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -1195,7 +1184,6 @@ pub fn it_2725_Logic54_PickedUp<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802BCED4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -1211,7 +1199,6 @@ pub fn it_802BCED4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802BCF2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -1227,7 +1214,6 @@ pub fn it_802BCF2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802BCF84<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -1242,11 +1228,8 @@ pub fn it_802BCF84<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802BCFC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, vel: Vec<'a>) {
     let __frame = ctx.stack_frame(0x80);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x14);
-    let unused_3: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x44);
     let mut gobj = gobj;
     let mut vel = vel;
     'l1: loop {

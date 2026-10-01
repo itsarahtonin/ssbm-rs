@@ -39,7 +39,6 @@ pub fn HSD_SObjLib_803A44D4<'a>(
     priority: u8,
 ) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut sobj = sobj;
     let mut priority = priority;
@@ -120,7 +119,6 @@ pub fn HSD_SObjLib_803A44D4<'a>(
 
 pub fn HSD_SObjLib_803A466C<'a>(ctx: &'a Ctx, sobj: HSD_SObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut sobj = sobj;
     'l1: loop {
         'c2: {}
@@ -307,7 +305,6 @@ pub fn HSD_SObjLib_803A477C<'a>(
 
 pub fn HSD_SObjLib_803A49E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut unused = unused;
     let mut sobj: HSD_SObj<'a> = null(ctx);

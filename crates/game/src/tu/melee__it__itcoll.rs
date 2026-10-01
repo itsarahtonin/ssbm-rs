@@ -118,7 +118,6 @@ pub fn it_8026FAC4<'a>(
     chk: i32,
 ) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg_item0 = arg_item0;
     let mut arg_hit = arg_hit;
     let mut arg2 = arg2;
@@ -170,7 +169,6 @@ pub fn it_8026FC00<'a>(
     arg3: Fighter<'a>,
 ) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg_item = arg_item;
     let mut arg_hit = arg_hit;
     let mut arg2 = arg2;
@@ -202,7 +200,6 @@ pub fn it_8026FC00<'a>(
 
 pub fn it_8026FCF8<'a>(ctx: &'a Ctx, arg_item: Item<'a>, arg_hit: HitCapsule<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg_item = arg_item;
     let mut arg_hit = arg_hit;
     let mut item_gobj: HSD_GObj<'a> = null(ctx);
@@ -262,9 +259,6 @@ pub fn it_8026FE68<'a>(
 ) {
     let __frame = ctx.stack_frame(0x88);
     let sp48: Vec<'a> = frame_at(ctx, &__frame, 0x40);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x20);
-    let __inl_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x28);
     let mut arg_item0 = arg_item0;
     let mut hit1 = hit1;
     let mut arg_item2 = arg_item2;
@@ -312,7 +306,6 @@ pub fn it_8026FE68<'a>(
             var_r26,
             Handle::cast::<Addr<'a>>(arg_item0),
             1_i32,
-            Handle::addr(__inl),
         );
         if dmg_int > (arg_item2).xC48() {
             (arg_item2).set_xC48(dmg_int);
@@ -364,7 +357,6 @@ pub fn it_8026FE68<'a>(
             var_r26,
             Handle::cast::<Addr<'a>>(arg_item2),
             0_i32,
-            Handle::addr(__inl_2),
         );
         if dmg_int > (arg_item0).xC48() {
             (arg_item0).set_xC48(dmg_int);
@@ -403,7 +395,6 @@ pub fn it_8026FE68<'a>(
 
 pub fn it_802701BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut fighter_gobj: HSD_GObj<'a> = null(ctx);
@@ -514,7 +505,6 @@ pub fn it_802701BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802703E8<'a>(ctx: &'a Ctx, arg_item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg_item_gobj = arg_item_gobj;
     let mut arg_item: Item<'a> = null(ctx);
     let mut fighter_gobj: HSD_GObj<'a> = null(ctx);
@@ -690,7 +680,6 @@ pub fn it_802703E8<'a>(ctx: &'a Ctx, arg_item_gobj: HSD_GObj<'a>) {
 
 pub fn it_802706D0<'a>(ctx: &'a Ctx, arg_item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x78);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut arg_item_gobj = arg_item_gobj;
     let mut hit_index: u32 = 0;
     let mut hurt_index: u32 = 0;
@@ -1428,7 +1417,6 @@ pub fn it_80271590<'a>(
     arg_hurt: HurtCapsule<'a>,
 ) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let sp18: Vec<'a> = frame_at(ctx, &__frame, 0x10);
     let mut item_gobj = item_gobj;
     let mut index = index;
@@ -1459,7 +1447,6 @@ pub fn it_80271590<'a>(
 
 pub fn it_8027163C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> = null(ctx);
     let mut article: Article<'a> = null(ctx);
@@ -1587,7 +1574,6 @@ pub fn it_80271830<'a>(ctx: &'a Ctx, item: Item<'a>, angle: f64) {
     let sp5C: Vec<'a> = frame_at(ctx, &__frame, 0x54);
     let sp50: Vec<'a> = frame_at(ctx, &__frame, 0x48);
     let sp44: Vec<'a> = frame_at(ctx, &__frame, 0x3c);
-    let _pad: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let sp20: Vec<'a> = frame_at(ctx, &__frame, 0x18);
     let mut item = item;
     let mut angle = angle;
@@ -1727,7 +1713,6 @@ pub fn it_80271A58<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 pub fn it_80271B60<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x70);
     let sp24: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let _padA: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut x_pos: f64 = 0.0;
     let mut ecb: _itECB<'a> = null(ctx);
@@ -1783,10 +1768,8 @@ pub fn it_80271B60<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
 
 pub fn it_80271D2C<'a>(ctx: &'a Ctx, arg_item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x80);
-    let _pad: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
     let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
     let mut arg_item_gobj = arg_item_gobj;
     let mut arg_item_jobj: HSD_JObj<'a> =
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, arg_item_gobj)));
@@ -1862,10 +1845,8 @@ pub fn it_80271D2C<'a>(ctx: &'a Ctx, arg_item_gobj: HSD_GObj<'a>) {
 
 pub fn it_80271F78<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x80);
-    let _pad: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let sp34: Vec<'a> = frame_at(ctx, &__frame, 0x2c);
     let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> =
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
@@ -2171,9 +2152,7 @@ fn inl_it_8026FAC4_unfused<'a>(
     arg2: i32,
     arg3: Addr<'a>,
     chk: i32,
-    __in_caller: u32,
 ) {
-    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0x0);
     let mut arg_item0 = arg_item0;
     let mut arg_hit = arg_hit;
     let mut arg2 = arg2;

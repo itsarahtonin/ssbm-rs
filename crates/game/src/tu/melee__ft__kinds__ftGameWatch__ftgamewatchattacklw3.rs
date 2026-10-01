@@ -29,7 +29,6 @@ use crate::support::*;
 pub fn ftGw_AttackLw3_ItemManholeSetup<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let sp10: Vec<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut manholeGObj: HSD_GObj<'a> = null(ctx);
     let mut fp: Fighter<'a> = inl_getFighter_unfused(ctx, gobj);
@@ -92,7 +91,6 @@ pub fn ftGw_AttackLw3_ItemManholeRemove<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftGw_AttackLw3_ItemManholeOnDamage<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = inl_getFighter_unfused(ctx, gobj);
     if !Handle::is_null((fp).u().gw().x2250_manholeGObj2()) {
@@ -155,7 +153,6 @@ pub fn ftGw_AttackLw3_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftGw_AttackLw3_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     if !(fns::ftAnim_IsFramesRemaining(ctx, gobj) != 0) {
         fns::ftCo_800D638C(ctx, gobj);

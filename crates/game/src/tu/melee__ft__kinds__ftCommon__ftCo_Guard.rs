@@ -62,7 +62,6 @@ pub fn ftCo_80091A4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn ftCo_80091AD8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, mv_x20: i32) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut mv_x20 = mv_x20;
     let mut ret0: i32 = 0;
@@ -691,7 +690,6 @@ pub fn ftCo_80091D58<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 pub fn ftCo_80091E78<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: f64) {
     let __frame = ctx.stack_frame(0x60);
     let scl: Vec<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -801,7 +799,6 @@ pub fn ftCo_80092158<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: HSD_
 pub fn ftCo_800921DC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
     let trans: Vec<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     'l1: loop {
@@ -950,7 +947,6 @@ pub fn ftCo_800924C0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_800925A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     'l1: loop {
@@ -1182,7 +1178,6 @@ pub fn ftCo_800928CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_80092908<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let absorb: AbsorbDesc<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     fns::Fighter_ChangeMotionState(
@@ -1238,7 +1233,6 @@ pub fn ftCo_80092908<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_Guard_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     'l1: loop {
@@ -1404,7 +1398,6 @@ pub fn ftCo_80092C54<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_GuardOff_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     'l1: loop {
@@ -1531,10 +1524,8 @@ pub fn ftCo_80092ED8<'a>(ctx: &'a Ctx, arg0: i32, arg1: f64) -> f64 {
 
 pub fn ftCo_80092F2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x78);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let absorb: AbsorbDesc<'a> = frame_at(ctx, &__frame, 0x30);
     let scl: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused_2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -1731,9 +1722,7 @@ pub fn ftCo_800932DC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_GuardSetOff_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
     let scl: Vec<'a> = frame_at(ctx, &__frame, 0x40);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let absorb: AbsorbDesc<'a> = frame_at(ctx, &__frame, 0x28);
-    let unused_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x4);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     'l1: loop {
@@ -1821,7 +1810,6 @@ pub fn ftCo_8009370C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, on_reflect: FnPtr<'a>
 
 pub fn ftCo_80093790<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1897,8 +1885,8 @@ pub fn ftCo_8009388C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 }
 
 pub fn ftCo_800939B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x88);
-    let __inl: ArrV<'a, u8, 128> = frame_at(ctx, &__frame, 0x0);
+    let __frame = ctx.stack_frame(0x78);
+    let __inl: ArrV<'a, u8, 112> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1996,7 +1984,6 @@ pub fn ftCo_80093BC0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_GuardReflect_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
     let absorb: AbsorbDesc<'a> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -2010,7 +1997,6 @@ pub fn ftCo_GuardReflect_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_GuardReflect_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -2790,7 +2776,6 @@ fn inl_inlineD0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 fn inl_ftCo_80091E78_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: f64, __in_caller: u32) {
     let scl: Vec<'a> = ptr(ctx, __in_caller + 0x0);
-    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0xc);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
@@ -2873,8 +2858,7 @@ fn inl_ftCo_80091E78_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: f64, __
 
 fn inl_ftCo_800921DC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
     let trans: Vec<'a> = ptr(ctx, __in_caller + 0x0);
-    let unused: ArrV<'a, u8, 12> = ptr(ctx, __in_caller + 0xc);
-    let __inl: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x18);
+    let __inl: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x10);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     'l1: loop {
@@ -2940,7 +2924,7 @@ fn inl_ftCo_800921DC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: 
 
 fn inl_ftCo_800924C0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
     let __inl: ArrV<'a, u8, 24> = ptr(ctx, __in_caller + 0x0);
-    let __inl_2: ArrV<'a, u8, 40> = ptr(ctx, __in_caller + 0x18);
+    let __inl_2: ArrV<'a, u8, 32> = ptr(ctx, __in_caller + 0x18);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -2966,8 +2950,8 @@ fn inl_ftCo_800924C0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: 
 }
 
 fn inl_ftCo_800923B4_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) {
-    let __inl: ArrV<'a, u8, 64> = ptr(ctx, __in_caller + 0x0);
-    let __inl_2: ArrV<'a, u8, 64> = ptr(ctx, __in_caller + 0x40);
+    let __inl: ArrV<'a, u8, 56> = ptr(ctx, __in_caller + 0x0);
+    let __inl_2: ArrV<'a, u8, 56> = ptr(ctx, __in_caller + 0x38);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
     's1: {

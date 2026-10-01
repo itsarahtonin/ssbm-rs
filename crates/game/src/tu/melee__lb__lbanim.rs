@@ -110,7 +110,6 @@ pub fn lbAnim_8001E6D8<'a>(
     frames: i8,
 ) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut jobj = jobj;
     let mut tree = tree;
     let mut track = track;
@@ -153,7 +152,6 @@ pub fn lbAnim_8001E7E8<'a>(
     frames: i8,
 ) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut jobj = jobj;
     let mut tree = tree;
     let mut track = track;

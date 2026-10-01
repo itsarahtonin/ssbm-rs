@@ -91,7 +91,6 @@ pub fn gm_801BA938<'a>(ctx: &'a Ctx, arg0: EventData<'a>, lo: i32, hi: i32, arg3
 
 pub fn onEnterCss<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_r31: EventData<'a> = (fns::gmMainLib_804D3EE0(ctx).get()).vs().unk_530();
     let mut css: CSSData<'a> =
@@ -181,9 +180,7 @@ pub fn gm_801BAB40<'a>(ctx: &'a Ctx, arg0: PlayerInitData<'a>, src: gm_801BAB40_
 
 pub fn gm_801BAC9C<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>, arg1: i32) -> i32 {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let chars: ArrV<'a, u8, 33> = frame_at(ctx, &__frame, 0x10);
-    let unused_2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut ev: EventData<'a> = (fns::gmMainLib_804D3EE0(ctx).get()).vs().unk_530();
@@ -243,7 +240,6 @@ pub fn gm_801BAC9C<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>, arg1: i32) -> i32 
 
 pub fn onEnterVs<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x88);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x24);
     let mut arg0 = arg0;
     let mut ev: EventData<'a> = inl_gm_GetEventData_unfused(ctx);
     let mut md: StartMeleeData<'a> =
@@ -1010,7 +1006,6 @@ pub fn gm_801BBB64<'a>(ctx: &'a Ctx) {
 
 pub fn gm_Mode_Event_OnLoad<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut temp_r30: EventData<'a> = null(ctx);
     let mut temp_r29: Ptr<'a, gm_804D6900_t<'a>> = null(ctx);
     let mut temp_r28: u8 = 0;
@@ -1074,7 +1069,6 @@ pub fn fn_801BBFE8<'a>(ctx: &'a Ctx) {
 
 pub fn gm_801BC00C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x60);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
     let mut event_levels: Ptr<'a, gm_804D6900_t<'a>> = null(ctx);
     let mut ev: EventData<'a> = inl_gm_GetEventData_unfused(ctx);
     let mut idx: u8 = (ev).unk_535();
@@ -1285,7 +1279,6 @@ pub fn gm_801BC00C<'a>(ctx: &'a Ctx) {
 pub fn gm_801BC488<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x2288);
     let spC: MatchEnd<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut tmp: MatchEnd<'a> = fns::gm_8016B774(ctx);
     'l1: loop {
         'c2: {}
@@ -1303,7 +1296,6 @@ pub fn gm_801BC488<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn gm_801BC4F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r0: i32 = 0;
     let mut temp_r30: u32 = 0;
@@ -1387,7 +1379,6 @@ pub fn gm_801BC4F4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn gm_801BC670<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_r31: EventData<'a> = (fns::gmMainLib_804D3EE0(ctx).get()).vs().unk_530();
     let mut temp_r30: gm_804D6900_x4_t<'a> = ((Handle::add(
@@ -1428,7 +1419,6 @@ pub fn gm_801BC670<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn gm_801BC754<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x68);
-    let unused: ArrV<'a, u8, 72> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r3: VsSceneController<'a> = null(ctx);
     let mut temp_r3_2: VsSceneController<'a> = null(ctx);
@@ -1529,7 +1519,6 @@ pub fn gm_801BC754<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn gm_801BC9E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r3: VsSceneController<'a> = null(ctx);
     let mut var_r0: i32 = 0;
@@ -1573,7 +1562,6 @@ pub fn gm_801BC9E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn gm_801BCAF0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r3: HSD_GObj<'a> = null(ctx);
     let mut temp_r3_2: VsSceneController<'a> = null(ctx);
@@ -1767,7 +1755,6 @@ pub fn gm_801BCAF0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn gm_801BCC9C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_r29: Ptr<'a, gm_804D6900_t<'a>> = statics::melee__gm__gmevent::gm_804D6900(ctx)
         .at(0_i32)
@@ -1857,7 +1844,6 @@ pub fn gm_801BCF20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn gm_801BCF40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r3: VsSceneController<'a> = null(ctx);
     let mut var_r0: i32 = 0;
@@ -1892,7 +1878,6 @@ pub fn gm_801BCF40<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn gm_801BD028<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut rules: VsSceneController<'a> = null(ctx);
     let mut cond: i32 = 0;
@@ -1942,7 +1927,6 @@ pub fn gm_801BD028<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn gm_801BD164<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r3: VsSceneController<'a> = null(ctx);
     let mut temp_r30: i32 = 0;
@@ -1985,7 +1969,6 @@ pub fn gm_801BD164<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn gm_801BD30C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r3: VsSceneController<'a> = null(ctx);
     let mut var_r0: i32 = 0;
@@ -2029,7 +2012,6 @@ pub fn gm_801BD44C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn gm_801BD46C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r3: VsSceneController<'a> = null(ctx);
     let mut var_r0: i32 = 0;
@@ -2099,7 +2081,6 @@ pub fn gm_801BD46C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn gm_801BD658<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r3: VsSceneController<'a> = null(ctx);
     let mut var_r0: i32 = 0;
@@ -2160,7 +2141,6 @@ pub fn gm_801BD658<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn gm_801BD7FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r3: VsSceneController<'a> = null(ctx);
     let mut var_r0: i32 = 0;
@@ -2198,7 +2178,6 @@ pub fn gm_801BD7FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn gm_801BD93C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 56> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r3: VsSceneController<'a> = null(ctx);
     let mut var_r0: i32 = 0;
@@ -2246,7 +2225,6 @@ pub fn gm_801BDAD4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn gm_801BDAF4<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_r3: VsSceneController<'a> = null(ctx);
     let mut temp_r30_2: i32 = 0;
@@ -2284,7 +2262,6 @@ pub fn gm_801BDAF4<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn gm_801BDC08<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_r3: VsSceneController<'a> = null(ctx);
     let mut var_r0: i32 = 0;
@@ -2322,7 +2299,6 @@ pub fn gm_801BDC08<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn gm_801BDD44<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_r3: VsSceneController<'a> = null(ctx);
     let mut var_r0: i32 = 0;
@@ -2362,7 +2338,6 @@ pub fn gm_801BDD44<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 pub fn gm_801BDE94<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xa0);
     let sp50: PlayerInitData<'a> = frame_at(ctx, &__frame, 0x48);
-    let unused: ArrV<'a, u8, 60> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut tbl: Ptr<'a, gm_804D6900_t<'a>> = statics::melee__gm__gmevent::gm_804D6900(ctx)
         .at(0_i32)
@@ -2605,7 +2580,6 @@ pub fn gm_801BE37C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn gm_801BE39C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x80);
     let sp40: PlayerInitData<'a> = frame_at(ctx, &__frame, 0x38);
-    let unused: ArrV<'a, u8, 52> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r3_2: VsSceneController<'a> = null(ctx);
     let mut temp_r31: EventData<'a> = null(ctx);
@@ -2699,7 +2673,6 @@ pub fn gm_801BE618<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn gm_801BE638<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r31: i32 = 0;
     let mut temp_r30: EventData<'a> = null(ctx);
@@ -2874,7 +2847,6 @@ pub fn gm_801BEA4C<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn gm_801BEA88<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     'l1: loop {

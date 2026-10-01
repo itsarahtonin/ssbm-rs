@@ -207,9 +207,7 @@ pub fn it_80277F90<'a>(
 pub fn it_80278108<'a>(ctx: &'a Ctx, item: Item<'a>, mobj: HSD_MObj<'a>, texp: HSD_TExp<'a>) {
     let __frame = ctx.stack_frame(0x188);
     let sp168: _GXColor<'a> = frame_at(ctx, &__frame, 0x160);
-    let _padA: ArrV<'a, u8, 84> = frame_at(ctx, &__frame, 0xa0);
     let spFC: _HSD_TECnst<'a> = frame_at(ctx, &__frame, 0xf4);
-    let _padB: ArrV<'a, u8, 84> = frame_at(ctx, &__frame, 0x10c);
     let sp90: _HSD_TECnst<'a> = frame_at(ctx, &__frame, 0x88);
     let sp1C: _HSD_TevDesc<'a> = frame_at(ctx, &__frame, 0x14);
     let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
@@ -413,7 +411,6 @@ pub fn it_80278108<'a>(ctx: &'a Ctx, item: Item<'a>, mobj: HSD_MObj<'a>, texp: H
 
 pub fn it_80278574<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: _GXColor<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut var_r3: HSD_DObj<'a> = null(ctx);

@@ -30,7 +30,6 @@ use ssbm_rt::cpu as c;
 pub fn fn_8018325C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x60);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
@@ -385,7 +384,6 @@ pub fn fn_8018325C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32) {
 pub fn fn_80184138<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x80);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0x14);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
@@ -679,7 +677,6 @@ pub fn fn_80184AB8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x140);
     let sp110: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x108);
     let sp10: ArrV<'a, i8, 256> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut i: i32 = 0;
@@ -1133,7 +1130,6 @@ pub fn fn_80184AB8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn fn_8018504C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut new_var: i32 = 0;
     'l1: loop {
         'c2: {}
@@ -1226,7 +1222,6 @@ pub fn fn_8018504C<'a>(ctx: &'a Ctx) {
 
 pub fn fn_801851C0<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let pad_stack: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0xc);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
     let mut result: i32 = 0;
@@ -1305,7 +1300,6 @@ pub fn fn_801851C0<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn fn_801852FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut i: i32 = 0;
     let mut j: i32 = 0;
@@ -1369,7 +1363,6 @@ pub fn fn_801852FC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_80185408<'a>(ctx: &'a Ctx, x: i32, arg8: f64, arg9: f64, argA: f64, argB: f64) {
     let __frame = ctx.stack_frame(0xa0);
-    let unused: ArrV<'a, u8, 48> = frame_at(ctx, &__frame, 0x44);
     let sp1C: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x14);
     let mut x = x;
     let mut arg8 = arg8;
@@ -1497,7 +1490,6 @@ pub fn fn_8018564C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn fn_8018569C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut i: i32 = 0;
     'l1: loop {
@@ -2199,7 +2191,6 @@ pub fn fn_80185A0C<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x38);
     let img_idx: Ptr<'a, Val<'a, u8>> = frame_at(ctx, &__frame, 0x0);
     let i: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x8);
     let mut count_ptr: Val<'a, u8> = null(ctx);
     let mut gobj2: HSD_GObj<'a> = null(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);
@@ -2531,7 +2522,6 @@ pub fn fn_80186080<'a>(ctx: &'a Ctx) {
 
 pub fn fn_801861B8<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut text: HSD_Text<'a> = null(ctx);
     let mut i: i32 = 0;
     'l1: loop {
@@ -2882,7 +2872,6 @@ pub fn fn_80186400<'a>(ctx: &'a Ctx) {
 pub fn fn_80186634<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x48);
     let local: ClassicArchiveNameLocal<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     'l1: loop {
         'c2: {}

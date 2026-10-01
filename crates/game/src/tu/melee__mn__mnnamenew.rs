@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn mnNameNew_8023B0F8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: u8) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -71,7 +70,6 @@ pub fn mnNameNew_8023B0F8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: u8) {
 
 pub fn mnNameNew_8023B224<'a>(ctx: &'a Ctx, arg0: u8) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut data: NameNewEntry<'a> = null(ctx);
     let mut name_index: u8 = 0;
@@ -176,7 +174,6 @@ pub fn mnNameNew_KeySetup<'a>(ctx: &'a Ctx, arg0: NameNewEntry<'a>, arg1: u8) ->
     let key_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x44);
     let selected_key_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x40);
     let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x3c);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut layout: MnNameNewDataLayout<'a> = null(ctx);
@@ -449,7 +446,6 @@ pub fn mnNameNew_8023BAA8<'a>(ctx: &'a Ctx, arg0: NameNewEntry<'a>, arg1: i32, a
 
 pub fn PickAutoName<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     'l1: loop {
         'c2: {}
@@ -645,7 +641,6 @@ pub fn AddCharacterToName<'a>(
 
 pub fn mnNameNew_GlyphVariantInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut data: NameNewEntry<'a> = null(ctx);
     let mut buttons: u32 = 0;
@@ -787,9 +782,7 @@ pub fn mnNameNew_GlyphVariantInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnNameNew_MainInput<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let unused: ArrV<'a, i8, 12> = frame_at(ctx, &__frame, 0x0);
     let name_buffer: ArrV<'a, i8, 16> = frame_at(ctx, &__frame, 0x1c);
-    let unused_2: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0xc);
     let mut arg0 = arg0;
     let mut space_lead: i8 = 0;
     let mut data: NameNewEntry<'a> = null(ctx);
@@ -1229,7 +1222,6 @@ pub fn fn_8023CFC8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let key_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x28);
     let selected_key_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut jobj: HSD_JObj<'a> = null(ctx);
     let mut root: HSD_JObj<'a> = null(ctx);
@@ -1643,7 +1635,6 @@ pub fn mnNameNew_8023DA08<'a>(ctx: &'a Ctx, arg0: NameNewEntry<'a>) -> i32 {
 
 pub fn fn_8023DAEC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut all_anims_done: i32 = 0;
     let mut data: NameNewEntry<'a> = null(ctx);
@@ -1716,10 +1707,8 @@ pub fn fn_8023DAEC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn fn_8023DBE8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, i8, 4> = frame_at(ctx, &__frame, 0x0);
     let normal_key_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x24);
     let highlighted_key_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
-    let unused_2: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut flow: _MenuFlow<'a> = null(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);
@@ -1961,7 +1950,6 @@ pub fn mnNameNew_8023E0D8<'a>(ctx: &'a Ctx, arg0: NameNewEntry<'a>) {
 
 pub fn InitNameEntryUIState<'a>(ctx: &'a Ctx, arg0: NameNewEntry<'a>, arg1: i32) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut result: i32 = 0;
@@ -2013,8 +2001,7 @@ pub fn InitNameEntryUIState<'a>(ctx: &'a Ctx, arg0: NameNewEntry<'a>, arg1: i32)
 
 pub fn mnNameNew_8023E32C<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x80);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x8);
+    let child: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut root_jobj: HSD_JObj<'a> = null(ctx);
@@ -2093,7 +2080,6 @@ pub fn mnNameNew_8023E32C<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn mnNameNew_EnterFromMnName<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, i8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut text: Val<'a, i8> = fns::mnNameNew_CurrentNameText(ctx).at(0);
     fns::mn_804A04F0(ctx).set_x10((1_i32 as u8));
@@ -2112,7 +2098,6 @@ pub fn mnNameNew_EnterFromMnName<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
 
 pub fn mnNameNew_EnterFromMnCharSel<'a>(ctx: &'a Ctx, arg0: HSD_Archive<'a>, arg1: i32) {
     let __frame = ctx.stack_frame(0x128);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut name_count: u8 = 0;

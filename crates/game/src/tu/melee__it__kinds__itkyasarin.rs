@@ -54,7 +54,6 @@ pub fn it_802ECD3C<'a>(
     facing_dir: f64,
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x88);
-    let unused: ArrV<'a, u8, 84> = frame_at(ctx, &__frame, 0x0);
     let mut owner = owner;
     let mut pos = pos;
     let mut facing_dir = facing_dir;
@@ -220,7 +219,6 @@ pub fn itKyasarin_UnkMotion2_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn itKyasarin_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attr: itKyasarinAttributes<'a> =
@@ -359,7 +357,6 @@ pub fn it_802ED774<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itKyasarin_UnkMotion7_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
     let spawn_pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData(ctx, gobj)));
     'l1: loop {
@@ -513,7 +510,6 @@ pub fn itKyasarin_UnkMotion10_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 
 
 pub fn it_802EDDC0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x88);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
     let pos_2: Vec<'a> = frame_at(ctx, &__frame, 0x40);
     let mut gobj = gobj;

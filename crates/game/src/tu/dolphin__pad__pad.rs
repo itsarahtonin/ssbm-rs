@@ -357,7 +357,6 @@ pub fn PADRecalibrate<'a>(ctx: &'a Ctx, mask: u32) -> i32 {
 
 pub fn PADInit<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     if (statics::dolphin__pad__pad::Initialized(ctx).get() != 0) {
         return 1_i32;
     }
@@ -416,7 +415,6 @@ pub fn PADInit<'a>(ctx: &'a Ctx) -> i32 {
 pub fn PADRead<'a>(ctx: &'a Ctx, status: PADStatus<'a>) -> u32 {
     let __frame = ctx.stack_frame(0x50);
     let data: ArrV<'a, u32, 2> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut status = status;
     let mut enabled: i32 = fns::OSDisableInterrupts(ctx);
     let mut chanBit: u32 = 0;
@@ -1048,7 +1046,6 @@ pub fn SPEC2_MakeStatus<'a>(ctx: &'a Ctx, chan: i32, status: PADStatus<'a>, data
 
 pub fn OnReset<'a>(ctx: &'a Ctx, f: i32) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut f = f;
     let mut sync: i32 = 0;
     if !Handle::is_null(statics::dolphin__pad__pad::SamplingCallback(ctx).get()) {

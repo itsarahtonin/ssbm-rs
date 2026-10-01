@@ -304,7 +304,6 @@ pub fn gmClassic_801B2D54<'a>(ctx: &'a Ctx, arg0: gm_803DDEC8Struct<'a>) -> gm_8
 
 pub fn gm_Mode_Classic_OnLoad<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x68);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x0);
     let mut data: UnkAllstarData<'a> = null(ctx);
     let mut scene_data: gmClassicSceneData<'a> =
         Handle::cast::<gmClassicSceneData<'a>>(fns::gm_Mode_Classic_States(ctx).get(0));
@@ -638,7 +637,6 @@ pub fn gmClassic_801B3500<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
 
 pub fn gmClassic_801B3A34<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut temp_r30: StartMeleeData<'a> = null(ctx);
     let mut temp_r31: gm_803DDEC8Struct<'a> = null(ctx);
@@ -695,10 +693,8 @@ pub fn gmClassic_801B3A34<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
 
 pub fn gmClassic_801B3B40<'a>(ctx: &'a Ctx, arg0: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
     let sp18: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
     let sp14: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut mei: MatchExitInfo<'a> = null(ctx);
     let mut asd: UnkAllstarData<'a> = null(ctx);

@@ -70,7 +70,6 @@ pub fn it_8029FDDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
 
 pub fn it_8029FE64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, i: i32) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 32> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut i = i;
     let mut ip: Item<'a> = null(ctx);
@@ -121,7 +120,6 @@ pub fn it_802A013C<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0xb0);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut facing_dir = facing_dir;
     let mut owner_gobj = owner_gobj;
     let mut pos = pos;
@@ -362,9 +360,7 @@ pub fn it_802A0930<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn it_802A0C34<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x40);
-    let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let rot: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itLinkBoomerangAttributes<'a> = Handle::cast::<itLinkBoomerangAttributes<'a>>(
@@ -402,7 +398,6 @@ pub fn it_802A0C34<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 
 pub fn it_802A0E70<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut hobj: HSD_JObj<'a> = null(ctx);
     let mut ip: Item<'a> = null(ctx);
@@ -512,7 +507,6 @@ pub fn itLinkboomerang_UnkMotion1_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> 
 pub fn it_802A10E4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
     let quat: Quaternion<'a> = frame_at(ctx, &__frame, 0x10);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut hobj: HSD_JObj<'a> = null(ctx);
     let mut child: HSD_JObj<'a> = null(ctx);
@@ -587,7 +581,6 @@ pub fn itLinkboomerang_UnkMotion2_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn it_802A13EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
     let __frame = ctx.stack_frame(0x38);
     let angle: Val<'a, F32> = frame_at(ctx, &__frame, 0x0);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x4);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut ip: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
@@ -673,7 +666,6 @@ pub fn it_802A15EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: Vec<'a>) {
 
 pub fn itLinkboomerang_UnkMotion2_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x48);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let quat: Quaternion<'a> = frame_at(ctx, &__frame, 0x8);
     let mut gobj = gobj;
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -770,7 +762,6 @@ pub fn it_802A19E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itLinkboomerang_UnkMotion3_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut child: HSD_JObj<'a> = null(ctx);
     let mut ip: Item<'a> = null(ctx);

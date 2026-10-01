@@ -35,7 +35,6 @@ pub fn mnGallery_80258940<'a>(ctx: &'a Ctx) {
 
 pub fn mnGallery_8025896C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, render_pass: i32) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut render_pass = render_pass;
     let mut data: HSD_GObj<'a> = statics::melee__mn__mngallery::mnGallery_804D6C88(ctx).get();
@@ -224,7 +223,6 @@ pub fn mnGallery_80258DBC<'a>(
     data: mnGallery_804D6C88_userdata<'a>,
 ) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut data = data;
     let mut buttons: u32 = 0;
@@ -358,7 +356,6 @@ pub fn fn_802590C4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn mnGallery_802591BC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x60);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut gallery: HSD_GObj<'a> = null(ctx);
     let mut ud: mnGallery_child_userdata<'a> = null(ctx);
@@ -606,7 +603,6 @@ pub fn mnGallery_8025963C<'a>(ctx: &'a Ctx) {
 
 pub fn mnGallery_80259868<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x78);
-    let unused: ArrV<'a, u8, 40> = frame_at(ctx, &__frame, 0x28);
     let mut archive: HSD_Archive<'a> = null(ctx);
     let mut new_var: Ptr<'a, Addr<'a>> = null(ctx);
     let mut gobj: HSD_GObj<'a> = null(ctx);

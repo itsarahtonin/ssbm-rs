@@ -665,7 +665,6 @@ pub fn fn_8019CDBC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let sp28: Val<'a, F32> = frame_at(ctx, &__frame, 0x20);
     let sp24: Val<'a, F32> = frame_at(ctx, &__frame, 0x1c);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_r27: u8 = 0;
     let mut tmd: TmData<'a> = fns::gm_GetTournamentData(ctx);
@@ -1187,7 +1186,6 @@ pub fn fn_8019D1BC<'a>(ctx: &'a Ctx) {
 
 pub fn fn_8019DD60<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut text: HSD_Text<'a> = null(ctx);
     let mut tmd: TmData<'a> = null(ctx);
@@ -1338,7 +1336,6 @@ pub fn fn_8019DD60<'a>(ctx: &'a Ctx) {
 pub fn gm_Scene_TouAlt_OnFrame<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x68);
     let vsdata: TmVsData<'a> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut tmd: TmData<'a> = null(ctx);
     let mut confirmed: i32 = 0;
     let mut i: i32 = 0;
@@ -1846,7 +1843,6 @@ pub fn gm_8019E634<'a>(ctx: &'a Ctx) {
 pub fn gm_Scene_TouAlt_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x50);
     let local: gm_Scene_TouAlt_OnEnter_local<'a> = frame_at(ctx, &__frame, 0x8);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut tmd: TmData<'a> = null(ctx);
     let mut i: i32 = 0;

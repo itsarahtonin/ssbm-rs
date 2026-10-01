@@ -1848,7 +1848,6 @@ pub fn ftAnim_8006F7C8<'a>(
     tree: FigaTree<'a>,
 ) {
     let __frame = ctx.stack_frame(0x50);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut ft = ft;
     let mut part = part;
     let mut arg2 = arg2;

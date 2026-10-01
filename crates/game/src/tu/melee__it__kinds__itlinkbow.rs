@@ -37,7 +37,6 @@ pub fn it_802AF1A4<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x88);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x1c);
-    let pad: ArrV<'a, F32, 1> = frame_at(ctx, &__frame, 0x0);
     let mut facing_dir = facing_dir;
     let mut owner_gobj = owner_gobj;
     let mut vec = vec;

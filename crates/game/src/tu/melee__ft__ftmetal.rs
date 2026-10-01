@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn ft_800C8170<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut fp = fp;
     let mut i: i32 = 0;
     let mut jobj: HSD_JObj<'a> = null(ctx);
@@ -148,7 +147,6 @@ pub fn ft_800C8170<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
 
 pub fn ftCo_800C8348<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, timer: i32, health: i32) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut timer = timer;
     let mut health = health;
@@ -171,7 +169,6 @@ pub fn ftCo_800C8348<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, timer: i32, health: i
 
 pub fn ftCo_800C8438<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     'l1: loop {
@@ -212,7 +209,6 @@ pub fn ft_800C85B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
     let sp20: Ptr<'a, HSD_Joint<'a>> = frame_at(ctx, &__frame, 0x18);
     let sp1C: Val<'a, i32> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 12> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut part_idx: u32 = 0;

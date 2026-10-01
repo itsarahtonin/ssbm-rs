@@ -187,7 +187,6 @@ pub fn IsNameUnique<'a>(ctx: &'a Ctx, name: Val<'a, i8>) -> i32 {
 
 pub fn DeleteName<'a>(ctx: &'a Ctx, arg0: u8) {
     let __frame = ctx.stack_frame(0x1d0);
-    let _2: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x1a8);
     let temp: NameTagData<'a> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut i: i32 = 0;
@@ -289,7 +288,6 @@ pub fn CreateNameAtIndex<'a>(ctx: &'a Ctx, slot: i32) {
 
 pub fn mnName_SortNames<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut result: i32 = 0;
     let mut idx2: u8 = 0;
@@ -635,7 +633,6 @@ pub fn mnName_SortNames<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn mnName_80237D94<'a>(ctx: &'a Ctx, arg0: i32, arg1: u8) -> u8 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut gobj: HSD_GObj<'a> = null(ctx);
@@ -712,7 +709,6 @@ pub fn mnName_80237D94<'a>(ctx: &'a Ctx, arg0: i32, arg1: u8) -> u8 {
 
 pub fn mnName_ConfirmNameDeleteInput<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut col: i32 = 0;
     let mut nameIdx: i32 = 0;
@@ -806,7 +802,6 @@ pub fn mnName_ConfirmNameDeleteInput<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn mnName_MainInput<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut gobj2: MnName_GObj<'a> =
         Handle::cast::<MnName_GObj<'a>>((fns::mnName_804D6BF8(ctx).get()).user_data());
@@ -1030,7 +1025,6 @@ pub fn mnName_GetPageCount<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn mnName_GetColumnCount<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut count: i32 = 0;
     let mut extra: i32 = 0;
     count = inl_GetNumNameList_unfused_2(ctx);
@@ -1830,7 +1824,6 @@ pub fn mnName_80238C34<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: u8, arg2: u8)
 
 pub fn fn_80239574<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut anim: AnimLoopSettings<'a> = null(ctx);
     let mut new_var: HSD_JObj<'a> = null(ctx);
@@ -2277,7 +2270,6 @@ pub fn mnName_80239A24<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xd0);
     let text_position: Vec<'a> = frame_at(ctx, &__frame, 0x64);
     let text_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x58);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut text_row_height: f64 = 0.0;
     let mut row: i32 = 0;
@@ -2875,7 +2867,6 @@ pub fn mnName_8023A59C<'a>(ctx: &'a Ctx, arg0: u8) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x60);
     let root_jobj: ArrP<'a, HSD_JObj<'a>, 1> = frame_at(ctx, &__frame, 0x0);
     let jobj7: ArrP<'a, HSD_JObj<'a>, 1> = frame_at(ctx, &__frame, 0x4);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut count: i32 = 0;
@@ -3041,7 +3032,6 @@ pub fn mnName_8023A59C<'a>(ctx: &'a Ctx, arg0: u8) -> HSD_GObj<'a> {
 
 pub fn mnName_8023A9B4<'a>(ctx: &'a Ctx, arg0: u8) {
     let __frame = ctx.stack_frame(0x28);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut i: u32 = 0;
     let mut gobj2: MnName_GObj<'a> = null(ctx);
@@ -3054,7 +3044,7 @@ pub fn mnName_8023A9B4<'a>(ctx: &'a Ctx, arg0: u8) {
             __t1
         }) as u8),
     );
-    inl_mnName_8023A9B4_ResetDisplayOrder_unfused(ctx, Handle::addr(__inl));
+    inl_mnName_8023A9B4_ResetDisplayOrder_unfused(ctx);
     gobj2 = ({ inl_mnName_8023A9B4_GetGObj_unfused(ctx) });
     if (fns::mn_804A04F0(ctx).x10() as i32) == 1_i32 {
         let mut p: mn_80231634_t<'a> = inl_mnName_8023A9B4_GetUserData_unfused(ctx, gobj2);
@@ -3741,8 +3731,7 @@ fn inl_mnName_SetupScrollbarAndText_unfused<'a>(
     }
 }
 
-fn inl_mnName_8023A9B4_ResetDisplayOrder_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) {
-    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
+fn inl_mnName_8023A9B4_ResetDisplayOrder_unfused<'a>(ctx: &'a Ctx) {
     let mut i: u32 = 0;
     'l1: loop {
         'c2: {}

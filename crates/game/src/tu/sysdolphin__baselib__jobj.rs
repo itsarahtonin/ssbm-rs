@@ -883,7 +883,6 @@ pub fn HSD_JObjDispAll<'a>(
 ) {
     let __frame = ctx.stack_frame(0x60);
     let mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut jobj = jobj;
     let mut vmtx = vmtx;
     let mut flags = flags;
@@ -1038,7 +1037,6 @@ pub fn HSD_JObjLoadJoint<'a>(ctx: &'a Ctx, arg0: HSD_Joint<'a>) -> HSD_JObj<'a> 
 
 pub fn HSD_JObjResolveRefs<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, joint: HSD_Joint<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut jobj = jobj;
     let mut joint = joint;
     if (Handle::is_null(jobj)) || (Handle::is_null(joint)) {
@@ -1080,20 +1078,13 @@ pub fn HSD_JObjResolveRefs<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, joint: HSD_Join
 
 pub fn HSD_JObjResolveRefsAll<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, joint: HSD_Joint<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut jobj = jobj;
     let mut joint = joint;
     'l1: while (!Handle::is_null(jobj)) && (!Handle::is_null(joint)) {
         'c2: {
             fns::HSD_JObjResolveRefs(ctx, jobj, joint);
             if !(((jobj).flags() & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) != 0) {
-                inl_HSD_JObjResolveRefsAll_unfused(
-                    ctx,
-                    (jobj).child(),
-                    (joint).child(),
-                    Handle::addr(__inl),
-                );
+                inl_HSD_JObjResolveRefsAll_unfused(ctx, (jobj).child(), (joint).child());
             }
             jobj = (jobj).next();
             joint = (joint).next();
@@ -4003,7 +3994,6 @@ pub fn resolveIKJoint2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
     let sp34: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x2c);
     let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut jobj = jobj;
     let mut var_r29: HSD_JObj<'a> = null(ctx);
     let mut temp_f1_4: f64 = 0.0;
@@ -5173,13 +5163,7 @@ fn inl_HSD_JObjRef_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
     inl_ref_INC_unfused(ctx, Handle::cast::<Addr<'a>>(jobj));
 }
 
-fn inl_HSD_JObjResolveRefsAll_unfused<'a>(
-    ctx: &'a Ctx,
-    jobj: HSD_JObj<'a>,
-    joint: HSD_Joint<'a>,
-    __in_caller: u32,
-) {
-    let unused: ArrV<'a, u8, 4> = ptr(ctx, __in_caller + 0x0);
+fn inl_HSD_JObjResolveRefsAll_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, joint: HSD_Joint<'a>) {
     let mut jobj = jobj;
     let mut joint = joint;
     'l1: while (!Handle::is_null(jobj)) && (!Handle::is_null(joint)) {

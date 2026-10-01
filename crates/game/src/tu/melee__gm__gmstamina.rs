@@ -155,7 +155,6 @@ pub fn gm_Mode_StaminaVs_OnLoad<'a>(ctx: &'a Ctx) {
 
 pub fn gm_801B9600<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut i: i32 = 0;
     let mut j: i32 = 0;
     let mut count: i32 = 0_i32;
@@ -229,7 +228,6 @@ pub fn gm_801B9600<'a>(ctx: &'a Ctx) -> i32 {
 
 pub fn fn_801B96E8<'a>(ctx: &'a Ctx, unused: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused_2: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut unused = unused;
     let mut i: i32 = 0;
     'l1: loop {

@@ -282,7 +282,6 @@ pub fn fn_80252E4C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn mnInfoBonus_80252F8C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x38);
-    let pad0: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut o: mnInfoBonus_804A09B0_t<'a> = fns::mnInfoBonus_804A09B0(ctx);
     let mut archive: HSD_Archive<'a> = null(ctx);
     fns::mn_804D6BC8(ctx).set_cooldown((5_i32 as u16));

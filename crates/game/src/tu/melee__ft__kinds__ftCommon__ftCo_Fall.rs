@@ -174,7 +174,6 @@ pub fn ftCo_Fall_Anim_Inner<'a>(
     backwards_smid: i32,
 ) {
     let __frame = ctx.stack_frame(0x40);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut mv_x4 = mv_x4;
     let mut neutral_smid = neutral_smid;

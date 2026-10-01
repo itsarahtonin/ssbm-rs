@@ -111,7 +111,6 @@ pub fn it_802C7158<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 
 pub fn itGamewatchturtle_UnkMotion1_Anim<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u32, 2> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut it: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));

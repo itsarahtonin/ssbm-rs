@@ -28,7 +28,6 @@ use crate::support::*;
 
 pub fn it_802CF3E0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut it: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     let mut ap: Article<'a> = (it).xC4_article_data();
@@ -62,7 +61,6 @@ pub fn it_802CF450<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ref_gobj: HSD_GObj<'a>)
 
 pub fn it_802CF470<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut it: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -172,7 +170,6 @@ pub fn itEntei_UnkMotion0_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn it_802CF6C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
     let v: Val<'a, F32> = frame_at(ctx, &__frame, 0xc);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut it: Item<'a> = Handle::cast::<Item<'a>>((gobj).user_data());
     if ((it).xDAC_itcmd_var0() != 0) {

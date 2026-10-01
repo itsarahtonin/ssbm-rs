@@ -352,7 +352,6 @@ pub fn HSD_GObj_SetupProc<'a>(
     pri: u8,
 ) -> HSD_GObjProc<'a> {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut func = func;
     let mut pri = pri;

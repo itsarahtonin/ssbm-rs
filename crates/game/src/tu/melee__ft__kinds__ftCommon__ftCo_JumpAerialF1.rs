@@ -96,7 +96,6 @@ pub fn ftCo_800D730C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) -> i32 {
 pub fn ftCo_800D74A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
     let vel: Vec<'a> = frame_at(ctx, &__frame, 0x18);
-    let unused: ArrV<'a, u8, 20> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> = null(ctx);
     let mut tmp: Fighter_x2D0_t<'a> = null(ctx);
@@ -152,7 +151,6 @@ pub fn ftCo_800D74A4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn ftCo_JumpAerialF1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut co: ftCo_DatAttrs<'a> = null(ctx);
     let mut temp_r30: Fighter<'a> =

@@ -29,7 +29,6 @@ use ssbm_rt::cpu as c;
 
 pub fn itFlipper_Spawn<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x78);
-    let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x14);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x8);
     let mut jobj = jobj;
@@ -53,7 +52,6 @@ pub fn itFlipper_Spawn<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_GObj<'a> {
 
 pub fn itFlipper_Spawned<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     'l1: loop {
@@ -180,9 +178,8 @@ pub fn itFlipper_AddSpinImpulse<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'
 
 pub fn itFlipper_SpinFromFighter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x58);
-    let _pad: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut speed: f64 = 10.0;
@@ -1190,9 +1187,8 @@ pub fn itFlipper_ShieldBounced<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
 pub fn itFlipper_DmgReceived<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x78);
     let pos: Vec<'a> = frame_at(ctx, &__frame, 0x44);
-    let _pad: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
-    let __inl_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x18);
+    let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
+    let __inl_2: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x10);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut attrs: itFlipper_DatAttrs<'a> =

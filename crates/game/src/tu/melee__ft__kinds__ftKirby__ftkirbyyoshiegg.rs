@@ -80,7 +80,6 @@ pub fn ftKb_SpecialNYs_8010AC78<'a>(ctx: &'a Ctx, victim: HSD_GObj<'a>, gobj: HS
     let __frame = ctx.stack_frame(0x78);
     let scale: Vec<'a> = frame_at(ctx, &__frame, 0x4c);
     let hurt: ftHurtboxInit<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut victim = victim;
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -163,7 +162,6 @@ pub fn ftKb_SpecialNYs_8010AC78<'a>(ctx: &'a Ctx, victim: HSD_GObj<'a>, gobj: HS
 
 pub fn ftCo_KirbyYoshiEgg_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut temp_ret: f64 = 0.0;
     let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());

@@ -66,7 +66,6 @@ pub fn itGameWatchParachute_Logic74_Destroyed<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'
 
 pub fn it_802C6D6C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let pad: ArrV<'a, i32, 1> = frame_at(ctx, &__frame, 0x0);
     let mut item_gobj = item_gobj;
     let mut item: Item<'a> =
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, item_gobj)));
@@ -104,7 +103,6 @@ pub fn itGameWatchParachute_Logic74_PickedUp<'a>(ctx: &'a Ctx, item_gobj: HSD_GO
 
 pub fn it_802C6E50<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     'l1: loop {
         'c2: {}
@@ -118,7 +116,6 @@ pub fn it_802C6E50<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 
 pub fn itGamewatchparachute_UnkMotion1_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut remove: i32 = 0;

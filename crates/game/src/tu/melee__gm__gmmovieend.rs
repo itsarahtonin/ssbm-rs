@@ -88,7 +88,6 @@ pub fn gm_Scene_DebugMenu_OnEnter<'a>(ctx: &'a Ctx, arg0_: Addr<'a>) {
 
 pub fn gm_Scene_MovieEnd_OnEnter<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut temp_r3: HSD_GObj<'a> = null(ctx);
     let mut temp_r3_2: HSD_GObj<'a> = null(ctx);

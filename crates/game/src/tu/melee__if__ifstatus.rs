@@ -177,12 +177,9 @@ pub fn ifStatus_802F4B84<'a>(ctx: &'a Ctx, state: IfDamageState<'a>, is_stamina:
 pub fn ifStatus_802F4EDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0xf8);
     let color: _GXColor<'a> = frame_at(ctx, &__frame, 0x58);
-    let pad_a: ArrV<'a, u8, 28> = frame_at(ctx, &__frame, 0x0);
     let stamina_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x38);
-    let pad_b: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x1c);
     let normal_color: _GXColor<'a> = frame_at(ctx, &__frame, 0x30);
-    let pad_c: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x20);
-    let digit_offset: ifStatus_802F4EDC_digit_offset<'a> = frame_at(ctx, &__frame, 0x28);
+    let digit_offset: ifStatus_802F4EDC_digit_offset<'a> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut hud: HudIndex<'a> = null(ctx);
     let mut state: IfDamageState<'a> = null(ctx);

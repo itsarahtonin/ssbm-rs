@@ -190,7 +190,6 @@ pub fn mn_8022EFD8<'a>(ctx: &'a Ctx, arg0: HSD_JObj<'a>, arg1: AnimLoopSettings<
 
 pub fn mn_8022F0F0<'a>(ctx: &'a Ctx, arg0: i32) {
     let __frame = ctx.stack_frame(0x20);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut curr: HSD_GObj<'a> =
         (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), ((arg0 as u8) as i32))).get();
@@ -211,8 +210,6 @@ pub fn mn_8022F0F0<'a>(ctx: &'a Ctx, arg0: i32) {
 
 pub fn mn_8022F138<'a>(ctx: &'a Ctx, arg0: u16, arg1: u16) {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x18);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut i: i32 = 0;
@@ -226,7 +223,7 @@ pub fn mn_8022F138<'a>(ctx: &'a Ctx, arg0: u16, arg1: u16) {
         i = (arg0 as i32);
         'l3: while i <= (arg1 as i32) {
             'c4: {
-                inl_mn_8022F0F0_unfused(ctx, i, Handle::addr(__inl));
+                inl_mn_8022F0F0_unfused(ctx, i);
             }
             i = i.wrapping_add(1);
         }
@@ -235,8 +232,6 @@ pub fn mn_8022F138<'a>(ctx: &'a Ctx, arg0: u16, arg1: u16) {
 
 pub fn mn_8022F1A8<'a>(ctx: &'a Ctx, arg0: u16, arg1: u16) {
     let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x8);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut i: i32 = 0;
@@ -250,7 +245,7 @@ pub fn mn_8022F1A8<'a>(ctx: &'a Ctx, arg0: u16, arg1: u16) {
         i = (arg0 as i32);
         'l3: while i <= (arg1 as i32) {
             'c4: {
-                inl_mn_8022F1A8_inline_unfused(ctx, (i as u8), Handle::addr(__inl));
+                inl_mn_8022F1A8_inline_unfused(ctx, (i as u8));
             }
             i = i.wrapping_add(1);
         }
@@ -464,8 +459,7 @@ fn inl_mn_8022F298_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     return fp::fneg(1.0);
 }
 
-fn inl_mn_8022F0F0_unfused<'a>(ctx: &'a Ctx, arg0: i32, __in_caller: u32) {
-    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
+fn inl_mn_8022F0F0_unfused<'a>(ctx: &'a Ctx, arg0: i32) {
     let mut arg0 = arg0;
     let mut curr: HSD_GObj<'a> =
         (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), ((arg0 as u8) as i32))).get();
@@ -484,8 +478,7 @@ fn inl_mn_8022F0F0_unfused<'a>(ctx: &'a Ctx, arg0: i32, __in_caller: u32) {
     }
 }
 
-fn inl_mn_8022F1A8_inline_unfused<'a>(ctx: &'a Ctx, arg0: u8, __in_caller: u32) {
-    let unused: ArrV<'a, u8, 8> = ptr(ctx, __in_caller + 0x0);
+fn inl_mn_8022F1A8_inline_unfused<'a>(ctx: &'a Ctx, arg0: u8) {
     let mut arg0 = arg0;
     let mut curr: HSD_GObj<'a> =
         (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), (arg0 as i32))).get();

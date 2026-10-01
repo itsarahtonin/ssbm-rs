@@ -38,7 +38,6 @@ pub fn it_802F0340<'a>(
 ) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x88);
     let spawn: SpawnItem<'a> = frame_at(ctx, &__frame, 0x24);
-    let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut prev_pos = prev_pos;
     let mut pos = pos;
@@ -136,7 +135,6 @@ pub fn it_802F05A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x48);
     let sp28: Vec<'a> = frame_at(ctx, &__frame, 0x20);
     let sp1C: Vec<'a> = frame_at(ctx, &__frame, 0x14);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     let mut owner: HSD_GObj<'a> = (ip).owner();

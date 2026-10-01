@@ -4491,7 +4491,6 @@ pub fn fn_8021E994<'a>(
 
 pub fn grHomeRun_8021EA30<'a>(ctx: &'a Ctx, pos: Val<'a, F32>) {
     let __frame = ctx.stack_frame(0x30);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
     let mut pos = pos;
     let mut new_var: f64 = 0.0;
     let mut result: f64 = 0.0;

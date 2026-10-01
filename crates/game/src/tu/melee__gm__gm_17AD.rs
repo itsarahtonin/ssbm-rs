@@ -204,7 +204,6 @@ pub fn fn_8017B3AC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 
 pub fn fn_8017B410<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut me: MatchEnd<'a> = null(ctx);
     let mut var_r3: i32 = 0;
@@ -341,7 +340,6 @@ pub fn fn_8017B8B8<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 
 pub fn fn_8017B91C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut me: MatchEnd<'a> = null(ctx);
     let mut var_r3: i32 = 0;
@@ -376,7 +374,6 @@ pub fn fn_8017B91C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
 
 pub fn fn_8017B9F4<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     let __frame = ctx.stack_frame(0x38);
-    let unused: ArrV<'a, u8, 24> = frame_at(ctx, &__frame, 0x0);
     let mut arg0 = arg0;
     let mut me: MatchEnd<'a> = null(ctx);
     let mut var_r3: u32 = 0;
