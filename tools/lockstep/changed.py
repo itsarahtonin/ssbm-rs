@@ -4,8 +4,9 @@ verified on the older one.
     python tools/lockstep/changed.py OLD [NEW] > changed.txt
 
 Compares each registered port of crates/game/src/tu at the two commits (NEW defaults to the
-working tree), with the inline copies it calls counted as part of it, and prints the address
-and name of each that differs, in LOCKSTEP_DONE's format.
+working tree), with the inline copies and machine code it calls counted as part of it, and the
+hand ports of crates/game/src/manual, and prints the address and name of each that differs, in
+LOCKSTEP_DONE's format.
 """
 
 import re
@@ -55,21 +56,39 @@ def closure(name, fns, seen=None):
     return "".join(parts)
 
 
+def registered(adapter, fns):
+    """The function a registration runs: the one its adapter calls, or a machine-code port it
+    names directly."""
+    bare = adapter.strip().rstrip(",").strip()
+    if re.fullmatch(r"\w+", bare):
+        return bare
+    return next((c for c in re.findall(r"\b([A-Za-z_]\w*)\(ctx", adapter) if c in fns), None)
+
+
 def main():
     old = sys.argv[1]
     new = sys.argv[2] if len(sys.argv) > 2 else None
     paths = sorted(set(files(old)) | set(files(new or "HEAD")))
     n = 0
     for path in paths:
+        # A unit's hand ports live in manual/ under the same name.
+        manual = path.replace("/tu/", "/manual/")
         a, b = read(old, path), read(new, path)
-        if a == b:
+        ma, mb = read(old, manual), read(new, manual)
+        if a == b and ma == mb:
             continue
         fa, fb = bodies(a), bodies(b)
+        hand_a, hand_b = bodies(ma), bodies(mb)
         for m in REGISTER.finditer(b):
-            # The adapter calls the port it registers.
             addr, adapter = m.group(1), m.group(2)
-            name = next((c for c in re.findall(r"\b([A-Za-z_]\w*)\(ctx", adapter) if c in fb), None)
-            if name is not None and closure(name, fa) != closure(name, fb):
+            hand = re.search(r"manual::(\w+)", adapter)
+            if hand:
+                name = hand.group(1)
+                changed = closure(name, hand_a) != closure(name, hand_b)
+            else:
+                name = registered(adapter, fb)
+                changed = name is not None and closure(name, fa) != closure(name, fb)
+            if changed:
                 print(f"{addr} # {name}")
                 n += 1
     print(f"{n} ports changed", file=sys.stderr)
