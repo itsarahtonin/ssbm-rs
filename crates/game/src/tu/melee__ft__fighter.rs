@@ -3442,7 +3442,7 @@ pub fn Fighter_8006D10C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 }
 
 pub fn Fighter_procCollResolve<'a>(ctx: &'a Ctx, a0: HSD_GObj<'a>) {
-    // Transliterated from its machine code: calls ftCo_800C2FD8, which reads registers its caller sets without passing them.
+    // Transliterated from its machine code: calls ftCo_8008E9D0, which reads registers its caller sets without passing them.
     (a0,).put_regs(ctx);
     asm_Fighter_procCollResolve(ctx);
 }

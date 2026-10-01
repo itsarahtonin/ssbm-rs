@@ -7086,7 +7086,7 @@ pub fn mn_802317E4<'a>(ctx: &'a Ctx, archive: HSD_Archive<'a>, arg1: i32) {
 }
 
 pub fn mn_80231804<'a>(ctx: &'a Ctx, a0: HSD_Archive<'a>, a1: i32) {
-    // Transliterated from its machine code: calls mn_80230E38, which reads registers its caller sets without passing them.
+    // Transliterated from its machine code: calls mn_8022C304, which reads registers its caller sets without passing them.
     (a0, a1).put_regs(ctx);
     asm_mn_80231804(ctx);
 }

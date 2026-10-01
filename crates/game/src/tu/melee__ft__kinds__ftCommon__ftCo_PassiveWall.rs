@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn ftCo_800C1D38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x20);
@@ -374,19 +375,109 @@ pub fn ftCo_PassiveWall_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
-pub fn ftCo_PassiveWall_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x8);
-    let mut gobj = gobj;
-    if ((Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
-        .mv()
-        .co()
-        .passivewall()
-        .timer()
-        != 0)
-    {
-        fns::ft_80083318(ctx, gobj, fnptr(ctx, 0x80096cc8), fnptr(ctx, 0x80082b1c));
-    } else {
-        fns::ft_800831CC(ctx, gobj, fnptr(ctx, 0x80096cc8), fnptr(ctx, 0x80082b1c));
+pub fn ftCo_PassiveWall_Coll<'a>(ctx: &'a Ctx, a0: HSD_GObj<'a>) {
+    // Transliterated from its machine code: calls ft_80083318, which reads registers its caller sets without passing them.
+    (a0,).put_regs(ctx);
+    asm_ftCo_PassiveWall_Coll(ctx);
+}
+
+fn asm_ftCo_PassiveWall_Coll(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x800c2348_u32;
+    loop {
+        match pc {
+            0x800c2348_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // lwz r4, 0x2c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x2c_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // lwz r0, 0x2340(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x2340_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_800C237C
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x800c237c_u32;
+                    continue;
+                }
+                pc = 0x800c2364_u32;
+            }
+            0x800c2364_u32 => {
+                // lis r4, ftCo_80096CC8@ha
+                g[4].set(0x80090000_u32);
+                // lis r5, ft_80082B1C@ha
+                g[5].set(0x80080000_u32);
+                // addi r4, r4, ftCo_80096CC8@l
+                g[4].set(g[4].get().wrapping_add(0x6cc8_u32));
+                // addi r5, r5, ft_80082B1C@l
+                g[5].set(g[5].get().wrapping_add(0x2b1c_u32));
+                // bl ft_80083318
+                c::call(ctx, 0x80083318_u32, 0x800c2378_u32);
+                pc = 0x800c2378_u32;
+            }
+            0x800c2378_u32 => {
+                // b .L_800C2390
+                pc = 0x800c2390_u32;
+                continue;
+                pc = 0x800c237c_u32;
+            }
+            0x800c237c_u32 => {
+                // lis r4, ftCo_80096CC8@ha
+                g[4].set(0x80090000_u32);
+                // lis r5, ft_80082B1C@ha
+                g[5].set(0x80080000_u32);
+                // addi r4, r4, ftCo_80096CC8@l
+                g[4].set(g[4].get().wrapping_add(0x6cc8_u32));
+                // addi r5, r5, ft_80082B1C@l
+                g[5].set(g[5].get().wrapping_add(0x2b1c_u32));
+                // bl ft_800831CC
+                c::call(ctx, 0x800831cc_u32, 0x800c2390_u32);
+                pc = 0x800c2390_u32;
+            }
+            0x800c2390_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of ftCo_PassiveWall_Coll");
+            }
+            _ => unreachable!("ftCo_PassiveWall_Coll: no block at {pc:#010x}"),
+        }
     }
 }
 

@@ -299,32 +299,373 @@ pub fn __OSSyncSram<'a>(ctx: &'a Ctx) -> i32 {
 }
 
 pub fn OSGetSoundMode<'a>(ctx: &'a Ctx) -> u32 {
-    let __frame = ctx.stack_frame(0x20);
-    let mut sram: OSSram<'a> = inl___OSLockSram_unfused(ctx);
-    let mut mode: u32 = ((if ((((sram).flags() as i32) & 4_i32) != 0) {
-        1_i32
-    } else {
-        0_i32
-    }) as u32);
-    let _ = inl___OSUnlockSram_unfused(ctx, 0_i32);
-    return mode;
+    // Transliterated from its machine code: returns or uses a value its C never sets.
+    ().put_regs(ctx);
+    asm_OSGetSoundMode(ctx);
+    Ret::get(ctx)
 }
 
-pub fn OSSetSoundMode<'a>(ctx: &'a Ctx, mode: u32) {
-    let __frame = ctx.stack_frame(0x20);
-    let mut mode = mode;
-    let mut sram: OSSram<'a> = null(ctx);
-    let mut unused: i32 = 0;
-    mode = mode.wrapping_mul((4_i32 as u32));
-    mode = (mode & (4_i32 as u32));
-    sram = inl___OSLockSram_unfused(ctx);
-    if mode == ((((sram).flags() as i32) & 4_i32) as u32) {
-        let _ = inl___OSUnlockSram_unfused(ctx, 0_i32);
-        return;
+fn asm_OSGetSoundMode(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80349154_u32;
+    loop {
+        match pc {
+            0x80349154_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // lis r3, Scb@ha
+                g[3].set(0x804a0000_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // addi r31, r3, Scb@l
+                g[31].set(g[3].get().wrapping_add(0x7d60_u32));
+                // bl OSDisableInterrupts
+                c::call(ctx, 0x80347364_u32, 0x80349170_u32);
+                pc = 0x80349170_u32;
+            }
+            0x80349170_u32 => {
+                // lwz r0, 0x48(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x48_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r4, r31, 0x48
+                g[4].set(g[31].get().wrapping_add(0x48_u32));
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_8034918C
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x8034918c_u32;
+                    continue;
+                }
+                pc = 0x80349180_u32;
+            }
+            0x80349180_u32 => {
+                // bl OSRestoreInterrupts
+                c::call(ctx, 0x8034738c_u32, 0x80349184_u32);
+                pc = 0x80349184_u32;
+            }
+            0x80349184_u32 => {
+                // li r31, 0x0
+                g[31].set(0_u32);
+                // b .L_80349198
+                pc = 0x80349198_u32;
+                continue;
+                pc = 0x8034918c_u32;
+            }
+            0x8034918c_u32 => {
+                // stw r3, 0x44(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x44_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // stw r0, 0x0(r4)
+                {
+                    let ea = g[4].get();
+                    ctx.write_u32(ea, g[0].get());
+                }
+                pc = 0x80349198_u32;
+            }
+            0x80349198_u32 => {
+                // lbz r0, 0x13(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x13_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // rlwinm. r0, r0, 0, 29, 29
+                {
+                    let v = g[0].get().rotate_left(0) & 0x4_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_803491AC
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x803491ac_u32;
+                    continue;
+                }
+                pc = 0x803491a4_u32;
+            }
+            0x803491a4_u32 => {
+                // li r31, 0x1
+                g[31].set(0x1_u32);
+                // b .L_803491B0
+                pc = 0x803491b0_u32;
+                continue;
+                pc = 0x803491ac_u32;
+            }
+            0x803491ac_u32 => {
+                // li r31, 0x0
+                g[31].set(0_u32);
+                pc = 0x803491b0_u32;
+            }
+            0x803491b0_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // bl UnlockSram
+                c::call(ctx, 0x80348df4_u32, 0x803491bc_u32);
+                pc = 0x803491bc_u32;
+            }
+            0x803491bc_u32 => {
+                // lwz r0, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // mr r3, r31
+                {
+                    let v = g[31].get() | g[31].get();
+                    g[3].set(v);
+                }
+                // lwz r31, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x20
+                g[1].set(g[1].get().wrapping_add(0x20_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of OSGetSoundMode");
+            }
+            _ => unreachable!("OSGetSoundMode: no block at {pc:#010x}"),
+        }
     }
-    (sram).set_flags(((((sram).flags() as u32) & 0xfffffffb_u32) as u8));
-    (sram).set_flags(((((sram).flags() as u32) | mode) as u8));
-    let _ = inl___OSUnlockSram_unfused(ctx, 1_i32);
+}
+
+pub fn OSSetSoundMode<'a>(ctx: &'a Ctx, a0: u32) {
+    // Transliterated from its machine code: returns or uses a value its C never sets.
+    (a0,).put_regs(ctx);
+    asm_OSSetSoundMode(ctx);
+}
+
+fn asm_OSSetSoundMode(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x803491d4_u32;
+    loop {
+        match pc {
+            0x803491d4_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // lis r4, Scb@ha
+                g[4].set(0x804a0000_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // addi r31, r4, Scb@l
+                g[31].set(g[4].get().wrapping_add(0x7d60_u32));
+                // stw r30, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // clrlslwi r30, r3, 31, 2
+                {
+                    let v = g[3].get().rotate_left(2) & 0x4_u32;
+                    g[30].set(v);
+                }
+                // bl OSDisableInterrupts
+                c::call(ctx, 0x80347364_u32, 0x803491f8_u32);
+                pc = 0x803491f8_u32;
+            }
+            0x803491f8_u32 => {
+                // lwz r0, 0x48(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x48_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r4, r31, 0x48
+                g[4].set(g[31].get().wrapping_add(0x48_u32));
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80349214
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80349214_u32;
+                    continue;
+                }
+                pc = 0x80349208_u32;
+            }
+            0x80349208_u32 => {
+                // bl OSRestoreInterrupts
+                c::call(ctx, 0x8034738c_u32, 0x8034920c_u32);
+                pc = 0x8034920c_u32;
+            }
+            0x8034920c_u32 => {
+                // li r31, 0x0
+                g[31].set(0_u32);
+                // b .L_80349220
+                pc = 0x80349220_u32;
+                continue;
+                pc = 0x80349214_u32;
+            }
+            0x80349214_u32 => {
+                // stw r3, 0x44(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x44_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // stw r0, 0x0(r4)
+                {
+                    let ea = g[4].get();
+                    ctx.write_u32(ea, g[0].get());
+                }
+                pc = 0x80349220_u32;
+            }
+            0x80349220_u32 => {
+                // lbz r3, 0x13(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x13_u32);
+                    g[3].set(u32::from(ctx.read_u8(ea)));
+                }
+                // rlwinm r0, r3, 0, 29, 29
+                {
+                    let v = g[3].get().rotate_left(0) & 0x4_u32;
+                    g[0].set(v);
+                }
+                // cmplw r30, r0
+                {
+                    let (x, y) = (g[30].get(), g[0].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80349240
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80349240_u32;
+                    continue;
+                }
+                pc = 0x80349230_u32;
+            }
+            0x80349230_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // bl UnlockSram
+                c::call(ctx, 0x80348df4_u32, 0x8034923c_u32);
+                pc = 0x8034923c_u32;
+            }
+            0x8034923c_u32 => {
+                // b .L_80349260
+                pc = 0x80349260_u32;
+                continue;
+                pc = 0x80349240_u32;
+            }
+            0x80349240_u32 => {
+                // rlwinm r0, r3, 0, 30, 28
+                {
+                    let v = g[3].get().rotate_left(0) & 0xfffffffb_u32;
+                    g[0].set(v);
+                }
+                // stb r0, 0x13(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x13_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // lbz r0, 0x13(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x13_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // or r0, r0, r30
+                {
+                    let v = g[0].get() | g[30].get();
+                    g[0].set(v);
+                }
+                // stb r0, 0x13(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x13_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                // bl UnlockSram
+                c::call(ctx, 0x80348df4_u32, 0x80349260_u32);
+                pc = 0x80349260_u32;
+            }
+            0x80349260_u32 => {
+                // lwz r0, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // addi r1, r1, 0x20
+                g[1].set(g[1].get().wrapping_add(0x20_u32));
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of OSSetSoundMode");
+            }
+            _ => unreachable!("OSSetSoundMode: no block at {pc:#010x}"),
+        }
+    }
 }
 
 pub fn OSGetProgressiveMode<'a>(ctx: &'a Ctx) -> u32 {
@@ -371,17 +712,212 @@ pub fn OSGetWirelessID<'a>(ctx: &'a Ctx, arg0: i32) -> u16 {
     return id;
 }
 
-pub fn OSSetWirelessID<'a>(ctx: &'a Ctx, chan: i32, id: u16) {
-    let __frame = ctx.stack_frame(0x28);
-    let mut chan = chan;
-    let mut id = id;
-    let mut sram: OSSramEx<'a> = inl___OSLockSramEx_unfused(ctx);
-    if ((sram).wirelessPadID().at(chan).get() as i32) != (id as i32) {
-        (sram).wirelessPadID().at(chan).set(id);
-        let _ = inl___OSUnlockSramEx_unfused(ctx, 1_i32);
-        return;
+pub fn OSSetWirelessID<'a>(ctx: &'a Ctx, a0: i32, a1: u16) {
+    // Transliterated from its machine code: returns or uses a value its C never sets.
+    (a0, a1).put_regs(ctx);
+    asm_OSSetWirelessID(ctx);
+}
+
+fn asm_OSSetWirelessID(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80349410_u32;
+    loop {
+        match pc {
+            0x80349410_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // lis r5, Scb@ha
+                g[5].set(0x804a0000_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x28(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffd8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // addi r31, r5, Scb@l
+                g[31].set(g[5].get().wrapping_add(0x7d60_u32));
+                // stw r30, 0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x20_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // addi r30, r4, 0x0
+                g[30].set(g[4].get());
+                // stw r29, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    ctx.write_u32(ea, g[29].get());
+                }
+                // addi r29, r3, 0x0
+                g[29].set(g[3].get());
+                // bl OSDisableInterrupts
+                c::call(ctx, 0x80347364_u32, 0x8034943c_u32);
+                pc = 0x8034943c_u32;
+            }
+            0x8034943c_u32 => {
+                // lwz r0, 0x48(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x48_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r4, r31, 0x48
+                g[4].set(g[31].get().wrapping_add(0x48_u32));
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80349458
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80349458_u32;
+                    continue;
+                }
+                pc = 0x8034944c_u32;
+            }
+            0x8034944c_u32 => {
+                // bl OSRestoreInterrupts
+                c::call(ctx, 0x8034738c_u32, 0x80349450_u32);
+                pc = 0x80349450_u32;
+            }
+            0x80349450_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // b .L_80349468
+                pc = 0x80349468_u32;
+                continue;
+                pc = 0x80349458_u32;
+            }
+            0x80349458_u32 => {
+                // stw r3, 0x44(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x44_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // addi r3, r31, 0x14
+                g[3].set(g[31].get().wrapping_add(0x14_u32));
+                // stw r0, 0x0(r4)
+                {
+                    let ea = g[4].get();
+                    ctx.write_u32(ea, g[0].get());
+                }
+                pc = 0x80349468_u32;
+            }
+            0x80349468_u32 => {
+                // slwi r0, r29, 1
+                {
+                    let v = g[29].get().rotate_left(1) & 0xfffffffe_u32;
+                    g[0].set(v);
+                }
+                // add r4, r3, r0
+                {
+                    let (v, ca, ov) = c::add3(g[3].get(), g[0].get(), 0);
+                    g[4].set(v);
+                    let _ = (ca, ov);
+                }
+                // lhzu r3, 0x1c(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x1c_u32);
+                    g[3].set(u32::from(ctx.read_u16(ea)));
+                    g[4].set(ea);
+                }
+                // clrlwi r0, r30, 16
+                {
+                    let v = g[30].get().rotate_left(0) & 0xffff_u32;
+                    g[0].set(v);
+                }
+                // cmplw r3, r0
+                {
+                    let (x, y) = (g[3].get(), g[0].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80349494
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80349494_u32;
+                    continue;
+                }
+                pc = 0x80349480_u32;
+            }
+            0x80349480_u32 => {
+                // sth r30, 0x0(r4)
+                {
+                    let ea = g[4].get();
+                    ctx.write_u16(ea, g[30].get() as u16);
+                }
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // li r4, 0x14
+                g[4].set(0x14_u32);
+                // bl UnlockSram
+                c::call(ctx, 0x80348df4_u32, 0x80349490_u32);
+                pc = 0x80349490_u32;
+            }
+            0x80349490_u32 => {
+                // b .L_803494A0
+                pc = 0x803494a0_u32;
+                continue;
+                pc = 0x80349494_u32;
+            }
+            0x80349494_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x14
+                g[4].set(0x14_u32);
+                // bl UnlockSram
+                c::call(ctx, 0x80348df4_u32, 0x803494a0_u32);
+                pc = 0x803494a0_u32;
+            }
+            0x803494a0_u32 => {
+                // lwz r0, 0x2c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x2c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x20_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // lwz r29, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[29].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x28
+                g[1].set(g[1].get().wrapping_add(0x28_u32));
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of OSSetWirelessID");
+            }
+            _ => unreachable!("OSSetWirelessID: no block at {pc:#010x}"),
+        }
     }
-    let _ = inl___OSUnlockSramEx_unfused(ctx, 0_i32);
 }
 
 fn inl_ReadSram_unfused<'a>(ctx: &'a Ctx, buffer: Addr<'a>, __in_caller: u32) -> i32 {

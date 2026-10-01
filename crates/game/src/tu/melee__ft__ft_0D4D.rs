@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn fn_800D4DD4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
@@ -291,13 +292,87 @@ pub fn ftCo_Rebirth_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
-pub fn ftCo_Rebirth_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x8);
-    let mut gobj = gobj;
-    let mut fp: Fighter<'a> =
-        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    if ((fp).smash_attrs().x2135() as i32) == 1_i32.wrapping_neg() {
-        fns::ft_80083DCC(ctx, gobj);
+pub fn ftCo_Rebirth_Coll<'a>(ctx: &'a Ctx, a0: HSD_GObj<'a>) {
+    // Transliterated from its machine code: calls ft_80083DCC, which reads registers its caller sets without passing them.
+    (a0,).put_regs(ctx);
+    asm_ftCo_Rebirth_Coll(ctx);
+}
+
+fn asm_ftCo_Rebirth_Coll(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x800d5470_u32;
+    loop {
+        match pc {
+            0x800d5470_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // lwz r4, 0x2c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x2c_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // lbz r0, 0x2135(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x2135_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // extsb r0, r0
+                {
+                    let v = g[0].get() as i8 as u32;
+                    g[0].set(v);
+                }
+                // cmpwi r0, -0x1
+                {
+                    let (x, y) = (g[0].get() as i32, -1_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_800D5494
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x800d5494_u32;
+                    continue;
+                }
+                pc = 0x800d5490_u32;
+            }
+            0x800d5490_u32 => {
+                // bl ft_80083DCC
+                c::call(ctx, 0x80083dcc_u32, 0x800d5494_u32);
+                pc = 0x800d5494_u32;
+            }
+            0x800d5494_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of ftCo_Rebirth_Coll");
+            }
+            _ => unreachable!("ftCo_Rebirth_Coll: no block at {pc:#010x}"),
+        }
     }
 }
 

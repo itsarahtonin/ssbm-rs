@@ -387,6 +387,7 @@ class Unit:
         self.inline_active = {}  # base Rust name -> Rust name, while translating it
         self.inline_outgoing = {}  # inline copy -> bytes at 8(r1) it needs of its caller's frame
         self.inline_frames = {}  # inline copy -> bytes of its caller's frame its locals take
+        self.inline_names = {}  # inline copy -> names of the inline functions it takes in
         self.inline_recursive = set()  # inline copies that call themselves
         self.data_ranges = self.read_data_ranges()
         self.static_addrs = {}
@@ -627,6 +628,7 @@ class Translator:
         # and for an inline copy, whether each pointer parameter it depends on points at a local
         # the original keeps in registers (("ptr", parameter) keys).
         self.decisions = {}
+        self.inlined = set()  # names of the inline functions this code takes in, at any depth
         self.reg_ptrs = reg_ptrs
         # Pairs of this inline copy's parameters whose arguments are the same value.
         self.same = same
@@ -3743,18 +3745,17 @@ UNSET_REASON = "returns or uses a value its C never sets"
 CALLER_REASON = "calls {}, which reads registers its caller sets without passing them"
 
 
-def unset_values(tu, source):
-    """The functions defined in `source` that clang finds returning or using a value their C
-    never sets."""
-    src = os.path.normpath(source)
-    spans = [(c.extent.start.line, c.extent.end.line, c.spelling) for c in tu.cursor.get_children()
-             if c.kind == CK.FUNCTION_DECL and c.is_definition() and c.location.file
-             and os.path.normpath(str(c.location.file)) == src]
+def unset_values(tu):
+    """The functions the unit defines, in its source or its headers' inline ones, that clang
+    finds returning or using a value their C never sets."""
+    spans = [(os.path.normpath(str(c.location.file)), c.extent.start.line, c.extent.end.line,
+              c.spelling) for c in tu.cursor.get_children()
+             if c.kind == CK.FUNCTION_DECL and c.is_definition() and c.location.file]
     out = set()
     for d in tu.diagnostics:
-        if d.severity == ci.Diagnostic.Warning and d.option in UNSET_WARNINGS and d.location.file \
-                and os.path.normpath(str(d.location.file)) == src:
-            out.update(name for a, b, name in spans if a <= d.location.line <= b)
+        if d.severity == ci.Diagnostic.Warning and d.option in UNSET_WARNINGS and d.location.file:
+            at = os.path.normpath(str(d.location.file))
+            out.update(name for f, a, b, name in spans if f == at and a <= d.location.line <= b)
     return out
 
 
@@ -3879,7 +3880,7 @@ def translate_unit(args):
     unit = Unit(prog, unit_name, source)
     unit.gekko = gekko
     manual = manual_ports(out_dir, unit_name)
-    unset = unset_values(tu, source)
+    unset = unset_values(tu)
     unit.col.visit(tu.cursor, source)
     unit.map_static_locals(tu.cursor, source)
     out_fns, regs = [], []
@@ -3966,6 +3967,20 @@ def translate_unit(args):
                 traceback.print_exc()
             unit.skipped.append((name, f"translator error: {type(e).__name__}: {e} (line {tr.line})"))
             continue
+        if tr.inlined & unset:
+            # Code inlined here uses a value its C never sets: so does this function, whose
+            # machine code holds that code.
+            try:
+                code = asm_port(unit, c, f, UNSET_REASON)
+                unset.add(name)
+                out_fns.append(code)
+                unit.transliterated.append(name)
+                regs.append(f"    ctx.register_port({f['addr']:#x}, {unit.adapter(c, ident(name))}, "
+                            f"Returns::{returns_of(unit, c)});")
+                unit.ported.append(name)
+                continue
+            except (Unsupported, asm2rs.AsmUnsupported) as e:
+                unit.unset_fallbacks.append((name, str(e)))
         out_fns.append(code)
         unit.fuse_check.append((name, unit.fused_ops.get(name), code, c, f, len(out_fns) - 1))
         regs.append(f"    ctx.register_port({f['addr']:#x}, {unit.adapter(c, ident(name))}, "
@@ -4073,6 +4088,7 @@ def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None
     for rname, decisions in variants:
         if all(holds(k, v) for k, v in decisions.items()):
             inherit(decisions)
+            caller.inlined |= {name} | self.inline_names.get(rname, set())
             return holding(rname)
     rname = base if not variants else f"{base}_{len(variants) + 1}"
     self.inline_active[base] = rname
@@ -4096,8 +4112,10 @@ def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None
         raise Unsupported(f"inline {name}: calls itself and keeps locals in its caller's frame")
     self.inline_outgoing[rname] = tr.f.outgoing
     self.inline_frames[rname] = tr.region if tr.f.frame else 0
+    self.inline_names[rname] = set(tr.inlined)
     variants.append((rname, tr.decisions))
     inherit(tr.decisions)
+    caller.inlined |= {name} | tr.inlined
     return holding(rname)
 
 
