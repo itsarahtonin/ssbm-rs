@@ -70,6 +70,12 @@ def main():
                         parts.add(re.sub(r"0x[0-9A-F]{4,}", "X", text.split(" (in ")[0])[:90])
                     elif d.startswith("Panic"):
                         parts.add("panic")
+                    elif d.startswith("Call"):
+                        # The first of the function's own calls that differs, with
+                        # LOCKSTEP_TRACE_CALLS=1.
+                        names = dict(re.findall(r'(original|port): (?:Some\(\("([^"]+)"|None)', d))
+                        parts.add(f"calls {names.get('original') or 'nothing'} where the port "
+                                  f"calls {names.get('port') or 'nothing'}")
                     else:
                         parts.add(d.split(" ")[0])
                 sig = f"{m.group(1)}: " + "; ".join(sorted(parts))
