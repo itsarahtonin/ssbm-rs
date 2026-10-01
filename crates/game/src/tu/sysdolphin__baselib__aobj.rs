@@ -464,7 +464,7 @@ pub fn callbackForeachFunc<'a>(
             return;
         }
         if __case <= 1 {
-            Handle::cast::<FnPtr<'a>>(func).call::<_, ()>((aobj, Single(fp::frsp((arg).f()))));
+            Handle::cast::<FnPtr<'a>>(func).call::<_, ()>((aobj, Single::round((arg).f())));
             return;
         }
         if __case <= 2 {
@@ -484,7 +484,7 @@ pub fn callbackForeachFunc<'a>(
             return;
         }
         if __case <= 6 {
-            Handle::cast::<FnPtr<'a>>(func).call::<_, ()>((aobj, obj, Single(fp::frsp((arg).f()))));
+            Handle::cast::<FnPtr<'a>>(func).call::<_, ()>((aobj, obj, Single::round((arg).f())));
             return;
         }
         if __case <= 7 {
@@ -500,7 +500,7 @@ pub fn callbackForeachFunc<'a>(
                 aobj,
                 obj,
                 r#type,
-                Single(fp::frsp((arg).f())),
+                Single::round((arg).f()),
             ));
             return;
         }
@@ -1096,7 +1096,7 @@ fn inl_getLoopedFrame_unfused<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) -> f64 {
     let mut y: f64 = fp::fsubs((aobj).end_frame(), (aobj).rewind_frame());
     let mut x: f64 = fp::fsubs((aobj).curr_frame(), (aobj).rewind_frame());
     return {
-        let __t1 = ctx.call::<_, f64>(0x80364340, (Single(fp::frsp(x)), Single(fp::frsp(y))));
+        let __t1 = ctx.call::<_, f64>(0x80364340, (Single::round(x), Single::round(y)));
         fp::fadds((aobj).rewind_frame(), __t1)
     };
 }

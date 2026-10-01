@@ -438,7 +438,7 @@ pub fn grAnime_801C6F50<'a>(
                 aobj,
                 Handle::cast::<HSD_TObj<'a>>(obj),
                 flags,
-                Single(fp::frsp((Handle::cast::<Val<'a, F32>>(param)).get())),
+                Single::round((Handle::cast::<Val<'a, F32>>(param)).get()),
             ));
             break 's1;
         }
@@ -465,7 +465,7 @@ pub fn grAnime_801C6F50<'a>(
                 aobj,
                 Handle::cast::<HSD_TObj<'a>>(obj),
                 flags,
-                Single(fp::frsp((Handle::cast::<Val<'a, F32>>(param)).get())),
+                Single::round((Handle::cast::<Val<'a, F32>>(param)).get()),
             ));
             break 's1;
         }
@@ -490,7 +490,7 @@ pub fn grAnime_801C6F50<'a>(
                 aobj,
                 Handle::cast::<HSD_TObj<'a>>(obj),
                 flags,
-                Single(fp::frsp((Handle::cast::<Val<'a, F32>>(param)).get())),
+                Single::round((Handle::cast::<Val<'a, F32>>(param)).get()),
             ));
             break 's1;
         }

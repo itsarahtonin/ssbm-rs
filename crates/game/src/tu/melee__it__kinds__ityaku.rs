@@ -196,7 +196,7 @@ pub fn it_2E6A_Logic117_DmgReceived<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -
             (item).xDD4_itemVar().yaku().x10(),
             sp10,
             fighter_gobj,
-            Single(fp::frsp(fp::frsp((item).xCA0() as f64))),
+            Single::round(fp::frsp((item).xCA0() as f64)),
         ));
     }
     return 0_i32;

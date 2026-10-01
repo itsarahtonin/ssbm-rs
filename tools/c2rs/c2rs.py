@@ -3392,7 +3392,7 @@ class Translator:
                 pt = {"k": "ptr", "to": pt}
             v = self.convert(self.expr(a), pt)
             if marshal and is_float(pt) and pt["size"] == 4:
-                out.append(f"Single(fp::frsp({v.code}))")
+                out.append(f"Single::round({v.code})")
             else:
                 out.append(v.code)
         if ft.get("variadic"):

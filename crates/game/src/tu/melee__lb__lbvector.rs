@@ -2139,13 +2139,13 @@ fn inl_lbVector_Len_unfused<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     let mut vec = vec;
     return ctx.call::<_, f64>(
         0x8000d5bc,
-        (Single(fp::frsp(fp::fadds(
+        (Single::round(fp::fadds(
             fp::fmuls((vec).z(), (vec).z()),
             fp::fadds(
                 fp::fmuls((vec).x(), (vec).x()),
                 fp::fmuls((vec).y(), (vec).y()),
             ),
-        ))),),
+        )),),
     );
 }
 

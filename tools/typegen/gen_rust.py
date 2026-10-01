@@ -197,7 +197,7 @@ class Gen:
         s = self.scalar(t)
         if s:
             if k == "float" and t["size"] == 4:
-                return "f64", "Single(gekko_fp::frsp({}))", "Single", "{}.0"
+                return "f64", "Single::round({})", "Single", "{}.0"
             return s[1], "{}", s[1], "{}"
         if k == "ptr":
             vt = self.value_ty(t["to"])

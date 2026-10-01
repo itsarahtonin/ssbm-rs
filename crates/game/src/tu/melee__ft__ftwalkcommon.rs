@@ -535,7 +535,7 @@ pub fn ftWalkCommon_800DFEC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg_cb: FnPtr
             frame,
             (fp::fdivs(adjusted_animFrame, float_result)),
         ));
-        arg_cb.call::<_, ()>((gobj, Single(fp::frsp(fp::frsp(final_animFrame as f64)))));
+        arg_cb.call::<_, ()>((gobj, Single::round(fp::frsp(final_animFrame as f64))));
     }
 }
 

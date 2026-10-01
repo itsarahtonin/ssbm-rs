@@ -24832,7 +24832,7 @@ pub fn mpLib_8005811C<'a>(ctx: &'a Ctx, coll: CollData<'a>, ledge_id: i32) {
                     coll,
                     fp::fctiwz((coll).x50()),
                     3_i32,
-                    Single(fp::frsp(0.0)),
+                    Single::round(0.0),
                 ));
             }
         }

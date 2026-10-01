@@ -7910,7 +7910,7 @@ pub fn ftCo_Damage_SetMv8FromKbThreshold<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut kb_vel: f64 = (if (fp).ground_or_air() == (((enums::GA_Air as i32) as u32) as i32) {
         ctx.call::<_, f64>(
             0x8000d5bc,
-            (Single(fp::frsp(
+            (Single::round(
                 (fp::fadds(
                     (fp::fmuls(((fp).x8c_kb_vel().z()), ((fp).x8c_kb_vel().z()))),
                     fp::fadds(
@@ -7918,7 +7918,7 @@ pub fn ftCo_Damage_SetMv8FromKbThreshold<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                         (fp::fmuls(((fp).x8c_kb_vel().y()), ((fp).x8c_kb_vel().y()))),
                     ),
                 )),
-            )),),
+            ),),
         )
     } else {
         (if ((fp).xF0_ground_kb_vel()) < fp::frsp(0_i32 as f64) {

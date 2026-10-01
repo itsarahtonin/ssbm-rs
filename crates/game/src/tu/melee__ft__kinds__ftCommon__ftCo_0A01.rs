@@ -46575,11 +46575,11 @@ fn inl_ftCo_800A1AB4<'a>(ctx: &'a Ctx, fp0: Fighter<'a>, fp1: Fighter<'a>) -> f6
     let mut dy: f64 = fp::fsubs((fp0).cur_pos().y(), (fp1).cur_pos().y());
     return ctx.call::<_, f64>(
         0x8000d5bc,
-        (Single(fp::frsp(fp::fmadds(
+        (Single::round(fp::fmadds(
             (dx),
             (dx),
             (fp::fmuls((dy), (dy))),
-        ))),),
+        )),),
     );
 }
 

@@ -7304,7 +7304,7 @@ pub fn hsd_8039930C<'a>(ctx: &'a Ctx, pp: HSD_Particle<'a>, prev: HSD_Particle<'
                 let _ = (((pp).r#gen()).userfunc()).setUserData().call::<_, i32>((
                     pp,
                     (idx_12 as u8),
-                    Single(fp::frsp(v)),
+                    Single::round(v),
                 ));
                 __state = 816;
             }

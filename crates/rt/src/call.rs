@@ -201,6 +201,15 @@ impl<'a> Ret<'a> for f64 {
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Single(pub f64);
 
+impl Single {
+    /// A register value as a `float` argument: rounded to single, as C converts it, but a NaN
+    /// as it is. Rounding would quiet a signaling NaN, which MWCC passes on as it loaded it.
+    #[inline]
+    pub fn round(x: f64) -> Single {
+        Single(if x.is_nan() { x } else { gekko_fp::frsp(x) })
+    }
+}
+
 impl<'a> Arg<'a> for Single {
     #[inline]
     fn put(self, ctx: &'a Ctx, r: &mut ArgRegs) {

@@ -559,7 +559,7 @@ pub mod dolphin__axfx__reverb_hi {
     #[inline] pub fn i2fMagic(ctx: &Ctx) -> Val<'_, F64> { At::new(ctx, 0x804de388).field(0) }
     #[inline] pub fn value0_6(ctx: &Ctx) -> Val<'_, F32> { At::new(ctx, 0x804de390).field(0) }
     #[inline] pub fn value0_3(ctx: &Ctx) -> Val<'_, F32> { At::new(ctx, 0x804de394).field(0) }
-    #[inline] pub fn ReverbHICreate<'a>(ctx: &'a Ctx, rv: AXFX_REVHI_WORK<'a>, coloration: f64, time: f64, mix: f64, damping: f64, preDelay: f64, crosstalk: f64) -> i32 { ctx.call(0x8035b6c0, (rv, Single(gekko_fp::frsp(coloration)), Single(gekko_fp::frsp(time)), Single(gekko_fp::frsp(mix)), Single(gekko_fp::frsp(damping)), Single(gekko_fp::frsp(preDelay)), Single(gekko_fp::frsp(crosstalk)), )) }
+    #[inline] pub fn ReverbHICreate<'a>(ctx: &'a Ctx, rv: AXFX_REVHI_WORK<'a>, coloration: f64, time: f64, mix: f64, damping: f64, preDelay: f64, crosstalk: f64) -> i32 { ctx.call(0x8035b6c0, (rv, Single::round(coloration), Single::round(time), Single::round(mix), Single::round(damping), Single::round(preDelay), Single::round(crosstalk), )) }
     #[inline] pub fn HandleReverb<'a>(ctx: &'a Ctx, sptr: Val<'a, i32>, rv: AXFX_REVHI_WORK<'a>, k: i32) -> () { ctx.call(0x8035bd3c, (sptr, rv, k, )) }
     #[inline] pub fn ReverbHIFree<'a>(ctx: &'a Ctx, rv: AXFX_REVHI_WORK<'a>) -> () { ctx.call(0x8035c248, (rv, )) }
     /// Addresses of this scope's functions.
@@ -583,7 +583,7 @@ pub mod dolphin__axfx__reverb_std {
     #[inline] pub fn value0_3(ctx: &Ctx) -> Val<'_, F32> { At::new(ctx, 0x804de3c8).field(0) }
     #[inline] pub fn value0_6(ctx: &Ctx) -> Val<'_, F32> { At::new(ctx, 0x804de3cc).field(0) }
     #[inline] pub fn i2fMagic(ctx: &Ctx) -> Val<'_, F64> { At::new(ctx, 0x804de3d0).field(0) }
-    #[inline] pub fn ReverbSTDCreate<'a>(ctx: &'a Ctx, rv: AXFX_REVSTD_WORK<'a>, coloration: f64, time: f64, mix: f64, damping: f64, predelay: f64) -> i32 { ctx.call(0x8035c504, (rv, Single(gekko_fp::frsp(coloration)), Single(gekko_fp::frsp(time)), Single(gekko_fp::frsp(mix)), Single(gekko_fp::frsp(damping)), Single(gekko_fp::frsp(predelay)), )) }
+    #[inline] pub fn ReverbSTDCreate<'a>(ctx: &'a Ctx, rv: AXFX_REVSTD_WORK<'a>, coloration: f64, time: f64, mix: f64, damping: f64, predelay: f64) -> i32 { ctx.call(0x8035c504, (rv, Single::round(coloration), Single::round(time), Single::round(mix), Single::round(damping), Single::round(predelay), )) }
     #[inline] pub fn HandleReverb<'a>(ctx: &'a Ctx, sptr: Val<'a, i32>, rv: AXFX_REVSTD_WORK<'a>) -> () { ctx.call(0x8035c910, (sptr, rv, )) }
     #[inline] pub fn ReverbSTDFree<'a>(ctx: &'a Ctx, rv: AXFX_REVSTD_WORK<'a>) -> () { ctx.call(0x8035ccc4, (rv, )) }
     /// Addresses of this scope's functions.
@@ -2036,7 +2036,7 @@ pub mod melee__cm__camera {
     #[inline] pub fn lbl_803BCC70(ctx: &Ctx) -> ArrV<'_, i8, 22> { At::new(ctx, 0x803bcc70).field(0) }
     #[inline] pub fn lbl_803BCC88(ctx: &Ctx) -> ArrV<'_, i8, 20> { At::new(ctx, 0x803bcc88).field(0) }
     #[inline] pub fn game_camera(ctx: &Ctx) -> Camera<'_> { At::new(ctx, 0x80452c68).field(0) }
-    #[inline] pub fn Camera_80029AAC<'a>(ctx: &'a Ctx, bounds: CameraBounds<'a>, transform: CameraTransformState<'a>, speed: f64) -> () { ctx.call(0x80029aac, (bounds, transform, Single(gekko_fp::frsp(speed)), )) }
+    #[inline] pub fn Camera_80029AAC<'a>(ctx: &'a Ctx, bounds: CameraBounds<'a>, transform: CameraTransformState<'a>, speed: f64) -> () { ctx.call(0x80029aac, (bounds, transform, Single::round(speed), )) }
     #[inline] pub fn fn_800301D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) -> () { ctx.call(0x800301d0, (gobj, arg1, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
@@ -2137,14 +2137,14 @@ pub mod melee__db__dbcamera {
     #[inline] pub fn fn_80227188<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80227188, ()) }
     #[inline] pub fn fn_802277E8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, port: i32) -> () { ctx.call(0x802277e8, (arg0, port, )) }
     #[inline] pub fn fn_80227904<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, port: i32) -> () { ctx.call(0x80227904, (camera, port, )) }
-    #[inline] pub fn fn_802279E8<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, camera_pos: Vec<'a>, camera_interest: Vec<'a>, cstick_x: f64, cstick_y: f64) -> () { ctx.call(0x802279e8, (camera, camera_pos, camera_interest, Single(gekko_fp::frsp(cstick_x)), Single(gekko_fp::frsp(cstick_y)), )) }
-    #[inline] pub fn fn_80227B64<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, cstick_x: f64, cstick_y: f64) -> () { ctx.call(0x80227b64, (camera, Single(gekko_fp::frsp(cstick_x)), Single(gekko_fp::frsp(cstick_y)), )) }
-    #[inline] pub fn fn_80227BA8<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: f64, arg3: f64) -> () { ctx.call(0x80227ba8, (camera, arg1, Single(gekko_fp::frsp(arg2)), Single(gekko_fp::frsp(arg3)), )) }
-    #[inline] pub fn fn_80227CAC<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, cstick_y: f64) -> () { ctx.call(0x80227cac, (camera, Single(gekko_fp::frsp(cstick_y)), )) }
-    #[inline] pub fn fn_80227D38<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: f64) -> () { ctx.call(0x80227d38, (camera, arg1, Single(gekko_fp::frsp(arg2)), )) }
-    #[inline] pub fn fn_80227EB0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: Vec<'a>, arg2: Vec<'a>, arg8: f64, arg9: f64) -> () { ctx.call(0x80227eb0, (arg0, arg1, arg2, Single(gekko_fp::frsp(arg8)), Single(gekko_fp::frsp(arg9)), )) }
-    #[inline] pub fn fn_80227FE0<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, cstick_x: f64, cstick_y: f64) -> () { ctx.call(0x80227fe0, (camera, Single(gekko_fp::frsp(cstick_x)), Single(gekko_fp::frsp(cstick_y)), )) }
-    #[inline] pub fn fn_80228124<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: f64, arg3: f64) -> () { ctx.call(0x80228124, (camera, arg1, Single(gekko_fp::frsp(arg2)), Single(gekko_fp::frsp(arg3)), )) }
+    #[inline] pub fn fn_802279E8<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, camera_pos: Vec<'a>, camera_interest: Vec<'a>, cstick_x: f64, cstick_y: f64) -> () { ctx.call(0x802279e8, (camera, camera_pos, camera_interest, Single::round(cstick_x), Single::round(cstick_y), )) }
+    #[inline] pub fn fn_80227B64<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, cstick_x: f64, cstick_y: f64) -> () { ctx.call(0x80227b64, (camera, Single::round(cstick_x), Single::round(cstick_y), )) }
+    #[inline] pub fn fn_80227BA8<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: f64, arg3: f64) -> () { ctx.call(0x80227ba8, (camera, arg1, Single::round(arg2), Single::round(arg3), )) }
+    #[inline] pub fn fn_80227CAC<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, cstick_y: f64) -> () { ctx.call(0x80227cac, (camera, Single::round(cstick_y), )) }
+    #[inline] pub fn fn_80227D38<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: f64) -> () { ctx.call(0x80227d38, (camera, arg1, Single::round(arg2), )) }
+    #[inline] pub fn fn_80227EB0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: Vec<'a>, arg2: Vec<'a>, arg8: f64, arg9: f64) -> () { ctx.call(0x80227eb0, (arg0, arg1, arg2, Single::round(arg8), Single::round(arg9), )) }
+    #[inline] pub fn fn_80227FE0<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, cstick_x: f64, cstick_y: f64) -> () { ctx.call(0x80227fe0, (camera, Single::round(cstick_x), Single::round(cstick_y), )) }
+    #[inline] pub fn fn_80228124<'a>(ctx: &'a Ctx, camera: HSD_GObj<'a>, arg1: Vec<'a>, arg2: f64, arg3: f64) -> () { ctx.call(0x80228124, (camera, arg1, Single::round(arg2), Single::round(arg3), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const fn_802270C4: u32 = 0x802270c4;
@@ -2944,8 +2944,8 @@ pub mod melee__ft__kinds__ftCommon__ftCo_0A01 {
     #[inline] pub fn ftCo_800A0F00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x800a0f00, (gobj, )) }
     #[inline] pub fn ftCo_800A1B38<'a>(ctx: &'a Ctx, arg0: i32) -> i32 { ctx.call(0x800a1b38, (arg0, )) }
     #[inline] pub fn ftCo_800A1CC4<'a>(ctx: &'a Ctx, fp: Fighter<'a>, var_r29: ftCo_803C6594_t<'a>) -> () { ctx.call(0x800a1cc4, (fp, var_r29, )) }
-    #[inline] pub fn ftCo_800A1F3C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: f64, arg2: f64, arg3: f64) -> () { ctx.call(0x800a1f3c, (fp, Single(gekko_fp::frsp(arg1)), Single(gekko_fp::frsp(arg2)), Single(gekko_fp::frsp(arg3)), )) }
-    #[inline] pub fn ftCo_800A1F98<'a>(ctx: &'a Ctx, x: i32, y: f64) -> i32 { ctx.call(0x800a1f98, (x, Single(gekko_fp::frsp(y)), )) }
+    #[inline] pub fn ftCo_800A1F3C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: f64, arg2: f64, arg3: f64) -> () { ctx.call(0x800a1f3c, (fp, Single::round(arg1), Single::round(arg2), Single::round(arg3), )) }
+    #[inline] pub fn ftCo_800A1F98<'a>(ctx: &'a Ctx, x: i32, y: f64) -> i32 { ctx.call(0x800a1f98, (x, Single::round(y), )) }
     #[inline] pub fn ftCo_800A20A0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> () { ctx.call(0x800a20a0, (fp, )) }
     #[inline] pub fn ftCo_800A21FC<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 { ctx.call(0x800a21fc, (fp, )) }
     #[inline] pub fn ftCo_800A229C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Vec<'a>) -> i32 { ctx.call(0x800a229c, (fp, arg1, )) }
@@ -2953,7 +2953,7 @@ pub mod melee__ft__kinds__ftCommon__ftCo_0A01 {
     #[inline] pub fn ftCo_800A2C80<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 { ctx.call(0x800a2c80, (fp, )) }
     #[inline] pub fn ftCo_800A3234<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 { ctx.call(0x800a3234, (fp, )) }
     #[inline] pub fn ftCo_800A3498<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 { ctx.call(0x800a3498, (fp, )) }
-    #[inline] pub fn ftCo_800A3554<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: f64) -> i32 { ctx.call(0x800a3554, (fp, Single(gekko_fp::frsp(arg1)), )) }
+    #[inline] pub fn ftCo_800A3554<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: f64) -> i32 { ctx.call(0x800a3554, (fp, Single::round(arg1), )) }
     #[inline] pub fn ftCo_800A3710<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> i32 { ctx.call(0x800a3710, (fp, )) }
     #[inline] pub fn ftCo_800A3908<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 { ctx.call(0x800a3908, (fp, arg1, )) }
     #[inline] pub fn ftCo_800A4038<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32) -> i32 { ctx.call(0x800a4038, (fp, arg1, )) }
@@ -3394,9 +3394,9 @@ pub mod melee__ft__kinds__ftCommon__ftCo_AttackS3 {
 pub mod melee__ft__kinds__ftCommon__ftCo_AttackS4 {
     use super::*;
     use crate::fns::*;
-    #[inline] pub fn checkItemThrow<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, stick_x_sign: f64) -> i32 { ctx.call(0x8008c22c, (gobj, Single(gekko_fp::frsp(stick_x_sign)), )) }
-    #[inline] pub fn decideFighter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, stick_x_sign: f64, stick_angle: f64) -> () { ctx.call(0x8008c348, (gobj, Single(gekko_fp::frsp(stick_x_sign)), Single(gekko_fp::frsp(stick_angle)), )) }
-    #[inline] pub fn doEnter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, stick_angle: f64) -> () { ctx.call(0x8008c3e0, (gobj, Single(gekko_fp::frsp(stick_angle)), )) }
+    #[inline] pub fn checkItemThrow<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, stick_x_sign: f64) -> i32 { ctx.call(0x8008c22c, (gobj, Single::round(stick_x_sign), )) }
+    #[inline] pub fn decideFighter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, stick_x_sign: f64, stick_angle: f64) -> () { ctx.call(0x8008c348, (gobj, Single::round(stick_x_sign), Single::round(stick_angle), )) }
+    #[inline] pub fn doEnter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, stick_angle: f64) -> () { ctx.call(0x8008c3e0, (gobj, Single::round(stick_angle), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const checkItemThrow: u32 = 0x8008c22c;
@@ -3502,7 +3502,7 @@ pub mod melee__ft__kinds__ftCommon__ftCo_CargoThrow {
 pub mod melee__ft__kinds__ftCommon__ftCo_CargoWalk {
     use super::*;
     use crate::fns::*;
-    #[inline] pub fn ftCo_8009B6C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, anim_start: f64) -> () { ctx.call(0x8009b6c8, (gobj, Single(gekko_fp::frsp(anim_start)), )) }
+    #[inline] pub fn ftCo_8009B6C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, anim_start: f64) -> () { ctx.call(0x8009b6c8, (gobj, Single::round(anim_start), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const ftCo_8009B6C8: u32 = 0x8009b6c8;
@@ -3547,7 +3547,7 @@ pub mod melee__ft__kinds__ftCommon__ftCo_CliffAttack {
 pub mod melee__ft__kinds__ftCommon__ftCo_CliffClimb {
     use super::*;
     use crate::fns::*;
-    #[inline] pub fn ftCo_8009AAFC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, stick_x: f64, angle: f64) -> i32 { ctx.call(0x8009aafc, (gobj, arg1, Single(gekko_fp::frsp(stick_x)), Single(gekko_fp::frsp(angle)), )) }
+    #[inline] pub fn ftCo_8009AAFC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, stick_x: f64, angle: f64) -> i32 { ctx.call(0x8009aafc, (gobj, arg1, Single::round(stick_x), Single::round(angle), )) }
     #[inline] pub fn ftCo_8009AB9C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8009ab9c, (gobj, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
@@ -3784,7 +3784,7 @@ pub mod melee__ft__kinds__ftCommon__ftCo_Guard {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn ftCo_80091BC4<'a>(ctx: &'a Ctx, fp: Fighter<'a>) -> () { ctx.call(0x80091bc4, (fp, )) }
-    #[inline] pub fn ftCo_80091E78<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: f64) -> () { ctx.call(0x80091e78, (gobj, Single(gekko_fp::frsp(arg1)), )) }
+    #[inline] pub fn ftCo_80091E78<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: f64) -> () { ctx.call(0x80091e78, (gobj, Single::round(arg1), )) }
     #[inline] pub fn ftCo_80092158<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: HSD_JObj<'a>) -> () { ctx.call(0x80092158, (gobj, arg1, arg2, )) }
     #[inline] pub fn ftCo_800921DC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800921dc, (gobj, )) }
     #[inline] pub fn ftCo_800923B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800923b4, (gobj, )) }
@@ -4627,7 +4627,7 @@ pub mod melee__ft__kinds__ftKirby__ftkirbyspecialn {
     #[inline] pub fn fn_800F6210<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800f6210, (gobj, )) }
     #[inline] pub fn fn_800F6280<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800f6280, (gobj, )) }
     #[inline] pub fn fn_800F6318<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800f6318, (gobj, )) }
-    #[inline] pub fn fn_800F64C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, anim_start: f64) -> () { ctx.call(0x800f64c8, (gobj, Single(gekko_fp::frsp(anim_start)), )) }
+    #[inline] pub fn fn_800F64C8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, anim_start: f64) -> () { ctx.call(0x800f64c8, (gobj, Single::round(anim_start), )) }
     #[inline] pub fn fn_800F6AC8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800f6ac8, (gobj, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
@@ -4863,7 +4863,7 @@ pub mod melee__ft__kinds__ftLink__ftlinkspecials {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn on21EC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800ebf2c, (gobj, )) }
-    #[inline] pub fn calcAnglePos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>, dist: f64) -> f64 { ctx.call(0x800ec0c4, (gobj, pos, Single(gekko_fp::frsp(dist)), )) }
+    #[inline] pub fn calcAnglePos<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, pos: Vec<'a>, dist: f64) -> f64 { ctx.call(0x800ec0c4, (gobj, pos, Single::round(dist), )) }
     #[inline] pub fn onAccessory4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x800ec210, (gobj, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
@@ -4959,7 +4959,7 @@ pub mod melee__ft__kinds__ftMasterHand__ftmasterhandfingerbeam {
 pub mod melee__ft__kinds__ftMasterHand__ftmasterhandfingergun {
     use super::*;
     use crate::fns::*;
-    #[inline] pub fn ftMh_MS_365_8015364C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: HSD_JObj<'a>, arg2: f64, arg3: f64) -> () { ctx.call(0x8015364c, (gobj, arg1, Single(gekko_fp::frsp(arg2)), Single(gekko_fp::frsp(arg3)), )) }
+    #[inline] pub fn ftMh_MS_365_8015364C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: HSD_JObj<'a>, arg2: f64, arg3: f64) -> () { ctx.call(0x8015364c, (gobj, arg1, Single::round(arg2), Single::round(arg3), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const ftMh_MS_365_8015364C: u32 = 0x8015364c;
@@ -5088,7 +5088,7 @@ pub mod melee__ft__kinds__ftNess__ftnessattackhi4 {
     #[inline] pub fn AttackHi4Pos(ctx: &Ctx) -> Vec<'_> { At::new(ctx, 0x803b7598).field(0) }
     #[inline] pub fn YoyoChargePos(ctx: &Ctx) -> Vec<'_> { At::new(ctx, 0x803b75a4).field(0) }
     #[inline] pub fn YoyoThinkPos(ctx: &Ctx) -> Vec<'_> { At::new(ctx, 0x803b75b0).field(0) }
-    #[inline] pub fn ftNs_AttackHi4_YoyoApplyDamage<'a>(ctx: &'a Ctx, charge_frames: f64, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80114f70, (Single(gekko_fp::frsp(charge_frames)), gobj, )) }
+    #[inline] pub fn ftNs_AttackHi4_YoyoApplyDamage<'a>(ctx: &'a Ctx, charge_frames: f64, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80114f70, (Single::round(charge_frames), gobj, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const ftNs_AttackHi4_YoyoApplyDamage: u32 = 0x80114f70;
@@ -7625,8 +7625,8 @@ pub mod melee__gr__grbigblue {
     #[inline] pub fn lbl_803E2DFC(ctx: &Ctx) -> ArrV<'_, i16, 30> { At::new(ctx, 0x803e2dfc).field(0) }
     #[inline] pub fn grBb_TrackEntries(ctx: &Ctx) -> Arr<'_, grBb_TrackEntry<'_>, 12> { At::new(ctx, 0x803e2ed8).field(0) }
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, grBb_YakumonoParam<'_>> { At::new(ctx, 0x804d69c8).field(0) }
-    #[inline] pub fn fn_801E8560<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801e8560, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
-    #[inline] pub fn fn_801EF60C<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801ef60c, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn fn_801E8560<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801e8560, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
+    #[inline] pub fn fn_801EF60C<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801ef60c, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const fn_801E8560: u32 = 0x801e8560;
@@ -7674,7 +7674,7 @@ pub mod melee__gr__grcastle {
     #[inline] pub fn grCs_804D45E4(ctx: &Ctx) -> Val<'_, u8> { At::new(ctx, 0x804d45e4).field(0) }
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, grCastle_YakumonoParam<'_>> { At::new(ctx, 0x804d6970).field(0) }
     #[inline] pub fn grCs_804D6974(ctx: &Ctx) -> Ptr<'_, lb_80011A50_t<'_>> { At::new(ctx, 0x804d6974).field(0) }
-    #[inline] pub fn grCastle_801CF750<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801cf750, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn grCastle_801CF750<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801cf750, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const grCastle_801CF750: u32 = 0x801cf750;
@@ -8067,7 +8067,7 @@ pub mod melee__gr__grfigureget {
     #[inline] pub fn grFigureGet_80219890<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x80219890, (gobj, )) }
     #[inline] pub fn grFigureGet_80219898<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80219898, (gobj, )) }
     #[inline] pub fn grFigureGet_80219B0C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80219b0c, (gobj, )) }
-    #[inline] pub fn grFigureGet_80219B10<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x80219b10, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn grFigureGet_80219B10<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x80219b10, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     #[inline] pub fn grFigureGet_OnTouchLine<'a>(ctx: &'a Ctx, arg0: i32) -> DynamicsDesc<'a> { ctx.call(0x80219c88, (arg0, )) }
     #[inline] pub fn grFigureGet_OnCheckShadowRender<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: i32, arg2: HSD_JObj<'a>) -> i32 { ctx.call(0x80219c90, (arg0, arg1, arg2, )) }
     /// Addresses of this scope's functions.
@@ -8138,7 +8138,7 @@ pub mod melee__gr__grfourside {
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, grFourside_YakumonoParam<'_>> { At::new(ctx, 0x804d69d8).field(0) }
     #[inline] pub fn stageGObj0_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801f2ebc, (gobj, )) }
     #[inline] pub fn stageGObj2_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801f2ef8, (gobj, )) }
-    #[inline] pub fn grFourside_801F30A0<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f30a0, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn grFourside_801F30A0<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f30a0, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const stageGObj0_OnInit: u32 = 0x801f2ebc;
@@ -8189,8 +8189,8 @@ pub mod melee__gr__grgreatbay {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn stageGObj0_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801f4404, (gobj, )) }
-    #[inline] pub fn grGreatBay_801F5914<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f5914, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
-    #[inline] pub fn grGreatBay_801F60C4<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f60c4, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn grGreatBay_801F5914<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f5914, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
+    #[inline] pub fn grGreatBay_801F60C4<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f60c4, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const stageGObj0_OnInit: u32 = 0x801f4404;
@@ -8224,7 +8224,7 @@ pub mod melee__gr__grgreens {
     #[inline] pub fn grGr_804D6AAD(ctx: &Ctx) -> Val<'_, u8> { At::new(ctx, 0x804d6aad).field(0) }
     #[inline] pub fn stageGObj1_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80213910, (gobj, )) }
     #[inline] pub fn stageGObj3_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8021394c, (gobj, )) }
-    #[inline] pub fn fn_80216DE4<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x80216de4, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn fn_80216DE4<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x80216de4, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const stageGObj1_OnInit: u32 = 0x80213910;
@@ -8263,7 +8263,7 @@ pub mod melee__gr__grheal {
     #[inline] pub fn fn_8021F424<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x8021f424, ()) }
     #[inline] pub fn stageGObj1_GObjProc<'a>(ctx: &'a Ctx, ground: HSD_GObj<'a>) -> () { ctx.call(0x8021f474, (ground, )) }
     #[inline] pub fn stageGObj1_Callback3<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8021f4bc, (gobj, )) }
-    #[inline] pub fn onJointCollision<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x8021f4c0, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn onJointCollision<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x8021f4c0, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     #[inline] pub fn grHeal_8021F4E8<'a>(ctx: &'a Ctx, arg0: i32, parent_jobj: HSD_JObj<'a>) -> () { ctx.call(0x8021f4e8, (arg0, parent_jobj, )) }
     #[inline] pub fn stageGObj2_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8021f5c8, (gobj, )) }
     #[inline] pub fn stageGObj2_Callback1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x8021f5cc, (gobj, )) }
@@ -8369,7 +8369,7 @@ pub mod melee__gr__grhomerun {
     #[inline] pub fn grHr_804D6AE0(ctx: &Ctx) -> Val<'_, F32> { At::new(ctx, 0x804d6ae0).field(0) }
     #[inline] pub fn grHr_804D6AE4(ctx: &Ctx) -> Val<'_, F32> { At::new(ctx, 0x804d6ae4).field(0) }
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, Addr<'_>> { At::new(ctx, 0x804d6ae8).field(0) }
-    #[inline] pub fn fn_8021E994<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x8021e994, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn fn_8021E994<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x8021e994, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const fn_8021E994: u32 = 0x8021e994;
@@ -8446,7 +8446,7 @@ pub mod melee__gr__gricemt {
     #[inline] pub fn stageGObj8_Callback1<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 { ctx.call(0x801f8b08, (arg0, )) }
     #[inline] pub fn stageGObj8_GObjProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> () { ctx.call(0x801f8b10, (arg0, )) }
     #[inline] pub fn stageGObj8_Callback3<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> () { ctx.call(0x801f8c60, (arg0, )) }
-    #[inline] pub fn fn_801F8C64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, u1: Ground<'a>, u2: Vec<'a>, u3: HSD_GObj<'a>, u4: f64) -> () { ctx.call(0x801f8c64, (gobj, u1, u2, u3, Single(gekko_fp::frsp(u4)), )) }
+    #[inline] pub fn fn_801F8C64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, u1: Ground<'a>, u2: Vec<'a>, u3: HSD_GObj<'a>, u4: f64) -> () { ctx.call(0x801f8c64, (gobj, u1, u2, u3, Single::round(u4), )) }
     #[inline] pub fn grIceMt_801F8CDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, joint_indices: Val<'a, i16>, block_num: i32, output_array: Ptr<'a, HSD_GObj<'a>>) -> () { ctx.call(0x801f8cdc, (gobj, joint_indices, block_num, output_array, )) }
     #[inline] pub fn fn_801F8E58<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, out: Val<'a, i32>) -> i32 { ctx.call(0x801f8e58, (arg0, out, )) }
     #[inline] pub fn fn_801F9038<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x801f9038, (gobj, )) }
@@ -8454,19 +8454,19 @@ pub mod melee__gr__gricemt {
     #[inline] pub fn fn_801F91A8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x801f91a8, (gobj, )) }
     #[inline] pub fn grIceMt_801F91EC<'a>(ctx: &'a Ctx, param_1: HSD_GObj<'a>, param_2: Val<'a, i16>, param_3: i32, param_4: i32, param_5: i32, param_6: i32, param_7: i32, param_8: FnPtr<'a>) -> () { ctx.call(0x801f91ec, (param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8, )) }
     #[inline] pub fn grIceMt_801F929C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: Addr<'a>) -> () { ctx.call(0x801f929c, (arg0, arg1, )) }
-    #[inline] pub fn fn_801F9338<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f9338, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
-    #[inline] pub fn fn_801F9448<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f9448, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
-    #[inline] pub fn fn_801F9558<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f9558, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
-    #[inline] pub fn grIceMt_801F9668<'a>(ctx: &'a Ctx, arg0: f64) -> () { ctx.call(0x801f9668, (Single(gekko_fp::frsp(arg0)), )) }
-    #[inline] pub fn grIceMt_801F96E0<'a>(ctx: &'a Ctx, arg0: grIceMt_GObj9_GObj10_UnderUpperIdPair<'a>, y: f64) -> f64 { ctx.call(0x801f96e0, (arg0, Single(gekko_fp::frsp(y)), )) }
+    #[inline] pub fn fn_801F9338<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f9338, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
+    #[inline] pub fn fn_801F9448<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f9448, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
+    #[inline] pub fn fn_801F9558<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f9558, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
+    #[inline] pub fn grIceMt_801F9668<'a>(ctx: &'a Ctx, arg0: f64) -> () { ctx.call(0x801f9668, (Single::round(arg0), )) }
+    #[inline] pub fn grIceMt_801F96E0<'a>(ctx: &'a Ctx, arg0: grIceMt_GObj9_GObj10_UnderUpperIdPair<'a>, y: f64) -> f64 { ctx.call(0x801f96e0, (arg0, Single::round(y), )) }
     #[inline] pub fn grIceMt_801F98A8<'a>(ctx: &'a Ctx, param1: HSD_GObj<'a>) -> () { ctx.call(0x801f98a8, (param1, )) }
     #[inline] pub fn grIceMt_801F993C<'a>(ctx: &'a Ctx, under_id: i32, upper_id: i32) -> f64 { ctx.call(0x801f993c, (under_id, upper_id, )) }
-    #[inline] pub fn grIceMt_801F9ACC<'a>(ctx: &'a Ctx, ids_: grIceMt_GObj9_GObj10_UnderUpperIdPair<'a>, y: f64, ev: FnPtr<'a>, arg3: HSD_GObj<'a>) -> i32 { ctx.call(0x801f9acc, (ids_, Single(gekko_fp::frsp(y)), ev, arg3, )) }
+    #[inline] pub fn grIceMt_801F9ACC<'a>(ctx: &'a Ctx, ids_: grIceMt_GObj9_GObj10_UnderUpperIdPair<'a>, y: f64, ev: FnPtr<'a>, arg3: HSD_GObj<'a>) -> i32 { ctx.call(0x801f9acc, (ids_, Single::round(y), ev, arg3, )) }
     #[inline] pub fn grIceMt_801FA0BC<'a>(ctx: &'a Ctx, ids: grIceMt_GObj9_GObj10_UnderUpperIdPair<'a>) -> () { ctx.call(0x801fa0bc, (ids, )) }
     #[inline] pub fn grIceMt_801FA364<'a>(ctx: &'a Ctx, state: grIceMt_FA364_State<'a>, out: Val<'a, F32>, cb: FnPtr<'a>, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x801fa364, (state, out, cb, gobj, )) }
     #[inline] pub fn fn_801FA4CC<'a>(ctx: &'a Ctx, num: i32) -> i32 { ctx.call(0x801fa4cc, (num, )) }
     #[inline] pub fn grIceMt_801FA500<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_JObj<'a>) -> i32 { ctx.call(0x801fa500, (arg0, arg1, )) }
-    #[inline] pub fn onJointCollision<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801fa7f0, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn onJointCollision<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801fa7f0, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     #[inline] pub fn grIceMt_801FA854<'a>(ctx: &'a Ctx) -> () { ctx.call(0x801fa854, ()) }
     #[inline] pub fn grIceMt_801FA8F8<'a>(ctx: &'a Ctx, id: i32) -> DynamicsDesc<'a> { ctx.call(0x801fa8f8, (id, )) }
     #[inline] pub fn grIceMt_801FA900<'a>(ctx: &'a Ctx, a: Vec<'a>, id: i32, jobj: HSD_JObj<'a>) -> i32 { ctx.call(0x801fa900, (a, id, jobj, )) }
@@ -8656,13 +8656,13 @@ pub mod melee__gr__grinishie1 {
     #[inline] pub fn grInishie1_801FBAA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, ix: i32) -> () { ctx.call(0x801fbaa0, (gobj, ix, )) }
     #[inline] pub fn grInishie1_801FBC4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, index: u32) -> () { ctx.call(0x801fbc4c, (gobj, index, )) }
     #[inline] pub fn grInishie1_801FBCEC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, index: u32) -> () { ctx.call(0x801fbcec, (gobj, index, )) }
-    #[inline] pub fn fn_801FBEB8<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801fbeb8, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
-    #[inline] pub fn fn_801FBF6C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, gp: Ground<'a>, pos: Vec<'a>, arg3: HSD_GObj<'a>, arg4: f64) -> () { ctx.call(0x801fbf6c, (item_gobj, gp, pos, arg3, Single(gekko_fp::frsp(arg4)), )) }
+    #[inline] pub fn fn_801FBEB8<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801fbeb8, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
+    #[inline] pub fn fn_801FBF6C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, gp: Ground<'a>, pos: Vec<'a>, arg3: HSD_GObj<'a>, arg4: f64) -> () { ctx.call(0x801fbf6c, (item_gobj, gp, pos, arg3, Single::round(arg4), )) }
     #[inline] pub fn grInishie1_801FC018<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801fc018, (gobj, )) }
     #[inline] pub fn grInishie1_801FC110<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801fc110, (gobj, )) }
     #[inline] pub fn grInishie1_801FC4A0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801fc4a0, (gobj, )) }
     #[inline] pub fn grInishie1_801FC664<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801fc664, (gobj, )) }
-    #[inline] pub fn fn_801FC9AC<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801fc9ac, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn fn_801FC9AC<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801fc9ac, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     #[inline] pub fn grInishie1_801FCB10<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801fcb10, (gobj, )) }
     #[inline] pub fn grInishie1_801FCBB0<'a>(ctx: &'a Ctx, arg: i32) -> DynamicsDesc<'a> { ctx.call(0x801fcbb0, (arg, )) }
     #[inline] pub fn grInishie1_801FCBB8<'a>(ctx: &'a Ctx, arg: Vec<'a>, arg0: i32, jobj: HSD_JObj<'a>) -> i32 { ctx.call(0x801fcbb8, (arg, arg0, jobj, )) }
@@ -8807,8 +8807,8 @@ pub mod melee__gr__grkongo {
     #[inline] pub fn grKg_803B7FB0(ctx: &Ctx) -> lbColl_80008D30_arg1<'_> { At::new(ctx, 0x803b7fb0).field(0) }
     #[inline] pub fn grKg_803E188C(ctx: &Ctx) -> Arr<'_, _struct_grKg_803E188C_0x18<'_>, 15> { At::new(ctx, 0x803e188c).field(0) }
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, grKongo_YakumonoParam<'_>> { At::new(ctx, 0x804d6980).field(0) }
-    #[inline] pub fn fn_801D7700<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801d7700, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
-    #[inline] pub fn fn_801D7E60<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801d7e60, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn fn_801D7700<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801d7700, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
+    #[inline] pub fn fn_801D7E60<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801d7e60, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     #[inline] pub fn fn_801D8134<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_GObj<'a>) -> i32 { ctx.call(0x801d8134, (arg0, arg1, )) }
     #[inline] pub fn grKongo_801D8444<'a>(ctx: &'a Ctx, arg: i32) -> DynamicsDesc<'a> { ctx.call(0x801d8444, (arg, )) }
     /// Addresses of this scope's functions.
@@ -8905,7 +8905,7 @@ pub mod melee__gr__grlast {
     #[inline] pub fn grLast_8021B2E8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8021b2e8, (gobj, )) }
     #[inline] pub fn grLast_8021B5C4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x8021b5c4, (gobj, )) }
     #[inline] pub fn grLast_8021B920<'a>(ctx: &'a Ctx, gobj_: HSD_GObj<'a>, arg1: i32) -> () { ctx.call(0x8021b920, (gobj_, arg1, )) }
-    #[inline] pub fn grLast_8021C40C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, color: _GXColor<'a>, arg2: f64) -> () { let color__copy = ctx.stack_alloc(<_GXColor<'a> as Handle<'a>>::SIZE); let color__tmp: _GXColor<'a> = color__copy.get(); color__tmp.copy_from(color);ctx.call(0x8021c40c, (gobj, color__tmp, Single(gekko_fp::frsp(arg2)), )) }
+    #[inline] pub fn grLast_8021C40C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, color: _GXColor<'a>, arg2: f64) -> () { let color__copy = ctx.stack_alloc(<_GXColor<'a> as Handle<'a>>::SIZE); let color__tmp: _GXColor<'a> = color__copy.get(); color__tmp.copy_from(color);ctx.call(0x8021c40c, (gobj, color__tmp, Single::round(arg2), )) }
     #[inline] pub fn grLast_8021C500<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8021c500, (gobj, )) }
     #[inline] pub fn grLast_8021C640<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8021c640, ()) }
     #[inline] pub fn grLast_8021C6AC<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8021c6ac, ()) }
@@ -9087,7 +9087,7 @@ pub mod melee__gr__grmutecity {
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, grMc_YakumonoParam<'_>> { At::new(ctx, 0x804d69d0).field(0) }
     #[inline] pub fn grMc_804D69D4(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d69d4).field(0) }
     #[inline] pub fn stageGObj36_37_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x801f0410, (gobj, )) }
-    #[inline] pub fn fn_801F2B58<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f2b58, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn fn_801F2B58<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801f2b58, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const stageGObj36_37_OnInit: u32 = 0x801f0410;
@@ -9225,7 +9225,7 @@ pub mod melee__gr__groldyoshi {
     use crate::fns::*;
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, groldyoshi_yakumono_param_t<'_>> { At::new(ctx, 0x804d6a88).field(0) }
     #[inline] pub fn stageGObj0_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8020e93c, (gobj, )) }
-    #[inline] pub fn fn_8020F2A8<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x8020f2a8, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn fn_8020F2A8<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x8020f2a8, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const stageGObj0_OnInit: u32 = 0x8020e93c;
@@ -9245,8 +9245,8 @@ pub mod melee__gr__gronett {
     #[inline] pub fn grOt_803E27E0(ctx: &Ctx) -> Arr<'_, StageCallbacks<'_>, 6> { At::new(ctx, 0x803e27e0).field(0) }
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, grOnett_StageParam<'_>> { At::new(ctx, 0x804d69c0).field(0) }
     #[inline] pub fn grOt_804D69C4(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d69c4).field(0) }
-    #[inline] pub fn grOnett_801E40E4<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801e40e4, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
-    #[inline] pub fn grOnett_801E54B4<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801e54b4, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn grOnett_801E40E4<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801e40e4, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
+    #[inline] pub fn grOnett_801E54B4<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x801e54b4, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const grOnett_801E40E4: u32 = 0x801e40e4;
@@ -9529,7 +9529,7 @@ pub mod melee__gr__grpushon {
     use crate::fns::*;
     #[inline] pub fn light_configs(ctx: &Ctx) -> Arr<'_, grPushOn_LightConfig<'_>, 9> { At::new(ctx, 0x803e7bac).field(0) }
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, grPushon_YakumonoParam<'_>> { At::new(ctx, 0x804d6ab8).field(0) }
-    #[inline] pub fn fn_802190A0<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x802190a0, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn fn_802190A0<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x802190a0, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const fn_802190A0: u32 = 0x802190a0;
@@ -9546,9 +9546,9 @@ pub mod melee__gr__grrcruise {
     use crate::fns::*;
     #[inline] pub fn grRc_804D4790(ctx: &Ctx) -> ArrV<'_, i16, 3> { At::new(ctx, 0x804d4790).field(0) }
     #[inline] pub fn yakumono_param(ctx: &Ctx) -> Ptr<'_, grRCruise_YakumonoParam<'_>> { At::new(ctx, 0x804d6a10).field(0) }
-    #[inline] pub fn fn_80200460<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x80200460, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
-    #[inline] pub fn grRCruise_80200578<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x80200578, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
-    #[inline] pub fn grRCruise_802010A4<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x802010a4, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn fn_80200460<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x80200460, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
+    #[inline] pub fn grRCruise_80200578<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x80200578, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
+    #[inline] pub fn grRCruise_802010A4<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x802010a4, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const fn_80200460: u32 = 0x80200460;
@@ -9689,7 +9689,7 @@ pub mod melee__gr__grshrineroute {
     #[inline] pub fn grShrineRoute_8020AB58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<'a> { ctx.call(0x8020ab58, (gobj, )) }
     #[inline] pub fn grShrineRoute_8020AC44<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> HSD_LObj<'a> { ctx.call(0x8020ac44, (gobj, )) }
     #[inline] pub fn grShrineRoute_8020AD24<'a>(ctx: &'a Ctx, arg: i32) -> i32 { ctx.call(0x8020ad24, (arg, )) }
-    #[inline] pub fn onJointCollision<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x8020ad58, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn onJointCollision<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x8020ad58, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     #[inline] pub fn grShrineRoute_8020AE08<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, player_gobj: HSD_GObj<'a>, out: Val<'a, i32>) -> i32 { ctx.call(0x8020ae08, (gobj, player_gobj, out, )) }
     #[inline] pub fn grShrineRoute_8020AF38<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) -> () { ctx.call(0x8020af38, (gobj, arg1, )) }
     #[inline] pub fn grShrineRoute_8020B020<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, r4: i32, r5: i32) -> () { ctx.call(0x8020b020, (gobj, r4, r5, )) }
@@ -10378,7 +10378,7 @@ pub mod melee__gr__grticeclimber {
     #[inline] pub fn stageGObj1_Callback1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x802211dc, (gobj, )) }
     #[inline] pub fn stageGObj1_GObjProc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x802211e4, (gobj, )) }
     #[inline] pub fn stageGObj1_Callback3<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80221204, (gobj, )) }
-    #[inline] pub fn grTIceClimber_80221208<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, u1: Ground<'a>, u2: Vec<'a>, u3: HSD_GObj<'a>, u4: f64) -> () { ctx.call(0x80221208, (gobj, u1, u2, u3, Single(gekko_fp::frsp(u4)), )) }
+    #[inline] pub fn grTIceClimber_80221208<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, u1: Ground<'a>, u2: Vec<'a>, u3: HSD_GObj<'a>, u4: f64) -> () { ctx.call(0x80221208, (gobj, u1, u2, u3, Single::round(u4), )) }
     #[inline] pub fn grTIceClimber_80221288<'a>(ctx: &'a Ctx, ground_gobj: HSD_GObj<'a>) -> () { ctx.call(0x80221288, (ground_gobj, )) }
     #[inline] pub fn grTIceClimber_80221354<'a>(ctx: &'a Ctx, gobj: i32) -> DynamicsDesc<'a> { ctx.call(0x80221354, (gobj, )) }
     #[inline] pub fn grTIceClimber_8022135C<'a>(ctx: &'a Ctx, vec: Vec<'a>, arg1: i32, jobj: HSD_JObj<'a>) -> i32 { ctx.call(0x8022135c, (vec, arg1, jobj, )) }
@@ -10665,7 +10665,7 @@ pub mod melee__gr__grtmario {
     #[inline] pub fn stageGObj1_GObjProc<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8021fb2c, (gobj, )) }
     #[inline] pub fn grTMario_8021FB4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8021fb4c, (gobj, )) }
     #[inline] pub fn lbl_8021FB50<'a>(ctx: &'a Ctx, unk: i32, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x8021fb50, (unk, gobj, )) }
-    #[inline] pub fn grTMario_8021FBE8<'a>(ctx: &'a Ctx, vec: Vec<'a>, arg8: f64) -> () { ctx.call(0x8021fbe8, (vec, Single(gekko_fp::frsp(arg8)), )) }
+    #[inline] pub fn grTMario_8021FBE8<'a>(ctx: &'a Ctx, vec: Vec<'a>, arg8: f64) -> () { ctx.call(0x8021fbe8, (vec, Single::round(arg8), )) }
     #[inline] pub fn grTMario_8021FC50<'a>(ctx: &'a Ctx, arg0: i32) -> DynamicsDesc<'a> { ctx.call(0x8021fc50, (arg0, )) }
     #[inline] pub fn grTMario_8021FC58<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: i32, arg2: HSD_JObj<'a>) -> i32 { ctx.call(0x8021fc58, (arg0, arg1, arg2, )) }
     /// Addresses of this scope's functions.
@@ -11424,7 +11424,7 @@ pub mod melee__gr__gryorster {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn stageGObj0_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80202124, (gobj, )) }
-    #[inline] pub fn grYorster_802024F0<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x802024f0, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn grYorster_802024F0<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x802024f0, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const stageGObj0_OnInit: u32 = 0x80202124;
@@ -11484,15 +11484,15 @@ pub mod melee__gr__grzebes {
     #[inline] pub fn grZebes_801D9F2C<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> () { ctx.call(0x801d9f2c, (arg, )) }
     #[inline] pub fn grZebes_801D9F7C<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> i32 { ctx.call(0x801d9f7c, (arg, )) }
     #[inline] pub fn grZebes_801DA0C0<'a>(ctx: &'a Ctx, arg: HSD_GObj<'a>) -> () { ctx.call(0x801da0c0, (arg, )) }
-    #[inline] pub fn grZebes_801DA0C4<'a>(ctx: &'a Ctx, level: f64) -> () { ctx.call(0x801da0c4, (Single(gekko_fp::frsp(level)), )) }
-    #[inline] pub fn grZebes_801DA254<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, level: f64) -> () { ctx.call(0x801da254, (gobj, Single(gekko_fp::frsp(level)), )) }
+    #[inline] pub fn grZebes_801DA0C4<'a>(ctx: &'a Ctx, level: f64) -> () { ctx.call(0x801da0c4, (Single::round(level), )) }
+    #[inline] pub fn grZebes_801DA254<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, level: f64) -> () { ctx.call(0x801da254, (gobj, Single::round(level), )) }
     #[inline] pub fn grZebes_801DA3E8<'a>(ctx: &'a Ctx) -> () { ctx.call(0x801da3e8, ()) }
     #[inline] pub fn grZebes_801DA528<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: Addr<'a>, arg2: i32, arg3: i32) -> i32 { ctx.call(0x801da528, (arg0, arg1, arg2, arg3, )) }
-    #[inline] pub fn fn_801DA9D8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, gp: Ground<'a>, pos: Vec<'a>, fobj: HSD_GObj<'a>, slope: f64) -> () { ctx.call(0x801da9d8, (arg0, gp, pos, fobj, Single(gekko_fp::frsp(slope)), )) }
-    #[inline] pub fn fn_801DA9F0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, gp: Ground<'a>, pos: Vec<'a>, fobj: HSD_GObj<'a>, slope: f64) -> () { ctx.call(0x801da9f0, (arg0, gp, pos, fobj, Single(gekko_fp::frsp(slope)), )) }
+    #[inline] pub fn fn_801DA9D8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, gp: Ground<'a>, pos: Vec<'a>, fobj: HSD_GObj<'a>, slope: f64) -> () { ctx.call(0x801da9d8, (arg0, gp, pos, fobj, Single::round(slope), )) }
+    #[inline] pub fn fn_801DA9F0<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, gp: Ground<'a>, pos: Vec<'a>, fobj: HSD_GObj<'a>, slope: f64) -> () { ctx.call(0x801da9f0, (arg0, gp, pos, fobj, Single::round(slope), )) }
     #[inline] pub fn grZebes_801DAA08<'a>(ctx: &'a Ctx) -> i32 { ctx.call(0x801daa08, ()) }
-    #[inline] pub fn fn_801DAC90<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: Ground<'a>, arg2: Vec<'a>, arg3: HSD_GObj<'a>, arg4: f64) -> () { ctx.call(0x801dac90, (arg0, arg1, arg2, arg3, Single(gekko_fp::frsp(arg4)), )) }
-    #[inline] pub fn grZebes_801DAE70<'a>(ctx: &'a Ctx, arg0: i32, arg1: u8, x: f64, y: f64, scale: f64) -> () { ctx.call(0x801dae70, (arg0, arg1, Single(gekko_fp::frsp(x)), Single(gekko_fp::frsp(y)), Single(gekko_fp::frsp(scale)), )) }
+    #[inline] pub fn fn_801DAC90<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: Ground<'a>, arg2: Vec<'a>, arg3: HSD_GObj<'a>, arg4: f64) -> () { ctx.call(0x801dac90, (arg0, arg1, arg2, arg3, Single::round(arg4), )) }
+    #[inline] pub fn grZebes_801DAE70<'a>(ctx: &'a Ctx, arg0: i32, arg1: u8, x: f64, y: f64, scale: f64) -> () { ctx.call(0x801dae70, (arg0, arg1, Single::round(x), Single::round(y), Single::round(scale), )) }
     #[inline] pub fn grZebes_801DB3CC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 { ctx.call(0x801db3cc, (gobj, )) }
     #[inline] pub fn grZebes_801DBB60<'a>(ctx: &'a Ctx, yaku: HSD_GObj<'a>) -> i32 { ctx.call(0x801dbb60, (yaku, )) }
     #[inline] pub fn grZebes_801DC260<'a>(ctx: &'a Ctx) -> () { ctx.call(0x801dc260, ()) }
@@ -11592,7 +11592,7 @@ pub mod melee__gr__grzebesroute {
     #[inline] pub fn grZebesRoute_8020B260<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> { ctx.call(0x8020b260, (gobj_id, )) }
     #[inline] pub fn stageGObj0_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8020b348, (gobj, )) }
     #[inline] pub fn stageGObj2_OnInit<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8020b384, (gobj, )) }
-    #[inline] pub fn fn_8020B4D8<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x8020b4d8, (user_data, joint_id, coll, coll_x50, ground_kind, Single(gekko_fp::frsp(delta_y)), )) }
+    #[inline] pub fn fn_8020B4D8<'a>(ctx: &'a Ctx, user_data: Addr<'a>, joint_id: i32, coll: CollData<'a>, coll_x50: i32, ground_kind: i32, delta_y: f64) -> () { ctx.call(0x8020b4d8, (user_data, joint_id, coll, coll_x50, ground_kind, Single::round(delta_y), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const grZebesRoute_8020B260: u32 = 0x8020b260;
@@ -12327,7 +12327,7 @@ pub mod melee__it__itcoll {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn hit_effect_ids(ctx: &Ctx) -> ArrV<'_, i32, 17> { At::new(ctx, 0x803f1384).field(0) }
-    #[inline] pub fn it_80271830<'a>(ctx: &'a Ctx, item: Item<'a>, angle: f64) -> () { ctx.call(0x80271830, (item, Single(gekko_fp::frsp(angle)), )) }
+    #[inline] pub fn it_80271830<'a>(ctx: &'a Ctx, item: Item<'a>, angle: f64) -> () { ctx.call(0x80271830, (item, Single::round(angle), )) }
     #[inline] pub fn it_80271B60<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> () { ctx.call(0x80271b60, (item_gobj, )) }
     #[inline] pub fn it_80271D2C<'a>(ctx: &'a Ctx, arg_item_gobj: HSD_GObj<'a>) -> () { ctx.call(0x80271d2c, (arg_item_gobj, )) }
     #[inline] pub fn it_80271F78<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80271f78, (gobj, )) }
@@ -14292,7 +14292,7 @@ pub mod melee__lb__lb_00F9 {
     #[inline] pub fn lb_804D63B0(ctx: &Ctx) -> Ptr<'_, lb_80011A50_t<'_>> { At::new(ctx, 0x804d63b0).field(0) }
     #[inline] pub fn lb_804D63B4(ctx: &Ctx) -> Val<'_, i32> { At::new(ctx, 0x804d63b4).field(0) }
     #[inline] pub fn lb_804D63B8(ctx: &Ctx) -> Val<'_, u8> { At::new(ctx, 0x804d63b8).field(0) }
-    #[inline] pub fn lb_800103D8<'a>(ctx: &'a Ctx, vec: Vec<'a>, x0: f64, x1: f64, x2: f64, x3: f64, offset: f64) -> i32 { ctx.call(0x800103d8, (vec, Single(gekko_fp::frsp(x0)), Single(gekko_fp::frsp(x1)), Single(gekko_fp::frsp(x2)), Single(gekko_fp::frsp(x3)), Single(gekko_fp::frsp(offset)), )) }
+    #[inline] pub fn lb_800103D8<'a>(ctx: &'a Ctx, vec: Vec<'a>, x0: f64, x1: f64, x2: f64, x3: f64, offset: f64) -> i32 { ctx.call(0x800103d8, (vec, Single::round(x0), Single::round(x1), Single::round(x2), Single::round(x3), Single::round(offset), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const lb_800103D8: u32 = 0x800103d8;
@@ -14784,7 +14784,7 @@ pub mod melee__lb__lbcollision {
     #[inline] pub fn lbColl_804D36F4(ctx: &Ctx) -> _GXColor<'_> { At::new(ctx, 0x804d36f4).field(0) }
     #[inline] pub fn lbColl_804D36F8(ctx: &Ctx) -> _GXColor<'_> { At::new(ctx, 0x804d36f8).field(0) }
     #[inline] pub fn lbColl_804D36FC(ctx: &Ctx) -> _GXColor<'_> { At::new(ctx, 0x804d36fc).field(0) }
-    #[inline] pub fn lbColl_80006E58<'a>(ctx: &'a Ctx, hit_start: Vec<'a>, hit_end: Vec<'a>, hurt_start: Vec<'a>, hurt_end: Vec<'a>, hit_closest: Vec<'a>, hurt_closest: Vec<'a>, hurt_mtx: ArrV<'a, F32, 4>, out_contact_pos: Vec<'a>, out_overlap: Val<'a, F32>, hit_radius: f64, hurt_radius: f64, broadphase_scale: f64) -> i32 { ctx.call(0x80006e58, (hit_start, hit_end, hurt_start, hurt_end, hit_closest, hurt_closest, hurt_mtx, out_contact_pos, out_overlap, Single(gekko_fp::frsp(hit_radius)), Single(gekko_fp::frsp(hurt_radius)), Single(gekko_fp::frsp(broadphase_scale)), )) }
+    #[inline] pub fn lbColl_80006E58<'a>(ctx: &'a Ctx, hit_start: Vec<'a>, hit_end: Vec<'a>, hurt_start: Vec<'a>, hurt_end: Vec<'a>, hit_closest: Vec<'a>, hurt_closest: Vec<'a>, hurt_mtx: ArrV<'a, F32, 4>, out_contact_pos: Vec<'a>, out_overlap: Val<'a, F32>, hit_radius: f64, hurt_radius: f64, broadphase_scale: f64) -> i32 { ctx.call(0x80006e58, (hit_start, hit_end, hurt_start, hurt_end, hit_closest, hurt_closest, hurt_mtx, out_contact_pos, out_overlap, Single::round(hit_radius), Single::round(hurt_radius), Single::round(broadphase_scale), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const lbColl_80006E58: u32 = 0x80006e58;
@@ -15010,7 +15010,7 @@ pub mod melee__lb__lbtrigf {
     use super::*;
     use crate::fns::*;
     #[inline] pub fn atanf_lookup(ctx: &Ctx) -> ArrV<'_, F32, 46> { At::new(ctx, 0x803b7300).field(0) }
-    #[inline] pub fn lb_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 { ctx.call(0x80022df8, (Single(gekko_fp::frsp(x)), )) }
+    #[inline] pub fn lb_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 { ctx.call(0x80022df8, (Single::round(x), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const lb_sqrtf: u32 = 0x80022df8;
@@ -15761,8 +15761,8 @@ pub mod melee__mp__mplib {
     #[inline] pub fn mpLib_804D8148(ctx: &Ctx) -> _GXColor<'_> { At::new(ctx, 0x804d8148).field(0) }
     #[inline] pub fn mpLib_804D814C(ctx: &Ctx) -> _GXColor<'_> { At::new(ctx, 0x804d814c).field(0) }
     #[inline] pub fn mpLib_804D8150(ctx: &Ctx) -> Arr<'_, _GXColor<'_>, 2> { At::new(ctx, 0x804d8150).field(0) }
-    #[inline] pub fn mpRemap2d<'a>(ctx: &'a Ctx, x_out: Val<'a, F32>, y_out: Val<'a, F32>, ax0: f64, ay0: f64, ax1: f64, ay1: f64, bx0: f64, by0: f64, bx1: f64, by1: f64, px: f64, py: f64) -> () { ctx.call(0x8004dc90, (x_out, y_out, Single(gekko_fp::frsp(ax0)), Single(gekko_fp::frsp(ay0)), Single(gekko_fp::frsp(ax1)), Single(gekko_fp::frsp(ay1)), Single(gekko_fp::frsp(bx0)), Single(gekko_fp::frsp(by0)), Single(gekko_fp::frsp(bx1)), Single(gekko_fp::frsp(by1)), Single(gekko_fp::frsp(px)), Single(gekko_fp::frsp(py)), )) }
-    #[inline] pub fn mpLineIntersection<'a>(ctx: &'a Ctx, a0x: f64, a0y: f64, a1x: f64, a1y: f64, b0x: f64, b0y: f64, b1x: f64, b1y: f64, int_x: Val<'a, F32>, int_y: Val<'a, F32>) -> i32 { ctx.call(0x8004e97c, (Single(gekko_fp::frsp(a0x)), Single(gekko_fp::frsp(a0y)), Single(gekko_fp::frsp(a1x)), Single(gekko_fp::frsp(a1y)), Single(gekko_fp::frsp(b0x)), Single(gekko_fp::frsp(b0y)), Single(gekko_fp::frsp(b1x)), Single(gekko_fp::frsp(b1y)), int_x, int_y, )) }
+    #[inline] pub fn mpRemap2d<'a>(ctx: &'a Ctx, x_out: Val<'a, F32>, y_out: Val<'a, F32>, ax0: f64, ay0: f64, ax1: f64, ay1: f64, bx0: f64, by0: f64, bx1: f64, by1: f64, px: f64, py: f64) -> () { ctx.call(0x8004dc90, (x_out, y_out, Single::round(ax0), Single::round(ay0), Single::round(ax1), Single::round(ay1), Single::round(bx0), Single::round(by0), Single::round(bx1), Single::round(by1), Single::round(px), Single::round(py), )) }
+    #[inline] pub fn mpLineIntersection<'a>(ctx: &'a Ctx, a0x: f64, a0y: f64, a1x: f64, a1y: f64, b0x: f64, b0y: f64, b1x: f64, b1y: f64, int_x: Val<'a, F32>, int_y: Val<'a, F32>) -> i32 { ctx.call(0x8004e97c, (Single::round(a0x), Single::round(a0y), Single::round(a1x), Single::round(a1y), Single::round(b0x), Single::round(b0y), Single::round(b1x), Single::round(b1y), int_x, int_y, )) }
     #[inline] pub fn mpLib_DrawMatchingLines<'a>(ctx: &'a Ctx, value: i32, flag: i32, color: _GXColor<'a>) -> i32 { ctx.call(0x80059404, (value, flag, color, )) }
     /// Addresses of this scope's functions.
     pub mod addr {
@@ -15846,13 +15846,13 @@ pub mod melee__ty__toy {
     #[inline] pub fn _Toy_color_4080D060_0(ctx: &Ctx) -> _GXColor<'_> { At::new(ctx, 0x804dde0c).field(0) }
     #[inline] pub fn _Toy_color_40B0D060_1(ctx: &Ctx) -> _GXColor<'_> { At::new(ctx, 0x804dde18).field(0) }
     #[inline] pub fn _Toy_803053C4<'a>(ctx: &'a Ctx, targetValue: i32, count: i32, flag: i32) -> () { ctx.call(0x803053c4, (targetValue, count, flag, )) }
-    #[inline] pub fn _Toy_803062EC<'a>(ctx: &'a Ctx, arg0: i32, arg1: u32, farg0: f64) -> () { ctx.call(0x803062ec, (arg0, arg1, Single(gekko_fp::frsp(farg0)), )) }
+    #[inline] pub fn _Toy_803062EC<'a>(ctx: &'a Ctx, arg0: i32, arg1: u32, farg0: f64) -> () { ctx.call(0x803062ec, (arg0, arg1, Single::round(farg0), )) }
     #[inline] pub fn _Toy_803064B8<'a>(ctx: &'a Ctx, arg0: i16, arg1: i8) -> i16 { ctx.call(0x803064b8, (arg0, arg1, )) }
     #[inline] pub fn _Toy_8030663C<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8030663c, ()) }
     #[inline] pub fn _Toy_80306A0C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, unused: i32) -> () { ctx.call(0x80306a0c, (arg0, unused, )) }
     #[inline] pub fn _Toy_80306C5C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> () { ctx.call(0x80306c5c, (arg0, )) }
     #[inline] pub fn _Toy_80307018<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80307018, ()) }
-    #[inline] pub fn _Toy_8030715C<'a>(ctx: &'a Ctx, cstick_x: f64, cstick_y: f64) -> () { ctx.call(0x8030715c, (Single(gekko_fp::frsp(cstick_x)), Single(gekko_fp::frsp(cstick_y)), )) }
+    #[inline] pub fn _Toy_8030715C<'a>(ctx: &'a Ctx, cstick_x: f64, cstick_y: f64) -> () { ctx.call(0x8030715c, (Single::round(cstick_x), Single::round(cstick_y), )) }
     #[inline] pub fn _Toy_803075E8<'a>(ctx: &'a Ctx, arg0: i32) -> () { ctx.call(0x803075e8, (arg0, )) }
     #[inline] pub fn _Toy_80307828<'a>(ctx: &'a Ctx, arg0: i32) -> () { ctx.call(0x80307828, (arg0, )) }
     #[inline] pub fn _Toy_803078E4<'a>(ctx: &'a Ctx) -> () { ctx.call(0x803078e4, ()) }
@@ -15978,7 +15978,7 @@ pub mod melee__ty__tydisplay {
     #[inline] pub fn _tyDisplay_8031B1FC<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8031b1fc, ()) }
     #[inline] pub fn _tyDisplay_8031B328<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8031b328, ()) }
     #[inline] pub fn _tyDisplay_8031B850<'a>(ctx: &'a Ctx) -> () { ctx.call(0x8031b850, ()) }
-    #[inline] pub fn _tyDisplay_8031BA78<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, farg0: f64) -> () { ctx.call(0x8031ba78, (arg0, arg1, Single(gekko_fp::frsp(farg0)), )) }
+    #[inline] pub fn _tyDisplay_8031BA78<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32, farg0: f64) -> () { ctx.call(0x8031ba78, (arg0, arg1, Single::round(farg0), )) }
     #[inline] pub fn _tyDisplay_8031BBF4<'a>(ctx: &'a Ctx, arg0: i8) -> i32 { ctx.call(0x8031bbf4, (arg0, )) }
     #[inline] pub fn _tyDisplay_8031BC54<'a>(ctx: &'a Ctx, arg0: i32) -> HSD_GObj<'a> { ctx.call(0x8031bc54, (arg0, )) }
     #[inline] pub fn _tyDisplay_8031BF34<'a>(ctx: &'a Ctx, arg0: i32) -> () { ctx.call(0x8031bf34, (arg0, )) }
@@ -16115,11 +16115,11 @@ pub mod melee__ty__tylist {
     #[inline] pub fn _tyList_80312834<'a>(ctx: &'a Ctx, buf: Val<'a, u8>, num: u32) -> Val<'a, u8> { ctx.call(0x80312834, (buf, num, )) }
     #[inline] pub fn _tyList_80312904<'a>(ctx: &'a Ctx, arg0: Addr<'a>, arg1: i8) -> () { ctx.call(0x80312904, (arg0, arg1, )) }
     #[inline] pub fn _tyList_80312BAC<'a>(ctx: &'a Ctx, state: TyListState<'a>, arg1: i8) -> () { ctx.call(0x80312bac, (state, arg1, )) }
-    #[inline] pub fn _tyList_80312E88<'a>(ctx: &'a Ctx, arg: TyListArg<'a>, delta: f64) -> () { ctx.call(0x80312e88, (arg, Single(gekko_fp::frsp(delta)), )) }
+    #[inline] pub fn _tyList_80312E88<'a>(ctx: &'a Ctx, arg: TyListArg<'a>, delta: f64) -> () { ctx.call(0x80312e88, (arg, Single::round(delta), )) }
     #[inline] pub fn _tyList_8031305C<'a>(ctx: &'a Ctx, a: Addr<'a>, state: TyListState<'a>, movedFlag: i8) -> i32 { ctx.call(0x8031305c, (a, state, movedFlag, )) }
     #[inline] pub fn _tyList_80313358<'a>(ctx: &'a Ctx, state: TyListState<'a>, arg2: i8, arg3: i8, arg4: i8) -> () { ctx.call(0x80313358, (state, arg2, arg3, arg4, )) }
     #[inline] pub fn _tyList_80313464<'a>(ctx: &'a Ctx, arg: TyListArg<'a>) -> () { ctx.call(0x80313464, (arg, )) }
-    #[inline] pub fn _tyList_80313508<'a>(ctx: &'a Ctx, parent: HSD_GObj<'a>, symbol_name: Val<'a, i8>, x: f64, y: f64, z: f64) -> Addr<'a> { ctx.call(0x80313508, (parent, symbol_name, Single(gekko_fp::frsp(x)), Single(gekko_fp::frsp(y)), Single(gekko_fp::frsp(z)), )) }
+    #[inline] pub fn _tyList_80313508<'a>(ctx: &'a Ctx, parent: HSD_GObj<'a>, symbol_name: Val<'a, i8>, x: f64, y: f64, z: f64) -> Addr<'a> { ctx.call(0x80313508, (parent, symbol_name, Single::round(x), Single::round(y), Single::round(z), )) }
     #[inline] pub fn _tyList_80313774<'a>(ctx: &'a Ctx) -> () { ctx.call(0x80313774, ()) }
     #[inline] pub fn _tyList_80313BD8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x80313bd8, (gobj, )) }
     #[inline] pub fn _tyList_8031438C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> () { ctx.call(0x8031438c, (gobj, )) }
@@ -16632,7 +16632,7 @@ pub mod sysdolphin__baselib__cobj {
     #[inline] pub fn setupNormalCamera<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 { ctx.call(0x80367c28, (cobj, )) }
     #[inline] pub fn setupTopHalfCamera<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 { ctx.call(0x80367eb0, (cobj, )) }
     #[inline] pub fn setupBottomHalfCamera<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 { ctx.call(0x803680f8, (cobj, )) }
-    #[inline] pub fn roll2upvec<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, up: Vec<'a>, roll: f64) -> i32 { ctx.call(0x80368bc0, (cobj, up, Single(gekko_fp::frsp(roll)), )) }
+    #[inline] pub fn roll2upvec<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, up: Vec<'a>, roll: f64) -> i32 { ctx.call(0x80368bc0, (cobj, up, Single::round(roll), )) }
     #[inline] pub fn CObjLoad<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, desc: HSD_CObjDesc<'a>) -> i32 { ctx.call(0x8036a2ec, (cobj, desc, )) }
     #[inline] pub fn CObjInit<'a>(ctx: &'a Ctx, o: _HSD_Class<'a>) -> i32 { ctx.call(0x8036a654, (o, )) }
     #[inline] pub fn CObjRelease<'a>(ctx: &'a Ctx, o: _HSD_Class<'a>) -> () { ctx.call(0x8036a6c8, (o, )) }
@@ -17703,7 +17703,7 @@ pub mod sysdolphin__baselib__synth {
     #[inline] pub fn HSD_SynthSFXSampleLoadCallback<'a>(ctx: &'a Ctx, result: i32, args: u32, addr: Addr<'a>, cancelflag: i32) -> () { ctx.call(0x803883b4, (result, args, addr, cancelflag, )) }
     #[inline] pub fn HSD_SynthSFXHeaderLoadCallback<'a>(ctx: &'a Ctx, result: i32, args: u32, addr: Addr<'a>, cancelflag: i32) -> () { ctx.call(0x803887dc, (result, args, addr, cancelflag, )) }
     #[inline] pub fn HSD_SynthSFXGroupDataReaddressCallback<'a>(ctx: &'a Ctx, result: i32, args: u32, addr: Addr<'a>, cancelflag: i32) -> () { ctx.call(0x80388eb4, (result, args, addr, cancelflag, )) }
-    #[inline] pub fn HSD_Synth_80389334<'a>(ctx: &'a Ctx, sfx_id: i32, vol: u8, vol2: u8, pan: u8, priority: i32, itd_flag: i32, pitch1: f64, pitch2: f64, mix_main: f64, mix_auxA: f64, mix_auxB: f64) -> i32 { ctx.call(0x80389334, (sfx_id, vol, vol2, pan, priority, itd_flag, Single(gekko_fp::frsp(pitch1)), Single(gekko_fp::frsp(pitch2)), Single(gekko_fp::frsp(mix_main)), Single(gekko_fp::frsp(mix_auxA)), Single(gekko_fp::frsp(mix_auxB)), )) }
+    #[inline] pub fn HSD_Synth_80389334<'a>(ctx: &'a Ctx, sfx_id: i32, vol: u8, vol2: u8, pan: u8, priority: i32, itd_flag: i32, pitch1: f64, pitch2: f64, mix_main: f64, mix_auxA: f64, mix_auxB: f64) -> i32 { ctx.call(0x80389334, (sfx_id, vol, vol2, pan, priority, itd_flag, Single::round(pitch1), Single::round(pitch2), Single::round(mix_main), Single::round(mix_auxA), Single::round(mix_auxB), )) }
     /// Addresses of this scope's functions.
     pub mod addr {
         pub const HSD_SynthSFXSampleLoadCallback: u32 = 0x803883b4;

@@ -800,10 +800,10 @@ fn inl_spinSpeedDirect_unfused<'a>(
     speed = {
         let __t1 = ctx.call::<_, f64>(
             0x8000d5bc,
-            (Single(fp::frsp(fp::fadds(
+            (Single::round(fp::fadds(
                 fp::fmuls(vel.x(), vel.x()),
                 fp::fmuls(vel.y(), vel.y()),
-            ))),),
+            )),),
         );
         fp::fmuls((attrs).x18_spinMultiplier(), __t1)
     };
@@ -872,10 +872,10 @@ fn inl_lbVector_Len_xy<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     let mut vec = vec;
     return ctx.call::<_, f64>(
         0x8000d5bc,
-        (Single(fp::frsp(fp::fadds(
+        (Single::round(fp::fadds(
             fp::fmuls((vec).x(), (vec).x()),
             fp::fmuls((vec).y(), (vec).y()),
-        ))),),
+        )),),
     );
 }
 
@@ -984,10 +984,10 @@ fn inl_lbVector_Len_xy_unfused<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     let mut vec = vec;
     return ctx.call::<_, f64>(
         0x8000d5bc,
-        (Single(fp::frsp(fp::fadds(
+        (Single::round(fp::fadds(
             fp::fmuls((vec).x(), (vec).x()),
             fp::fmuls((vec).y(), (vec).y()),
-        ))),),
+        )),),
     );
 }
 

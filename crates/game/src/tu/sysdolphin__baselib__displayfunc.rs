@@ -1021,7 +1021,7 @@ fn inl_HSD_MtxColMag_unfused<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, col: i32) 
     let mut col = col;
     return ctx.call::<_, f64>(
         0x8000d5bc,
-        (Single(fp::frsp(fp::fadds(
+        (Single::round(fp::fadds(
             (fp::fmuls(
                 (Handle::add(mtx, 2_i32)).at(col).get(),
                 (Handle::add(mtx, 2_i32)).at(col).get(),
@@ -1036,7 +1036,7 @@ fn inl_HSD_MtxColMag_unfused<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, col: i32) 
                     (Handle::add(mtx, 1_i32)).at(col).get(),
                 )),
             ),
-        ))),),
+        )),),
     );
 }
 

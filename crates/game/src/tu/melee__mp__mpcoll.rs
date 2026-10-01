@@ -1072,7 +1072,7 @@ pub fn mpColl_80043268<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32, arg2:
                 coll,
                 fp::fctiwz((coll).x50()),
                 thing,
-                Single(fp::frsp(dy)),
+                Single::round(dy),
             ));
         }
     }
@@ -1207,7 +1207,7 @@ pub fn mpColl_80043558<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32) {
                     coll,
                     fp::fctiwz((coll).x50()),
                     2_i32,
-                    Single(fp::frsp(0.0)),
+                    Single::round(0.0),
                 ));
             }
         }
@@ -1223,7 +1223,7 @@ pub fn mpColl_80043558<'a>(ctx: &'a Ctx, coll: CollData<'a>, line_id: i32) {
                     coll,
                     fp::fctiwz((coll).x50()),
                     0_i32,
-                    Single(fp::frsp(0.0)),
+                    Single::round(0.0),
                 ));
             }
         }
@@ -29026,7 +29026,7 @@ fn inl_mpCollEnd_inline2_unfused<'a>(
                 coll,
                 fp::fctiwz((coll).x50()),
                 0_i32,
-                Single(fp::frsp(dy)),
+                Single::round(dy),
             ));
         }
     }

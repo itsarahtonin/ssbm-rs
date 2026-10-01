@@ -1509,12 +1509,12 @@ pub fn ftCommon_8007E83C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, div: f
         statics::melee__ft__ftcommon::parasol_table_1(ctx)
             .at(arg1)
             .get()
-            .call::<_, ()>(((fp).item_gobj(), Single(fp::frsp(val))));
+            .call::<_, ()>(((fp).item_gobj(), Single::round(val)));
     } else {
         statics::melee__ft__ftcommon::parasol_table_3(ctx)
             .at(arg1)
             .get()
-            .call::<_, ()>(((fp).item_gobj(), Single(fp::frsp(val))));
+            .call::<_, ()>(((fp).item_gobj(), Single::round(val)));
     }
 }
 

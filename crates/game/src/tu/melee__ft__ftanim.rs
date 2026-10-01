@@ -2981,7 +2981,7 @@ pub fn ftAnim_800704F0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, tobj_idx: i32, fram
         ptr::<Arr<'a, ftData_UnkCallbackPairs0_t<'a>, 33>>(ctx, 0x803c2258)
             .get((fp).kind())
             .x4()
-            .call::<_, ()>((gobj, tobj_idx, Single(fp::frsp(frame))));
+            .call::<_, ()>((gobj, tobj_idx, Single::round(frame)));
     }
     (fp).set_x221E_b7((1_i32 as u8));
 }
