@@ -28,16 +28,21 @@ pub fn DCStoreRange<'a>(_ctx: &'a Ctx, _addr: Addr<'a>, _n_bytes: u32) {}
 
 pub fn DCFlushRangeNoSync<'a>(_ctx: &'a Ctx, _addr: Addr<'a>, _n_bytes: u32) {}
 
-/// Zeroes every 32-byte line the range touches, as `dcbz` does.
+/// Zeroes every 32-byte line the range touches, as `dcbz` does. A length that rounds to no
+/// lines leaves the count register 0, which `bdnz` counts down from 2^32: zeroing then goes on
+/// until it faults past the end of memory.
 pub fn DCZeroRange<'a>(ctx: &'a Ctx, addr: Addr<'a>, n_bytes: u32) {
     if n_bytes == 0 {
         return;
     }
     let addr = Handle::addr(addr);
     let n = if addr & 31 != 0 { n_bytes.wrapping_add(32) } else { n_bytes };
-    let lines = n.wrapping_add(31) >> 5;
+    let lines = match n.wrapping_add(31) >> 5 {
+        0 => 1 << 32,
+        lines => u64::from(lines),
+    };
     for i in 0..lines {
-        ctx.fill(addr.wrapping_add(32 * i) & !31, 0, 32);
+        ctx.fill(addr.wrapping_add(32u32.wrapping_mul(i as u32)) & !31, 0, 32);
     }
 }
 
