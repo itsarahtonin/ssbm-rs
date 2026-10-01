@@ -405,20 +405,20 @@ fn inl_mapButtons_unfused<'a>(ctx: &'a Ctx, i: i32) {
         ctx,
         i,
         (((shl_i32(1_i32, (8_i32 as u32))) | (shl_i32(1_i32, (12_i32 as u32)))) as u64),
-        (fns::__shl2i(ctx, 1_u64 as i64, 32_i32) as u64),
+        (0x100000000_u64),
     );
     fns::gm_801A3714(
         ctx,
         i,
         ((shl_i32(1_i32, (9_i32 as u32))) as u64),
-        (fns::__shl2i(ctx, 1_u64 as i64, 33_i32) as u64),
+        (0x200000000_u64),
     );
     statics::melee__gm__gm_1A36::gm_801A3820(
         ctx,
         i,
         ((((shl_i32(1_i32, (6_i32 as u32))) | (shl_i32(1_i32, (5_i32 as u32))))
             | (shl_i32(1_i32, (12_i32 as u32)))) as u64),
-        (fns::__shl2i(ctx, 1_u64 as i64, 34_i32) as u64),
+        (0x400000000_u64),
     );
     statics::melee__gm__gm_1A36::gm_801A3820(
         ctx,
@@ -426,31 +426,31 @@ fn inl_mapButtons_unfused<'a>(ctx: &'a Ctx, i: i32) {
         (((((shl_i32(1_i32, (6_i32 as u32))) | (shl_i32(1_i32, (5_i32 as u32))))
             | (shl_i32(1_i32, (8_i32 as u32))))
             | (shl_i32(1_i32, (12_i32 as u32)))) as u64),
-        (fns::__shl2i(ctx, 1_u64 as i64, 35_i32) as u64),
+        (0x800000000_u64),
     );
     fns::gm_801A3714(
         ctx,
         i,
         (((shl_i32(1_i32, (3_i32 as u32))) | (shl_i32(1_i32, (16_i32 as u32)))) as u64),
-        (fns::__shl2i(ctx, 1_u64 as i64, 36_i32) as u64),
+        (0x1000000000_u64),
     );
     fns::gm_801A3714(
         ctx,
         i,
         (((shl_i32(1_i32, (2_i32 as u32))) | (shl_i32(1_i32, (17_i32 as u32)))) as u64),
-        (fns::__shl2i(ctx, 1_u64 as i64, 37_i32) as u64),
+        (0x2000000000_u64),
     );
     fns::gm_801A3714(
         ctx,
         i,
         (((shl_i32(1_i32, (0_i32 as u32))) | (shl_i32(1_i32, (18_i32 as u32)))) as u64),
-        (fns::__shl2i(ctx, 1_u64 as i64, 38_i32) as u64),
+        (0x4000000000_u64),
     );
     fns::gm_801A3714(
         ctx,
         i,
         (((shl_i32(1_i32, (1_i32 as u32))) | (shl_i32(1_i32, (19_i32 as u32)))) as u64),
-        (fns::__shl2i(ctx, 1_u64 as i64, 39_i32) as u64),
+        (0x8000000000_u64),
     );
 }
 

@@ -234,9 +234,7 @@ pub fn gm_Scene_ProgScan_OnFrame<'a>(ctx: &'a Ctx) {
             statics::melee__gm__gmprogressive::gm_80480D70(ctx).set_x10(4_i32);
         }
     } else {
-        if (((fns::gm_GetButtonsTriggered(ctx, (4_i32 as u8))
-            & (fns::__shl2i(ctx, 1_u64 as i64, 38_i32) as u64))
-            != 0)
+        if (((fns::gm_GetButtonsTriggered(ctx, (4_i32 as u8)) & (0x4000000000_u64)) != 0)
             && (statics::melee__gm__gmprogressive::gm_80480D70(ctx).x10() == 2_i32))
             && (statics::melee__gm__gmprogressive::gm_80480D70(ctx).x14() == 0_i32)
         {
@@ -247,9 +245,7 @@ pub fn gm_Scene_ProgScan_OnFrame<'a>(ctx: &'a Ctx) {
                 statics::melee__gm__gmprogressive::gm_80480D70(ctx).x10(),
             );
         }
-        if (((fns::gm_GetButtonsTriggered(ctx, (4_i32 as u8))
-            & (fns::__shl2i(ctx, 1_u64 as i64, 39_i32) as u64))
-            != 0)
+        if (((fns::gm_GetButtonsTriggered(ctx, (4_i32 as u8)) & (0x8000000000_u64)) != 0)
             && (statics::melee__gm__gmprogressive::gm_80480D70(ctx).x10() == 1_i32))
             && (statics::melee__gm__gmprogressive::gm_80480D70(ctx).x14() == 0_i32)
         {
@@ -260,9 +256,7 @@ pub fn gm_Scene_ProgScan_OnFrame<'a>(ctx: &'a Ctx) {
                 statics::melee__gm__gmprogressive::gm_80480D70(ctx).x10(),
             );
         }
-        if ((fns::gm_GetButtonsTriggered(ctx, (4_i32 as u8))
-            & (fns::__shl2i(ctx, 1_u64 as i64, 32_i32) as u64))
-            != 0)
+        if ((fns::gm_GetButtonsTriggered(ctx, (4_i32 as u8)) & (0x100000000_u64)) != 0)
             && (statics::melee__gm__gmprogressive::gm_80480D70(ctx).x14() == 0_i32)
         {
             if statics::melee__gm__gmprogressive::gm_80480D70(ctx).x10() == 1_i32 {

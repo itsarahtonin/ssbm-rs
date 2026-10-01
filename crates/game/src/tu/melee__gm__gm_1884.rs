@@ -643,7 +643,7 @@ pub fn fn_801891F4<'a>(ctx: &'a Ctx) {
             (sub).anim_frames().at(22_i32).set(0_i32);
         }
         (sub).set_x01((1_i32 as u8));
-        if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 36_i32) as u64)) != 0) {
+        if ((buttons & (0x1000000000_u64)) != 0) {
             inl_sfxMove_unfused(ctx);
             if ((sub).x00() as i32) != 0_i32 {
                 (sub).set_x00((sub).x00().wrapping_sub(1));
@@ -654,7 +654,7 @@ pub fn fn_801891F4<'a>(ctx: &'a Ctx) {
                 (sub).set_x00((8_i32 as u8));
             }
         }
-        if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 37_i32) as u64)) != 0) {
+        if ((buttons & (0x2000000000_u64)) != 0) {
             inl_sfxMove_unfused(ctx);
             if ((sub).x00() as i32) < 8_i32 {
                 (sub).set_x00((sub).x00().wrapping_add(1));
@@ -679,7 +679,7 @@ pub fn fn_801891F4<'a>(ctx: &'a Ctx) {
                 _ => 9,
             };
             if __case <= 0 {
-                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 38_i32) as u64)) != 0) {
+                if ((buttons & (0x4000000000_u64)) != 0) {
                     inl_sfxMove_unfused(ctx);
                     if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) != (0_i32 as u32)
                     {
@@ -695,7 +695,7 @@ pub fn fn_801891F4<'a>(ctx: &'a Ctx) {
                     (sub).menu_values().at(((sub).x00() as i32)).set(5_i32);
                     return;
                 }
-                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 39_i32) as u64)) != 0) {
+                if ((buttons & (0x8000000000_u64)) != 0) {
                     inl_sfxMove_unfused(ctx);
                     if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) < (5_i32 as u32)
                     {
@@ -714,7 +714,7 @@ pub fn fn_801891F4<'a>(ctx: &'a Ctx) {
                 break 's1;
             }
             if __case <= 1 {
-                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 38_i32) as u64)) != 0) {
+                if ((buttons & (0x4000000000_u64)) != 0) {
                     inl_sfxMove_unfused(ctx);
                     if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) != (0_i32 as u32)
                     {
@@ -728,7 +728,7 @@ pub fn fn_801891F4<'a>(ctx: &'a Ctx) {
                     } else {
                         (sub).menu_values().at(((sub).x00() as i32)).set(29_i32);
                     }
-                } else if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 39_i32) as u64)) != 0) {
+                } else if ((buttons & (0x8000000000_u64)) != 0) {
                     inl_sfxMove_unfused(ctx);
                     if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) < (29_i32 as u32)
                     {
@@ -760,7 +760,7 @@ pub fn fn_801891F4<'a>(ctx: &'a Ctx) {
                 break 's1;
             }
             if __case <= 2 {
-                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 38_i32) as u64)) != 0) {
+                if ((buttons & (0x4000000000_u64)) != 0) {
                     inl_sfxMove_unfused(ctx);
                     if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) != (0_i32 as u32)
                     {
@@ -776,7 +776,7 @@ pub fn fn_801891F4<'a>(ctx: &'a Ctx) {
                     (sub).menu_values().at(((sub).x00() as i32)).set(2_i32);
                     return;
                 }
-                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 39_i32) as u64)) != 0) {
+                if ((buttons & (0x8000000000_u64)) != 0) {
                     inl_sfxMove_unfused(ctx);
                     if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) < (2_i32 as u32)
                     {
@@ -795,7 +795,7 @@ pub fn fn_801891F4<'a>(ctx: &'a Ctx) {
                 break 's1;
             }
             if __case <= 3 {
-                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 38_i32) as u64)) != 0) {
+                if ((buttons & (0x4000000000_u64)) != 0) {
                     inl_sfxMove_unfused(ctx);
                     if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) != (0_i32 as u32)
                     {
@@ -811,7 +811,7 @@ pub fn fn_801891F4<'a>(ctx: &'a Ctx) {
                     (sub).menu_values().at(((sub).x00() as i32)).set(5_i32);
                     return;
                 }
-                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 39_i32) as u64)) != 0) {
+                if ((buttons & (0x8000000000_u64)) != 0) {
                     inl_sfxMove_unfused(ctx);
                     if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) < (5_i32 as u32)
                     {
@@ -830,7 +830,7 @@ pub fn fn_801891F4<'a>(ctx: &'a Ctx) {
                 break 's1;
             }
             if __case <= 4 {
-                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 38_i32) as u64)) != 0) {
+                if ((buttons & (0x4000000000_u64)) != 0) {
                     inl_sfxMove_unfused(ctx);
                     if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) != (0_i32 as u32)
                     {
@@ -849,7 +849,7 @@ pub fn fn_801891F4<'a>(ctx: &'a Ctx) {
                         (sub).menu_values().at(((sub).x00() as i32)).set(0x3e7_i32);
                         return;
                     }
-                } else if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 39_i32) as u64)) != 0) {
+                } else if ((buttons & (0x8000000000_u64)) != 0) {
                     inl_sfxMove_unfused(ctx);
                     if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32)
                         < (0x3e7_i32 as u32)
@@ -875,12 +875,12 @@ pub fn fn_801891F4<'a>(ctx: &'a Ctx) {
                 break 's1;
             }
             if __case <= 5 {
-                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 38_i32) as u64)) != 0) {
+                if ((buttons & (0x4000000000_u64)) != 0) {
                     inl_sfxMove_unfused(ctx);
                     (sub).menu_values().at(((sub).x00() as i32)).set(0_i32);
                     return;
                 }
-                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 39_i32) as u64)) != 0) {
+                if ((buttons & (0x8000000000_u64)) != 0) {
                     inl_sfxMove_unfused(ctx);
                     (sub).menu_values().at(((sub).x00() as i32)).set(1_i32);
                     return;
@@ -888,7 +888,7 @@ pub fn fn_801891F4<'a>(ctx: &'a Ctx) {
                 break 's1;
             }
             if __case <= 6 {
-                if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 38_i32) as u64)) != 0) {
+                if ((buttons & (0x4000000000_u64)) != 0) {
                     inl_sfxMove_unfused(ctx);
                     if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) != (0_i32 as u32)
                     {
@@ -926,7 +926,7 @@ pub fn fn_801891F4<'a>(ctx: &'a Ctx) {
                             return;
                         }
                     }
-                } else if ((buttons & (fns::__shl2i(ctx, 1_u64 as i64, 39_i32) as u64)) != 0) {
+                } else if ((buttons & (0x8000000000_u64)) != 0) {
                     inl_sfxMove_unfused(ctx);
                     if ((sub).menu_values().at(((sub).x00() as i32)).get() as u32) < (2_i32 as u32)
                     {

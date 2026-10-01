@@ -68,11 +68,7 @@ pub fn un_8031D030<'a>(ctx: &'a Ctx, char_kind: i32, costume: i32) {
     fns::Player_80032768(ctx, 0_i32, pos);
     fns::Player_80036F34(ctx, 0_i32, 8_i32);
     fns::lbAudioAx_80026F2C(ctx, (24_i32 as u32));
-    fns::lbAudioAx_8002702C(
-        ctx,
-        (8_i32 as u32),
-        (fns::__shl2i(ctx, (0x100_i32 as u64) as i64, 32_i32) as u64),
-    );
+    fns::lbAudioAx_8002702C(ctx, (8_i32 as u32), 0x10000000000_u64);
     fns::lbAudioAx_80027168(ctx);
     fns::lbAudioAx_80027648(ctx);
     fns::lbAudioAx_80024634(ctx, 136_i32);

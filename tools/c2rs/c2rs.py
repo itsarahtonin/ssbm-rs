@@ -106,6 +106,16 @@ def children(c):
     return list(c.get_children())
 
 
+def is_constant(node):
+    """Whether a C expression is a constant: it evaluates, naming no variable."""
+    def names_variable(n):
+        if n.kind == CK.DECL_REF_EXPR:
+            r = n.referenced
+            return r is None or r.kind != CK.ENUM_CONSTANT_DECL
+        return any(names_variable(x) for x in children(n))
+    return evaluate(node) is not None and not names_variable(node)
+
+
 def f32(x):
     return struct.unpack(">f", struct.pack(">f", x))[0]
 
@@ -2246,6 +2256,9 @@ class Translator:
             return Expr(f"({self.compare(op, a, b)}) as i32", INT, True)
         if is_int(t) and op in ARITH_OPS:
             t = self.enum_type(c) or t
+        if op in ("<<", ">>", "/", "%") and is_int(t) and int_info(t)[0] == 8 and is_constant(c):
+            # MWCC folds these on constants, where it otherwise calls the runtime's helpers.
+            return Expr(self.int_literal(int(evaluate(c)), t), t, True)
         va, vb = self.expr(a), self.expr(b)
         if calls_or_effects(b) and (calls_or_effects(a) or self.reads_memory(a)) and \
                 not (op in ("+", "-") and is_float(t) and (self.product(a, t) or self.product(b, t, True))):

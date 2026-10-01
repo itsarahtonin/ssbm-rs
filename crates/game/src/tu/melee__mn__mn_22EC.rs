@@ -259,10 +259,7 @@ pub fn mn_8022F1A8<'a>(ctx: &'a Ctx, arg0: u16, arg1: u16) {
 
 pub fn mn_8022F218<'a>(ctx: &'a Ctx) -> i32 {
     let __frame = ctx.stack_frame(0x8);
-    if ((fns::gm_GetButtonsTriggered(ctx, (4_i32 as u8))
-        & (fns::__shl2i(ctx, 1_u64 as i64, 34_i32) as u64))
-        != 0)
-    {
+    if ((fns::gm_GetButtonsTriggered(ctx, (4_i32 as u8)) & (0x400000000_u64)) != 0) {
         return 1_i32;
     }
     return 0_i32;
