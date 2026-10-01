@@ -612,7 +612,15 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     // differences are those of this second look.
     let mut uninitialized = false;
     let mut dropped = false;
-    if !diffs.is_empty() && original.is_none() && !state.first_look_only.get() {
+    // An original that faults through a bad pointer, as mutated inputs make one, may also have
+    // read stack it never wrote before: its second look faults likewise, if it agrees.
+    let faults = |p: &Option<Box<dyn std::any::Any + Send>>| {
+        p.as_ref().is_some_and(|p| panic_text(p.as_ref()).starts_with("unmapped "))
+    };
+    if !diffs.is_empty()
+        && (original.is_none() || faults(&original_panic))
+        && !state.first_look_only.get()
+    {
         let zero = ctx.zero_frames.replace(true);
         let rechecking = state.rechecking.replace(true);
         ctx.mem.restore(&j2);
@@ -634,7 +642,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         let _ = ctx.take_resume_at();
         let j3 = ctx.mem.end_journal();
         let regs3 = ctx.regs.snapshot();
-        if again.is_none() && state.cursor.get() == end {
+        if (again.is_none() || faults(&again)) && state.cursor.get() == end {
             let s3 = ctx.mem.capture(j3.keys());
             ctx.mem.restore(&j3);
             ctx.regs.restore(&regs0);
@@ -655,19 +663,19 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
             let _ = ctx.take_resume_at();
             let j4 = ctx.mem.end_journal();
             let regs4 = ctx.regs.snapshot();
-            if port_again.is_none() && state.cursor.get() == end {
+            if (port_again.is_none() && state.cursor.get() == end) || faults(&port_again) {
                 let s4 = ctx.mem.capture(j4.keys());
                 let original = Outcome {
                     before: &j3,
                     after: &s3,
                     regs: &regs3,
-                    panic: None,
+                    panic: again.as_ref().map(|p| panic_text(p.as_ref())),
                 };
                 let port = Outcome {
                     before: &j4,
                     after: &s4,
                     regs: &regs4,
-                    panic: None,
+                    panic: port_again.as_ref().map(|p| panic_text(p.as_ref())),
                 };
                 diffs = compare(ctx, &original, &port, returns, sp);
                 uninitialized = diffs.is_empty();
