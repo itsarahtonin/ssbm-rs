@@ -845,7 +845,8 @@ pub fn probe(ctx: &Ctx, addr: u32, setup: impl FnOnce(&Ctx)) -> bool {
     let Some(e) = ctx.entry(addr).filter(|e| !e.external) else {
         return false;
     };
-    if state.active.get() || state.mutating.get() {
+    // A function that never returns, such as HSD_Panic, has nothing a probe could compare.
+    if state.active.get() || state.mutating.get() || state.noreturn.borrow().contains(&addr) {
         return false;
     }
     let regs = ctx.regs.snapshot();
