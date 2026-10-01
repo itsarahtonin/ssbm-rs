@@ -31,6 +31,18 @@ pub const STACK_SCRATCH: u32 = 0x1_0000;
 /// other addresses than the original's.
 const STACK_CLEARED: u32 = 0x1000;
 
+/// What decides a branch to code a function's checks have not reached, which its mutated
+/// checks change (see `tools/lockstep/targets.py`).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Target {
+    /// What a callee returns, which a stand-in returns instead.
+    Call(u32),
+    /// An argument register (r3 to r10), compared with `value`, or with its `bits` tested.
+    Reg { reg: usize, value: u32, bits: bool },
+    /// What the function's load at `pc` reads, `size` bytes, compared or tested likewise.
+    Load { pc: u32, size: u32, value: u32, bits: bool },
+}
+
 /// Which registers hold a function's result, and so are compared.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub enum Returns {
@@ -182,6 +194,16 @@ pub struct State {
     pub mutations: Cell<u32>,
     mutating: Cell<bool>,
     pub rng: Cell<u64>,
+    /// What decides the branches to code each function's checks have not reached: half its
+    /// mutated checks change one of these.
+    pub targets: RefCell<BTreeMap<u32, Vec<Target>>>,
+    /// The callee the running mutated check stands in for, and the r3 and f1 it returns.
+    stub: Cell<Option<(u32, u32, f64)>>,
+    /// While an outermost check's original runs, its function's loads that targets name, and
+    /// where they read.
+    watch: RefCell<Vec<u32>>,
+    watching: Cell<bool>,
+    loaded: RefCell<Vec<(u32, u32)>>,
     /// The game's code, from its first address to past its last: a mutated check whose
     /// original writes there goes on running code only it sees changed.
     pub code: Cell<(u32, u32)>,
@@ -223,6 +245,78 @@ pub struct State {
 impl State {
     pub fn is_active(&self) -> bool {
         self.active.get()
+    }
+
+    /// The next number of mutations' random sequence.
+    fn random(&self) -> u64 {
+        let mut x = self.rng.get().max(1);
+        x ^= x << 13;
+        x ^= x >> 7;
+        x ^= x << 17;
+        self.rng.set(x);
+        x
+    }
+
+    /// The r3 and f1 a call to `addr` returns without running, when a mutated check stands in
+    /// for it.
+    pub(crate) fn stubbed(&self, addr: u32) -> Option<(u32, f64)> {
+        self.stub
+            .get()
+            .filter(|s| s.0 == addr && self.mutating.get())
+            .map(|s| (s.1, s.2))
+    }
+
+    /// Whether the interpreter should report the loads it runs (see `note_load`).
+    #[inline]
+    pub fn watching(&self) -> bool {
+        self.watching.get()
+    }
+
+    /// The interpreter is about to run instruction `w` at `pc`: if it is a load a target of the
+    /// function under check names, note where it reads.
+    pub fn note_load(&self, ctx: &Ctx, pc: u32, w: u32) {
+        if !self.watch.borrow().contains(&pc) {
+            return;
+        }
+        let (op, ra, rb) = (w >> 26, ((w >> 16) & 31) as usize, ((w >> 11) & 31) as usize);
+        let base = if ra == 0 { 0 } else { ctx.regs.r(ra) };
+        let ea = match op {
+            // lwz, lwzu, lbz, lbzu, lhz, lhzu, lha, lhau
+            32..=35 | 40..=43 => base.wrapping_add(w as u16 as i16 as u32),
+            // lwzx, lwzux, lbzx, lbzux, lhzx, lhzux, lhax, lhaux
+            31 if matches!((w >> 1) & 0x3FF, 23 | 55 | 87 | 119 | 279 | 311 | 343 | 375) => {
+                base.wrapping_add(ctx.regs.r(rb))
+            }
+            _ => return,
+        };
+        let mut loaded = self.loaded.borrow_mut();
+        if loaded.len() < 256 {
+            loaded.push((pc, ea));
+        }
+    }
+
+    /// Starts noting where the loads `addr`'s targets name read.
+    fn watch_loads(&self, addr: u32) {
+        let targets = self.targets.borrow();
+        let pcs: Vec<u32> = targets
+            .get(&addr)
+            .into_iter()
+            .flatten()
+            .filter_map(|t| match *t {
+                Target::Load { pc, .. } => Some(pc),
+                _ => None,
+            })
+            .collect();
+        self.loaded.borrow_mut().clear();
+        self.watching.set(!pcs.is_empty());
+        *self.watch.borrow_mut() = pcs;
+    }
+
+    /// Stops noting loads; returns where each read, as (load, address).
+    fn end_watch(&self) -> Vec<(u32, u32)> {
+        self.watching.set(false);
+        self.watch.borrow_mut().clear();
+        std::mem::take(&mut *self.loaded.borrow_mut())
     }
 
     /// The interpreter runs the instruction at `pc`: outside the game's code, that word is code
@@ -398,12 +492,13 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     let log_reads = outermost && !mutating && state.mutations.get() > 0;
     if log_reads {
         ctx.begin_read_log();
+        state.watch_loads(addr);
     }
     let original_panic = passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr))));
-    let reads = if log_reads {
-        ctx.end_read_log()
+    let (reads, loaded) = if log_reads {
+        (ctx.end_read_log(), state.end_watch())
     } else {
-        Vec::new()
+        (Vec::new(), Vec::new())
     };
     let broke_convention = mutating && ctx.check_conventions(false).is_some();
     state.calls_left.set(calls_left);
@@ -697,7 +792,11 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     }
     drop(stats);
     if outermost && original_panic.is_none() && !state.mutating.get() && state.mutations.get() > 0 {
-        mutated_checks(ctx, addr, native, returns, &j1, &regs0, &regs1, original_resume, &reads);
+        let inputs = Inputs {
+            reads: &reads,
+            loaded: &loaded,
+        };
+        mutated_checks(ctx, addr, native, returns, &j1, &regs0, &regs1, original_resume, &inputs);
     }
     // The original's panic is the run's to handle, such as the end of a run.
     if let Some(p) = original_panic {
@@ -784,7 +883,7 @@ fn mutated_checks(
     regs0: &crate::RegsSnapshot,
     regs1: &crate::RegsSnapshot,
     resume: Option<u32>,
-    reads: &[u32],
+    inputs: &Inputs,
 ) {
     let state = &ctx.lockstep;
     state.mutating.set(true);
@@ -797,8 +896,10 @@ fn mutated_checks(
         ctx.mem.restore(before);
         ctx.regs.restore(regs0);
         let kept = state.mismatches.borrow().len();
-        let changes = mutate(ctx, reads);
+        let mut changes = mutate(ctx, inputs.reads);
+        changes.extend(change_target(ctx, addr, inputs.loaded));
         let result = catch_unwind(AssertUnwindSafe(|| run(ctx, addr, native, returns)));
+        state.stub.set(None);
         // Name what changed for the mismatches the report will show.
         for m in &state.mismatches.borrow()[kept..] {
             eprintln!(
@@ -829,6 +930,89 @@ fn mutated_checks(
     }
 }
 
+/// What the original of an outermost check read that its mutated checks may change: every
+/// word, and where the loads its function's targets name read.
+struct Inputs<'a> {
+    reads: &'a [u32],
+    loaded: &'a [(u32, u32)],
+}
+
+/// Half the time, changes one of the targets of the function at `addr`: has a callee return a
+/// small number, as flags, counts, kinds and null pointers are, or sets an argument or a word
+/// a load read (`loaded`) to the value its compare looks for or a neighbor of it, or toggles
+/// the bits its test looks at. Returns what it changed.
+fn change_target(ctx: &Ctx, addr: u32, loaded: &[(u32, u32)]) -> Option<String> {
+    let state = &ctx.lockstep;
+    let targets = state.targets.borrow();
+    let all = targets.get(&addr).filter(|t| !t.is_empty())?;
+    if state.random().is_multiple_of(2) {
+        return None;
+    }
+    // A value near the one a compare looks for, or the bits a test looks at toggled.
+    let near = |old: u32, value: u32, bits: bool| {
+        if bits {
+            old ^ value
+        } else {
+            match state.random() % 3 {
+                0 => value.wrapping_sub(1),
+                1 => value.wrapping_add(1),
+                _ => value,
+            }
+        }
+    };
+    match all[(state.random() % all.len() as u64) as usize] {
+        Target::Call(callee) => {
+            let r3 = match state.random() % 6 {
+                0 => 0,
+                1 => 1,
+                2 => u32::MAX,
+                3 => 2,
+                4 => (state.random() % 16) as u32,
+                _ => (state.random() % 256) as u32,
+            };
+            let f1 = match state.random() % 5 {
+                0 => 0.0,
+                1 => 1.0,
+                2 => -1.0,
+                3 => 0.5,
+                _ => (state.random() % 200) as f64 - 100.0,
+            };
+            state.stub.set(Some((callee, r3, f1)));
+            Some(format!("{} returns r3 {r3:#X}, f1 {f1}", ctx.name_of(callee)))
+        }
+        Target::Reg { reg, value, bits } => {
+            let old = ctx.regs.r(reg);
+            let new = near(old, value, bits);
+            ctx.regs.set_r(reg, new);
+            Some(format!("r{reg} {old:#X}->{new:#X}"))
+        }
+        Target::Load { pc, size, value, bits } => {
+            let at: Vec<u32> = loaded.iter().filter(|l| l.0 == pc).map(|l| l.1).collect();
+            let ea = *at.get((state.random() % at.len().max(1) as u64) as usize)?;
+            let (code_start, code_end) = state.code.get();
+            if !(RAM_LO..RAM_HI).contains(&ea)
+                || (code_start..code_end).contains(&ea)
+                || state.is_ram_code(ea & !3)
+                || state.constant.borrow().iter().any(|&(lo, hi)| (lo..hi).contains(&ea))
+            {
+                return None;
+            }
+            let old = match size {
+                1 => u32::from(ctx.read_u8(ea)),
+                2 => u32::from(ctx.read_u16(ea)),
+                _ => ctx.read_u32(ea),
+            };
+            let new = near(old, value, bits);
+            match size {
+                1 => ctx.write_u8(ea, new as u8),
+                2 => ctx.write_u16(ea, new as u16),
+                _ => ctx.write_u32(ea, new),
+            }
+            Some(format!("{ea:#010X} {old:#X}->{new:#X}"))
+        }
+    }
+}
+
 /// Changes a call's inputs at random: some of the bytes its pointer arguments reach, some of
 /// what the original read (`reads`, words), such as global state it branches on, and some of
 /// its other integer and float arguments. Code, read-only data and words that hold pointers
@@ -838,14 +1022,7 @@ fn mutated_checks(
 /// calls miss.
 fn mutate(ctx: &Ctx, reads: &[u32]) -> Vec<String> {
     let state = &ctx.lockstep;
-    let next = || {
-        let mut x = state.rng.get().max(1);
-        x ^= x << 13;
-        x ^= x >> 7;
-        x ^= x << 17;
-        state.rng.set(x);
-        x
-    };
+    let next = || state.random();
     let ram = |a: u32| (RAM_LO..RAM_HI).contains(&a);
     let (code_start, code_end) = state.code.get();
     let constant = state.constant.borrow();

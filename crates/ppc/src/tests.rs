@@ -182,6 +182,86 @@ fn mutated_checks_leave_code_run_from_ram_as_it_is() {
 }
 
 #[test]
+fn mutated_checks_reach_what_a_callee_result_decides() {
+    // f: return g() != 0 ? 7 : 9, where g always returns 0.
+    const G: u32 = CODE + 0x40;
+    let f = [
+        0x7C08_02A6, // mflr r0
+        0x9001_0004, // stw r0, 4(r1)
+        0x9421_FFF0, // stwu r1, -16(r1)
+        bl(CODE + 12, G),
+        0x2C03_0000, // cmpwi r3, 0
+        0x4182_000C, // beq +12
+        li(3, 7),
+        0x4800_0008, // b +8
+        li(3, 9),
+        0x8001_0014, // lwz r0, 20(r1)
+        addi(1, 1, 16),
+        0x7C08_03A6, // mtlr r0
+        BLR,
+    ];
+    let mismatches = |port: fn(&Ctx)| {
+        let ctx = machine(&f);
+        ctx.write_u32(G, li(3, 0));
+        ctx.write_u32(G + 4, BLR);
+        ctx.register(CODE, port);
+        ctx.register(G, |ctx| ctx.regs.set_r(3, 0));
+        ctx.set_mode(CODE, Mode::Lockstep);
+        ctx.lockstep.mutations.set(50);
+        ctx.lockstep.rng.set(1);
+        ctx.lockstep.targets.borrow_mut().insert(CODE, vec![ssbm_rt::lockstep::Target::Call(G)]);
+        ctx.invoke(CODE);
+        assert_eq!(ctx.regs.r(3), 9, "the call itself goes on unchanged");
+        ctx.lockstep.mismatches.borrow().len()
+    };
+    assert_eq!(mismatches(|ctx| {
+        let g: u32 = ctx.call(G, ());
+        ctx.regs.set_r(3, if g != 0 { 7 } else { 9 });
+    }), 0);
+    // A port wrong only where g returns nonzero, which only a stood-in g shows.
+    assert!(mismatches(|ctx| {
+        let g: u32 = ctx.call(G, ());
+        ctx.regs.set_r(3, if g != 0 { 8 } else { 9 });
+    }) > 0);
+}
+
+#[test]
+fn mutated_checks_reach_what_a_loaded_value_decides() {
+    // f: return *(u8*) 0x80600010 == 7 ? 7 : 9, where the byte is 0.
+    let f = [
+        0x3C80_8060, // lis r4, 0x8060
+        0x8804_0010, // lbz r0, 0x10(r4)
+        0x2C00_0007, // cmpwi r0, 7
+        0x4182_000C, // beq +12
+        li(3, 9),
+        BLR,
+        li(3, 7),
+        BLR,
+    ];
+    let mismatches = |port: fn(&Ctx)| {
+        let ctx = machine(&f);
+        // Its result is r3 alone: r4 is left as lis set it.
+        ctx.register_port(CODE, port, ssbm_rt::lockstep::Returns::Int);
+        ctx.set_mode(CODE, Mode::Lockstep);
+        ctx.lockstep.mutations.set(50);
+        ctx.lockstep.rng.set(1);
+        let load = ssbm_rt::lockstep::Target::Load { pc: CODE + 4, size: 1, value: 7, bits: false };
+        ctx.lockstep.targets.borrow_mut().insert(CODE, vec![load]);
+        ctx.invoke(CODE);
+        assert_eq!(ctx.regs.r(3), 9, "the call itself goes on unchanged");
+        ctx.lockstep.mismatches.borrow().len()
+    };
+    assert_eq!(mismatches(|ctx| {
+        let seven = ctx.read_u8(0x8060_0010) == 7;
+        ctx.regs.set_r(3, if seven { 7 } else { 9 });
+    }), 0);
+    assert!(mismatches(|ctx| {
+        let seven = ctx.read_u8(0x8060_0010) == 7;
+        ctx.regs.set_r(3, if seven { 8 } else { 9 });
+    }) > 0);
+}
+
+#[test]
 fn lockstep_flags_a_wrong_port() {
     let body = [li(3, 5), 0x9061_0000 | 0x2000, BLR]; // stw r3, 0x2000(r1)
     let good = machine(&body);

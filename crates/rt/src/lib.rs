@@ -851,6 +851,12 @@ impl Ctx {
     }
 
     fn invoke_traced(&self, addr: u32) {
+        if let Some((r3, f1)) = self.lockstep.stubbed(addr) {
+            // Stood in for by a mutated check, on both its sides alike.
+            self.regs.set_r(3, r3);
+            self.regs.set_f(1, f1);
+            return;
+        }
         let resolved = || {
             let resolver = self.resolver.borrow();
             resolver.as_ref().is_some_and(|r| r(self, addr))

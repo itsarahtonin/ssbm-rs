@@ -578,6 +578,33 @@ fn run() -> ExitCode {
             let seed = std::env::var("LOCKSTEP_SEED").ok().and_then(|v| v.parse().ok());
             ctx.lockstep.rng.set(seed.unwrap_or(1));
         }
+        // LOCKSTEP_TARGETS=FILE lists, as `tools/lockstep/targets.py` writes them, what decides
+        // the branches to code each function's checks have not reached: half of a listed
+        // function's mutated checks change one of those callees' results, arguments or loads.
+        if let Ok(path) = std::env::var("LOCKSTEP_TARGETS") {
+            let text = std::fs::read_to_string(&path).unwrap_or_else(|e| panic!("{path}: {e}"));
+            let mut targets = ctx.lockstep.targets.borrow_mut();
+            for line in text.lines() {
+                let hex = |s: &str| u32::from_str_radix(s.trim_start_matches("0x"), 16).ok();
+                let fields = line.split('#').next().unwrap_or("");
+                let w: Vec<&str> = fields.split_whitespace().collect();
+                let target = match w.as_slice() {
+                    [_, "call", g] => hex(g).map(ssbm_rt::lockstep::Target::Call),
+                    [_, "reg", n, op, k] => n.parse().ok().zip(hex(k)).map(|(reg, value)| {
+                        ssbm_rt::lockstep::Target::Reg { reg, value, bits: *op == "&" }
+                    }),
+                    [_, "load", pc, size, op, k] => {
+                        hex(pc).zip(size.parse().ok()).zip(hex(k)).map(|((pc, size), value)| {
+                            ssbm_rt::lockstep::Target::Load { pc, size, value, bits: *op == "&" }
+                        })
+                    }
+                    _ => None,
+                };
+                if let (Some(f), Some(t)) = (w.first().and_then(|f| hex(f)), target) {
+                    targets.entry(f).or_default().push(t);
+                }
+            }
+        }
         // LOCKSTEP_UNINIT=1 reports which instructions of the original read stack it never
         // wrote, as lockstep's checks run it.
         if std::env::var_os("LOCKSTEP_UNINIT").is_some() {

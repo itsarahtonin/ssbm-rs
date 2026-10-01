@@ -71,6 +71,9 @@ impl Interpreter {
             }
             self.pc.set(pc);
             let w = ctx.fetch_u32(pc);
+            if ctx.lockstep.watching() {
+                ctx.lockstep.note_load(ctx, pc, w);
+            }
             let from = pc;
             pc = step(ctx, pc, w);
             if pc != from.wrapping_add(4) {
