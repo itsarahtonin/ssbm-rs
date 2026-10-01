@@ -185,6 +185,9 @@ pub struct State {
     /// The game's code, from its first address to past its last: a mutated check whose
     /// original writes there goes on running code only it sees changed.
     pub code: Cell<(u32, u32)>,
+    /// Read-only data, whose constants ports hold inline rather than read: mutated checks
+    /// leave it as it is.
+    pub constant: RefCell<Vec<(u32, u32)>>,
     /// Ports that run as ports even on a mutated check's original side, which otherwise runs
     /// original code throughout.
     pub always_native: RefCell<BTreeSet<u32>>,
@@ -348,7 +351,17 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     if mutating {
         ctx.check_conventions(true);
     }
+    // What an outermost check's original reads, its mutated checks may change.
+    let log_reads = outermost && !mutating && state.mutations.get() > 0;
+    if log_reads {
+        ctx.begin_read_log();
+    }
     let original_panic = passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr))));
+    let reads = if log_reads {
+        ctx.end_read_log()
+    } else {
+        Vec::new()
+    };
     let broke_convention = mutating && ctx.check_conventions(false).is_some();
     state.calls_left.set(calls_left);
     let cost = ctx.executed() - executed;
@@ -646,7 +659,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     }
     drop(stats);
     if outermost && original_panic.is_none() && !state.mutating.get() && state.mutations.get() > 0 {
-        mutated_checks(ctx, addr, native, returns, &j1, &regs0, &regs1, original_resume);
+        mutated_checks(ctx, addr, native, returns, &j1, &regs0, &regs1, original_resume, &reads);
     }
     // The original's panic is the run's to handle, such as the end of a run.
     if let Some(p) = original_panic {
@@ -729,6 +742,7 @@ fn mutated_checks(
     regs0: &crate::RegsSnapshot,
     regs1: &crate::RegsSnapshot,
     resume: Option<u32>,
+    reads: &[u32],
 ) {
     let state = &ctx.lockstep;
     state.mutating.set(true);
@@ -740,8 +754,18 @@ fn mutated_checks(
         ctx.mem.begin_journal();
         ctx.mem.restore(before);
         ctx.regs.restore(regs0);
-        mutate(ctx);
+        let kept = state.mismatches.borrow().len();
+        let changes = mutate(ctx, reads);
         let result = catch_unwind(AssertUnwindSafe(|| run(ctx, addr, native, returns)));
+        // Name what changed for the mismatches the report will show.
+        for m in &state.mismatches.borrow()[kept..] {
+            eprintln!(
+                "  {} call {} had its inputs changed: {}",
+                ctx.name_of(m.function),
+                m.call,
+                changes.join(", ")
+            );
+        }
         let _ = ctx.take_resume_at();
         let undo = ctx.mem.end_journal();
         ctx.mem.restore(&undo);
@@ -763,12 +787,14 @@ fn mutated_checks(
     }
 }
 
-/// Changes a call's inputs at random: some of the bytes its pointer arguments reach, and some
-/// of its other integer and float arguments. Code and words that hold pointers stay as they
-/// are: only the original runs code from memory, a pointer changed sends both sides through
-/// memory where they differ only in what ports keep out of it, and counts, flags and floats
-/// are what reach the branches real calls miss.
-fn mutate(ctx: &Ctx) {
+/// Changes a call's inputs at random: some of the bytes its pointer arguments reach, some of
+/// what the original read (`reads`, words), such as global state it branches on, and some of
+/// its other integer and float arguments. Code, read-only data and words that hold pointers
+/// stay as they are: only the original runs code from memory or reads the constants ports
+/// hold inline, a pointer changed sends both sides through memory where they differ only in
+/// what ports keep out of it, and counts, flags and floats are what reach the branches real
+/// calls miss.
+fn mutate(ctx: &Ctx, reads: &[u32]) -> Vec<String> {
     let state = &ctx.lockstep;
     let next = || {
         let mut x = state.rng.get().max(1);
@@ -780,20 +806,29 @@ fn mutate(ctx: &Ctx) {
     };
     let ram = |a: u32| (0x8000_0000..0x8180_0000).contains(&a);
     let (code_start, code_end) = state.code.get();
+    let constant = state.constant.borrow();
+    let changes = std::cell::RefCell::new(Vec::new());
+    let change_byte = |at: u32| {
+        if ram(at)
+            && !(code_start..code_end).contains(&at)
+            && !constant.iter().any(|&(lo, hi)| (lo..hi).contains(&at))
+            && !ram(ctx.read_u32(at & !3))
+        {
+            let old = ctx.read_u8(at);
+            let new = if next() % 2 == 0 {
+                old ^ (1 << (next() % 8))
+            } else {
+                next() as u8
+            };
+            ctx.write_u8(at, new);
+            changes.borrow_mut().push(format!("{at:#010X} {old:02X}->{new:02X}"));
+        }
+    };
     for r in 3..=10 {
         let v = ctx.regs.r(r);
         if ram(v) {
             for _ in 0..=next() % 3 {
-                let at = v.wrapping_add((next() % 0x80) as u32);
-                if ram(at) && !(code_start..code_end).contains(&at) && !ram(ctx.read_u32(at & !3)) {
-                    let old = ctx.read_u8(at);
-                    let new = if next() % 2 == 0 {
-                        old ^ (1 << (next() % 8))
-                    } else {
-                        next() as u8
-                    };
-                    ctx.write_u8(at, new);
-                }
+                change_byte(v.wrapping_add((next() % 0x80) as u32));
             }
         } else if next() % 3 == 0 {
             let new = match next() % 6 {
@@ -805,6 +840,13 @@ fn mutate(ctx: &Ctx) {
                 _ => (next() % 64) as u32,
             };
             ctx.regs.set_r(r, new);
+            changes.borrow_mut().push(format!("r{r} {v:#X}->{new:#X}"));
+        }
+    }
+    if !reads.is_empty() {
+        for _ in 0..=next() % 3 {
+            let word = reads[(next() % reads.len() as u64) as usize];
+            change_byte(word + (next() % 4) as u32);
         }
     }
     for f in 1..=8 {
@@ -818,8 +860,10 @@ fn mutate(ctx: &Ctx) {
                 _ => v * 0.5,
             };
             ctx.regs.set_f(f, new);
+            changes.borrow_mut().push(format!("f{f} {v}->{new}"));
         }
     }
+    changes.into_inner()
 }
 
 fn clear_stack(ctx: &Ctx, sp: u32) {
@@ -1072,11 +1116,14 @@ fn compare(ctx: &Ctx, a: &Outcome, b: &Outcome, returns: Returns, sp: u32) -> Ve
             while i < PAGE_SIZE as usize && expected[i] != actual[i] {
                 i += 1;
             }
+            // Whole words, so a value that differs reads as one, such as a float's sign.
+            let (lo, hi) = (start & !3, ((i + 3) & !3).min(PAGE_SIZE as usize));
             diffs.push(Diff::Mem {
-                addr: 0x8000_0000 | (page * PAGE_SIZE + start as u32),
-                original: expected[start..i].to_vec(),
-                port: actual[start..i].to_vec(),
+                addr: 0x8000_0000 | (page * PAGE_SIZE + lo as u32),
+                original: expected[lo..hi].to_vec(),
+                port: actual[lo..hi].to_vec(),
             });
+            i = hi;
         }
     }
     diffs

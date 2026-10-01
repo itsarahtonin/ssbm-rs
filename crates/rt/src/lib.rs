@@ -30,6 +30,9 @@ pub use regs::{Regs, RegsSnapshot, spr};
 /// Code run when execution reaches an address.
 pub type Hook = Rc<dyn Fn(&Ctx)>;
 
+/// Reads a read log notes at most.
+const READ_LOG_MAX: usize = 1 << 16;
+
 /// Calls through dispatch a mutated check may nest: the game's deepest recursion takes a few
 /// dozen.
 const MUTATED_DEPTH: u32 = 4000;
@@ -190,6 +193,9 @@ pub struct Ctx {
     /// what hears of reads of the rest.
     shadow: RefCell<Option<StackShadow>>,
     shadow_on: Cell<bool>,
+    /// The addresses read while a read log is open (see `begin_read_log`), which `shadow_on`
+    /// also gates.
+    read_log: RefCell<Option<Vec<u32>>>,
     /// Whether original code, rather than a port, an SDK stand-in or a hook, is running.
     running_original: Cell<bool>,
     /// Whether each new frame starts zeroed, as lockstep's second look at a mismatch runs both
@@ -272,6 +278,7 @@ impl Ctx {
             resolver: RefCell::default(),
             shadow: RefCell::default(),
             shadow_on: Cell::new(false),
+            read_log: RefCell::default(),
             running_original: Cell::new(false),
             zero_frames: Cell::new(false),
             conventions: RefCell::default(),
@@ -318,8 +325,23 @@ impl Ctx {
     }
 
     pub(crate) fn end_stack_shadow(&self) {
-        self.shadow_on.set(false);
         *self.shadow.borrow_mut() = None;
+        self.shadow_on.set(self.read_log.borrow().is_some());
+    }
+
+    /// Starts noting the address of every read.
+    pub(crate) fn begin_read_log(&self) {
+        *self.read_log.borrow_mut() = Some(Vec::new());
+        self.shadow_on.set(true);
+    }
+
+    /// Stops noting reads and returns the words read, each once.
+    pub(crate) fn end_read_log(&self) -> Vec<u32> {
+        let mut words = self.read_log.borrow_mut().take().unwrap_or_default();
+        self.shadow_on.set(self.shadow.borrow().is_some());
+        words.sort_unstable();
+        words.dedup();
+        words
     }
 
     /// A frame is being allocated from `sp` down to `new_sp`: none of its bytes hold anything
@@ -360,6 +382,11 @@ impl Ctx {
 
     #[cold]
     fn shadow_read(&self, addr: u32, len: u32) {
+        if let Some(log) = self.read_log.borrow_mut().as_mut()
+            && log.len() < READ_LOG_MAX
+        {
+            log.push(addr & !3);
+        }
         let unwritten = self.shadow.borrow().as_ref().is_some_and(|sh| {
             (0..len).any(|i| {
                 let off = addr.wrapping_add(i).wrapping_sub(sh.lo) as usize;

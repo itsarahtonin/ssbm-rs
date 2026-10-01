@@ -128,6 +128,10 @@ fn update_ledger(
     Ok((n, bad))
 }
 
+/// The DOL's read-only data, as the decomp's splits give it: .ctors, .dtors and .rodata, and
+/// .sdata2.
+const READ_ONLY: [(u32, u32); 2] = [(0x803B_7240, 0x803B_9840), (0x804D_79E0, 0x804D_EC00)];
+
 /// Stack for the thread that runs the game. Every guest call nests Rust frames, and ports and
 /// lockstep checks make them deep.
 const STACK_SIZE: usize = 1 << 30;
@@ -523,6 +527,7 @@ fn run() -> ExitCode {
             functions.clone().map(|s| s.0).min().unwrap_or(0),
             functions.map(|s| s.0 + s.1).max().unwrap_or(0),
         ));
+        ctx.lockstep.constant.borrow_mut().extend(READ_ONLY);
         let checking = checking.clone();
         let enable = move |ctx: &Ctx| {
             for &addr in &checked {
