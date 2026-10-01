@@ -6,7 +6,7 @@
 //! pipe), and EXI with the memory card in slot A when there is one. Other EXI transfers finish
 //! as they start, with no device answering: Slippi's device, and the memory cards when there
 //! are none, are stood in for above the registers. Registers without a model keep the last
-//! value written.
+//! value written. `DVD_RETRY=N` makes one data read in N fail once, as on a scratched disc.
 
 use std::cell::{Cell, RefCell};
 use std::rc::Rc;
@@ -129,6 +129,12 @@ pub struct Hw {
     ais_since: Cell<u64>,
     /// The memory card in slot A, if any.
     pub card: Option<Card>,
+    /// One data read in this many fails, as on a scratched disc, with an error the DVD driver
+    /// retries (`DVD_RETRY`); the read again works. Zero for none.
+    dvd_retry: u32,
+    dvd_reads: Cell<u32>,
+    /// The error the drive reports when next asked.
+    dvd_error: Cell<u32>,
 }
 
 impl Default for Hw {
@@ -144,6 +150,13 @@ impl Default for Hw {
             ais_base: Cell::new(0),
             ais_since: Cell::new(0),
             card: None,
+            dvd_retry: std::env::var("DVD_RETRY")
+                .ok()
+                .and_then(|v| v.parse().ok())
+                .filter(|&n: &u32| n >= 2)
+                .unwrap_or(0),
+            dvd_reads: Cell::new(0),
+            dvd_error: Cell::new(0),
         };
         hw.set32(PI_FLIPPER_REV, 0x2465_00B1);
         hw
@@ -477,6 +490,21 @@ impl Hw {
                 hw.set32(DI_MAR, mar + data.len() as u32);
                 hw.set32(DI_LENGTH, 0);
             };
+            if cmd[0] >> 24 == 0xA8 && cmd[0] & 0xFF != 0x40 && hw.dvd_retry != 0 {
+                let n = hw.dvd_reads.get() + 1;
+                hw.dvd_reads.set(n);
+                if n % hw.dvd_retry == 0 {
+                    // An unrecovered read error, which the driver asks for and retries.
+                    hw.dvd_error.set(0x0003_0200);
+                    hw.set32(DI_CR, hw.get32(DI_CR) & !1);
+                    let sr = hw.get32(DI_SR) | 0x04;
+                    hw.set32(DI_SR, sr);
+                    if sr & 0x02 != 0 {
+                        sdk.raise(ctx, irq::PI_DI);
+                    }
+                    return;
+                }
+            }
             match cmd[0] >> 24 {
                 0xA8 => {
                     let offset = if cmd[0] & 0xFF == 0x40 {
@@ -494,7 +522,8 @@ impl Hw {
                     info[..8].copy_from_slice(&[0x00, 0x02, 0x00, 0x06, 0x20, 0x02, 0x04, 0x02]);
                     dma(&info[..len.min(0x20) as usize]);
                 }
-                0xE0 | 0xE2 => hw.set32(DI_IMM, 0),
+                0xE0 => hw.set32(DI_IMM, hw.dvd_error.replace(0)),
+                0xE2 => hw.set32(DI_IMM, 0),
                 0xAB | 0xE1 | 0xE3 | 0xE4 => {}
                 op => panic!("unsupported DVD command {op:#04X} ({:08X?})", cmd),
             }
