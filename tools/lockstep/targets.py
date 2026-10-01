@@ -4,23 +4,26 @@ not reached in the functions below the bar.
     python tools/lockstep/targets.py <decomp root> REPORT_CSV OUT --coverage FILE... [--bar 0.9]
 
 For each block not yet verified that a verified block branches to, the compare deciding that
-branch is traced back to what set its register, within the block and its lone predecessors:
+branch is traced back to what set its register:
 
     call   a callee's result: `F call G`
     reg    an argument the function was called with: `F reg N = K` or `F reg N & MASK`
     load   a value the function loads: `F load PC SIZE = K` or `F load PC SIZE & MASK`
 
-where K is the constant the compare tests against and MASK the bits a test such as `rlwinm.`
-looks at. A listed function's mutated checks take one of its targets half the time: a callee
-then returns a small number instead of running, on both sides alike; an argument becomes K or
-a neighbor of it, or has the bits toggled; a word the original loaded at PC in the check
-being mutated does too.
+where K is the constant the compare tests against (a single's bits, for a float compared with
+a constant) and MASK the bits a test such as `rlwinm.` looks at. The register is followed
+through copies, lone predecessors, and a saved register set once in the entry block, as an
+argument's copy is. A listed function's mutated checks take one of its targets half the time:
+a callee then returns a small number instead of running, on both sides alike; an argument
+becomes K or a neighbor of it, or has the bits toggled; a word the original loaded at PC in
+the check being mutated does too.
 """
 
 import argparse
 import csv
 import glob
 import os
+import struct
 import sys
 from collections import defaultdict
 
@@ -34,6 +37,7 @@ LOAD_SIZES = {"lbz": 1, "lbzx": 1, "lbzu": 1, "lbzux": 1, "lhz": 2, "lhzx": 2, "
               "lhzux": 2, "lha": 2, "lhax": 2, "lhau": 2, "lhaux": 2, "lwz": 4, "lwzx": 4,
               "lwzu": 4, "lwzux": 4}
 ARGS = {f"r{i}" for i in range(3, 11)}
+FVOLATILE = {f"f{i}" for i in range(14)}
 CTR = (None, "dnz", "dz", "dnzt", "dnzf", "dzt", "dzf", "ns", "so", "un", "nu")
 
 
@@ -47,9 +51,18 @@ def mask(mb, me):
     return m
 
 
+def writes(m, ops, reg):
+    """Whether instruction `m ops` writes `reg`."""
+    r = feasible.regs(ops)
+    if coverage.is_call(m):
+        return reg in feasible.VOLATILE
+    return bool(r) and r[0] == reg and not m.startswith(feasible.NOT_WRITING)
+
+
 def source(cfg, b, upto, reg, depth=0):
     """What `reg` holds before instruction `upto` of block `b`: ("call", callee), ("reg", reg)
-    for an argument, ("load", pc, size), or None. Follows copies and lone predecessors."""
+    for an argument, ("load", pc, size), or None. Follows copies, lone predecessors, and a
+    register the whole function sets once, as the saved copy of an argument is."""
     blocks, preds = cfg
     block = blocks[b]
     if depth > 8:
@@ -63,7 +76,7 @@ def source(cfg, b, upto, reg, depth=0):
             if reg in feasible.VOLATILE:
                 return None
             continue
-        if not r or r[0] != reg or m.startswith(feasible.NOT_WRITING):
+        if not writes(m, ops, reg):
             continue
         if m.rstrip(".") in PASSING and len(r) >= 2:
             return source(cfg, b, j, r[1], depth + 1)
@@ -75,10 +88,74 @@ def source(cfg, b, upto, reg, depth=0):
     if len(preds[b]) == 1:
         p = preds[b][0]
         return source(cfg, p, len(blocks[p]), reg, depth + 1)
+    # A saved register set once, in the entry block, holds what it was set to throughout: the
+    # epilogue's reload of the caller's value from the stack comes after every use.
+    if reg not in feasible.VOLATILE:
+        def reload(m, ops):
+            r = feasible.regs(ops)
+            return m == "lwz" and len(r) == 2 and r[1].endswith("(r1)")
+        sets = [(i, j) for i, blk in enumerate(blocks) for j, (_, m, ops) in enumerate(blk)
+                if writes(m, ops, reg) and not reload(m, ops)]
+        if len(sets) == 1 and sets[0][0] == 0:
+            return source(cfg, 0, sets[0][1] + 1, reg, depth + 1)
     return None
 
 
-def decider(cfg, b):
+def constants(root, unit):
+    """The float constants a unit's listing defines, by name: (bits, size)."""
+    path = os.path.join(root, "build", "GALE01", "asm", unit + ".s")
+    out, name = {}, None
+    for line in open(path, encoding="utf-8", errors="replace"):
+        if line.startswith(".obj "):
+            name = line[5:].split(",")[0].strip().strip('"')
+        elif name and line.strip().startswith((".float ", ".double ")):
+            kind, text = line.split(None, 1)
+            try:
+                v = float(text.split("#")[0].strip())
+            except ValueError:
+                v = None
+            if v is not None and kind == ".float":
+                out[name] = (struct.unpack(">I", struct.pack(">f", v))[0], 4)
+            elif v is not None:
+                out[name] = (struct.unpack(">Q", struct.pack(">d", v))[0], 8)
+            name = None
+        else:
+            name = None if line.startswith(".endobj") else name
+    return out
+
+
+def fsource(cfg, b, upto, reg, consts, depth=0):
+    """What float register `reg` holds before instruction `upto` of block `b`: ("const",
+    bits, size) for a constant of the unit's, ("load", pc, size), or None."""
+    blocks, preds = cfg
+    block = blocks[b]
+    if depth > 8:
+        return None
+    for j in range(upto - 1, -1, -1):
+        pc, m, ops = block[j]
+        r = feasible.regs(ops)
+        if coverage.is_call(m):
+            if reg in FVOLATILE:
+                return None
+            continue
+        if not r or r[0] != reg or m.startswith(feasible.NOT_WRITING):
+            continue
+        if m in ("fmr", "frsp") and len(r) == 2:
+            return fsource(cfg, b, j, r[1], consts, depth + 1)
+        if m in ("lfs", "lfd") and len(r) == 2:
+            size = 4 if m == "lfs" else 8
+            if "@sda21" in r[1]:
+                c = consts.get(r[1].split("@sda21")[0].strip('"'))
+                return ("const", c[0], size) if c and c[1] == size else None
+            return ("load", pc, size)
+        return None
+    if len(preds[b]) == 1:
+        p = preds[b][0]
+        return fsource(cfg, p, len(blocks[p]), reg, consts, depth + 1)
+    return None
+
+
+def decider(cfg, b, consts):
     """What decides the conditional branch ending block `b`: (source, "=", K) for a compare
     with a constant, (source, "&", MASK) for a bit test, or None."""
     block = cfg[0][b]
@@ -92,6 +169,14 @@ def decider(cfg, b):
             x, k = (r[1], r[2]) if len(r) == 3 else (r[0], r[1])
             k = feasible.imm(k)
             return (source(cfg, b, j, x), "=", k & 0xFFFFFFFF) if k is not None else None
+        if m in ("fcmpu", "fcmpo") and len(r) == 3:
+            # A loaded single against a constant: the compare looks for that value, and the
+            # floats next to it either side.
+            x, y = fsource(cfg, b, j, r[1], consts), fsource(cfg, b, j, r[2], consts)
+            for a, c in ((x, y), (y, x)):
+                if a and c and a[0] == "load" and c[0] == "const" and a[2] == c[2] == 4:
+                    return (a, "=", c[1])
+            return None
         if m.startswith(("cmp", "fcmp")) or coverage.is_call(m):
             return None
         if m.endswith("."):
@@ -137,6 +222,7 @@ def main():
                               lambda path: set())
     lines = []
     kinds = defaultdict(int)
+    unit_consts = {}
     for unit, name, insns, labels in todo:
         blocks = coverage.blocks(insns, labels)
         index = {blk[0][0]: i for i, blk in enumerate(blocks)}
@@ -149,6 +235,8 @@ def main():
             if m not in ("b", "blr", "bctr", "rfi") and i + 1 < len(blocks):
                 preds[i + 1].append(i)
         cfg = (blocks, preds)
+        if unit not in unit_consts:
+            unit_consts[unit] = constants(args.root, unit)
         unreached = feasible.infeasible(insns, labels)
         hit = [any(coverage.covered(bits, a) for a, _, _ in blk) for blk in blocks]
         seen = set()
@@ -160,7 +248,7 @@ def main():
             ways.append(i + 1 if i + 1 < len(blocks) else None)
             if all(w is None or hit[w] or blocks[w][0][0] in unreached for w in ways):
                 continue
-            d = decider(cfg, i)
+            d = decider(cfg, i, unit_consts[unit])
             if d is None or d[0] is None:
                 continue
             src, op, k = d
