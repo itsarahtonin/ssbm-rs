@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-//! API-level stand-ins for controllers (PAD), memory cards (CARD) and the DSP.
+//! API-level stand-ins for controllers (PAD), memory cards (CARD) when slot A has none, and the
+//! DSP.
 
 use std::cell::{Cell, RefCell};
 
@@ -53,7 +54,7 @@ impl Default for Devices {
     }
 }
 
-pub(crate) fn install(ctx: &Ctx) {
+pub(crate) fn install(ctx: &Ctx, card: bool) {
     let reg = |name: &str, f: Native| ctx.register(sym(name), f);
 
     // Controllers.
@@ -66,7 +67,10 @@ pub(crate) fn install(ctx: &Ctx) {
     reg("PADSetSamplingRate", |_| {});
     reg("SIRefreshSamplingRate", |_| {});
 
-    // Memory cards: none inserted.
+    // Memory cards: none inserted, unless slot A has one, which the CARD library drives.
+    if card {
+        return install_dsp(ctx);
+    }
     reg("CARDInit", |_| {});
     reg("CARDProbe", |ctx| ret(ctx, 0));
     reg("CARDGetXferredBytes", |ctx| ret(ctx, 0));
@@ -92,7 +96,11 @@ pub(crate) fn install(ctx: &Ctx) {
     ] {
         reg(name, |ctx| ret(ctx, CARD_RESULT_NOCARD as u32));
     }
+    install_dsp(ctx);
+}
 
+fn install_dsp(ctx: &Ctx) {
+    let reg = |name: &str, f: Native| ctx.register(sym(name), f);
     // DSP: the only task is the AX microcode, which the stand-in runs.
     reg("DSPInit", |ctx| ctx.ext::<Sdk>().dev.dsp_init.set(true));
     reg("DSPCheckInit", |ctx| {

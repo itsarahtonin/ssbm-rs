@@ -2,16 +2,18 @@
 // Register behavior follows Dolphin's hardware emulation (GPL-2.0-or-later).
 
 //! Hardware registers at `0xCC000000` for the devices whose SDK drivers run as original code:
-//! VI, the DVD interface, ARAM and audio DMA, and the GX FIFO (CP, PE, PI and the write-gather
-//! pipe). EXI transfers finish as they start, with no device answering: the memory cards and
-//! Slippi's device are stood in for above the registers. Registers without a model keep the
-//! last value written.
+//! VI, the DVD interface, ARAM and audio DMA, the GX FIFO (CP, PE, PI and the write-gather
+//! pipe), and EXI with the memory card in slot A when there is one. Other EXI transfers finish
+//! as they start, with no device answering: Slippi's device, and the memory cards when there
+//! are none, are stood in for above the registers. Registers without a model keep the last
+//! value written.
 
 use std::cell::{Cell, RefCell};
 use std::rc::Rc;
 
 use ssbm_rt::Ctx;
 
+use crate::card::{self, Card};
 use crate::gp::{Effect, Gp};
 use crate::{Sdk, TB_HZ, irq};
 
@@ -57,6 +59,17 @@ const DI_CR: u32 = 0x601C;
 /// Each EXI channel's control register, whose bit 0 starts a transfer and reads as 0 once it
 /// is done.
 const EXI_CR: [u32; 3] = [0x680C, 0x6820, 0x6834];
+/// Each EXI channel's status register, the slot A channel's first.
+const EXI_CSR: [u32; 3] = [0x6800, 0x6814, 0x6828];
+const EXI0_MAR: u32 = 0x6804;
+const EXI0_LENGTH: u32 = 0x6808;
+const EXI0_DATA: u32 = 0x6810;
+// EXI status register bits.
+const EXI_INT: u32 = 0x0002;
+const EXI_TCINT: u32 = 0x0008;
+const EXI_CS0: u32 = 0x0080;
+const EXI_EXTINT: u32 = 0x0800;
+const EXI_EXT: u32 = 0x1000;
 const DI_IMM: u32 = 0x6020;
 const AI_CR: u32 = 0x6C00;
 const AI_SCNT: u32 = 0x6C08;
@@ -114,6 +127,8 @@ pub struct Hw {
     /// Streaming audio sample counter: its value when the rate or state last changed, and when.
     ais_base: Cell<u32>,
     ais_since: Cell<u64>,
+    /// The memory card in slot A, if any.
+    pub card: Option<Card>,
 }
 
 impl Default for Hw {
@@ -128,6 +143,7 @@ impl Default for Hw {
             frame_start: Cell::new(0),
             ais_base: Cell::new(0),
             ais_since: Cell::new(0),
+            card: None,
         };
         hw.set32(PI_FLIPPER_REV, 0x2465_00B1);
         hw
@@ -185,6 +201,8 @@ impl Hw {
             (AI_DMA_LEFT, 2) => 0,
             (AR_MODE, 2) => u32::from(self.get16(off)) | 1, // ARAM ready
             (AI_SCNT, 4) => self.ais_count(ctx),
+            // A card in slot A is attached.
+            (0x6800, 4) if self.card.is_some() => self.get32(off) | EXI_EXT,
             (_, 4) => self.get32(off),
             (_, 2) => u32::from(self.get16(off)),
             (_, 1) => u32::from((self.get16(off & !1) >> if off & 1 == 0 { 8 } else { 0 }) as u8),
@@ -286,9 +304,84 @@ impl Hw {
                 self.set32(off, v & !0x28); // AIINT and SCRESET read as 0
             }
             PI_FIFO_WPTR => self.set32(off, v & 0x03FF_FFE0),
+            _ if EXI_CSR.contains(&off) => self.exi_status(ctx, sdk, off, old, v),
+            0x680C if v & 1 != 0 && self.selected_card() => self.card_transfer(ctx, sdk, v),
             _ if EXI_CR.contains(&off) => self.set32(off, v & !1),
             _ => {}
         }
+    }
+
+    // EXI and the memory card in slot A.
+
+    fn selected_card(&self) -> bool {
+        self.card.is_some() && self.get32(0x6800) & EXI_CS0 != 0
+    }
+
+    /// A write to an EXI status register: its interrupt flags clear when written as 1, and
+    /// selecting or deselecting the card in slot A starts or ends a command.
+    fn exi_status(&self, ctx: &Ctx, sdk: &Rc<Sdk>, off: u32, old: u32, v: u32) {
+        let flags = EXI_INT | EXI_TCINT | EXI_EXTINT;
+        self.set32(off, (v & !flags) | (old & flags & !v));
+        // A flag cleared before its interrupt was taken takes the interrupt back.
+        let chan = (off - 0x6800) / 0x14;
+        for (flag, n) in [(EXI_INT, 9), (EXI_TCINT, 10), (EXI_EXTINT, 11)] {
+            if v & flag != 0 {
+                sdk.withdraw(n + 3 * chan);
+            }
+        }
+        let Some(card) = &self.card else { return };
+        if off != 0x6800 || (old ^ v) & EXI_CS0 == 0 {
+            return;
+        }
+        if v & EXI_CS0 != 0 {
+            card.select();
+        } else if let card::Done::Busy = card.deselect() {
+            // The erase or program is done at once: the game's waits for the card spin
+            // without letting time pass.
+            card.finish();
+            if card.interrupts() {
+                self.set32(0x6800, self.get32(0x6800) | EXI_INT);
+                sdk.raise(ctx, irq::EXI0_EXI);
+            }
+        }
+    }
+
+    /// A transfer with the card in slot A, done at once, with its transfer interrupt raised.
+    fn card_transfer(&self, ctx: &Ctx, sdk: &Rc<Sdk>, cr: u32) {
+        let Some(card) = &self.card else { return };
+        let write = (cr >> 2) & 3;
+        if cr & 2 == 0 {
+            let n = ((cr >> 4) & 3) as usize + 1;
+            let data = self.get32(EXI0_DATA).to_be_bytes();
+            if write != 0 {
+                card.write(&data[..n]);
+            }
+            if write != 1 {
+                let mut out = [0u8; 4];
+                out[..n].copy_from_slice(&card.read(n));
+                self.set32(EXI0_DATA, u32::from_be_bytes(out));
+            }
+            self.exi_done(ctx, sdk);
+            return;
+        }
+        let mar = self.get32(EXI0_MAR) & 0x03FF_FFE0;
+        let len = self.get32(EXI0_LENGTH) as usize;
+        if write == 1 {
+            let mut data = vec![0; len];
+            let _ = ctx.mem.read_bytes(0x8000_0000 | mar, &mut data);
+            card.write(&data);
+        } else {
+            let _ = ctx.dma_write(0x8000_0000 | mar, &card.read(len));
+        }
+        self.exi_done(ctx, sdk);
+    }
+
+    /// The slot A channel's transfer is done: its control register reads idle and its transfer
+    /// interrupt is raised.
+    fn exi_done(&self, ctx: &Ctx, sdk: &Rc<Sdk>) {
+        self.set32(0x680C, self.get32(0x680C) & !1);
+        self.set32(0x6800, self.get32(0x6800) | EXI_TCINT);
+        sdk.raise(ctx, irq::EXI0_TC);
     }
 
     // Write-gather pipe and GX FIFO.

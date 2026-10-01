@@ -5,8 +5,9 @@
 //!
 //! Most of the SDK runs as ordinary game code. Devices whose SDK drivers are simple register
 //! pokes (VI, DVD, the GX FIFO, ARAM and audio DMA) are emulated at the register level, and
-//! their interrupts reach the SDK's own handlers. The rest (alarms, thread sleeps, controllers,
-//! memory cards, the DSP, SRAM) is replaced at the API level.
+//! their interrupts reach the SDK's own handlers, as does a memory card in slot A when there is
+//! one. The rest (alarms, thread sleeps, controllers, the DSP, SRAM, and the memory cards when
+//! there are none) is replaced at the API level.
 //!
 //! Time is virtual. It only moves at wait points, such as a thread going to sleep or the game
 //! waiting for the next controller poll, which then jump to the next scheduled event. Events
@@ -23,6 +24,8 @@ use ssbm_disc::Disc;
 use ssbm_rt::{Ctx, MSR_EE};
 
 pub mod boot;
+mod card;
+pub use card::Card;
 mod devices;
 pub use devices::PadStatus;
 mod gp;
@@ -48,6 +51,8 @@ pub mod irq {
     pub const DSP_AI: u32 = 5;
     pub const DSP_ARAM: u32 = 6;
     pub const DSP_DSP: u32 = 7;
+    pub const EXI0_EXI: u32 = 9;
+    pub const EXI0_TC: u32 = 10;
     pub const PI_CP: u32 = 17;
     pub const PI_PE_TOKEN: u32 = 18;
     pub const PI_PE_FINISH: u32 = 19;
@@ -156,6 +161,12 @@ impl Sdk {
     /// Runs `run` `delay` ticks from now.
     pub fn after(&self, ctx: &Ctx, delay: u64, run: impl FnOnce(&Ctx) + 'static) {
         self.schedule(Self::now(ctx) + delay, run);
+    }
+
+    /// Takes back OS interrupt `n` if it is raised and not yet delivered: the device's flag
+    /// for it was cleared.
+    pub(crate) fn withdraw(&self, n: u32) {
+        self.pending.set(self.pending.get() & !(0x8000_0000 >> n));
     }
 
     /// Raises OS interrupt `n`. Its handler runs now if interrupts are enabled and it is
@@ -287,12 +298,15 @@ pub fn sym(name: &str) -> u32 {
         .unwrap_or_else(|| panic!("no symbol named {name}"))
 }
 
-/// Puts the SDK layer into `ctx`: device registers, stand-in functions and wait points.
-pub fn install(ctx: &Ctx, disc: Disc) -> Rc<Sdk> {
-    let sdk = ctx.set_ext(Sdk::new(disc));
+/// Puts the SDK layer into `ctx`: device registers, stand-in functions and wait points, and a
+/// memory card in slot A if `card` gives one.
+pub fn install(ctx: &Ctx, disc: Disc, card: Option<Card>) -> Rc<Sdk> {
+    let mut sdk = Sdk::new(disc);
+    sdk.hw.card = card;
+    let sdk = ctx.set_ext(sdk);
     ctx.set_mmio(Box::new(hw::Mmio));
-    os::install(ctx);
-    devices::install(ctx);
+    os::install(ctx, sdk.hw.card.is_some());
+    devices::install(ctx, sdk.hw.card.is_some());
     hw::install(ctx);
     // The game's own wait loops (for loads, and for the next controller poll) all call
     // lb_800195D0 on each spin.
@@ -300,6 +314,15 @@ pub fn install(ctx: &Ctx, disc: Disc) -> Rc<Sdk> {
         sym("lb_800195D0"),
         Rc::new(|ctx| Sdk::wait(ctx, GAME_WAIT_STEP)),
     );
+    // So do its waits for the memory card, which spin on hsd_803AAA48 (through
+    // lbCardNew_CompleteNextTask, inlined in some) until the card's interrupts and the CARD
+    // library's alarms have moved its tasks on.
+    if sdk.hw.card.is_some() {
+        ctx.set_hook(
+            sym("hsd_803AAA48"),
+            Rc::new(|ctx| Sdk::wait(ctx, GAME_WAIT_STEP)),
+        );
+    }
     ctx.set_interrupt_check(Rc::new(Sdk::take_interrupts));
     // Everything the SDK layer stands in for lives outside game memory.
     for addr in ctx.registered() {

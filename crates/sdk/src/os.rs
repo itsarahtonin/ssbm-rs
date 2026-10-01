@@ -32,7 +32,7 @@ const CURRENT_THREAD: u32 = 0x8000_00E4;
 const THREAD_STACK_BASE: u32 = 0x304;
 const THREAD_STACK_END: u32 = 0x308;
 
-pub(crate) fn install(ctx: &Ctx) {
+pub(crate) fn install(ctx: &Ctx, card: bool) {
     ctx.set_stack_bounds(Box::new(|ctx| {
         let thread = ctx.mem.read_u32(CURRENT_THREAD).ok().filter(|&t| t != 0)?;
         let top = ctx.mem.read_u32(thread.wrapping_add(THREAD_STACK_BASE)).ok()?;
@@ -56,7 +56,11 @@ pub(crate) fn install(ctx: &Ctx) {
     // Hardware setup inside OSInit, done by the device models instead.
     reg("__OSInitAudioSystem", |_| {});
     reg("__OSInitMemoryProtection", |_| {});
-    reg("EXIInit", |_| {});
+    // With a memory card, EXI runs as the original code, which installs its interrupt
+    // handlers.
+    if !card {
+        reg("EXIInit", |_| {});
+    }
     reg("SIInit", |_| {});
     reg("__OSInitSram", os_init_sram);
     reg("WriteSram", |ctx| ctx.regs.set_r(3, 1));

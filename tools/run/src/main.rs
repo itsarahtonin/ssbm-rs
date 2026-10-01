@@ -2,10 +2,11 @@
 
 //! Boots the game headless on original code and reports progress.
 //!
-//! `ssbm-run [disc] [--fields N] [--replay FILE] [--fp hardware|slippi]` runs for N video fields
-//! (default 600, ten seconds), playing back a Slippi replay if given. Floating point follows
-//! Slippi's Dolphin for replays and the hardware otherwise, unless `--fp` says. The disc path
-//! defaults to `SSBM_DISC`.
+//! `ssbm-run [disc] [--fields N] [--replay FILE] [--fp hardware|slippi] [--card FILE]` runs for
+//! N video fields (default 600, ten seconds), playing back a Slippi replay if given. Floating
+//! point follows Slippi's Dolphin for replays and the hardware otherwise, unless `--fp` says.
+//! `--card` puts a memory card in slot A, kept in that file. The disc path defaults to
+//! `SSBM_DISC`.
 //!
 //! A replay run checks the replay it records against the original, and fails on any divergence
 //! not listed in the `--known FILE` (one per line, as reported; `#` starts a comment).
@@ -153,6 +154,7 @@ fn run() -> ExitCode {
     let mut monkey_seed: Option<u64> = None;
     let mut match_seed: Option<u64> = None;
     let mut start_mode: Option<u32> = None;
+    let mut card_path: Option<std::path::PathBuf> = None;
     let mut args = std::env::args().skip(1);
     while let Some(a) = args.next() {
         match a.as_str() {
@@ -200,6 +202,7 @@ fn run() -> ExitCode {
                         .expect("--mode KIND (hex)"),
                 )
             }
+            "--card" => card_path = Some(args.next().expect("--card FILE").into()),
             "--fp" => {
                 fp_mode = match args.next().as_deref() {
                     Some("hardware") => Some(gekko_fp::FpMode::Hardware),
@@ -257,7 +260,13 @@ fn run() -> ExitCode {
     ctx.set_backend(Box::new(RcBackend(interp.clone())));
     ctx.set_names(Box::new(ssbm_types::describe));
     let dol = disc.main_dol().ok();
-    let sdk = ssbm_sdk::install(&ctx, disc);
+    // --card FILE puts a memory card in slot A with that file's contents, blank if there is
+    // none, and keeps what the game writes there.
+    let card = card_path.map(|p| {
+        ssbm_sdk::Card::new(Some(p.clone()))
+            .unwrap_or_else(|e| panic!("memory card {}: {e}", p.display()))
+    });
+    let sdk = ssbm_sdk::install(&ctx, disc, card);
     // STAND_INS=FILE lists the functions the SDK layer stands in for, which neither a port
     // nor the original code runs.
     if let Ok(path) = std::env::var("STAND_INS") {
