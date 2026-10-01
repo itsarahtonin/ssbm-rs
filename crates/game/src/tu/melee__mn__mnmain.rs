@@ -509,10 +509,10 @@ pub fn mn_80229F60<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>, root: HSD_JObj<'a>, selec
         ctx,
         jobj,
         fp::fadds(
+            fp::frsp(selection.wrapping_mul(((2_i32 as u32) as i32)) as f64),
             fns::mn_803EB6B0(ctx)
                 .get(((flow).cur_menu() as i32))
                 .start_frame(),
-            fp::frsp(selection.wrapping_mul(((2_i32 as u32) as i32)) as f64),
         ),
     );
     fns::mn_8022F3D8(ctx, jobj, (12_i32 as u8), (enums::TOBJ_MASK as i32));
@@ -627,10 +627,10 @@ pub fn mn_8022A440<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>, root: HSD_JObj<'a>, selec
         ctx,
         r29,
         fp::fadds(
+            fp::frsp(selection.wrapping_mul(((2_i32 as u32) as i32)) as f64),
             fns::mn_803EB6B0(ctx)
                 .get(((flow).cur_menu() as i32))
                 .start_frame(),
-            fp::frsp(selection.wrapping_mul(((2_i32 as u32) as i32)) as f64),
         ),
     );
     fns::mn_8022F3D8(ctx, r29, (12_i32 as u8), (enums::TOBJ_MASK as i32));
@@ -2701,10 +2701,10 @@ pub fn mn_8022B3A0<'a>(ctx: &'a Ctx, state: u8) -> HSD_GObj<'a> {
                         let __t2 = {
                             let __t1 = fp::frsp(inl_GetSelectionFrameOffset_unfused(ctx, i) as f64);
                             fp::fadds(
+                                __t1,
                                 fns::mn_803EB6B0(ctx)
                                     .get((fns::mn_804A04F0(ctx).cur_menu() as i32))
                                     .start_frame(),
-                                __t1,
                             )
                         };
                         fns::HSD_JObjReqAnim(ctx, jobj.value(), __t2)

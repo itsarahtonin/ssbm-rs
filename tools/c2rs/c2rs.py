@@ -2595,7 +2595,7 @@ class Translator:
             return 0 if r is not None and r.kind in (CK.ENUM_CONSTANT_DECL, CK.FUNCTION_DECL) else 1
         if k in (CK.MEMBER_REF_EXPR, CK.ARRAY_SUBSCRIPT_EXPR):
             inner = max((self.weight(x, depth) for x in children(n)), default=0)
-            return inner if inner >= self.CALL_WEIGHT else 1
+            return inner if inner >= self.CALL_WEIGHT else self.access_weight(n)
         if k == CK.CSTYLE_CAST_EXPR:
             return self.weight(children(n)[-1], depth)
         if k == CK.UNARY_OPERATOR:
@@ -2615,6 +2615,53 @@ class Translator:
                 return 1 if ret is None or depth > 8 else self.weight(ret, depth + 1)
             return self.CALL_WEIGHT
         return 1
+
+    def access_weight(self, n):
+        """MWCC's weight for a load from memory: 2 where the first index into its address that
+        isn't constant indexes an array that starts where its base points, as a[i], m[0][c],
+        m[c][1], s->first[i] and p[i].x do; 1 where that array starts past it, as m[1][c],
+        s->rest[i] and s->inner[i].u do, or where no index varies. Measured on MWCC with
+        random expressions of such loads."""
+        def walk(x):
+            # (where the array of the first index that varies starts, past the base; x's own
+            # constant offset from its base)
+            x = strip(x)
+            if x.kind == CK.ARRAY_SUBSCRIPT_EXPR and len(children(x)) == 2:
+                base, index = children(x)
+                if strip(base).type.get_canonical().kind in (TK.CONSTANTARRAY, TK.INCOMPLETEARRAY):
+                    first, off = walk(base)
+                else:
+                    first, off = pointer(base), 0
+                if not is_constant(index):
+                    return (off if first is None else first), 0
+                return first, off + int(evaluate(index)) * max(x.type.get_size(), 0)
+            if x.kind == CK.MEMBER_REF_EXPR and children(x):
+                base = children(x)[0]
+                field = x.referenced
+                off = max(field.get_field_offsetof(), 0) // 8 if field is not None else 0
+                if strip(base).type.get_canonical().kind == TK.POINTER:
+                    return pointer(base), off
+                first, at = walk(base)
+                return first, at + off
+            if x.kind == CK.UNARY_OPERATOR and children(x) and \
+                    UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(x)) == "*":
+                return pointer(children(x)[0]), 0
+            return None, 0
+
+        def pointer(v):
+            # Where an index varies first in computing pointer value v.
+            v = strip(v)
+            while v.kind == CK.CSTYLE_CAST_EXPR and children(v):
+                v = strip(children(v)[-1])
+            if v.kind in (CK.ARRAY_SUBSCRIPT_EXPR, CK.MEMBER_REF_EXPR, CK.UNARY_OPERATOR):
+                return walk(v)[0]
+            if v.kind == CK.BINARY_OPERATOR and BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(v)) in ("+", "-") \
+                    and not all(is_constant(y) or strip(y).type.get_canonical().kind == TK.POINTER
+                                for y in children(v)):
+                return 0
+            return None
+
+        return 2 if walk(n)[0] == 0 else 1
 
     def folded_constant(self, n):
         """Whether n names a header constant MWCC folds into its uses."""

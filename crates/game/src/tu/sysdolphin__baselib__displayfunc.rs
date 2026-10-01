@@ -995,12 +995,12 @@ fn inl_HSD_MtxColMag<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, col: i32) -> f64 {
             )),
             fp::fadds(
                 (fp::fmuls(
-                    (Handle::add(mtx, 0_i32)).at(col).get(),
-                    (Handle::add(mtx, 0_i32)).at(col).get(),
+                    (Handle::add(mtx, 1_i32)).at(col).get(),
+                    (Handle::add(mtx, 1_i32)).at(col).get(),
                 )),
                 (fp::fmuls(
-                    (Handle::add(mtx, 1_i32)).at(col).get(),
-                    (Handle::add(mtx, 1_i32)).at(col).get(),
+                    (Handle::add(mtx, 0_i32)).at(col).get(),
+                    (Handle::add(mtx, 0_i32)).at(col).get(),
                 )),
             ),
         ),
@@ -1028,12 +1028,12 @@ fn inl_HSD_MtxColMag_unfused<'a>(ctx: &'a Ctx, mtx: ArrV<'a, F32, 4>, col: i32) 
             )),
             fp::fadds(
                 (fp::fmuls(
-                    (Handle::add(mtx, 0_i32)).at(col).get(),
-                    (Handle::add(mtx, 0_i32)).at(col).get(),
+                    (Handle::add(mtx, 1_i32)).at(col).get(),
+                    (Handle::add(mtx, 1_i32)).at(col).get(),
                 )),
                 (fp::fmuls(
-                    (Handle::add(mtx, 1_i32)).at(col).get(),
-                    (Handle::add(mtx, 1_i32)).at(col).get(),
+                    (Handle::add(mtx, 0_i32)).at(col).get(),
+                    (Handle::add(mtx, 0_i32)).at(col).get(),
                 )),
             ),
         )),),

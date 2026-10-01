@@ -82,10 +82,10 @@ pub fn sinf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         return fp::fmadds(
             ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9378).at(9_i32).get(),
             fp::fmuls(
+                y,
                 ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9358)
                     .at(n.wrapping_add(1_i32))
                     .get(),
-                y,
             ),
             ptr::<ArrV<'a, F32, 0>>(ctx, 0x803b9358).at(n).get(),
         );

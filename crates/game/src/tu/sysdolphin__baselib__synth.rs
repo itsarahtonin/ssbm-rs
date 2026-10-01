@@ -1726,18 +1726,18 @@ pub fn HSD_SynthSFXVolumeEnvelope<'a>(ctx: &'a Ctx) -> i32 {
                         'c6: {
                             if ((node).user_vol().get(k).x4_ref()).get() != 0_i32 {
                                 let mut c: i32 = (node).user_vol().get(k).x4();
-                                let __t1 = fp::fadds(
+                                let __t2 = fp::fadds(
                                     fp::fdivs(
-                                        (fp::fmuls(
-                                            (Handle::add(
+                                        ({
+                                            let __t1 = (Handle::add(
                                                 ((node).user_vol().get(k).volume_ref()),
                                                 inl_user_vol_src_offset_unfused(ctx, k)
                                                     .wrapping_sub(k.wrapping_mul(3_i32))
                                                     .wrapping_sub(1_i32),
                                             ))
-                                            .get(),
-                                            (fp::fsubs(fp::frsp(c as f64), 1.0)),
-                                        )),
+                                            .get();
+                                            fp::fmuls((fp::fsubs(fp::frsp(c as f64), 1.0)), __t1)
+                                        }),
                                         fp::frsp(c as f64),
                                     ),
                                     fp::fdivs(
@@ -1751,7 +1751,7 @@ pub fn HSD_SynthSFXVolumeEnvelope<'a>(ctx: &'a Ctx) -> i32 {
                                         .wrapping_sub(k.wrapping_mul(3_i32))
                                         .wrapping_sub(1_i32),
                                 ))
-                                .set(__t1);
+                                .set(__t2);
                                 (node)
                                     .user_vol()
                                     .get(k)
