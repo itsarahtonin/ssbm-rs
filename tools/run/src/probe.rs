@@ -223,11 +223,13 @@ fn int(rng: &Rng) -> u32 {
     }
 }
 
-/// A float argument: mostly one of a few round values, otherwise any up to a hundred.
+/// A float argument: mostly one of a few round values, otherwise any up to a hundred, or a
+/// value at an edge of the format: negative zero, infinities, a NaN, a denormal, a huge one.
 fn float(rng: &Rng) -> f32 {
-    match rng.below(8) {
+    match rng.below(10) {
         0..=5 => [0.0, 1.0, -1.0, 0.5, 2.0, 10.0][rng.below(6) as usize],
-        _ => (rng.below(20_001) as f32 - 10_000.0) / 100.0,
+        6 | 7 => (rng.below(20_001) as f32 - 10_000.0) / 100.0,
+        _ => [-0.0, f32::INFINITY, f32::NEG_INFINITY, f32::NAN, 1e-40, -3e38][rng.below(6) as usize],
     }
 }
 
