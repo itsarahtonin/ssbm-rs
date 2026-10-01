@@ -691,9 +691,9 @@ pub fn ftKb_SpecialN_800EF0E4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, a
     let jobj: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
     let total_dobjs: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
     let insert_part_idx: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let arg2_idx: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let byte_base: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x10);
+    let arg2_idx: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
+    let byte_base: Val<'a, i32> = frame_at(ctx, &__frame, 0x10);
+    let __inl: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x28);
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -879,7 +879,7 @@ pub fn ftKb_SpecialN_800EF438<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, hat: KirbyHa
     let total_dobjs: Val<'a, i32> = frame_at(ctx, &__frame, 0x4);
     let insert_part_idx: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
     let unused: ArrV<'a, u8, 4> = frame_at(ctx, &__frame, 0x8);
-    let byte_base: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
+    let byte_base: Val<'a, i32> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
     let mut hat = hat;
     let mut jobj: HSD_JObj<'a> = null(ctx);

@@ -1442,7 +1442,7 @@ pub fn mnNameNew_GlyphVariantSetup<'a>(
     let variant_count: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
     let position: Vec<'a> = frame_at(ctx, &__frame, 0x30);
     let offset: Vec<'a> = frame_at(ctx, &__frame, 0x24);
-    let created: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x0);
+    let created: Ptr<'a, HSD_JObj<'a>> = frame_at(ctx, &__frame, 0x4);
     let mut arg0 = arg0;
     let mut arg1 = arg1;
     let mut arg2 = arg2;

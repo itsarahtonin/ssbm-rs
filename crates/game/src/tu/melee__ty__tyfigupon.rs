@@ -1321,9 +1321,9 @@ pub fn _tyFigupon_80316C24<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
 pub fn _tyFigupon_8031753C<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x60);
     let remaining: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let panel: _tyFigupon_8031753C_panel<'a> = frame_at(ctx, &__frame, 0x10);
-    let _padA: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x14);
-    let digits_s: TyFiguponDigitInit<'a> = frame_at(ctx, &__frame, 0x0);
+    let panel: _tyFigupon_8031753C_panel<'a> = frame_at(ctx, &__frame, 0x4);
+    let _padA: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x8);
+    let digits_s: TyFiguponDigitInit<'a> = frame_at(ctx, &__frame, 0x18);
     let mut count: i32 = 0;
     let mut joint: HSD_Joint<'a> = null(ctx);
     let mut bet_joint: HSD_Joint<'a> = null(ctx);

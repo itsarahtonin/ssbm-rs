@@ -973,16 +973,24 @@ class Translator:
         """Each frame slot's offset past the outgoing arguments: a local the original's frame
         holds at its own offset there, the rest in order after the bytes the frame keeps at
         its start, each at the first place it fits around those, so the frame grows past the
-        original's no more than it must."""
-        fixed = [(at - 8 - out, at - 8 - out + size) for _, _, size, _, at in self.f.frame if at is not None]
+        original's no more than it must. Locals the original keeps in registers can share a
+        spill slot in its debug info, but not in the port's frame: only the first keeps it."""
+        fixed, places = [], {}
+        for i, (_, _, size, _, at) in enumerate(self.f.frame):
+            if at is None:
+                continue
+            lo, hi = at - 8 - out, at - 8 - out + size
+            if not any(lo < b and a < hi for a, b in fixed):
+                fixed.append((lo, hi))
+                places[i] = lo
         if any(lo < self.f.frame_size for lo, _ in fixed):
             # In the port's outgoing arguments or kept bytes: the original's layout does not fit.
-            fixed = []
+            fixed, places = [], {}
         taken = list(fixed)
         offsets = []
-        for _, _, size, align, at in self.f.frame:
-            if at is not None and fixed:
-                offsets.append(at - 8 - out)
+        for i, (_, _, size, align, at) in enumerate(self.f.frame):
+            if i in places:
+                offsets.append(places[i])
                 continue
             off = (self.f.frame_size + align - 1) & ~(align - 1)
             while True:
