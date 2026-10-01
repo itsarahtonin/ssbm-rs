@@ -36,11 +36,15 @@ pub fn symbol_at(addr: u32) -> Option<(u32, &'static str)> {
     (addr < start + size.max(1)).then_some((start, name))
 }
 
-/// The function starting at `addr`, as `[start, end)`.
+/// The function starting at `addr`, as `[start, end)`. A label may start there too, such as
+/// `__RAS_OSDisableInterrupts_begin`.
 pub fn function_bounds(addr: u32) -> Option<(u32, u32)> {
     let i = symbols::SYMBOLS.partition_point(|s| s.0 < addr);
-    let &(start, size, _, function) = symbols::SYMBOLS.get(i)?;
-    (start == addr && function && size > 0).then_some((start, start + size))
+    symbols::SYMBOLS[i..]
+        .iter()
+        .take_while(|s| s.0 == addr)
+        .find(|s| s.3 && s.1 > 0)
+        .map(|s| (s.0, s.0 + s.1))
 }
 
 /// Start addresses of the functions that overlap `[addr, addr + len)`.
@@ -72,4 +76,16 @@ pub mod prelude {
     pub use crate::records::*;
     pub use gekko_fp::*;
     pub use ssbm_rt::*;
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn finds_a_function_that_starts_with_a_label() {
+        // `__RAS_OSDisableInterrupts_begin` labels OSDisableInterrupts's first instruction.
+        assert_eq!(
+            super::function_bounds(0x8034_7364),
+            Some((0x8034_7364, 0x8034_7378))
+        );
+    }
 }
