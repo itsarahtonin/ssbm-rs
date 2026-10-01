@@ -391,6 +391,21 @@ fn run() -> ExitCode {
             });
         }
     }
+    // DVD_COVER=F,G opens the disc cover at field F and closes it at G; DVD_FATAL=F fails the
+    // first data read after field F with an error the DVD driver can't recover from.
+    if let Ok(when) = std::env::var("DVD_COVER") {
+        let fields = when.split(',').filter_map(|f| f.trim().parse::<u64>().ok());
+        for (field, open) in fields.zip([true, false]) {
+            sdk.schedule(hw::field_start(field), move |ctx| {
+                ctx.ext::<Sdk>().hw.set_dvd_cover(ctx, open);
+            });
+        }
+    }
+    if let Some(field) = std::env::var("DVD_FATAL").ok().and_then(|v| v.parse().ok()) {
+        sdk.schedule(hw::field_start(field), |ctx| {
+            ctx.ext::<Sdk>().hw.fail_next_dvd_read(0x0002_0400);
+        });
+    }
     // UNLOCK_ALL=1 unlocks every character, stage and trophy once the main menu comes up.
     if std::env::var_os("UNLOCK_ALL").is_some() {
         matches::install_unlocks(&ctx);

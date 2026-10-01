@@ -6,8 +6,9 @@
 //! pipe), and EXI with the memory card in slot A when there is one. Other EXI transfers finish
 //! as they start, with no device answering: Slippi's device, and the memory cards when there
 //! are none, are stood in for above the registers. Registers without a model keep the last
-//! value written. `DVD_RETRY=N` makes one data read in N fail once, as on a scratched disc, and
-//! the memory card can be pulled out and put back.
+//! value written. `DVD_RETRY=N` makes one data read in N fail once, as on a scratched disc; a
+//! read can fail for good, the disc cover open and close, and the memory card come out and go
+//! back in.
 
 use std::cell::{Cell, RefCell};
 use std::rc::Rc;
@@ -138,6 +139,10 @@ pub struct Hw {
     dvd_reads: Cell<u32>,
     /// The error the drive reports when next asked.
     dvd_error: Cell<u32>,
+    /// An error the next data read fails with, as `fail_next_dvd_read` sets it.
+    dvd_fail_next: Cell<Option<u32>>,
+    /// Whether the disc cover is open: DICVR's low bit, which writes don't change.
+    dvd_cover_open: Cell<bool>,
 }
 
 impl Default for Hw {
@@ -161,6 +166,8 @@ impl Default for Hw {
                 .unwrap_or(0),
             dvd_reads: Cell::new(0),
             dvd_error: Cell::new(0),
+            dvd_fail_next: Cell::new(None),
+            dvd_cover_open: Cell::new(false),
         };
         hw.set32(PI_FLIPPER_REV, 0x2465_00B1);
         hw
@@ -219,6 +226,7 @@ impl Hw {
             (AR_MODE, 2) => u32::from(self.get16(off)) | 1, // ARAM ready
             (AI_SCNT, 4) => self.ais_count(ctx),
             // A card in slot A is attached.
+            (DI_CVR, 4) => (self.get32(off) & !1) | u32::from(self.dvd_cover_open.get()),
             (0x6800, 4) if self.card.is_some() && self.card_present.get() => {
                 self.get32(off) | EXI_EXT
             }
@@ -509,20 +517,31 @@ impl Hw {
                 hw.set32(DI_MAR, mar + data.len() as u32);
                 hw.set32(DI_LENGTH, 0);
             };
-            if cmd[0] >> 24 == 0xA8 && cmd[0] & 0xFF != 0x40 && hw.dvd_retry != 0 {
+            let data_read = cmd[0] >> 24 == 0xA8 && cmd[0] & 0xFF != 0x40;
+            let error = if hw.dvd_cover_open.get() && !matches!(cmd[0] >> 24, 0xE0 | 0xE3) {
+                // With the cover open, the drive takes nothing but requests for its error and
+                // to stop its motor.
+                Some(0x0102_3A00)
+            } else if data_read && let Some(error) = hw.dvd_fail_next.take() {
+                Some(error)
+            } else if data_read && hw.dvd_retry != 0 {
                 let n = hw.dvd_reads.get() + 1;
                 hw.dvd_reads.set(n);
-                if n % hw.dvd_retry == 0 {
-                    // An unrecovered read error, which the driver asks for and retries.
-                    hw.dvd_error.set(0x0003_0200);
-                    hw.set32(DI_CR, hw.get32(DI_CR) & !1);
-                    let sr = hw.get32(DI_SR) | 0x04;
-                    hw.set32(DI_SR, sr);
-                    if sr & 0x02 != 0 {
-                        sdk.raise(ctx, irq::PI_DI);
-                    }
-                    return;
+                // An unrecovered read error, which the driver asks for and retries.
+                (n % hw.dvd_retry == 0).then_some(0x0003_0200)
+            } else {
+                None
+            };
+            if let Some(error) = error {
+                // The command ends with a device error, which the driver then asks for.
+                hw.dvd_error.set(error);
+                hw.set32(DI_CR, hw.get32(DI_CR) & !1);
+                let sr = hw.get32(DI_SR) | 0x04;
+                hw.set32(DI_SR, sr);
+                if sr & 0x02 != 0 {
+                    sdk.raise(ctx, irq::PI_DI);
                 }
+                return;
             }
             match cmd[0] >> 24 {
                 0xA8 => {
@@ -553,6 +572,26 @@ impl Hw {
                 sdk.raise(ctx, irq::PI_DI);
             }
         });
+    }
+
+    /// Opens or closes the disc cover. The cover's state is DICVR's low bit, and a change raises
+    /// the DVD interface's interrupt when the driver waits for one, as it does once a command
+    /// found the cover open.
+    pub fn set_dvd_cover(&self, ctx: &Ctx, open: bool) {
+        if self.dvd_cover_open.replace(open) == open {
+            return;
+        }
+        let cvr = self.get32(DI_CVR) | 4;
+        self.set32(DI_CVR, cvr);
+        if cvr & 2 != 0 {
+            ctx.ext::<Sdk>().raise(ctx, irq::PI_DI);
+        }
+    }
+
+    /// Fails the next data read with `error`, as a drive that can't go on reports: 0x00020400
+    /// is one the driver treats as fatal.
+    pub fn fail_next_dvd_read(&self, error: u32) {
+        self.dvd_fail_next.set(Some(error));
     }
 
     // ARAM and audio DMA.
