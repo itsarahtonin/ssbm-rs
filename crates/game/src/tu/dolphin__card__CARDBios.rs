@@ -138,6 +138,7 @@ pub fn __CARDTxHandler<'a>(ctx: &'a Ctx, chan: i32, context: OSContext<'a>) {
     let mut err: i32 = 0;
     card = fns::__CARDBlock(ctx).get(chan);
     err = (!(fns::EXIDeselect(ctx, chan) != 0) as i32);
+    let _ = (!(fns::EXIUnlock(ctx, chan) != 0) as i32);
     callback = (card).txCallback();
     if !Handle::is_null(callback) {
         (card).set_txCallback(null::<FnPtr<'a>>(ctx));

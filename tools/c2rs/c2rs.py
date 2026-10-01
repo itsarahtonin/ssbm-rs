@@ -2230,7 +2230,7 @@ class Translator:
                 return Expr("{ " + f"let {tmp} = {lv.read()}; " + " ".join(stmts) + f" {tmp} }}", lv.ty, False)
             return self.stmt_expr(stmts, Expr(lv.read(), lv.ty, False))
         if op == "!":
-            return Expr(f"(!({self.cond(kid)}) as i32)", INT, True)
+            return Expr(f"(!({self.cond(kid)}) as i32)", INT, not calls_or_effects(kid))
         if op == "-":
             v = self.convert(self.expr(kid), t)
             if is_float(t):
@@ -2268,9 +2268,9 @@ class Translator:
             return self.stmt_expr(self.effect(a), self.expr(b))
         if op in ("&&", "||"):
             rop = "&&" if op == "&&" else "||"
-            return Expr(f"(({self.cond(a)}) {rop} ({self.cond(b)})) as i32", INT, True)
+            return Expr(f"(({self.cond(a)}) {rop} ({self.cond(b)})) as i32", INT, not calls_or_effects(c))
         if op in ("<", ">", "<=", ">=", "==", "!="):
-            return Expr(f"({self.compare(op, a, b)}) as i32", INT, True)
+            return Expr(f"({self.compare(op, a, b)}) as i32", INT, not calls_or_effects(c))
         if is_int(t) and op in ARITH_OPS:
             t = self.enum_type(c) or t
         if op in ("<<", ">>", "/", "%") and is_int(t) and int_info(t)[0] == 8 and is_constant(c):
