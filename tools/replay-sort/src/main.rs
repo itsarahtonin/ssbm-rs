@@ -4,6 +4,8 @@
 //!
 //! Indexes Slippi replays by what the replay oracle must reproduce (platform, controller fixes,
 //! frozen Stadium, Gecko code set) and picks a diverse smoke set from the most common profile.
+//! Replays from modded games, which name characters or stages vanilla Melee lacks, are left out:
+//! the disc can't play them back.
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs::{self, File};
@@ -34,6 +36,8 @@ struct Entry {
     humans: usize,
     teams: bool,
     frames: i64,
+    /// Names a character or stage vanilla Melee lacks.
+    modded: bool,
 }
 
 fn main() -> ExitCode {
@@ -73,9 +77,10 @@ fn run() -> Result<(), String> {
     paths.sort();
 
     let mut entries = Vec::new();
-    let mut unreadable = 0;
+    let (mut unreadable, mut modded) = (0, 0);
     for path in paths {
         match read_entry(&path) {
+            Ok(entry) if entry.modded => modded += 1,
             Ok(entry) => entries.push(entry),
             Err(err) => {
                 eprintln!("skipping {}: {err}", path.display());
@@ -90,7 +95,14 @@ fn run() -> Result<(), String> {
     write_smoke_set(&out.join("smoke-set.txt"), profile.as_ref(), &chosen)
         .map_err(|e| format!("writing smoke set: {e}"))?;
 
-    print_summary(&entries, unreadable, profile.as_ref(), chosen.len(), &out);
+    print_summary(
+        &entries,
+        unreadable,
+        modded,
+        profile.as_ref(),
+        chosen.len(),
+        &out,
+    );
     Ok(())
 }
 
@@ -189,6 +201,11 @@ fn entry_from_game(path: &Path, game: &Game) -> Entry {
             .count(),
         teams: start.is_teams,
         frames,
+        modded: Stage::try_from(start.stage).is_err()
+            || start
+                .players
+                .iter()
+                .any(|p| External::try_from(p.character).is_err()),
     }
 }
 
@@ -344,11 +361,15 @@ fn write_smoke_set(
 fn print_summary(
     entries: &[Entry],
     unreadable: usize,
+    modded: usize,
     profile: Option<&Profile>,
     chosen: usize,
     out: &Path,
 ) {
-    println!("{} replays indexed, {unreadable} unreadable", entries.len());
+    println!(
+        "{} replays indexed, {unreadable} unreadable, {modded} from modded games left out",
+        entries.len()
+    );
     let tally = |label: &str, key: &dyn Fn(&Entry) -> String| {
         let mut counts: BTreeMap<String, usize> = BTreeMap::new();
         for e in entries {
