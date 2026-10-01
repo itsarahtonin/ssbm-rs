@@ -297,6 +297,10 @@ fn run() -> ExitCode {
     if std::env::var_os("CPU_PLAYERS").is_some() {
         matches::install_cpu_players(&ctx);
     }
+    // GAME_LANGUAGE=jp runs the game in Japanese.
+    if std::env::var("GAME_LANGUAGE").is_ok_and(|v| v == "jp") {
+        matches::install_japanese(&ctx);
+    }
     // EVENT=N makes the Event mode start at event match N (from 0).
     if let Some(n) = std::env::var("EVENT").ok().and_then(|v| v.parse().ok()) {
         matches::install_event(&ctx, n);

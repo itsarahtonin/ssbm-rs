@@ -81,6 +81,18 @@ pub fn install_event(ctx: &Ctx, n: u8) {
     );
 }
 
+/// Makes the game Japanese, as on a disc without `/usa.ini`: the language it shows, and the one
+/// its save data's preferences start with, which the code that resets them takes from it.
+pub fn install_japanese(ctx: &Ctx) {
+    ctx.set_hook(
+        ssbm_sdk::sym("gmMainLib_8015F600"),
+        Rc::new(|ctx| {
+            let game = gmm_x0(At::new(ctx, ctx.read_u32(ssbm_sdk::sym("gmMainLib_804D3EE0"))));
+            game.set_language(0);
+        }),
+    );
+}
+
 /// Makes every match's human players level 9 CPUs, so the modes that end when the player
 /// loses go on further than random play takes them.
 pub fn install_cpu_players(ctx: &Ctx) {
