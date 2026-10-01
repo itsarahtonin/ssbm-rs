@@ -77,6 +77,8 @@ pub enum Diff {
 struct CallTrace {
     depth: u32,
     port_side: bool,
+    /// Whether calls at every depth count, not only the function's own.
+    deep: bool,
     original: Vec<(u32, [u32; 4])>,
     port: Vec<(u32, [u32; 4])>,
 }
@@ -145,6 +147,8 @@ struct Interaction {
     tb: u64,
     /// r1 when it happened: what a callee or interrupt handler wrote below it is dead stack.
     sp: u32,
+    /// The original's return address then, which names where it happened.
+    lr: u32,
 }
 
 #[derive(Default)]
@@ -171,6 +175,12 @@ pub struct State {
     /// Whether each check records the calls its function makes, to name the first that
     /// differs when it mismatches.
     pub trace_calls: Cell<bool>,
+    /// A function whose checks trace calls at every depth.
+    pub trace_deep: Cell<Option<u32>>,
+    /// Whether a mismatch reports what differed in its first look, without the second.
+    pub first_look_only: Cell<bool>,
+    /// Whether a side that departs from the original's interactions prints those around it.
+    pub trace_log: Cell<bool>,
     traces: RefCell<Vec<CallTrace>>,
     /// Whether a check is taking its second look at a mismatch, when the ports its port calls
     /// run unchecked: their own checks already ran.
@@ -193,7 +203,9 @@ impl State {
         let at = traces.len().checked_sub(1)?;
         let t = &mut traces[at];
         t.depth += 1;
-        if t.depth == 1 {
+        if t.depth == 1 || t.deep {
+            // Deeper calls are told apart by their depth, in the address's low bits.
+            let addr = if t.deep { addr | (t.depth - 1).min(3) } else { addr };
             if t.port_side {
                 t.port.push((addr, args));
             } else {
@@ -275,8 +287,14 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     }
     state.checking.borrow_mut().push(addr);
     let traced = state.trace_calls.get();
+    // A check of the function `trace_deep` names traces every call it makes at any depth, with
+    // the port's callees running unchecked, and prints both sides' lists.
+    let deep = traced && state.trace_deep.get() == Some(addr);
     if traced {
-        state.traces.borrow_mut().push(CallTrace::default());
+        state.traces.borrow_mut().push(CallTrace {
+            deep,
+            ..CallTrace::default()
+        });
     }
     let regs0 = ctx.regs.snapshot();
     let sp = regs0.gpr[1];
@@ -323,8 +341,10 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         t.port_side = true;
         t.depth = 0;
     }
+    // The port runs on the stack the original found, whose frames it lays out as the original
+    // does: what either reads of it before writing it is the same.
     ctx.mem.begin_journal();
-    clear_stack(ctx, sp);
+    let rechecking = state.rechecking.replace(state.rechecking.get() || deep);
     let mut port = passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_native(addr, native))))
         .map(|p| {
             if let Some(j) = crate::jump::describe(p.as_ref()) {
@@ -340,6 +360,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
             format!("{} (in {})", panic_text(p.as_ref()), inner.join(" < "))
         });
     ctx.truncate_natives(natives);
+    state.rechecking.set(rechecking);
     let port_resume = ctx.take_resume_at();
     let j2 = ctx.mem.end_journal();
     let regs2 = ctx.regs.snapshot();
@@ -375,7 +396,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     // leftovers the port cannot reproduce. Otherwise they differ given the same stack, and the
     // differences are those of this second look.
     let mut uninitialized = false;
-    if !diffs.is_empty() && original.is_none() {
+    if !diffs.is_empty() && original.is_none() && !state.first_look_only.get() {
         let zero = ctx.zero_frames.replace(true);
         let rechecking = state.rechecking.replace(true);
         ctx.mem.restore(&j2);
@@ -440,6 +461,18 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     }
 
     if traced && let Some(t) = state.traces.borrow_mut().pop() {
+        if t.deep {
+            let show = |c: Option<&(u32, [u32; 4])>| {
+                c.map(|&(a, x)| {
+                    format!("{}{} {:08X?}", "  ".repeat((a & 3) as usize), ctx.name_of(a & !3), x)
+                })
+                .unwrap_or_default()
+            };
+            eprintln!("{} call trace, original | port:", ctx.name_of(addr));
+            for i in 0..t.original.len().max(t.port.len()) {
+                eprintln!("  {i:4} {:70} | {}", show(t.original.get(i)), show(t.port.get(i)));
+            }
+        }
         if !diffs.is_empty() {
             let n = t.original.len().max(t.port.len());
             let arity = state.arity.borrow();
@@ -568,6 +601,7 @@ fn interact(ctx: &Ctx, kind: Kind, f: impl FnOnce() -> u32) -> u32 {
         Phase::Original if state.depth.get() == 0 => {
             state.depth.set(1);
             let sp = ctx.regs.r(1);
+            let lr = ctx.regs.lr.get();
             ctx.mem.begin_log();
             let result = catch_unwind(AssertUnwindSafe(f));
             let writes = ctx.mem.end_log();
@@ -586,6 +620,7 @@ fn interact(ctx: &Ctx, kind: Kind, f: impl FnOnce() -> u32) -> u32 {
                 cr: regs.cr.get(),
                 tb: regs.tb.get(),
                 sp,
+                lr,
             });
             value
         }
@@ -617,6 +652,17 @@ fn interact(ctx: &Ctx, kind: Kind, f: impl FnOnce() -> u32) -> u32 {
                 }
                 other => {
                     let other = other.map(|x| x.kind);
+                    if state.trace_log.get() {
+                        // The interactions around it, with where the original made them.
+                        for (i, x) in log.iter().enumerate().take(at + 4).skip(at.saturating_sub(12)) {
+                            let mark = if i == at { ">" } else { " " };
+                            eprintln!(
+                                "  {mark} {i}: {} (LR {})",
+                                describe(ctx, x.kind),
+                                ctx.name_of(x.lr)
+                            );
+                        }
+                    }
                     drop(log);
                     panic_any(Diverged(format!(
                         "the port made a {} where the original made {}",

@@ -495,6 +495,21 @@ fn run() -> ExitCode {
         ctx.lockstep
             .trace_calls
             .set(std::env::var_os("LOCKSTEP_TRACE_CALLS").is_some());
+        // LOCKSTEP_TRACE_LOG=1 prints, where a side departs from the original's interactions
+        // with the rest of the system, the interactions around it.
+        ctx.lockstep
+            .trace_log
+            .set(std::env::var_os("LOCKSTEP_TRACE_LOG").is_some());
+        // LOCKSTEP_TRACE_DEEP=NAME prints the calls a check of that function makes at every
+        // depth on both sides, with the port's callees unchecked (needs LOCKSTEP_TRACE_CALLS).
+        if let Ok(name) = std::env::var("LOCKSTEP_TRACE_DEEP") {
+            ctx.lockstep.trace_deep.set(Some(ssbm_sdk::sym(&name)));
+        }
+        // LOCKSTEP_FIRST=1 reports a mismatch as its first look found it, without looking
+        // again on zeroed frames.
+        ctx.lockstep
+            .first_look_only
+            .set(std::env::var_os("LOCKSTEP_FIRST").is_some());
         if let Some(n) = std::env::var("LOCKSTEP_CALLS").ok().and_then(|v| v.parse().ok()) {
             ctx.lockstep.calls_per_function.set(Some(n));
         }
