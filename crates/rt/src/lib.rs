@@ -851,6 +851,11 @@ impl Ctx {
     }
 
     fn invoke_traced(&self, addr: u32) {
+        if self.lockstep.is_mutating() && self.lockstep.noreturn.borrow().contains(&addr) {
+            // Its inputs fail an assertion, whose handlers save the CPU's registers, which
+            // ports keep elsewhere, and never return.
+            std::panic::panic_any(lockstep::Runaway);
+        }
         if let Some((r3, f1)) = self.lockstep.stubbed(addr) {
             // Stood in for by a mutated check, on both its sides alike.
             self.regs.set_r(3, r3);

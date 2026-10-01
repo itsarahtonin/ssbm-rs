@@ -43,9 +43,8 @@ pub(crate) fn install(ctx: &Ctx, card: bool) {
     reg("OSReport", os_report);
     reg("OSPanic", os_panic);
     reg("OSResetSystem", os_reset_system);
-    let mut noreturn = ctx.lockstep.noreturn.borrow_mut();
-    noreturn.extend([sym("OSPanic"), sym("OSResetSystem")]);
-    drop(noreturn);
+    let noreturn = ["OSPanic", "OSResetSystem", "__assert", "HSD_Panic"].map(sym);
+    ctx.lockstep.noreturn.borrow_mut().extend(noreturn);
 
     reg("OSInitAlarm", |_| {});
     reg("OSSetAlarm", os_set_alarm);
