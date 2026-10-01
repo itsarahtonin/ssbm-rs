@@ -2025,7 +2025,7 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(hsd_8039D1EC(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int16,
     );
     ctx.register_port(
         0x8039d214,

@@ -25577,7 +25577,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (_THPFileInfo<'_>,) = Args::take_all(ctx);
             Ret::put(THPDec_80330158(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x803302ec,
@@ -25593,7 +25593,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (_THPFileInfo<'_>,) = Args::take_all(ctx);
             Ret::put(__THPReadFrameHeader(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x803305cc,
@@ -25601,7 +25601,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (_THPFileInfo<'_>,) = Args::take_all(ctx);
             Ret::put(__THPReadQuantizationTable(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80330970,
@@ -25609,7 +25609,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (_THPFileInfo<'_>,) = Args::take_all(ctx);
             Ret::put(__THPReadHuffmanTableSpecification(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80330b40,
@@ -25617,7 +25617,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (_THPFileInfo<'_>,) = Args::take_all(ctx);
             Ret::put(__THPReadScaneHeader(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80330c98,
@@ -25625,7 +25625,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2): (_THPFileInfo<'_>, u8, i32) = Args::take_all(ctx);
             Ret::put(__THPHuffGenerateSizeTable(ctx, a0, a1, a2), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80330e30,
@@ -25633,7 +25633,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1): (_THPFileInfo<'_>, u8) = Args::take_all(ctx);
             Ret::put(__THPHuffGenerateCodeTable(ctx, a0, a1), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80330f10,
@@ -25649,7 +25649,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (_THPFileInfo<'_>,) = Args::take_all(ctx);
             Ret::put(THPDec_803310CC(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x803312f4,
@@ -25657,7 +25657,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (_THPFileInfo<'_>,) = Args::take_all(ctx);
             Ret::put(__THPRestartDefinition(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80331340,

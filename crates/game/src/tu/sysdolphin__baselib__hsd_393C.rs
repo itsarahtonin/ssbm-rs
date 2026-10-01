@@ -532,7 +532,7 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(hsd_80394068(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80394128,
@@ -540,7 +540,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1): (i32, i32) = Args::take_all(ctx);
             Ret::put(hsd_80394128(ctx, a0, a1), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x803941e8,

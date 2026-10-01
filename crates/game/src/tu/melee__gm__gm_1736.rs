@@ -639,7 +639,7 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(gm_801737D8(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x801737e8,

@@ -445,7 +445,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (Val<'_, i8>,) = Args::take_all(ctx);
             Ret::put(fn_80392CD8(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80392e2c,

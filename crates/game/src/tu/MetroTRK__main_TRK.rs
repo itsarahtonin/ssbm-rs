@@ -51,7 +51,7 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(TRKTargetCPUMinorType(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8032abe0,

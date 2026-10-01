@@ -799,7 +799,7 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(lbCardGame_DecideGameMode(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8001cec0,

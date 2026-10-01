@@ -3016,7 +3016,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1): (u8, u8) = Args::take_all(ctx);
             Ret::put(mnDiagram2_GetRankedFighter(ctx, a0, a1), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80245684,
@@ -3024,7 +3024,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1): (u8, u8) = Args::take_all(ctx);
             Ret::put(mnDiagram2_GetRankedName(ctx, a0, a1), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8024589c,

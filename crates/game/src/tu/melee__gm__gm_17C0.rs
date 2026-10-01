@@ -1419,7 +1419,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2, a3): (UnkAdventureData<'_>, i32, i32, i32) = Args::take_all(ctx);
             Ret::put(gm_8017CD94(ctx, a0, a1, a2, a3), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017ce34,

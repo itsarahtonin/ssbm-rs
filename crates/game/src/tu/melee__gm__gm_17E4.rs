@@ -383,14 +383,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(gm_8017E430(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017e440,
         |ctx| {
             Ret::put(gm_8017E440(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017e48c,
@@ -398,7 +398,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (GameModeState<'_>,) = Args::take_all(ctx);
             Ret::put(gm_8017E48C(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017e4c4,
@@ -414,7 +414,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1): (u8, u8) = Args::take_all(ctx);
             Ret::put(gm_8017E500(ctx, a0, a1), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017e528,
@@ -438,7 +438,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2): (u8, u8, u8) = Args::take_all(ctx);
             Ret::put(gm_8017E5C8(ctx, a0, a1, a2), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017e5fc,
@@ -446,7 +446,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2): (u8, u8, u8) = Args::take_all(ctx);
             Ret::put(gm_8017E5FC(ctx, a0, a1, a2), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017e630,
@@ -454,7 +454,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2): (u8, u8, u8) = Args::take_all(ctx);
             Ret::put(gm_8017E630(ctx, a0, a1, a2), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017e664,
@@ -478,7 +478,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2): (u8, u8, u8) = Args::take_all(ctx);
             Ret::put(gm_8017E704(ctx, a0, a1, a2), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017e738,
@@ -486,7 +486,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2): (u8, u8, u8) = Args::take_all(ctx);
             Ret::put(gm_8017E738(ctx, a0, a1, a2), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017e76c,
@@ -494,7 +494,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2): (u8, u8, u8) = Args::take_all(ctx);
             Ret::put(gm_8017E76C(ctx, a0, a1, a2), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017e7a0,

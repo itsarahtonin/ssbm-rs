@@ -552,14 +552,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(gm_GetPreviousSceneIndex(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x801a42c4,
         |ctx| {
             Ret::put(gm_GetCurrentSceneIndex(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x801a42d4,
@@ -589,14 +589,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(gm_GetCurrentGameMode(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x801a4320,
         |ctx| {
             Ret::put(gm_GetPreviousGameMode(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x801a4330,
@@ -620,7 +620,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (u8,) = Args::take_all(ctx);
             Ret::put(runGameMode(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x801a4510,

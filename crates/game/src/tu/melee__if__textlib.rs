@@ -477,7 +477,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1): (DevText<'_>, u8) = Args::take_all(ctx);
             Ret::put(DevText_StoreColorIndex(ctx, a0, a1), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80302b64,

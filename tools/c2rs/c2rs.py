@@ -3616,6 +3616,8 @@ def returns_of(unit, cursor):
         return "Float"
     if is_int(rt) and int_info(rt)[0] == 8:
         return "Int64"
+    if is_int(rt) and int_info(rt)[0] in (1, 2):
+        return f"Int{8 * int_info(rt)[0]}"
     return "Int"
 
 

@@ -2143,7 +2143,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1): (i32, Val<'_, u8>) = Args::take_all(ctx);
             Ret::put(SearchFreeBlocks(ctx, a0, a1), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8032ce40,
@@ -2226,14 +2226,14 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(MCCGetFreeBlocks(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8032da3c,
         |ctx| {
             Ret::put(MCCGetLastError(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8032da44,

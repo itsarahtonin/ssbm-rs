@@ -40,6 +40,10 @@ pub enum Returns {
     Nothing,
     /// r3.
     Int,
+    /// r3's low byte or halfword: MWCC leaves the rest as it happens to be, and callers
+    /// extend the value themselves.
+    Int8,
+    Int16,
     /// r3 and r4.
     Int64,
     /// f1.
@@ -753,6 +757,8 @@ fn compare(ctx: &Ctx, a: &Outcome, b: &Outcome, returns: Returns, sp: u32) -> Ve
         Returns::Unknown => regs.extend([r3, r4, f1]),
         Returns::Nothing => {}
         Returns::Int => regs.push(r3),
+        Returns::Int8 => regs.push(("r3", r3.1 & 0xFF, r3.2 & 0xFF)),
+        Returns::Int16 => regs.push(("r3", r3.1 & 0xFFFF, r3.2 & 0xFFFF)),
         Returns::Int64 => regs.extend([r3, r4]),
         Returns::Float => regs.push(f1),
     }

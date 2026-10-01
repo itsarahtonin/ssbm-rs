@@ -1962,7 +1962,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (_GXTexObj<'_>,) = Args::take_all(ctx);
             Ret::put(GXGetTexObjWidth(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int16,
     );
     ctx.register_port(
         0x8033ee10,
@@ -1970,7 +1970,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (_GXTexObj<'_>,) = Args::take_all(ctx);
             Ret::put(GXGetTexObjHeight(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int16,
     );
     ctx.register_port(
         0x8033ee20,

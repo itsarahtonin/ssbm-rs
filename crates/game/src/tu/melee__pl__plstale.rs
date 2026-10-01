@@ -201,7 +201,7 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(plStale_IncrementAttackInstance(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int16,
     );
     ctx.register_port(
         0x8003722c,

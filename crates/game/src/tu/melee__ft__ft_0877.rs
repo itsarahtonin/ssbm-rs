@@ -730,7 +730,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ft_80087AB4(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80087ac0,

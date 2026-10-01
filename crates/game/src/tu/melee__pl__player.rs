@@ -3134,7 +3134,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1): (i32, i32) = Args::take_all(ctx);
             Ret::put(Player_800325C8(ctx, a0, a1), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80032610,
@@ -3142,7 +3142,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1): (i32, i32) = Args::take_all(ctx);
             Ret::put(Player_80032610(ctx, a0, a1), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x800326cc,
@@ -3302,7 +3302,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(Player_GetSubColor(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x800332f4,
@@ -3709,7 +3709,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(Player_GetFlagsAEBit0(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80034b80,
@@ -3845,7 +3845,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(Player_GetNametagSlotID(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x800355e0,
@@ -3909,7 +3909,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(Player_GetFlagsBit5(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x800359a8,
@@ -3925,7 +3925,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(Player_GetFlagsBit6(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80035aa0,
@@ -3941,7 +3941,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(Player_GetFlagsBit7(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80035b98,
@@ -3997,7 +3997,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(Player_GetFlagsAEBit1(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80035ee8,
@@ -4005,7 +4005,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1): (i32, u8) = Args::take_all(ctx);
             Ret::put(Player_SetFlagsAEBit1(ctx, a0, a1), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80035f6c,

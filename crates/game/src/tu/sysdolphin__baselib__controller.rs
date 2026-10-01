@@ -936,7 +936,7 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(HSD_PadGetRawQueueCount(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x803769d8,

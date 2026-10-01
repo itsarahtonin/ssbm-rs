@@ -264,7 +264,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1): (u8, u8) = Args::take_all(ctx);
             Ret::put(gm_8017EB3C(ctx, a0, a1), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017eb64,
@@ -272,7 +272,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2): (u8, u8, u8) = Args::take_all(ctx);
             Ret::put(gm_8017EB64(ctx, a0, a1, a2), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017eb98,
@@ -280,7 +280,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2): (u8, u8, u8) = Args::take_all(ctx);
             Ret::put(gm_8017EB98(ctx, a0, a1, a2), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017ebcc,
@@ -288,7 +288,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2): (u8, u8, u8) = Args::take_all(ctx);
             Ret::put(gm_8017EBCC(ctx, a0, a1, a2), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017ec00,
@@ -312,7 +312,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2): (u8, u8, u8) = Args::take_all(ctx);
             Ret::put(gm_8017ECA0(ctx, a0, a1, a2), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017ecd4,
@@ -320,7 +320,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2): (u8, u8, u8) = Args::take_all(ctx);
             Ret::put(gm_8017ECD4(ctx, a0, a1, a2), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017ed08,
@@ -328,7 +328,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1, a2): (u8, u8, u8) = Args::take_all(ctx);
             Ret::put(gm_8017ED08(ctx, a0, a1, a2), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017ed3c,

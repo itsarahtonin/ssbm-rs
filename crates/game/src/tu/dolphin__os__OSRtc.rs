@@ -606,7 +606,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(OSGetWirelessID(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int16,
     );
     ctx.register_port(
         0x80349410,

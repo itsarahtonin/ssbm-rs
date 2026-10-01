@@ -3876,7 +3876,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (ResultsPlayerData<'_>,) = Args::take_all(ctx);
             Ret::put(fn_80174920(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x801749b8,

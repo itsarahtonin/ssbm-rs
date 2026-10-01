@@ -13028,7 +13028,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(Toy_803062BC(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int16,
     );
     ctx.register_port(
         0x803062ec,
@@ -13052,7 +13052,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1): (i16, i8) = Args::take_all(ctx);
             Ret::put(_Toy_803064B8(ctx, a0, a1), ctx);
         },
-        Returns::Int,
+        Returns::Int16,
     );
     ctx.register_port(
         0x8030663c,

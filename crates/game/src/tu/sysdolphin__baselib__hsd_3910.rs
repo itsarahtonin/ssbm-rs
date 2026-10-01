@@ -241,6 +241,6 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1): (_HSD_GObjLibInitDataType<'_>, GObjFuncs<'_>) = Args::take_all(ctx);
             Ret::put(HSD_GObj_803912A8(ctx, a0, a1), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
 }

@@ -3667,14 +3667,14 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1): (u8, u8) = Args::take_all(ctx);
             Ret::put(gm_DecideChallengerCpuLevel(ctx, a0, a1), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80172d78,
         |ctx| {
             Ret::put(gm_80172D78(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80172dd4,
@@ -3682,14 +3682,14 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (u32,) = Args::take_all(ctx);
             Ret::put(gm_80172DD4(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80172e74,
         |ctx| {
             Ret::put(gm_80172E74(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80172f00,
@@ -3697,7 +3697,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (u32,) = Args::take_all(ctx);
             Ret::put(gm_80172F00(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int16,
     );
     ctx.register_port(
         0x80172fac,
@@ -3712,7 +3712,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(fn_80173098(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80173224,
@@ -3720,7 +3720,7 @@ pub fn register(ctx: &Ctx) {
             let (a0, a1): (i32, i32) = Args::take_all(ctx);
             Ret::put(gm_80173224(ctx, a0, a1), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x801732d8,
@@ -3728,28 +3728,28 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (u8,) = Args::take_all(ctx);
             Ret::put(gm_801732D8(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017335c,
         |ctx| {
             Ret::put(gm_8017335C(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int16,
     );
     ctx.register_port(
         0x801733d8,
         |ctx| {
             Ret::put(gm_801733D8(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8017341c,
         |ctx| {
             Ret::put(gm_8017341C(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int16,
     );
     ctx.register_port(
         0x80173460,
@@ -3757,14 +3757,14 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (i8,) = Args::take_all(ctx);
             Ret::put(gm_80173460(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80173498,
         |ctx| {
             Ret::put(gm_80173498(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int16,
     );
     ctx.register_port(
         0x801734d0,
@@ -3772,7 +3772,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (u32,) = Args::take_all(ctx);
             Ret::put(gm_801734D0(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int16,
     );
     ctx.register_port(
         0x80173510,

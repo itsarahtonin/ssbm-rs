@@ -1155,7 +1155,7 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(AIGetStreamVolLeft(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x803507b4,
@@ -1170,7 +1170,7 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(AIGetStreamVolRight(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x803507e0,

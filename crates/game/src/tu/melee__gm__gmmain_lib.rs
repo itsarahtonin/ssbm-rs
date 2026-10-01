@@ -2911,7 +2911,7 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(gmMainLib_8015DB00(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8015db0c,
@@ -2942,7 +2942,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (u8,) = Args::take_all(ctx);
             Ret::put(gmMainLib_8015DB6C(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8015db80,
@@ -3023,7 +3023,7 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(gmMainLib_8015ED74(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8015ed80,

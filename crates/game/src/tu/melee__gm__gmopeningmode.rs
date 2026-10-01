@@ -628,7 +628,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (i32,) = Args::take_all(ctx);
             Ret::put(gm_801BF670(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x801bf684,
@@ -643,7 +643,7 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(gm_801BF694(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x801bf6a8,
@@ -658,7 +658,7 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(gm_801BF6B8(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x801bf6c8,
@@ -703,7 +703,7 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(gm_801BF718(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x801bf728,

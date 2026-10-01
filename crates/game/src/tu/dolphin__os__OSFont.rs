@@ -78,6 +78,6 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(OSGetFontEncode(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int16,
     );
 }

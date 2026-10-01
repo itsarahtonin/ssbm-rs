@@ -1780,7 +1780,7 @@ pub fn register(ctx: &Ctx) {
             let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
             Ret::put(ftLib_GetPlayerIndex(ctx, a0), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x80086bec,

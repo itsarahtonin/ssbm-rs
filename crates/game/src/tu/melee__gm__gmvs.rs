@@ -3813,14 +3813,14 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(gm_8016AEFC(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int16,
     );
     ctx.register_port(
         0x8016af0c,
         |ctx| {
             Ret::put(gm_8016AF0C(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int16,
     );
     ctx.register_port(
         0x8016af88,
@@ -3835,7 +3835,7 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(gm_GetStKind(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int16,
     );
     ctx.register_port(
         0x8016b014,
@@ -4109,7 +4109,7 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(fn_8016B728(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int8,
     );
     ctx.register_port(
         0x8016b738,

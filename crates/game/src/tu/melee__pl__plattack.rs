@@ -127,6 +127,6 @@ pub fn register(ctx: &Ctx) {
         |ctx| {
             Ret::put(plAttack_80037B08(ctx), ctx);
         },
-        Returns::Int,
+        Returns::Int16,
     );
 }
