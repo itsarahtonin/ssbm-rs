@@ -158,6 +158,15 @@ fn illegal(ctx: &Ctx, pc: u32, w: u32) -> ! {
     )
 }
 
+/// Before a call or jump through a register: one to the return sentinel's addresses, where no
+/// code is, faults on fetching its first instruction, as a port's call through a pointer there
+/// does. Only returns go there.
+fn fetch_call(ctx: &Ctx, target: u32) {
+    if target >= RETURN_SENTINEL {
+        ctx.read_u32(target);
+    }
+}
+
 /// Branches to `target`. Calls into native implementations go through dispatch.
 fn branch(ctx: &Ctx, pc: u32, target: u32, link: bool) -> u32 {
     if link {
@@ -324,6 +333,8 @@ fn op19(ctx: &Ctx, pc: u32, w: u32) -> u32 {
             if ctr && cond_ok(ctx, d, a) {
                 if w & 1 == 0 {
                     ctx.convention_return(target);
+                } else {
+                    fetch_call(ctx, target);
                 }
                 return branch(ctx, pc, target, w & 1 != 0);
             }
@@ -334,6 +345,7 @@ fn op19(ctx: &Ctx, pc: u32, w: u32) -> u32 {
         528 => {
             let target = ctx.regs.ctr.get() & !3;
             if cond_ok(ctx, d, a) {
+                fetch_call(ctx, target);
                 return branch(ctx, pc, target, w & 1 != 0);
             }
             if w & 1 != 0 {
