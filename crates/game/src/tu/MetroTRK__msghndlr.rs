@@ -60,21 +60,121 @@ pub fn TRKMessageIntoReply<'a>(
     }
 }
 
-pub fn TRKSendACK<'a>(ctx: &'a Ctx, b: MessageBuffer<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let mut b = b;
-    let mut error: i32 = 0;
-    let mut i: i32 = 3_i32;
-    'l1: while i > 0_i32 {
-        'c2: {
-            error = fns::TRKMessageSend(ctx, b);
-            i = i.wrapping_sub(1);
-            if error == (enums::kNoError as i32) {
-                break 'l1;
+pub fn TRKSendACK<'a>(ctx: &'a Ctx, a0: MessageBuffer<'a>) -> i32 {
+    // Transliterated from its machine code: returns or uses a value its C never sets.
+    (a0,).put_regs(ctx);
+    asm_TRKSendACK(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_TRKSendACK(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x803277d8_u32;
+    loop {
+        match pc {
+            0x803277d8_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // li r31, 0x3
+                g[31].set(0x3_u32);
+                // stw r30, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // addi r30, r3, 0x0
+                g[30].set(g[3].get());
+                pc = 0x803277f4_u32;
             }
+            0x803277f4_u32 => {
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // bl TRKMessageSend
+                c::call(ctx, 0x80326c6c_u32, 0x803277fc_u32);
+                pc = 0x803277fc_u32;
+            }
+            0x803277fc_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // subi r31, r31, 0x1
+                g[31].set(g[31].get().wrapping_add(0xffffffff_u32));
+                // beq .L_80327810
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80327810_u32;
+                    continue;
+                }
+                pc = 0x80327808_u32;
+            }
+            0x80327808_u32 => {
+                // cmpwi r31, 0x0
+                {
+                    let (x, y) = (g[31].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bgt .L_803277F4
+                if (c::cr_bit(ctx, 1) == true) {
+                    pc = 0x803277f4_u32;
+                    continue;
+                }
+                pc = 0x80327810_u32;
+            }
+            0x80327810_u32 => {
+                // lwz r31, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x10
+                g[1].set(g[1].get().wrapping_add(0x10_u32));
+                // lwz r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of TRKSendACK");
+            }
+            _ => unreachable!("TRKSendACK: no block at {pc:#010x}"),
         }
     }
-    return error;
 }
 
 pub fn TRKStandardACK<'a>(

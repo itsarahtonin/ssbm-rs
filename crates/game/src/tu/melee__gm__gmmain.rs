@@ -132,7 +132,7 @@ pub fn gmMain_8015FDA4<'a>(ctx: &'a Ctx) {
 }
 
 pub fn main<'a>(ctx: &'a Ctx) -> i32 {
-    // Transliterated from its machine code: inline init_spr_unk: MWCC-only code.
+    // Transliterated from its machine code: calls gmMainLib_8015FBA4, which reads registers its caller sets without passing them.
     ().put_regs(ctx);
     asm_main(ctx);
     Ret::get(ctx)

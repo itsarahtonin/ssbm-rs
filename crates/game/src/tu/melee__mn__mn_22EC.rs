@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn mn_8022EC18<'a>(
     ctx: &'a Ctx,
@@ -401,20 +402,153 @@ pub fn mn_8022F470<'a>(ctx: &'a Ctx, x: Val<'a, i32>, target: Val<'a, i32>, dx: 
 }
 
 pub fn mn_8022F4CC<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x8);
-    if (fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_TOURNAMENT as i32) {
-        fns::HSD_SisLib_803A5E70(ctx);
-        fns::mn_8022EBDC(ctx);
-        fns::gm_80190EA4(ctx);
-        return;
+    // Transliterated from its machine code: calls mnCharSel_802640A0, which reads registers its caller sets without passing them.
+    ().put_regs(ctx);
+    asm_mn_8022F4CC(ctx);
+}
+
+fn asm_mn_8022F4CC(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8022f4cc_u32;
+    loop {
+        match pc {
+            0x8022f4cc_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // bl gm_GetCurrentGameMode
+                c::call(ctx, 0x801a4310_u32, 0x8022f4dc_u32);
+                pc = 0x8022f4dc_u32;
+            }
+            0x8022f4dc_u32 => {
+                // clrlwi r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                }
+                // cmplwi r0, 0x1b
+                {
+                    let (x, y) = (g[0].get(), 0x1b_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_8022F4F8
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x8022f4f8_u32;
+                    continue;
+                }
+                pc = 0x8022f4e8_u32;
+            }
+            0x8022f4e8_u32 => {
+                // bl HSD_SisLib_803A5E70
+                c::call(ctx, 0x803a5e70_u32, 0x8022f4ec_u32);
+                pc = 0x8022f4ec_u32;
+            }
+            0x8022f4ec_u32 => {
+                // bl mn_8022EBDC
+                c::call(ctx, 0x8022ebdc_u32, 0x8022f4f0_u32);
+                pc = 0x8022f4f0_u32;
+            }
+            0x8022f4f0_u32 => {
+                // bl gm_80190EA4
+                c::call(ctx, 0x80190ea4_u32, 0x8022f4f4_u32);
+                pc = 0x8022f4f4_u32;
+            }
+            0x8022f4f4_u32 => {
+                // b .L_8022F528
+                pc = 0x8022f528_u32;
+                continue;
+                pc = 0x8022f4f8_u32;
+            }
+            0x8022f4f8_u32 => {
+                // bl gm_GetCurrentGameMode
+                c::call(ctx, 0x801a4310_u32, 0x8022f4fc_u32);
+                pc = 0x8022f4fc_u32;
+            }
+            0x8022f4fc_u32 => {
+                // clrlwi r0, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                }
+                // cmplwi r0, 0x1
+                {
+                    let (x, y) = (g[0].get(), 0x1_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_8022F51C
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x8022f51c_u32;
+                    continue;
+                }
+                pc = 0x8022f508_u32;
+            }
+            0x8022f508_u32 => {
+                // li r3, 0x2
+                g[3].set(0x2_u32);
+                // li r4, 0x3
+                g[4].set(0x3_u32);
+                // li r5, 0x3
+                g[5].set(0x3_u32);
+                // bl mn_80229894
+                c::call(ctx, 0x80229894_u32, 0x8022f518_u32);
+                pc = 0x8022f518_u32;
+            }
+            0x8022f518_u32 => {
+                // b .L_8022F528
+                pc = 0x8022f528_u32;
+                continue;
+                pc = 0x8022f51c_u32;
+            }
+            0x8022f51c_u32 => {
+                // bl HSD_SisLib_803A5E70
+                c::call(ctx, 0x803a5e70_u32, 0x8022f520_u32);
+                pc = 0x8022f520_u32;
+            }
+            0x8022f520_u32 => {
+                // bl mn_8022EBDC
+                c::call(ctx, 0x8022ebdc_u32, 0x8022f524_u32);
+                pc = 0x8022f524_u32;
+            }
+            0x8022f524_u32 => {
+                // bl mnCharSel_802640A0
+                c::call(ctx, 0x802640a0_u32, 0x8022f528_u32);
+                pc = 0x8022f528_u32;
+            }
+            0x8022f528_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of mn_8022F4CC");
+            }
+            _ => unreachable!("mn_8022F4CC: no block at {pc:#010x}"),
+        }
     }
-    if (fns::gm_GetCurrentGameMode(ctx) as i32) == (enums::GM_MENU as i32) {
-        fns::mn_80229894(ctx, 2_i32, (3_i32 as u16), 3_i32);
-        return;
-    }
-    fns::HSD_SisLib_803A5E70(ctx);
-    fns::mn_8022EBDC(ctx);
-    let _ = fns::mnCharSel_802640A0(ctx);
 }
 
 fn inl_mn_8022F298_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {

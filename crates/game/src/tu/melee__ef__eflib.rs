@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn efLib_Init<'a>(ctx: &'a Ctx) {
     let __frame = ctx.stack_frame(0x20);
@@ -879,54 +880,345 @@ pub fn efLib_Create_Attach_Pos<'a>(
     return effect;
 }
 
-pub fn efLib_render_callback<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
-    let __frame = ctx.stack_frame(0x18);
-    let mut gobj = gobj;
-    let mut code = code;
-    let mut particles_code: u32 = 0;
-    's1: {
-        let __case = match code {
-            0_i32 => 0,
-            1_i32 => 1,
-            2_i32 => 2,
-            _ => 3,
-        };
-        if __case <= 0 {
-            particles_code = (0_i32 as u32);
-            break 's1;
-        }
-        if __case <= 1 {
-            particles_code = (1_i32 as u32);
-            break 's1;
-        }
-        if __case <= 2 {
-            particles_code = (2_i32 as u32);
-            break 's1;
-        }
-        if __case <= 3 {
-            return;
-        }
-    }
-    fns::HSD_StateSetColorUpdate(ctx, 1_i32);
-    if ((gobj).gx_link() as i32) == 7_i32 {
-        fns::psDispParticles(ctx, ((1_i32 | 4_i32) as u32), particles_code);
-        return;
-    }
-    fns::psDispParticles(ctx, (2_i32 as u32), particles_code);
+pub fn efLib_render_callback<'a>(ctx: &'a Ctx, a0: HSD_GObj<'a>, a1: i32) {
+    // Transliterated from its machine code: calls psDispParticles, which reads registers its caller sets without passing them.
+    (a0, a1).put_regs(ctx);
+    asm_efLib_render_callback(ctx);
 }
 
-pub fn efLib_particles_proc_main<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x8);
-    let mut gobj = gobj;
-    fns::hsd_8039CEAC(ctx, ((0x20000_i32 | 0x40000_i32) as u32));
-    fns::hsd_8039EE24(ctx, ((0x20000_i32 | 0x40000_i32) as u32));
+fn asm_efLib_render_callback(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8005c904_u32;
+    loop {
+        match pc {
+            0x8005c904_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // cmpwi r4, 0x1
+                {
+                    let (x, y) = (g[4].get() as i32, 1_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // addi r30, r3, 0x0
+                g[30].set(g[3].get());
+                // beq .L_8005C948
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x8005c948_u32;
+                    continue;
+                }
+                pc = 0x8005c924_u32;
+            }
+            0x8005c924_u32 => {
+                // bge .L_8005C934
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x8005c934_u32;
+                    continue;
+                }
+                pc = 0x8005c928_u32;
+            }
+            0x8005c928_u32 => {
+                // cmpwi r4, 0x0
+                {
+                    let (x, y) = (g[4].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bge .L_8005C940
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x8005c940_u32;
+                    continue;
+                }
+                pc = 0x8005c930_u32;
+            }
+            0x8005c930_u32 => {
+                // b .L_8005C98C
+                pc = 0x8005c98c_u32;
+                continue;
+                pc = 0x8005c934_u32;
+            }
+            0x8005c934_u32 => {
+                // cmpwi r4, 0x3
+                {
+                    let (x, y) = (g[4].get() as i32, 3_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bge .L_8005C98C
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x8005c98c_u32;
+                    continue;
+                }
+                pc = 0x8005c93c_u32;
+            }
+            0x8005c93c_u32 => {
+                // b .L_8005C950
+                pc = 0x8005c950_u32;
+                continue;
+                pc = 0x8005c940_u32;
+            }
+            0x8005c940_u32 => {
+                // li r31, 0x0
+                g[31].set(0_u32);
+                // b .L_8005C95C
+                pc = 0x8005c95c_u32;
+                continue;
+                pc = 0x8005c948_u32;
+            }
+            0x8005c948_u32 => {
+                // li r31, 0x1
+                g[31].set(0x1_u32);
+                // b .L_8005C95C
+                pc = 0x8005c95c_u32;
+                continue;
+                pc = 0x8005c950_u32;
+            }
+            0x8005c950_u32 => {
+                // li r31, 0x2
+                g[31].set(0x2_u32);
+                // b .L_8005C95C
+                pc = 0x8005c95c_u32;
+                continue;
+                pc = 0x8005c958_u32;
+            }
+            0x8005c958_u32 => {
+                // b .L_8005C98C
+                pc = 0x8005c98c_u32;
+                continue;
+                pc = 0x8005c95c_u32;
+            }
+            0x8005c95c_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // bl HSD_StateSetColorUpdate
+                c::call(ctx, 0x80361d6c_u32, 0x8005c964_u32);
+                pc = 0x8005c964_u32;
+            }
+            0x8005c964_u32 => {
+                // lbz r0, 0x3(r30)
+                {
+                    let ea = g[30].get().wrapping_add(0x3_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // cmplwi r0, 0x7
+                {
+                    let (x, y) = (g[0].get(), 0x7_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_8005C980
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x8005c980_u32;
+                    continue;
+                }
+                pc = 0x8005c970_u32;
+            }
+            0x8005c970_u32 => {
+                // li r3, 0x5
+                g[3].set(0x5_u32);
+                // addi r4, r31, 0x0
+                g[4].set(g[31].get());
+                // bl psDispParticles
+                c::call(ctx, 0x803a0088_u32, 0x8005c97c_u32);
+                pc = 0x8005c97c_u32;
+            }
+            0x8005c97c_u32 => {
+                // b .L_8005C98C
+                pc = 0x8005c98c_u32;
+                continue;
+                pc = 0x8005c980_u32;
+            }
+            0x8005c980_u32 => {
+                // li r3, 0x2
+                g[3].set(0x2_u32);
+                // addi r4, r31, 0x0
+                g[4].set(g[31].get());
+                // bl psDispParticles
+                c::call(ctx, 0x803a0088_u32, 0x8005c98c_u32);
+                pc = 0x8005c98c_u32;
+            }
+            0x8005c98c_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of efLib_render_callback");
+            }
+            _ => unreachable!("efLib_render_callback: no block at {pc:#010x}"),
+        }
+    }
 }
 
-pub fn efLib_particles_proc_aux<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x8);
-    let mut gobj = gobj;
-    fns::hsd_8039CEAC(ctx, (0x10000_i32 as u32));
-    fns::hsd_8039EE24(ctx, (0x10000_i32 as u32));
+pub fn efLib_particles_proc_main<'a>(ctx: &'a Ctx, a0: HSD_GObj<'a>) {
+    // Transliterated from its machine code: calls hsd_8039EE24, which reads registers its caller sets without passing them.
+    (a0,).put_regs(ctx);
+    asm_efLib_particles_proc_main(ctx);
+}
+
+fn asm_efLib_particles_proc_main(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8005c9a4_u32;
+    loop {
+        match pc {
+            0x8005c9a4_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // lis r3, 0x6
+                g[3].set(0x60000_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // bl hsd_8039CEAC
+                c::call(ctx, 0x8039ceac_u32, 0x8005c9b8_u32);
+                pc = 0x8005c9b8_u32;
+            }
+            0x8005c9b8_u32 => {
+                // lis r3, 0x6
+                g[3].set(0x60000_u32);
+                // bl hsd_8039EE24
+                c::call(ctx, 0x8039ee24_u32, 0x8005c9c0_u32);
+                pc = 0x8005c9c0_u32;
+            }
+            0x8005c9c0_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of efLib_particles_proc_main");
+            }
+            _ => unreachable!("efLib_particles_proc_main: no block at {pc:#010x}"),
+        }
+    }
+}
+
+pub fn efLib_particles_proc_aux<'a>(ctx: &'a Ctx, a0: HSD_GObj<'a>) {
+    // Transliterated from its machine code: calls hsd_8039EE24, which reads registers its caller sets without passing them.
+    (a0,).put_regs(ctx);
+    asm_efLib_particles_proc_aux(ctx);
+}
+
+fn asm_efLib_particles_proc_aux(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8005c9d0_u32;
+    loop {
+        match pc {
+            0x8005c9d0_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // lis r3, 0x1
+                g[3].set(0x10000_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // bl hsd_8039CEAC
+                c::call(ctx, 0x8039ceac_u32, 0x8005c9e4_u32);
+                pc = 0x8005c9e4_u32;
+            }
+            0x8005c9e4_u32 => {
+                // lis r3, 0x1
+                g[3].set(0x10000_u32);
+                // bl hsd_8039EE24
+                c::call(ctx, 0x8039ee24_u32, 0x8005c9ec_u32);
+                pc = 0x8005c9ec_u32;
+            }
+            0x8005c9ec_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of efLib_particles_proc_aux");
+            }
+            _ => unreachable!("efLib_particles_proc_aux: no block at {pc:#010x}"),
+        }
+    }
 }
 
 pub fn efLib_CreateGenerator<'a>(ctx: &'a Ctx, gfx_id: i32, pos: Vec<'a>) -> HSD_Generator<'a> {

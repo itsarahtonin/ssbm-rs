@@ -1868,30 +1868,168 @@ pub fn un_80301800<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     return 0_i32;
 }
 
-pub fn un_80301840<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
-    let __frame = ctx.stack_frame(0x18);
-    let mut arg0 = arg0;
-    if arg0 != ((1_i32 as u32) as i32) {
-        return 0_i32;
-    }
-    fns::OSReport(
-        ctx,
-        statics::melee__if__if_3004::un_804D5988(ctx).at(0),
-        &[],
-    );
-    {
-        let mut result: i32 = fns::lb_8001CBBC(ctx);
-        fns::gmMainLib_8015FA34(ctx, result);
-        if (result == 0_i32) || (result == 2_i32) {
-            fns::lbCardGame_SetCardStatus(ctx, 0_i32);
+pub fn un_80301840<'a>(ctx: &'a Ctx, a0: i32) -> i32 {
+    // Transliterated from its machine code: calls gmMainLib_8015FA34, which reads registers its caller sets without passing them.
+    (a0,).put_regs(ctx);
+    asm_un_80301840(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_un_80301840(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80301840_u32;
+    loop {
+        match pc {
+            0x80301840_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // cmpwi r3, 0x1
+                {
+                    let (x, y) = (g[3].get() as i32, 1_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // beq .L_80301860
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80301860_u32;
+                    continue;
+                }
+                pc = 0x80301858_u32;
+            }
+            0x80301858_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // b .L_803018A8
+                pc = 0x803018a8_u32;
+                continue;
+                pc = 0x80301860_u32;
+            }
+            0x80301860_u32 => {
+                // li r3, un_804D5988@sda21
+                g[3].set(g[13].get().wrapping_add(0xffffa2e8_u32));
+                // crclr cr1eq
+                {
+                    let (x, y) = (c::cr_bit(ctx, 6), c::cr_bit(ctx, 6));
+                    c::set_cr_bit(ctx, 6, x ^ y);
+                }
+                // bl OSReport
+                c::call(ctx, 0x803456a8_u32, 0x8030186c_u32);
+                pc = 0x8030186c_u32;
+            }
+            0x8030186c_u32 => {
+                // bl lb_8001CBBC
+                c::call(ctx, 0x8001cbbc_u32, 0x80301870_u32);
+                pc = 0x80301870_u32;
+            }
+            0x80301870_u32 => {
+                // mr r31, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[31].set(v);
+                }
+                // bl gmMainLib_8015FA34
+                c::call(ctx, 0x8015fa34_u32, 0x80301878_u32);
+                pc = 0x80301878_u32;
+            }
+            0x80301878_u32 => {
+                // cmpwi r31, 0x0
+                {
+                    let (x, y) = (g[31].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80301888
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80301888_u32;
+                    continue;
+                }
+                pc = 0x80301880_u32;
+            }
+            0x80301880_u32 => {
+                // cmpwi r31, 0x2
+                {
+                    let (x, y) = (g[31].get() as i32, 2_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80301890
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80301890_u32;
+                    continue;
+                }
+                pc = 0x80301888_u32;
+            }
+            0x80301888_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // bl lbCardGame_SetCardStatus
+                c::call(ctx, 0x8001cbac_u32, 0x80301890_u32);
+                pc = 0x80301890_u32;
+            }
+            0x80301890_u32 => {
+                // lis r3, un_803FD230@ha
+                g[3].set(0x80400000_u32);
+                // crclr cr1eq
+                {
+                    let (x, y) = (c::cr_bit(ctx, 6), c::cr_bit(ctx, 6));
+                    c::set_cr_bit(ctx, 6, x ^ y);
+                }
+                // addi r3, r3, un_803FD230@l
+                g[3].set(g[3].get().wrapping_add(0xffffd230_u32));
+                // addi r4, r31, 0x0
+                g[4].set(g[31].get());
+                // bl OSReport
+                c::call(ctx, 0x803456a8_u32, 0x803018a4_u32);
+                pc = 0x803018a4_u32;
+            }
+            0x803018a4_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                pc = 0x803018a8_u32;
+            }
+            0x803018a8_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of un_80301840");
+            }
+            _ => unreachable!("un_80301840: no block at {pc:#010x}"),
         }
-        fns::OSReport(
-            ctx,
-            ptr::<ArrV<'a, i8, 0>>(ctx, 0x803fd230).at(0),
-            &[VarArg::Int(result as u32)],
-        );
     }
-    return 0_i32;
 }
 
 pub fn un_803018BC<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {

@@ -393,6 +393,7 @@ class Unit:
         self.skipped = []
         self.ported = []
         self.transliterated = []  # ported from their machine code
+        self.unset_fallbacks = []  # (name, why) for unset values only their C translation has
         self.fuse_check = []
         self.inline_fallbacks = []  # (caller, callee, why) for inlined calls kept as calls
         self.inline_partial = set()  # (caller, callee, calls in the asm, calls in the source)
@@ -3736,7 +3737,8 @@ def returns_of(unit, cursor):
 
 # Clang's warnings about a value a function's C never sets: what the original returns or uses
 # there is whatever a register or the stack held, which only its machine code reproduces.
-UNSET_WARNINGS = {"-Wreturn-type", "-Wuninitialized", "-Wsometimes-uninitialized"}
+UNSET_WARNINGS = {"-Wreturn-type", "-Wuninitialized", "-Wsometimes-uninitialized",
+                  "-Wconditional-uninitialized"}
 UNSET_REASON = "returns or uses a value its C never sets"
 CALLER_REASON = "calls {}, which reads registers its caller sets without passing them"
 
@@ -3923,9 +3925,12 @@ def translate_unit(args):
         if why:
             try:
                 code = asm_port(unit, c, f, why)
-            except (Unsupported, asm2rs.AsmUnsupported):
-                if name not in callers:
+            except (Unsupported, asm2rs.AsmUnsupported) as e:
+                # Functions only MWCC compiles have nothing else to fall back on; the rest take
+                # their C translation, whose unset values start at zero.
+                if name in FROM_MACHINE_CODE:
                     raise
+                unit.unset_fallbacks.append((name, str(e)))
         if code is not None:
             out_fns.append(code)
             unit.transliterated.append(name)
@@ -4011,7 +4016,8 @@ def translate_unit(args):
             n = asm_n
         fuse.append((name, asm_n, n))
     unit.fuse_report = fuse
-    inlining = {"fallbacks": unit.inline_fallbacks, "partial": sorted(unit.inline_partial)}
+    inlining = {"fallbacks": unit.inline_fallbacks, "partial": sorted(unit.inline_partial),
+                "unset_from_c": unit.unset_fallbacks}
     if not out_fns and not regs:
         return unit_name, source, None, unit.skipped, unit.ported, fuse, inlining, sorted(unset)
     text = HEADER.format(source=source.replace("\\", "/"), unit=unit_name)
@@ -4198,7 +4204,7 @@ def main():
     unset = {n for r in results for n in r[7]} | unset_elsewhere(out, {r[0] for r in results}) \
         | UNSET_FROM_MACHINE_CODE
     flow = regflow.Program(root, types_path)
-    callers = flow.callers_to_port(unset)
+    callers, unfollowed = flow.callers_to_port(unset)
     redo = [(root, types_path, u, s, only.get(u), out,
              {c: f for c, f in callers.items() if flow.units.get(c) == u})
             for u, s in units if any(flow.units.get(c) == u for c in callers)]
@@ -4270,6 +4276,8 @@ def main():
     print(f"  of the first {len(fuse_examples)} that differ, {more} have more fused ops than the asm")
     print(f"calls the original inlines but that stay calls: {fallbacks} not translatable inline, "
           f"{partial} where only some calls are inlined")
+    print(f"callers ported from machine code for registers they set: {len(callers)}; seeds whose "
+          f"dependence carries too far to follow: {', '.join(unfollowed) or 'none'}")
     for why, n in sorted(reasons.items(), key=lambda x: -x[1])[:25]:
         print(f"  {n:6} {why}")
 

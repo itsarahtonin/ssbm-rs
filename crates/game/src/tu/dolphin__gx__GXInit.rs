@@ -2084,552 +2084,1805 @@ fn asm_GXInit(ctx: &Ctx) {
 }
 
 pub fn __GXInitGX<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x78);
-    let identity_mtx: Arr<'a, ArrV<'a, F32, 4>, 3> = frame_at(ctx, &__frame, 0x24);
-    let clear: _GXColor<'a> = frame_at(ctx, &__frame, 0x20);
-    let black: _GXColor<'a> = frame_at(ctx, &__frame, 0x1c);
-    let white: _GXColor<'a> = frame_at(ctx, &__frame, 0x18);
-    let __arg: _GXColor<'a> = frame_at(ctx, &__frame, 0x0);
-    let __arg_2: _GXColor<'a> = frame_at(ctx, &__frame, 0x4);
-    let __arg_3: _GXColor<'a> = frame_at(ctx, &__frame, 0x8);
-    let __arg_4: _GXColor<'a> = frame_at(ctx, &__frame, 0xc);
-    let __arg_5: _GXColor<'a> = frame_at(ctx, &__frame, 0x10);
-    let __arg_6: _GXColor<'a> = frame_at(ctx, &__frame, 0x14);
-    clear.set_r((64_i32 as u8));
-    clear.set_g((64_i32 as u8));
-    clear.set_b((64_i32 as u8));
-    clear.set_a((255_i32 as u8));
-    black.set_r((0_i32 as u8));
-    black.set_g((0_i32 as u8));
-    black.set_b((0_i32 as u8));
-    black.set_a((0_i32 as u8));
-    white.set_r((255_i32 as u8));
-    white.set_g((255_i32 as u8));
-    white.set_b((255_i32 as u8));
-    white.set_a((255_i32 as u8));
-    let mut i: u32 = 0;
-    let mut rmode: _GXRenderModeObj<'a> = null(ctx);
-    's1: {
-        let __case = match fns::VIGetTvFormat(ctx) {
-            0_u32 => 0,
-            1_u32 => 1,
-            2_u32 => 2,
-            _ => 3,
-        };
-        if __case <= 0 {
-            rmode = fns::GXNtsc480IntDf(ctx);
-            break 's1;
-        }
-        if __case <= 1 {
-            rmode = fns::GXPal528IntDf(ctx);
-            break 's1;
-        }
-        if __case <= 2 {
-            rmode = fns::GXMpal480IntDf(ctx);
-            break 's1;
-        }
-        if __case <= 3 {
-            rmode = fns::GXNtsc480IntDf(ctx);
-            break 's1;
-        }
-    }
-    fns::GXSetCopyClear(
-        ctx,
-        {
-            Handle::copy_from(__arg, clear);
-            __arg
-        },
-        (0xffffff_i32 as u32),
-    );
-    inl_GXSetTexCoordGen_unfused(
-        ctx,
-        (enums::GX_TEXCOORD0 as i32),
-        (enums::GX_TG_MTX2x4 as i32),
-        (enums::GX_TG_TEX0 as i32),
-        60_u32,
-    );
-    inl_GXSetTexCoordGen_unfused(
-        ctx,
-        (enums::GX_TEXCOORD1 as i32),
-        (enums::GX_TG_MTX2x4 as i32),
-        (enums::GX_TG_TEX1 as i32),
-        60_u32,
-    );
-    inl_GXSetTexCoordGen_unfused(
-        ctx,
-        (enums::GX_TEXCOORD2 as i32),
-        (enums::GX_TG_MTX2x4 as i32),
-        (enums::GX_TG_TEX2 as i32),
-        60_u32,
-    );
-    inl_GXSetTexCoordGen_unfused(
-        ctx,
-        (enums::GX_TEXCOORD3 as i32),
-        (enums::GX_TG_MTX2x4 as i32),
-        (enums::GX_TG_TEX3 as i32),
-        60_u32,
-    );
-    inl_GXSetTexCoordGen_unfused(
-        ctx,
-        (enums::GX_TEXCOORD4 as i32),
-        (enums::GX_TG_MTX2x4 as i32),
-        (enums::GX_TG_TEX4 as i32),
-        60_u32,
-    );
-    inl_GXSetTexCoordGen_unfused(
-        ctx,
-        (enums::GX_TEXCOORD5 as i32),
-        (enums::GX_TG_MTX2x4 as i32),
-        (enums::GX_TG_TEX5 as i32),
-        60_u32,
-    );
-    inl_GXSetTexCoordGen_unfused(
-        ctx,
-        (enums::GX_TEXCOORD6 as i32),
-        (enums::GX_TG_MTX2x4 as i32),
-        (enums::GX_TG_TEX6 as i32),
-        60_u32,
-    );
-    inl_GXSetTexCoordGen_unfused(
-        ctx,
-        (enums::GX_TEXCOORD7 as i32),
-        (enums::GX_TG_MTX2x4 as i32),
-        (enums::GX_TG_TEX7 as i32),
-        60_u32,
-    );
-    fns::GXSetNumTexGens(ctx, (1_i32 as u8));
-    fns::GXClearVtxDesc(ctx);
-    fns::GXInvalidateVtxCache(ctx);
-    fns::GXSetLineWidth(ctx, (6_i32 as u8), 0_i32);
-    fns::GXSetPointSize(ctx, (6_i32 as u8), 0_i32);
-    fns::GXEnableTexOffsets(ctx, 0_i32, (0_i32 as u8), (0_i32 as u8));
-    fns::GXEnableTexOffsets(ctx, 1_i32, (0_i32 as u8), (0_i32 as u8));
-    fns::GXEnableTexOffsets(ctx, 2_i32, (0_i32 as u8), (0_i32 as u8));
-    fns::GXEnableTexOffsets(ctx, 3_i32, (0_i32 as u8), (0_i32 as u8));
-    fns::GXEnableTexOffsets(ctx, 4_i32, (0_i32 as u8), (0_i32 as u8));
-    fns::GXEnableTexOffsets(ctx, 5_i32, (0_i32 as u8), (0_i32 as u8));
-    fns::GXEnableTexOffsets(ctx, 6_i32, (0_i32 as u8), (0_i32 as u8));
-    fns::GXEnableTexOffsets(ctx, 7_i32, (0_i32 as u8), (0_i32 as u8));
-    identity_mtx.get(0_i32).at(0_i32).set(1.0);
-    identity_mtx.get(0_i32).at(1_i32).set(0.0);
-    identity_mtx.get(0_i32).at(2_i32).set(0.0);
-    identity_mtx.get(0_i32).at(3_i32).set(0.0);
-    identity_mtx.get(1_i32).at(0_i32).set(0.0);
-    identity_mtx.get(1_i32).at(1_i32).set(1.0);
-    identity_mtx.get(1_i32).at(2_i32).set(0.0);
-    identity_mtx.get(1_i32).at(3_i32).set(0.0);
-    identity_mtx.get(2_i32).at(0_i32).set(0.0);
-    identity_mtx.get(2_i32).at(1_i32).set(0.0);
-    identity_mtx.get(2_i32).at(2_i32).set(1.0);
-    identity_mtx.get(2_i32).at(3_i32).set(0.0);
-    fns::GXLoadPosMtxImm(ctx, identity_mtx.get(0), ((enums::GX_PNMTX0 as i32) as u32));
-    fns::GXLoadNrmMtxImm(ctx, identity_mtx.get(0), ((enums::GX_PNMTX0 as i32) as u32));
-    fns::GXSetCurrentMtx(ctx, ((enums::GX_PNMTX0 as i32) as u32));
-    fns::GXLoadTexMtxImm(
-        ctx,
-        identity_mtx.get(0),
-        ((enums::GX_IDENTITY as i32) as u32),
-        (enums::GX_MTX3x4 as i32),
-    );
-    fns::GXLoadTexMtxImm(
-        ctx,
-        identity_mtx.get(0),
-        ((enums::GX_PTIDENTITY as i32) as u32),
-        (enums::GX_MTX3x4 as i32),
-    );
-    fns::GXSetViewport(
-        ctx,
-        0.0,
-        0.0,
-        fp::frsp((rmode).fbWidth() as f64),
-        fp::frsp((rmode).xfbHeight() as f64),
-        0.0,
-        1.0,
-    );
-    fns::GXSetCoPlanar(ctx, (0_i32 as u8));
-    fns::GXSetCullMode(ctx, (enums::GX_CULL_BACK as i32));
-    fns::GXSetClipMode(ctx, (enums::GX_CLIP_ENABLE as i32));
-    fns::GXSetScissor(
-        ctx,
-        (0_i32 as u32),
-        (0_i32 as u32),
-        ((rmode).fbWidth() as u32),
-        ((rmode).efbHeight() as u32),
-    );
-    fns::GXSetScissorBoxOffset(ctx, 0_i32, 0_i32);
-    fns::GXSetNumChans(ctx, (0_i32 as u8));
-    fns::GXSetChanCtrl(
-        ctx,
-        (enums::GX_COLOR0A0 as i32),
-        (0_i32 as u8),
-        (enums::GX_SRC_REG as i32),
-        (enums::GX_SRC_VTX as i32),
-        ((enums::GX_LIGHT_NULL as i32) as u32),
-        (enums::GX_DF_NONE as i32),
-        (enums::GX_AF_NONE as i32),
-    );
-    fns::GXSetChanAmbColor(ctx, (enums::GX_COLOR0A0 as i32), {
-        Handle::copy_from(__arg_2, black);
-        __arg_2
-    });
-    fns::GXSetChanMatColor(ctx, (enums::GX_COLOR0A0 as i32), {
-        Handle::copy_from(__arg_3, white);
-        __arg_3
-    });
-    fns::GXSetChanCtrl(
-        ctx,
-        (enums::GX_COLOR1A1 as i32),
-        (0_i32 as u8),
-        (enums::GX_SRC_REG as i32),
-        (enums::GX_SRC_VTX as i32),
-        ((enums::GX_LIGHT_NULL as i32) as u32),
-        (enums::GX_DF_NONE as i32),
-        (enums::GX_AF_NONE as i32),
-    );
-    fns::GXSetChanAmbColor(ctx, (enums::GX_COLOR1A1 as i32), {
-        Handle::copy_from(__arg_4, black);
-        __arg_4
-    });
-    fns::GXSetChanMatColor(ctx, (enums::GX_COLOR1A1 as i32), {
-        Handle::copy_from(__arg_5, white);
-        __arg_5
-    });
-    fns::GXInvalidateTexAll(ctx);
-    (fns::gx(ctx).get()).set_nextTexRgn((0_i32 as u32));
-    (fns::gx(ctx).get()).set_nextTexRgnCI((0_i32 as u32));
-    let _ = fns::GXSetTexRegionCallback(ctx, fnptr(ctx, 0x8033a6e0));
-    let _ = fns::GXSetTlutRegionCallback(ctx, fnptr(ctx, 0x8033a75c));
-    fns::GXSetTevOrder(
-        ctx,
-        (enums::GX_TEVSTAGE0 as i32),
-        (enums::GX_TEXCOORD0 as i32),
-        (enums::GX_TEXMAP0 as i32),
-        (enums::GX_COLOR0A0 as i32),
-    );
-    fns::GXSetTevOrder(
-        ctx,
-        (enums::GX_TEVSTAGE1 as i32),
-        (enums::GX_TEXCOORD1 as i32),
-        (enums::GX_TEXMAP1 as i32),
-        (enums::GX_COLOR0A0 as i32),
-    );
-    fns::GXSetTevOrder(
-        ctx,
-        (enums::GX_TEVSTAGE2 as i32),
-        (enums::GX_TEXCOORD2 as i32),
-        (enums::GX_TEXMAP2 as i32),
-        (enums::GX_COLOR0A0 as i32),
-    );
-    fns::GXSetTevOrder(
-        ctx,
-        (enums::GX_TEVSTAGE3 as i32),
-        (enums::GX_TEXCOORD3 as i32),
-        (enums::GX_TEXMAP3 as i32),
-        (enums::GX_COLOR0A0 as i32),
-    );
-    fns::GXSetTevOrder(
-        ctx,
-        (enums::GX_TEVSTAGE4 as i32),
-        (enums::GX_TEXCOORD4 as i32),
-        (enums::GX_TEXMAP4 as i32),
-        (enums::GX_COLOR0A0 as i32),
-    );
-    fns::GXSetTevOrder(
-        ctx,
-        (enums::GX_TEVSTAGE5 as i32),
-        (enums::GX_TEXCOORD5 as i32),
-        (enums::GX_TEXMAP5 as i32),
-        (enums::GX_COLOR0A0 as i32),
-    );
-    fns::GXSetTevOrder(
-        ctx,
-        (enums::GX_TEVSTAGE6 as i32),
-        (enums::GX_TEXCOORD6 as i32),
-        (enums::GX_TEXMAP6 as i32),
-        (enums::GX_COLOR0A0 as i32),
-    );
-    fns::GXSetTevOrder(
-        ctx,
-        (enums::GX_TEVSTAGE7 as i32),
-        (enums::GX_TEXCOORD7 as i32),
-        (enums::GX_TEXMAP7 as i32),
-        (enums::GX_COLOR0A0 as i32),
-    );
-    fns::GXSetTevOrder(
-        ctx,
-        (enums::GX_TEVSTAGE8 as i32),
-        (enums::GX_TEXCOORD_NULL as i32),
-        (enums::GX_TEXMAP_NULL as i32),
-        (enums::GX_COLOR_NULL as i32),
-    );
-    fns::GXSetTevOrder(
-        ctx,
-        (enums::GX_TEVSTAGE9 as i32),
-        (enums::GX_TEXCOORD_NULL as i32),
-        (enums::GX_TEXMAP_NULL as i32),
-        (enums::GX_COLOR_NULL as i32),
-    );
-    fns::GXSetTevOrder(
-        ctx,
-        (enums::GX_TEVSTAGE10 as i32),
-        (enums::GX_TEXCOORD_NULL as i32),
-        (enums::GX_TEXMAP_NULL as i32),
-        (enums::GX_COLOR_NULL as i32),
-    );
-    fns::GXSetTevOrder(
-        ctx,
-        (enums::GX_TEVSTAGE11 as i32),
-        (enums::GX_TEXCOORD_NULL as i32),
-        (enums::GX_TEXMAP_NULL as i32),
-        (enums::GX_COLOR_NULL as i32),
-    );
-    fns::GXSetTevOrder(
-        ctx,
-        (enums::GX_TEVSTAGE12 as i32),
-        (enums::GX_TEXCOORD_NULL as i32),
-        (enums::GX_TEXMAP_NULL as i32),
-        (enums::GX_COLOR_NULL as i32),
-    );
-    fns::GXSetTevOrder(
-        ctx,
-        (enums::GX_TEVSTAGE13 as i32),
-        (enums::GX_TEXCOORD_NULL as i32),
-        (enums::GX_TEXMAP_NULL as i32),
-        (enums::GX_COLOR_NULL as i32),
-    );
-    fns::GXSetTevOrder(
-        ctx,
-        (enums::GX_TEVSTAGE14 as i32),
-        (enums::GX_TEXCOORD_NULL as i32),
-        (enums::GX_TEXMAP_NULL as i32),
-        (enums::GX_COLOR_NULL as i32),
-    );
-    fns::GXSetTevOrder(
-        ctx,
-        (enums::GX_TEVSTAGE15 as i32),
-        (enums::GX_TEXCOORD_NULL as i32),
-        (enums::GX_TEXMAP_NULL as i32),
-        (enums::GX_COLOR_NULL as i32),
-    );
-    fns::GXSetNumTevStages(ctx, (1_i32 as u8));
-    fns::GXSetTevOp(
-        ctx,
-        (enums::GX_TEVSTAGE0 as i32),
-        (enums::GX_REPLACE as i32),
-    );
-    fns::GXSetAlphaCompare(
-        ctx,
-        (enums::GX_ALWAYS as i32),
-        (0_i32 as u8),
-        (enums::GX_AOP_AND as i32),
-        (enums::GX_ALWAYS as i32),
-        (0_i32 as u8),
-    );
-    fns::GXSetZTexture(
-        ctx,
-        (enums::GX_ZT_DISABLE as i32),
-        (enums::GX_TF_Z8 as i32),
-        (0_i32 as u32),
-    );
-    {
-        i = ((enums::GX_TEVSTAGE0 as i32) as u32);
-        'l2: while i < ((enums::GX_MAX_TEVSTAGE as i32) as u32) {
-            'c3: {
-                fns::GXSetTevKColorSel(ctx, (i as i32), (enums::GX_TEV_KCSEL_1_4 as i32));
-                fns::GXSetTevKAlphaSel(ctx, (i as i32), (enums::GX_TEV_KASEL_1 as i32));
-                fns::GXSetTevSwapMode(
-                    ctx,
-                    (i as i32),
-                    (enums::GX_TEV_SWAP0 as i32),
-                    (enums::GX_TEV_SWAP0 as i32),
-                );
-            }
-            i = i.wrapping_add(1);
-        }
-    }
-    fns::GXSetTevSwapModeTable(
-        ctx,
-        (enums::GX_TEV_SWAP0 as i32),
-        (enums::GX_CH_RED as i32),
-        (enums::GX_CH_GREEN as i32),
-        (enums::GX_CH_BLUE as i32),
-        (enums::GX_CH_ALPHA as i32),
-    );
-    fns::GXSetTevSwapModeTable(
-        ctx,
-        (enums::GX_TEV_SWAP1 as i32),
-        (enums::GX_CH_RED as i32),
-        (enums::GX_CH_RED as i32),
-        (enums::GX_CH_RED as i32),
-        (enums::GX_CH_ALPHA as i32),
-    );
-    fns::GXSetTevSwapModeTable(
-        ctx,
-        (enums::GX_TEV_SWAP2 as i32),
-        (enums::GX_CH_GREEN as i32),
-        (enums::GX_CH_GREEN as i32),
-        (enums::GX_CH_GREEN as i32),
-        (enums::GX_CH_ALPHA as i32),
-    );
-    fns::GXSetTevSwapModeTable(
-        ctx,
-        (enums::GX_TEV_SWAP3 as i32),
-        (enums::GX_CH_BLUE as i32),
-        (enums::GX_CH_BLUE as i32),
-        (enums::GX_CH_BLUE as i32),
-        (enums::GX_CH_ALPHA as i32),
-    );
-    {
-        i = ((enums::GX_TEVSTAGE0 as i32) as u32);
-        'l4: while i < ((enums::GX_MAX_TEVSTAGE as i32) as u32) {
-            'c5: {
-                fns::GXSetTevDirect(ctx, (i as i32));
-            }
-            i = i.wrapping_add(1);
-        }
-    }
-    fns::GXSetNumIndStages(ctx, (0_i32 as u8));
-    fns::GXSetIndTexCoordScale(
-        ctx,
-        (enums::GX_INDTEXSTAGE0 as i32),
-        (enums::GX_ITS_1 as i32),
-        (enums::GX_ITS_1 as i32),
-    );
-    fns::GXSetIndTexCoordScale(
-        ctx,
-        (enums::GX_INDTEXSTAGE1 as i32),
-        (enums::GX_ITS_1 as i32),
-        (enums::GX_ITS_1 as i32),
-    );
-    fns::GXSetIndTexCoordScale(
-        ctx,
-        (enums::GX_INDTEXSTAGE2 as i32),
-        (enums::GX_ITS_1 as i32),
-        (enums::GX_ITS_1 as i32),
-    );
-    fns::GXSetIndTexCoordScale(
-        ctx,
-        (enums::GX_INDTEXSTAGE3 as i32),
-        (enums::GX_ITS_1 as i32),
-        (enums::GX_ITS_1 as i32),
-    );
-    fns::GXSetFog(
-        ctx,
-        (enums::GX_FOG_NONE as i32),
-        0.0,
-        1.0,
-        0.10000000149011612,
-        1.0,
-        {
-            Handle::copy_from(__arg_6, black);
-            __arg_6
-        },
-    );
-    fns::GXSetFogRangeAdj(
-        ctx,
-        (0_i32 as u8),
-        (0_i32 as u16),
-        null::<_GXFogAdjTable<'a>>(ctx),
-    );
-    fns::GXSetBlendMode(
-        ctx,
-        (enums::GX_BM_NONE as i32),
-        (enums::GX_BL_SRCALPHA as i32),
-        (enums::GX_BL_INVSRCALPHA as i32),
-        (enums::GX_LO_CLEAR as i32),
-    );
-    fns::GXSetColorUpdate(ctx, (1_i32 as u8));
-    fns::GXSetAlphaUpdate(ctx, (1_i32 as u8));
-    fns::GXSetZMode(ctx, (1_i32 as u8), (enums::GX_LEQUAL as i32), (1_i32 as u8));
-    fns::GXSetZCompLoc(ctx, (1_i32 as u8));
-    fns::GXSetDither(ctx, (1_i32 as u8));
-    fns::GXSetDstAlpha(ctx, (0_i32 as u8), (0_i32 as u8));
-    fns::GXSetPixelFmt(
-        ctx,
-        (enums::GX_PF_RGB8_Z24 as i32),
-        (enums::GX_ZC_LINEAR as i32),
-    );
-    fns::GXSetFieldMask(ctx, (1_i32 as u8), (1_i32 as u8));
-    fns::GXSetFieldMode(
-        ctx,
-        (rmode).field_rendering(),
-        ((if ((rmode).viHeight() as i32) == 2_i32.wrapping_mul(((rmode).xfbHeight() as i32)) {
-            ((1_i32 as u8) as i32)
-        } else {
-            ((0_i32 as u8) as i32)
-        }) as u8),
-    );
-    fns::GXSetDispCopySrc(
-        ctx,
-        (0_i32 as u16),
-        (0_i32 as u16),
-        (rmode).fbWidth(),
-        (rmode).efbHeight(),
-    );
-    fns::GXSetDispCopyDst(ctx, (rmode).fbWidth(), (rmode).efbHeight());
-    let _ = fns::GXSetDispCopyYScale(
-        ctx,
-        fp::fdivs(
-            fp::frsp(((rmode).xfbHeight()) as f64),
-            fp::frsp(((rmode).efbHeight()) as f64),
-        ),
-    );
-    fns::GXSetCopyClamp(
-        ctx,
-        ((enums::GX_CLAMP_TOP as i32) | (enums::GX_CLAMP_BOTTOM as i32)),
-    );
-    fns::GXSetCopyFilter(
-        ctx,
-        (rmode).aa(),
-        Handle::cast::<Arr<'a, ArrV<'a, u8, 2>, 12>>((rmode).sample_pattern().get(0)).get(0),
-        (1_i32 as u8),
-        Handle::cast::<ArrV<'a, u8, 7>>((rmode).vfilter().at(0)).at(0),
-    );
-    fns::GXSetDispCopyGamma(ctx, (enums::GX_GM_1_0 as i32));
-    fns::GXSetDispCopyFrame2Field(ctx, (enums::GX_COPY_PROGRESSIVE as i32));
-    fns::GXClearBoundingBox(ctx);
-    fns::GXPokeColorUpdate(ctx, (1_i32 as u8));
-    fns::GXPokeAlphaUpdate(ctx, (1_i32 as u8));
-    fns::GXPokeDither(ctx, (0_i32 as u8));
-    fns::GXPokeBlendMode(
-        ctx,
-        (enums::GX_BM_NONE as i32),
-        (enums::GX_BL_ZERO as i32),
-        (enums::GX_BL_ONE as i32),
-        (enums::GX_LO_SET as i32),
-    );
-    fns::GXPokeAlphaMode(ctx, (enums::GX_ALWAYS as i32), (0_i32 as u8));
-    fns::GXPokeAlphaRead(ctx, (enums::GX_READ_FF as i32));
-    fns::GXPokeDstAlpha(ctx, (0_i32 as u8), (0_i32 as u8));
-    fns::GXPokeZMode(ctx, (1_i32 as u8), (enums::GX_ALWAYS as i32), (1_i32 as u8));
-    fns::GXSetGPMetric(
-        ctx,
-        (enums::GX_PERF0_NONE as i32),
-        (enums::GX_PERF1_NONE as i32),
-    );
-    fns::GXClearGPMetric(ctx);
+    // Transliterated from its machine code: calls VIGetTvFormat, which reads registers its caller sets without passing them.
+    ().put_regs(ctx);
+    asm___GXInitGX(ctx);
 }
 
-fn inl_GXSetTexCoordGen_unfused<'a>(
-    ctx: &'a Ctx,
-    dst_coord: i32,
-    func: i32,
-    src_param: i32,
-    mtx: u32,
-) {
-    let mut dst_coord = dst_coord;
-    let mut func = func;
-    let mut src_param = src_param;
-    let mut mtx = mtx;
-    fns::GXSetTexCoordGen2(
-        ctx,
-        dst_coord,
-        func,
-        src_param,
-        mtx,
-        (0_i32 as u8),
-        ((enums::GX_PTIDENTITY as i32) as u32),
-    );
+fn asm___GXInitGX(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8033af40_u32;
+    loop {
+        match pc {
+            0x8033af40_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x78(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffff88_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x74(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x74_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x70(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x70_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // lwz r4, "@248"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffffe820_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // lwz r3, "@249"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffffe824_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // lwz r0, "@250"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffffe828_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // stw r4, 0x28(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x28_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // stw r3, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // stw r0, 0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x20_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // bl VIGetTvFormat
+                c::call(ctx, 0x8035032c_u32, 0x8033af70_u32);
+                pc = 0x8033af70_u32;
+            }
+            0x8033af70_u32 => {
+                // cmpwi r3, 0x1
+                {
+                    let (x, y) = (g[3].get() as i32, 1_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_8033AFA4
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x8033afa4_u32;
+                    continue;
+                }
+                pc = 0x8033af78_u32;
+            }
+            0x8033af78_u32 => {
+                // bge .L_8033AF88
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x8033af88_u32;
+                    continue;
+                }
+                pc = 0x8033af7c_u32;
+            }
+            0x8033af7c_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bge .L_8033AF94
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x8033af94_u32;
+                    continue;
+                }
+                pc = 0x8033af84_u32;
+            }
+            0x8033af84_u32 => {
+                // b .L_8033AFC4
+                pc = 0x8033afc4_u32;
+                continue;
+                pc = 0x8033af88_u32;
+            }
+            0x8033af88_u32 => {
+                // cmpwi r3, 0x3
+                {
+                    let (x, y) = (g[3].get() as i32, 3_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bge .L_8033AFC4
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x8033afc4_u32;
+                    continue;
+                }
+                pc = 0x8033af90_u32;
+            }
+            0x8033af90_u32 => {
+                // b .L_8033AFB4
+                pc = 0x8033afb4_u32;
+                continue;
+                pc = 0x8033af94_u32;
+            }
+            0x8033af94_u32 => {
+                // lis r3, GXNtsc480IntDf@ha
+                g[3].set(0x80400000_u32);
+                // addi r0, r3, GXNtsc480IntDf@l
+                g[0].set(g[3].get().wrapping_add(0x1168_u32));
+                // mr r31, r0
+                {
+                    let v = g[0].get() | g[0].get();
+                    g[31].set(v);
+                }
+                // b .L_8033AFD0
+                pc = 0x8033afd0_u32;
+                continue;
+                pc = 0x8033afa4_u32;
+            }
+            0x8033afa4_u32 => {
+                // lis r3, GXPal528IntDf@ha
+                g[3].set(0x80400000_u32);
+                // addi r0, r3, GXPal528IntDf@l
+                g[0].set(g[3].get().wrapping_add(0x1258_u32));
+                // mr r31, r0
+                {
+                    let v = g[0].get() | g[0].get();
+                    g[31].set(v);
+                }
+                // b .L_8033AFD0
+                pc = 0x8033afd0_u32;
+                continue;
+                pc = 0x8033afb4_u32;
+            }
+            0x8033afb4_u32 => {
+                // lis r3, GXMpal480IntDf@ha
+                g[3].set(0x80400000_u32);
+                // addi r0, r3, GXMpal480IntDf@l
+                g[0].set(g[3].get().wrapping_add(0x121c_u32));
+                // mr r31, r0
+                {
+                    let v = g[0].get() | g[0].get();
+                    g[31].set(v);
+                }
+                // b .L_8033AFD0
+                pc = 0x8033afd0_u32;
+                continue;
+                pc = 0x8033afc4_u32;
+            }
+            0x8033afc4_u32 => {
+                // lis r3, GXNtsc480IntDf@ha
+                g[3].set(0x80400000_u32);
+                // addi r0, r3, GXNtsc480IntDf@l
+                g[0].set(g[3].get().wrapping_add(0x1168_u32));
+                // mr r31, r0
+                {
+                    let v = g[0].get() | g[0].get();
+                    g[31].set(v);
+                }
+                pc = 0x8033afd0_u32;
+            }
+            0x8033afd0_u32 => {
+                // lwz r0, 0x28(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x28_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lis r4, 0x100
+                g[4].set(0x1000000_u32);
+                // addi r3, r1, 0x1c
+                g[3].set(g[1].get().wrapping_add(0x1c_u32));
+                // stw r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // subi r4, r4, 0x1
+                g[4].set(g[4].get().wrapping_add(0xffffffff_u32));
+                // bl GXSetCopyClear
+                c::call(ctx, 0x8033d8a0_u32, 0x8033afe8_u32);
+                pc = 0x8033afe8_u32;
+            }
+            0x8033afe8_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x1
+                g[4].set(0x1_u32);
+                // li r5, 0x4
+                g[5].set(0x4_u32);
+                // li r6, 0x3c
+                g[6].set(0x3c_u32);
+                // li r7, 0x0
+                g[7].set(0_u32);
+                // li r8, 0x7d
+                g[8].set(0x7d_u32);
+                // bl GXSetTexCoordGen2
+                c::call(ctx, 0x8033c8a8_u32, 0x8033b004_u32);
+                pc = 0x8033b004_u32;
+            }
+            0x8033b004_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // li r4, 0x1
+                g[4].set(0x1_u32);
+                // li r5, 0x5
+                g[5].set(0x5_u32);
+                // li r6, 0x3c
+                g[6].set(0x3c_u32);
+                // li r7, 0x0
+                g[7].set(0_u32);
+                // li r8, 0x7d
+                g[8].set(0x7d_u32);
+                // bl GXSetTexCoordGen2
+                c::call(ctx, 0x8033c8a8_u32, 0x8033b020_u32);
+                pc = 0x8033b020_u32;
+            }
+            0x8033b020_u32 => {
+                // li r3, 0x2
+                g[3].set(0x2_u32);
+                // li r4, 0x1
+                g[4].set(0x1_u32);
+                // li r5, 0x6
+                g[5].set(0x6_u32);
+                // li r6, 0x3c
+                g[6].set(0x3c_u32);
+                // li r7, 0x0
+                g[7].set(0_u32);
+                // li r8, 0x7d
+                g[8].set(0x7d_u32);
+                // bl GXSetTexCoordGen2
+                c::call(ctx, 0x8033c8a8_u32, 0x8033b03c_u32);
+                pc = 0x8033b03c_u32;
+            }
+            0x8033b03c_u32 => {
+                // li r3, 0x3
+                g[3].set(0x3_u32);
+                // li r4, 0x1
+                g[4].set(0x1_u32);
+                // li r5, 0x7
+                g[5].set(0x7_u32);
+                // li r6, 0x3c
+                g[6].set(0x3c_u32);
+                // li r7, 0x0
+                g[7].set(0_u32);
+                // li r8, 0x7d
+                g[8].set(0x7d_u32);
+                // bl GXSetTexCoordGen2
+                c::call(ctx, 0x8033c8a8_u32, 0x8033b058_u32);
+                pc = 0x8033b058_u32;
+            }
+            0x8033b058_u32 => {
+                // li r3, 0x4
+                g[3].set(0x4_u32);
+                // li r4, 0x1
+                g[4].set(0x1_u32);
+                // li r5, 0x8
+                g[5].set(0x8_u32);
+                // li r6, 0x3c
+                g[6].set(0x3c_u32);
+                // li r7, 0x0
+                g[7].set(0_u32);
+                // li r8, 0x7d
+                g[8].set(0x7d_u32);
+                // bl GXSetTexCoordGen2
+                c::call(ctx, 0x8033c8a8_u32, 0x8033b074_u32);
+                pc = 0x8033b074_u32;
+            }
+            0x8033b074_u32 => {
+                // li r3, 0x5
+                g[3].set(0x5_u32);
+                // li r4, 0x1
+                g[4].set(0x1_u32);
+                // li r5, 0x9
+                g[5].set(0x9_u32);
+                // li r6, 0x3c
+                g[6].set(0x3c_u32);
+                // li r7, 0x0
+                g[7].set(0_u32);
+                // li r8, 0x7d
+                g[8].set(0x7d_u32);
+                // bl GXSetTexCoordGen2
+                c::call(ctx, 0x8033c8a8_u32, 0x8033b090_u32);
+                pc = 0x8033b090_u32;
+            }
+            0x8033b090_u32 => {
+                // li r3, 0x6
+                g[3].set(0x6_u32);
+                // li r4, 0x1
+                g[4].set(0x1_u32);
+                // li r5, 0xa
+                g[5].set(0xa_u32);
+                // li r6, 0x3c
+                g[6].set(0x3c_u32);
+                // li r7, 0x0
+                g[7].set(0_u32);
+                // li r8, 0x7d
+                g[8].set(0x7d_u32);
+                // bl GXSetTexCoordGen2
+                c::call(ctx, 0x8033c8a8_u32, 0x8033b0ac_u32);
+                pc = 0x8033b0ac_u32;
+            }
+            0x8033b0ac_u32 => {
+                // li r3, 0x7
+                g[3].set(0x7_u32);
+                // li r4, 0x1
+                g[4].set(0x1_u32);
+                // li r5, 0xb
+                g[5].set(0xb_u32);
+                // li r6, 0x3c
+                g[6].set(0x3c_u32);
+                // li r7, 0x0
+                g[7].set(0_u32);
+                // li r8, 0x7d
+                g[8].set(0x7d_u32);
+                // bl GXSetTexCoordGen2
+                c::call(ctx, 0x8033c8a8_u32, 0x8033b0c8_u32);
+                pc = 0x8033b0c8_u32;
+            }
+            0x8033b0c8_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // bl GXSetNumTexGens
+                c::call(ctx, 0x8033cb78_u32, 0x8033b0d0_u32);
+                pc = 0x8033b0d0_u32;
+            }
+            0x8033b0d0_u32 => {
+                // bl GXClearVtxDesc
+                c::call(ctx, 0x8033c3c8_u32, 0x8033b0d4_u32);
+                pc = 0x8033b0d4_u32;
+            }
+            0x8033b0d4_u32 => {
+                // bl GXInvalidateVtxCache
+                c::call(ctx, 0x8033c898_u32, 0x8033b0d8_u32);
+                pc = 0x8033b0d8_u32;
+            }
+            0x8033b0d8_u32 => {
+                // li r3, 0x6
+                g[3].set(0x6_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // bl GXSetLineWidth
+                c::call(ctx, 0x8033d240_u32, 0x8033b0e4_u32);
+                pc = 0x8033b0e4_u32;
+            }
+            0x8033b0e4_u32 => {
+                // li r3, 0x6
+                g[3].set(0x6_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // bl GXSetPointSize
+                c::call(ctx, 0x8033d298_u32, 0x8033b0f0_u32);
+                pc = 0x8033b0f0_u32;
+            }
+            0x8033b0f0_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl GXEnableTexOffsets
+                c::call(ctx, 0x8033d2ec_u32, 0x8033b100_u32);
+                pc = 0x8033b100_u32;
+            }
+            0x8033b100_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl GXEnableTexOffsets
+                c::call(ctx, 0x8033d2ec_u32, 0x8033b110_u32);
+                pc = 0x8033b110_u32;
+            }
+            0x8033b110_u32 => {
+                // li r3, 0x2
+                g[3].set(0x2_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl GXEnableTexOffsets
+                c::call(ctx, 0x8033d2ec_u32, 0x8033b120_u32);
+                pc = 0x8033b120_u32;
+            }
+            0x8033b120_u32 => {
+                // li r3, 0x3
+                g[3].set(0x3_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl GXEnableTexOffsets
+                c::call(ctx, 0x8033d2ec_u32, 0x8033b130_u32);
+                pc = 0x8033b130_u32;
+            }
+            0x8033b130_u32 => {
+                // li r3, 0x4
+                g[3].set(0x4_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl GXEnableTexOffsets
+                c::call(ctx, 0x8033d2ec_u32, 0x8033b140_u32);
+                pc = 0x8033b140_u32;
+            }
+            0x8033b140_u32 => {
+                // li r3, 0x5
+                g[3].set(0x5_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl GXEnableTexOffsets
+                c::call(ctx, 0x8033d2ec_u32, 0x8033b150_u32);
+                pc = 0x8033b150_u32;
+            }
+            0x8033b150_u32 => {
+                // li r3, 0x6
+                g[3].set(0x6_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl GXEnableTexOffsets
+                c::call(ctx, 0x8033d2ec_u32, 0x8033b160_u32);
+                pc = 0x8033b160_u32;
+            }
+            0x8033b160_u32 => {
+                // li r3, 0x7
+                g[3].set(0x7_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl GXEnableTexOffsets
+                c::call(ctx, 0x8033d2ec_u32, 0x8033b170_u32);
+                pc = 0x8033b170_u32;
+            }
+            0x8033b170_u32 => {
+                // lfs f1, "@297"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffffe82c_u32);
+                    c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
+                }
+                // addi r3, r1, 0x2c
+                g[3].set(g[1].get().wrapping_add(0x2c_u32));
+                // lfs f0, "@298"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffffe830_u32);
+                    c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
+                }
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // stfs f1, 0x2c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x2c_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(1)));
+                }
+                // stfs f0, 0x30(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x30_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+                }
+                // stfs f0, 0x34(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x34_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+                }
+                // stfs f0, 0x38(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x38_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+                }
+                // stfs f0, 0x3c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x3c_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+                }
+                // stfs f1, 0x40(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x40_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(1)));
+                }
+                // stfs f0, 0x44(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x44_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+                }
+                // stfs f0, 0x48(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x48_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+                }
+                // stfs f0, 0x4c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4c_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+                }
+                // stfs f0, 0x50(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x50_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+                }
+                // stfs f1, 0x54(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x54_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(1)));
+                }
+                // stfs f0, 0x58(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x58_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+                }
+                // bl GXLoadPosMtxImm
+                c::call(ctx, 0x80341494_u32, 0x8033b1b4_u32);
+                pc = 0x8033b1b4_u32;
+            }
+            0x8033b1b4_u32 => {
+                // addi r3, r1, 0x2c
+                g[3].set(g[1].get().wrapping_add(0x2c_u32));
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // bl GXLoadNrmMtxImm
+                c::call(ctx, 0x803414d0_u32, 0x8033b1c0_u32);
+                pc = 0x8033b1c0_u32;
+            }
+            0x8033b1c0_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // bl GXSetCurrentMtx
+                c::call(ctx, 0x80341510_u32, 0x8033b1c8_u32);
+                pc = 0x8033b1c8_u32;
+            }
+            0x8033b1c8_u32 => {
+                // addi r3, r1, 0x2c
+                g[3].set(g[1].get().wrapping_add(0x2c_u32));
+                // li r4, 0x3c
+                g[4].set(0x3c_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl GXLoadTexMtxImm
+                c::call(ctx, 0x8034154c_u32, 0x8033b1d8_u32);
+                pc = 0x8033b1d8_u32;
+            }
+            0x8033b1d8_u32 => {
+                // addi r3, r1, 0x2c
+                g[3].set(g[1].get().wrapping_add(0x2c_u32));
+                // li r4, 0x7d
+                g[4].set(0x7d_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl GXLoadTexMtxImm
+                c::call(ctx, 0x8034154c_u32, 0x8033b1e8_u32);
+                pc = 0x8033b1e8_u32;
+            }
+            0x8033b1e8_u32 => {
+                // lhz r4, 0x4(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x4_u32);
+                    g[4].set(u32::from(ctx.read_u16(ea)));
+                }
+                // lis r3, 0x4330
+                g[3].set(0x43300000_u32);
+                // lhz r0, 0x8(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x8_u32);
+                    g[0].set(u32::from(ctx.read_u16(ea)));
+                }
+                // stw r4, 0x6c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x6c_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // lfs f1, "@298"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffffe830_u32);
+                    c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
+                }
+                // stw r0, 0x64(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x64_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lfd f4, "@301"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffffe838_u32);
+                    ctx.regs.set_f(4, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // fmr f2, f1
+                {
+                    let v = ctx.regs.f(1);
+                    ctx.regs.set_f(2, v);
+                }
+                // stw r3, 0x68(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x68_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // fmr f5, f1
+                {
+                    let v = ctx.regs.f(1);
+                    ctx.regs.set_f(5, v);
+                }
+                // lfs f6, "@297"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffffe82c_u32);
+                    c::fill(ctx, 6, fp::lfs(ctx.read_u32(ea)));
+                }
+                // stw r3, 0x60(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x60_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // lfd f3, 0x68(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x68_u32);
+                    ctx.regs.set_f(3, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // lfd f0, 0x60(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x60_u32);
+                    ctx.regs.set_f(0, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // fsubs f3, f3, f4
+                {
+                    let v = fp::fsubs(ctx.regs.f(3), ctx.regs.f(4));
+                    c::fill(ctx, 3, v);
+                }
+                // fsubs f4, f0, f4
+                {
+                    let v = fp::fsubs(ctx.regs.f(0), ctx.regs.f(4));
+                    c::fill(ctx, 4, v);
+                }
+                // bl GXSetViewport
+                c::call(ctx, 0x803416ec_u32, 0x8033b22c_u32);
+                pc = 0x8033b22c_u32;
+            }
+            0x8033b22c_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // bl GXSetCoPlanar
+                c::call(ctx, 0x8033d3a0_u32, 0x8033b234_u32);
+                pc = 0x8033b234_u32;
+            }
+            0x8033b234_u32 => {
+                // li r3, 0x2
+                g[3].set(0x2_u32);
+                // bl GXSetCullMode
+                c::call(ctx, 0x8033d350_u32, 0x8033b23c_u32);
+                pc = 0x8033b23c_u32;
+            }
+            0x8033b23c_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // bl GXSetClipMode
+                c::call(ctx, 0x80341850_u32, 0x8033b244_u32);
+                pc = 0x8033b244_u32;
+            }
+            0x8033b244_u32 => {
+                // lhz r5, 0x4(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x4_u32);
+                    g[5].set(u32::from(ctx.read_u16(ea)));
+                }
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // lhz r6, 0x6(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x6_u32);
+                    g[6].set(u32::from(ctx.read_u16(ea)));
+                }
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // bl GXSetScissor
+                c::call(ctx, 0x8034175c_u32, 0x8033b258_u32);
+                pc = 0x8033b258_u32;
+            }
+            0x8033b258_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // bl GXSetScissorBoxOffset
+                c::call(ctx, 0x8034180c_u32, 0x8033b264_u32);
+                pc = 0x8033b264_u32;
+            }
+            0x8033b264_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // bl GXSetNumChans
+                c::call(ctx, 0x8033e55c_u32, 0x8033b26c_u32);
+                pc = 0x8033b26c_u32;
+            }
+            0x8033b26c_u32 => {
+                // li r3, 0x4
+                g[3].set(0x4_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // li r6, 0x1
+                g[6].set(0x1_u32);
+                // li r7, 0x0
+                g[7].set(0_u32);
+                // li r8, 0x0
+                g[8].set(0_u32);
+                // li r9, 0x2
+                g[9].set(0x2_u32);
+                // bl GXSetChanCtrl
+                c::call(ctx, 0x8033e5a8_u32, 0x8033b28c_u32);
+                pc = 0x8033b28c_u32;
+            }
+            0x8033b28c_u32 => {
+                // lwz r0, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r4, r1, 0x18
+                g[4].set(g[1].get().wrapping_add(0x18_u32));
+                // li r3, 0x4
+                g[3].set(0x4_u32);
+                // stw r0, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // bl GXSetChanAmbColor
+                c::call(ctx, 0x8033e28c_u32, 0x8033b2a0_u32);
+                pc = 0x8033b2a0_u32;
+            }
+            0x8033b2a0_u32 => {
+                // lwz r0, 0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x20_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r4, r1, 0x14
+                g[4].set(g[1].get().wrapping_add(0x14_u32));
+                // li r3, 0x4
+                g[3].set(0x4_u32);
+                // stw r0, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // bl GXSetChanMatColor
+                c::call(ctx, 0x8033e3f4_u32, 0x8033b2b4_u32);
+                pc = 0x8033b2b4_u32;
+            }
+            0x8033b2b4_u32 => {
+                // li r3, 0x5
+                g[3].set(0x5_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // li r6, 0x1
+                g[6].set(0x1_u32);
+                // li r7, 0x0
+                g[7].set(0_u32);
+                // li r8, 0x0
+                g[8].set(0_u32);
+                // li r9, 0x2
+                g[9].set(0x2_u32);
+                // bl GXSetChanCtrl
+                c::call(ctx, 0x8033e5a8_u32, 0x8033b2d4_u32);
+                pc = 0x8033b2d4_u32;
+            }
+            0x8033b2d4_u32 => {
+                // lwz r0, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r4, r1, 0x10
+                g[4].set(g[1].get().wrapping_add(0x10_u32));
+                // li r3, 0x5
+                g[3].set(0x5_u32);
+                // stw r0, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // bl GXSetChanAmbColor
+                c::call(ctx, 0x8033e28c_u32, 0x8033b2e8_u32);
+                pc = 0x8033b2e8_u32;
+            }
+            0x8033b2e8_u32 => {
+                // lwz r0, 0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x20_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r4, r1, 0xc
+                g[4].set(g[1].get().wrapping_add(0xc_u32));
+                // li r3, 0x5
+                g[3].set(0x5_u32);
+                // stw r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // bl GXSetChanMatColor
+                c::call(ctx, 0x8033e3f4_u32, 0x8033b2fc_u32);
+                pc = 0x8033b2fc_u32;
+            }
+            0x8033b2fc_u32 => {
+                // bl GXInvalidateTexAll
+                c::call(ctx, 0x8033f270_u32, 0x8033b300_u32);
+                pc = 0x8033b300_u32;
+            }
+            0x8033b300_u32 => {
+                // lwz r4, gx@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffa508_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // lis r3, __GXDefaultTexRegionCallback@ha
+                g[3].set(0x80340000_u32);
+                // stw r0, 0x2c8(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x2c8_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // addi r3, r3, __GXDefaultTexRegionCallback@l
+                g[3].set(g[3].get().wrapping_add(0xffffa6e0_u32));
+                // lwz r4, gx@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffa508_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // stw r0, 0x2cc(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x2cc_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // bl GXSetTexRegionCallback
+                c::call(ctx, 0x8033f2b8_u32, 0x8033b320_u32);
+                pc = 0x8033b320_u32;
+            }
+            0x8033b320_u32 => {
+                // lis r3, __GXDefaultTlutRegionCallback@ha
+                g[3].set(0x80340000_u32);
+                // addi r3, r3, __GXDefaultTlutRegionCallback@l
+                g[3].set(g[3].get().wrapping_add(0xffffa75c_u32));
+                // bl GXSetTlutRegionCallback
+                c::call(ctx, 0x8033f2cc_u32, 0x8033b32c_u32);
+                pc = 0x8033b32c_u32;
+            }
+            0x8033b32c_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // li r6, 0x4
+                g[6].set(0x4_u32);
+                // bl GXSetTevOrder
+                c::call(ctx, 0x803405f0_u32, 0x8033b340_u32);
+                pc = 0x8033b340_u32;
+            }
+            0x8033b340_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // li r4, 0x1
+                g[4].set(0x1_u32);
+                // li r5, 0x1
+                g[5].set(0x1_u32);
+                // li r6, 0x4
+                g[6].set(0x4_u32);
+                // bl GXSetTevOrder
+                c::call(ctx, 0x803405f0_u32, 0x8033b354_u32);
+                pc = 0x8033b354_u32;
+            }
+            0x8033b354_u32 => {
+                // li r3, 0x2
+                g[3].set(0x2_u32);
+                // li r4, 0x2
+                g[4].set(0x2_u32);
+                // li r5, 0x2
+                g[5].set(0x2_u32);
+                // li r6, 0x4
+                g[6].set(0x4_u32);
+                // bl GXSetTevOrder
+                c::call(ctx, 0x803405f0_u32, 0x8033b368_u32);
+                pc = 0x8033b368_u32;
+            }
+            0x8033b368_u32 => {
+                // li r3, 0x3
+                g[3].set(0x3_u32);
+                // li r4, 0x3
+                g[4].set(0x3_u32);
+                // li r5, 0x3
+                g[5].set(0x3_u32);
+                // li r6, 0x4
+                g[6].set(0x4_u32);
+                // bl GXSetTevOrder
+                c::call(ctx, 0x803405f0_u32, 0x8033b37c_u32);
+                pc = 0x8033b37c_u32;
+            }
+            0x8033b37c_u32 => {
+                // li r3, 0x4
+                g[3].set(0x4_u32);
+                // li r4, 0x4
+                g[4].set(0x4_u32);
+                // li r5, 0x4
+                g[5].set(0x4_u32);
+                // li r6, 0x4
+                g[6].set(0x4_u32);
+                // bl GXSetTevOrder
+                c::call(ctx, 0x803405f0_u32, 0x8033b390_u32);
+                pc = 0x8033b390_u32;
+            }
+            0x8033b390_u32 => {
+                // li r3, 0x5
+                g[3].set(0x5_u32);
+                // li r4, 0x5
+                g[4].set(0x5_u32);
+                // li r5, 0x5
+                g[5].set(0x5_u32);
+                // li r6, 0x4
+                g[6].set(0x4_u32);
+                // bl GXSetTevOrder
+                c::call(ctx, 0x803405f0_u32, 0x8033b3a4_u32);
+                pc = 0x8033b3a4_u32;
+            }
+            0x8033b3a4_u32 => {
+                // li r3, 0x6
+                g[3].set(0x6_u32);
+                // li r4, 0x6
+                g[4].set(0x6_u32);
+                // li r5, 0x6
+                g[5].set(0x6_u32);
+                // li r6, 0x4
+                g[6].set(0x4_u32);
+                // bl GXSetTevOrder
+                c::call(ctx, 0x803405f0_u32, 0x8033b3b8_u32);
+                pc = 0x8033b3b8_u32;
+            }
+            0x8033b3b8_u32 => {
+                // li r3, 0x7
+                g[3].set(0x7_u32);
+                // li r4, 0x7
+                g[4].set(0x7_u32);
+                // li r5, 0x7
+                g[5].set(0x7_u32);
+                // li r6, 0x4
+                g[6].set(0x4_u32);
+                // bl GXSetTevOrder
+                c::call(ctx, 0x803405f0_u32, 0x8033b3cc_u32);
+                pc = 0x8033b3cc_u32;
+            }
+            0x8033b3cc_u32 => {
+                // li r3, 0x8
+                g[3].set(0x8_u32);
+                // li r4, 0xff
+                g[4].set(0xff_u32);
+                // li r5, 0xff
+                g[5].set(0xff_u32);
+                // li r6, 0xff
+                g[6].set(0xff_u32);
+                // bl GXSetTevOrder
+                c::call(ctx, 0x803405f0_u32, 0x8033b3e0_u32);
+                pc = 0x8033b3e0_u32;
+            }
+            0x8033b3e0_u32 => {
+                // li r3, 0x9
+                g[3].set(0x9_u32);
+                // li r4, 0xff
+                g[4].set(0xff_u32);
+                // li r5, 0xff
+                g[5].set(0xff_u32);
+                // li r6, 0xff
+                g[6].set(0xff_u32);
+                // bl GXSetTevOrder
+                c::call(ctx, 0x803405f0_u32, 0x8033b3f4_u32);
+                pc = 0x8033b3f4_u32;
+            }
+            0x8033b3f4_u32 => {
+                // li r3, 0xa
+                g[3].set(0xa_u32);
+                // li r4, 0xff
+                g[4].set(0xff_u32);
+                // li r5, 0xff
+                g[5].set(0xff_u32);
+                // li r6, 0xff
+                g[6].set(0xff_u32);
+                // bl GXSetTevOrder
+                c::call(ctx, 0x803405f0_u32, 0x8033b408_u32);
+                pc = 0x8033b408_u32;
+            }
+            0x8033b408_u32 => {
+                // li r3, 0xb
+                g[3].set(0xb_u32);
+                // li r4, 0xff
+                g[4].set(0xff_u32);
+                // li r5, 0xff
+                g[5].set(0xff_u32);
+                // li r6, 0xff
+                g[6].set(0xff_u32);
+                // bl GXSetTevOrder
+                c::call(ctx, 0x803405f0_u32, 0x8033b41c_u32);
+                pc = 0x8033b41c_u32;
+            }
+            0x8033b41c_u32 => {
+                // li r3, 0xc
+                g[3].set(0xc_u32);
+                // li r4, 0xff
+                g[4].set(0xff_u32);
+                // li r5, 0xff
+                g[5].set(0xff_u32);
+                // li r6, 0xff
+                g[6].set(0xff_u32);
+                // bl GXSetTevOrder
+                c::call(ctx, 0x803405f0_u32, 0x8033b430_u32);
+                pc = 0x8033b430_u32;
+            }
+            0x8033b430_u32 => {
+                // li r3, 0xd
+                g[3].set(0xd_u32);
+                // li r4, 0xff
+                g[4].set(0xff_u32);
+                // li r5, 0xff
+                g[5].set(0xff_u32);
+                // li r6, 0xff
+                g[6].set(0xff_u32);
+                // bl GXSetTevOrder
+                c::call(ctx, 0x803405f0_u32, 0x8033b444_u32);
+                pc = 0x8033b444_u32;
+            }
+            0x8033b444_u32 => {
+                // li r3, 0xe
+                g[3].set(0xe_u32);
+                // li r4, 0xff
+                g[4].set(0xff_u32);
+                // li r5, 0xff
+                g[5].set(0xff_u32);
+                // li r6, 0xff
+                g[6].set(0xff_u32);
+                // bl GXSetTevOrder
+                c::call(ctx, 0x803405f0_u32, 0x8033b458_u32);
+                pc = 0x8033b458_u32;
+            }
+            0x8033b458_u32 => {
+                // li r3, 0xf
+                g[3].set(0xf_u32);
+                // li r4, 0xff
+                g[4].set(0xff_u32);
+                // li r5, 0xff
+                g[5].set(0xff_u32);
+                // li r6, 0xff
+                g[6].set(0xff_u32);
+                // bl GXSetTevOrder
+                c::call(ctx, 0x803405f0_u32, 0x8033b46c_u32);
+                pc = 0x8033b46c_u32;
+            }
+            0x8033b46c_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // bl GXSetNumTevStages
+                c::call(ctx, 0x80340790_u32, 0x8033b474_u32);
+                pc = 0x8033b474_u32;
+            }
+            0x8033b474_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x3
+                g[4].set(0x3_u32);
+                // bl GXSetTevOp
+                c::call(ctx, 0x8033fdc4_u32, 0x8033b480_u32);
+                pc = 0x8033b480_u32;
+            }
+            0x8033b480_u32 => {
+                // li r3, 0x7
+                g[3].set(0x7_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // li r6, 0x7
+                g[6].set(0x7_u32);
+                // li r7, 0x0
+                g[7].set(0_u32);
+                // bl GXSetAlphaCompare
+                c::call(ctx, 0x8034051c_u32, 0x8033b498_u32);
+                pc = 0x8033b498_u32;
+            }
+            0x8033b498_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x11
+                g[4].set(0x11_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl GXSetZTexture
+                c::call(ctx, 0x8034056c_u32, 0x8033b4a8_u32);
+                pc = 0x8033b4a8_u32;
+            }
+            0x8033b4a8_u32 => {
+                // li r30, 0x0
+                g[30].set(0_u32);
+                // b .L_8033B4B0
+                pc = 0x8033b4b0_u32;
+                continue;
+                pc = 0x8033b4b0_u32;
+            }
+            0x8033b4b0_u32 => {
+                // b .L_8033B4B4
+                pc = 0x8033b4b4_u32;
+                continue;
+                pc = 0x8033b4b4_u32;
+            }
+            0x8033b4b4_u32 => {
+                // b .L_8033B4B8
+                pc = 0x8033b4b8_u32;
+                continue;
+                pc = 0x8033b4b8_u32;
+            }
+            0x8033b4b8_u32 => {
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // li r4, 0x6
+                g[4].set(0x6_u32);
+                // bl GXSetTevKColorSel
+                c::call(ctx, 0x80340348_u32, 0x8033b4c4_u32);
+                pc = 0x8033b4c4_u32;
+            }
+            0x8033b4c4_u32 => {
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // bl GXSetTevKAlphaSel
+                c::call(ctx, 0x803403b4_u32, 0x8033b4d0_u32);
+                pc = 0x8033b4d0_u32;
+            }
+            0x8033b4d0_u32 => {
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl GXSetTevSwapMode
+                c::call(ctx, 0x80340420_u32, 0x8033b4e0_u32);
+                pc = 0x8033b4e0_u32;
+            }
+            0x8033b4e0_u32 => {
+                // addi r30, r30, 0x1
+                g[30].set(g[30].get().wrapping_add(0x1_u32));
+                // cmplwi r30, 0x10
+                {
+                    let (x, y) = (g[30].get(), 0x10_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // blt .L_8033B4B8
+                if (c::cr_bit(ctx, 0) == true) {
+                    pc = 0x8033b4b8_u32;
+                    continue;
+                }
+                pc = 0x8033b4ec_u32;
+            }
+            0x8033b4ec_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x1
+                g[5].set(0x1_u32);
+                // li r6, 0x2
+                g[6].set(0x2_u32);
+                // li r7, 0x3
+                g[7].set(0x3_u32);
+                // bl GXSetTevSwapModeTable
+                c::call(ctx, 0x80340478_u32, 0x8033b504_u32);
+                pc = 0x8033b504_u32;
+            }
+            0x8033b504_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // li r6, 0x0
+                g[6].set(0_u32);
+                // li r7, 0x3
+                g[7].set(0x3_u32);
+                // bl GXSetTevSwapModeTable
+                c::call(ctx, 0x80340478_u32, 0x8033b51c_u32);
+                pc = 0x8033b51c_u32;
+            }
+            0x8033b51c_u32 => {
+                // li r3, 0x2
+                g[3].set(0x2_u32);
+                // li r4, 0x1
+                g[4].set(0x1_u32);
+                // li r5, 0x1
+                g[5].set(0x1_u32);
+                // li r6, 0x1
+                g[6].set(0x1_u32);
+                // li r7, 0x3
+                g[7].set(0x3_u32);
+                // bl GXSetTevSwapModeTable
+                c::call(ctx, 0x80340478_u32, 0x8033b534_u32);
+                pc = 0x8033b534_u32;
+            }
+            0x8033b534_u32 => {
+                // li r3, 0x3
+                g[3].set(0x3_u32);
+                // li r4, 0x2
+                g[4].set(0x2_u32);
+                // li r5, 0x2
+                g[5].set(0x2_u32);
+                // li r6, 0x2
+                g[6].set(0x2_u32);
+                // li r7, 0x3
+                g[7].set(0x3_u32);
+                // bl GXSetTevSwapModeTable
+                c::call(ctx, 0x80340478_u32, 0x8033b54c_u32);
+                pc = 0x8033b54c_u32;
+            }
+            0x8033b54c_u32 => {
+                // li r30, 0x0
+                g[30].set(0_u32);
+                // b .L_8033B554
+                pc = 0x8033b554_u32;
+                continue;
+                pc = 0x8033b554_u32;
+            }
+            0x8033b554_u32 => {
+                // b .L_8033B558
+                pc = 0x8033b558_u32;
+                continue;
+                pc = 0x8033b558_u32;
+            }
+            0x8033b558_u32 => {
+                // b .L_8033B55C
+                pc = 0x8033b55c_u32;
+                continue;
+                pc = 0x8033b55c_u32;
+            }
+            0x8033b55c_u32 => {
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // bl GXSetTevDirect
+                c::call(ctx, 0x8033fc8c_u32, 0x8033b564_u32);
+                pc = 0x8033b564_u32;
+            }
+            0x8033b564_u32 => {
+                // addi r30, r30, 0x1
+                g[30].set(g[30].get().wrapping_add(0x1_u32));
+                // cmplwi r30, 0x10
+                {
+                    let (x, y) = (g[30].get(), 0x10_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // blt .L_8033B55C
+                if (c::cr_bit(ctx, 0) == true) {
+                    pc = 0x8033b55c_u32;
+                    continue;
+                }
+                pc = 0x8033b570_u32;
+            }
+            0x8033b570_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // bl GXSetNumIndStages
+                c::call(ctx, 0x8033fc60_u32, 0x8033b578_u32);
+                pc = 0x8033b578_u32;
+            }
+            0x8033b578_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl GXSetIndTexCoordScale
+                c::call(ctx, 0x8033f954_u32, 0x8033b588_u32);
+                pc = 0x8033b588_u32;
+            }
+            0x8033b588_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl GXSetIndTexCoordScale
+                c::call(ctx, 0x8033f954_u32, 0x8033b598_u32);
+                pc = 0x8033b598_u32;
+            }
+            0x8033b598_u32 => {
+                // li r3, 0x2
+                g[3].set(0x2_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl GXSetIndTexCoordScale
+                c::call(ctx, 0x8033f954_u32, 0x8033b5a8_u32);
+                pc = 0x8033b5a8_u32;
+            }
+            0x8033b5a8_u32 => {
+                // li r3, 0x3
+                g[3].set(0x3_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl GXSetIndTexCoordScale
+                c::call(ctx, 0x8033f954_u32, 0x8033b5b8_u32);
+                pc = 0x8033b5b8_u32;
+            }
+            0x8033b5b8_u32 => {
+                // lfs f2, "@297"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffffe82c_u32);
+                    c::fill(ctx, 2, fp::lfs(ctx.read_u32(ea)));
+                }
+                // addi r4, r1, 0x8
+                g[4].set(g[1].get().wrapping_add(0x8_u32));
+                // lwz r0, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // fmr f4, f2
+                {
+                    let v = ctx.regs.f(2);
+                    ctx.regs.set_f(4, v);
+                }
+                // stw r0, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lfs f1, "@298"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffffe830_u32);
+                    c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
+                }
+                // lfs f3, "@299"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffffe834_u32);
+                    c::fill(ctx, 3, fp::lfs(ctx.read_u32(ea)));
+                }
+                // bl GXSetFog
+                c::call(ctx, 0x803407c4_u32, 0x8033b5dc_u32);
+                pc = 0x8033b5dc_u32;
+            }
+            0x8033b5dc_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl GXSetFogRangeAdj
+                c::call(ctx, 0x80340b3c_u32, 0x8033b5ec_u32);
+                pc = 0x8033b5ec_u32;
+            }
+            0x8033b5ec_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x4
+                g[4].set(0x4_u32);
+                // li r5, 0x5
+                g[5].set(0x5_u32);
+                // li r6, 0x0
+                g[6].set(0_u32);
+                // bl GXSetBlendMode
+                c::call(ctx, 0x80340c3c_u32, 0x8033b600_u32);
+                pc = 0x8033b600_u32;
+            }
+            0x8033b600_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // bl GXSetColorUpdate
+                c::call(ctx, 0x80340d40_u32, 0x8033b608_u32);
+                pc = 0x8033b608_u32;
+            }
+            0x8033b608_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // bl GXSetAlphaUpdate
+                c::call(ctx, 0x80340d80_u32, 0x8033b610_u32);
+                pc = 0x8033b610_u32;
+            }
+            0x8033b610_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // li r4, 0x3
+                g[4].set(0x3_u32);
+                // li r5, 0x1
+                g[5].set(0x1_u32);
+                // bl GXSetZMode
+                c::call(ctx, 0x80340dc0_u32, 0x8033b620_u32);
+                pc = 0x8033b620_u32;
+            }
+            0x8033b620_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // bl GXSetZCompLoc
+                c::call(ctx, 0x80340e38_u32, 0x8033b628_u32);
+                pc = 0x8033b628_u32;
+            }
+            0x8033b628_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // bl GXSetDither
+                c::call(ctx, 0x80340f88_u32, 0x8033b630_u32);
+                pc = 0x8033b630_u32;
+            }
+            0x8033b630_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // bl GXSetDstAlpha
+                c::call(ctx, 0x80340fc8_u32, 0x8033b63c_u32);
+                pc = 0x8033b63c_u32;
+            }
+            0x8033b63c_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // bl GXSetPixelFmt
+                c::call(ctx, 0x80340e78_u32, 0x8033b648_u32);
+                pc = 0x8033b648_u32;
+            }
+            0x8033b648_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // li r4, 0x1
+                g[4].set(0x1_u32);
+                // bl GXSetFieldMask
+                c::call(ctx, 0x8034101c_u32, 0x8033b654_u32);
+                pc = 0x8033b654_u32;
+            }
+            0x8033b654_u32 => {
+                // lhz r0, 0x8(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x8_u32);
+                    g[0].set(u32::from(ctx.read_u16(ea)));
+                }
+                // lhz r3, 0x10(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x10_u32);
+                    g[3].set(u32::from(ctx.read_u16(ea)));
+                }
+                // slwi r0, r0, 1
+                {
+                    let v = g[0].get().rotate_left(1) & 0xfffffffe_u32;
+                    g[0].set(v);
+                }
+                // cmpw r3, r0
+                {
+                    let (x, y) = (g[3].get() as i32, g[0].get() as i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_8033B670
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x8033b670_u32;
+                    continue;
+                }
+                pc = 0x8033b668_u32;
+            }
+            0x8033b668_u32 => {
+                // li r4, 0x1
+                g[4].set(0x1_u32);
+                // b .L_8033B674
+                pc = 0x8033b674_u32;
+                continue;
+                pc = 0x8033b670_u32;
+            }
+            0x8033b670_u32 => {
+                // li r4, 0x0
+                g[4].set(0_u32);
+                pc = 0x8033b674_u32;
+            }
+            0x8033b674_u32 => {
+                // lbz r3, 0x18(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x18_u32);
+                    g[3].set(u32::from(ctx.read_u8(ea)));
+                }
+                // bl GXSetFieldMode
+                c::call(ctx, 0x80341054_u32, 0x8033b67c_u32);
+                pc = 0x8033b67c_u32;
+            }
+            0x8033b67c_u32 => {
+                // lhz r5, 0x4(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x4_u32);
+                    g[5].set(u32::from(ctx.read_u16(ea)));
+                }
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // lhz r6, 0x6(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x6_u32);
+                    g[6].set(u32::from(ctx.read_u16(ea)));
+                }
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // bl GXSetDispCopySrc
+                c::call(ctx, 0x8033d408_u32, 0x8033b690_u32);
+                pc = 0x8033b690_u32;
+            }
+            0x8033b690_u32 => {
+                // lhz r3, 0x4(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x4_u32);
+                    g[3].set(u32::from(ctx.read_u16(ea)));
+                }
+                // lhz r4, 0x6(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x6_u32);
+                    g[4].set(u32::from(ctx.read_u16(ea)));
+                }
+                // bl GXSetDispCopyDst
+                c::call(ctx, 0x8033d588_u32, 0x8033b69c_u32);
+                pc = 0x8033b69c_u32;
+            }
+            0x8033b69c_u32 => {
+                // lhz r4, 0x8(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x8_u32);
+                    g[4].set(u32::from(ctx.read_u16(ea)));
+                }
+                // lis r3, 0x4330
+                g[3].set(0x43300000_u32);
+                // lhz r0, 0x6(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x6_u32);
+                    g[0].set(u32::from(ctx.read_u16(ea)));
+                }
+                // stw r4, 0x64(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x64_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // lfd f2, "@301"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffffe838_u32);
+                    ctx.regs.set_f(2, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // stw r0, 0x6c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x6c_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stw r3, 0x60(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x60_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // stw r3, 0x68(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x68_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // lfd f1, 0x60(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x60_u32);
+                    ctx.regs.set_f(1, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // lfd f0, 0x68(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x68_u32);
+                    ctx.regs.set_f(0, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // fsubs f1, f1, f2
+                {
+                    let v = fp::fsubs(ctx.regs.f(1), ctx.regs.f(2));
+                    c::fill(ctx, 1, v);
+                }
+                // fsubs f0, f0, f2
+                {
+                    let v = fp::fsubs(ctx.regs.f(0), ctx.regs.f(2));
+                    c::fill(ctx, 0, v);
+                }
+                // fdivs f1, f1, f0
+                {
+                    let v = fp::fdivs(ctx.regs.f(1), ctx.regs.f(0));
+                    c::fill(ctx, 1, v);
+                }
+                // bl GXSetDispCopyYScale
+                c::call(ctx, 0x8033d7e4_u32, 0x8033b6d4_u32);
+                pc = 0x8033b6d4_u32;
+            }
+            0x8033b6d4_u32 => {
+                // li r3, 0x3
+                g[3].set(0x3_u32);
+                // bl GXSetCopyClamp
+                c::call(ctx, 0x8033d768_u32, 0x8033b6dc_u32);
+                pc = 0x8033b6dc_u32;
+            }
+            0x8033b6dc_u32 => {
+                // lbz r3, 0x19(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x19_u32);
+                    g[3].set(u32::from(ctx.read_u8(ea)));
+                }
+                // addi r4, r31, 0x1a
+                g[4].set(g[31].get().wrapping_add(0x1a_u32));
+                // addi r6, r31, 0x32
+                g[6].set(g[31].get().wrapping_add(0x32_u32));
+                // li r5, 0x1
+                g[5].set(0x1_u32);
+                // bl GXSetCopyFilter
+                c::call(ctx, 0x8033d908_u32, 0x8033b6f0_u32);
+                pc = 0x8033b6f0_u32;
+            }
+            0x8033b6f0_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // bl GXSetDispCopyGamma
+                c::call(ctx, 0x8033db30_u32, 0x8033b6f8_u32);
+                pc = 0x8033b6f8_u32;
+            }
+            0x8033b6f8_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // bl GXSetDispCopyFrame2Field
+                c::call(ctx, 0x8033d73c_u32, 0x8033b700_u32);
+                pc = 0x8033b700_u32;
+            }
+            0x8033b700_u32 => {
+                // bl GXClearBoundingBox
+                c::call(ctx, 0x8033de4c_u32, 0x8033b704_u32);
+                pc = 0x8033b704_u32;
+            }
+            0x8033b704_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // bl GXPokeColorUpdate
+                c::call(ctx, 0x8033ce0c_u32, 0x8033b70c_u32);
+                pc = 0x8033b70c_u32;
+            }
+            0x8033b70c_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // bl GXPokeAlphaUpdate
+                c::call(ctx, 0x8033cd68_u32, 0x8033b714_u32);
+                pc = 0x8033b714_u32;
+            }
+            0x8033b714_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // bl GXPokeDither
+                c::call(ctx, 0x8033ce3c_u32, 0x8033b71c_u32);
+                pc = 0x8033b71c_u32;
+            }
+            0x8033b71c_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x1
+                g[5].set(0x1_u32);
+                // li r6, 0xf
+                g[6].set(0xf_u32);
+                // bl GXPokeBlendMode
+                c::call(ctx, 0x8033cd84_u32, 0x8033b730_u32);
+                pc = 0x8033b730_u32;
+            }
+            0x8033b730_u32 => {
+                // li r3, 0x7
+                g[3].set(0x7_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // bl GXPokeAlphaMode
+                c::call(ctx, 0x8033cd40_u32, 0x8033b73c_u32);
+                pc = 0x8033b73c_u32;
+            }
+            0x8033b73c_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // bl GXPokeAlphaRead
+                c::call(ctx, 0x8033cd54_u32, 0x8033b744_u32);
+                pc = 0x8033b744_u32;
+            }
+            0x8033b744_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // bl GXPokeDstAlpha
+                c::call(ctx, 0x8033ce28_u32, 0x8033b750_u32);
+                pc = 0x8033b750_u32;
+            }
+            0x8033b750_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // li r4, 0x7
+                g[4].set(0x7_u32);
+                // li r5, 0x1
+                g[5].set(0x1_u32);
+                // bl GXPokeZMode
+                c::call(ctx, 0x8033ce58_u32, 0x8033b760_u32);
+                pc = 0x8033b760_u32;
+            }
+            0x8033b760_u32 => {
+                // li r3, 0x23
+                g[3].set(0x23_u32);
+                // li r4, 0x16
+                g[4].set(0x16_u32);
+                // bl GXSetGPMetric
+                c::call(ctx, 0x803418fc_u32, 0x8033b76c_u32);
+                pc = 0x8033b76c_u32;
+            }
+            0x8033b76c_u32 => {
+                // bl GXClearGPMetric
+                c::call(ctx, 0x80342194_u32, 0x8033b770_u32);
+                pc = 0x8033b770_u32;
+            }
+            0x8033b770_u32 => {
+                // lwz r0, 0x7c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x7c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x74(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x74_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x70(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x70_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // addi r1, r1, 0x78
+                g[1].set(g[1].get().wrapping_add(0x78_u32));
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of __GXInitGX");
+            }
+            _ => unreachable!("__GXInitGX: no block at {pc:#010x}"),
+        }
+    }
 }
 
 /// Registers this unit's ports.

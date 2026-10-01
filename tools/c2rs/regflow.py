@@ -49,6 +49,8 @@ READ_MODIFY_WRITE = {"rlwimi", "inslwi", "insrwi"}
 KEEPS_REGISTERS = {"OSSaveContext", "__OSSaveFPUContext", "__setjmp", "OSDefaultExceptionHandler",
                    "ExternalInterruptHandler", "DecrementerExceptionHandler", "InitMetroTRK",
                    "TRKInterruptHandler", "TRKSwapAndGo"}
+# Callers a seed's dependence may pass through before the seed is left be.
+FOLLOWED = 10
 # Functions whose unset reads stay with them: their callers would pass the dependence up
 # through most of the game.
 IGNORED = {
@@ -285,13 +287,31 @@ class Program:
         return live[0] - args - FIXED
 
     def callers_to_port(self, seeds):
-        """{caller: callee} for the callers that must be ported from machine code with
-        `seeds`, the functions ported that way because their C reads values it never sets:
-        those that call one reading registers its caller never passes it, and on up while a
-        caller leaves such registers as it found them."""
-        extra = {f: r for f in seeds if f in self.funcs and f not in IGNORED
-                 for r in [self.reads(f, {})] if r}
+        """({caller: callee}, [seeds left be]) for the callers that must be ported from
+        machine code with `seeds`, the functions ported that way because their C reads values
+        it never sets: those that call one reading registers its caller never passes it, and on
+        up while a caller leaves such registers as it found them. A seed whose dependence
+        passes through more than `FOLLOWED` callers is left be, as `IGNORED` ones are: it
+        reaches that far only through paths that never set a register, which the game takes
+        rarely if ever."""
+        port, left = {}, []
+        for seed in sorted(set(seeds)):
+            if seed not in self.funcs or seed in IGNORED:
+                continue
+            found, passing = self.follow([seed])
+            if passing > FOLLOWED:
+                left.append(seed)
+                continue
+            for c, f in found.items():
+                port.setdefault(c, f)
+        return {c: f for c, f in port.items() if c not in seeds}, left
+
+    def follow(self, seeds):
+        """({caller: callee}, how many pass it on) for the callers the dependence of `seeds`
+        carries to."""
+        extra = {f: r for f in seeds for r in [self.reads(f, {})] if r}
         own, port = {}, {}
+        passing = set()
         work = list(extra)
         while work:
             f = work.pop()
@@ -304,8 +324,9 @@ class Program:
                 r = self.reads(c, extra) - own[c]
                 if r and r != extra.get(c):
                     extra[c] = r
+                    passing.add(c)
                     work.append(c)
-        return {c: f for c, f in port.items() if c not in seeds}
+        return port, len(passing)
 
 
 def fmt(regs):

@@ -28,9 +28,90 @@ use crate::support::*;
 use ssbm_rt::cpu as c;
 
 pub fn __check_pad3<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x8);
-    if ((fns::Pad3Button(ctx).get() as i32) & 0xeef_i32) == 0xeef_i32 {
-        fns::OSResetSystem(ctx, 0_i32, (0_i32 as u32), 0_i32);
+    // Transliterated from its machine code: calls OSResetSystem, which reads registers its caller sets without passing them.
+    ().put_regs(ctx);
+    asm___check_pad3(ctx);
+}
+
+fn asm___check_pad3(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x800051ec_u32;
+    loop {
+        match pc {
+            0x800051ec_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // lis r3, 0x8000
+                g[3].set(0x80000000_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // lhz r0, 0x30e4(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x30e4_u32);
+                    g[0].set(u32::from(ctx.read_u16(ea)));
+                }
+                // andi. r0, r0, 0xeef
+                {
+                    let v = g[0].get() & 0xeef_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // cmpwi r0, 0xeef
+                {
+                    let (x, y) = (g[0].get() as i32, 3823_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_8000521C
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x8000521c_u32;
+                    continue;
+                }
+                pc = 0x8000520c_u32;
+            }
+            0x8000520c_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl OSResetSystem
+                c::call(ctx, 0x8034844c_u32, 0x8000521c_u32);
+                pc = 0x8000521c_u32;
+            }
+            0x8000521c_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of __check_pad3");
+            }
+            _ => unreachable!("__check_pad3: no block at {pc:#010x}"),
+        }
     }
 }
 

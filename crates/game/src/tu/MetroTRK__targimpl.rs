@@ -416,71 +416,461 @@ pub fn TRKTargetAccessFP<'a>(
 
 pub fn TRKTargetAccessExtended1<'a>(
     ctx: &'a Ctx,
-    firstRegister: u32,
-    lastRegister: u32,
-    b: MessageBuffer<'a>,
-    registerStorageSize: Val<'a, u32>,
-    read: i32,
+    a0: u32,
+    a1: u32,
+    a2: MessageBuffer<'a>,
+    a3: Val<'a, u32>,
+    a4: i32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x20);
-    let tempExceptionStatus: TRKExceptionStatus<'a> = frame_at(ctx, &__frame, 0x0);
-    let mut firstRegister = firstRegister;
-    let mut lastRegister = lastRegister;
-    let mut b = b;
-    let mut registerStorageSize = registerStorageSize;
-    let mut read = read;
-    let mut error: i32 = 0;
-    let mut data: Val<'a, u32> = null(ctx);
-    let mut count: i32 = 0;
-    if lastRegister > (96_i32 as u32) {
-        return (enums::kInvalidRegister as i32);
-    }
-    Handle::copy_from(
-        tempExceptionStatus,
-        statics::MetroTRK__targimpl::gTRKExceptionStatus(ctx),
-    );
-    statics::MetroTRK__targimpl::gTRKExceptionStatus(ctx).set_exceptionDetected((0_i32 as u8));
-    (registerStorageSize).set((0_i32 as u32));
-    if firstRegister <= lastRegister {
-        data = Handle::add(
-            Handle::cast::<Val<'a, u32>>(fns::gTRKCPUState(ctx).Extended1()),
-            (firstRegister as i32),
-        );
-        count = (lastRegister
-            .wrapping_sub(firstRegister)
-            .wrapping_add((1_i32 as u32)) as i32);
-        (registerStorageSize).set(
-            (registerStorageSize)
-                .get()
-                .wrapping_add((count as u32).wrapping_mul(4_u32)),
-        );
-        if (read != 0) {
-            error = fns::TRKAppendBuffer_ui32(ctx, b, data, count);
-        } else {
-            if (Handle::addr(data) <= Handle::addr(fns::gTRKCPUState(ctx).Extended1().TBU_ref()))
-                && (Handle::addr((Handle::add(Handle::add(data, count), 1_i32.wrapping_neg())))
-                    >= Handle::addr(fns::gTRKCPUState(ctx).Extended1().TBL_ref()))
-            {
-                fns::gTRKRestoreFlags(ctx).set_TBR((1_i32 as u8));
+    // Transliterated from its machine code: returns or uses a value its C never sets.
+    (a0, a1, a2, a3, a4).put_regs(ctx);
+    asm_TRKTargetAccessExtended1(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_TRKTargetAccessExtended1(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x803295c4_u32;
+    loop {
+        match pc {
+            0x803295c4_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // mr r30, r6
+                {
+                    let v = g[6].get() | g[6].get();
+                    g[30].set(v);
+                }
+                // cmplwi r4, 0x60
+                {
+                    let (x, y) = (g[4].get(), 0x60_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // ble .L_803295EC
+                if (c::cr_bit(ctx, 1) == false) {
+                    pc = 0x803295ec_u32;
+                    continue;
+                }
+                pc = 0x803295e4_u32;
             }
-            if (Handle::addr(data) <= Handle::addr(fns::gTRKCPUState(ctx).Extended1().DEC_ref()))
-                && (Handle::addr((Handle::add(Handle::add(data, count), 1_i32.wrapping_neg())))
-                    >= Handle::addr(fns::gTRKCPUState(ctx).Extended1().DEC_ref()))
-            {
-                fns::gTRKRestoreFlags(ctx).set_DEC((1_i32 as u8));
+            0x803295e4_u32 => {
+                // li r3, 0x701
+                g[3].set(0x701_u32);
+                // b .L_80329724
+                pc = 0x80329724_u32;
+                continue;
+                pc = 0x803295ec_u32;
             }
-            error = fns::TRKReadBuffer_ui32(ctx, b, data, count);
+            0x803295ec_u32 => {
+                // lis r6, gTRKExceptionStatus@ha
+                g[6].set(0x80400000_u32);
+                // cmplw r3, r4
+                {
+                    let (x, y) = (g[3].get(), g[4].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // addi r9, r6, gTRKExceptionStatus@l
+                g[9].set(g[6].get().wrapping_add(0x854_u32));
+                // lwz r8, 0x0(r9)
+                {
+                    let ea = g[9].get();
+                    g[8].set(ctx.read_u32(ea));
+                }
+                // addi r31, r9, 0xd
+                g[31].set(g[9].get().wrapping_add(0xd_u32));
+                // lwz r6, 0x4(r9)
+                {
+                    let ea = g[9].get().wrapping_add(0x4_u32);
+                    g[6].set(ctx.read_u32(ea));
+                }
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stw r8, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    ctx.write_u32(ea, g[8].get());
+                }
+                // stw r6, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    ctx.write_u32(ea, g[6].get());
+                }
+                // lwz r8, 0x8(r9)
+                {
+                    let ea = g[9].get().wrapping_add(0x8_u32);
+                    g[8].set(ctx.read_u32(ea));
+                }
+                // lwz r6, 0xc(r9)
+                {
+                    let ea = g[9].get().wrapping_add(0xc_u32);
+                    g[6].set(ctx.read_u32(ea));
+                }
+                // stw r8, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    ctx.write_u32(ea, g[8].get());
+                }
+                // stw r6, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[6].get());
+                }
+                // stb r0, 0x0(r31)
+                {
+                    let ea = g[31].get();
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                // stw r0, 0x0(r30)
+                {
+                    let ea = g[30].get();
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // bgt .L_803296E4
+                if (c::cr_bit(ctx, 1) == true) {
+                    pc = 0x803296e4_u32;
+                    continue;
+                }
+                pc = 0x8032962c_u32;
+            }
+            0x8032962c_u32 => {
+                // subf r4, r3, r4
+                {
+                    let (v, ca, ov) = c::add3(!g[3].get(), g[4].get(), 1);
+                    g[4].set(v);
+                    let _ = (ca, ov);
+                }
+                // lwz r0, 0x0(r30)
+                {
+                    let ea = g[30].get();
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r8, r4, 0x1
+                g[8].set(g[4].get().wrapping_add(0x1_u32));
+                // cmpwi r7, 0x0
+                {
+                    let (x, y) = (g[7].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // slwi r6, r8, 2
+                {
+                    let v = g[8].get().rotate_left(2) & 0xfffffffc_u32;
+                    g[6].set(v);
+                }
+                // lis r4, gTRKCPUState@ha
+                g[4].set(0x804a0000_u32);
+                // add r0, r0, r6
+                {
+                    let (v, ca, ov) = c::add3(g[0].get(), g[6].get(), 0);
+                    g[0].set(v);
+                    let _ = (ca, ov);
+                }
+                // stw r0, 0x0(r30)
+                {
+                    let ea = g[30].get();
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // addi r7, r4, gTRKCPUState@l
+                g[7].set(g[4].get().wrapping_add(0x4c98_u32));
+                // slwi r0, r3, 2
+                {
+                    let v = g[3].get().rotate_left(2) & 0xfffffffc_u32;
+                    g[0].set(v);
+                }
+                // add r4, r7, r0
+                {
+                    let (v, ca, ov) = c::add3(g[7].get(), g[0].get(), 0);
+                    g[4].set(v);
+                    let _ = (ca, ov);
+                }
+                // addi r4, r4, 0x1a8
+                g[4].set(g[4].get().wrapping_add(0x1a8_u32));
+                // beq .L_80329670
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80329670_u32;
+                    continue;
+                }
+                pc = 0x80329660_u32;
+            }
+            0x80329660_u32 => {
+                // mr r3, r5
+                {
+                    let v = g[5].get() | g[5].get();
+                    g[3].set(v);
+                }
+                // mr r5, r8
+                {
+                    let v = g[8].get() | g[8].get();
+                    g[5].set(v);
+                }
+                // bl TRKAppendBuffer_ui32
+                c::call(ctx, 0x8032718c_u32, 0x8032966c_u32);
+                pc = 0x8032966c_u32;
+            }
+            0x8032966c_u32 => {
+                // b .L_803296E4
+                pc = 0x803296e4_u32;
+                continue;
+                pc = 0x80329670_u32;
+            }
+            0x80329670_u32 => {
+                // addi r0, r7, 0x1ec
+                g[0].set(g[7].get().wrapping_add(0x1ec_u32));
+                // cmplw r4, r0
+                {
+                    let (x, y) = (g[4].get(), g[0].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bgt .L_803296A0
+                if (c::cr_bit(ctx, 1) == true) {
+                    pc = 0x803296a0_u32;
+                    continue;
+                }
+                pc = 0x8032967c_u32;
+            }
+            0x8032967c_u32 => {
+                // subi r3, r6, 0x4
+                g[3].set(g[6].get().wrapping_add(0xfffffffc_u32));
+                // addi r0, r7, 0x1e8
+                g[0].set(g[7].get().wrapping_add(0x1e8_u32));
+                // add r3, r4, r3
+                {
+                    let (v, ca, ov) = c::add3(g[4].get(), g[3].get(), 0);
+                    g[3].set(v);
+                    let _ = (ca, ov);
+                }
+                // cmplw r3, r0
+                {
+                    let (x, y) = (g[3].get(), g[0].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // blt .L_803296A0
+                if (c::cr_bit(ctx, 0) == true) {
+                    pc = 0x803296a0_u32;
+                    continue;
+                }
+                pc = 0x80329690_u32;
+            }
+            0x80329690_u32 => {
+                // lis r3, gTRKRestoreFlags@ha
+                g[3].set(0x80400000_u32);
+                // addi r3, r3, gTRKRestoreFlags@l
+                g[3].set(g[3].get().wrapping_add(0x848_u32));
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // stb r0, 0x0(r3)
+                {
+                    let ea = g[3].get();
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                pc = 0x803296a0_u32;
+            }
+            0x803296a0_u32 => {
+                // lis r3, gTRKCPUState@ha
+                g[3].set(0x804a0000_u32);
+                // addi r3, r3, gTRKCPUState@l
+                g[3].set(g[3].get().wrapping_add(0x4c98_u32));
+                // addi r6, r3, 0x278
+                g[6].set(g[3].get().wrapping_add(0x278_u32));
+                // cmplw r4, r6
+                {
+                    let (x, y) = (g[4].get(), g[6].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bgt .L_803296D8
+                if (c::cr_bit(ctx, 1) == true) {
+                    pc = 0x803296d8_u32;
+                    continue;
+                }
+                pc = 0x803296b4_u32;
+            }
+            0x803296b4_u32 => {
+                // slwi r3, r8, 2
+                {
+                    let v = g[8].get().rotate_left(2) & 0xfffffffc_u32;
+                    g[3].set(v);
+                }
+                // subi r0, r3, 0x4
+                g[0].set(g[3].get().wrapping_add(0xfffffffc_u32));
+                // add r0, r4, r0
+                {
+                    let (v, ca, ov) = c::add3(g[4].get(), g[0].get(), 0);
+                    g[0].set(v);
+                    let _ = (ca, ov);
+                }
+                // cmplw r0, r6
+                {
+                    let (x, y) = (g[0].get(), g[6].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // blt .L_803296D8
+                if (c::cr_bit(ctx, 0) == true) {
+                    pc = 0x803296d8_u32;
+                    continue;
+                }
+                pc = 0x803296c8_u32;
+            }
+            0x803296c8_u32 => {
+                // lis r3, gTRKRestoreFlags@ha
+                g[3].set(0x80400000_u32);
+                // addi r3, r3, gTRKRestoreFlags@l
+                g[3].set(g[3].get().wrapping_add(0x848_u32));
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // stb r0, 0x1(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x1_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                pc = 0x803296d8_u32;
+            }
+            0x803296d8_u32 => {
+                // mr r3, r5
+                {
+                    let v = g[5].get() | g[5].get();
+                    g[3].set(v);
+                }
+                // mr r5, r8
+                {
+                    let v = g[8].get() | g[8].get();
+                    g[5].set(v);
+                }
+                // bl TRKReadBuffer_ui32
+                c::call(ctx, 0x80327460_u32, 0x803296e4_u32);
+                pc = 0x803296e4_u32;
+            }
+            0x803296e4_u32 => {
+                // lbz r0, 0x0(r31)
+                {
+                    let ea = g[31].get();
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // cmplwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_803296FC
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x803296fc_u32;
+                    continue;
+                }
+                pc = 0x803296f0_u32;
+            }
+            0x803296f0_u32 => {
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stw r0, 0x0(r30)
+                {
+                    let ea = g[30].get();
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // li r3, 0x702
+                g[3].set(0x702_u32);
+                pc = 0x803296fc_u32;
+            }
+            0x803296fc_u32 => {
+                // lis r5, gTRKExceptionStatus@ha
+                g[5].set(0x80400000_u32);
+                // lwz r4, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r5, r5, gTRKExceptionStatus@l
+                g[5].set(g[5].get().wrapping_add(0x854_u32));
+                // stw r4, 0x0(r5)
+                {
+                    let ea = g[5].get();
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // stw r0, 0x4(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lwz r4, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // lwz r0, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // stw r4, 0x8(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x8_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // stw r0, 0xc(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0xc_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                pc = 0x80329724_u32;
+            }
+            0x80329724_u32 => {
+                // lwz r31, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x20
+                g[1].set(g[1].get().wrapping_add(0x20_u32));
+                // lwz r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of TRKTargetAccessExtended1");
+            }
+            _ => unreachable!("TRKTargetAccessExtended1: no block at {pc:#010x}"),
         }
     }
-    if (statics::MetroTRK__targimpl::gTRKExceptionStatus(ctx).exceptionDetected() != 0) {
-        (registerStorageSize).set((0_i32 as u32));
-        error = (enums::kCWDSException as i32);
-    }
-    Handle::copy_from(
-        statics::MetroTRK__targimpl::gTRKExceptionStatus(ctx),
-        tempExceptionStatus,
-    );
-    return error;
 }
 
 pub fn TRKTargetAccessExtended2<'a>(
@@ -1351,88 +1741,517 @@ fn asm_TRKInterruptHandlerEnableInterrupts(ctx: &Ctx) {
     return;
 }
 
-pub fn TRKTargetInterrupt<'a>(ctx: &'a Ctx, event: NubEvent<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x10);
-    let mut event = event;
-    let mut error: i32 = (enums::kNoError as i32);
-    's1: {
-        let __case = match ((event).fType() as i32) {
-            3_i32 => 0,
-            4_i32 => 0,
-            _ => 1,
-        };
-        if __case <= 0 {
-            if statics::MetroTRK__targimpl::TRKTargetCheckStep(ctx) == 0_i32 {
-                fns::TRKTargetSetStopped(ctx, 1_i32);
-                error = fns::TRKDoNotifyStopped(ctx, ((enums::kDSNotifyStopped as i32) as u8));
+pub fn TRKTargetInterrupt<'a>(ctx: &'a Ctx, a0: NubEvent<'a>) -> i32 {
+    // Transliterated from its machine code: calls TRKDoNotifyStopped, which reads registers its caller sets without passing them.
+    (a0,).put_regs(ctx);
+    asm_TRKTargetInterrupt(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_TRKTargetInterrupt(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80329de4_u32;
+    loop {
+        match pc {
+            0x80329de4_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // lbz r0, 0x0(r3)
+                {
+                    let ea = g[3].get();
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // li r31, 0x0
+                g[31].set(0_u32);
+                // cmpwi r0, 0x5
+                {
+                    let (x, y) = (g[0].get() as i32, 5_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bge .L_80329E30
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x80329e30_u32;
+                    continue;
+                }
+                pc = 0x80329e04_u32;
             }
-            break 's1;
-        }
-        if __case <= 1 {
-            break 's1;
+            0x80329e04_u32 => {
+                // cmpwi r0, 0x3
+                {
+                    let (x, y) = (g[0].get() as i32, 3_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bge .L_80329E10
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x80329e10_u32;
+                    continue;
+                }
+                pc = 0x80329e0c_u32;
+            }
+            0x80329e0c_u32 => {
+                // b .L_80329E30
+                pc = 0x80329e30_u32;
+                continue;
+                pc = 0x80329e10_u32;
+            }
+            0x80329e10_u32 => {
+                // bl TRKTargetCheckStep
+                c::call(ctx, 0x8032a090_u32, 0x80329e14_u32);
+                pc = 0x80329e14_u32;
+            }
+            0x80329e14_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80329E30
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80329e30_u32;
+                    continue;
+                }
+                pc = 0x80329e1c_u32;
+            }
+            0x80329e1c_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // bl TRKTargetSetStopped
+                c::call(ctx, 0x8032a2d0_u32, 0x80329e24_u32);
+                pc = 0x80329e24_u32;
+            }
+            0x80329e24_u32 => {
+                // li r3, 0x90
+                g[3].set(0x90_u32);
+                // bl TRKDoNotifyStopped
+                c::call(ctx, 0x80328e78_u32, 0x80329e2c_u32);
+                pc = 0x80329e2c_u32;
+            }
+            0x80329e2c_u32 => {
+                // mr r31, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[31].set(v);
+                }
+                pc = 0x80329e30_u32;
+            }
+            0x80329e30_u32 => {
+                // mr r3, r31
+                {
+                    let v = g[31].get() | g[31].get();
+                    g[3].set(v);
+                }
+                // lwz r31, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x10
+                g[1].set(g[1].get().wrapping_add(0x10_u32));
+                // lwz r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of TRKTargetInterrupt");
+            }
+            _ => unreachable!("TRKTargetInterrupt: no block at {pc:#010x}"),
         }
     }
-    return error;
 }
 
-pub fn TRKTargetAddStopInfo<'a>(ctx: &'a Ctx, arg0: MessageBuffer<'a>) -> i32 {
-    let __frame = ctx.stack_frame(0x18);
-    let data: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let mut arg0 = arg0;
-    let mut error: i32 = 0;
-    error = fns::TRKAppendBuffer1_ui32(ctx, arg0, fns::gTRKCPUState(ctx).Default().PC());
-    if error == (enums::kNoError as i32) {
-        error = statics::MetroTRK__targimpl::TRKTargetReadInstruction(
-            ctx,
-            Handle::cast::<Addr<'a>>(data),
-            fns::gTRKCPUState(ctx).Default().PC(),
-        );
-    }
-    if error == (enums::kNoError as i32) {
-        error = fns::TRKAppendBuffer1_ui32(ctx, arg0, (data.get() as u32));
-    }
-    if error == (enums::kNoError as i32) {
-        error = fns::TRKAppendBuffer1_ui16(
-            ctx,
-            arg0,
-            ((fns::gTRKCPUState(ctx).Extended1().exceptionID() & (0xffff_i32 as u32)) as u16),
-        );
-    }
-    return error;
+pub fn TRKTargetAddStopInfo<'a>(ctx: &'a Ctx, a0: MessageBuffer<'a>) -> i32 {
+    // Transliterated from its machine code: returns or uses a value its C never sets.
+    (a0,).put_regs(ctx);
+    asm_TRKTargetAddStopInfo(ctx);
+    Ret::get(ctx)
 }
 
-pub fn TRKTargetAddExceptionInfo<'a>(ctx: &'a Ctx, b: MessageBuffer<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let data: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let mut b = b;
-    let mut error: i32 = 0;
-    error = fns::TRKAppendBuffer1_ui32(
-        ctx,
-        b,
-        statics::MetroTRK__targimpl::gTRKExceptionStatus(ctx)
-            .exceptionInfo()
-            .PC(),
-    );
-    if error == (enums::kNoError as i32) {
-        error = statics::MetroTRK__targimpl::TRKTargetReadInstruction(
-            ctx,
-            Handle::cast::<Addr<'a>>(data),
-            statics::MetroTRK__targimpl::gTRKExceptionStatus(ctx)
-                .exceptionInfo()
-                .PC(),
-        );
+fn asm_TRKTargetAddStopInfo(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80329e48_u32;
+    loop {
+        match pc {
+            0x80329e48_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // mr r30, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[30].set(v);
+                }
+                // lis r3, gTRKCPUState@ha
+                g[3].set(0x804a0000_u32);
+                // addi r3, r3, gTRKCPUState@l
+                g[3].set(g[3].get().wrapping_add(0x4c98_u32));
+                // addi r31, r3, 0x80
+                g[31].set(g[3].get().wrapping_add(0x80_u32));
+                // lwz r4, 0x0(r31)
+                {
+                    let ea = g[31].get();
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // bl TRKAppendBuffer1_ui32
+                c::call(ctx, 0x80327038_u32, 0x80329e78_u32);
+                pc = 0x80329e78_u32;
+            }
+            0x80329e78_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80329E8C
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80329e8c_u32;
+                    continue;
+                }
+                pc = 0x80329e80_u32;
+            }
+            0x80329e80_u32 => {
+                // addi r3, r1, 0x8
+                g[3].set(g[1].get().wrapping_add(0x8_u32));
+                // lwz r4, 0x0(r31)
+                {
+                    let ea = g[31].get();
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // bl TRKTargetReadInstruction
+                c::call(ctx, 0x80329334_u32, 0x80329e8c_u32);
+                pc = 0x80329e8c_u32;
+            }
+            0x80329e8c_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80329EA0
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80329ea0_u32;
+                    continue;
+                }
+                pc = 0x80329e94_u32;
+            }
+            0x80329e94_u32 => {
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // lwz r4, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // bl TRKAppendBuffer1_ui32
+                c::call(ctx, 0x80327038_u32, 0x80329ea0_u32);
+                pc = 0x80329ea0_u32;
+            }
+            0x80329ea0_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80329EC0
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80329ec0_u32;
+                    continue;
+                }
+                pc = 0x80329ea8_u32;
+            }
+            0x80329ea8_u32 => {
+                // lis r3, gTRKCPUState@ha
+                g[3].set(0x804a0000_u32);
+                // addi r3, r3, gTRKCPUState@l
+                g[3].set(g[3].get().wrapping_add(0x4c98_u32));
+                // lwz r0, 0x2f8(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x2f8_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // clrlwi r4, r0, 16
+                {
+                    let v = g[0].get().rotate_left(0) & 0xffff_u32;
+                    g[4].set(v);
+                }
+                // bl TRKAppendBuffer1_ui16
+                c::call(ctx, 0x80326fe4_u32, 0x80329ec0_u32);
+                pc = 0x80329ec0_u32;
+            }
+            0x80329ec0_u32 => {
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // lwz r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of TRKTargetAddStopInfo");
+            }
+            _ => unreachable!("TRKTargetAddStopInfo: no block at {pc:#010x}"),
+        }
     }
-    if error == (enums::kNoError as i32) {
-        error = fns::TRKAppendBuffer1_ui32(ctx, b, (data.get() as u32));
-    }
-    if error == (enums::kNoError as i32) {
-        let _ = fns::TRKAppendBuffer1_ui16(
-            ctx,
-            b,
-            statics::MetroTRK__targimpl::gTRKExceptionStatus(ctx)
-                .exceptionInfo()
-                .exceptionID(),
-        );
+}
+
+pub fn TRKTargetAddExceptionInfo<'a>(ctx: &'a Ctx, a0: MessageBuffer<'a>) {
+    // Transliterated from its machine code: returns or uses a value its C never sets.
+    (a0,).put_regs(ctx);
+    asm_TRKTargetAddExceptionInfo(ctx);
+}
+
+fn asm_TRKTargetAddExceptionInfo(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80329ed8_u32;
+    loop {
+        match pc {
+            0x80329ed8_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // mr r30, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[30].set(v);
+                }
+                // lis r3, gTRKExceptionStatus@ha
+                g[3].set(0x80400000_u32);
+                // addi r31, r3, gTRKExceptionStatus@l
+                g[31].set(g[3].get().wrapping_add(0x854_u32));
+                // lwz r4, 0x0(r31)
+                {
+                    let ea = g[31].get();
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // bl TRKAppendBuffer1_ui32
+                c::call(ctx, 0x80327038_u32, 0x80329f04_u32);
+                pc = 0x80329f04_u32;
+            }
+            0x80329f04_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80329F18
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80329f18_u32;
+                    continue;
+                }
+                pc = 0x80329f0c_u32;
+            }
+            0x80329f0c_u32 => {
+                // addi r3, r1, 0x8
+                g[3].set(g[1].get().wrapping_add(0x8_u32));
+                // lwz r4, 0x0(r31)
+                {
+                    let ea = g[31].get();
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // bl TRKTargetReadInstruction
+                c::call(ctx, 0x80329334_u32, 0x80329f18_u32);
+                pc = 0x80329f18_u32;
+            }
+            0x80329f18_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80329F2C
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80329f2c_u32;
+                    continue;
+                }
+                pc = 0x80329f20_u32;
+            }
+            0x80329f20_u32 => {
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // lwz r4, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // bl TRKAppendBuffer1_ui32
+                c::call(ctx, 0x80327038_u32, 0x80329f2c_u32);
+                pc = 0x80329f2c_u32;
+            }
+            0x80329f2c_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80329F48
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80329f48_u32;
+                    continue;
+                }
+                pc = 0x80329f34_u32;
+            }
+            0x80329f34_u32 => {
+                // lis r3, gTRKExceptionStatus@ha
+                g[3].set(0x80400000_u32);
+                // addi r3, r3, gTRKExceptionStatus@l
+                g[3].set(g[3].get().wrapping_add(0x854_u32));
+                // lhz r4, 0x8(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x8_u32);
+                    g[4].set(u32::from(ctx.read_u16(ea)));
+                }
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // bl TRKAppendBuffer1_ui16
+                c::call(ctx, 0x80326fe4_u32, 0x80329f48_u32);
+                pc = 0x80329f48_u32;
+            }
+            0x80329f48_u32 => {
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // lwz r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of TRKTargetAddExceptionInfo");
+            }
+            _ => unreachable!("TRKTargetAddExceptionInfo: no block at {pc:#010x}"),
+        }
     }
 }
 
@@ -1562,60 +2381,299 @@ pub fn TRKTargetGetPC<'a>(ctx: &'a Ctx) -> u32 {
 }
 
 pub fn TRKTargetSupportRequest<'a>(ctx: &'a Ctx) -> i32 {
-    let __frame = ctx.stack_frame(0x30);
-    let event: NubEvent<'a> = frame_at(ctx, &__frame, 0x4);
-    let io_result: Val<'a, u8> = frame_at(ctx, &__frame, 0x0);
-    let mut err: i32 = (enums::kNoError as i32);
-    let mut length: Val<'a, u32> = null(ctx);
-    let mut command: u8 = 0;
-    command = ((fns::gTRKCPUState(ctx).Default().GPR().at(3_i32).get() as i32) as u8);
-    if ((command as i32) != (enums::kDSReadFile as i32))
-        && ((command as i32) != (enums::kDSWriteFile as i32))
-    {
-        fns::TRKConstructEvent(ctx, event, (enums::kExceptionEvent as i32));
-        let _ = fns::TRKPostEvent(ctx, event);
-        return err;
+    // Transliterated from its machine code: calls TRKSuppAccessFile, which reads registers its caller sets without passing them.
+    ().put_regs(ctx);
+    asm_TRKTargetSupportRequest(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_TRKTargetSupportRequest(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8032a194_u32;
+    loop {
+        match pc {
+            0x8032a194_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x30(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffd0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stmw r27, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    for (i, reg) in (27..32).enumerate() {
+                        ctx.write_u32(ea.wrapping_add(4 * i as u32), g[reg].get());
+                    }
+                }
+                // lis r3, gTRKCPUState@ha
+                g[3].set(0x804a0000_u32);
+                // addi r3, r3, gTRKCPUState@l
+                g[3].set(g[3].get().wrapping_add(0x4c98_u32));
+                // addi r31, r3, 0xc
+                g[31].set(g[3].get().wrapping_add(0xc_u32));
+                // lwz r0, 0x0(r31)
+                {
+                    let ea = g[31].get();
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // clrlwi r27, r0, 24
+                {
+                    let v = g[0].get().rotate_left(0) & 0xff_u32;
+                    g[27].set(v);
+                }
+                // cmplwi r27, 0xd1
+                {
+                    let (x, y) = (g[27].get(), 0xd1_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_8032A1E4
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x8032a1e4_u32;
+                    continue;
+                }
+                pc = 0x8032a1c0_u32;
+            }
+            0x8032a1c0_u32 => {
+                // cmplwi r27, 0xd0
+                {
+                    let (x, y) = (g[27].get(), 0xd0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_8032A1E4
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x8032a1e4_u32;
+                    continue;
+                }
+                pc = 0x8032a1c8_u32;
+            }
+            0x8032a1c8_u32 => {
+                // addi r3, r1, 0xc
+                g[3].set(g[1].get().wrapping_add(0xc_u32));
+                // li r4, 0x4
+                g[4].set(0x4_u32);
+                // bl TRKConstructEvent
+                c::call(ctx, 0x80326a9c_u32, 0x8032a1d4_u32);
+                pc = 0x8032a1d4_u32;
+            }
+            0x8032a1d4_u32 => {
+                // addi r3, r1, 0xc
+                g[3].set(g[1].get().wrapping_add(0xc_u32));
+                // bl TRKPostEvent
+                c::call(ctx, 0x803269bc_u32, 0x8032a1dc_u32);
+                pc = 0x8032a1dc_u32;
+            }
+            0x8032a1dc_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // b .L_8032A270
+                pc = 0x8032a270_u32;
+                continue;
+                pc = 0x8032a1e4_u32;
+            }
+            0x8032a1e4_u32 => {
+                // lis r3, gTRKCPUState@ha
+                g[3].set(0x804a0000_u32);
+                // addi r6, r1, 0x8
+                g[6].set(g[1].get().wrapping_add(0x8_u32));
+                // addi r4, r3, gTRKCPUState@l
+                g[4].set(g[3].get().wrapping_add(0x4c98_u32));
+                // lwz r3, 0x10(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x10_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // subfic r0, r27, 0xd1
+                {
+                    let (v, ca, _) = c::add3(!g[27].get(), 0xd1_u32, 1);
+                    g[0].set(v);
+                    c::set_ca(ctx, ca);
+                }
+                // lwz r28, 0x14(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x14_u32);
+                    g[28].set(ctx.read_u32(ea));
+                }
+                // addi r30, r4, 0x18
+                g[30].set(g[4].get().wrapping_add(0x18_u32));
+                // cntlzw r0, r0
+                {
+                    let v = g[0].get().leading_zeros();
+                    g[0].set(v);
+                }
+                // lwz r4, 0x0(r30)
+                {
+                    let ea = g[30].get();
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // clrlwi r3, r3, 24
+                {
+                    let v = g[3].get().rotate_left(0) & 0xff_u32;
+                    g[3].set(v);
+                }
+                // mr r5, r28
+                {
+                    let v = g[28].get() | g[28].get();
+                    g[5].set(v);
+                }
+                // srwi r8, r0, 5
+                {
+                    let v = g[0].get().rotate_left(27) & 0x7ffffff_u32;
+                    g[8].set(v);
+                }
+                // li r7, 0x1
+                g[7].set(0x1_u32);
+                // bl TRKSuppAccessFile
+                c::call(ctx, 0x803289e4_u32, 0x8032a21c_u32);
+                pc = 0x8032a21c_u32;
+            }
+            0x8032a21c_u32 => {
+                // lbz r0, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // mr r29, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[29].set(v);
+                }
+                // cmplwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_8032A23C
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x8032a23c_u32;
+                    continue;
+                }
+                pc = 0x8032a22c_u32;
+            }
+            0x8032a22c_u32 => {
+                // cmpwi r29, 0x0
+                {
+                    let (x, y) = (g[29].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_8032A23C
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x8032a23c_u32;
+                    continue;
+                }
+                pc = 0x8032a234_u32;
+            }
+            0x8032a234_u32 => {
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // stb r0, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                pc = 0x8032a23c_u32;
+            }
+            0x8032a23c_u32 => {
+                // lbz r0, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // cmplwi r27, 0xd1
+                {
+                    let (x, y) = (g[27].get(), 0xd1_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // stw r0, 0x0(r31)
+                {
+                    let ea = g[31].get();
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // bne .L_8032A258
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x8032a258_u32;
+                    continue;
+                }
+                pc = 0x8032a24c_u32;
+            }
+            0x8032a24c_u32 => {
+                // lwz r3, 0x0(r30)
+                {
+                    let ea = g[30].get();
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // lwz r4, 0x0(r28)
+                {
+                    let ea = g[28].get();
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // bl TRK_flush_cache
+                c::call(ctx, 0x80328f50_u32, 0x8032a258_u32);
+                pc = 0x8032a258_u32;
+            }
+            0x8032a258_u32 => {
+                // lis r3, gTRKCPUState@ha
+                g[3].set(0x804a0000_u32);
+                // addi r5, r3, gTRKCPUState@l
+                g[5].set(g[3].get().wrapping_add(0x4c98_u32));
+                // lwz r4, 0x80(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x80_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // mr r3, r29
+                {
+                    let v = g[29].get() | g[29].get();
+                    g[3].set(v);
+                }
+                // addi r0, r4, 0x4
+                g[0].set(g[4].get().wrapping_add(0x4_u32));
+                // stw r0, 0x80(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x80_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                pc = 0x8032a270_u32;
+            }
+            0x8032a270_u32 => {
+                // lmw r27, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    for (i, reg) in (27..32).enumerate() {
+                        g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
+                    }
+                }
+                // addi r1, r1, 0x30
+                g[1].set(g[1].get().wrapping_add(0x30_u32));
+                // lwz r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of TRKTargetSupportRequest");
+            }
+            _ => unreachable!("TRKTargetSupportRequest: no block at {pc:#010x}"),
+        }
     }
-    length = ptr::<Val<'a, u32>>(
-        ctx,
-        fns::gTRKCPUState(ctx).Default().GPR().at(5_i32).get() as u32,
-    );
-    err = fns::TRKSuppAccessFile(
-        ctx,
-        ((fns::gTRKCPUState(ctx).Default().GPR().at(4_i32).get() as u8) as u32),
-        ptr::<Val<'a, u8>>(
-            ctx,
-            fns::gTRKCPUState(ctx).Default().GPR().at(6_i32).get() as u32,
-        ),
-        length,
-        io_result,
-        1_i32,
-        (((command as i32) == (enums::kDSReadFile as i32)) as i32),
-    );
-    if ((io_result.get() as i32) == (enums::kDSIONoError as i32))
-        && (err != (enums::kNoError as i32))
-    {
-        io_result.set(((enums::kDSIOError as i32) as u8));
-    }
-    fns::gTRKCPUState(ctx)
-        .Default()
-        .GPR()
-        .at(3_i32)
-        .set((io_result.get() as u32));
-    if (command as i32) == (enums::kDSReadFile as i32) {
-        fns::TRK_flush_cache(
-            ctx,
-            fns::gTRKCPUState(ctx).Default().GPR().at(6_i32).get(),
-            (length).get(),
-        );
-    }
-    fns::gTRKCPUState(ctx).Default().set_PC(
-        fns::gTRKCPUState(ctx)
-            .Default()
-            .PC()
-            .wrapping_add((4_i32 as u32)),
-    );
-    return err;
 }
 
 pub fn TRKTargetFlushCache<'a>(ctx: &'a Ctx, arg0: u8, arg1: u32, arg2: u32) -> i32 {

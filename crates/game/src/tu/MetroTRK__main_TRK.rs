@@ -25,23 +25,115 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn TRKTargetCPUMinorType<'a>(ctx: &'a Ctx) -> u8 {
     return (84_i32 as u8);
 }
 
 pub fn TRK_main<'a>(ctx: &'a Ctx) -> i32 {
-    let __frame = ctx.stack_frame(0x8);
-    statics::MetroTRK__main_TRK::TRK_mainError(ctx).set(fns::TRKInitializeNub(ctx));
-    if !(statics::MetroTRK__main_TRK::TRK_mainError(ctx).get() != 0) {
-        fns::TRKNubWelcome(ctx);
-        fns::TRKNubMainLoop(ctx);
+    // Transliterated from its machine code: calls TRKNubMainLoop, which reads registers its caller sets without passing them.
+    ().put_regs(ctx);
+    asm_TRK_main(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_TRK_main(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8032abe0_u32;
+    loop {
+        match pc {
+            0x8032abe0_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // bl TRKInitializeNub
+                c::call(ctx, 0x80326ad8_u32, 0x8032abf0_u32);
+                pc = 0x8032abf0_u32;
+            }
+            0x8032abf0_u32 => {
+                // lis r4, TRK_mainError@ha
+                g[4].set(0x804a0000_u32);
+                // stwu r3, TRK_mainError@l(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x50d0_u32);
+                    ctx.write_u32(ea, g[3].get());
+                    g[4].set(ea);
+                }
+                // lwz r0, 0x0(r4)
+                {
+                    let ea = g[4].get();
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_8032AC0C
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x8032ac0c_u32;
+                    continue;
+                }
+                pc = 0x8032ac04_u32;
+            }
+            0x8032ac04_u32 => {
+                // bl TRKNubWelcome
+                c::call(ctx, 0x80326bd0_u32, 0x8032ac08_u32);
+                pc = 0x8032ac08_u32;
+            }
+            0x8032ac08_u32 => {
+                // bl TRKNubMainLoop
+                c::call(ctx, 0x80326788_u32, 0x8032ac0c_u32);
+                pc = 0x8032ac0c_u32;
+            }
+            0x8032ac0c_u32 => {
+                // bl TRKTerminateNub
+                c::call(ctx, 0x80326bac_u32, 0x8032ac10_u32);
+                pc = 0x8032ac10_u32;
+            }
+            0x8032ac10_u32 => {
+                // lis r4, TRK_mainError@ha
+                g[4].set(0x804a0000_u32);
+                // stw r3, TRK_mainError@l(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x50d0_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // lwz r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of TRK_main");
+            }
+            _ => unreachable!("TRK_main: no block at {pc:#010x}"),
+        }
     }
-    return {
-        let __t1 = fns::TRKTerminateNub(ctx);
-        statics::MetroTRK__main_TRK::TRK_mainError(ctx).set(__t1);
-        __t1
-    };
 }
 
 /// Registers this unit's ports.

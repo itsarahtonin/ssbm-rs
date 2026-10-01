@@ -25,56 +25,283 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
-pub fn TRKDoNotifyStopped<'a>(ctx: &'a Ctx, cmdId: u8) -> i32 {
-    let __frame = ctx.stack_frame(0x20);
-    let sp8: Val<'a, i32> = frame_at(ctx, &__frame, 0x8);
-    let buffer: Ptr<'a, MessageBuffer<'a>> = frame_at(ctx, &__frame, 0x4);
-    let spC: Val<'a, i32> = frame_at(ctx, &__frame, 0x0);
-    let mut cmdId = cmdId;
-    let mut result: i32 = 0;
-    result = fns::TRKGetFreeBuffer(ctx, spC, buffer);
-    if result == (enums::kNoError as i32) {
-        result = inl_TRKAppendBuffer1_ui8_unfused(ctx, buffer.get(), cmdId);
-        if result == (enums::kNoError as i32) {
-            if (cmdId as i32) == (enums::kDSNotifyStopped as i32) {
-                let _ = fns::TRKTargetAddStopInfo(ctx, buffer.get());
-            } else {
-                fns::TRKTargetAddExceptionInfo(ctx, buffer.get());
-            }
-        }
-        result = fns::TRKRequestSend(
-            ctx,
-            buffer.get(),
-            sp8,
-            (2_i32 as u32),
-            (3_i32 as u32),
-            1_i32,
-        );
-        if result == (enums::kNoError as i32) {
-            fns::TRKReleaseBuffer(ctx, sp8.get());
-        }
-        fns::TRKReleaseBuffer(ctx, spC.get());
-    }
-    return result;
+pub fn TRKDoNotifyStopped<'a>(ctx: &'a Ctx, a0: u8) -> i32 {
+    // Transliterated from its machine code: calls TRKRequestSend, which reads registers its caller sets without passing them.
+    (a0,).put_regs(ctx);
+    asm_TRKDoNotifyStopped(ctx);
+    Ret::get(ctx)
 }
 
-fn inl_TRKAppendBuffer1_ui8_unfused<'a>(ctx: &'a Ctx, buffer: MessageBuffer<'a>, data: u8) -> i32 {
-    let mut buffer = buffer;
-    let mut data = data;
-    if (buffer).fPosition() >= (0x800_i32.wrapping_add(128_i32) as u32) {
-        return (enums::kMessageBufferOverflow as i32);
+fn asm_TRKDoNotifyStopped(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80328e78_u32;
+    loop {
+        match pc {
+            0x80328e78_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // addi r4, r1, 0xc
+                g[4].set(g[1].get().wrapping_add(0xc_u32));
+                // stw r30, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // addi r30, r3, 0x0
+                g[30].set(g[3].get());
+                // addi r3, r1, 0x8
+                g[3].set(g[1].get().wrapping_add(0x8_u32));
+                // bl TRKGetFreeBuffer
+                c::call(ctx, 0x80326d14_u32, 0x80328e9c_u32);
+                pc = 0x80328e9c_u32;
+            }
+            0x80328e9c_u32 => {
+                // mr. r31, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[31].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // bne .L_80328F34
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80328f34_u32;
+                    continue;
+                }
+                pc = 0x80328ea4_u32;
+            }
+            0x80328ea4_u32 => {
+                // lwz r5, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[5].set(ctx.read_u32(ea));
+                }
+                // lwz r3, 0xc(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0xc_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // cmplwi r3, 0x880
+                {
+                    let (x, y) = (g[3].get(), 0x880_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // blt .L_80328EBC
+                if (c::cr_bit(ctx, 0) == true) {
+                    pc = 0x80328ebc_u32;
+                    continue;
+                }
+                pc = 0x80328eb4_u32;
+            }
+            0x80328eb4_u32 => {
+                // li r4, 0x301
+                g[4].set(0x301_u32);
+                // b .L_80328EDC
+                pc = 0x80328edc_u32;
+                continue;
+                pc = 0x80328ebc_u32;
+            }
+            0x80328ebc_u32 => {
+                // addi r0, r3, 0x1
+                g[0].set(g[3].get().wrapping_add(0x1_u32));
+                // add r3, r5, r3
+                {
+                    let (v, ca, ov) = c::add3(g[5].get(), g[3].get(), 0);
+                    g[3].set(v);
+                    let _ = (ca, ov);
+                }
+                // stw r0, 0xc(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0xc_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // stb r30, 0x10(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x10_u32);
+                    ctx.write_u8(ea, g[30].get() as u8);
+                }
+                // lwz r3, 0x8(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x8_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // addi r0, r3, 0x1
+                g[0].set(g[3].get().wrapping_add(0x1_u32));
+                // stw r0, 0x8(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x8_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                pc = 0x80328edc_u32;
+            }
+            0x80328edc_u32 => {
+                // cmpwi r4, 0x0
+                {
+                    let (x, y) = (g[4].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80328F04
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80328f04_u32;
+                    continue;
+                }
+                pc = 0x80328ee4_u32;
+            }
+            0x80328ee4_u32 => {
+                // clrlwi r0, r30, 24
+                {
+                    let v = g[30].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                }
+                // cmplwi r0, 0x90
+                {
+                    let (x, y) = (g[0].get(), 0x90_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80328EFC
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80328efc_u32;
+                    continue;
+                }
+                pc = 0x80328ef0_u32;
+            }
+            0x80328ef0_u32 => {
+                // lwz r3, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // bl TRKTargetAddStopInfo
+                c::call(ctx, 0x80329e48_u32, 0x80328ef8_u32);
+                pc = 0x80328ef8_u32;
+            }
+            0x80328ef8_u32 => {
+                // b .L_80328F04
+                pc = 0x80328f04_u32;
+                continue;
+                pc = 0x80328efc_u32;
+            }
+            0x80328efc_u32 => {
+                // lwz r3, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // bl TRKTargetAddExceptionInfo
+                c::call(ctx, 0x80329ed8_u32, 0x80328f04_u32);
+                pc = 0x80328f04_u32;
+            }
+            0x80328f04_u32 => {
+                // lwz r3, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // addi r4, r1, 0x10
+                g[4].set(g[1].get().wrapping_add(0x10_u32));
+                // li r5, 0x2
+                g[5].set(0x2_u32);
+                // li r6, 0x3
+                g[6].set(0x3_u32);
+                // li r7, 0x1
+                g[7].set(0x1_u32);
+                // bl TRKRequestSend
+                c::call(ctx, 0x80328cbc_u32, 0x80328f1c_u32);
+                pc = 0x80328f1c_u32;
+            }
+            0x80328f1c_u32 => {
+                // mr. r31, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[31].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // bne .L_80328F2C
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80328f2c_u32;
+                    continue;
+                }
+                pc = 0x80328f24_u32;
+            }
+            0x80328f24_u32 => {
+                // lwz r3, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // bl TRKReleaseBuffer
+                c::call(ctx, 0x80326ddc_u32, 0x80328f2c_u32);
+                pc = 0x80328f2c_u32;
+            }
+            0x80328f2c_u32 => {
+                // lwz r3, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // bl TRKReleaseBuffer
+                c::call(ctx, 0x80326ddc_u32, 0x80328f34_u32);
+                pc = 0x80328f34_u32;
+            }
+            0x80328f34_u32 => {
+                // mr r3, r31
+                {
+                    let v = g[31].get() | g[31].get();
+                    g[3].set(v);
+                }
+                // lwz r31, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x20
+                g[1].set(g[1].get().wrapping_add(0x20_u32));
+                // lwz r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of TRKDoNotifyStopped");
+            }
+            _ => unreachable!("TRKDoNotifyStopped: no block at {pc:#010x}"),
+        }
     }
-    (buffer)
-        .fData()
-        .at(({
-            let __t1 = (buffer).fPosition();
-            (buffer).set_fPosition((buffer).fPosition().wrapping_add(1));
-            __t1
-        } as i32))
-        .set(data);
-    (buffer).set_fLength((buffer).fLength().wrapping_add(1));
-    return (enums::kNoError as i32);
 }
 
 /// Registers this unit's ports.

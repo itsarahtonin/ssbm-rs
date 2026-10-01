@@ -33,7 +33,7 @@ pub fn __TRK_reset<'a>(ctx: &'a Ctx) {
 }
 
 pub fn InitMetroTRK<'a>(ctx: &'a Ctx) {
-    // Transliterated from its machine code: MWCC-only code.
+    // Transliterated from its machine code: calls TRK_main, which reads registers its caller sets without passing them.
     ().put_regs(ctx);
     asm_InitMetroTRK(ctx);
 }

@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn ftMr_Init_OnDeath<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
@@ -176,26 +177,106 @@ pub fn ftMr_Init_UnkDemoCallbacks0<'a>(
     }
 }
 
-pub fn ftMr_Init_GetMotionFileString<'a>(ctx: &'a Ctx, arg0: i32) -> Val<'a, i8> {
-    let mut arg0 = arg0;
-    let mut offset: i32 = 0;
-    's1: {
-        let __case = match arg0 {
-            9_i32 => 0,
-            10_i32 => 1,
-            _ => 2,
-        };
-        if __case <= 0 {
-            offset = 14_i32;
-            break 's1;
-        }
-        if __case <= 1 {
-            offset = 15_i32;
+pub fn ftMr_Init_GetMotionFileString<'a>(ctx: &'a Ctx, a0: i32) -> Val<'a, i8> {
+    // Transliterated from its machine code: returns or uses a value its C never sets.
+    (a0,).put_regs(ctx);
+    asm_ftMr_Init_GetMotionFileString(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_ftMr_Init_GetMotionFileString(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x800e0ce0_u32;
+    loop {
+        match pc {
+            0x800e0ce0_u32 => {
+                // cmpwi r3, 0xa
+                {
+                    let (x, y) = (g[3].get() as i32, 10_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_800E0D00
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x800e0d00_u32;
+                    continue;
+                }
+                pc = 0x800e0ce8_u32;
+            }
+            0x800e0ce8_u32 => {
+                // bge .L_800E0D04
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x800e0d04_u32;
+                    continue;
+                }
+                pc = 0x800e0cec_u32;
+            }
+            0x800e0cec_u32 => {
+                // cmpwi r3, 0x9
+                {
+                    let (x, y) = (g[3].get() as i32, 9_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bge .L_800E0CF8
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x800e0cf8_u32;
+                    continue;
+                }
+                pc = 0x800e0cf4_u32;
+            }
+            0x800e0cf4_u32 => {
+                // b .L_800E0D04
+                pc = 0x800e0d04_u32;
+                continue;
+                pc = 0x800e0cf8_u32;
+            }
+            0x800e0cf8_u32 => {
+                // li r0, 0xe
+                g[0].set(0xe_u32);
+                // b .L_800E0D04
+                pc = 0x800e0d04_u32;
+                continue;
+                pc = 0x800e0d00_u32;
+            }
+            0x800e0d00_u32 => {
+                // li r0, 0xf
+                g[0].set(0xf_u32);
+                pc = 0x800e0d04_u32;
+            }
+            0x800e0d04_u32 => {
+                // lis r3, ftMr_Init_DemoViMotionFilenames@ha
+                g[3].set(0x803c0000_u32);
+                // addi r3, r3, ftMr_Init_DemoViMotionFilenames@l
+                g[3].set(g[3].get().wrapping_add(0x5a20_u32));
+                // slwi r0, r0, 2
+                {
+                    let v = g[0].get().rotate_left(2) & 0xfffffffc_u32;
+                    g[0].set(v);
+                }
+                // add r3, r3, r0
+                {
+                    let (v, ca, ov) = c::add3(g[3].get(), g[0].get(), 0);
+                    g[3].set(v);
+                    let _ = (ca, ov);
+                }
+                // lwz r3, -0x38(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xffffffc8_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of ftMr_Init_GetMotionFileString");
+            }
+            _ => unreachable!("ftMr_Init_GetMotionFileString: no block at {pc:#010x}"),
         }
     }
-    return ptr::<ArrP<'a, Val<'a, i8>, 0>>(ctx, 0x803c5a20)
-        .at(offset.wrapping_sub(14_i32))
-        .get();
 }
 
 fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {

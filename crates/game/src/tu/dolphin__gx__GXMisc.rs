@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn GXSetMisc<'a>(ctx: &'a Ctx, token: i32, val: u32) {
     let mut token = token;
@@ -60,23 +61,194 @@ pub fn GXSetMisc<'a>(ctx: &'a Ctx, token: i32, val: u32) {
 }
 
 pub fn GXSetDrawDone<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x18);
-    let mut reg: u32 = 0;
-    let mut enabled: i32 = 0;
-    enabled = fns::OSDisableInterrupts(ctx);
-    reg = (0x45000002_i32 as u32);
-    'l1: loop {
-        'c2: {
-            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((97_i32) as u8));
-            (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((reg));
-        }
-        if !(0_i32 != 0) {
-            break 'l1;
+    // Transliterated from its machine code: calls __GXSetDirtyState, which reads registers its caller sets without passing them.
+    ().put_regs(ctx);
+    asm_GXSetDrawDone(ctx);
+}
+
+fn asm_GXSetDrawDone(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8033cc38_u32;
+    loop {
+        match pc {
+            0x8033cc38_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // bl OSDisableInterrupts
+                c::call(ctx, 0x80347364_u32, 0x8033cc50_u32);
+                pc = 0x8033cc50_u32;
+            }
+            0x8033cc50_u32 => {
+                // li r0, 0x61
+                g[0].set(0x61_u32);
+                // lwz r4, gx@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffa508_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // lis r6, 0xcc01
+                g[6].set(0xcc010000_u32);
+                // lis r5, 0x4500
+                g[5].set(0x45000000_u32);
+                // stb r0, -0x8000(r6)
+                {
+                    let ea = g[6].get().wrapping_add(0xffff8000_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                // addi r0, r5, 0x2
+                g[0].set(g[5].get().wrapping_add(0x2_u32));
+                // stw r0, -0x8000(r6)
+                {
+                    let ea = g[6].get().wrapping_add(0xffff8000_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // mr r30, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[30].set(v);
+                }
+                // lwz r0, 0x4f0(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x4f0_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmplwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_8033CC80
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x8033cc80_u32;
+                    continue;
+                }
+                pc = 0x8033cc7c_u32;
+            }
+            0x8033cc7c_u32 => {
+                // bl __GXSetDirtyState
+                c::call(ctx, 0x8033d050_u32, 0x8033cc80_u32);
+                pc = 0x8033cc80_u32;
+            }
+            0x8033cc80_u32 => {
+                // li r31, 0x0
+                g[31].set(0_u32);
+                // lis r3, 0xcc01
+                g[3].set(0xcc010000_u32);
+                // stw r31, -0x8000(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xffff8000_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r31, -0x8000(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xffff8000_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r31, -0x8000(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xffff8000_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r31, -0x8000(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xffff8000_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r31, -0x8000(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xffff8000_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r31, -0x8000(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xffff8000_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r31, -0x8000(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xffff8000_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r31, -0x8000(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xffff8000_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // bl PPCSync
+                c::call(ctx, 0x80335e8c_u32, 0x8033ccac_u32);
+                pc = 0x8033ccac_u32;
+            }
+            0x8033ccac_u32 => {
+                // stb r31, DrawDone@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbc88_u32);
+                    ctx.write_u8(ea, g[31].get() as u8);
+                }
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // bl OSRestoreInterrupts
+                c::call(ctx, 0x8034738c_u32, 0x8033ccb8_u32);
+                pc = 0x8033ccb8_u32;
+            }
+            0x8033ccb8_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of GXSetDrawDone");
+            }
+            _ => unreachable!("GXSetDrawDone: no block at {pc:#010x}"),
         }
     }
-    inl_GXFlush_unfused(ctx);
-    statics::dolphin__gx__GXMisc::DrawDone(ctx).set((0_i32 as u8));
-    let _ = fns::OSRestoreInterrupts(ctx, enabled);
 }
 
 pub fn GXWaitDrawDone<'a>(ctx: &'a Ctx) {
@@ -540,23 +712,6 @@ pub fn __GXPEInit<'a>(ctx: &'a Ctx) {
         }
     }
     (Handle::add(fns::__peReg(ctx).get(), 5_i32)).set((reg as u16));
-}
-
-fn inl_GXFlush_unfused<'a>(ctx: &'a Ctx) {
-    let mut i: u32 = 0;
-    if ((fns::gx(ctx).get()).dirtyState() != 0) {
-        fns::__GXSetDirtyState(ctx);
-    }
-    {
-        i = (8_i32 as u32);
-        'l1: while i > (0_i32 as u32) {
-            'c2: {
-                (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32(((0_i32) as u32));
-            }
-            i = i.wrapping_sub(1);
-        }
-    }
-    ctx.call::<_, ()>(0x80335e8c, ());
 }
 
 /// Registers this unit's ports.

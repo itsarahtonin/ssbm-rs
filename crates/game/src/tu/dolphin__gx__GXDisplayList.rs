@@ -25,20 +25,156 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
-pub fn GXCallDisplayList<'a>(ctx: &'a Ctx, list: Addr<'a>, nbytes: u32) {
-    let __frame = ctx.stack_frame(0x18);
-    let mut list = list;
-    let mut nbytes = nbytes;
-    if (fns::gx(ctx).get()).dirtyState() != (0_i32 as u32) {
-        fns::__GXSetDirtyState(ctx);
+pub fn GXCallDisplayList<'a>(ctx: &'a Ctx, a0: Addr<'a>, a1: u32) {
+    // Transliterated from its machine code: calls __GXSetDirtyState, which reads registers its caller sets without passing them.
+    (a0, a1).put_regs(ctx);
+    asm_GXCallDisplayList(ctx);
+}
+
+fn asm_GXCallDisplayList(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x803410d8_u32;
+    loop {
+        match pc {
+            0x803410d8_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // addi r31, r4, 0x0
+                g[31].set(g[4].get());
+                // stw r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // addi r30, r3, 0x0
+                g[30].set(g[3].get());
+                // lwz r5, gx@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffa508_u32);
+                    g[5].set(ctx.read_u32(ea));
+                }
+                // lwz r0, 0x4f0(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x4f0_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmplwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80341108
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80341108_u32;
+                    continue;
+                }
+                pc = 0x80341104_u32;
+            }
+            0x80341104_u32 => {
+                // bl __GXSetDirtyState
+                c::call(ctx, 0x8033d050_u32, 0x80341108_u32);
+                pc = 0x80341108_u32;
+            }
+            0x80341108_u32 => {
+                // lwz r3, gx@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffa508_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // lwz r0, 0x0(r3)
+                {
+                    let ea = g[3].get();
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmplwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_8034111C
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x8034111c_u32;
+                    continue;
+                }
+                pc = 0x80341118_u32;
+            }
+            0x80341118_u32 => {
+                // bl __GXSendFlushPrim
+                c::call(ctx, 0x8033d1b8_u32, 0x8034111c_u32);
+                pc = 0x8034111c_u32;
+            }
+            0x8034111c_u32 => {
+                // li r0, 0x40
+                g[0].set(0x40_u32);
+                // lis r3, 0xcc01
+                g[3].set(0xcc010000_u32);
+                // stb r0, -0x8000(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xffff8000_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                // stw r30, -0x8000(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xffff8000_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // stw r31, -0x8000(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0xffff8000_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x10_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of GXCallDisplayList");
+            }
+            _ => unreachable!("GXCallDisplayList: no block at {pc:#010x}"),
+        }
     }
-    if (Handle::cast::<Val<'a, u32>>((fns::gx(ctx).get()).unk_ref())).get() == (0_i32 as u32) {
-        fns::__GXSendFlushPrim(ctx);
-    }
-    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u8(((64_i32) as u8));
-    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32(Handle::addr((list)));
-    (ptr::<PPCWGPipe<'a>>(ctx, 0xcc008000_u32 as u32)).set_u32((nbytes));
 }
 
 /// Registers this unit's ports.

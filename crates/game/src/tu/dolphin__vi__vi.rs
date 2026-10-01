@@ -2203,35 +2203,197 @@ pub fn VIGetCurrentLine<'a>(ctx: &'a Ctx) -> u32 {
 }
 
 pub fn VIGetTvFormat<'a>(ctx: &'a Ctx) -> u32 {
-    let __frame = ctx.stack_frame(0x10);
-    let mut enabled: i32 = 0;
-    let mut format: i32 = 0;
-    enabled = fns::OSDisableInterrupts(ctx);
-    's1: {
-        let __case = match statics::dolphin__vi__vi::CurrTvMode(ctx).get() {
-            3_i32 => 0,
-            0_i32 => 0,
-            4_i32 => 1,
-            1_i32 => 1,
-            5_i32 => 2,
-            2_i32 => 2,
-            _ => 3,
-        };
-        if __case <= 0 {
-            format = 0_i32;
-            break 's1;
-        }
-        if __case <= 1 {
-            format = 1_i32;
-            break 's1;
-        }
-        if __case <= 2 {
-            format = statics::dolphin__vi__vi::CurrTvMode(ctx).get();
-            break 's1;
+    // Transliterated from its machine code: returns or uses a value its C never sets.
+    ().put_regs(ctx);
+    asm_VIGetTvFormat(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_VIGetTvFormat(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8035032c_u32;
+    loop {
+        match pc {
+            0x8035032c_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // bl OSDisableInterrupts
+                c::call(ctx, 0x80347364_u32, 0x80350340_u32);
+                pc = 0x80350340_u32;
+            }
+            0x80350340_u32 => {
+                // lwz r0, CurrTvMode@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbdc4_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmpwi r0, 0x3
+                {
+                    let (x, y) = (g[0].get() as i32, 3_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80350378
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80350378_u32;
+                    continue;
+                }
+                pc = 0x8035034c_u32;
+            }
+            0x8035034c_u32 => {
+                // bge .L_80350368
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x80350368_u32;
+                    continue;
+                }
+                pc = 0x80350350_u32;
+            }
+            0x80350350_u32 => {
+                // cmpwi r0, 0x1
+                {
+                    let (x, y) = (g[0].get() as i32, 1_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80350380
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80350380_u32;
+                    continue;
+                }
+                pc = 0x80350358_u32;
+            }
+            0x80350358_u32 => {
+                // bge .L_80350388
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x80350388_u32;
+                    continue;
+                }
+                pc = 0x8035035c_u32;
+            }
+            0x8035035c_u32 => {
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bge .L_80350378
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x80350378_u32;
+                    continue;
+                }
+                pc = 0x80350364_u32;
+            }
+            0x80350364_u32 => {
+                // b .L_8035038C
+                pc = 0x8035038c_u32;
+                continue;
+                pc = 0x80350368_u32;
+            }
+            0x80350368_u32 => {
+                // cmpwi r0, 0x5
+                {
+                    let (x, y) = (g[0].get() as i32, 5_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80350388
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80350388_u32;
+                    continue;
+                }
+                pc = 0x80350370_u32;
+            }
+            0x80350370_u32 => {
+                // bge .L_8035038C
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x8035038c_u32;
+                    continue;
+                }
+                pc = 0x80350374_u32;
+            }
+            0x80350374_u32 => {
+                // b .L_80350380
+                pc = 0x80350380_u32;
+                continue;
+                pc = 0x80350378_u32;
+            }
+            0x80350378_u32 => {
+                // li r31, 0x0
+                g[31].set(0_u32);
+                // b .L_8035038C
+                pc = 0x8035038c_u32;
+                continue;
+                pc = 0x80350380_u32;
+            }
+            0x80350380_u32 => {
+                // li r31, 0x1
+                g[31].set(0x1_u32);
+                // b .L_8035038C
+                pc = 0x8035038c_u32;
+                continue;
+                pc = 0x80350388_u32;
+            }
+            0x80350388_u32 => {
+                // mr r31, r0
+                {
+                    let v = g[0].get() | g[0].get();
+                    g[31].set(v);
+                }
+                pc = 0x8035038c_u32;
+            }
+            0x8035038c_u32 => {
+                // bl OSRestoreInterrupts
+                c::call(ctx, 0x8034738c_u32, 0x80350390_u32);
+                pc = 0x80350390_u32;
+            }
+            0x80350390_u32 => {
+                // lwz r0, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // mr r3, r31
+                {
+                    let v = g[31].get() | g[31].get();
+                    g[3].set(v);
+                }
+                // lwz r31, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x10
+                g[1].set(g[1].get().wrapping_add(0x10_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of VIGetTvFormat");
+            }
+            _ => unreachable!("VIGetTvFormat: no block at {pc:#010x}"),
         }
     }
-    let _ = fns::OSRestoreInterrupts(ctx, enabled);
-    return (format as u32);
 }
 
 pub fn VIGetDTVStatus<'a>(ctx: &'a Ctx) -> u32 {

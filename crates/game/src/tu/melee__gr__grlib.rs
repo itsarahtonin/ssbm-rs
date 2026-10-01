@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn grLib_801C96E8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
     let mut arg0 = arg0;
@@ -259,16 +260,106 @@ pub fn grLib_801C9A70<'a>(ctx: &'a Ctx, arg0: i32, v: Vec<'a>) {
 
 pub fn grLib_801C9B20<'a>(
     ctx: &'a Ctx,
-    arg0: HSD_JObj<'a>,
-    arg1: DynamicsDesc<'a>,
-    arg2: DynamicsDesc<'a>,
+    a0: HSD_JObj<'a>,
+    a1: DynamicsDesc<'a>,
+    a2: DynamicsDesc<'a>,
 ) {
-    let __frame = ctx.stack_frame(0x20);
-    let mut arg0 = arg0;
-    let mut arg1 = arg1;
-    let mut arg2 = arg2;
-    fns::lb_8000FD48(ctx, arg0, arg2, (arg1).count());
-    fns::lb_80011710(ctx, arg1, arg2);
+    // Transliterated from its machine code: calls lb_8000FD48, which reads registers its caller sets without passing them.
+    (a0, a1, a2).put_regs(ctx);
+    asm_grLib_801C9B20(ctx);
+}
+
+fn asm_grLib_801C9B20(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x801c9b20_u32;
+    loop {
+        match pc {
+            0x801c9b20_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // addi r31, r5, 0x0
+                g[31].set(g[5].get());
+                // stw r30, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // addi r30, r4, 0x0
+                g[30].set(g[4].get());
+                // lwz r5, 0x4(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x4_u32);
+                    g[5].set(ctx.read_u32(ea));
+                }
+                // mr r4, r31
+                {
+                    let v = g[31].get() | g[31].get();
+                    g[4].set(v);
+                }
+                // bl lb_8000FD48
+                c::call(ctx, 0x8000fd48_u32, 0x801c9b48_u32);
+                pc = 0x801c9b48_u32;
+            }
+            0x801c9b48_u32 => {
+                // addi r3, r30, 0x0
+                g[3].set(g[30].get());
+                // addi r4, r31, 0x0
+                g[4].set(g[31].get());
+                // bl lb_80011710
+                c::call(ctx, 0x80011710_u32, 0x801c9b54_u32);
+                pc = 0x801c9b54_u32;
+            }
+            0x801c9b54_u32 => {
+                // lwz r0, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x20
+                g[1].set(g[1].get().wrapping_add(0x20_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of grLib_801C9B20");
+            }
+            _ => unreachable!("grLib_801C9B20: no block at {pc:#010x}"),
+        }
+    }
 }
 
 pub fn grLib_801C9B6C<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {

@@ -25,24 +25,155 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn lb_8001955C<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x8);
-    if (fns::HSD_PadGetResetSwitch(ctx) != 0) {
-        fns::lbAudioAx_80027DBC(ctx);
-        'l1: while fns::lbCardNew_CompleteNextTask(ctx) == 11_i32 {
-            'c2: {}
+    // Transliterated from its machine code: calls OSResetSystem, which reads registers its caller sets without passing them.
+    ().put_regs(ctx);
+    asm_lb_8001955C(ctx);
+}
+
+fn asm_lb_8001955C(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8001955c_u32;
+    loop {
+        match pc {
+            0x8001955c_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // bl HSD_PadGetResetSwitch
+                c::call(ctx, 0x803769d8_u32, 0x8001956c_u32);
+                pc = 0x8001956c_u32;
+            }
+            0x8001956c_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_800195B8
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x800195b8_u32;
+                    continue;
+                }
+                pc = 0x80019574_u32;
+            }
+            0x80019574_u32 => {
+                // bl lbAudioAx_80027DBC
+                c::call(ctx, 0x80027dbc_u32, 0x80019578_u32);
+                pc = 0x80019578_u32;
+            }
+            0x80019578_u32 => {
+                // bl lbCardNew_CompleteNextTask
+                c::call(ctx, 0x8001b6f8_u32, 0x8001957c_u32);
+                pc = 0x8001957c_u32;
+            }
+            0x8001957c_u32 => {
+                // cmpwi r3, 0xb
+                {
+                    let (x, y) = (g[3].get() as i32, 11_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80019578
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80019578_u32;
+                    continue;
+                }
+                pc = 0x80019584_u32;
+            }
+            0x80019584_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // bl VISetPostRetraceCallback
+                c::call(ctx, 0x8034ebd0_u32, 0x8001958c_u32);
+                pc = 0x8001958c_u32;
+            }
+            0x8001958c_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // bl VISetPreRetraceCallback
+                c::call(ctx, 0x8034eb8c_u32, 0x80019594_u32);
+                pc = 0x80019594_u32;
+            }
+            0x80019594_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // bl VISetBlack
+                c::call(ctx, 0x80350100_u32, 0x8001959c_u32);
+                pc = 0x8001959c_u32;
+            }
+            0x8001959c_u32 => {
+                // bl VIFlush
+                c::call(ctx, 0x8034ff78_u32, 0x800195a0_u32);
+                pc = 0x800195a0_u32;
+            }
+            0x800195a0_u32 => {
+                // bl VIWaitForRetrace
+                c::call(ctx, 0x8034f314_u32, 0x800195a4_u32);
+                pc = 0x800195a4_u32;
+            }
+            0x800195a4_u32 => {
+                // bl VIWaitForRetrace
+                c::call(ctx, 0x8034f314_u32, 0x800195a8_u32);
+                pc = 0x800195a8_u32;
+            }
+            0x800195a8_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl OSResetSystem
+                c::call(ctx, 0x8034844c_u32, 0x800195b8_u32);
+                pc = 0x800195b8_u32;
+            }
+            0x800195b8_u32 => {
+                // bl lbCardNew_CompleteNextTask
+                c::call(ctx, 0x8001b6f8_u32, 0x800195bc_u32);
+                pc = 0x800195bc_u32;
+            }
+            0x800195bc_u32 => {
+                // bl lb_8001CC84
+                c::call(ctx, 0x8001cc84_u32, 0x800195c0_u32);
+                pc = 0x800195c0_u32;
+            }
+            0x800195c0_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of lb_8001955C");
+            }
+            _ => unreachable!("lb_8001955C: no block at {pc:#010x}"),
         }
-        let _ = fns::VISetPostRetraceCallback(ctx, null::<FnPtr<'a>>(ctx));
-        let _ = fns::VISetPreRetraceCallback(ctx, null::<FnPtr<'a>>(ctx));
-        fns::VISetBlack(ctx, 1_i32);
-        fns::VIFlush(ctx);
-        fns::VIWaitForRetrace(ctx);
-        fns::VIWaitForRetrace(ctx);
-        fns::OSResetSystem(ctx, 0_i32, (0_i32 as u32), 0_i32);
     }
-    let _ = fns::lbCardNew_CompleteNextTask(ctx);
-    fns::lb_8001CC84(ctx);
 }
 
 pub fn lb_800195D0<'a>(ctx: &'a Ctx) {
