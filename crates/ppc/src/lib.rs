@@ -70,7 +70,7 @@ impl Interpreter {
                 ctx.coverage.hit(pc);
             }
             self.pc.set(pc);
-            let w = ctx.read_u32(pc);
+            let w = ctx.fetch_u32(pc);
             let from = pc;
             pc = step(ctx, pc, w);
             if pc != from.wrapping_add(4) {

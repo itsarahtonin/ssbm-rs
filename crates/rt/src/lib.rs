@@ -650,6 +650,17 @@ impl Ctx {
         }
     }
 
+    /// Fetches the instruction at `pc` for the interpreter: not a read of data, for the read
+    /// log or the stack shadow.
+    #[inline]
+    pub fn fetch_u32(&self, pc: u32) -> u32 {
+        self.lockstep.note_run(pc);
+        match self.mem.read_u32(pc) {
+            Ok(v) => v,
+            Err(_) => self.read_slow(pc, 4) as u32,
+        }
+    }
+
     #[inline]
     pub fn read_u64(&self, addr: u32) -> u64 {
         if self.shadow_on.get() {

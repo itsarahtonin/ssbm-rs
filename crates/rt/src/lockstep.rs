@@ -185,6 +185,9 @@ pub struct State {
     /// The game's code, from its first address to past its last: a mutated check whose
     /// original writes there goes on running code only it sees changed.
     pub code: Cell<(u32, u32)>,
+    /// Words of main memory outside `code` that the interpreter has run, such as injected code
+    /// playback placed in the heap, a bit per word: code too.
+    ram_code: RefCell<Vec<u64>>,
     /// Read-only data, whose constants ports hold inline rather than read: mutated checks
     /// leave it as it is.
     pub constant: RefCell<Vec<(u32, u32)>>,
@@ -220,6 +223,46 @@ pub struct State {
 impl State {
     pub fn is_active(&self) -> bool {
         self.active.get()
+    }
+
+    /// The interpreter runs the instruction at `pc`: outside the game's code, that word is code
+    /// as well.
+    #[inline]
+    pub(crate) fn note_run(&self, pc: u32) {
+        let (lo, hi) = self.code.get();
+        if hi != 0 && !(lo..hi).contains(&pc) && (RAM_LO..RAM_HI).contains(&pc) {
+            let i = ((pc - RAM_LO) / 4) as usize;
+            let mut bits = self.ram_code.borrow_mut();
+            if bits.is_empty() {
+                bits.resize(((RAM_HI - RAM_LO) / 4 / 64) as usize, 0);
+            }
+            bits[i / 64] |= 1 << (i % 64);
+        }
+    }
+
+    /// Whether the word at `addr` is code the interpreter ran outside the game's code.
+    fn is_ram_code(&self, addr: u32) -> bool {
+        let bits = self.ram_code.borrow();
+        let i = (addr.wrapping_sub(RAM_LO) / 4) as usize;
+        (RAM_LO..RAM_HI).contains(&addr) && !bits.is_empty() && bits[i / 64] >> (i % 64) & 1 != 0
+    }
+
+    /// Whether code changed from `before`, the pages a run wrote as they were.
+    fn wrote_code(&self, ctx: &Ctx, before: &Pages) -> bool {
+        let (lo, hi) = self.code.get();
+        before.iter().any(|(&page, old)| {
+            let at = 0x8000_0000 + page * ssbm_mem::PAGE_SIZE;
+            if at < hi && at + ssbm_mem::PAGE_SIZE > lo {
+                return true;
+            }
+            (0..ssbm_mem::PAGE_SIZE).step_by(4).any(|off| {
+                self.is_ram_code(at + off) && {
+                    let mut now = [0; 4];
+                    let _ = ctx.mem.read_bytes(at + off, &mut now);
+                    now[..] != old[off as usize..off as usize + 4]
+                }
+            })
+        })
     }
 
     /// A call to `addr` starts: returns which check's trace it belongs to, if traced.
@@ -373,12 +416,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     // Where the original asked its caller to continue, if not after the call.
     let original_resume = ctx.take_resume_at();
     let j1 = ctx.mem.end_journal();
-    let (code_start, code_end) = state.code.get();
-    let wrote_code = state.mutating.get()
-        && j1.keys().any(|&page| {
-            let at = 0x8000_0000 + page * ssbm_mem::PAGE_SIZE;
-            at < code_end && at + ssbm_mem::PAGE_SIZE > code_start
-        });
+    let wrote_code = state.mutating.get() && state.wrote_code(ctx, &j1);
     if wrote_code
         || broke_convention
         || original_panic.as_ref().is_some_and(|p| p.is::<ReachedSdk>() || p.is::<Runaway>())
@@ -729,6 +767,10 @@ pub fn probe(ctx: &Ctx, addr: u32, setup: impl FnOnce(&Ctx)) -> bool {
 /// Calls a port under a mutated check may make: a runaway loop makes many more.
 const MUTATED_CALLS: u64 = 10_000_000;
 
+/// Main memory.
+const RAM_LO: u32 = 0x8000_0000;
+const RAM_HI: u32 = 0x8180_0000;
+
 /// Checks the function again from the call just checked, as many times as `mutations` says,
 /// each with the call's arguments and what they point to changed at random; then goes on
 /// from the call's results.
@@ -804,13 +846,14 @@ fn mutate(ctx: &Ctx, reads: &[u32]) -> Vec<String> {
         state.rng.set(x);
         x
     };
-    let ram = |a: u32| (0x8000_0000..0x8180_0000).contains(&a);
+    let ram = |a: u32| (RAM_LO..RAM_HI).contains(&a);
     let (code_start, code_end) = state.code.get();
     let constant = state.constant.borrow();
     let changes = std::cell::RefCell::new(Vec::new());
     let change_byte = |at: u32| {
         if ram(at)
             && !(code_start..code_end).contains(&at)
+            && !state.is_ram_code(at & !3)
             && !constant.iter().any(|&(lo, hi)| (lo..hi).contains(&at))
             && !ram(ctx.read_u32(at & !3))
         {

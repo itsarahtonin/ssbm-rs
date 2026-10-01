@@ -157,6 +157,31 @@ fn notes_calls_that_break_the_calling_convention() {
 }
 
 #[test]
+fn mutated_checks_leave_code_run_from_ram_as_it_is() {
+    // `li r3, 5; blr` placed in RAM past the game's code, as playback places injected code,
+    // and called with a pointer to itself, which mutated checks change bytes behind.
+    const PLACED: u32 = 0x8060_0000;
+    let ctx = machine(&[]);
+    ctx.write_u32(PLACED, li(3, 5));
+    ctx.write_u32(PLACED + 4, BLR);
+    ctx.lockstep.code.set((CODE, CODE + 0x100));
+    ctx.lockstep.mutations.set(200);
+    ctx.lockstep.rng.set(1);
+    ctx.register(PLACED, |ctx| ctx.regs.set_r(3, 5));
+    ctx.set_mode(PLACED, Mode::Lockstep);
+    // As ssbm-run does: changed code may loop.
+    ctx.set_heartbeat(|ctx, _| {
+        if ctx.lockstep.is_mutating() && ctx.lockstep.in_original() {
+            std::panic::panic_any(ssbm_rt::lockstep::Runaway);
+        }
+    });
+    ctx.regs.set_r(4, PLACED);
+    ctx.invoke(PLACED);
+    assert!(ctx.lockstep.mismatches.borrow().is_empty());
+    assert_eq!(ctx.read_u32(PLACED), li(3, 5));
+}
+
+#[test]
 fn lockstep_flags_a_wrong_port() {
     let body = [li(3, 5), 0x9061_0000 | 0x2000, BLR]; // stw r3, 0x2000(r1)
     let good = machine(&body);
