@@ -34,6 +34,7 @@ use ssbm_sdk::{Sdk, boot, hw};
 
 mod matches;
 mod monkey;
+mod probe;
 
 /// Ports lockstep does not check (see where they are set).
 const LOCKSTEP_EXEMPT: &[&str] = &[
@@ -291,6 +292,10 @@ fn run() -> ExitCode {
     // CPU_PLAYERS=1 makes every match's human players CPUs.
     if std::env::var_os("CPU_PLAYERS").is_some() {
         matches::install_cpu_players(&ctx);
+    }
+    // PROBES=FILE checks the functions it lists by calling them on live objects (see probe.rs).
+    if let Ok(path) = std::env::var("PROBES") {
+        probe::install(&sdk, &path);
     }
     let log_modes = std::env::var_os("MODES").is_some();
     if start_mode.is_some() || log_modes {
@@ -721,6 +726,11 @@ fn run() -> ExitCode {
     let pcs: std::cell::RefCell<HashMap<u32, u32>> = Default::default();
     let interp2 = interp.clone();
     ctx.set_heartbeat(move |ctx, pc| {
+        // A mutated check or probe whose original runs this long may never come back on the
+        // port's side: lockstep drops it.
+        if ctx.lockstep.is_mutating() && ctx.lockstep.in_original() {
+            panic::panic_any(ssbm_rt::lockstep::Runaway);
+        }
         let sdk = ctx.ext::<Sdk>();
         let f = sdk.hw.fields.get();
         // A port under lockstep replays the original's interrupts, so fields stand still

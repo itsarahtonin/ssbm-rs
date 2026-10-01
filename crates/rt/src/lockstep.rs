@@ -259,6 +259,11 @@ impl State {
         self.stats.borrow_mut().clear();
     }
 
+    /// Whether a check of inputs no real call gave is running: a mutated check or a probe.
+    pub fn is_mutating(&self) -> bool {
+        self.mutating.get()
+    }
+
     /// How far checks have got through the world's interactions: it grows while the original
     /// makes them and while the port replays them, where video fields do not advance.
     pub fn progress(&self) -> usize {
@@ -341,9 +346,9 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     // Where the original asked its caller to continue, if not after the call.
     let original_resume = ctx.take_resume_at();
     let j1 = ctx.mem.end_journal();
-    if original_panic.as_ref().is_some_and(|p| p.is::<ReachedSdk>()) {
+    if original_panic.as_ref().is_some_and(|p| p.is::<ReachedSdk>() || p.is::<Runaway>()) {
         // A mutated call that reaches the SDK layer would change its state, which no journal
-        // undoes: drop it.
+        // undoes, and one that runs on and on may never return on the port's side: drop it.
         ctx.mem.restore(&j1);
         ctx.regs.restore(&regs0);
         if traced {
@@ -610,6 +615,42 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
 
 /// Panic payload that ends a mutated check that reached the SDK layer.
 struct ReachedSdk;
+
+/// Panic payload that ends a mutated check whose original runs on and on, from the heartbeat.
+pub struct Runaway;
+
+/// Checks the port of `addr` from a call no code made, whose arguments `setup` puts in place,
+/// on the state the game is in: as a mutated check, counted apart and undone after. Only outside
+/// any check; returns whether it ran.
+pub fn probe(ctx: &Ctx, addr: u32, setup: impl FnOnce(&Ctx)) -> bool {
+    let state = &ctx.lockstep;
+    let Some(e) = ctx.entry(addr).filter(|e| !e.external) else {
+        return false;
+    };
+    if state.active.get() || state.mutating.get() {
+        return false;
+    }
+    let regs = ctx.regs.snapshot();
+    let resume = ctx.take_resume_at();
+    state.mutating.set(true);
+    ctx.mem.begin_journal();
+    setup(ctx);
+    let result = catch_unwind(AssertUnwindSafe(|| run(ctx, addr, e.native, e.returns)));
+    let _ = ctx.take_resume_at();
+    let undo = ctx.mem.end_journal();
+    ctx.mem.restore(&undo);
+    ctx.regs.restore(&regs);
+    if let Some(at) = resume {
+        ctx.resume_at(at);
+    }
+    state.mutating.set(false);
+    if let Err(p) = result
+        && p.is::<crate::Stop>()
+    {
+        resume_unwind(p);
+    }
+    true
+}
 
 /// Calls a port under a mutated check may make: a runaway loop makes many more.
 const MUTATED_CALLS: u64 = 10_000_000;
