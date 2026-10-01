@@ -315,9 +315,7 @@ pub fn grRCruise_801FF5B4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             10000.0,
             fp::fneg(10000.0),
         ));
-        (gp).u()
-            .rcruise()
-            .set_x8((fp::fmuls(fp::frsp((1_i32) as f64), 0.01745329238474369)));
+        (gp).u().rcruise().set_x8((0.01745329238474369));
         (gp).u().rcruise().set_xC(1_i32);
     }
 }

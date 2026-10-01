@@ -505,7 +505,7 @@ pub fn ftCo_800A0CB0<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                 return;
             }
             if __case <= 2 {
-                (data).set_x56C(fp::frsp(fp::fmul(1.0, rand)));
+                (data).set_x56C(fp::frsp(rand));
                 return;
             }
             if __case <= 3 {

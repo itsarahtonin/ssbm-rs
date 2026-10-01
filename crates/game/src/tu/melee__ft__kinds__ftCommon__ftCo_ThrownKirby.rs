@@ -381,7 +381,7 @@ pub fn ftCo_800BE6AC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     f = fp::fmuls(f, xC);
     scale.set_x({
         let __t2 = {
-            let __t1 = fp::fsubs((fp::fsubs(1.0, xC)), fp::fneg(f));
+            let __t1 = fp::fadds((fp::fsubs(1.0, xC)), f);
             scale.set_z(__t1);
             __t1
         };

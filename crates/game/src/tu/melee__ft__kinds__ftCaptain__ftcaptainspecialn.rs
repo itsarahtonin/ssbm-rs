@@ -300,7 +300,7 @@ fn inl_ftCaptain_SpecialN_GetAngleVel_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>)
             stick_y = fp::fneg(stick_y);
         }
         {
-            let mut f: f64 = (fp::fmuls(fp::frsp((1_i32) as f64), 0.01745329238474369));
+            let mut f: f64 = (0.01745329238474369);
             return fp::fmuls(
                 f,
                 (fp::fdivs(

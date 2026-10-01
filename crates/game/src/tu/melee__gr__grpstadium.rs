@@ -2641,13 +2641,13 @@ pub fn grStadium_801D435C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
                         __t2
                     })
                     .scalar();
-                    (gp).u().stadium().set_xD4(fp::fsubs(
+                    (gp).u().stadium().set_xD4(fp::fadds(
                         ({
                             let __t3 = (gp).u().stadium().xD4();
                             total = __t3;
                             __t3
                         }),
-                        fp::fneg(part),
+                        part,
                     ));
                 }
                 i = i.wrapping_add(1);

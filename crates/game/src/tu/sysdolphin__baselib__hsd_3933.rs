@@ -533,18 +533,15 @@ pub fn hsd_80393A5C<'a>(ctx: &'a Ctx, filename: Val<'a, i8>, data: Addr<'a>, siz
     let _ = fns::FIOFclose(ctx, fd);
     elapsed = fp::fdivs(
         fp::frsp((fns::OSGetTick(ctx).wrapping_sub(start)) as f64),
-        (fp::fmuls(
-            (1.0),
-            fp::frsp(
-                (div_u32(
-                    ((ptr::<Val<'a, u32>>(
-                        ctx,
-                        ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
-                    ))
-                    .get()),
-                    (4_i32 as u32),
-                )) as f64,
-            ),
+        (fp::frsp(
+            (div_u32(
+                ((ptr::<Val<'a, u32>>(
+                    ctx,
+                    ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                ))
+                .get()),
+                (4_i32 as u32),
+            )) as f64,
         )),
     );
     {

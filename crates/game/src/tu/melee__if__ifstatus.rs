@@ -366,9 +366,9 @@ pub fn ifStatus_802F4EDC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             digit_offset.value(),
             fp::fadds(tens_offset, hundreds_offset),
         ));
-        pos = fp::fsubs(
+        pos = fp::fadds(
             inl_ifStatus_GetStoredTranslationX(ctx, state, (enums::Hundreds as i32)),
-            fp::fneg(digit_offset.value()),
+            digit_offset.value(),
         );
         inl_HSD_JObjSetTranslateX(ctx, digit_jobj, pos);
     }

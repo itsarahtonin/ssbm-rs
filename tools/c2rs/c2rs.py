@@ -13,6 +13,7 @@ static locals) is left out, so the original keeps running it.
 import bisect
 import ctypes
 import json
+import math
 import os
 import re
 import struct
@@ -401,6 +402,7 @@ class Unit:
         self.ported = []
         self.transliterated = []  # ported from their machine code
         self.unset_fallbacks = []  # (name, why) for unset values only their C translation has
+        self.identities = 0  # float operations MWCC folds as identities
         self.fuse_check = []
         self.inline_fallbacks = []  # (caller, callee, why) for inlined calls kept as calls
         self.inline_partial = set()  # (caller, callee, calls in the asm, calls in the source)
@@ -2294,17 +2296,31 @@ class Translator:
         if op in ("<<", ">>", "/", "%") and is_int(t) and int_info(t)[0] == 8 and is_constant(c):
             # MWCC folds these on constants, where it otherwise calls the runtime's helpers.
             return Expr(self.int_literal(int(evaluate(c)), t), t, True)
+        if is_float(t) and op in ("+", "-", "*", "/"):
+            same = self.identity(op, a, b)
+            if same is not None:
+                return self.identity_value(same, t)
+        commute = True
+        if is_float(t) and op == "-" and self.negation(b) is not None:
+            # MWCC makes `a - -b` a + b, in that order, before it contracts multiply-adds.
+            self.u.identities += 1
+            op, b, commute = "+", self.negation(b), False
+        elif is_float(t) and op == "+" and self.negation(b) is not None and not (
+                self.fuse and (self.product(a, t) is not None or self.product(b, t, True) is not None)):
+            # And `a + -b` a - b, where nothing contracts.
+            self.u.identities += 1
+            op, b = "-", self.negation(b)
         va, vb = self.expr(a), self.expr(b)
         if calls_or_effects(b) and (calls_or_effects(a) or self.reads_memory(a)) and \
                 not (op in ("+", "-") and is_float(t) and (self.product(a, t) or self.product(b, t, True))):
             # MWCC evaluates the right side first.
             pre = []
             vb = Expr(self.first(vb.code, pre), vb.ty, True)
-            res = self.binary_values(op, a, b, va, vb, t)
+            res = self.binary_values(op, a, b, va, vb, t, commute)
             return Expr("{ " + " ".join(pre) + f" {res.code} }}", res.ty, False)
-        return self.binary_values(op, a, b, va, vb, t)
+        return self.binary_values(op, a, b, va, vb, t, commute)
 
-    def binary_values(self, op, a, b, va, vb, t):
+    def binary_values(self, op, a, b, va, vb, t, commute=True):
         if op in ("+", "-") and (is_ptr(va.ty) or is_ptr(vb.ty)):
             return self.ptr_arith(op, va, vb)
         if op in ("<<", ">>"):
@@ -2313,7 +2329,7 @@ class Translator:
             fused = self.try_fuse_binary(op, a, b, t)
             if fused is not None:
                 return fused
-        if op in ("+", "*") and is_float(t) and self.commuted(a, b):
+        if op in ("+", "*") and is_float(t) and commute and self.commuted(a, b):
             va, vb = self.convert(va, t), self.convert(vb, t)
             if va.pure:
                 return self.arith_op(op, vb, va, t)
@@ -2425,6 +2441,11 @@ class Translator:
         if not same_type(self.u.ctype(n.type), t):
             return None
         a, c = children(n)
+        if self.literal(a) in (0.0, 1.0) or self.literal(c) in (0.0, 1.0):
+            return None
+        na, nc = self.negation(a), self.negation(c)
+        if na is not None and nc is not None:
+            a, c = na, nc
         if self.is_square(a, c):
             return None
         ea, ec = self.convert(self.expr(a), t), self.convert(self.expr(c), t)
@@ -2490,6 +2511,75 @@ class Translator:
         return False
 
     CALL_WEIGHT = 1000
+
+    def literal(self, node):
+        """The value of a number literal, through casts and negations, else None."""
+        n = strip(node)
+        while n.kind == CK.CSTYLE_CAST_EXPR and children(n):
+            n = strip(children(n)[-1])
+        if n.kind in (CK.FLOATING_LITERAL, CK.INTEGER_LITERAL):
+            v = evaluate(n)
+            return None if v is None else float(v)
+        if n.kind == CK.UNARY_OPERATOR and UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(n)) == "-":
+            v = self.literal(children(n)[0])
+            return None if v is None else -v
+        return None
+
+    def negation(self, node):
+        """What a unary minus negates, unless it negates a literal, else None."""
+        n = strip(node)
+        if n.kind == CK.UNARY_OPERATOR and UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(n)) == "-" \
+                and self.literal(n) is None:
+            return children(n)[0]
+        return None
+
+    def identity(self, op, a, b):
+        """What MWCC's front end makes of a float `a op b` on a literal 0 or 1, or on two
+        negations, as it builds the expression and before it contracts multiply-adds: `x + 0`
+        and `x * 1` are x, `0 - x` is -x, `x * 0` is 0 once x is evaluated, `-x * -y` is x * y.
+        As (kind, node, other node), kind "same", "neg", "zero" or the operator; else None.
+        Only literals count, not operands that fold to one."""
+        la, lb = self.literal(a), self.literal(b)
+
+        def plus(v):
+            return v == 0.0 and math.copysign(1.0, v) > 0
+
+        if op == "+" and lb == 0.0:
+            return ("same", a, None)
+        if op == "+" and la == 0.0:
+            return ("same", b, None)
+        if op == "-" and lb is not None and plus(lb):
+            return ("same", a, None)
+        if op == "-" and la is not None and plus(la) and lb is None:
+            return ("neg", b, None)
+        if op == "*" and lb == 1.0:
+            return ("same", a, None)
+        if op == "*" and la == 1.0:
+            return ("same", b, None)
+        if op == "/" and lb == 1.0:
+            return ("same", a, None)
+        if op == "*" and lb is not None and plus(lb) and la is None:
+            return ("zero", a, None)
+        if op == "*" and la is not None and plus(la) and lb is None:
+            return ("zero", b, None)
+        if op in ("*", "/"):
+            na, nb = self.negation(a), self.negation(b)
+            if na is not None and nb is not None:
+                return (op, na, nb)
+        return None
+
+    def identity_value(self, same, t):
+        kind, x, y = same
+        self.u.identities += 1
+        if kind == "same":
+            return self.convert(self.expr(x), t)
+        if kind == "neg":
+            v = self.convert(self.expr(x), t)
+            return Expr(f"fp::fneg({v.code})", t, v.pure)
+        if kind == "zero":
+            v = self.expr(x)
+            return Expr("0.0", t, True) if v.pure else Expr("{ " + f"let _ = {v.code}; 0.0" + " }", t, False)
+        return self.binary_values(kind, x, y, self.expr(x), self.expr(y), t)
 
     def weight(self, node, depth=0):
         """Registers MWCC's code generator reckons an expression needs, as in Sethi-Ullman
@@ -4156,7 +4246,7 @@ def translate_unit(args):
         fuse.append((name, asm_n, n))
     unit.fuse_report = fuse
     inlining = {"fallbacks": unit.inline_fallbacks, "partial": sorted(unit.inline_partial),
-                "unset_from_c": unit.unset_fallbacks}
+                "unset_from_c": unit.unset_fallbacks, "identities": unit.identities}
     if not out_fns and not regs:
         return unit_name, source, None, unit.skipped, unit.ported, fuse, inlining, sorted(unset), \
             sorted(unit.transliterated)
@@ -4454,6 +4544,8 @@ def main():
     print(f"callers ported from machine code for registers they set: {len(callers)}; seeds whose "
           f"dependence carries too far to follow: {', '.join(unfollowed) or 'none'}")
     print(f"callees ported from machine code for registers they leave: {len(leftovers)}")
+    print(f"float operations MWCC folds as identities: "
+          f"{sum(r[6].get('identities', 0) for r in results)}")
     for why, n in sorted(reasons.items(), key=lambda x: -x[1])[:25]:
         print(f"  {n:6} {why}")
 
