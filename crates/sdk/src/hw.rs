@@ -6,7 +6,8 @@
 //! pipe), and EXI with the memory card in slot A when there is one. Other EXI transfers finish
 //! as they start, with no device answering: Slippi's device, and the memory cards when there
 //! are none, are stood in for above the registers. Registers without a model keep the last
-//! value written. `DVD_RETRY=N` makes one data read in N fail once, as on a scratched disc.
+//! value written. `DVD_RETRY=N` makes one data read in N fail once, as on a scratched disc, and
+//! the memory card can be pulled out and put back.
 
 use std::cell::{Cell, RefCell};
 use std::rc::Rc;
@@ -68,6 +69,7 @@ const EXI0_DATA: u32 = 0x6810;
 const EXI_INT: u32 = 0x0002;
 const EXI_TCINT: u32 = 0x0008;
 const EXI_CS0: u32 = 0x0080;
+const EXI_EXTINTMASK: u32 = 0x0400;
 const EXI_EXTINT: u32 = 0x0800;
 const EXI_EXT: u32 = 0x1000;
 const DI_IMM: u32 = 0x6020;
@@ -127,8 +129,9 @@ pub struct Hw {
     /// Streaming audio sample counter: its value when the rate or state last changed, and when.
     ais_base: Cell<u32>,
     ais_since: Cell<u64>,
-    /// The memory card in slot A, if any.
+    /// The memory card in slot A, if any, and whether it is in the slot (`set_card_present`).
     pub card: Option<Card>,
+    card_present: Cell<bool>,
     /// One data read in this many fails, as on a scratched disc, with an error the DVD driver
     /// retries (`DVD_RETRY`); the read again works. Zero for none.
     dvd_retry: u32,
@@ -150,6 +153,7 @@ impl Default for Hw {
             ais_base: Cell::new(0),
             ais_since: Cell::new(0),
             card: None,
+            card_present: Cell::new(true),
             dvd_retry: std::env::var("DVD_RETRY")
                 .ok()
                 .and_then(|v| v.parse().ok())
@@ -215,7 +219,9 @@ impl Hw {
             (AR_MODE, 2) => u32::from(self.get16(off)) | 1, // ARAM ready
             (AI_SCNT, 4) => self.ais_count(ctx),
             // A card in slot A is attached.
-            (0x6800, 4) if self.card.is_some() => self.get32(off) | EXI_EXT,
+            (0x6800, 4) if self.card.is_some() && self.card_present.get() => {
+                self.get32(off) | EXI_EXT
+            }
             (_, 4) => self.get32(off),
             (_, 2) => u32::from(self.get16(off)),
             (_, 1) => u32::from((self.get16(off & !1) >> if off & 1 == 0 { 8 } else { 0 }) as u8),
@@ -327,7 +333,20 @@ impl Hw {
     // EXI and the memory card in slot A.
 
     fn selected_card(&self) -> bool {
-        self.card.is_some() && self.get32(0x6800) & EXI_CS0 != 0
+        self.card.is_some() && self.card_present.get() && self.get32(0x6800) & EXI_CS0 != 0
+    }
+
+    /// Pulls the card out of slot A, or puts it back. Its EXT line changes, which raises the
+    /// channel's external interrupt when the driver has unmasked it.
+    pub fn set_card_present(&self, ctx: &Ctx, present: bool) {
+        if self.card.is_none() || self.card_present.replace(present) == present {
+            return;
+        }
+        let csr = self.get32(0x6800) | EXI_EXTINT;
+        self.set32(0x6800, csr);
+        if csr & EXI_EXTINTMASK != 0 {
+            ctx.ext::<Sdk>().raise(ctx, irq::EXI0_EXT);
+        }
     }
 
     /// A write to an EXI status register: its interrupt flags clear when written as 1, and
@@ -343,7 +362,7 @@ impl Hw {
             }
         }
         let Some(card) = &self.card else { return };
-        if off != 0x6800 || (old ^ v) & EXI_CS0 == 0 {
+        if off != 0x6800 || (old ^ v) & EXI_CS0 == 0 || !self.card_present.get() {
             return;
         }
         if v & EXI_CS0 != 0 {

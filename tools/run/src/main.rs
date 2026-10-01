@@ -382,6 +382,15 @@ fn run() -> ExitCode {
     if std::env::var_os("CPU_PLAYERS").is_some() {
         matches::install_cpu_players(&ctx);
     }
+    // CARD_REMOVE=F[,G] pulls the memory card out of slot A at field F, and puts it back at G.
+    if let Ok(when) = std::env::var("CARD_REMOVE") {
+        let fields = when.split(',').filter_map(|f| f.trim().parse::<u64>().ok());
+        for (field, present) in fields.zip([false, true]) {
+            sdk.schedule(hw::field_start(field), move |ctx| {
+                ctx.ext::<Sdk>().hw.set_card_present(ctx, present);
+            });
+        }
+    }
     // UNLOCK_ALL=1 unlocks every character, stage and trophy once the main menu comes up.
     if std::env::var_os("UNLOCK_ALL").is_some() {
         matches::install_unlocks(&ctx);

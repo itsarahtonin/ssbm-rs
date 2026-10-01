@@ -53,6 +53,7 @@ pub mod irq {
     pub const DSP_DSP: u32 = 7;
     pub const EXI0_EXI: u32 = 9;
     pub const EXI0_TC: u32 = 10;
+    pub const EXI0_EXT: u32 = 11;
     pub const PI_CP: u32 = 17;
     pub const PI_PE_TOKEN: u32 = 18;
     pub const PI_PE_FINISH: u32 = 19;
