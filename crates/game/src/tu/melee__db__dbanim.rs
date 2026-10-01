@@ -313,13 +313,12 @@ pub fn fn_CheckAnimationInfo<'a>(ctx: &'a Ctx, player: i32) {
                 gobj = (Handle::add(fns::HSD_GObjPLinkHead(ctx).get(), 8_i32)).get();
                 'l1: while !Handle::is_null(gobj) {
                     'c2: {
+                        let __t1 = (statics::melee__db__dbanim::db_804D6B48(ctx)
+                            .ShowFighterCollisionBubbles()
+                            as u8);
                         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
                             .x21FC_flag()
-                            .set_byte(
-                                (statics::melee__db__dbanim::db_804D6B48(ctx)
-                                    .ShowFighterCollisionBubbles()
-                                    as u8),
-                            );
+                            .set_byte(__t1);
                     }
                     gobj = (gobj).next();
                 }

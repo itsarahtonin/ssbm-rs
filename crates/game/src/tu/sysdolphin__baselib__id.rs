@@ -101,10 +101,11 @@ pub fn HSD_IDRemoveByIDFromTable<'a>(ctx: &'a Ctx, table: _HSD_IDTable<'a>, id: 
                     if !Handle::is_null(prev) {
                         (prev).set_next((entry).next());
                     } else {
+                        let __t1 = (entry).next();
                         (table)
                             .table()
                             .at((inl_hash_unfused(ctx, id) as i32))
-                            .set((entry).next());
+                            .set(__t1);
                     }
                     inl_IDEntryFree_unfused(ctx, entry);
                     return;

@@ -67,6 +67,7 @@ pub fn Command_02<'a>(ctx: &'a Ctx, info: CommandInfo<'a>) {
 
 pub fn Command_03<'a>(ctx: &'a Ctx, info: CommandInfo<'a>) {
     let mut info = info;
+    let __t2 = Handle::add((info).x8().u(), 1_i32);
     (info)
         .event_return()
         .at(({
@@ -74,18 +75,16 @@ pub fn Command_03<'a>(ctx: &'a Ctx, info: CommandInfo<'a>) {
             (info).set_loop_count((info).loop_count().wrapping_add(1));
             __t1
         } as i32))
-        .set(Handle::add((info).x8().u(), 1_i32));
+        .set(__t2);
+    let __t4 = ptr::<CmdUnion<'a>>(ctx, ((info).x8().u()).Command_03().value() as u32);
     (info)
         .event_return()
         .at(({
-            let __t2 = (info).loop_count();
+            let __t3 = (info).loop_count();
             (info).set_loop_count((info).loop_count().wrapping_add(1));
-            __t2
+            __t3
         } as i32))
-        .set(ptr::<CmdUnion<'a>>(
-            ctx,
-            ((info).x8().u()).Command_03().value() as u32,
-        ));
+        .set(__t4);
     'l1: loop {
         'c2: {
             (info).x8().set_u(Handle::add((info).x8().u(), 1));
@@ -148,6 +147,7 @@ pub fn Command_05<'a>(ctx: &'a Ctx, info: CommandInfo<'a>) {
             break 'l1;
         }
     }
+    let __t2 = Handle::add((info).x8().u(), 1_i32);
     (info)
         .event_return()
         .at(({
@@ -155,7 +155,7 @@ pub fn Command_05<'a>(ctx: &'a Ctx, info: CommandInfo<'a>) {
             (info).set_loop_count((info).loop_count().wrapping_add(1));
             __t1
         } as i32))
-        .set(Handle::add((info).x8().u(), 1_i32));
+        .set(__t2);
     (info).x8().set_u(((info).x8().u()).Command_05().ptr());
 }
 

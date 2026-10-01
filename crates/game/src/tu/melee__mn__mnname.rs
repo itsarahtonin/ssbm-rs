@@ -278,10 +278,11 @@ pub fn CreateNameAtIndex<'a>(ctx: &'a Ctx, slot: i32) {
     let __frame = ctx.stack_frame(0x20);
     let mut slot = slot;
     let mut idx: i32 = (slot & 255_i32);
+    let __t1 = (fns::mnName_StringTerminator(ctx).at(0)).get();
     (fns::GetPersistentNameData(ctx, idx))
         .namedata()
         .at(0_i32)
-        .set((fns::mnName_StringTerminator(ctx).at(0)).get());
+        .set(__t1);
     (fns::GetPersistentNameData(ctx, idx)).set_rumble_enabled((1_i32 as u8));
     fns::InitializePersistentNameData(ctx, slot);
 }

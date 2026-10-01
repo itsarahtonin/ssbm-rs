@@ -2740,12 +2740,13 @@ pub fn fn_80193308<'a>(ctx: &'a Ctx) {
             (text).font_size().set_y(0.550000011920929);
             ((ptr_).get()).set_default_kerning((1_i32 as u8));
             if count != 0_i32 {
+                let __t2 = (color_word).get();
                 ({
                     let __t1 = Handle::cast::<Val<'a, i32>>((((ptr_).get()).text_color()));
                     text_color_word = __t1;
                     __t1
                 })
-                .set((color_word).get());
+                .set(__t2);
             }
             count = count.wrapping_add(1_i32);
             idx = 2_i32;
@@ -2767,14 +2768,15 @@ pub fn fn_80193308<'a>(ctx: &'a Ctx) {
             ((ptr_).get()).set_default_kerning((1_i32 as u8));
             ((ptr_).get()).set_default_alignment((1_i32 as u8));
             if (count != 0) {
+                let __t4 = (color_word).get();
                 (Handle::cast::<Val<'a, i32>>(
                     ({
-                        let __t2 = ((ptr_).get()).text_color();
-                        text_color = __t2;
-                        __t2
+                        let __t3 = ((ptr_).get()).text_color();
+                        text_color = __t3;
+                        __t3
                     }),
                 ))
-                .set((color_word).get());
+                .set(__t4);
             }
             count = count.wrapping_add(1_i32);
             idx = 4_i32;
@@ -2945,19 +2947,18 @@ pub fn fn_801937C4<'a>(ctx: &'a Ctx, arg0: Val<'a, i32>, arg1: u32, arg2: u32) {
         {
             'l1: while idx < 6_i32 {
                 'c2: {
+                    let __t1 = ((Handle::add(
+                        tp,
+                        (((((global).match_type() != 0_i32) as i32) as u32)
+                            .wrapping_add((Handle::addr((null::<TmSettingTable<'a>>(ctx)).min())))
+                            as i32),
+                    ))
+                    .get() as i32);
                     ({
                         dp = Handle::add(dp, 1);
                         dp
                     })
-                    .set(
-                        ((Handle::add(
-                            tp,
-                            (((((global).match_type() != 0_i32) as i32) as u32).wrapping_add(
-                                (Handle::addr((null::<TmSettingTable<'a>>(ctx)).min())),
-                            ) as i32),
-                        ))
-                        .get() as i32),
-                    );
+                    .set(__t1);
                     tp = Handle::add(tp, 2_i32);
                 }
                 idx = idx.wrapping_add(1);
@@ -8014,7 +8015,8 @@ pub fn gm_Scene_TouSetup_OnExit<'a>(ctx: &'a Ctx, arg: Addr<'a>) {
     fns::lbArchive_80016EFC(ctx, ptr::<Ptr<'a, HSD_Archive<'a>>>(ctx, 0x804d6638).get());
     (fns::gm_GetTournamentData(ctx)).set_cur_option(19_i32);
     (fns::gm_GetTournamentData(ctx)).set_x2C((1_i32 as u8));
-    (fns::gm_GetTournamentData(ctx)).set_x31(statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x0());
+    let __t1 = statics::melee__gm__gmtou_0::lbl_804799B8(ctx).x0();
+    (fns::gm_GetTournamentData(ctx)).set_x31(__t1);
 }
 
 fn inl_fn_80191240_get_menu_state_unfused<'a>(

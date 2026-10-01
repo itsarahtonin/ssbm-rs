@@ -2525,12 +2525,12 @@ pub fn float2str<'a>(
             }
             58 => {
                 __state = if ({
-                    let __t5 = (dec.exp() as i32)
+                    let __t7 = (dec.exp() as i32)
                         .wrapping_neg()
                         .wrapping_add((dec.sig().length() as i32))
                         .wrapping_sub(1_i32);
-                    frac_digits = __t5;
-                    __t5
+                    frac_digits = __t7;
+                    __t7
                 }) < 0_i32
                 {
                     103
@@ -2591,11 +2591,12 @@ pub fn float2str<'a>(
                     p
                 })
                 .set((sign as i8));
+                let __t4 = ((format).conversion_char() as i8);
                 ({
                     p = Handle::add(p, -1);
                     p
                 })
-                .set(((format).conversion_char() as i8));
+                .set(__t4);
                 __state = if ((Handle::addr(buff).wrapping_sub(Handle::addr(p)) as i32) / 1)
                     .wrapping_add((format).precision())
                     > 0x1fd_i32
@@ -2684,7 +2685,7 @@ pub fn float2str<'a>(
                 };
             }
             84 => {
-                let __t4 = ({
+                let __t5 = ({
                     q = Handle::add(q, -1);
                     q
                 })
@@ -2693,7 +2694,7 @@ pub fn float2str<'a>(
                     p = Handle::add(p, -1);
                     p
                 })
-                .set(__t4);
+                .set(__t5);
                 __state = 85;
             }
             85 => {
@@ -2719,11 +2720,12 @@ pub fn float2str<'a>(
                 __state = 89;
             }
             89 => {
+                let __t6 = ((dec.sig().text().at(0)).get() as i8);
                 ({
                     p = Handle::add(p, -1);
                     p
                 })
-                .set(((dec.sig().text().at(0)).get() as i8));
+                .set(__t6);
                 __state = if (dec.sign() != 0) { 91 } else { 93 };
             }
             90 => {
@@ -2810,12 +2812,12 @@ pub fn float2str<'a>(
                         .wrapping_sub((frac_digits.wrapping_sub((format).precision()))),
                 );
                 __state = if ({
-                    let __t6 = (dec.exp() as i32)
+                    let __t8 = (dec.exp() as i32)
                         .wrapping_neg()
                         .wrapping_add((dec.sig().length() as i32))
                         .wrapping_sub(1_i32);
-                    frac_digits = __t6;
-                    __t6
+                    frac_digits = __t8;
+                    __t8
                 }) < 0_i32
                 {
                     109
@@ -2825,9 +2827,9 @@ pub fn float2str<'a>(
             }
             107 => {
                 __state = if ({
-                    let __t7 = (dec.exp() as i32).wrapping_add(1_i32);
-                    int_digits = __t7;
-                    __t7
+                    let __t9 = (dec.exp() as i32).wrapping_add(1_i32);
+                    int_digits = __t9;
+                    __t9
                 }) < 0_i32
                 {
                     112
@@ -2913,7 +2915,7 @@ pub fn float2str<'a>(
                 };
             }
             125 => {
-                let __t8 = ({
+                let __t10 = ({
                     q = Handle::add(q, -1);
                     q
                 })
@@ -2922,7 +2924,7 @@ pub fn float2str<'a>(
                     p = Handle::add(p, -1);
                     p
                 })
-                .set(__t8);
+                .set(__t10);
                 __state = 126;
             }
             126 => {
@@ -3022,7 +3024,7 @@ pub fn float2str<'a>(
                 __state = if digits < int_digits { 147 } else { 149 };
             }
             147 => {
-                let __t9 = ({
+                let __t11 = ({
                     q = Handle::add(q, -1);
                     q
                 })
@@ -3031,7 +3033,7 @@ pub fn float2str<'a>(
                     p = Handle::add(p, -1);
                     p
                 })
-                .set(__t9);
+                .set(__t11);
                 __state = 148;
             }
             148 => {

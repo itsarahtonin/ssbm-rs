@@ -5505,18 +5505,19 @@ pub fn Toy_803067BC<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
         }),
     );
     'l3: while {
-        let __t4 = count;
+        let __t5 = count;
         count = count.wrapping_sub(1);
-        __t4
+        __t5
     } != 0_i32
     {
         'c4: {
+            let __t4 = (src).get();
             ({
                 let __t3 = dest;
                 dest = Handle::add(dest, -1);
                 __t3
             })
-            .set((src).get());
+            .set(__t4);
             src = Handle::add(src, 3_i32);
         }
     }
@@ -50437,8 +50438,8 @@ pub fn Toy_8031234C<'a>(ctx: &'a Ctx, arg0: i32) {
                 category = category.wrapping_add(1);
             }
         }
-        (fns::gmMainLib_GetTrophyCount(ctx))
-            .set((Handle::cast::<Val<'a, i16>>((Handle::add(toy, 0x3ec_i32)))).get());
+        let __t1 = (Handle::cast::<Val<'a, i16>>((Handle::add(toy, 0x3ec_i32)))).get();
+        (fns::gmMainLib_GetTrophyCount(ctx)).set(__t1);
     } else {
         (Handle::cast::<Val<'a, u16>>((Handle::add(toy, 0x19a_i32)))).set((stateData).get());
         (Handle::cast::<Val<'a, u16>>((Handle::add(toy, 0x19c_i32)))).set((0_i32 as u16));

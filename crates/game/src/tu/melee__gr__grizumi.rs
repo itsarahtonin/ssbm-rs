@@ -244,8 +244,9 @@ pub fn grIzumi_801CBE64<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         let _ = fns::grLib_801C96F8(ctx, 0x7536_i32, 30_i32, y);
     }
     (gp).u().izumi().set_xCC(fns::grIzumi_801CBCE8(ctx, 2_i32));
+    let __t4 = (gp).u().izumi().xC8();
     (Handle::cast::<IzumiUnkCC<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, (gp).u().izumi().xCC())))
-        .set_x18((gp).u().izumi().xC8());
+        .set_x18(__t4);
     jobj = fns::Ground_801C3FA4(ctx, gobj, 4_i32);
     {
         {}

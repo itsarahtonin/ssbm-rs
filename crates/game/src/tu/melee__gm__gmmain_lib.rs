@@ -1275,8 +1275,8 @@ pub fn gmMainLib_8015EE68<'a>(ctx: &'a Ctx) {
         .save_data()
         .x186C_ref();
     __t1.set((((__t1.get() as i32) & (!2_i32)) as u8));
-    (inl_gmMainLib_GetGamePrefs_unfused(ctx))
-        .set_stage_mask(fns::gmMainLib_DefaultGamePrefs(ctx).stage_mask());
+    let __t2 = fns::gmMainLib_DefaultGamePrefs(ctx).stage_mask();
+    (inl_gmMainLib_GetGamePrefs_unfused(ctx)).set_stage_mask(__t2);
 }
 
 pub fn gmMainLib_8015EE90<'a>(ctx: &'a Ctx) -> i32 {

@@ -414,10 +414,11 @@ pub fn it_802D2D2C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         spawn.x44_flag().x0().set_b0((1_i32 as u8));
         spawn.set_x40(0_i32);
         new_gobj = fns::Item_80268B18(ctx, spawn);
+        let __t4 = line_id.get();
         (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, new_gobj)))
             .xDD4_itemVar()
             .houou()
-            .set_timer(line_id.get());
+            .set_timer(__t4);
     }
 }
 

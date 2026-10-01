@@ -3164,20 +3164,19 @@ pub fn mnCharSel_8025FB50<'a>(ctx: &'a Ctx, door: u8, arg1: i32) {
             break 'l1;
         }
     }
+    let __t1 = ((Handle::add(
+        (statics::melee__mn__mncharsel::icons(ctx)
+            .get(0_i32)
+            .char_kind_ref()),
+        icon_offset,
+    ))
+    .get() as i8);
     (statics::melee__mn__mncharsel::mnCharSel_804D6CB0(ctx).get())
         .vs()
         .start()
         .players()
         .get(inl_getPlayerForDoor_unfused(ctx, door))
-        .set_ckind(
-            ((Handle::add(
-                (statics::melee__mn__mncharsel::icons(ctx)
-                    .get(0_i32)
-                    .char_kind_ref()),
-                icon_offset,
-            ))
-            .get() as i8),
-        );
+        .set_ckind(__t1);
     statics::melee__mn__mncharsel::mnCharSel_803F0DFC(ctx)
         .doors()
         .get((door as i32))

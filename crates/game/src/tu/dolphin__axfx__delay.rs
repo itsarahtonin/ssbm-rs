@@ -79,69 +79,75 @@ pub fn AXFXDelayCallback<'a>(
                 l = (lBuf).get();
                 r = (rBuf).get();
                 s = (sBuf).get();
-                ({
-                    let __t1 = lBuf;
-                    lBuf = Handle::add(lBuf, 1);
-                    __t1
-                })
-                .set((left).get().wrapping_add(
+                let __t2 = (left).get().wrapping_add(
                     (sar_i32(
                         (((l as u32).wrapping_mul((delay).currentFeedback().at(0_i32).get()))
                             as i32),
                         (7_i32 as u32),
                     )),
-                ));
+                );
                 ({
-                    let __t2 = rBuf;
-                    rBuf = Handle::add(rBuf, 1);
-                    __t2
+                    let __t1 = lBuf;
+                    lBuf = Handle::add(lBuf, 1);
+                    __t1
                 })
-                .set((right).get().wrapping_add(
+                .set(__t2);
+                let __t4 = (right).get().wrapping_add(
                     (sar_i32(
                         (((r as u32).wrapping_mul((delay).currentFeedback().at(1_i32).get()))
                             as i32),
                         (7_i32 as u32),
                     )),
-                ));
+                );
                 ({
-                    let __t3 = sBuf;
-                    sBuf = Handle::add(sBuf, 1);
+                    let __t3 = rBuf;
+                    rBuf = Handle::add(rBuf, 1);
                     __t3
                 })
-                .set((sur).get().wrapping_add(
+                .set(__t4);
+                let __t6 = (sur).get().wrapping_add(
                     (sar_i32(
                         (((s as u32).wrapping_mul((delay).currentFeedback().at(2_i32).get()))
                             as i32),
                         (7_i32 as u32),
                     )),
-                ));
+                );
                 ({
-                    let __t4 = left;
-                    left = Handle::add(left, 1);
-                    __t4
-                })
-                .set(sar_i32(
-                    (((l as u32).wrapping_mul((delay).currentOutput().at(0_i32).get())) as i32),
-                    (7_i32 as u32),
-                ));
-                ({
-                    let __t5 = right;
-                    right = Handle::add(right, 1);
+                    let __t5 = sBuf;
+                    sBuf = Handle::add(sBuf, 1);
                     __t5
                 })
-                .set(sar_i32(
+                .set(__t6);
+                let __t8 = sar_i32(
+                    (((l as u32).wrapping_mul((delay).currentOutput().at(0_i32).get())) as i32),
+                    (7_i32 as u32),
+                );
+                ({
+                    let __t7 = left;
+                    left = Handle::add(left, 1);
+                    __t7
+                })
+                .set(__t8);
+                let __t10 = sar_i32(
                     (((r as u32).wrapping_mul((delay).currentOutput().at(1_i32).get())) as i32),
                     (7_i32 as u32),
-                ));
+                );
                 ({
-                    let __t6 = sur;
-                    sur = Handle::add(sur, 1);
-                    __t6
+                    let __t9 = right;
+                    right = Handle::add(right, 1);
+                    __t9
                 })
-                .set(sar_i32(
+                .set(__t10);
+                let __t12 = sar_i32(
                     (((s as u32).wrapping_mul((delay).currentOutput().at(2_i32).get())) as i32),
                     (7_i32 as u32),
-                ));
+                );
+                ({
+                    let __t11 = sur;
+                    sur = Handle::add(sur, 1);
+                    __t11
+                })
+                .set(__t12);
             }
             i = i.wrapping_add(1);
         }

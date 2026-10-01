@@ -62,18 +62,20 @@ pub fn gmCamera_801A2224<'a>(ctx: &'a Ctx, dst: Val<'a, u8>, value: u32) -> Val<
         value = rem_u32(value, (10_i32 as u32));
         dst = Handle::add(dst, 2_i32);
     }
+    let __t2 = (Handle::add(digits, (value as i32))).hi();
     ({
         let __t1 = dst;
         dst = Handle::add(dst, 1);
         __t1
     })
-    .set((Handle::add(digits, (value as i32))).hi());
+    .set(__t2);
+    let __t4 = (Handle::add(digits, (value as i32))).lo();
     ({
-        let __t2 = dst;
+        let __t3 = dst;
         dst = Handle::add(dst, 1);
-        __t2
+        __t3
     })
-    .set((Handle::add(digits, (value as i32))).lo());
+    .set(__t4);
     (dst).set((0_i32 as u8));
     return dst;
 }

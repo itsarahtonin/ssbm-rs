@@ -409,12 +409,13 @@ pub fn HSD_TExpMakeDag<'a>(ctx: &'a Ctx, root: HSD_TExp<'a>, list: HSD_TExpDag<'
                                     }
                                 }
                                 if k >= n {
+                                    let __t3 = (tmp).tev().c_in().get(i).exp();
                                     (Handle::add(base, {
                                         let __t2 = n;
                                         n = n.wrapping_add(1);
                                         __t2
                                     }))
-                                    .set((tmp).tev().c_in().get(i).exp());
+                                    .set(__t3);
                                 }
                             }
                         }
@@ -442,12 +443,13 @@ pub fn HSD_TExpMakeDag<'a>(ctx: &'a Ctx, root: HSD_TExp<'a>, list: HSD_TExpDag<'
                                     }
                                 }
                                 if k >= n {
+                                    let __t5 = (tmp).tev().a_in().get(i).exp();
                                     (Handle::add(base, {
-                                        let __t3 = n;
+                                        let __t4 = n;
                                         n = n.wrapping_add(1);
-                                        __t3
+                                        __t4
                                     }))
-                                    .set((tmp).tev().a_in().get(i).exp());
+                                    .set(__t5);
                                 }
                             }
                         }
@@ -550,11 +552,11 @@ pub fn HSD_TExpMakeDag<'a>(ctx: &'a Ctx, root: HSD_TExp<'a>, list: HSD_TExpDag<'
                                                     (dag)
                                                         .depend()
                                                         .at(({
-                                                            let __t4 = (dag).nb_dep();
+                                                            let __t6 = (dag).nb_dep();
                                                             (dag).set_nb_dep(
                                                                 (dag).nb_dep().wrapping_add(1),
                                                             );
-                                                            __t4
+                                                            __t6
                                                         }
                                                             as i32))
                                                         .set(dep_entry);
@@ -618,11 +620,11 @@ pub fn HSD_TExpMakeDag<'a>(ctx: &'a Ctx, root: HSD_TExp<'a>, list: HSD_TExpDag<'
                                                     (dag)
                                                         .depend()
                                                         .at(({
-                                                            let __t5 = (dag).nb_dep();
+                                                            let __t7 = (dag).nb_dep();
                                                             (dag).set_nb_dep(
                                                                 (dag).nb_dep().wrapping_add(1),
                                                             );
-                                                            __t5
+                                                            __t7
                                                         }
                                                             as i32))
                                                         .set(dep_entry2);

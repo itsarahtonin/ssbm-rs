@@ -12630,13 +12630,16 @@ fn inl_mnDiagram_GetVisibleFighterRowForInput_unfused<'a>(
 
 fn inl_saveCursorPositions_unfused<'a>(ctx: &'a Ctx, data: Diagram<'a>) {
     let mut data = data;
-    (fns::gmMainLib_GetGameRules(ctx))
-        .set_xE(((sar_i32(((data).fighter_cursor_pos() as i32), (8_i32 as u32))) as u8));
-    (fns::gmMainLib_GetGameRules(ctx)).set_xF(((data).fighter_cursor_pos() as u8));
-    (fns::gmMainLib_GetGameRules(ctx))
-        .set_unk_x10(((sar_i32(((data).name_cursor_pos() as i32), (8_i32 as u32))) as u8));
-    (fns::gmMainLib_GetGameRules(ctx)).set_x11(((data).name_cursor_pos() as u8));
-    (fns::gmMainLib_GetGameRules(ctx)).set_xD((data).is_name_mode());
+    let __t1 = ((sar_i32(((data).fighter_cursor_pos() as i32), (8_i32 as u32))) as u8);
+    (fns::gmMainLib_GetGameRules(ctx)).set_xE(__t1);
+    let __t2 = ((data).fighter_cursor_pos() as u8);
+    (fns::gmMainLib_GetGameRules(ctx)).set_xF(__t2);
+    let __t3 = ((sar_i32(((data).name_cursor_pos() as i32), (8_i32 as u32))) as u8);
+    (fns::gmMainLib_GetGameRules(ctx)).set_unk_x10(__t3);
+    let __t4 = ((data).name_cursor_pos() as u8);
+    (fns::gmMainLib_GetGameRules(ctx)).set_x11(__t4);
+    let __t5 = (data).is_name_mode();
+    (fns::gmMainLib_GetGameRules(ctx)).set_xD(__t5);
 }
 
 fn inl_getHoveredColumn_unfused<'a>(ctx: &'a Ctx) -> u8 {

@@ -1270,12 +1270,13 @@ fn inl_pick_random_ckind_unfused<'a>(
             'c4: {
                 temp = (w).get();
                 swap_idx = fns::HSD_Randi(ctx, scan.count());
+                let __t3 = (Handle::add(base, swap_idx)).get();
                 ({
                     let __t2 = w;
                     w = Handle::add(w, 1);
                     __t2
                 })
-                .set((Handle::add(base, swap_idx)).get());
+                .set(__t3);
                 (Handle::add(base, swap_idx)).set(temp);
             }
             j = j.wrapping_add(1);

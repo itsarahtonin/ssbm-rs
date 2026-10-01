@@ -147,12 +147,13 @@ pub fn DBGRead<'a>(ctx: &'a Ctx, param1: u32, data: Val<'a, u32>, byte_size: i32
                     (0_i32 as u32),
                 ) != 0) as i32));
             error = (error | (!(inl_DBGEXISync_unfused(ctx) != 0) as i32));
+            let __t2 = readValue.get();
             ({
                 let __t1 = dataPtr;
                 dataPtr = Handle::add(dataPtr, 1);
                 __t1
             })
-            .set(readValue.get());
+            .set(__t2);
             byte_size = byte_size.wrapping_sub(4_i32);
             if byte_size < 0_i32 {
                 byte_size = 0_i32;

@@ -407,10 +407,11 @@ pub fn itNokonoko_UnkMotion5_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             );
         }
         if !Handle::is_null(ip_2) {
+            let __t1 = (ip).xDD4_itemVar().nokonoko().x4();
             (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, ip_2)))
                 .xDD4_itemVar()
                 .nokonoko()
-                .set_x4((ip).xDD4_itemVar().nokonoko().x4());
+                .set_x4(__t1);
             (ip).xDD4_itemVar().nokonoko().set_x4(1_i32.wrapping_neg());
         }
         return 1_i32;

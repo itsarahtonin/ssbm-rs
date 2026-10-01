@@ -114,11 +114,12 @@ pub fn ftCo_AttackDash_SetMv0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let mut gobj = gobj;
     ctx.fill(Handle::addr(unused), 0, 0x4);
     unused.at(0).set((0_i32 as u8));
+    let __t1 = fp::fctiwz((fns::p_ftCommonData(ctx).get()).x68());
     (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)))
         .mv()
         .co()
         .attackdash()
-        .set_x0(fp::fctiwz((fns::p_ftCommonData(ctx).get()).x68()));
+        .set_x0(__t1);
 }
 
 pub fn ftCo_AttackDash_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

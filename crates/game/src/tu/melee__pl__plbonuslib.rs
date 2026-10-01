@@ -877,9 +877,8 @@ pub fn fn_8003E998<'a>(ctx: &'a Ctx, arg0: i32, index: i32) {
     temp_r31 = fns::Player_GetStaleMoveTableIndexPtr2(ctx, arg0);
     if (index == 0_i32) && ((temp_r31).xD6C() != 6_i32) {
         let mut gobj: HSD_GObj<'a> = fns::Player_GetEntityAtIndex(ctx, arg0, index);
-        (fns::ft_800898A8(ctx, gobj))
-            .x207C()
-            .set_y((temp_r31).xD6C());
+        let __t1 = (temp_r31).xD6C();
+        (fns::ft_800898A8(ctx, gobj)).x207C().set_y(__t1);
     }
 }
 
@@ -2061,8 +2060,8 @@ pub fn pl_80040120<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) {
                 if var_r29 == arg0 {
                     (temp_r30).set_xD50((fns::pl_804D6470(ctx).get()).xB0());
                 } else {
-                    (fns::Player_GetStaleMoveTableIndexPtr2(ctx, var_r29))
-                        .set_xD4C((fns::pl_804D6470(ctx).get()).xA4());
+                    let __t1 = (fns::pl_804D6470(ctx).get()).xA4();
+                    (fns::Player_GetStaleMoveTableIndexPtr2(ctx, var_r29)).set_xD4C(__t1);
                 }
             }
             var_r29 = var_r29.wrapping_add(1);

@@ -35,60 +35,68 @@ pub fn _tyList_80312834<'a>(ctx: &'a Ctx, buf: Val<'a, u8>, num: u32) -> Val<'a,
     );
     let mut original: u32 = num;
     if num >= (100_i32 as u32) {
+        let __t2 = (Handle::add(digits, (div_u32(num, (100_i32 as u32)) as i32))).hi();
         ({
             let __t1 = buf;
             buf = Handle::add(buf, 1);
             __t1
         })
-        .set((Handle::add(digits, (div_u32(num, (100_i32 as u32)) as i32))).hi());
-        ({
-            let __t2 = buf;
-            buf = Handle::add(buf, 1);
-            __t2
-        })
-        .set((Handle::add(digits, (div_u32(num, (100_i32 as u32)) as i32))).lo());
-        num = rem_u32(num, (100_i32 as u32));
-    }
-    if num >= (10_i32 as u32) {
+        .set(__t2);
+        let __t4 = (Handle::add(digits, (div_u32(num, (100_i32 as u32)) as i32))).lo();
         ({
             let __t3 = buf;
             buf = Handle::add(buf, 1);
             __t3
         })
-        .set((Handle::add(digits, (div_u32(num, (10_i32 as u32)) as i32))).hi());
-        ({
-            let __t4 = buf;
-            buf = Handle::add(buf, 1);
-            __t4
-        })
-        .set((Handle::add(digits, (div_u32(num, (10_i32 as u32)) as i32))).lo());
-        num = rem_u32(num, (10_i32 as u32));
-    } else if original >= (100_i32 as u32) {
+        .set(__t4);
+        num = rem_u32(num, (100_i32 as u32));
+    }
+    if num >= (10_i32 as u32) {
+        let __t6 = (Handle::add(digits, (div_u32(num, (10_i32 as u32)) as i32))).hi();
         ({
             let __t5 = buf;
             buf = Handle::add(buf, 1);
             __t5
         })
-        .set((Handle::add(digits, 0_i32)).hi());
+        .set(__t6);
+        let __t8 = (Handle::add(digits, (div_u32(num, (10_i32 as u32)) as i32))).lo();
         ({
-            let __t6 = buf;
+            let __t7 = buf;
             buf = Handle::add(buf, 1);
-            __t6
+            __t7
         })
-        .set((Handle::add(digits, 0_i32)).lo());
+        .set(__t8);
+        num = rem_u32(num, (10_i32 as u32));
+    } else if original >= (100_i32 as u32) {
+        let __t10 = (Handle::add(digits, 0_i32)).hi();
+        ({
+            let __t9 = buf;
+            buf = Handle::add(buf, 1);
+            __t9
+        })
+        .set(__t10);
+        let __t12 = (Handle::add(digits, 0_i32)).lo();
+        ({
+            let __t11 = buf;
+            buf = Handle::add(buf, 1);
+            __t11
+        })
+        .set(__t12);
     }
+    let __t14 = (Handle::add(digits, (num as i32))).hi();
     ({
-        let __t7 = buf;
+        let __t13 = buf;
         buf = Handle::add(buf, 1);
-        __t7
+        __t13
     })
-    .set((Handle::add(digits, (num as i32))).hi());
+    .set(__t14);
+    let __t16 = (Handle::add(digits, (num as i32))).lo();
     ({
-        let __t8 = buf;
+        let __t15 = buf;
         buf = Handle::add(buf, 1);
-        __t8
+        __t15
     })
-    .set((Handle::add(digits, (num as i32))).lo());
+    .set(__t16);
     (buf).set((0_i32 as u8));
     return buf;
 }

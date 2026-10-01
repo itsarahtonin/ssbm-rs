@@ -68,13 +68,12 @@ pub fn gm_80180BA0<'a>(ctx: &'a Ctx) {
         'l1: while i < 27_i32 {
             'c2: {
                 let mut idx: u8 = fns::gm_CKindToSelKind(ctx, (i as u8));
-                (fns::gmMainLib_8015D06C(ctx, fns::gm_CKindToSelKind(ctx, (i as u8)))).set(
-                    statics::melee__gm__gm_180A::lbl_80472E48(ctx)
-                        .x14()
-                        .at((idx as i32))
-                        .get()
-                        .wrapping_mul(10_i32),
-                );
+                let __t1 = statics::melee__gm__gm_180A::lbl_80472E48(ctx)
+                    .x14()
+                    .at((idx as i32))
+                    .get()
+                    .wrapping_mul(10_i32);
+                (fns::gmMainLib_8015D06C(ctx, fns::gm_CKindToSelKind(ctx, (i as u8)))).set(__t1);
             }
             i = i.wrapping_add(1);
         }

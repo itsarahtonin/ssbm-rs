@@ -39,7 +39,7 @@ pub fn __CARDCheckSum<'a>(
     let mut checksumInv = checksumInv;
     let mut p: Val<'a, u16> = null(ctx);
     let mut i: i32 = 0;
-    length = (div_u32((length as u32), 2_u32) as i32);
+    length = div_i32(length, (2_u32 as i32));
     (checksum).set({
         let __t1 = (0_i32 as u16);
         (checksumInv).set(__t1);
@@ -604,7 +604,7 @@ fn inl___CARDCheckSum_unfused<'a>(
     let mut checksumInv = checksumInv;
     let mut p: Val<'a, u16> = null(ctx);
     let mut i: i32 = 0;
-    length = (div_u32((length as u32), 2_u32) as i32);
+    length = div_i32(length, (2_u32 as i32));
     (checksum).set({
         let __t1 = (0_i32 as u16);
         (checksumInv).set(__t1);

@@ -76,6 +76,10 @@ pub fn HSD_SisLib_803A7684<'a>(ctx: &'a Ctx, text: HSD_Text<'a>, cursor: Val<'a,
                     }
                     fns::HSD_SisLib_Free(ctx, Handle::cast::<Addr<'a>>(old_buf));
                 }
+                let __t2 = ((sar_i32(
+                    fp::fctiwz((fp::fmuls(256.0, (text).x78().x()))),
+                    (8_i32 as u32),
+                )) as u8);
                 (Handle::add(
                     (text).state_stack(),
                     ({
@@ -84,21 +88,8 @@ pub fn HSD_SisLib_803A7684<'a>(ctx: &'a Ctx, text: HSD_Text<'a>, cursor: Val<'a,
                         __t1
                     } as i32),
                 ))
-                .set(
-                    ((sar_i32(
-                        fp::fctiwz((fp::fmuls(256.0, (text).x78().x()))),
-                        (8_i32 as u32),
-                    )) as u8),
-                );
-                (Handle::add(
-                    (text).state_stack(),
-                    ({
-                        let __t2 = (text).state_stack_used();
-                        (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
-                        __t2
-                    } as i32),
-                ))
-                .set((fp::fctiwz((fp::fmuls(256.0, (text).x78().x()))) as u8));
+                .set(__t2);
+                let __t4 = (fp::fctiwz((fp::fmuls(256.0, (text).x78().x()))) as u8);
                 (Handle::add(
                     (text).state_stack(),
                     ({
@@ -107,27 +98,36 @@ pub fn HSD_SisLib_803A7684<'a>(ctx: &'a Ctx, text: HSD_Text<'a>, cursor: Val<'a,
                         __t3
                     } as i32),
                 ))
-                .set(
-                    ((sar_i32(
-                        fp::fctiwz((fp::fmuls(256.0, (text).x78().y()))),
-                        (8_i32 as u32),
-                    )) as u8),
-                );
-                (Handle::add(
-                    (text).state_stack(),
-                    ({
-                        let __t4 = (text).state_stack_used();
-                        (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
-                        __t4
-                    } as i32),
-                ))
-                .set((fp::fctiwz((fp::fmuls(256.0, (text).x78().y()))) as u8));
+                .set(__t4);
+                let __t6 = ((sar_i32(
+                    fp::fctiwz((fp::fmuls(256.0, (text).x78().y()))),
+                    (8_i32 as u32),
+                )) as u8);
                 (Handle::add(
                     (text).state_stack(),
                     ({
                         let __t5 = (text).state_stack_used();
                         (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
                         __t5
+                    } as i32),
+                ))
+                .set(__t6);
+                let __t8 = (fp::fctiwz((fp::fmuls(256.0, (text).x78().y()))) as u8);
+                (Handle::add(
+                    (text).state_stack(),
+                    ({
+                        let __t7 = (text).state_stack_used();
+                        (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
+                        __t7
+                    } as i32),
+                ))
+                .set(__t8);
+                (Handle::add(
+                    (text).state_stack(),
+                    ({
+                        let __t9 = (text).state_stack_used();
+                        (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
+                        __t9
                     } as i32),
                 ))
                 .set(flags);
@@ -169,39 +169,42 @@ pub fn HSD_SisLib_803A7684<'a>(ctx: &'a Ctx, text: HSD_Text<'a>, cursor: Val<'a,
                     }
                     fns::HSD_SisLib_Free(ctx, Handle::cast::<Addr<'a>>(old_buf_2));
                 }
+                let __t11 = (text).active_color().r();
                 (Handle::add(
                     (text).state_stack(),
                     ({
-                        let __t6 = (text).state_stack_used();
+                        let __t10 = (text).state_stack_used();
                         (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
-                        __t6
+                        __t10
                     } as i32),
                 ))
-                .set((text).active_color().r());
+                .set(__t11);
+                let __t13 = (text).active_color().g();
                 (Handle::add(
                     (text).state_stack(),
                     ({
-                        let __t7 = (text).state_stack_used();
+                        let __t12 = (text).state_stack_used();
                         (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
-                        __t7
+                        __t12
                     } as i32),
                 ))
-                .set((text).active_color().g());
+                .set(__t13);
+                let __t15 = (text).active_color().b();
                 (Handle::add(
                     (text).state_stack(),
                     ({
-                        let __t8 = (text).state_stack_used();
+                        let __t14 = (text).state_stack_used();
                         (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
-                        __t8
+                        __t14
                     } as i32),
                 ))
-                .set((text).active_color().b());
+                .set(__t15);
                 (Handle::add(
                     (text).state_stack(),
                     ({
-                        let __t9 = (text).state_stack_used();
+                        let __t16 = (text).state_stack_used();
                         (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
-                        __t9
+                        __t16
                     } as i32),
                 ))
                 .set(flags);
@@ -243,58 +246,58 @@ pub fn HSD_SisLib_803A7684<'a>(ctx: &'a Ctx, text: HSD_Text<'a>, cursor: Val<'a,
                     }
                     fns::HSD_SisLib_Free(ctx, Handle::cast::<Addr<'a>>(old_buf_3));
                 }
+                let __t18 = ((sar_i32(
+                    fp::fctiwz((fp::fmuls(256.0, (text).x80().x()))),
+                    (8_i32 as u32),
+                )) as u8);
                 (Handle::add(
                     (text).state_stack(),
                     ({
-                        let __t10 = (text).state_stack_used();
+                        let __t17 = (text).state_stack_used();
                         (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
-                        __t10
+                        __t17
                     } as i32),
                 ))
-                .set(
-                    ((sar_i32(
-                        fp::fctiwz((fp::fmuls(256.0, (text).x80().x()))),
-                        (8_i32 as u32),
-                    )) as u8),
-                );
+                .set(__t18);
+                let __t20 = (fp::fctiwz((fp::fmuls(256.0, (text).x80().x()))) as u8);
                 (Handle::add(
                     (text).state_stack(),
                     ({
-                        let __t11 = (text).state_stack_used();
+                        let __t19 = (text).state_stack_used();
                         (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
-                        __t11
+                        __t19
                     } as i32),
                 ))
-                .set((fp::fctiwz((fp::fmuls(256.0, (text).x80().x()))) as u8));
+                .set(__t20);
+                let __t22 = ((sar_i32(
+                    fp::fctiwz((fp::fmuls(256.0, (text).x80().y()))),
+                    (8_i32 as u32),
+                )) as u8);
                 (Handle::add(
                     (text).state_stack(),
                     ({
-                        let __t12 = (text).state_stack_used();
+                        let __t21 = (text).state_stack_used();
                         (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
-                        __t12
+                        __t21
                     } as i32),
                 ))
-                .set(
-                    ((sar_i32(
-                        fp::fctiwz((fp::fmuls(256.0, (text).x80().y()))),
-                        (8_i32 as u32),
-                    )) as u8),
-                );
+                .set(__t22);
+                let __t24 = (fp::fctiwz((fp::fmuls(256.0, (text).x80().y()))) as u8);
                 (Handle::add(
                     (text).state_stack(),
                     ({
-                        let __t13 = (text).state_stack_used();
+                        let __t23 = (text).state_stack_used();
                         (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
-                        __t13
+                        __t23
                     } as i32),
                 ))
-                .set((fp::fctiwz((fp::fmuls(256.0, (text).x80().y()))) as u8));
+                .set(__t24);
                 (Handle::add(
                     (text).state_stack(),
                     ({
-                        let __t14 = (text).state_stack_used();
+                        let __t25 = (text).state_stack_used();
                         (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
-                        __t14
+                        __t25
                     } as i32),
                 ))
                 .set(flags);
@@ -336,21 +339,22 @@ pub fn HSD_SisLib_803A7684<'a>(ctx: &'a Ctx, text: HSD_Text<'a>, cursor: Val<'a,
                     }
                     fns::HSD_SisLib_Free(ctx, Handle::cast::<Addr<'a>>(old_buf_4));
                 }
+                let __t27 = (text).alignment();
                 (Handle::add(
                     (text).state_stack(),
                     ({
-                        let __t15 = (text).state_stack_used();
+                        let __t26 = (text).state_stack_used();
                         (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
-                        __t15
+                        __t26
                     } as i32),
                 ))
-                .set((text).alignment());
+                .set(__t27);
                 (Handle::add(
                     (text).state_stack(),
                     ({
-                        let __t16 = (text).state_stack_used();
+                        let __t28 = (text).state_stack_used();
                         (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
-                        __t16
+                        __t28
                     } as i32),
                 ))
                 .set(flags);
@@ -406,11 +410,11 @@ pub fn HSD_SisLib_803A7684<'a>(ctx: &'a Ctx, text: HSD_Text<'a>, cursor: Val<'a,
                                 (Handle::add(
                                     (text).state_stack(),
                                     ({
-                                        let __t17 = (text).state_stack_used();
+                                        let __t29 = (text).state_stack_used();
                                         (text).set_state_stack_used(
                                             (text).state_stack_used().wrapping_add(1),
                                         );
-                                        __t17
+                                        __t29
                                     } as i32),
                                 ))
                                 .set(((shr_u32(Handle::addr(cursor), (shift as u32))) as u8));
@@ -422,45 +426,45 @@ pub fn HSD_SisLib_803A7684<'a>(ctx: &'a Ctx, text: HSD_Text<'a>, cursor: Val<'a,
                 (Handle::add(
                     (text).state_stack(),
                     ({
-                        let __t18 = (text).state_stack_used();
+                        let __t30 = (text).state_stack_used();
                         (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
-                        __t18
+                        __t30
                     } as i32),
                 ))
                 .set(((shr_u32(Handle::addr(cursor), (24_i32 as u32))) as u8));
                 (Handle::add(
                     (text).state_stack(),
                     ({
-                        let __t19 = (text).state_stack_used();
+                        let __t31 = (text).state_stack_used();
                         (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
-                        __t19
+                        __t31
                     } as i32),
                 ))
                 .set((((shr_u32(Handle::addr(cursor), (16_i32 as u32))) & (255_i32 as u32)) as u8));
                 (Handle::add(
                     (text).state_stack(),
                     ({
-                        let __t20 = (text).state_stack_used();
+                        let __t32 = (text).state_stack_used();
                         (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
-                        __t20
+                        __t32
                     } as i32),
                 ))
                 .set((((shr_u32(Handle::addr(cursor), (8_i32 as u32))) & (255_i32 as u32)) as u8));
                 (Handle::add(
                     (text).state_stack(),
                     ({
-                        let __t21 = (text).state_stack_used();
+                        let __t33 = (text).state_stack_used();
                         (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
-                        __t21
+                        __t33
                     } as i32),
                 ))
                 .set((Handle::addr(cursor) as u8));
                 (Handle::add(
                     (text).state_stack(),
                     ({
-                        let __t22 = (text).state_stack_used();
+                        let __t34 = (text).state_stack_used();
                         (text).set_state_stack_used((text).state_stack_used().wrapping_add(1));
-                        __t22
+                        __t34
                     } as i32),
                 ))
                 .set(flags);

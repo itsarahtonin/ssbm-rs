@@ -108,8 +108,11 @@ def children(c):
 
 
 def is_constant(node):
-    """Whether a C expression is a constant: it evaluates, naming no variable."""
+    """Whether a C expression is a constant: it evaluates, naming no variable outside a
+    `sizeof`."""
     def names_variable(n):
+        if n.kind == CK.CXX_UNARY_EXPR:
+            return False
         if n.kind == CK.DECL_REF_EXPR:
             r = n.referenced
             return r is None or r.kind != CK.ENUM_CONSTANT_DECL
@@ -1905,8 +1908,10 @@ class Translator:
             return [f"Handle::copy_from({lv.addr_code}, {v.code});"]
         v = self.convert(self.expr(b), t)
         pre = []
-        if not v.pure and (not lv.pure or (calls_or_effects(b) and self.address_reads_memory(a))):
-            # MWCC evaluates the right side first, then where it goes.
+        if (not v.pure and (not lv.pure or (calls_or_effects(b) and self.address_reads_memory(a)))
+                or (not lv.pure and self.reads_memory(b))):
+            # MWCC evaluates the right side first, then where it goes: what it reads, it reads
+            # before the left side's own changes, such as the index's in `a[n++] = *p`.
             tmp = self.f.temp()
             pre.append(f"let {tmp} = {v.code};")
             v = Expr(tmp, t, True)
@@ -1950,7 +1955,12 @@ class Translator:
         if op in ("<<", ">>"):
             res = self.shift(op, self.convert(cur, promote(lv.ty)), self.convert(rhs, promote(rhs.ty)))
         else:
-            ct = (is_int(rhs.ty) and self.common_type(a, b)) or arith(lv.ty, rhs.ty)
+            if op in ("/", "%") and is_int(lv.ty) and is_int(rhs.ty) and is_constant(b):
+                # MWCC divides by a constant in the type of the value it changes, so
+                # `length /= sizeof(u16)` divides a signed length signed.
+                ct = promote(lv.ty)
+            else:
+                ct = (is_int(rhs.ty) and self.common_type(a, b)) or arith(lv.ty, rhs.ty)
             res = self.arith_op(op, self.convert(cur, ct), self.convert(rhs, ct), ct)
         return pre + [lv.write(self.convert(res, lv.ty).code) + ";"]
 

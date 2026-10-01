@@ -979,13 +979,15 @@ pub fn itZrshell_UnkMotion11_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             fp::fctiwz((ip).facing_dir()),
         );
         if !Handle::is_null(spawn) {
+            let __t1 =
+                (Handle::cast::<Val<'a, i32>>((ip).xDD4_itemVar().zgshell().xDD8_ref())).get();
             (Handle::cast::<Val<'a, i32>>(
                 (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, spawn)))
                     .xDD4_itemVar()
                     .zgshell()
                     .xDD8_ref(),
             ))
-            .set((Handle::cast::<Val<'a, i32>>((ip).xDD4_itemVar().zgshell().xDD8_ref())).get());
+            .set(__t1);
             (Handle::cast::<Val<'a, i32>>((ip).xDD4_itemVar().zgshell().xDD8_ref()))
                 .set(1_i32.wrapping_neg());
         }
