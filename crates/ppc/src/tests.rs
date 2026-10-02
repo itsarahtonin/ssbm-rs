@@ -196,6 +196,19 @@ fn mutated_checks_drop_calls_whose_original_fails() {
 }
 
 #[test]
+fn calls_that_never_return_go_unchecked() {
+    // A failed assertion's call: the port runs, and lockstep compares nothing.
+    let ctx = machine(&[li(3, 1), BLR]);
+    ctx.register_port(CODE, |ctx| ctx.regs.set_r(3, 2), ssbm_rt::lockstep::Returns::Int);
+    ctx.lockstep.noreturn.borrow_mut().insert(CODE);
+    ctx.set_mode(CODE, Mode::Lockstep);
+    ctx.invoke(CODE);
+    assert_eq!(ctx.regs.r(3), 2, "the port ran");
+    assert!(ctx.lockstep.stats.borrow().get(&CODE).is_none());
+    assert!(ctx.lockstep.mismatches.borrow().is_empty());
+}
+
+#[test]
 fn mutated_checks_change_a_call_alike_whatever_ran_before() {
     // f(n) = n + 1, whose port is wrong for n with bit 4 set; g's checks, run first in one of
     // the two machines, must not change which of f's mutated checks find that.

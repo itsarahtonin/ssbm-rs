@@ -457,6 +457,11 @@ fn panic_text(p: &(dyn std::any::Any + Send)) -> String {
 /// one when a port under check calls another.
 pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     let state = &ctx.lockstep;
+    if !state.mutating.get() && !state.active.get() && state.noreturn.borrow().contains(&addr) {
+        // A call that never returns, such as an assertion's that failed: the game has
+        // failed, and what its panic path does is nothing a check can compare.
+        return ctx.run_native(addr, native);
+    }
     let outermost = !state.active.get();
     let enclosing = state.phase.get();
     if outermost {
