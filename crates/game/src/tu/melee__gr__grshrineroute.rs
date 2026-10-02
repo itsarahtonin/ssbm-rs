@@ -1098,10 +1098,10 @@ pub fn grShrineRoute_80209BEC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             .shrineroute3()
             .set_xCC(fp::fneg(0.0008726646192371845));
     }
-    rot = fp::fadds(
-        inl_HSD_JObjGetRotationX(ctx, jobj),
-        (gp).u().shrineroute3().xC8(),
-    );
+    rot = {
+        let __t1 = inl_HSD_JObjGetRotationX(ctx, jobj);
+        fp::fadds((gp).u().shrineroute3().xC8(), __t1)
+    };
     if rot > 0.2617993950843811 {
         rot = 0.2617993950843811;
         (gp).u().shrineroute3().set_xC8(fp::fneg(
@@ -1136,10 +1136,10 @@ pub fn grShrineRoute_80209BEC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     inl_HSD_JObjSetRotationX(ctx, jobj, rot);
     {
-        let mut rot_2: f64 = fp::fadds(
-            inl_HSD_JObjGetRotationY(ctx, jobj),
-            (gp).u().shrineroute3().xCC(),
-        );
+        let mut rot_2: f64 = {
+            let __t2 = inl_HSD_JObjGetRotationY(ctx, jobj);
+            fp::fadds((gp).u().shrineroute3().xCC(), __t2)
+        };
         if rot_2 > 0.1745329201221466 {
             rot_2 = 0.1745329201221466;
             (gp).u().shrineroute3().set_xCC(fp::fneg(
@@ -1176,8 +1176,8 @@ pub fn grShrineRoute_80209BEC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
     if !Handle::is_null((gp).u().shrineroute3().xC4()) {
         rot = {
-            let __t1 = inl_HSD_JObjGetRotationX(ctx, (gp).u().shrineroute3().xC4());
-            fp::fadds((gp).u().shrineroute3().xD8(), __t1)
+            let __t3 = inl_HSD_JObjGetRotationX(ctx, (gp).u().shrineroute3().xC4());
+            fp::fadds((gp).u().shrineroute3().xD8(), __t3)
         };
         if rot > 6.283185307179586 {
             rot = fp::frsp((fp::fsub(rot, 6.283185307179586)));
@@ -1186,8 +1186,8 @@ pub fn grShrineRoute_80209BEC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         }
         inl_HSD_JObjSetRotationX(ctx, (gp).u().shrineroute3().xC4(), rot);
         rot = {
-            let __t2 = inl_HSD_JObjGetRotationY(ctx, (gp).u().shrineroute3().xC4());
-            fp::fadds((gp).u().shrineroute3().xDC(), __t2)
+            let __t4 = inl_HSD_JObjGetRotationY(ctx, (gp).u().shrineroute3().xC4());
+            fp::fadds((gp).u().shrineroute3().xDC(), __t4)
         };
         if rot > 6.283185307179586 {
             rot = fp::frsp((fp::fsub(rot, 6.283185307179586)));

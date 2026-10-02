@@ -3127,10 +3127,10 @@ pub fn ftCo_Damage_OnExitHitlag<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         let mut kb_y: f64 = (fp).x8c_kb_vel().y();
         if (kb_x != 0.0) || (kb_y != 0.0) {
             let mut kb_angle: f64 = fns::atan2f(ctx, kb_y, kb_x);
-            let mut scaled_kb_mag: f64 = fp::fmuls(
-                inl_sqrtf(ctx, fp::fmadds(kb_x, kb_x, fp::fmuls(kb_y, kb_y))),
-                (fns::p_ftCommonData(ctx).get()).x1AC(),
-            );
+            let mut scaled_kb_mag: f64 = {
+                let __t1 = inl_sqrtf(ctx, fp::fmadds(kb_x, kb_x, fp::fmuls(kb_y, kb_y)));
+                fp::fmuls((fns::p_ftCommonData(ctx).get()).x1AC(), __t1)
+            };
             (fp).x8c_kb_vel()
                 .set_x(fp::fmuls(scaled_kb_mag, fns::cosf(ctx, kb_angle)));
             (fp).x8c_kb_vel()

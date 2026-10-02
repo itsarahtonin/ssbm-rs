@@ -2610,9 +2610,12 @@ class Translator:
             ref = callee.referenced if callee is not None and callee.kind == CK.DECL_REF_EXPR else None
             if ref is not None and ref.kind == CK.FUNCTION_DECL and ref.get_definition() is not None \
                     and self.inlined_in_original(ref.spelling, ref):
-                # An inline call weighs what it returns, its parameters as variables.
+                # An inline call weighs what it returns, its parameters as variables; one whose
+                # body is more than a return weighs as a call does.
                 ret = returned_expr(ref.get_definition())
-                return 1 if ret is None or depth > 8 else self.weight(ret, depth + 1)
+                if ret is None:
+                    return self.CALL_WEIGHT
+                return 1 if depth > 8 else self.weight(ret, depth + 1)
             return self.CALL_WEIGHT
         return 1
 
