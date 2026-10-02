@@ -308,6 +308,20 @@ fioPacketResultWrite+* dev # MCC/FIO: runs past its not-initialized exit only on
 fioPacketSendPacket+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
 fioPacketWrite+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
 mccInitializeCheck+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+# HIO, the host I/O under MCC (2026-10-02): callers.py lists only MCC functions calling into dolphin/hio (HIOInit and HIOEnumDevices from MCCInit and MCCEnumDevices, the reads and writes from MCC's channel and mailbox code). Every HIO call past its first test needs Chan, which only HIOInit sets after an EXI device answers id 0x01010000 (the dev kit's USB adapter), or EXIGetID returning that id; ExiHandler, DbgHandler, TxHandler and RxHandler run a callback only HIOInit installs on that success. The SDK layer models no such device, so HIOInit always takes its no-device exit, and mutated checks cannot pass the EXI calls, whose stand-ins return 0 for them.
+HIOInit+* hw # HIO: runs past its first test only once HIOInit found the dev kit's USB adapter on EXI
+HIOEnumDevices+* hw # HIO: runs past its first test only once HIOInit found the dev kit's USB adapter on EXI
+HIOReadMailbox+* hw # HIO: runs past its first test only once HIOInit found the dev kit's USB adapter on EXI
+HIOWriteMailbox+* hw # HIO: runs past its first test only once HIOInit found the dev kit's USB adapter on EXI
+HIORead+* hw # HIO: runs past its first test only once HIOInit found the dev kit's USB adapter on EXI
+HIOWrite+* hw # HIO: runs past its first test only once HIOInit found the dev kit's USB adapter on EXI
+HIOReadAsync+* hw # HIO: runs past its first test only once HIOInit found the dev kit's USB adapter on EXI
+HIOWriteAsync+* hw # HIO: runs past its first test only once HIOInit found the dev kit's USB adapter on EXI
+HIOReadStatus+* hw # HIO: runs past its first test only once HIOInit found the dev kit's USB adapter on EXI
+ExiHandler+* hw # HIO: runs past its first test only once HIOInit found the dev kit's USB adapter on EXI
+DbgHandler+* hw # HIO: runs past its first test only once HIOInit found the dev kit's USB adapter on EXI
+TxHandler+* hw # HIO: runs past its first test only once HIOInit found the dev kit's USB adapter on EXI
+RxHandler+* hw # HIO: runs past its first test only once HIOInit found the dev kit's USB adapter on EXI
 
 # Threads and jumps (2026-10-02):
 OSExitThread+* fail # OSCreateThread makes it each thread's return address; the game's only OSCreateThread call (hsd_80397DA4, debugconsole_main) starts the crash screen's thread
