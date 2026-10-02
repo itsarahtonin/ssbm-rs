@@ -196,6 +196,37 @@ fn mutated_checks_drop_calls_whose_original_fails() {
 }
 
 #[test]
+fn checks_end_once_the_blocks_still_needed_are_verified() {
+    // f(n): return n != 0 ? 1 : 2, whose `return 2` block alone is still needed.
+    let ctx = machine(&[
+        0x2C03_0000, // cmpwi r3, 0
+        0x4182_000C, // beq +12
+        li(3, 1),
+        BLR,
+        li(3, 2),
+        BLR,
+    ]);
+    ctx.register_port(
+        CODE,
+        |ctx| ctx.regs.set_r(3, if ctx.regs.r(3) != 0 { 1 } else { 2 }),
+        ssbm_rt::lockstep::Returns::Int,
+    );
+    ctx.coverage
+        .set_bounds(Box::new(|a| (a == CODE).then_some((CODE, CODE + 24))));
+    ctx.lockstep
+        .needed
+        .borrow_mut()
+        .insert(CODE, vec![(CODE + 16, CODE + 24)]);
+    ctx.set_mode(CODE, Mode::Lockstep);
+    for n in [1, 0, 0] {
+        ctx.regs.set_r(3, n);
+        ctx.invoke(CODE);
+    }
+    assert_eq!(ctx.lockstep.stats.borrow()[&CODE].calls, 2, "the third call ran unchecked");
+    assert!(ctx.coverage.is_covered(CODE + 16));
+}
+
+#[test]
 fn mutated_checks_drop_calls_that_read_a_saved_register() {
     // f(i): saves r31, stores 5 at 8(r1), returns the word at r1 + i. Changed inputs make i 12,
     // the saved r31's slot, which only the original's frame holds.

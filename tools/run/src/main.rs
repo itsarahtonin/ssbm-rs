@@ -730,6 +730,22 @@ fn run() -> ExitCode {
             let seed = std::env::var("LOCKSTEP_SEED").ok().and_then(|v| v.parse().ok());
             ctx.lockstep.rng.set(seed.unwrap_or(1));
         }
+        // LOCKSTEP_NEEDED=FILE lists, as coverage.py's --needed writes them, the blocks each
+        // function still needs verified: its checks end once this run has verified them all.
+        if let Ok(path) = std::env::var("LOCKSTEP_NEEDED") {
+            let text = std::fs::read_to_string(&path).unwrap_or_else(|e| panic!("{path}: {e}"));
+            let hex = |s: &str| u32::from_str_radix(s.trim_start_matches("0x"), 16).ok();
+            let mut needed = ctx.lockstep.needed.borrow_mut();
+            for line in text.lines() {
+                let mut w = line.split_whitespace();
+                let Some(f) = w.next().and_then(hex) else { continue };
+                let blocks = w
+                    .filter_map(|r| r.split_once('-'))
+                    .filter_map(|(lo, hi)| hex(lo).zip(hex(hi)))
+                    .collect();
+                needed.insert(f, blocks);
+            }
+        }
         // LOCKSTEP_TARGETS=FILE lists, as `tools/lockstep/targets.py` writes them, what decides
         // the branches to code each function's checks have not reached: half of a listed
         // function's mutated checks change one of those callees' results, arguments or loads.

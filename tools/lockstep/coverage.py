@@ -2,7 +2,7 @@
 
     python tools/lockstep/coverage.py <decomp root> --coverage FILE... [--ledger FILE...]
         [--bar 0.9] [--dead FILE] [--stand-ins FILE] [--stale CHANGED=FILES]... [--csv OUT]
-        [--done OUT] [--reviewed FILE] [--gaps FILE]
+        [--done OUT] [--reviewed FILE] [--gaps FILE] [--known OUT] [--needed OUT]
 
 ssbm-run's LOCKSTEP_COVERAGE bitmaps mark each instruction of the original that ran within a
 check of its own function whose sides agreed. This splits every function of the decomp's
@@ -18,7 +18,9 @@ writes it, that take nothing from the results its glob matches. Functions whose 
 with changed inputs were reviewed and found to come from the inputs, not the port (--reviewed,
 one per line with the reason), are no longer to review. The gap ledger (--gaps, as gaps.txt
 describes it) explains blocks no run can reach; a function is complete when its countable blocks
-are all verified or explained.
+are all verified or explained. --known writes the merged bitmap, stale results left out, for
+ssbm-run's LOCKSTEP_KNOWN, and --needed the blocks each incomplete function still needs, for
+LOCKSTEP_NEEDED: `0xSTART lo-hi lo-hi ...`, a block per range of its instructions' addresses.
 """
 
 import argparse
@@ -148,6 +150,8 @@ def main():
     ap.add_argument("--done")
     ap.add_argument("--reviewed")
     ap.add_argument("--gaps")
+    ap.add_argument("--known")
+    ap.add_argument("--needed")
     args = ap.parse_args()
 
     def names(path):
@@ -171,9 +175,13 @@ def main():
     funcs = list(functions(args.root))
     spans = {insns[0][0]: (insns[0][0], insns[-1][0] + 4) for _, _, insns, _ in funcs}
     bits = load_bits([p for g in args.coverage for p in glob.glob(g)], spans, stale)
+    if args.known:
+        # The instructions still verified, for LOCKSTEP_KNOWN: stale results left out.
+        open(args.known, "wb").write(bytes(bits) + bytes(1) * (-len(bits) % 8))
     ledger = load_ledgers([p for g in args.ledger for p in glob.glob(g)], stale)
 
     rows = []
+    needed = {}
     unreachable, contradicted = 0, []
     for unit, name, insns, labels in funcs:
         bs = blocks(insns, labels)
@@ -192,6 +200,11 @@ def main():
         explained = sum(1 for b in countable if ("*" in gap or b[0][0] - start in gap)
                         and not any(covered(bits, a) for a, _, _ in b))
         calls, bad, uninit, mutated = ledger.get(start, (0, 0, 0, 0))
+        missing = [(b[0][0], b[-1][0] + 4) for b in countable
+                   if not any(covered(bits, a) for a, _, _ in b)
+                   and not ("*" in gap or b[0][0] - start in gap)]
+        if missing:
+            needed[start] = missing
         share = done / len(countable) if countable else 1.0
         rows.append((start, name, unit, len(bs), len(countable), done, share, calls, bad, uninit,
                      mutated, explained))
@@ -247,6 +260,10 @@ def main():
             for r in rows:
                 w.writerow([f"{r[0]:#010x}", r[1], r[2], r[3], r[4], r[5], f"{r[6]:.3f}",
                             r[7], r[8], r[9], r[10], r[11]])
+    if args.needed:
+        with open(args.needed, "w", encoding="utf-8") as f:
+            for start, missing in sorted(needed.items()):
+                f.write(f"{start:#010x} " + " ".join(f"{lo:#x}-{hi:#x}" for lo, hi in missing) + "\n")
     if args.done:
         with open(args.done, "w", encoding="utf-8") as f:
             f.write(f"# Functions verified at {args.bar:.0%} of their blocks with no mismatch\n")

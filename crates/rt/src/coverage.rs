@@ -98,6 +98,13 @@ impl Coverage {
         }
     }
 
+    /// Whether the instruction at `pc` is verified.
+    pub fn is_covered(&self, pc: u32) -> bool {
+        let covered = self.covered.borrow();
+        let at = (pc.wrapping_sub(LO) / 4) as usize;
+        covered.get(at / 64).is_some_and(|w| w >> (at % 64) & 1 != 0)
+    }
+
     /// The instructions verified so far, a bit per instruction from `LO`, as little-endian
     /// words: empty when none are.
     pub fn covered(&self) -> Vec<u64> {

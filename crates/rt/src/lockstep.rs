@@ -197,6 +197,9 @@ pub struct State {
     /// What decides the branches to code each function's checks have not reached: half its
     /// mutated checks change one of these.
     pub targets: RefCell<BTreeMap<u32, Vec<Target>>>,
+    /// The blocks, as `[lo, hi)` address ranges, that each function still needs verified: once
+    /// none are left, its checks end.
+    pub needed: RefCell<BTreeMap<u32, Vec<(u32, u32)>>>,
     /// The callee the running mutated check stands in for, and the r3 and f1 it returns.
     stub: Cell<Option<(u32, u32, f64)>>,
     /// While an outermost check's original runs, its function's loads that targets name, and
@@ -810,6 +813,14 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     }
     if diffs.is_empty() {
         ctx.coverage.verified(hits);
+        let mut needed = state.needed.borrow_mut();
+        if let Some(blocks) = needed.get_mut(&addr) {
+            blocks.retain(|&(lo, hi)| !(lo..hi).step_by(4).any(|pc| ctx.coverage.is_covered(pc)));
+            if blocks.is_empty() {
+                needed.remove(&addr);
+                state.checked_enough.borrow_mut().push(addr);
+            }
+        }
     }
     let mut stats = state.stats.borrow_mut();
     let entry = stats.entry(addr).or_default();
