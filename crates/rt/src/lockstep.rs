@@ -808,7 +808,15 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         }
     }
     drop(stats);
-    if outermost && original_panic.is_none() && !state.mutating.get() && state.mutations.get() > 0 {
+    // Code outside the game's own, such as the code Slippi's playback places in the heap, takes
+    // registers as the code that branches to it leaves them, not arguments to change.
+    let (code_lo, code_hi) = state.code.get();
+    if outermost
+        && original_panic.is_none()
+        && !state.mutating.get()
+        && state.mutations.get() > 0
+        && (code_lo == code_hi || (code_lo..code_hi).contains(&addr))
+    {
         let inputs = Inputs {
             reads: &reads,
             loaded: &loaded,

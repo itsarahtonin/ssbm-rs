@@ -197,17 +197,17 @@ fn mutated_checks_drop_calls_whose_original_fails() {
 
 #[test]
 fn mutated_checks_leave_code_run_from_ram_as_it_is() {
-    // `li r3, 5; blr` placed in RAM past the game's code, as playback places injected code,
-    // and called with a pointer to itself, which mutated checks change bytes behind.
+    // f(p): jumps to p, where `li r3, 5; blr` lies in RAM past the game's code, as playback
+    // places injected code; mutated checks change bytes behind p.
     const PLACED: u32 = 0x8060_0000;
-    let ctx = machine(&[]);
+    let ctx = machine(&[0x7C89_03A6, 0x4E80_0420]); // mtctr r4; bctr
     ctx.write_u32(PLACED, li(3, 5));
     ctx.write_u32(PLACED + 4, BLR);
     ctx.lockstep.code.set((CODE, CODE + 0x100));
     ctx.lockstep.mutations.set(200);
     ctx.lockstep.rng.set(1);
-    ctx.register(PLACED, |ctx| ctx.regs.set_r(3, 5));
-    ctx.set_mode(PLACED, Mode::Lockstep);
+    ctx.register(CODE, |ctx| ctx.regs.set_r(3, 5));
+    ctx.set_mode(CODE, Mode::Lockstep);
     // As ssbm-run does: changed code may loop.
     ctx.set_heartbeat(|ctx, _| {
         if ctx.lockstep.is_mutating() && ctx.lockstep.in_original() {
@@ -215,9 +215,10 @@ fn mutated_checks_leave_code_run_from_ram_as_it_is() {
         }
     });
     ctx.regs.set_r(4, PLACED);
-    ctx.invoke(PLACED);
+    ctx.invoke(CODE);
     assert!(ctx.lockstep.mismatches.borrow().is_empty());
     assert_eq!(ctx.read_u32(PLACED), li(3, 5));
+    assert_eq!(ctx.lockstep.stats.borrow()[&CODE].calls, 201, "every mutated check ran");
 }
 
 #[test]
