@@ -427,9 +427,15 @@ fn run() -> ExitCode {
             ctx.ext::<Sdk>().hw.fail_next_dvd_read(0x0002_0400);
         });
     }
-    // UNLOCK_ALL=1 unlocks every character, stage and trophy once the main menu comes up.
-    if std::env::var_os("UNLOCK_ALL").is_some() {
-        matches::install_unlocks(&ctx);
+    // UNLOCK_ALL=1 unlocks every character, stage and trophy once the main menu comes up, and
+    // MENU=KIND,SELECTION opens it on that menu (MenuKind) with that item under the cursor.
+    let unlock = std::env::var_os("UNLOCK_ALL").is_some();
+    let menu = std::env::var("MENU").ok().map(|m| {
+        let v: Vec<u8> = m.split(',').map(|x| x.trim().parse().expect("MENU=KIND,SELECTION")).collect();
+        (v[0], v.get(1).copied().unwrap_or(0))
+    });
+    if unlock || menu.is_some() {
+        matches::install_main_menu(&ctx, unlock, menu);
     }
     // GAME_LANGUAGE=jp runs the game in Japanese.
     if std::env::var("GAME_LANGUAGE").is_ok_and(|v| v == "jp") {
