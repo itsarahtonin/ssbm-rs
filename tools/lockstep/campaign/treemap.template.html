@@ -1,0 +1,418 @@
+<meta charset="utf-8">
+<title>Port Coverage Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #f6f5f1; --panel: #ffffff; --fg: #1d1f24; --muted: #646a74; --line: #dcdad3;
+  --ok: #3f9a5c; --low-hi: #d9a23a; --low-lo: #c4663a; --never: #c9c7c0;
+  --review: #b83a8e; --bad: #d62f2f; --area: #1d1f24; --hl: #1f6fd6;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15171b; --panel: #1d2026; --fg: #e7e8ea; --muted: #9aa0a9; --line: #30343b;
+  --ok: #4fae6c; --low-hi: #d6a443; --low-lo: #c56a3e; --never: #3a3e45;
+  --review: #d356ab; --bad: #ef4b4b; --area: #e7e8ea; --hl: #5aa2ff; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #15171b; --panel: #1d2026; --fg: #e7e8ea; --muted: #9aa0a9; --line: #30343b;
+  --ok: #4fae6c; --low-hi: #d6a443; --low-lo: #c56a3e; --never: #3a3e45;
+  --review: #d356ab; --bad: #ef4b4b; --area: #e7e8ea; --hl: #5aa2ff; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 14px/1.45 "IBM Plex Sans", system-ui, sans-serif; }
+.wrap { max-width: 1400px; margin: 0 auto; padding: 20px 16px 40px; display: grid; gap: 18px; }
+.mono, .num { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; }
+h1 { font-size: 22px; font-weight: 600; margin: 0; text-wrap: balance; }
+.sub { color: var(--muted); font-size: 13px; }
+.stats { display: flex; flex-wrap: wrap; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.stat { flex: 1 1 160px; background: var(--panel); padding: 12px 14px; display: grid; gap: 2px; }
+.stat .k { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.stat .v { font-size: 22px; font-weight: 500; }
+.stat .d { font-size: 12px; color: var(--muted); }
+.gates { display: grid; gap: 12px; }
+.gate { display: grid; gap: 6px; }
+.gate .legend { justify-content: space-between; }
+.gate b { color: var(--fg); font-weight: 600; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.seg button { font: 12px "IBM Plex Sans", sans-serif; background: var(--panel); color: var(--muted); border: 0; padding: 6px 10px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed=true] { background: var(--fg); color: var(--bg); }
+.tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.history { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+.history input[type=range] { flex: 1 1 220px; min-width: 0; accent-color: var(--ok); }
+.history .hlabel { font: 500 13px "IBM Plex Mono", monospace; min-width: 9ch; }
+.history .hk { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.history button { font: 13px "IBM Plex Sans", sans-serif; background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 4px 10px; cursor: pointer; min-width: 2.4em; }
+.history label { font-size: 12px; color: var(--muted); display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+.bar { height: 10px; border-radius: 5px; background: var(--never); overflow: hidden; display: flex; }
+.bar span { display: block; height: 100%; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--muted); align-items: center; }
+.legend i { display: inline-block; width: 11px; height: 11px; border-radius: 2px; vertical-align: -1px; margin-right: 5px; }
+.map-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
+.crumbs { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; font-size: 13px; min-width: 0; }
+.crumbs button { font: inherit; background: none; border: 0; padding: 2px 4px; color: var(--hl); cursor: pointer; border-radius: 4px; }
+.crumbs button:last-child { color: var(--fg); cursor: default; font-weight: 500; }
+.crumbs .sep { color: var(--muted); }
+input[type=search] { font: 13px "IBM Plex Mono", monospace; padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--fg); width: 260px; max-width: 100%; }
+.mapbox { position: relative; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+canvas { display: block; width: 100%; height: min(72vh, 760px); min-height: 360px; cursor: pointer; }
+.tip { position: absolute; pointer-events: none; background: var(--panel); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.18); max-width: 320px; z-index: 2; }
+.tip b { font-family: "IBM Plex Mono", monospace; font-weight: 500; word-break: break-all; }
+.tip .row { display: flex; justify-content: space-between; gap: 14px; color: var(--muted); }
+.tip .row span:last-child { color: var(--fg); font-family: "IBM Plex Mono", monospace; }
+.lower { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 18px; }
+@media (max-width: 860px) { .lower { grid-template-columns: minmax(0, 1fr); } }
+section h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 8px; }
+.areas { display: grid; gap: 4px; max-height: 420px; overflow: auto; }
+.arow { display: grid; grid-template-columns: 150px minmax(0, 1fr) 110px; gap: 10px; align-items: center; font-size: 12px; cursor: pointer; padding: 2px 4px; border-radius: 4px; }
+.arow:hover { background: var(--panel); }
+.arow .n { text-align: right; color: var(--muted); }
+.arow .bar { height: 8px; }
+@media (max-width: 480px) { .arow { grid-template-columns: 100px minmax(0, 1fr) 80px; } }
+svg text { fill: var(--muted); font: 11px "IBM Plex Mono", monospace; }
+.list { font-size: 12px; display: grid; gap: 3px; max-height: 260px; overflow: auto; }
+.list div { display: flex; justify-content: space-between; gap: 10px; cursor: pointer; padding: 1px 4px; border-radius: 4px; }
+.list div:hover { background: var(--panel); }
+.list span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.list span:last-child { color: var(--muted); flex: none; }
+.foot { color: var(--muted); font-size: 12px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Port Coverage Map</h1>
+    <div class="sub">Lockstep verification of the Rust ports, by function · updated <span class="mono" id="updated"></span> · after <span id="label"></span></div>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="gates">
+    <div class="gate">
+      <div class="legend"><span><b>Milestone 3a</b> · every function verified at ≥90% of its countable blocks, with no mismatches</span><span class="num" id="g3a"></span></div>
+      <div class="bar" id="bar3a"></div>
+    </div>
+    <div class="gate">
+      <div class="legend"><span><b>Phase 3 gate (3b)</b> · every countable block verified, or explained in the reviewed gap ledger; no unexplained mismatches</span><span class="num" id="g3b"></span></div>
+      <div class="bar" id="bar3b"></div>
+    </div>
+  </div>
+
+  <div class="history" role="group" aria-label="Rounds">
+    <span class="hk">Round</span>
+    <button id="h-prev" aria-label="Previous round">◀</button>
+    <button id="h-play" aria-label="Play the rounds">▶</button>
+    <button id="h-next" aria-label="Next round">▶|</button>
+    <input type="range" id="h-range" min="0" max="0" step="1" aria-label="Round shown">
+    <span class="hlabel" id="h-label"></span>
+    <label><input type="checkbox" id="h-diff"> only what changed since the round before</label>
+  </div>
+
+  <div class="map-head">
+    <nav class="crumbs" id="crumbs"></nav>
+    <div class="tools">
+      <div class="seg" role="group" aria-label="Color the map by"><button data-m="3a" aria-pressed="true">3a · 90% bar</button><button data-m="3b" aria-pressed="false">3b · every block</button></div>
+      <input type="search" id="q" placeholder="find a function…" autocomplete="off" spellcheck="false">
+    </div>
+  </div>
+  <div class="legend" id="legend"></div>
+  <div class="mapbox"><canvas id="map"></canvas><div class="tip" id="tip" hidden></div></div>
+
+  <div class="lower">
+    <section><h2 id="areas-h">Left to verify by area</h2><div class="areas" id="areas"></div></section>
+    <section>
+      <h2 id="trend-h">Verified over rounds</h2><div id="trend"></div>
+      <h2 style="margin-top:16px">To review</h2><div class="list" id="review"></div>
+    </section>
+  </div>
+  <p class="foot">Tiles are sized by countable blocks: the blocks that can run, leaving out those that only fail an assertion or that the machine code shows no input reaches. A block is verified once lockstep has run it in the original and the port and their results agreed. Under 3a a function counts as verified at ≥90% of its blocks; under 3b only at all of them, or with the rest explained in the gap ledger. “To review” means mismatches only under mutated inputs, not yet explained. Click an area or unit to zoom in; click the path above to zoom out. The round slider shows the map after each round; earlier rounds are counted again from their own results, with ports changed since then counting as they stood at that round.</p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const DATA = /*DATA*/null;
+let mode = "3a", BAR = DATA.bar;
+try { if (localStorage.getItem("mode") === "3b") { mode = "3b"; BAR = 1; } } catch (e) {}
+const units = DATA.units;
+// [name, unit, countable, verified_blocks, calls, mismatches, mutated, reviewed, explained]
+const fns = DATA.fns.map(r => ({ name: r[0], unit: units[r[1]], countable: r[2], done: r[3], calls: r[4], bad: r[5], mutated: r[6], reviewed: r[7], explained: r[8] || 0 }));
+for (const f of fns) {
+  f.area = f.unit.split("/").slice(0, 2).join("/");
+  f.latest = { done: f.done, explained: f.explained, calls: f.calls, bad: f.bad, mutated: f.mutated, reviewed: f.reviewed };
+}
+// Each round's state: per function, blocks verified, blocks explained, and flags (1 called,
+// 2 mismatches, 4 mismatches with changed inputs not reviewed). The last is the latest.
+const SNAPS = DATA.snaps;
+let at = SNAPS.length - 1, diffOn = false;
+function apply(i) {
+  const v = SNAPS[i].v, latest = i === SNAPS.length - 1;
+  fns.forEach((f, k) => {
+    if (latest) Object.assign(f, f.latest);
+    else {
+      const fl = v[3 * k + 2];
+      f.done = v[3 * k]; f.explained = v[3 * k + 1]; f.calls = fl & 1; f.bad = fl & 2 ? 1 : 0; f.mutated = fl & 4 ? 1 : 0; f.reviewed = 0;
+    }
+    f.share = f.countable ? f.done / f.countable : 1;
+    f.whole = f.countable ? (f.done + f.explained) / f.countable : 1;
+  });
+}
+apply(at);
+// Each round's totals, for the trend and the changes since the round before.
+const SUMS = SNAPS.map(sn => {
+  let verified = 0, complete = 0, blocks = 0, explained = 0;
+  fns.forEach((f, k) => {
+    const done = sn.v[3 * k], x = sn.v[3 * k + 1], fl = sn.v[3 * k + 2];
+    blocks += done; explained += x;
+    if (!(fl & 2) && (fl & 1) && done >= DATA.bar * f.countable) verified++;
+    if (!(fl & 2) && done + x >= f.countable && ((fl & 1) || done === 0)) complete++;
+  });
+  return { label: sn.label, verified, complete, blocks, explained };
+});
+function classify() {
+  for (const f of fns) f.status = f.bad > 0 ? "bad" : (f.mutated > 0 && !f.reviewed) ? "review" : (mode === "3b" ? f.whole >= 1 && (f.calls > 0 || f.done === 0) : f.calls > 0 && f.share >= BAR) ? "ok" : f.calls > 0 ? "low" : "never";
+}
+classify();
+const STATUS = { ok: "verified", low: "called, below the bar", never: "never called", review: "to review", bad: "mismatch" };
+const isVerified = (f, bar = BAR) => f.bad === 0 && (bar >= 1 ? f.whole >= 1 && (f.calls > 0 || f.done === 0) : f.calls > 0 && f.share >= bar);
+
+let C = {};
+function readColors() { const s = getComputedStyle(document.documentElement); for (const k of ["ok","low-hi","low-lo","never","review","bad","area","panel","fg","muted","hl","line"]) C[k] = s.getPropertyValue("--" + k).trim(); }
+function fillOf(f) {
+  if (f.status === "low") return d3.interpolateRgb(C["low-lo"], C["low-hi"])(Math.min(1, f.share / BAR));
+  return C[f.status];
+}
+
+// Header
+document.getElementById("updated").textContent = DATA.updated;
+const total = fns.length;
+const blocksAll = d3.sum(fns, f => f.countable);
+const fmt = d3.format(",");
+const pct = (n, d) => (100 * n / d).toFixed(1) + "%";
+function bar(el, parts, whole) { document.getElementById(el).innerHTML = parts.map(([k, n]) => `<span style="width:${100 * n / whole}%;background:var(--${k})"></span>`).join(""); }
+
+function header() {
+  document.getElementById("label").textContent = SNAPS[at].label;
+  const blocksDone = d3.sum(fns, f => f.done);
+  const verified = fns.filter(f => isVerified(f)).length;
+  const counts = d3.rollup(fns, v => v.length, f => f.status);
+  const prev = at > 0 ? SUMS[at - 1] : null, before = prev && (mode === "3a" ? prev.verified : prev.complete);
+  const since = prev ? ` · ${verified - before >= 0 ? "+" : ""}${fmt(verified - before)} since ${prev.label}` : "";
+  const stats = [
+    [mode === "3a" ? "Functions verified (3a)" : "Functions complete (3b)", fmt(verified), `of ${fmt(total)} · ${pct(verified, total)}${since}`],
+    ["Blocks verified", pct(blocksDone, blocksAll), `${fmt(blocksDone)} of ${fmt(blocksAll)} countable`],
+    ["Left to verify", mode === "3a" ? fmt(total - verified) : fmt(blocksAll - blocksDone), mode === "3a" ? `functions: ${fmt(counts.get("low") || 0)} below the bar · ${fmt(counts.get("never") || 0)} never called` : `blocks, in ${fmt(total - verified)} functions`],
+    ["Mismatches", fmt(counts.get("bad") || 0), "real calls disagreeing with the original"],
+    ["To review", fmt(counts.get("review") || 0), "only under mutated inputs"],
+  ];
+  document.getElementById("stats").innerHTML = stats.map(([k, v, d]) => `<div class="stat"><span class="k">${k}</span><span class="v num">${v}</span><span class="d">${d}</span></div>`).join("");
+  // Both gates, whichever the map shows
+  const v3a = fns.filter(f => isVerified(f, DATA.bar)).length, near = fns.filter(f => f.calls > 0 && f.share < DATA.bar).length;
+  document.getElementById("g3a").textContent = `${fmt(v3a)} / ${fmt(total)} functions`;
+  bar("bar3a", [["ok", v3a], ["review", fns.filter(f => f.bad > 0 || (f.mutated > 0 && !f.reviewed)).length], ["low-hi", near]], total);
+  const explained = d3.sum(fns, f => f.explained);
+  document.getElementById("g3b").textContent = `${fmt(blocksDone)}${explained ? ` + ${fmt(explained)} explained` : ""} / ${fmt(blocksAll)} blocks`;
+  bar("bar3b", [["ok", blocksDone], ["low-hi", explained]], blocksAll);
+}
+
+document.getElementById("legend").innerHTML = [["ok", "verified"], ["low-hi", "called, part of the way to the bar"], ["low-lo", "called, little run"], ["never", "never called"], ["review", "to review"], ["bad", "mismatch"]].map(([k, l]) => `<span><i style="background:var(--${k})"></i>${l}</span>`).join("");
+
+// Treemap
+const canvas = document.getElementById("map"), ctx = canvas.getContext("2d"), tip = document.getElementById("tip");
+const tree = { name: "all", children: [] };
+{
+  const byArea = d3.group(fns, f => f.area, f => f.unit);
+  for (const [area, us] of byArea) tree.children.push({ name: area, children: [...us].map(([u, fs]) => ({ name: u, children: fs })) });
+}
+const root = d3.hierarchy(tree).sum(d => d.children ? 0 : Math.max(1, d.countable)).sort((a, b) => b.value - a.value);
+let focus = root, leaves = [], query = "";
+let W = 0, H = 0;
+
+function layout() {
+  const r = canvas.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+  W = r.width; H = r.height;
+  canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const sub = focus.copy().sum(d => d.children ? 0 : Math.max(1, d.countable)).sort((a, b) => b.value - a.value);
+  const depth0 = focus.depth;
+  d3.treemap().size([W, H]).paddingOuter(n => n.depth === 0 ? 0 : (n.depth + depth0 === 1 ? 2 : 1)).paddingTop(n => (n.depth + depth0 === 1 && focus.depth === 0) || (focus.depth >= 1 && n.depth === 1 && n.children) ? 15 : n.depth === 0 ? 0 : 1).paddingInner(0.5).tile(d3.treemapSquarify.ratio(1.2))(sub);
+  // Map the copied nodes back to absolute depth for drawing
+  sub.each(n => n.absDepth = n.depth + depth0);
+  current = sub;
+  leaves = sub.leaves();
+  draw();
+}
+let current = null;
+
+function draw() {
+  readColors();
+  ctx.fillStyle = C.panel; ctx.fillRect(0, 0, W, H);
+  const dim = diffOn && at > 0;
+  for (const n of leaves) {
+    const w = n.x1 - n.x0, h = n.y1 - n.y0;
+    if (w <= 0 || h <= 0) continue;
+    ctx.fillStyle = fillOf(n.data);
+    ctx.globalAlpha = dim && n.data.status === n.data.prevStatus && n.data.done === n.data.prevDone ? 0.15 : 1;
+    ctx.fillRect(n.x0, n.y0, w, h);
+  }
+  ctx.globalAlpha = 1;
+  if (focus.depth >= 1) {
+    ctx.font = "10px 'IBM Plex Mono', monospace"; ctx.textBaseline = "top";
+    for (const n of leaves) {
+      const w = n.x1 - n.x0;
+      if (w < 70 || n.y1 - n.y0 < 16) continue;
+      let t = n.data.name;
+      while (t.length > 4 && ctx.measureText(t).width > w - 6) t = t.slice(0, -1);
+      ctx.fillStyle = n.data.status === "never" ? C.fg : "#1d1f24";
+      ctx.globalAlpha = 0.8; ctx.fillText(t === n.data.name ? t : t + "…", n.x0 + 3, n.y0 + 3); ctx.globalAlpha = 1;
+    }
+  }
+  if (query) {
+    ctx.strokeStyle = C.hl; ctx.lineWidth = 2;
+    for (const n of leaves) if (n.data.name.toLowerCase().includes(query)) ctx.strokeRect(n.x0 - 1, n.y0 - 1, Math.max(3, n.x1 - n.x0) + 2, Math.max(3, n.y1 - n.y0) + 2);
+  }
+  // Group outlines and labels
+  ctx.textBaseline = "top";
+  current.each(n => {
+    if (!n.children || n === current) return;
+    const w = n.x1 - n.x0, h = n.y1 - n.y0;
+    const isArea = n.absDepth === 1, labelled = (focus.depth === 0 && isArea) || (focus.depth >= 1 && n.depth === 1);
+    ctx.strokeStyle = isArea ? C.area : C.muted; ctx.globalAlpha = isArea ? 0.55 : 0.35; ctx.lineWidth = isArea ? 1.5 : 0.75;
+    ctx.strokeRect(n.x0 + .5, n.y0 + .5, w - 1, h - 1); ctx.globalAlpha = 1;
+    if (labelled && w > 40 && h > 18) {
+      const fs = n.leaves(), v = fs.filter(l => isVerified(l.data)).length;
+      let label = (focus.depth === 0 ? n.data.name : n.data.name.split("/").slice(-1)[0]);
+      const tail = ` ${v}/${fs.length}`;
+      ctx.font = "500 11px 'IBM Plex Mono', monospace"; ctx.fillStyle = C.fg;
+      let t = label + tail;
+      while (t.length > 3 && ctx.measureText(t).width > w - 6) t = t.slice(0, -2);
+      ctx.fillText(t === label + tail ? t : t + "…", n.x0 + 4, n.y0 + 2);
+    }
+  });
+}
+
+function hit(x, y) { for (const n of leaves) if (x >= n.x0 && x < n.x1 && y >= n.y0 && y < n.y1) return n; return null; }
+canvas.addEventListener("mousemove", e => {
+  const r = canvas.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+  const n = hit(x, y);
+  if (!n) { tip.hidden = true; return; }
+  const f = n.data;
+  tip.innerHTML = `<b>${f.name}</b><div class="sub mono" style="word-break:break-all">${f.unit}</div>` +
+    `<div class="row"><span>status</span><span style="color:${fillOf(f)}">${STATUS[f.status]}</span></div>` +
+    `<div class="row"><span>blocks verified</span><span>${f.done} / ${f.countable} (${(100 * f.share).toFixed(0)}%)</span></div>` +
+    (f.explained ? `<div class="row"><span>explained in the gap ledger</span><span>${f.explained}</span></div>` : "") +
+    (at === SNAPS.length - 1 ? `<div class="row"><span>calls checked</span><span>${fmt(f.calls)}</span></div>` : `<div class="row"><span>called</span><span>${f.calls ? "yes" : "no"}</span></div>`) +
+    (diffOn && at > 0 && f.prevStatus !== undefined ? `<div class="row"><span>in ${SNAPS[at - 1].label}</span><span>${STATUS[f.prevStatus]}, ${f.prevDone} blocks</span></div>` : "") +
+    (f.mutated && at === SNAPS.length - 1 ? `<div class="row"><span>mutated mismatches</span><span>${fmt(f.mutated)}${f.reviewed ? " (reviewed)" : ""}</span></div>` : "") +
+    (f.bad && at === SNAPS.length - 1 ? `<div class="row"><span>mismatches</span><span>${fmt(f.bad)}</span></div>` : "");
+  tip.hidden = false;
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  tip.style.left = Math.min(x + 14, W - tw - 4) + "px";
+  tip.style.top = (y + 14 + th > H ? y - th - 10 : y + 14) + "px";
+});
+canvas.addEventListener("mouseleave", () => tip.hidden = true);
+canvas.addEventListener("click", e => {
+  // Zoom one level: from all to the area under the pointer, from an area to its unit
+  const r = canvas.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+  const next = (current.children || []).find(c => c.children && x >= c.x0 && x < c.x1 && y >= c.y0 && y < c.y1);
+  if (next) zoomTo(findIn(focus, next.data));
+});
+function findIn(base, data) { let hitNode = null; base.each(n => { if (n.data === data) hitNode = n; }); return hitNode; }
+function zoomTo(n) { if (!n) return; focus = n; crumbs(); layout(); }
+function crumbs() {
+  const el = document.getElementById("crumbs"); el.innerHTML = "";
+  const path = focus.ancestors().reverse();
+  path.forEach((n, i) => {
+    if (i) el.insertAdjacentHTML("beforeend", '<span class="sep">/</span>');
+    const b = document.createElement("button");
+    const fs = n.leaves(), v = fs.filter(l => isVerified(l.data)).length;
+    b.textContent = (i === 0 ? "all" : i === 1 ? n.data.name : n.data.name.split("/").slice(2).join("/")) + (i === path.length - 1 ? `  ·  ${fmt(v)} of ${fmt(fs.length)} verified` : "");
+    b.onclick = () => zoomTo(n);
+    el.appendChild(b);
+  });
+}
+document.getElementById("q").addEventListener("input", e => {
+  query = e.target.value.trim().toLowerCase();
+  if (query.length >= 3 && focus !== root) {
+    const inView = leaves.some(n => n.data.name.toLowerCase().includes(query));
+    if (!inView) { focus = root; crumbs(); layout(); return; }
+  }
+  draw();
+});
+
+// Areas list
+function areas() {
+  const rows = d3.rollups(fns, v => mode === "3a"
+      ? { n: v.length, v: v.filter(f => isVerified(f)).length, rv: v.filter(f => f.status === "review" || f.status === "bad").length, low: v.filter(f => f.status === "low").length }
+      : { n: d3.sum(v, f => f.countable), v: d3.sum(v, f => f.done + f.explained), rv: 0, low: 0 }, f => f.area)
+    .sort((a, b) => (b[1].n - b[1].v) - (a[1].n - a[1].v));
+  document.getElementById("areas").innerHTML = rows.map(([a, r]) =>
+    `<div class="arow" data-area="${a}"><span class="mono">${a}</span><div class="bar"><span style="width:${100 * r.v / r.n}%;background:var(--ok)"></span><span style="width:${100 * r.rv / r.n}%;background:var(--review)"></span><span style="width:${100 * r.low / r.n}%;background:var(--low-hi)"></span></div><span class="n num">${fmt(r.n - r.v)} ${mode === "3a" ? "left" : "blocks"}</span></div>`).join("");
+  document.querySelectorAll(".arow").forEach(r => r.onclick = () => { zoomTo(root.children.find(c => c.data.name === r.dataset.area)); document.getElementById("crumbs").scrollIntoView({ behavior: "smooth", block: "start" }); });
+}
+areas();
+
+// To review
+{
+  const rv = fns.filter(f => f.status === "review" || f.status === "bad").sort((a, b) => b.mutated - a.mutated);
+  document.getElementById("review").innerHTML = rv.length ? rv.map(f => `<div data-name="${f.name}"><span class="mono">${f.name}</span><span class="num">${fmt(f.mutated || f.bad)} · ${f.area}</span></div>`).join("") : '<span class="sub">nothing</span>';
+  document.querySelectorAll("#review div").forEach(d => d.onclick = () => { const q = document.getElementById("q"); q.value = d.dataset.name; q.dispatchEvent(new Event("input")); });
+}
+
+// Trend
+function trend() {
+  const P = SUMS, el = document.getElementById("trend");
+  if (P.length < 2) { el.innerHTML = '<span class="sub">one round so far</span>'; return; }
+  const w = el.clientWidth || 400, h = 150, m = { l: 48, r: 12, t: 10, b: 22 };
+  const x = d3.scalePoint().domain(P.map(p => p.label)).range([m.l, w - m.r]).padding(0.3);
+  const val = p => mode === "3a" ? p.verified : +(100 * (p.blocks + p.explained) / blocksAll).toFixed(1), top = mode === "3a" ? total : 100, tf = mode === "3a" ? d3.format(",") : (t => t + "%");
+  const lo = d3.min(P, val), y = d3.scaleLinear().domain(mode === "3a" ? [Math.floor(lo * 0.97 / 500) * 500, top] : [Math.floor(lo / 5) * 5 - 5, top]).range([h - m.b, m.t]);
+  const ticks = y.ticks(4);
+  el.innerHTML = `<svg width="100%" viewBox="0 0 ${w} ${h}" role="img" aria-label="Functions verified per round">
+    ${ticks.map(t => `<line x1="${m.l}" x2="${w - m.r}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)"/><text x="${m.l - 6}" y="${y(t) + 4}" text-anchor="end">${tf(t)}</text>`).join("")}
+    <line x1="${m.l}" x2="${w - m.r}" y1="${y(top)}" y2="${y(top)}" stroke="var(--ok)" stroke-dasharray="4 3"/>
+    <text x="${w - m.r}" y="${y(top) + 13}" text-anchor="end">${mode === "3a" ? "3a " + fmt(total) : "3b 100%"}</text>
+    <polyline fill="none" stroke="var(--ok)" stroke-width="2" points="${P.map(p => `${x(p.label)},${y(val(p))}`).join(" ")}"/>
+    ${P.map((p, i) => `<circle data-i="${i}" cx="${x(p.label)}" cy="${y(val(p))}" r="${i === at ? 6 : 3.5}" fill="var(--ok)" stroke="var(--fg)" stroke-width="${i === at ? 2 : 0}" style="cursor:pointer"><title>${p.label}: ${fmt(p.verified)} verified at 90%, ${fmt(p.complete)} complete, ${(100 * p.blocks / blocksAll).toFixed(1)}% of blocks</title></circle><text x="${x(p.label)}" y="${h - 6}" text-anchor="middle">${p.label}</text>`).join("")}
+  </svg>`;
+  el.querySelectorAll("circle").forEach(c => c.onclick = () => show(+c.dataset.i));
+}
+
+function all() { layout(); trend(); }
+function setMode(m) {
+  mode = m; BAR = m === "3a" ? DATA.bar : 1;
+  try { localStorage.setItem("mode", m); } catch (e) {}
+  document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.m === m)));
+  document.getElementById("trend-h").textContent = m === "3a" ? "Functions verified over rounds" : "Blocks verified over rounds";
+  show(at);
+}
+
+// The round shown, and what each function was the round before, for the changes.
+function show(i) {
+  at = i;
+  if (diffOn && at > 0) {
+    apply(at - 1); classify();
+    for (const f of fns) { f.prevStatus = f.status; f.prevDone = f.done; }
+  }
+  apply(at); classify();
+  const range = document.getElementById("h-range");
+  range.max = SNAPS.length - 1; range.value = at;
+  document.getElementById("h-label").textContent = SNAPS[at].label + (at === SNAPS.length - 1 ? " (latest)" : "");
+  header(); areas(); crumbs(); if (current) draw(); trend();
+}
+let player = null;
+function stopPlaying() { clearInterval(player); player = null; document.getElementById("h-play").textContent = "▶"; }
+document.getElementById("h-range").addEventListener("input", e => { stopPlaying(); show(+e.target.value); });
+document.getElementById("h-prev").onclick = () => { stopPlaying(); show(Math.max(0, at - 1)); };
+document.getElementById("h-next").onclick = () => { stopPlaying(); show(Math.min(SNAPS.length - 1, at + 1)); };
+document.getElementById("h-diff").addEventListener("change", e => { diffOn = e.target.checked; show(at); });
+document.getElementById("h-play").onclick = () => {
+  if (player) return stopPlaying();
+  document.getElementById("h-play").textContent = "❚❚";
+  if (at === SNAPS.length - 1) show(0);
+  player = setInterval(() => { if (at >= SNAPS.length - 1) stopPlaying(); else show(at + 1); }, 1400);
+};
+document.querySelectorAll(".seg button").forEach(b => b.onclick = () => setMode(b.dataset.m));
+setMode(mode);
+let rt, lastW = 0; new ResizeObserver(() => { const w = canvas.clientWidth; if (w === lastW) return; lastW = w; clearTimeout(rt); rt = setTimeout(all, 120); }).observe(canvas);
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
+new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(all); else all();
+all();
+</script>

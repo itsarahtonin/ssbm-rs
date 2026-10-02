@@ -1,0 +1,41 @@
+#!/bin/bash
+# Reruns one job of a round exactly as the round ran it (its line in jobs-ROUND.txt, the round's
+# done list, probes, targets and settings), with a deep trace of FUNC, so a mismatch the round
+# logged comes back with its call and write traces. BIN defaults to the line-table build, run in
+# place so port faults name their ports. Writes local/lockstep/repro/ROUND-JOB-FUNC.txt.
+#
+#   bash tools/lockstep/campaign/repro.sh ROUND JOB FUNC [FIELDS]
+cd "$(dirname "$0")/../../.."
+. tools/lockstep/campaign/env.sh
+ROUND=$1 JOB=$2 FUNC=$3 FIELDS=${4:-}
+BIN=${BIN:-target/dbg/release/ssbm-run$EXE}
+mkdir -p $L/repro
+# Side campaigns of the round keep their jobs in jobs-ROUND-*.txt.
+line=$(cat $L/jobs-$ROUND.txt $L/jobs-$ROUND-*.txt 2>/dev/null | grep "^$JOB|" | head -1)
+[[ -z $line ]] && { echo "no job $JOB in jobs-$ROUND*.txt"; exit 1; }
+args=${line#*|}
+envs=(); rest=()
+for a in $args; do
+    if [[ ${#rest[@]} -eq 0 && $a =~ ^[A-Z_]+= ]]; then envs+=("$a"); else rest+=("$a"); fi
+done
+# Fresh copies of any card the job uses.
+for i in "${!rest[@]}"; do
+    if [[ ${rest[$i]} == --card ]]; then
+        src=${rest[$((i + 1))]}
+        copy=$L/repro/$ROUND-$JOB.raw
+        if [[ -f $src ]]; then cp "$src" "$copy"; else rm -f "$copy"; fi
+        rest[$((i + 1))]=$copy
+    fi
+done
+[[ -n $FIELDS ]] && rest+=(--fields "$FIELDS")
+out=$L/repro/$ROUND-$JOB-$FUNC.txt
+# What else the round gave its jobs, which decides which checks run and so the mutations.
+more=()
+[[ -f $L/needed-$ROUND.txt ]] && more+=(LOCKSTEP_NEEDED=$L/needed-$ROUND.txt)
+[[ -f $L/known-$ROUND.bin ]] && more+=(LOCKSTEP_KNOWN=$L/known-$ROUND.bin)
+env "${more[@]}" LOCKSTEP_BUDGET=5000000 LOCKSTEP_CALLS=3000 LOCKSTEP_DONE=$L/done-$ROUND.txt \
+    PROBES=$L/probes-$ROUND.txt LOCKSTEP_TARGETS=$L/targets-$ROUND.txt LOCKSTEP_TRACE_CALLS=1 \
+    "${envs[@]}" LOCKSTEP_TRACE_DEEP=$FUNC \
+    timeout 5400 $BIN "$SSBM_DISC" \
+    "${rest[@]}" --port all --lockstep > $out 2>&1
+grep -n "^lockstep:\|$FUNC call [0-9]* had its inputs\|$FUNC writes, original\|port fault" $out | head -12
