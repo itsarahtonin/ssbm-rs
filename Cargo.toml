@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["crates/*", "tools/*"]
+members = ["crates/*", "tools/fp-fuzz", "tools/replay-sort", "tools/run"]
 exclude = ["tools/typegen", "tools/c2rs", "tools/lockstep"]
 
 [workspace.package]
