@@ -150,6 +150,9 @@ struct Results {
 /// Fields between saves of a run's results, so a run cut short keeps most of them.
 const SAVE_EVERY: u64 = 1800;
 
+/// Fields between counts of what a run verified beyond LOCKSTEP_KNOWN.
+const STALE_EVERY: u64 = 300;
+
 impl Results {
     fn from_env() -> Self {
         let ledger = std::env::var("LOCKSTEP_LEDGER").ok().map(|p| {
@@ -912,6 +915,66 @@ fn run() -> ExitCode {
         }
         let ported = Rc::new(ported.clone());
         sdk.schedule(hw::field_start(SAVE_EVERY), save_from(results.clone(), ported, SAVE_EVERY));
+    }
+
+    // LOCKSTEP_KNOWN=FILE is a coverage bitmap of what earlier runs verified: every so often a
+    // run tells how many instructions it verified beyond it, and with LOCKSTEP_STALE=N it stops
+    // once N fields pass with no more of them and no other function mismatching, as the rest
+    // of it would only check again what is already checked.
+    if lockstep && let Ok(path) = std::env::var("LOCKSTEP_KNOWN") {
+        let known: Vec<u64> = std::fs::read(&path)
+            .unwrap_or_else(|e| panic!("{path}: {e}"))
+            .chunks_exact(8)
+            .map(|b| u64::from_le_bytes(b.try_into().unwrap()))
+            .collect();
+        let stale = std::env::var("LOCKSTEP_STALE")
+            .ok()
+            .map(|n| n.parse::<u64>().expect("LOCKSTEP_STALE=N"));
+        fn watch(
+            known: Rc<Vec<u64>>,
+            stale: Option<u64>,
+            field: u64,
+            best: (u64, u64),
+        ) -> impl FnOnce(&Ctx) {
+            move |ctx| {
+                let beyond: u64 = ctx
+                    .coverage
+                    .covered()
+                    .iter()
+                    .enumerate()
+                    .map(|(i, w)| {
+                        u64::from((w & !known.get(i).copied().unwrap_or(0)).count_ones())
+                    })
+                    .sum();
+                let found: u64 = ctx
+                    .lockstep
+                    .stats
+                    .borrow()
+                    .values()
+                    .filter(|s| s.mismatches + s.mutated_mismatches > 0)
+                    .count() as u64;
+                let progress = beyond + found;
+                eprintln!(
+                    "field {field}: {beyond} instructions verified beyond the known ones, {found} functions mismatch"
+                );
+                let best = if progress > best.0 {
+                    (progress, field)
+                } else {
+                    best
+                };
+                if stale.is_some_and(|n| field - best.1 >= n) {
+                    eprintln!("stopping: nothing new since field {}", best.1);
+                    panic::panic_any(Stop);
+                }
+                let next = field + STALE_EVERY;
+                let sdk = ctx.ext::<Sdk>();
+                sdk.schedule(hw::field_start(next), watch(known, stale, next, best));
+            }
+        }
+        sdk.schedule(
+            hw::field_start(STALE_EVERY),
+            watch(Rc::new(known), stale, STALE_EVERY, (0, 0)),
+        );
     }
 
     // Stop after the requested number of fields.
