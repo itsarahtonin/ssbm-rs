@@ -22,3 +22,5 @@
 *.dump
 *.slp
 *.slpp
+*.call
+*.corp

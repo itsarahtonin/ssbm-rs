@@ -257,6 +257,7 @@ fn run() -> ExitCode {
     let mut start_mode: Option<u32> = None;
     let mut card_path: Option<std::path::PathBuf> = None;
     let mut call_path: Option<std::path::PathBuf> = None;
+    let mut corpus_path: Option<std::path::PathBuf> = None;
     let mut repeat = 1u32;
     let mut args = std::env::args().skip(1);
     while let Some(a) = args.next() {
@@ -309,6 +310,7 @@ fn run() -> ExitCode {
             // --call FILE checks a saved call (calls.rs) again instead of booting, --repeat
             // times.
             "--call" => call_path = Some(args.next().expect("--call FILE").into()),
+            "--corpus" => corpus_path = Some(args.next().expect("--corpus FILE").into()),
             "--repeat" => {
                 repeat = args
                     .next()
@@ -740,13 +742,24 @@ fn run() -> ExitCode {
         ctx.lockstep
             .trace_log
             .set(std::env::var_os("LOCKSTEP_TRACE_LOG").is_some());
-        // CAPTURE=DIR saves mismatching calls, and a few of each function CAPTURE_FUNCS names,
-        // for `--call` (calls.rs).
+        // CAPTURE=DIR saves mismatching calls, and a few of each function CAPTURE_FUNCS names
+        // (or every function a needed list names, with @FILE), for `--call`; CORPUS=FILE puts
+        // the real calls into one corpus for `--corpus` (calls.rs).
         if let Ok(dir) = std::env::var("CAPTURE") {
-            let funcs = std::env::var("CAPTURE_FUNCS")
-                .map(|v| v.split(',').map(|n| ssbm_sdk::sym(n.trim())).collect())
-                .unwrap_or_default();
-            calls::install_capture(&ctx, dir.into(), funcs);
+            let funcs = match std::env::var("CAPTURE_FUNCS") {
+                Ok(v) if v.starts_with('@') => std::fs::read_to_string(&v[1..])
+                    .unwrap_or_else(|e| panic!("{v}: {e}"))
+                    .lines()
+                    .filter_map(|l| l.split_whitespace().next())
+                    .filter_map(|a| u32::from_str_radix(a.trim_start_matches("0x"), 16).ok())
+                    .collect(),
+                Ok(v) => v.split(',').map(|n| ssbm_sdk::sym(n.trim())).collect(),
+                Err(_) => Default::default(),
+            };
+            let corpus = std::env::var("CORPUS").ok().map(Into::into);
+            // CAPTURE_FROM=FIELD (300) saves real calls from that field on, past booting.
+            let from = std::env::var("CAPTURE_FROM").map_or(300, |v| v.parse().expect("FIELD"));
+            calls::install_capture(&ctx, dir.into(), funcs, corpus, from);
         }
         // LOCKSTEP_DROP_LOG=1 prints why the first few mutated checks of each function that are
         // dropped were.
@@ -1105,6 +1118,10 @@ fn run() -> ExitCode {
         if ctx.lockstep.is_mutating() && ctx.lockstep.in_original() {
             panic::panic_any(ssbm_rt::lockstep::Runaway("ran too long"));
         }
+        // So is a call checked again that runs past its deadline, as one waiting on a device.
+        if ctx.lockstep.in_original() && calls::past_deadline(ctx.executed()) {
+            panic::panic_any(ssbm_rt::lockstep::Runaway("ran past its deadline"));
+        }
         let sdk = ctx.ext::<Sdk>();
         let f = sdk.hw.fields.get();
         // A port under lockstep replays the original's interrupts, so fields stand still
@@ -1160,6 +1177,10 @@ fn run() -> ExitCode {
     let result = panic::catch_unwind(AssertUnwindSafe(|| {
         if let Some(path) = &call_path {
             calls::replay(&ctx, path, repeat);
+            return;
+        }
+        if let Some(path) = &corpus_path {
+            calls::replay_corpus(&ctx, path, repeat);
             return;
         }
         let entry = boot::boot(&ctx, boot::DEFAULT_CLOCK);

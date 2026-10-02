@@ -652,8 +652,8 @@ fn saved_calls_mismatch_again_apart_from_their_run() {
     let ctx = machine_with_port();
     let saved: std::rc::Rc<std::cell::RefCell<Vec<Vec<u8>>>> = Default::default();
     let into = saved.clone();
-    *ctx.lockstep.capture.borrow_mut() = Some(std::rc::Rc::new(move |_, _, mismatched, take| {
-        if mismatched {
+    *ctx.lockstep.capture.borrow_mut() = Some(std::rc::Rc::new(move |_, ended, take| {
+        if ended.mismatched {
             into.borrow_mut().push(take().to_bytes());
         }
     }));

@@ -270,10 +270,12 @@ pub struct State {
     pub trace_log: Cell<bool>,
     /// Whether the first few mutated checks of each function that are dropped print why.
     pub drop_log: Cell<bool>,
-    /// What the run does with outermost calls it may save (crate::capture): given the
-    /// function, whether its check mismatched and a way to take the call, as the check ends.
+    /// What the run does with outermost calls it may save (crate::capture): given how the
+    /// check ended and a way to take the call.
     #[allow(clippy::type_complexity)]
-    pub capture: RefCell<Option<Rc<dyn Fn(&Ctx, u32, bool, &dyn Fn() -> crate::capture::Call)>>>,
+    pub capture: RefCell<
+        Option<Rc<dyn Fn(&Ctx, crate::capture::Ended, &dyn Fn() -> crate::capture::Call)>>,
+    >,
     /// Checks that have mismatched, at any depth, for a capture to tell whether the call it may
     /// save had one inside it.
     mismatched: Cell<u64>,
@@ -897,7 +899,14 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         // It, or a check inside it.
         let mismatched =
             (!uninitialized && !diffs.is_empty()) || state.mismatched.get() > mismatched_before;
-        capture(ctx, addr, mismatched, &|| crate::capture::Call::take(ctx, addr, &regs0));
+        let ended = crate::capture::Ended {
+            addr,
+            mismatched,
+            mutated: state.mutating.get(),
+            cost,
+            interacted: end > start,
+        };
+        capture(ctx, ended, &|| crate::capture::Call::take(ctx, addr, &regs0));
     }
     ctx.mem.restore(&s1);
     ctx.regs.restore(&regs1);

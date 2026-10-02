@@ -14,6 +14,22 @@ use ssbm_mem::{LOCKED_CACHE, LOCKED_CACHE_SIZE, MEM1_SIZE};
 use crate::{Ctx, RegsSnapshot};
 
 const MAGIC: &[u8; 8] = b"SSBMCALL";
+
+/// How an outermost check ended, for the run to decide whether to save its call.
+#[derive(Clone, Copy, Debug)]
+pub struct Ended {
+    /// The function called.
+    pub addr: u32,
+    /// Whether it, or a check inside it, mismatched.
+    pub mismatched: bool,
+    /// Whether it was a mutated check.
+    pub mutated: bool,
+    /// Instructions its original ran.
+    pub cost: u64,
+    /// Whether its original met hardware or the SDK layer, whose state lives outside memory:
+    /// checked again, it would find them as they are then, not as they were.
+    pub interacted: bool,
+}
 const VERSION: u32 = 1;
 
 pub struct Call {
