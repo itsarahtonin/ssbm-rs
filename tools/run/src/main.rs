@@ -1220,4 +1220,8 @@ impl ssbm_rt::Backend for RcBackend {
     fn resume(&self, ctx: &Ctx, pc: u32) {
         self.0.resume(ctx, pc)
     }
+
+    fn executed(&self) -> u64 {
+        self.0.executed.get()
+    }
 }
