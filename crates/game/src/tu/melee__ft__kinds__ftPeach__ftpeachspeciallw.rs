@@ -146,7 +146,7 @@ pub fn ftPe_SpecialLw_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftPe_SpecialAirLw_Enter<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    let _ = inl_throwVegIfHeld_unfused(ctx, gobj, (enums::ftCo_MS_LightThrowAirF4 as i32));
+    let _ = inl_throwVegIfHeld_unfused_discard(ctx, gobj, (enums::ftCo_MS_LightThrowAirF4 as i32));
 }
 
 pub fn handleAirColl<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -299,6 +299,23 @@ fn inl_throwVegIfHeld_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) -
         return 1_i32;
     } else {
         return 0_i32;
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_throwVegIfHeld_unfused_discard<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, msid: i32) -> i32 {
+    let mut gobj = gobj;
+    let mut msid = msid;
+    let mut igobj: HSD_GObj<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj))).item_gobj();
+    if !Handle::is_null(igobj) {
+        if fns::itGetKind(ctx, igobj) == (enums::It_Kind_Peach_Turnip as i32) {
+            fns::ftCo_800957F4(ctx, gobj, msid);
+        }
+        return 0;
+    } else {
+        return 0;
     }
     #[allow(unreachable_code)]
     return 0;

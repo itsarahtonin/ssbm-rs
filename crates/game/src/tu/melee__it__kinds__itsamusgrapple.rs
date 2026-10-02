@@ -8156,7 +8156,8 @@ pub fn it_802BACC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         let mut link: ItemLink<'a> = (ip).xDD4_itemVar().samusgrapple().x0();
         inl_samus_grapple_setup_pos_unfused(ctx, link, pos, m.get(0));
         if (fns::it_802BA760(ctx, link, pos, attrs, fp) != 0) {
-            let _ = inl_fn_802B7E34_inline_unfused(ctx, (fp).u().ss().x223C(), ip, m2.get(0));
+            let _ =
+                inl_fn_802B7E34_inline_unfused_discard(ctx, (fp).u().ss().x223C(), ip, m2.get(0));
         } else {
             fns::it_802A7168(ctx, ip, pos, (fp).x34_scale().y());
         }
@@ -8487,7 +8488,7 @@ fn inl_Item_RetractChain_unfused<'a>(
     (remaining_out).set(remaining);
 }
 
-fn inl_fn_802B7E34_inline_unfused<'a>(
+fn inl_fn_802B7E34_inline_unfused_discard<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
     ip: Item<'a>,
@@ -8509,7 +8510,7 @@ fn inl_fn_802B7E34_inline_unfused<'a>(
             fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
         }
     }
-    return (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    return null(ctx);
 }
 
 /// Registers this unit's ports.

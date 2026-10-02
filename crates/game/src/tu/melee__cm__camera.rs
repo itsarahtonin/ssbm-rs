@@ -18957,7 +18957,7 @@ pub fn Camera_SetUpPauseCamera<'a>(ctx: &'a Ctx, pauserSlot: i8, pauserId: i8, a
             break 's3;
         }
     }
-    let _ = inl_compute_orbit_distance_unfused(
+    let _ = inl_compute_orbit_distance_unfused_discard(
         ctx,
         (statics::melee__cm__camera::game_camera(ctx).x2C4() as i32),
     );
@@ -21275,7 +21275,7 @@ fn inl_getCameraGObj_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     return statics::melee__cm__camera::game_camera(ctx).gobj();
 }
 
-fn inl_compute_orbit_distance_unfused<'a>(ctx: &'a Ctx, slot: i32) -> f64 {
+fn inl_compute_orbit_distance_unfused_discard<'a>(ctx: &'a Ctx, slot: i32) -> f64 {
     let mut slot = slot;
     let mut distance: f64 = 0.0;
     let mut gobj: HSD_GObj<'a> = null(ctx);
@@ -21311,7 +21311,7 @@ fn inl_compute_orbit_distance_unfused<'a>(ctx: &'a Ctx, slot: i32) -> f64 {
     } else {
         distance = 1000.0;
     }
-    return distance;
+    return 0.0;
 }
 
 fn inl_gxlink_prio8_unfused<'a>(ctx: &'a Ctx) -> i64 {

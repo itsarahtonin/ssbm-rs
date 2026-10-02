@@ -4263,18 +4263,18 @@ pub fn lb_8001B7E0<'a>(
         status_out,
         null::<FnPtr<'a>>(ctx),
     );
-    let _ = inl_setupTask_unfused(
+    let _ = inl_setupTask_unfused_discard(
         ctx,
         (enums::LbCardNewTask_Mount as i32),
         (enums::resultMask_16 as i32),
     );
-    let _ = inl_setupTask_unfused(
+    let _ = inl_setupTask_unfused_discard(
         ctx,
         (enums::LbCardNewTask_Check as i32),
         ((enums::resultMask_Ready as i32) | (enums::resultMask_Malformed as i32)),
     );
     inl_lb_8001A4CC_dontinline_unfused(ctx, filename, file_entries);
-    let _ = inl_setupTask_unfused(
+    let _ = inl_setupTask_unfused_discard(
         ctx,
         (enums::LbCardNewTask_Unk3 as i32),
         (0xffffffff_u32 as i32),
@@ -4306,17 +4306,17 @@ pub fn lb_8001B8C8<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
         null::<Val<'a, i32>>(ctx),
         null::<FnPtr<'a>>(ctx),
     );
-    let _ = inl_setupTask_unfused(
+    let _ = inl_setupTask_unfused_discard(
         ctx,
         (enums::LbCardNewTask_Mount as i32),
         (enums::resultMask_16 as i32),
     );
-    let _ = inl_setupTask_unfused(
+    let _ = inl_setupTask_unfused_discard(
         ctx,
         (enums::LbCardNewTask_Check as i32),
         ((enums::resultMask_Ready as i32) | (enums::resultMask_Malformed as i32)),
     );
-    let _ = inl_setupTask_unfused(
+    let _ = inl_setupTask_unfused_discard(
         ctx,
         (enums::LbCardNewTask_Format as i32),
         (0xffffffff_u32 as i32),
@@ -4353,18 +4353,18 @@ pub fn lbCardNew_DeleteSnap<'a>(
         Handle::cast::<Val<'a, i32>>(status_out),
         null::<FnPtr<'a>>(ctx),
     );
-    let _ = inl_setupTask_unfused(
+    let _ = inl_setupTask_unfused_discard(
         ctx,
         (enums::LbCardNewTask_Mount as i32),
         (enums::resultMask_16 as i32),
     );
-    let _ = inl_setupTask_unfused(
+    let _ = inl_setupTask_unfused_discard(
         ctx,
         (enums::LbCardNewTask_Check as i32),
         ((enums::resultMask_Ready as i32) | (enums::resultMask_Malformed as i32)),
     );
     inl_lb_8001A4CC_dontinline_unfused(ctx, filename, null::<Addr<'a>>(ctx));
-    let _ = inl_setupTask_unfused(
+    let _ = inl_setupTask_unfused_discard(
         ctx,
         (enums::LbCardNewTask_Unk3 as i32),
         (0xffffffff_u32 as i32),
@@ -4399,10 +4399,10 @@ pub fn lb_8001BA44<'a>(
         Handle::cast::<Val<'a, i32>>(status_out),
         null::<FnPtr<'a>>(ctx),
     );
-    let _ = inl_setupTask_unfused(ctx, (enums::LbCardNewTask_Mount as i32), 0x10000_i32);
-    let _ = inl_setupTask_unfused(ctx, (enums::LbCardNewTask_Check as i32), 0x201_i32);
+    let _ = inl_setupTask_unfused_discard(ctx, (enums::LbCardNewTask_Mount as i32), 0x10000_i32);
+    let _ = inl_setupTask_unfused_discard(ctx, (enums::LbCardNewTask_Check as i32), 0x201_i32);
     inl_lb_8001A4CC_dontinline_unfused(ctx, filename, null::<Addr<'a>>(ctx));
-    let _ = inl_setupTask_unfused(
+    let _ = inl_setupTask_unfused_discard(
         ctx,
         (enums::LbCardNewTask_Unk3 as i32),
         1_i32.wrapping_neg(),
@@ -4513,11 +4513,11 @@ pub fn lb_8001BC18<'a>(
         status_out,
         null::<FnPtr<'a>>(ctx),
     );
-    let _ = inl_setupTask_unfused(ctx, (enums::LbCardNewTask_Mount as i32), 0x10000_i32);
+    let _ = inl_setupTask_unfused_discard(ctx, (enums::LbCardNewTask_Mount as i32), 0x10000_i32);
     size = (32_i32 as u32);
-    let _ = inl_setupTask_unfused(ctx, (enums::LbCardNewTask_Check as i32), 0x201_i32);
+    let _ = inl_setupTask_unfused_discard(ctx, (enums::LbCardNewTask_Check as i32), 0x201_i32);
     inl_lb_8001A4CC_dontinline_unfused(ctx, filename, Handle::cast::<Addr<'a>>(file_entries));
-    let _ = inl_setupTask_unfused(
+    let _ = inl_setupTask_unfused_discard(
         ctx,
         (enums::LbCardNewTask_Unk3 as i32),
         1_i32.wrapping_neg(),
@@ -4572,10 +4572,10 @@ pub fn lb_8001BD34<'a>(
         Handle::cast::<Val<'a, i32>>(status_out),
         null::<FnPtr<'a>>(ctx),
     );
-    let _ = inl_setupTask_unfused(ctx, (enums::LbCardNewTask_Mount as i32), 0x10000_i32);
-    let _ = inl_setupTask_unfused(ctx, (enums::LbCardNewTask_Check as i32), 0x201_i32);
+    let _ = inl_setupTask_unfused_discard(ctx, (enums::LbCardNewTask_Mount as i32), 0x10000_i32);
+    let _ = inl_setupTask_unfused_discard(ctx, (enums::LbCardNewTask_Check as i32), 0x201_i32);
     inl_lb_8001A4CC_dontinline_unfused(ctx, filename, null::<Addr<'a>>(ctx));
-    let _ = inl_setupTask_unfused(
+    let _ = inl_setupTask_unfused_discard(
         ctx,
         (enums::LbCardNewTask_Unk3 as i32),
         (0xffffffff_u32 as i32),
@@ -4709,23 +4709,23 @@ pub fn lb_8001BFD8<'a>(
         null::<Val<'a, i32>>(ctx),
         null::<FnPtr<'a>>(ctx),
     );
-    let _ = inl_setupTask_unfused(
+    let _ = inl_setupTask_unfused_discard(
         ctx,
         (enums::LbCardNewTask_Mount as i32),
         (enums::resultMask_16 as i32),
     );
-    let _ = inl_setupTask_unfused(
+    let _ = inl_setupTask_unfused_discard(
         ctx,
         (enums::LbCardNewTask_Check as i32),
         ((enums::resultMask_Ready as i32) | (enums::resultMask_Malformed as i32)),
     );
     inl_lb_8001A4CC_dontinline_unfused(ctx, null::<Val<'a, i8>>(ctx), null::<Addr<'a>>(ctx));
-    let _ = inl_setupTask_unfused(
+    let _ = inl_setupTask_unfused_discard(
         ctx,
         (enums::LbCardNewTask_Unk3 as i32),
         (0xffffffff_u32 as i32),
     );
-    let _ = inl_setupTask_unfused(
+    let _ = inl_setupTask_unfused_discard(
         ctx,
         (enums::LbCardNewTask_ListSnapshots as i32),
         (enums::resultMask_NullFilename as i32),
@@ -4849,10 +4849,10 @@ pub fn lb_8001C2D8<'a>(
         null::<Val<'a, i32>>(ctx),
         null::<FnPtr<'a>>(ctx),
     );
-    let _ = inl_setupTask_unfused(ctx, (enums::LbCardNewTask_Mount as i32), 0x10000_i32);
-    let _ = inl_setupTask_unfused(ctx, (enums::LbCardNewTask_Check as i32), 0x201_i32);
+    let _ = inl_setupTask_unfused_discard(ctx, (enums::LbCardNewTask_Mount as i32), 0x10000_i32);
+    let _ = inl_setupTask_unfused_discard(ctx, (enums::LbCardNewTask_Check as i32), 0x201_i32);
     inl_lb_8001A4CC_dontinline_unfused(ctx, null::<Val<'a, i8>>(ctx), null::<Addr<'a>>(ctx));
-    let _ = inl_setupTask_unfused(
+    let _ = inl_setupTask_unfused_discard(
         ctx,
         (enums::LbCardNewTask_Unk3 as i32),
         1_i32.wrapping_neg(),
@@ -5144,13 +5144,13 @@ fn inl_lbCardNew_CompleteNextTask_unfused<'a>(ctx: &'a Ctx) -> i32 {
     return result;
 }
 
-fn inl_setupTask_unfused<'a>(ctx: &'a Ctx, r#type: i32, result_mask: i32) -> CardTask<'a> {
+fn inl_setupTask_unfused_discard<'a>(ctx: &'a Ctx, r#type: i32, result_mask: i32) -> CardTask<'a> {
     let mut r#type = r#type;
     let mut result_mask = result_mask;
     let mut task: CardTask<'a> = statics::melee__lb__lbcardnew::getNewTask(ctx);
     (task).set_type(r#type);
     (task).set_result_mask(result_mask);
-    return task;
+    return null(ctx);
 }
 
 fn inl_lb_8001A4CC_dontinline_unfused<'a>(
@@ -5161,6 +5161,15 @@ fn inl_lb_8001A4CC_dontinline_unfused<'a>(
     let mut filename = filename;
     let mut file_entries = file_entries;
     statics::melee__lb__lbcardnew::setTaskFilename(ctx, filename, file_entries);
+}
+
+fn inl_setupTask_unfused<'a>(ctx: &'a Ctx, r#type: i32, result_mask: i32) -> CardTask<'a> {
+    let mut r#type = r#type;
+    let mut result_mask = result_mask;
+    let mut task: CardTask<'a> = statics::melee__lb__lbcardnew::getNewTask(ctx);
+    (task).set_type(r#type);
+    (task).set_result_mask(result_mask);
+    return task;
 }
 
 fn inl_lb_80019C38_noinline_unfused<'a>(ctx: &'a Ctx) -> CardTask<'a> {

@@ -426,7 +426,7 @@ pub fn ftCo_800C3390<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn ftCo_DamageSongWait_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    let _ = inl_inlineB0_unfused(ctx, gobj);
+    let _ = inl_inlineB0_unfused_discard(ctx, gobj);
 }
 
 pub fn ftCo_DamageSongWait_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -574,6 +574,25 @@ fn inl_inlineB0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         return 1_i32;
     } else {
         return 0_i32;
+    }
+    #[allow(unreachable_code)]
+    return 0;
+}
+
+fn inl_inlineB0_unfused_discard<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+    let mut gobj = gobj;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
+    (fp).set_grab_timer(fp::fsubs(
+        (fp).grab_timer(),
+        (fns::p_ftCommonData(ctx).get()).x63C(),
+    ));
+    let _ = fns::ftCommon_GrabMash(ctx, fp, (fns::p_ftCommonData(ctx).get()).x640());
+    if (fp).grab_timer() <= fp::frsp(0_i32 as f64) {
+        statics::melee__ft__kinds__ftCommon__ftCo_DamageSong::ftCo_800C3480(ctx, gobj);
+        return 0;
+    } else {
+        return 0;
     }
     #[allow(unreachable_code)]
     return 0;

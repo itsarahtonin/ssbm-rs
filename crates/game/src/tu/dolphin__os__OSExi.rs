@@ -1526,7 +1526,7 @@ pub fn EXIAttach<'a>(ctx: &'a Ctx, chan: i32, extCallback: FnPtr<'a>) -> i32 {
     let mut enabled: i32 = 0;
     let mut result: i32 = 0;
     exi = statics::dolphin__os__OSExi::Ecb(ctx).get(chan);
-    let _ = inl_EXIProbe_unfused(ctx, chan, Handle::addr(__inl));
+    let _ = inl_EXIProbe_unfused_discard(ctx, chan, Handle::addr(__inl));
     enabled = fns::OSDisableInterrupts(ctx);
     if (exi).idTime() == 0_i32 {
         let _ = fns::OSRestoreInterrupts(ctx, enabled);
@@ -4463,6 +4463,28 @@ fn inl_EXIProbe_unfused<'a>(ctx: &'a Ctx, chan: i32, __in_caller: u32) -> i32 {
         }
     }
     return var_r3;
+}
+
+fn inl_EXIProbe_unfused_discard<'a>(ctx: &'a Ctx, chan: i32, __in_caller: u32) -> i32 {
+    let id: Val<'a, u32> = ptr(ctx, __in_caller + 0x0);
+    let mut chan = chan;
+    let mut var_r3: i32 = 0;
+    let mut exi: EXIControl<'a> = statics::dolphin__os__OSExi::Ecb(ctx).get(chan);
+    if (({
+        let __t1 = statics::dolphin__os__OSExi::__EXIProbe(ctx, chan);
+        var_r3 = __t1;
+        __t1
+    }) != 0)
+    {
+        if (exi).idTime() == 0_i32 {
+            if fns::EXIGetID(ctx, chan, (0_i32 as u32), id) != 0_i32 {
+                var_r3 = 1_i32;
+            } else {
+                var_r3 = 0_i32;
+            }
+        }
+    }
+    return 0;
 }
 
 fn inl___EXIAttach_unfused<'a>(ctx: &'a Ctx, chan: i32, extCallback: FnPtr<'a>) -> i32 {

@@ -352,13 +352,13 @@ pub fn it_802D9168<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (ip).xDD4_itemVar().heiho().set_x24(0_i32);
     fns::Stage_UnkSetVec3TCam_Offset(ctx, sp14);
     if (ip).pos().x() < sp14.x() {
-        let _ = inl_HSD_JObjGetRotationY_unfused(ctx, jobj);
+        let _ = inl_HSD_JObjGetRotationY_unfused_discard(ctx, jobj);
         if (jobj).rotate().y() == zero {
             (ip).xDD4_itemVar().heiho().set_x24(20_i32);
         }
         (ip).set_facing_dir(fp::fneg(1.0));
     } else if (ip).pos().x() > sp14.x() {
-        let _ = inl_HSD_JObjGetRotationY_unfused(ctx, jobj);
+        let _ = inl_HSD_JObjGetRotationY_unfused_discard(ctx, jobj);
         if (jobj).rotate().y() != zero {
             (ip).xDD4_itemVar().heiho().set_x24(20_i32);
         }
@@ -781,7 +781,7 @@ fn inl_it_802D8EC8_inline<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
-fn inl_HSD_JObjGetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
+fn inl_HSD_JObjGetRotationY_unfused_discard<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     let mut jobj = jobj;
     (if !Handle::is_null((jobj)) {
         ({ () })
@@ -793,7 +793,7 @@ fn inl_HSD_JObjGetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64
             cstr(ctx, 0x803f8400),
         )
     });
-    return (jobj).rotate().y();
+    return 0.0;
 }
 
 fn inl_it_802D9714_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

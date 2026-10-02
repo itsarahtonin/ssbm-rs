@@ -33664,6 +33664,25 @@ pub fn hsd_SetCardIconInfo<'a>(
     return 0_i32;
 }
 
+fn inl_checkOpen_unfused_discard<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
+    let mut state = state;
+    let mut i: i32 = 0;
+    let mut result: i32 = 0;
+    {
+        i = 0_i32;
+        'l1: while i < 10_i32 {
+            'c2: {
+                result = fns::CARDClose(ctx, (state).file_info());
+                if result != 1_i32.wrapping_neg() {
+                    break 'l1;
+                }
+            }
+            i = i.wrapping_add(1);
+        }
+    }
+    return 0;
+}
+
 fn inl_checkOpen_unfused<'a>(ctx: &'a Ctx, state: CardState<'a>) -> i32 {
     let mut state = state;
     let mut i: i32 = 0;

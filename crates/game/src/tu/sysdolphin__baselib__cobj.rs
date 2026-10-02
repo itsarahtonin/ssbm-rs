@@ -4292,7 +4292,7 @@ pub fn HSD_CObjGetViewingMtxPtr<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> ArrV<'a
         && (inl_HSD_CObjMtxIsDirty_unfused(ctx, cobj) != 0)
     {
         inl_HSD_CObjGetEyePosition_unfused(ctx, cobj, eyepos);
-        let _ = inl_get_up_vector_for_viewing_mtx_unfused(ctx, cobj, up_vec);
+        let _ = inl_get_up_vector_for_viewing_mtx_unfused_discard(ctx, cobj, up_vec);
         inl_HSD_CObjGetInterest_unfused(ctx, cobj, interest);
         fns::C_MTXLookAt(ctx, (cobj).view_mtx().get(0), eyepos, up_vec, interest);
         inl_HSD_WObjClearFlags_unfused(ctx, (cobj).eyepos(), (2_i32 as u32));
@@ -4319,7 +4319,7 @@ pub fn HSD_CObjGetInvViewingMtxPtr<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> ArrV
         && (inl_HSD_CObjMtxIsDirty_unfused(ctx, cobj) != 0)
     {
         inl_HSD_CObjGetEyePosition_unfused(ctx, cobj, eyepos);
-        let _ = inl_get_up_vector_for_viewing_mtx_unfused(ctx, cobj, up_vec);
+        let _ = inl_get_up_vector_for_viewing_mtx_unfused_discard(ctx, cobj, up_vec);
         inl_HSD_CObjGetInterest_unfused(ctx, cobj, interest);
         fns::C_MTXLookAt(ctx, (cobj).view_mtx().get(0), eyepos, up_vec, interest);
         inl_HSD_WObjClearFlags_unfused(ctx, (cobj).eyepos(), (2_i32 as u32));
@@ -4340,7 +4340,7 @@ pub fn HSD_CObjSetRoll<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, roll: f64) {
         return;
     }
     if ((cobj).flags() & (1_i32 as u32)) != (0_i32 as u32) {
-        let _ = inl_roll2upvec(ctx, cobj, up, roll, Handle::addr(__inl));
+        let _ = inl_roll2upvec_discard(ctx, cobj, up, roll, Handle::addr(__inl));
         fns::HSD_CObjSetUpVector(ctx, cobj, up);
     } else {
         if (cobj).u().roll() != roll {
@@ -5878,24 +5878,26 @@ fn inl_HSD_CObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> i32 {
             && ((((cobj).interest()).flags() & (2_i32 as u32)) != 0))) as i32;
 }
 
-fn inl_get_up_vector_for_viewing_mtx_inner_unfused<'a>(
+fn inl_get_up_vector_for_viewing_mtx_inner_unfused_discard<'a>(
     ctx: &'a Ctx,
     cobj: HSD_CObj<'a>,
     up: Vec<'a>,
 ) -> i32 {
     let mut cobj = cobj;
     let mut up = up;
-    return fns::HSD_CObjGetUpVector(ctx, cobj, up);
+    let _ = fns::HSD_CObjGetUpVector(ctx, cobj, up);
+    return 0;
 }
 
-fn inl_get_up_vector_for_viewing_mtx_unfused<'a>(
+fn inl_get_up_vector_for_viewing_mtx_unfused_discard<'a>(
     ctx: &'a Ctx,
     cobj: HSD_CObj<'a>,
     up: Vec<'a>,
 ) -> i32 {
     let mut cobj = cobj;
     let mut up = up;
-    return inl_get_up_vector_for_viewing_mtx_inner_unfused(ctx, cobj, up);
+    let _ = inl_get_up_vector_for_viewing_mtx_inner_unfused_discard(ctx, cobj, up);
+    return 0;
 }
 
 fn inl_HSD_CObjGetViewingMtxPtrDirect_unfused<'a>(
@@ -5921,6 +5923,49 @@ fn inl_HSD_CObjGetInvViewingMtxPtrDirect_unfused<'a>(
         fns::HSD_CObjClearFlags(ctx, cobj, ((shl_i32(1_i32, (31_i32 as u32))) as u32));
     }
     return ((cobj).proj_mtx()).get(0);
+}
+
+fn inl_roll2upvec_discard<'a>(
+    ctx: &'a Ctx,
+    cobj: HSD_CObj<'a>,
+    up: Vec<'a>,
+    roll: f64,
+    __in_caller: u32,
+) -> i32 {
+    let eye: Vec<'a> = ptr(ctx, __in_caller + 0x0);
+    let v0: Vec<'a> = ptr(ctx, __in_caller + 0xc);
+    let v1: Vec<'a> = ptr(ctx, __in_caller + 0x18);
+    let m: Arr<'a, ArrV<'a, F32, 4>, 3> = ptr(ctx, __in_caller + 0x24);
+    let mut cobj = cobj;
+    let mut up = up;
+    let mut roll = roll;
+    let mut res: i32 = 0;
+    res = fns::HSD_CObjGetEyeVector(ctx, cobj, eye);
+    if res != 0_i32 {
+        return 0;
+    }
+    if fp::fsub(1.0, inl_vec_get_abs_y(ctx, eye)) < 0.0001 {
+        v0.set_x(inl_sqrtf(
+            ctx,
+            fp::fadds(fp::fmuls(eye.y(), eye.y()), fp::fmuls(eye.z(), eye.z())),
+        ));
+        v0.set_y({
+            let __t1 = (fp::fdivs(fp::fneg(inl_vec_get_x(ctx, eye)), v0.x()));
+            fp::fmuls(eye.y(), __t1)
+        });
+        v0.set_z(fp::fmuls(eye.z(), (fp::fdivs(fp::fneg(eye.x()), v0.x()))));
+    } else {
+        v0.set_y(inl_sqrtf(
+            ctx,
+            fp::fadds(fp::fmuls(eye.x(), eye.x()), fp::fmuls(eye.z(), eye.z())),
+        ));
+        v0.set_x(fp::fmuls(eye.x(), (fp::fdivs(fp::fneg(eye.y()), v0.y()))));
+        v0.set_z(fp::fmuls(eye.z(), (fp::fdivs(fp::fneg(eye.y()), v0.y()))));
+    }
+    fns::PSMTXRotAxisRad(ctx, m.get(0), eye, fp::fneg(roll));
+    fns::PSMTXMultVecSR(ctx, m.get(0), v0, v1);
+    fns::PSVECNormalize(ctx, v1, up);
+    return 0;
 }
 
 fn inl_CObjResetFlags_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, flags: u32) {

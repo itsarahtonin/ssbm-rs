@@ -1221,7 +1221,7 @@ pub fn mnCharSel_8025D5AC<'a>(ctx: &'a Ctx, door: i32, frame: i32, hidden: i32) 
             'l1: while i < 5_i32 {
                 'c2: {
                     let mut tmp: u8 = statics::melee__mn__mncharsel::data2(ctx).xf0().at(i).get();
-                    let _ = inl_animateJoint_unfused(
+                    let _ = inl_animateJoint_unfused_discard(
                         ctx,
                         statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
                         tmp,
@@ -1445,7 +1445,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                     .at(1_i32)
                     .get() as f64,
             );
-            let _ = inl_animateJoint_unfused(
+            let _ = inl_animateJoint_unfused_discard(
                 ctx,
                 statics::melee__mn__mncharsel::mnCharSel_804D6CC4(ctx).get(),
                 (2_i32 as u8),
@@ -1458,7 +1458,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                     .at(1_i32)
                     .get() as f64,
             );
-            let _ = inl_animateJoint_unfused(
+            let _ = inl_animateJoint_unfused_discard(
                 ctx,
                 statics::melee__mn__mncharsel::mnCharSel_804D6CC4(ctx).get(),
                 (4_i32 as u8),
@@ -1472,7 +1472,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                     .at((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32))
                     .get() as f64,
             );
-            let _ = inl_animateJoint_unfused(
+            let _ = inl_animateJoint_unfused_discard(
                 ctx,
                 statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
                 (41_i32 as u8),
@@ -1485,7 +1485,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                     .at((statics::melee__mn__mncharsel::mnCharSel_804D6CF0(ctx).get() as i32))
                     .get() as f64,
             );
-            let _ = inl_animateJoint_unfused(
+            let _ = inl_animateJoint_unfused_discard(
                 ctx,
                 statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
                 (43_i32 as u8),
@@ -1690,7 +1690,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                             .doors()
                             .get((arg0 as i32))
                             .cpuslider_joint();
-                        let _ = inl_animateJointPadded_unfused(
+                        let _ = inl_animateJointPadded_unfused_discard(
                             ctx,
                             statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
                             joint,
@@ -1783,7 +1783,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                                 .doors()
                                 .get((arg0 as i32))
                                 .cpuslider2_joint();
-                            let _ = inl_animateJoint_unfused(
+                            let _ = inl_animateJoint_unfused_discard(
                                 ctx,
                                 statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
                                 joint,
@@ -1816,7 +1816,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                                 .doors()
                                 .get((arg0 as i32))
                                 .cpuslider_joint();
-                            let _ = inl_animateJoint_unfused(
+                            let _ = inl_animateJoint_unfused_discard(
                                 ctx,
                                 statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
                                 joint,
@@ -1920,7 +1920,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                                 .doors()
                                 .get((arg0 as i32))
                                 .cpuslider2_joint();
-                            let _ = inl_animateJoint_unfused(
+                            let _ = inl_animateJoint_unfused_discard(
                                 ctx,
                                 statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
                                 joint,
@@ -1963,7 +1963,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                                 .doors()
                                 .get((arg0 as i32))
                                 .cpuslider_joint();
-                            let _ = inl_animateJoint_unfused(
+                            let _ = inl_animateJoint_unfused_discard(
                                 ctx,
                                 statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
                                 joint,
@@ -2002,7 +2002,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
             .doors()
             .get((arg0 as i32))
             .player_indicator_joint();
-        let _ = inl_animateJoint_unfused(
+        let _ = inl_animateJoint_unfused_discard(
             ctx,
             statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
             joint,
@@ -2051,7 +2051,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                 .doors()
                 .get((arg0 as i32))
                 .bg_joint();
-            let _ = inl_animateJoint_unfused(
+            let _ = inl_animateJoint_unfused_discard(
                 ctx,
                 statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
                 joint,
@@ -2068,7 +2068,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                 .doors()
                 .get((arg0 as i32))
                 .emblem_joint();
-            let _ = inl_animateJoint_unfused(
+            let _ = inl_animateJoint_unfused_discard(
                 ctx,
                 statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
                 joint,
@@ -2093,7 +2093,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                 .doors()
                 .get((arg0 as i32))
                 .team_joint();
-            let _ = inl_animateJoint_unfused(
+            let _ = inl_animateJoint_unfused_discard(
                 ctx,
                 statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
                 joint,
@@ -2119,7 +2119,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                     .doors()
                     .get((arg0 as i32))
                     .bg_joint();
-                let _ = inl_animateJoint_unfused(
+                let _ = inl_animateJoint_unfused_discard(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
                     joint,
@@ -2136,7 +2136,7 @@ pub fn mnCharSel_8025DB34<'a>(ctx: &'a Ctx, arg0: u8) {
                     .doors()
                     .get((arg0 as i32))
                     .emblem_joint();
-                let _ = inl_animateJointLeadingPad_unfused(
+                let _ = inl_animateJointLeadingPad_unfused_discard(
                     ctx,
                     statics::melee__mn__mncharsel::mnCharSel_804D6CC0(ctx).get(),
                     joint,
@@ -29132,6 +29132,54 @@ fn inl_sethidden_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, hidden: i32) {
     }
 }
 
+fn inl_animateJoint_unfused_discard<'a>(
+    ctx: &'a Ctx,
+    root: HSD_JObj<'a>,
+    joint: u8,
+    mask: u32,
+    frame: f64,
+    __in_caller: u32,
+) -> HSD_JObj<'a> {
+    let jobj: Ptr<'a, HSD_JObj<'a>> = ptr(ctx, __in_caller + 0x0);
+    let mut root = root;
+    let mut joint = joint;
+    let mut mask = mask;
+    let mut frame = frame;
+    let mut cc0: HSD_JObj<'a> = null(ctx);
+    let mut cc1: HSD_JObj<'a> = null(ctx);
+    let _ = fns::lb_80011E24(
+        ctx,
+        root,
+        jobj,
+        &[
+            VarArg::Int((joint as i32) as u32),
+            VarArg::Int(1_i32.wrapping_neg() as u32),
+        ],
+    );
+    cc0 = jobj.get();
+    fns::HSD_ForeachAnim(
+        ctx,
+        Handle::cast::<Addr<'a>>(cc0),
+        (enums::JOBJ_TYPE as i32),
+        (mask as i32),
+        Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036410c)),
+        (enums::AOBJ_ARG_AF as i32),
+        &[VarArg::Float(frame)],
+    );
+    fns::HSD_JObjAnimAll(ctx, jobj.get());
+    cc1 = jobj.get();
+    fns::HSD_ForeachAnim(
+        ctx,
+        Handle::cast::<Addr<'a>>(cc1),
+        (enums::JOBJ_TYPE as i32),
+        (mask as i32),
+        Handle::cast::<Addr<'a>>(fnptr(ctx, 0x8036414c)),
+        (enums::AOBJ_ARG_AOV as i32),
+        &[VarArg::Int(0_i32 as u32), VarArg::Int(0_i32 as u32)],
+    );
+    return null(ctx);
+}
+
 fn inl_isDuplicateCostumeExact_unfused<'a>(ctx: &'a Ctx, door: i32) -> i32 {
     let mut door = door;
     let mut num_doors: i32 = 0;
@@ -29195,7 +29243,7 @@ fn inl_pickUniqueCostume_unfused<'a>(ctx: &'a Ctx, door: i32) {
     }
 }
 
-fn inl_animateJointPadded_unfused<'a>(
+fn inl_animateJointPadded_unfused_discard<'a>(
     ctx: &'a Ctx,
     root: HSD_JObj<'a>,
     joint: u8,
@@ -29240,7 +29288,7 @@ fn inl_animateJointPadded_unfused<'a>(
         (enums::AOBJ_ARG_AOV as i32),
         &[VarArg::Int(0_i32 as u32), VarArg::Int(0_i32 as u32)],
     );
-    return state.jobj();
+    return null(ctx);
 }
 
 fn inl_getHandicapValue_unfused<'a>(ctx: &'a Ctx, port: i32) -> i32 {
@@ -29313,7 +29361,7 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f6
     }
 }
 
-fn inl_animateJointLeadingPad_unfused<'a>(
+fn inl_animateJointLeadingPad_unfused_discard<'a>(
     ctx: &'a Ctx,
     root: HSD_JObj<'a>,
     joint: u8,
@@ -29364,7 +29412,7 @@ fn inl_animateJointLeadingPad_unfused<'a>(
         (enums::AOBJ_ARG_AOV as i32),
         &[VarArg::Int(0_i32 as u32), VarArg::Int(0_i32 as u32)],
     );
-    return jobj.get();
+    return null(ctx);
 }
 
 fn inl_HSD_GObjGetHSDObj<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {

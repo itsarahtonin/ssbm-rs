@@ -8710,9 +8710,9 @@ pub fn mnMain_Scene_OnEnter<'a>(ctx: &'a Ctx, user_data: Addr<'a>) {
         fns::lbAudioAx_8002392C(ctx);
     }
     inl_mn_8022DDA8_inline_unfused(ctx, hovered_selection);
-    let _ = inl_mn_8022BCF8_unfused(ctx);
+    let _ = inl_mn_8022BCF8_unfused_discard(ctx);
     inl_mn_8022BEDC_unfused(ctx, inl_mn_8022BE34_OnEnter_unfused(ctx, pos));
-    let _ = inl_mn_80229B2C_unfused(ctx);
+    let _ = inl_mn_80229B2C_unfused_discard(ctx);
     let _ = fns::mn_80229DC0(ctx);
     's1: {
         let __case = match ((data).menu_kind() as i32) {
@@ -9478,7 +9478,7 @@ fn inl_mn_8022DDA8_inline_unfused<'a>(ctx: &'a Ctx, sp2B4: Val<'a, u16>) {
     );
 }
 
-fn inl_mn_8022BCF8_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
+fn inl_mn_8022BCF8_unfused_discard<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     let mut gobj: HSD_GObj<'a> = null(ctx);
     let mut fog: HSD_Fog<'a> = null(ctx);
     gobj = fns::GObj_Create(ctx, (1_i32 as u16), (2_i32 as u8), (128_i32 as u8));
@@ -9497,7 +9497,7 @@ fn inl_mn_8022BCF8_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
         (1_i32 as u8),
         (128_i32 as u32),
     );
-    return gobj;
+    return null(ctx);
 }
 
 fn inl_mn_8022BEDC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -9564,7 +9564,7 @@ fn inl_mn_8022BE34_OnEnter_unfused<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> HSD_GObj<'
     return gobj;
 }
 
-fn inl_mn_80229B2C_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
+fn inl_mn_80229B2C_unfused_discard<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     let mut temp_r30: HSD_GObj<'a> = null(ctx);
     let mut temp_r3: HSD_JObj<'a> = null(ctx);
     temp_r30 = fns::GObj_Create(ctx, (4_i32 as u16), (5_i32 as u8), (128_i32 as u8));
@@ -9592,7 +9592,7 @@ fn inl_mn_80229B2C_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     );
     fns::HSD_JObjReqAnimAll(ctx, temp_r3, 0.0);
     fns::HSD_JObjAnimAll(ctx, temp_r3);
-    return temp_r30;
+    return null(ctx);
 }
 
 /// Registers this unit's ports.

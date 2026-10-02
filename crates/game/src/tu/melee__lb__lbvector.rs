@@ -106,7 +106,7 @@ pub fn lbVector_CrossprodNormalized<'a>(
     let mut b = b;
     let mut result = result;
     fns::PSVECCrossProduct(ctx, a, b, result);
-    let _ = inl_lbVector_Normalize_unfused(ctx, result);
+    let _ = inl_lbVector_Normalize_unfused_discard(ctx, result);
     return result;
 }
 
@@ -1498,11 +1498,11 @@ pub fn lbVector_Lerp<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, result: Vec<'a>, 
     let mut b = b;
     let mut result = result;
     let mut f = f;
-    let _ = inl_lbVector_Diff_unfused(ctx, b, a, result);
+    let _ = inl_lbVector_Diff_unfused_discard(ctx, b, a, result);
     (result).set_x(fp::fmuls((result).x(), f));
     (result).set_y(fp::fmuls((result).y(), f));
     (result).set_z(fp::fmuls((result).z(), f));
-    let _ = inl_lbVector_Add_unfused(ctx, result, a);
+    let _ = inl_lbVector_Add_unfused_discard(ctx, result, a);
     return result;
 }
 
@@ -1624,8 +1624,8 @@ pub fn lbVector_EulerAnglesFromPartialONB<'a>(
     let mut a = a;
     let mut c = c;
     fns::PSVECCrossProduct(ctx, c, a, b);
-    let _ = inl_lbVector_Normalize_unfused(ctx, b);
-    let _ = inl_lbVector_EulerAnglesFromONB_unfused(ctx, result_angles, a, b, c);
+    let _ = inl_lbVector_Normalize_unfused_discard(ctx, b);
+    let _ = inl_lbVector_EulerAnglesFromONB_unfused_discard(ctx, result_angles, a, b, c);
     return result_angles;
 }
 
@@ -1977,13 +1977,13 @@ pub fn lbVector_8000E838<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, c: Vec<'a>, d
     let mut d = d;
     let mut sqrlen_b_a: f64 = 0.0;
     let mut tooSmall: i32 = 0;
-    let _ = inl_lbVector_Diff(ctx, b, a, b_a);
+    let _ = inl_lbVector_Diff_discard(ctx, b, a, b_a);
     sqrlen_b_a = fp::fmadds(
         b_a.z(),
         b_a.z(),
         fp::fmadds(b_a.x(), b_a.x(), fp::fmuls(b_a.y(), b_a.y())),
     );
-    let _ = inl_lbVector_Diff(ctx, c, a, c_a);
+    let _ = inl_lbVector_Diff_discard(ctx, c, a, c_a);
     if (sqrlen_b_a < 9.999999747378752e-06_f64)
         && (sqrlen_b_a > fp::fneg(9.999999747378752e-06_f64))
     {
@@ -2006,7 +2006,7 @@ pub fn lbVector_8000E838<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, c: Vec<'a>, d
         (d).set_x(fp::fmadds(b_a.x(), f1, (a).x()));
         (d).set_y(fp::fmadds(b_a.y(), f1, (a).y()));
         (d).set_z(fp::fmadds(b_a.z(), f1, (a).z()));
-        let _ = inl_lbVector_Diff(ctx, c, d, v3);
+        let _ = inl_lbVector_Diff_discard(ctx, c, d, v3);
         return inl_lbVector_Len_2(ctx, v3);
     }
     #[allow(unreachable_code)]
@@ -2236,7 +2236,7 @@ fn inl_lbVector_Len_unfused<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     );
 }
 
-fn inl_lbVector_Normalize_unfused<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
+fn inl_lbVector_Normalize_unfused_discard<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     let mut vec = vec;
     let mut len: f64 = inl_lbVector_Len_unfused(ctx, vec);
     let mut inv: f64 = 0.0;
@@ -2247,7 +2247,7 @@ fn inl_lbVector_Normalize_unfused<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     (vec).set_x(fp::fmuls((vec).x(), inv));
     (vec).set_y(fp::fmuls((vec).y(), inv));
     (vec).set_z(fp::fmuls((vec).z(), inv));
-    return len;
+    return 0.0;
 }
 
 fn inl_lbVector_Len_xy_accurate<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
@@ -2261,26 +2261,31 @@ fn inl_lbVector_Len_xy_accurate<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {
     );
 }
 
-fn inl_lbVector_Diff_unfused<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, result: Vec<'a>) -> Vec<'a> {
+fn inl_lbVector_Diff_unfused_discard<'a>(
+    ctx: &'a Ctx,
+    a: Vec<'a>,
+    b: Vec<'a>,
+    result: Vec<'a>,
+) -> Vec<'a> {
     let mut a = a;
     let mut b = b;
     let mut result = result;
     (result).set_x(fp::fsubs((a).x(), (b).x()));
     (result).set_y(fp::fsubs((a).y(), (b).y()));
     (result).set_z(fp::fsubs((a).z(), (b).z()));
-    return result;
+    return null(ctx);
 }
 
-fn inl_lbVector_Add_unfused<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> Vec<'a> {
+fn inl_lbVector_Add_unfused_discard<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>) -> Vec<'a> {
     let mut a = a;
     let mut b = b;
     (a).set_x(fp::fadds((a).x(), (b).x()));
     (a).set_y(fp::fadds((a).y(), (b).y()));
     (a).set_z(fp::fadds((a).z(), (b).z()));
-    return a;
+    return null(ctx);
 }
 
-fn inl_lbVector_EulerAnglesFromONB_unfused<'a>(
+fn inl_lbVector_EulerAnglesFromONB_unfused_discard<'a>(
     ctx: &'a Ctx,
     result_angles: Vec<'a>,
     a: Vec<'a>,
@@ -2305,7 +2310,7 @@ fn inl_lbVector_EulerAnglesFromONB_unfused<'a>(
         (result_angles).set_x(fns::atan2f(ctx, (c).z(), (a).z()));
         (result_angles).set_z(fns::atan2f(ctx, (b).y(), (b).x()));
     }
-    return result_angles;
+    return null(ctx);
 }
 
 fn inl_lbvector_sin<'a>(ctx: &'a Ctx, angle: f64) -> f64 {
@@ -2363,14 +2368,14 @@ fn inl_lbvector_cos<'a>(ctx: &'a Ctx, angle: f64) -> f64 {
     );
 }
 
-fn inl_lbVector_Diff<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, result: Vec<'a>) -> Vec<'a> {
+fn inl_lbVector_Diff_discard<'a>(ctx: &'a Ctx, a: Vec<'a>, b: Vec<'a>, result: Vec<'a>) -> Vec<'a> {
     let mut a = a;
     let mut b = b;
     let mut result = result;
     (result).set_x(fp::fsubs((a).x(), (b).x()));
     (result).set_y(fp::fsubs((a).y(), (b).y()));
     (result).set_z(fp::fsubs((a).z(), (b).z()));
-    return result;
+    return null(ctx);
 }
 
 fn inl_lbVector_Len_2<'a>(ctx: &'a Ctx, vec: Vec<'a>) -> f64 {

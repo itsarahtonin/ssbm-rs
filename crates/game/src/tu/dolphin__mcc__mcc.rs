@@ -1721,7 +1721,7 @@ pub fn MCCInit<'a>(ctx: &'a Ctx, exiChannel: i32, timeout: u8, callbackSysEvent:
         if (fns::HIOReadStatus(ctx, status) != 0_i32) && ((status.get() & (1_i32 as u32)) != 0) {
             let _ = fns::HIOReadMailbox(ctx, mailbox);
         }
-        let _ = inl_WaitAMinute_unfused(ctx, 1_i32, dmyFlag, 1_i32);
+        let _ = inl_WaitAMinute_unfused_discard(ctx, 1_i32, dmyFlag, 1_i32);
         if inl_NotifyInit_unfused(ctx) == 0_i32 {
             statics::dolphin__mcc__mcc::gLastError(ctx).set((4_i32 as u8));
         } else {
@@ -2332,7 +2332,7 @@ pub fn MCCRead<'a>(
             & (16_i32 as u32))
             != 0)
         {
-            let _ = inl_NotifyChannelEvent_unfused(ctx, chID, (16_i32 as u32));
+            let _ = inl_NotifyChannelEvent_unfused_discard(ctx, chID, (16_i32 as u32));
         }
         if (((!(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
             .get(chID)
@@ -2501,7 +2501,7 @@ pub fn MCCWrite<'a>(
             & (32_i32 as u32))
             != 0)
         {
-            let _ = inl_NotifyChannelEvent_unfused(ctx, chID, (32_i32 as u32));
+            let _ = inl_NotifyChannelEvent_unfused_discard(ctx, chID, (32_i32 as u32));
         }
         if (((!(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
             .get(chID)
@@ -2550,7 +2550,7 @@ pub fn MCCCheckAsyncDone<'a>(ctx: &'a Ctx) -> i32 {
                 & (16_i32 as u32))
                 != 0)
             {
-                let _ = inl_NotifyChannelEvent_unfused(ctx, (chID as i32), (16_i32 as u32));
+                let _ = inl_NotifyChannelEvent_unfused_discard(ctx, (chID as i32), (16_i32 as u32));
             }
             if (((!(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
                 .get((chID as i32))
@@ -2575,7 +2575,7 @@ pub fn MCCCheckAsyncDone<'a>(ctx: &'a Ctx) -> i32 {
                 & (32_i32 as u32))
                 != 0)
             {
-                let _ = inl_NotifyChannelEvent_unfused(ctx, (chID as i32), (32_i32 as u32));
+                let _ = inl_NotifyChannelEvent_unfused_discard(ctx, (chID as i32), (32_i32 as u32));
             }
             if (((!(statics::dolphin__mcc__mcc::gChannelInfo(ctx)
                 .get((chID as i32))
@@ -2704,7 +2704,7 @@ fn inl_ClearChannelInfo_unfused<'a>(ctx: &'a Ctx, i: i32) {
         .set_isStreamDone(0_i32);
 }
 
-fn inl_InitializeCodeSet_unfused<'a>(ctx: &'a Ctx) -> i32 {
+fn inl_InitializeCodeSet_unfused_discard<'a>(ctx: &'a Ctx) -> i32 {
     let _ = fns::strcpy(
         ctx,
         statics::dolphin__mcc__mcc::m_szInitCode(ctx).at(0),
@@ -2760,7 +2760,7 @@ fn inl_WaitAMinute_unfused<'a>(ctx: &'a Ctx, timeout: i32, flag: Val<'a, i32>, v
     return 1_i32;
 }
 
-fn inl_InitializeCodeClear_unfused<'a>(ctx: &'a Ctx) -> i32 {
+fn inl_InitializeCodeClear_unfused_discard<'a>(ctx: &'a Ctx) -> i32 {
     let _ = fns::memset(
         ctx,
         Handle::cast::<Addr<'a>>(statics::dolphin__mcc__mcc::m_szInitCode(ctx).at(0)),
@@ -2842,6 +2842,46 @@ fn inl_SetUsbAdapterMode_unfused<'a>(ctx: &'a Ctx, mode: u8) -> i32 {
     return result;
 }
 
+fn inl_WaitAMinute_unfused_discard<'a>(
+    ctx: &'a Ctx,
+    timeout: i32,
+    flag: Val<'a, i32>,
+    value: i32,
+) -> i32 {
+    let mut timeout = timeout;
+    let mut flag = flag;
+    let mut value = value;
+    let mut tickStart: u32 = 0;
+    let mut tickDist: u32 = 0;
+    tickStart = fns::OSGetTick(ctx);
+    'l1: while (flag).get() != value {
+        'c2: {
+            tickDist = fns::OSGetTick(ctx).wrapping_sub(tickStart);
+            tickDist = (if ((tickDist & 0x80000000_u32) != 0) {
+                (0x80000000_u32.wrapping_sub(tickStart)).wrapping_add(fns::OSGetTick(ctx))
+            } else {
+                tickDist
+            });
+            if (div_u32(
+                (tickDist),
+                (div_u32(
+                    ((ptr::<Val<'a, u32>>(
+                        ctx,
+                        ((shl_i32(0x8000_i32, (16_i32 as u32))) | 248_i32) as u32,
+                    ))
+                    .get()),
+                    (4_i32 as u32),
+                )),
+            )) >= (timeout as u32)
+            {
+                inl_mccDebugPrint_unfused(ctx, null(ctx));
+                return 0;
+            }
+        }
+    }
+    return 0;
+}
+
 fn inl_NotifyInit_unfused<'a>(ctx: &'a Ctx) -> i32 {
     return statics::dolphin__mcc__mcc::NotifyCompulsorily(ctx, 0_i32, (1_i32 as u32), 0_u32);
 }
@@ -2874,7 +2914,7 @@ fn inl_AsyncResourceStateBusy_unfused<'a>(ctx: &'a Ctx, channel: u8, mode: u16) 
     );
 }
 
-fn inl_NotifyChannelEvent_unfused<'a>(ctx: &'a Ctx, chID: i32, notify: u32) -> i32 {
+fn inl_NotifyChannelEvent_unfused_discard<'a>(ctx: &'a Ctx, chID: i32, notify: u32) -> i32 {
     let mut chID = chID;
     let mut notify = notify;
     if statics::dolphin__mcc__mcc::LoadChannelInfo(
@@ -2888,9 +2928,9 @@ fn inl_NotifyChannelEvent_unfused<'a>(ctx: &'a Ctx, chID: i32, notify: u32) -> i
         inl_mccDebugPrint_unfused(ctx, null(ctx));
         statics::dolphin__mcc__mcc::gLastError(ctx).set((18_i32 as u8));
     } else if statics::dolphin__mcc__mcc::NotifyCompulsorily(ctx, chID, notify, 10_u32) != 0_i32 {
-        return 1_i32;
+        return 0;
     }
-    return 0_i32;
+    return 0;
 }
 
 fn inl_AsyncResourceGetMode_unfused<'a>(ctx: &'a Ctx) -> u16 {

@@ -2997,7 +2997,7 @@ pub fn mnName_80239A24<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 fns::HSD_JObjAnimAll(ctx, jobj);
                 ref_jobj = Handle::cast::<HSD_JObj<'a>>((data).gobj().user_data_remove_func());
                 col_width = ({
-                    let _ = inl_HSD_JObjGetTranslationX_unfused(ctx, ref_jobj);
+                    let _ = inl_HSD_JObjGetTranslationX_unfused_discard(ctx, ref_jobj);
                     (ref_jobj).translate().x()
                 });
                 col_width = fp::fsubs(
@@ -3068,7 +3068,7 @@ pub fn mnName_80239A24<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     Handle::copy_from((text).text_color(), (fns::mnName_804D4BE4(ctx)));
     ref_jobj2 = inl_mnName_802388D4_noinline_unfused(ctx, gobj, (6_u32 as u8));
     text_col_width = ({
-        let _ = inl_HSD_JObjGetTranslationX_unfused(ctx, text_jobj0);
+        let _ = inl_HSD_JObjGetTranslationX_unfused_discard(ctx, text_jobj0);
         (text_jobj0).translate().x()
     });
     text_col_width = inl_mnName_TextWidth_unfused(ctx, text_col_width, ref_jobj2);
@@ -4234,6 +4234,21 @@ fn inl_mnName_FindAnimLoop_unfused<'a>(
 fn inl_mnName_80238C34_inline_unfused<'a>(ctx: &'a Ctx, anim: AnimLoopSettings<'a>) -> f64 {
     let mut anim = anim;
     return (anim).end_frame();
+}
+
+fn inl_HSD_JObjGetTranslationX_unfused_discard<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
+    let mut jobj = jobj;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803ed538),
+            (0x3e1_i32 as u32),
+            cstr(ctx, 0x803ed538),
+        )
+    });
+    return 0.0;
 }
 
 fn inl_HSD_JObjGetTranslationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {

@@ -683,7 +683,7 @@ pub fn it_8028E170<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
 pub fn itRshell_UnkMotion6_Anim<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x18);
     let mut gobj = gobj;
-    let _ = inl_itRshell_UnkMotion5_Anim_unfused(ctx, gobj);
+    let _ = inl_itRshell_UnkMotion5_Anim_unfused_discard(ctx, gobj);
     return 0_i32;
 }
 
@@ -1088,11 +1088,11 @@ fn inl_itRshell_UM5C_GroundSpin_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     }
 }
 
-fn inl_itRshell_UnkMotion5_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+fn inl_itRshell_UnkMotion5_Anim_unfused_discard<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if (ip).xDD4_itemVar().rshell().xDD4() <= 0.0 {
-        return 1_i32;
+        return 0;
     }
     (ip).xDD4_itemVar()
         .rshell()
@@ -1109,7 +1109,7 @@ fn inl_itRshell_UnkMotion5_Anim_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) ->
     if (ip).msid() == 5_i32 {
         fns::it_8028CFE0(ctx, gobj);
     }
-    return 0_i32;
+    return 0;
 }
 
 /// Registers this unit's ports.

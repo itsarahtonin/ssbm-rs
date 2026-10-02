@@ -226,7 +226,7 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
-fn inl_Item_AttachToParent_unfused<'a>(
+fn inl_Item_AttachToParent_unfused_discard<'a>(
     ctx: &'a Ctx,
     item_gobj: HSD_GObj<'a>,
     parent: HSD_GObj<'a>,
@@ -237,7 +237,7 @@ fn inl_Item_AttachToParent_unfused<'a>(
     let mut part = part;
     fns::Item_8026AB54(ctx, item_gobj, parent, part);
     fns::db_80225DD8(ctx, item_gobj, parent);
-    return item_gobj;
+    return null(ctx);
 }
 
 fn inl_Item_AttachGameWatchArticle_unfused<'a>(
@@ -251,7 +251,7 @@ fn inl_Item_AttachGameWatchArticle_unfused<'a>(
     let mut part = part;
     let mut item_gobj = item_gobj;
     let mut attributes = attributes;
-    let _ = inl_Item_AttachToParent_unfused(ctx, item_gobj, parent, part);
+    let _ = inl_Item_AttachToParent_unfused_discard(ctx, item_gobj, parent, part);
     fns::it_8027CE64(
         ctx,
         item_gobj,

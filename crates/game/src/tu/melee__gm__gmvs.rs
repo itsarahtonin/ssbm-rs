@@ -2006,7 +2006,7 @@ pub fn gm_Scene_Training_OnFrame<'a>(ctx: &'a Ctx) {
     inl_fn_8016CFE0_inline_unfused(ctx);
     fns::fn_8016758C(ctx);
     if fns::gm_GetDbPauseFlag(ctx, 2_i32) != 0_i32 {
-        let _ = inl_fn_8016CBE8_inline_unfused(ctx);
+        let _ = inl_fn_8016CBE8_inline_unfused_discard(ctx);
         fns::gm_DoUnpauseChecksAndRoutine(ctx, tmp, 2_i32);
         if ((tmp).state().pause_timer() as i32) != 0_i32 {
             (tmp)
@@ -5808,7 +5808,7 @@ fn inl_fn_8016CF4C_dontinline_unfused<'a>(ctx: &'a Ctx, slot: i32, matchResult: 
     fns::fn_8016CF4C(ctx, slot, matchResult);
 }
 
-fn inl_fn_8016CBE8_inline_unfused<'a>(ctx: &'a Ctx) -> i32 {
+fn inl_fn_8016CBE8_inline_unfused_discard<'a>(ctx: &'a Ctx) -> i32 {
     let mut pad: HSD_PadStatus<'a> = null(ctx);
     let mut var_r0: i32 = 0;
     let mut i: i32 = 0;
@@ -5832,14 +5832,14 @@ fn inl_fn_8016CBE8_inline_unfused<'a>(ctx: &'a Ctx) -> i32 {
                             (((pad).trigger() & ((shl_i32(1_i32, (12_i32 as u32))) as u32)) as i32);
                     }
                     if (var_r0 != 0) {
-                        return i;
+                        return 0;
                     }
                 }
             }
             i = i.wrapping_add(1);
         }
     }
-    return 1_i32.wrapping_neg();
+    return 0;
 }
 
 fn inl_gm_8016B3D8_unfused<'a>(ctx: &'a Ctx) -> i32 {

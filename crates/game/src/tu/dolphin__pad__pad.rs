@@ -427,7 +427,7 @@ pub fn PADRead<'a>(ctx: &'a Ctx, status: PADStatus<'a>) -> u32 {
             'c2: {
                 chanBit = shr_u32(0x80000000_u32, (chan as u32));
                 if ((statics::dolphin__pad__pad::PendingBits(ctx).get() & chanBit) != 0) {
-                    let _ = inl_PADReset_unfused(ctx, (0_i32 as u32));
+                    let _ = inl_PADReset_unfused_discard(ctx, (0_i32 as u32));
                     (status).set_err((2_i32.wrapping_neg() as i8));
                     let _ = fns::memset(
                         ctx,
@@ -1308,7 +1308,7 @@ pub fn OnReset<'a>(ctx: &'a Ctx, f: i32) -> i32 {
     if !(f != 0) {
         sync = inl_PADSync_unfused(ctx);
         if (!(At::new(ctx, 0x804d7414).field::<Val<'a, i32>>(0).get() != 0)) && (sync != 0) {
-            let _ = inl_PADRecalibrate_unfused(
+            let _ = inl_PADRecalibrate_unfused_discard(
                 ctx,
                 (((0x80000000_u32 | (0x40000000_i32 as u32)) | (0x20000000_i32 as u32))
                     | (0x10000000_i32 as u32)),
@@ -1462,6 +1462,34 @@ fn inl_PADReset_unfused<'a>(ctx: &'a Ctx, mask: u32) -> i32 {
     return 1_i32;
 }
 
+fn inl_PADReset_unfused_discard<'a>(ctx: &'a Ctx, mask: u32) -> i32 {
+    let mut mask = mask;
+    let mut enabled: i32 = 0;
+    let mut disableBits: u32 = 0;
+    enabled = fns::OSDisableInterrupts(ctx);
+    mask = (mask | statics::dolphin__pad__pad::PendingBits(ctx).get());
+    statics::dolphin__pad__pad::PendingBits(ctx).set((0_i32 as u32));
+    mask = (mask
+        & (!(statics::dolphin__pad__pad::WaitingBits(ctx).get()
+            | statics::dolphin__pad__pad::CheckingBits(ctx).get())));
+    statics::dolphin__pad__pad::ResettingBits(ctx)
+        .set((statics::dolphin__pad__pad::ResettingBits(ctx).get() | mask));
+    disableBits = (statics::dolphin__pad__pad::ResettingBits(ctx).get()
+        & statics::dolphin__pad__pad::EnabledBits(ctx).get());
+    statics::dolphin__pad__pad::EnabledBits(ctx)
+        .set((statics::dolphin__pad__pad::EnabledBits(ctx).get() & (!mask)));
+    if statics::dolphin__pad__pad::Spec(ctx).get() == (4_i32 as u32) {
+        statics::dolphin__pad__pad::RecalibrateBits(ctx)
+            .set((statics::dolphin__pad__pad::RecalibrateBits(ctx).get() | mask));
+    }
+    let _ = fns::SIDisablePolling(ctx, disableBits);
+    if statics::dolphin__pad__pad::ResettingChan(ctx).get() == 32_i32 {
+        inl_DoReset_unfused(ctx);
+    }
+    let _ = fns::OSRestoreInterrupts(ctx, enabled);
+    return 0;
+}
+
 fn inl_ClampS8_unfused<'a>(ctx: &'a Ctx, var: i8, org: i8) -> i8 {
     let mut var = var;
     let mut org = org;
@@ -1500,7 +1528,7 @@ fn inl_PADSync_unfused<'a>(ctx: &'a Ctx) -> i32 {
         && (!(fns::SIBusy(ctx) != 0))) as i32;
 }
 
-fn inl_PADRecalibrate_unfused<'a>(ctx: &'a Ctx, mask: u32) -> i32 {
+fn inl_PADRecalibrate_unfused_discard<'a>(ctx: &'a Ctx, mask: u32) -> i32 {
     let mut mask = mask;
     let mut intrEnabled: i32 = 0;
     let mut arg: u32 = 0;
@@ -1525,7 +1553,7 @@ fn inl_PADRecalibrate_unfused<'a>(ctx: &'a Ctx, mask: u32) -> i32 {
         inl_DoReset_unfused(ctx);
     }
     let _ = fns::OSRestoreInterrupts(ctx, intrEnabled);
-    return 1_i32;
+    return 0;
 }
 
 /// Registers this unit's ports.

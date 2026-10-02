@@ -8257,7 +8257,7 @@ fn inl_inlineA0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, fp: Fighter<'a>, angle: Va
     );
 }
 
-fn inl_ftCo_8008DA4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i32) -> i32 {
+fn inl_ftCo_8008DA4C_discard<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i32) -> i32 {
     let mut gobj = gobj;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -8294,7 +8294,7 @@ fn inl_ftCo_8008DA4C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i32)
             }
         }
     }
-    return result;
+    return 0;
 }
 
 fn inl_inlineA1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {

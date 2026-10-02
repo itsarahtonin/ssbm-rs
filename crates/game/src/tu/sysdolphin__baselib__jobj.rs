@@ -4152,7 +4152,7 @@ pub fn HSD_JObjAddNext<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, next: HSD_JObj<'a>)
     } else {
         cur = jobj;
     }
-    let _ = inl_HSD_JObjReparent_unfused(ctx, next, (jobj).parent());
+    let _ = inl_HSD_JObjReparent_unfused_discard(ctx, next, (jobj).parent());
     if !Handle::is_null((next).child()) {
         let mut child: HSD_JObj<'a> = (next).child();
         'l1: while !Handle::is_null((child).next()) {
@@ -7585,7 +7585,7 @@ pub fn JObjReleaseChild<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
         (jobj).set_child(null::<HSD_JObj<'a>>(ctx));
     }
     if !Handle::is_null((jobj).parent()) {
-        let _ = inl_HSD_JObjReparent_unfused(ctx, jobj, null::<HSD_JObj<'a>>(ctx));
+        let _ = inl_HSD_JObjReparent_unfused_discard(ctx, jobj, null::<HSD_JObj<'a>>(ctx));
     }
     if ((if (((jobj).flags()
         & (((shl_i32(1_i32, (5_i32 as u32))) | (shl_i32(1_i32, (14_i32 as u32)))) as u32))
@@ -8258,7 +8258,7 @@ fn inl_RecalcParentTrspBits_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) {
     }
 }
 
-fn inl_HSD_JObjReparent_unfused<'a>(
+fn inl_HSD_JObjReparent_unfused_discard<'a>(
     ctx: &'a Ctx,
     jobj: HSD_JObj<'a>,
     parent: HSD_JObj<'a>,
@@ -8267,7 +8267,7 @@ fn inl_HSD_JObjReparent_unfused<'a>(
     let mut parent = parent;
     let mut next: HSD_JObj<'a> = null(ctx);
     if Handle::is_null(jobj) {
-        return null::<HSD_JObj<'a>>(ctx);
+        return null(ctx);
     }
     next = (jobj).next();
     if !Handle::is_null((jobj).parent()) {
@@ -8292,7 +8292,7 @@ fn inl_HSD_JObjReparent_unfused<'a>(
     }
     (jobj).set_next(null::<HSD_JObj<'a>>(ctx));
     fns::HSD_JObjAddChild(ctx, parent, jobj);
-    return next;
+    return null(ctx);
 }
 
 fn inl_robj_set_next_unfused<'a>(

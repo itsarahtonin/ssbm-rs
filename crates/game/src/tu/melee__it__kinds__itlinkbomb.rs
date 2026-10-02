@@ -548,7 +548,7 @@ pub fn itLinkbomb_UnkMotion3_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x38);
     let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0x0);
     let mut gobj = gobj;
-    let _ = inl_itLinkbomb_UnkMotion2_Coll_unfused(ctx, gobj, Handle::addr(__inl));
+    let _ = inl_itLinkbomb_UnkMotion2_Coll_unfused_discard(ctx, gobj, Handle::addr(__inl));
     return 0_i32;
 }
 
@@ -1319,7 +1319,7 @@ fn inl_itLinkbomb_UnkMotion3_Anim_inline2_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GO
     fns::it_8029DB5C(ctx, gobj);
 }
 
-fn inl_itLinkbomb_UnkMotion2_Coll_unfused<'a>(
+fn inl_itLinkbomb_UnkMotion2_Coll_unfused_discard<'a>(
     ctx: &'a Ctx,
     gobj: HSD_GObj<'a>,
     __in_caller: u32,
@@ -1340,7 +1340,7 @@ fn inl_itLinkbomb_UnkMotion2_Coll_unfused<'a>(
             fns::it_8029F18C(ctx, gobj);
         }
     }
-    return 0_i32;
+    return 0;
 }
 
 fn inl_fsign_inline_unfused<'a>(ctx: &'a Ctx, x: f64) -> f64 {

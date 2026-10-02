@@ -1826,7 +1826,7 @@ pub fn ft_80083B68<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             break 'l1;
         }
     }
-    let _ = inl_ft_80082578_unfused(ctx, gobj);
+    let _ = inl_ft_80082578_unfused_discard(ctx, gobj);
 }
 
 pub fn ft_80083C00<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {
@@ -4066,6 +4066,27 @@ fn inl_ft_80083844_inline_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         return 1_i32;
     }
     return 0_i32;
+}
+
+fn inl_ft_80082578_unfused_discard<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {
+    let mut arg0 = arg0;
+    let mut fp: Fighter<'a> =
+        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg0)));
+    let mut coll: CollData<'a> = (fp).coll_data();
+    Handle::copy_from((coll).last_pos(), (coll).cur_pos());
+    Handle::copy_from((coll).cur_pos(), (fp).cur_pos());
+    let _ = fns::mpColl_800477E0(ctx, coll);
+    Handle::copy_from((fp).cur_pos(), (coll).cur_pos());
+    if (fns::ft_80081A00(ctx, arg0) != 0) {
+        return 0;
+    }
+    if (((coll).env_flags() & (0x8000_i32 | 0x10000_i32)) != 0) {
+        return 0;
+    } else {
+        return 0;
+    }
+    #[allow(unreachable_code)]
+    return 0;
 }
 
 fn inl_ft_80082578_unfused<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) -> i32 {

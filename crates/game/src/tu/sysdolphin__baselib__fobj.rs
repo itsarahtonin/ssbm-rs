@@ -113,7 +113,7 @@ pub fn HSD_FObjStopAnim<'a>(
         return;
     }
     inl_FObj_FlushKeyData_unfused(ctx, fobj, obj, obj_update, rate);
-    let _ = inl_HSD_FObjSetState_unfused(ctx, fobj, (0_i32 as u32));
+    let _ = inl_HSD_FObjSetState_unfused_discard(ctx, fobj, (0_i32 as u32));
 }
 
 pub fn HSD_FObjStopAnimAll<'a>(
@@ -558,7 +558,7 @@ fn inl_HSD_FObjRemoveAll_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) {
     fns::HSD_FObjRemove(ctx, fobj);
 }
 
-fn inl_HSD_FObjSetState_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>, state: u32) -> u32 {
+fn inl_HSD_FObjSetState_unfused_discard<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>, state: u32) -> u32 {
     let mut fobj = fobj;
     let mut state = state;
     if !Handle::is_null(fobj) {
@@ -566,7 +566,7 @@ fn inl_HSD_FObjSetState_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>, state: u32
             (((state & (15_i32 as u32)) | ((((fobj).flags() as i32) & 240_i32) as u32)) as u8),
         );
     }
-    return state;
+    return 0;
 }
 
 fn inl_HSD_FObjReqAnim_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>, startframe: f64) {
@@ -586,7 +586,7 @@ fn inl_HSD_FObjReqAnim_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>, startframe:
     (fobj).set_p1(0.0);
     (fobj).set_d0(0.0);
     (fobj).set_d1(0.0);
-    let _ = inl_HSD_FObjSetState_unfused(ctx, fobj, (1_i32 as u32));
+    let _ = inl_HSD_FObjSetState_unfused_discard(ctx, fobj, (1_i32 as u32));
 }
 
 fn inl_FObj_FlushKeyData_unfused<'a>(
@@ -620,7 +620,7 @@ fn inl_HSD_FObjStopAnim_unfused<'a>(
         return;
     }
     inl_FObj_FlushKeyData_unfused(ctx, fobj, obj, obj_update, rate);
-    let _ = inl_HSD_FObjSetState_unfused(ctx, fobj, (0_i32 as u32));
+    let _ = inl_HSD_FObjSetState_unfused_discard(ctx, fobj, (0_i32 as u32));
 }
 
 fn inl_parseOpCode_unfused<'a>(ctx: &'a Ctx, curr_parse: Ptr<'a, Val<'a, u8>>) -> u8 {

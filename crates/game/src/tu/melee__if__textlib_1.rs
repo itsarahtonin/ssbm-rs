@@ -664,8 +664,11 @@ pub fn un_80303AC4<'a>(ctx: &'a Ctx, arg0: un_80304138_objalloc_t<'a>) {
     let mut stick: i32 = fns::un_803039A4(ctx, (0_i32 as u8));
     let mut buttons: i32 = (stick | trigger);
     if ((buttons & (shl_i32(1_i32, (12_i32 as u32)))) != 0) {
-        let _ =
-            inl_un_80302E00_unfused(ctx, (Handle::add((arg0).x8(), ((arg0).x0() as i32))), 6_i32);
+        let _ = inl_un_80302E00_unfused_discard(
+            ctx,
+            (Handle::add((arg0).x8(), ((arg0).x0() as i32))),
+            6_i32,
+        );
     } else if ((buttons & (0x10000000_i32 | (shl_i32(1_i32, (11_i32 as u32))))) != 0) {
         let mut i: i32 = inl_findPrev_unfused(ctx, arg0);
         if i != 1_i32.wrapping_neg() {
@@ -684,7 +687,7 @@ pub fn un_80303AC4<'a>(ctx: &'a Ctx, arg0: un_80304138_objalloc_t<'a>) {
         != 0)
     {
         if (fns::un_80303444(ctx, arg0) != 0) {
-            let _ = inl_un_80302E00_unfused(
+            let _ = inl_un_80302E00_unfused_discard(
                 ctx,
                 (Handle::add((arg0).x8(), ((arg0).x0() as i32))),
                 3_i32,
@@ -692,18 +695,24 @@ pub fn un_80303AC4<'a>(ctx: &'a Ctx, arg0: un_80304138_objalloc_t<'a>) {
         }
     } else if ((buttons & (0x40000000_i32 | (shl_i32(1_i32, (6_i32 as u32))))) != 0) {
         if (fns::un_80303720(ctx, arg0) != 0) {
-            let _ = inl_un_80302E00_unfused(
+            let _ = inl_un_80302E00_unfused_discard(
                 ctx,
                 (Handle::add((arg0).x8(), ((arg0).x0() as i32))),
                 2_i32,
             );
         }
     } else if ((buttons & (shl_i32(1_i32, (8_i32 as u32)))) != 0) {
-        let _ =
-            inl_un_80302E00_unfused(ctx, (Handle::add((arg0).x8(), ((arg0).x0() as i32))), 1_i32);
+        let _ = inl_un_80302E00_unfused_discard(
+            ctx,
+            (Handle::add((arg0).x8(), ((arg0).x0() as i32))),
+            1_i32,
+        );
     } else if ((buttons & (shl_i32(1_i32, (9_i32 as u32)))) != 0) {
-        let _ =
-            inl_un_80302E00_unfused(ctx, (Handle::add((arg0).x8(), ((arg0).x0() as i32))), 0_i32);
+        let _ = inl_un_80302E00_unfused_discard(
+            ctx,
+            (Handle::add((arg0).x8(), ((arg0).x0() as i32))),
+            0_i32,
+        );
     }
 }
 
@@ -1012,7 +1021,7 @@ fn inl_sfxMove_unfused<'a>(ctx: &'a Ctx) {
     fns::lbAudioAx_80024030(ctx, 2_i32);
 }
 
-fn inl_un_80302E00_unfused<'a>(
+fn inl_un_80302E00_unfused_discard<'a>(
     ctx: &'a Ctx,
     arg0: un_80304138_objalloc_t_x8<'a>,
     arg1: i32,
@@ -1027,15 +1036,17 @@ fn inl_un_80302E00_unfused<'a>(
             if (!Handle::is_null(fns::un_804D6E44(ctx).get()))
                 && (!Handle::is_null((fns::un_804D6E44(ctx).get()).xC()))
             {
-                return (fns::un_804D6E44(ctx).get()).xC().call::<_, i32>((arg1,));
+                let _ = (fns::un_804D6E44(ctx).get()).xC().call::<_, i32>((arg1,));
+                return 0;
             }
         }
     } else if (!Handle::is_null(fns::un_804D6E44(ctx).get()))
         && (!Handle::is_null((fns::un_804D6E44(ctx).get()).xC()))
     {
-        return (fns::un_804D6E44(ctx).get()).xC().call::<_, i32>((arg1,));
+        let _ = (fns::un_804D6E44(ctx).get()).xC().call::<_, i32>((arg1,));
+        return 0;
     }
-    return ret;
+    return 0;
 }
 
 fn inl_findPrev_unfused<'a>(ctx: &'a Ctx, menu: un_80304138_objalloc_t<'a>) -> i32 {

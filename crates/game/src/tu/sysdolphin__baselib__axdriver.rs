@@ -138,7 +138,7 @@ pub fn HSD_AudioSFXKeyOffAll<'a>(ctx: &'a Ctx) {
         'c4: {
             if (((v).flags() & 0xc0000000_u32) != 0) {
                 if !Handle::is_null(v) {
-                    let _ = inl_AXDriverKeyOff_unfused(ctx, v);
+                    let _ = inl_AXDriverKeyOff_unfused_discard(ctx, v);
                 }
             }
             v = (v).next();
@@ -156,7 +156,7 @@ pub fn HSD_AudioSFXKeyOffTrack<'a>(ctx: &'a Ctx, track: i32) {
         'c2: {
             if (((v).flags() & 0xc0000000_u32) != 0) && (((v).track() as i32) == track) {
                 if !Handle::is_null(v) {
-                    let _ = inl_AXDriverKeyOff_unfused(ctx, v);
+                    let _ = inl_AXDriverKeyOff_unfused_discard(ctx, v);
                 }
             }
             v = (v).next();
@@ -374,7 +374,7 @@ pub fn AXDriverExec<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) {
                         }
                         if __case <= 9 {
                             if !Handle::is_null(v) {
-                                let _ = inl_AXDriverKeyOff(ctx, v);
+                                let _ = inl_AXDriverKeyOff_discard(ctx, v);
                             }
                             return;
                         }
@@ -2413,30 +2413,7 @@ fn inl_AXDriverKeyOff_unfused<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) -> i32 {
     return 1_i32;
 }
 
-fn inl_sqrtf_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
-    let mut x = x;
-    let mut y = y;
-    if x > 0.0 {
-        let mut guess: f64 = fp::frsqrte(x);
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
-        );
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
-        );
-        guess = fp::fmul(
-            fp::fmul(0.5, guess),
-            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
-        );
-        (y).set(fp::frsp((fp::fmul(x, guess))));
-        return (y).get();
-    }
-    return x;
-}
-
-fn inl_AXDriverKeyOff<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) -> i32 {
+fn inl_AXDriverKeyOff_unfused_discard<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) -> i32 {
     let mut v = v;
     let mut idx: i32 = 0;
     let mut state: u32 = 0;
@@ -2466,7 +2443,63 @@ fn inl_AXDriverKeyOff<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) -> i32 {
     }
     (v).set_flags(((v).flags() & ((!0x20000000_i32) as u32)));
     (v).set_flags(((v).flags() & (!0xc0000000_u32)));
-    return 1_i32;
+    return 0;
+}
+
+fn inl_sqrtf_store<'a>(ctx: &'a Ctx, x: f64, y: Val<'a, F32>) -> f64 {
+    let mut x = x;
+    let mut y = y;
+    if x > 0.0 {
+        let mut guess: f64 = fp::frsqrte(x);
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
+        );
+        guess = fp::fmul(
+            fp::fmul(0.5, guess),
+            (fp::fnmsub(x, fp::fmul(guess, guess), 3.0)),
+        );
+        (y).set(fp::frsp((fp::fmul(x, guess))));
+        return (y).get();
+    }
+    return x;
+}
+
+fn inl_AXDriverKeyOff_discard<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) -> i32 {
+    let mut v = v;
+    let mut idx: i32 = 0;
+    let mut state: u32 = 0;
+    state = ((v).flags() & 0xc0000000_u32);
+    (if (state == (0x40000000_i32 as u32)) || (state == 0x80000000_u32) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803b95f8),
+            (146_i32 as u32),
+            cstr(ctx, 0x80408174),
+        )
+    });
+    idx = (v).vID();
+    if (v).vID() != 1_i32.wrapping_neg() {
+        statics::sysdolphin__baselib__axdriver::AXDriver_804C5920(ctx)
+            .at((idx & 63_i32))
+            .set(null::<HSD_SM<'a>>(ctx));
+        (v).set_vID(1_i32.wrapping_neg());
+        fns::HSD_SynthSFXKeyOff(ctx, idx);
+        statics::sysdolphin__baselib__axdriver::AXDriver_804D77C8(ctx).set(
+            statics::sysdolphin__baselib__axdriver::AXDriver_804D77C8(ctx)
+                .get()
+                .wrapping_sub(1),
+        );
+    }
+    (v).set_flags(((v).flags() & ((!0x20000000_i32) as u32)));
+    (v).set_flags(((v).flags() & (!0xc0000000_u32)));
+    return 0;
 }
 
 fn inl_parseWait_unfused<'a>(ctx: &'a Ctx, param_type: u32, param_value: u32) -> u32 {

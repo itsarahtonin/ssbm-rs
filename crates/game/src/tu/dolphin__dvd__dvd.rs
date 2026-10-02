@@ -5004,7 +5004,7 @@ pub fn __DVDPrepareResetAsync<'a>(ctx: &'a Ctx, callback: FnPtr<'a>) {
         if !Handle::is_null(statics::dolphin__dvd__dvd::executing(ctx).get()) {
             (statics::dolphin__dvd__dvd::executing(ctx).get()).set_callback(null::<FnPtr<'a>>(ctx));
         }
-        let _ = inl_DVDCancelAllAsync_unfused(ctx, callback);
+        let _ = inl_DVDCancelAllAsync_unfused_discard(ctx, callback);
     }
     let _ = fns::OSRestoreInterrupts(ctx, enabled);
 }
@@ -5196,7 +5196,7 @@ fn inl_DVDResume_unfused<'a>(ctx: &'a Ctx) {
     let _ = fns::OSRestoreInterrupts(ctx, level);
 }
 
-fn inl_DVDCancelAllAsync_unfused<'a>(ctx: &'a Ctx, callback: FnPtr<'a>) -> i32 {
+fn inl_DVDCancelAllAsync_unfused_discard<'a>(ctx: &'a Ctx, callback: FnPtr<'a>) -> i32 {
     let mut callback = callback;
     let mut enabled: i32 = 0;
     let mut p: DVDCommandBlock<'a> = null(ctx);
@@ -5228,7 +5228,7 @@ fn inl_DVDCancelAllAsync_unfused<'a>(ctx: &'a Ctx, callback: FnPtr<'a>) -> i32 {
     }
     inl_DVDResume_unfused(ctx);
     let _ = fns::OSRestoreInterrupts(ctx, enabled);
-    return retVal;
+    return 0;
 }
 
 /// Registers this unit's ports.

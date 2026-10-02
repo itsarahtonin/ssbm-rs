@@ -621,9 +621,14 @@ def strip(c):
 
 class Translator:
     def __init__(self, unit, fn_cursor, fuse=None, inline=False, asm=None, reg_ptrs=frozenset(),
-                 forward=None, same=frozenset(), fnargs=None):
+                 forward=None, same=frozenset(), fnargs=None, discard=False):
         self.u = unit
         self.f = FnCtx(unit.name, fn_cursor)
+        # An inline copy for a call whose result goes unused: its returns keep only what their
+        # values do besides being values, as MWCC drops the rest.
+        self.discard = discard
+        # The next call_function call's result goes unused.
+        self.discarding = False
         self.line = fn_cursor.location.line
         # Whether to contract multiply-adds: only where the original's asm has fused ops.
         self.fuse = fuse if fuse is not None else unit.fused_ops.get(fn_cursor.spelling, 1) > 0
@@ -1361,6 +1366,8 @@ class Translator:
             if self.f.sret:
                 v = self.expr(kids[0])
                 return [f"Handle::copy_from(__ret, {v.code});", "return;"]
+            if self.discard:
+                return self.effect(kids[0]) + [f"return {self.zero(self.f.ret)};"]
             v = self.convert(self.expr(kids[0]), self.f.ret)
             return [f"return {v.code};"]
         if k == CK.IF_STMT:
@@ -1894,7 +1901,11 @@ class Translator:
             # MWCC drops what has no effect, such as the dead loads of the decomp's
             # stack-padding GET_FIGHTER(0), which would fault.
             return []
-        v = self.expr(c)
+        self.discarding = strip(c).kind == CK.CALL_EXPR
+        try:
+            v = self.expr(c)
+        finally:
+            self.discarding = False
         if v.ty["k"] == "void":
             return [f"{v.code};"]
         if v.pure:
@@ -2900,16 +2911,19 @@ class Translator:
     # Calls.
 
     def call(self, c):
+        # A call whose result goes unused calls an inline function's copy that drops it; the
+        # calls in its arguments are used.
+        discard, self.discarding = self.discarding, False
         saved, self.call_pre = self.call_pre, []
         try:
-            e = self.call_expr(c)
+            e = self.call_expr(c, discard)
             if self.call_pre:
                 e = Expr("{ " + " ".join(self.call_pre) + f" {e.code} }}", e.ty, False)
             return e
         finally:
             self.call_pre = saved
 
-    def call_expr(self, c):
+    def call_expr(self, c, discard=False):
         kids = children(c)
         callee = strip(kids[0])
         args = kids[1:]
@@ -2925,10 +2939,11 @@ class Translator:
                 ref = self.fnargs[r.spelling]
                 self.decisions[("fnarg", r.spelling)] = ref.spelling
         if ref is not None:
-            return self.call_function(ref, args, t)
+            return self.call_function(ref, args, t, discard)
         return self.call_pointer(kids, args, t)
 
-    def call_function(self, ref, args, t):
+    def call_function(self, ref, args, t, discard=False):
+        discard = discard and t["k"] not in ("void", "rec")
         """A call to the function `ref` declares."""
         if True:
             name = ref.spelling
@@ -2960,7 +2975,7 @@ class Translator:
                 try:
                     rname = self.u.request_inline(defn, self.fuse, self, self.reg_ptr_args(ref, args),
                                                   {pn: neg for pn, (_, _, neg) in fwd.values()},
-                                                  self.same_args(defn, args), fnargs)
+                                                  self.same_args(defn, args), fnargs, discard)
                 except Unsupported as e:
                     self.u.inline_fallbacks.append((self.f.cursor.spelling, name, str(e)))
                 else:
@@ -3008,7 +3023,7 @@ class Translator:
                                    fwd)
             rname = self.u.request_inline(defn, self.fuse, self, self.reg_ptr_args(defn, args),
                                           {pn: neg for pn, (_, _, neg) in fwd.values()},
-                                          self.same_args(defn, args), fnargs)
+                                          self.same_args(defn, args), fnargs, discard)
             argv += self.inline_region(rname)
             if t["k"] == "rec":
                 return self.sret_call(rname, argv, t)
@@ -4332,12 +4347,13 @@ def flow():
 
 
 def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None, same=frozenset(),
-                    fnargs=None):
+                    fnargs=None, discard=False):
     """An inline function's Rust name, translating it on first use. MWCC contracts inlined
     code as its caller's, and inlines the calls in it as the function it ends up in does, so
-    there is a copy for each way of doing both."""
+    there is a copy for each way of doing both, and one for calls whose result goes unused,
+    whose loads MWCC drops."""
     name = defn.spelling
-    base = "inl_" + name + ("" if fuse else "_unfused")
+    base = "inl_" + name + ("" if fuse else "_unfused") + ("_discard" if discard else "")
     if base in self.inline_active:
         self.inline_recursive.add(self.inline_active[base])
         return self.inline_active[base]  # recursion: the copy being translated
@@ -4379,7 +4395,7 @@ def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None
     all_variants = {k: list(v) for k, v in self.inline_variants.items()}
     try:
         tr = Translator(self, defn, fuse, inline=True, asm=asm, reg_ptrs=reg_ptrs, forward=forward,
-                        same=same, fnargs=fnargs)
+                        same=same, fnargs=fnargs, discard=discard)
         code = tr.function()
     except Exception as e:
         self.inlines, self.inline_variants = inlines, all_variants

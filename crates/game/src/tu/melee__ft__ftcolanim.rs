@@ -207,7 +207,7 @@ pub fn ft_800C0098<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
     let mut fp = fp;
     fns::lb_80014498(ctx, (fp).x508());
     if ((fp).x2226_b4() != 0) {
-        let _ = inl_ftCo_800BFFD0_unfused(ctx, fp, 128_i32, 0_i32);
+        let _ = inl_ftCo_800BFFD0_unfused_discard(ctx, fp, 128_i32, 0_i32);
     }
 }
 
@@ -222,7 +222,7 @@ pub fn ftCo_800C0134<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
             .call::<_, ()>(((fp).gobj(),));
     }
     if fns::ftCo_800C53E4(ctx, fp) != 0_i32 {
-        let _ = inl_ftCo_800BFFD0_unfused(ctx, fp, 106_i32, 0_i32);
+        let _ = inl_ftCo_800BFFD0_unfused_discard(ctx, fp, 106_i32, 0_i32);
     }
 }
 
@@ -351,7 +351,12 @@ fn inl_ftCo_800BFD04_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     (fp).set_x221F_b1((1_i32 as u8));
 }
 
-fn inl_ftCo_800BFFD0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32, arg2: i32) -> i32 {
+fn inl_ftCo_800BFFD0_unfused_discard<'a>(
+    ctx: &'a Ctx,
+    fp: Fighter<'a>,
+    arg1: i32,
+    arg2: i32,
+) -> i32 {
     let mut fp = fp;
     let mut arg1 = arg1;
     let mut arg2 = arg2;
@@ -370,7 +375,7 @@ fn inl_ftCo_800BFFD0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32, arg2:
             )
         } != 0)
         {
-            return 1_i32;
+            return 0;
         }
     } else if ((Handle::add(fns::Fighter_804D653C(ctx).get(), arg1)).unk5() as i32) != 0_i32 {
         if (fns::lb_800144C8(
@@ -381,7 +386,7 @@ fn inl_ftCo_800BFFD0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32, arg2:
             arg2,
         ) != 0)
         {
-            return 1_i32;
+            return 0;
         }
     } else if (fns::lb_800144C8(
         ctx,
@@ -391,9 +396,9 @@ fn inl_ftCo_800BFFD0_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32, arg2:
         arg2,
     ) != 0)
     {
-        return 1_i32;
+        return 0;
     }
-    return 0_i32;
+    return 0;
 }
 
 fn inl_ftCo_800C0134_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {

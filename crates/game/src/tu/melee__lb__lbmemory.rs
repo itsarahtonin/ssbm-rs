@@ -761,7 +761,7 @@ pub fn lbMemory_8001564C<'a>(ctx: &'a Ctx) {
         .get(i)
         .set_next(null::<Handle_<'a>>(ctx));
     fns::lbMemory_804318B0(ctx).set_aram_heap(null::<Handle_<'a>>(ctx));
-    let _ = inl_lbMemory_800154D4_unfused(
+    let _ = inl_lbMemory_800154D4_unfused_discard(
         ctx,
         ptr::<Addr<'a>>(ctx, (fns::lbMemory_804318B0(ctx).a_arenaLo()) as u32),
         ptr::<Addr<'a>>(ctx, (fns::lbMemory_804318B0(ctx).a_arenaHi()) as u32),
@@ -967,7 +967,7 @@ fn inl_lbMemory_80014EEC_unfused<'a>(ctx: &'a Ctx, handle: Handle_<'a>) {
     fns::lbMemory_804318B0(ctx).set_free_heap(handle);
 }
 
-fn inl_lbMemory_800154D4_unfused<'a>(
+fn inl_lbMemory_800154D4_unfused_discard<'a>(
     ctx: &'a Ctx,
     arenaLo: Addr<'a>,
     arenaHi: Addr<'a>,
@@ -975,7 +975,7 @@ fn inl_lbMemory_800154D4_unfused<'a>(
     let mut arenaLo = arenaLo;
     let mut arenaHi = arenaHi;
     fns::lbMemory_804318B0(ctx).set_aram_heap(fns::lbMemory_80014E24(ctx, arenaLo, arenaHi));
-    return (fns::lbMemory_804318B0(ctx).aram_heap());
+    return null(ctx);
 }
 
 /// Registers this unit's ports.

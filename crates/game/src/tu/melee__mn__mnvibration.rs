@@ -82,7 +82,7 @@ pub fn mnVibration_HandleInput<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         inl_Menu_DecrementAnimTimer(ctx);
         return;
     }
-    let _ = inl_Menu_GetAllInputs(ctx);
+    let _ = inl_Menu_GetAllInputs_discard(ctx);
     inputs = fns::gm_GetButtonsTriggered(ctx, (4_i32 as u8));
     if ((inputs & (0x200000000_u64)) != 0) {
         let mut exit_data: MnVibrationData<'a> = null(ctx);
@@ -1232,12 +1232,9 @@ fn inl_Menu_DecrementAnimTimer<'a>(ctx: &'a Ctx) {
     fns::mn_804D6BC8(ctx).set_x4(0_i32);
 }
 
-fn inl_Menu_GetAllInputs<'a>(ctx: &'a Ctx) -> u64 {
-    return {
-        let __t1 = (fns::mn_80229624(ctx, (4_i32 as u32)) as u64);
-        fns::mn_804A04F0(ctx).set_buttons(__t1);
-        __t1
-    };
+fn inl_Menu_GetAllInputs_discard<'a>(ctx: &'a Ctx) -> u64 {
+    fns::mn_804A04F0(ctx).set_buttons((fns::mn_80229624(ctx, (4_i32 as u32)) as u64));
+    return 0;
 }
 
 fn inl_sfxBack<'a>(ctx: &'a Ctx) {

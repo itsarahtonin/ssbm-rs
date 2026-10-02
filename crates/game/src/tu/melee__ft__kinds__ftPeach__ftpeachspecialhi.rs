@@ -101,7 +101,7 @@ pub fn ftPe_8011D598<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
     if !Handle::is_null((fp).u().pe().parasol_gobj_0()) {
         fns::it_802BDB94(ctx, (fp).u().pe().parasol_gobj_0());
-        let _ = inl_ftPe_8011D518_unfused(ctx, gobj);
+        let _ = inl_ftPe_8011D518_unfused_discard(ctx, gobj);
     }
 }
 
@@ -401,7 +401,7 @@ fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr
     return (gobj).user_data();
 }
 
-fn inl_ftPe_8011D518_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+fn inl_ftPe_8011D518_unfused_discard<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
         (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -416,10 +416,10 @@ fn inl_ftPe_8011D518_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
             fns::it_8026BB20(ctx, (fp).item_gobj());
             fns::it_8026B73C(ctx, (fp).item_gobj());
             fns::ftpickupitem_80094818(ctx, gobj, 1_i32);
-            return 1_i32;
+            return 0;
         }
     }
-    return 0_i32;
+    return 0;
 }
 
 fn inl_ensureUnkItem_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, cb: FnPtr<'a>) {

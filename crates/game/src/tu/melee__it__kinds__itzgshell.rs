@@ -1175,7 +1175,7 @@ pub fn it_2725_Logic11_HitShield<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     if ((ip).msid() == 3_i32) || ((ip).msid() == 4_i32) {
         fns::itColl_BounceOffVictim(ctx, gobj);
     } else if (((ip).msid() as u32).wrapping_sub(5_u32)) <= (3_i32 as u32) {
-        let _ = inl_it_2725_Logic11_Clanked_unfused(ctx, gobj);
+        let _ = inl_it_2725_Logic11_Clanked_unfused_discard(ctx, gobj);
     }
     return 0_i32;
 }
@@ -1668,7 +1668,7 @@ fn inl_itResetVelocity_unfused<'a>(ctx: &'a Ctx, ip: Item<'a>) {
     });
 }
 
-fn inl_it_2725_Logic11_Clanked_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
+fn inl_it_2725_Logic11_Clanked_unfused_discard<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
     let mut gobj = gobj;
     let mut attrs: itZGShell_Attrs<'a> = null(ctx);
     let mut ip: Item<'a> = (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
@@ -1685,7 +1685,7 @@ fn inl_it_2725_Logic11_Clanked_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> 
     (ip).xDD4_itemVar().zgshell().set_xE04((attrs).x34());
     fns::Item_80268E5C(ctx, gobj, 1_i32, (enums::ITEM_ANIM_UPDATE as i32));
     fns::it_80274C88(ctx, gobj);
-    return 0_i32;
+    return 0;
 }
 
 fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec<'a>) {

@@ -1214,7 +1214,7 @@ pub fn fn_8019249C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     child = inl_HSD_JObjGetNext_unfused(ctx, child);
     child = inl_HSD_JObjGetNext_unfused(ctx, child);
     child = inl_HSD_JObjGetNext_unfused(ctx, child);
-    let _ = inl_HSD_JObjGetNext_unfused(ctx, child);
+    let _ = inl_HSD_JObjGetNext_unfused_discard(ctx, child);
     child2 = inl_HSD_JObjGetNext_unfused(ctx, child);
     child2 = inl_HSD_JObjGetNext_unfused(ctx, child2);
     child2 = inl_HSD_JObjGetNext_unfused(ctx, child2);
@@ -1224,7 +1224,7 @@ pub fn fn_8019249C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         child3 = (child2).next();
     }
     child2 = child3;
-    let _ = inl_HSD_JObjGetNext_unfused(ctx, child2);
+    let _ = inl_HSD_JObjGetNext_unfused_discard(ctx, child2);
     if cur_option == 13_i32 {
         fns::fn_8019044C(ctx, child, 0.0);
         fns::fn_8019044C(
@@ -8145,6 +8145,17 @@ fn inl_HSD_JObjGetNext_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj
         return null::<HSD_JObj<'a>>(ctx);
     } else {
         return (jobj).next();
+    }
+    #[allow(unreachable_code)]
+    return null(ctx);
+}
+
+fn inl_HSD_JObjGetNext_unfused_discard<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD_JObj<'a> {
+    let mut jobj = jobj;
+    if Handle::is_null(jobj) {
+        return null(ctx);
+    } else {
+        return null(ctx);
     }
     #[allow(unreachable_code)]
     return null(ctx);

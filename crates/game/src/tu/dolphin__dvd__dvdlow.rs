@@ -994,7 +994,7 @@ pub fn AlarmHandler<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>, context: OSContext<'a>
     let __frame = ctx.stack_frame(0x8);
     let mut alarm = alarm;
     let mut context = context;
-    let _ = inl_ProcessNextCommand_unfused(ctx);
+    let _ = inl_ProcessNextCommand_unfused_discard(ctx);
 }
 
 pub fn AlarmHandlerForTimeout<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>, context: OSContext<'a>) {
@@ -2830,7 +2830,7 @@ pub fn __DVDLowSetWAType<'a>(ctx: &'a Ctx, r#type: u32, location: u32) {
     let _ = fns::OSRestoreInterrupts(ctx, enabled);
 }
 
-fn inl_ProcessNextCommand_unfused<'a>(ctx: &'a Ctx) -> i32 {
+fn inl_ProcessNextCommand_unfused_discard<'a>(ctx: &'a Ctx) -> i32 {
     let mut n: i32 = statics::dolphin__dvd__dvdlow::NextCommandNumber(ctx).get();
     if statics::dolphin__dvd__dvdlow::CommandList(ctx).get(n).cmd() == 1_i32 {
         statics::dolphin__dvd__dvdlow::NextCommandNumber(ctx).set(
@@ -2853,7 +2853,7 @@ fn inl_ProcessNextCommand_unfused<'a>(ctx: &'a Ctx) -> i32 {
                 .get(n)
                 .callback(),
         );
-        return 1_i32;
+        return 0;
     } else if statics::dolphin__dvd__dvdlow::CommandList(ctx).get(n).cmd() == 2_i32 {
         statics::dolphin__dvd__dvdlow::NextCommandNumber(ctx).set(
             statics::dolphin__dvd__dvdlow::NextCommandNumber(ctx)
@@ -2869,9 +2869,9 @@ fn inl_ProcessNextCommand_unfused<'a>(ctx: &'a Ctx) -> i32 {
                 .get(n)
                 .callback(),
         );
-        return 1_i32;
+        return 0;
     }
-    return 0_i32;
+    return 0;
 }
 
 fn inl_SetTimeoutAlarm_unfused<'a>(ctx: &'a Ctx, timeout: i64) {

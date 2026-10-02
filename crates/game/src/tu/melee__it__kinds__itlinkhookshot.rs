@@ -3316,7 +3316,7 @@ pub fn it_802A44CC<'a>(
     let mut inv: f64 = 0.0;
     let mut len: f64 = 0.0;
     link_1 = (link_0).prev();
-    let _ = inl_it_802A3C98(ctx, (link_0).pos(), arg1, vec);
+    let _ = inl_it_802A3C98_discard(ctx, (link_0).pos(), arg1, vec);
     (link_0).pos().set_x(fp::fmadds(vec.x(), arg8, (arg1).x()));
     (link_0).pos().set_y(fp::fmadds(vec.y(), arg8, (arg1).y()));
     (link_0).pos().set_z(fp::fmadds(vec.z(), arg8, (arg1).z()));
@@ -3412,7 +3412,7 @@ pub fn it_802A49B0<'a>(
     let mut inv: f64 = 0.0;
     let mut len: f64 = 0.0;
     link_1 = (link_0).prev();
-    let _ = inl_it_802A3C98(ctx, (link_0).pos(), arg1, vec);
+    let _ = inl_it_802A3C98_discard(ctx, (link_0).pos(), arg1, vec);
     (link_0).pos().set_x(fp::fmadds(vec.x(), arg8, (arg1).x()));
     (link_0).pos().set_y(fp::fmadds(vec.y(), arg8, (arg1).y()));
     (link_0).pos().set_z(fp::fmadds(vec.z(), arg8, (arg1).z()));
@@ -4891,6 +4891,34 @@ fn inl_sqrtf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
         return y;
     }
     return x;
+}
+
+fn inl_it_802A3C98_discard<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: Vec<'a>, arg2: Vec<'a>) -> f64 {
+    let mut arg0 = arg0;
+    let mut arg1 = arg1;
+    let mut arg2 = arg2;
+    let mut inv: f64 = 0.0;
+    let mut len: f64 = 0.0;
+    (arg2).set_x(fp::fsubs((arg0).x(), (arg1).x()));
+    (arg2).set_y(fp::fsubs((arg0).y(), (arg1).y()));
+    (arg2).set_z(fp::fsubs((arg0).z(), (arg1).z()));
+    len = inl_sqrtf(
+        ctx,
+        fp::fmadds(
+            (arg2).z(),
+            (arg2).z(),
+            fp::fmadds((arg2).x(), (arg2).x(), fp::fmuls((arg2).y(), (arg2).y())),
+        ),
+    );
+    if len == 0.0 {
+        inv = fp::frsp(0.0);
+    } else {
+        inv = fp::frsp(fp::fdiv(1.0, len));
+    }
+    (arg2).set_x(fp::fmuls((arg2).x(), inv));
+    (arg2).set_y(fp::fmuls((arg2).y(), inv));
+    (arg2).set_z(fp::fmuls((arg2).z(), inv));
+    return 0.0;
 }
 
 fn inl_it_802A3C98<'a>(ctx: &'a Ctx, arg0: Vec<'a>, arg1: Vec<'a>, arg2: Vec<'a>) -> f64 {

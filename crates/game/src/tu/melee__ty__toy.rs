@@ -11260,7 +11260,7 @@ pub fn _Toy_80308F04<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) {
     bottom = fns::HSD_CObjGetBottom(ctx, cobj);
     right = fns::HSD_CObjGetRight(ctx, cobj);
     left = fns::HSD_CObjGetLeft(ctx, cobj);
-    let _ = inl_HSD_JObjGetScaleY_unfused(ctx, Handle::cast::<HSD_JObj<'a>>(jobj_ptr));
+    let _ = inl_HSD_JObjGetScaleY_unfused_discard(ctx, Handle::cast::<HSD_JObj<'a>>(jobj_ptr));
     if ((state).x61() as i32) == 1_i32 {
         if fp::frsp((state).x5C() as f64) < 10.0 {
             fns::_Toy_sbss_804D6E80(ctx).set(fp::fsubs(
@@ -50804,7 +50804,7 @@ fn inl_HSD_JObjSetScaleZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     }
 }
 
-fn inl_HSD_JObjGetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
+fn inl_HSD_JObjGetScaleY_unfused_discard<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     let mut jobj = jobj;
     (if !Handle::is_null((jobj)) {
         ({ () })
@@ -50816,7 +50816,7 @@ fn inl_HSD_JObjGetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
             cstr(ctx, 0x803b87a8),
         )
     });
-    return (jobj).scale().y();
+    return 0.0;
 }
 
 fn inl_showDevText_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, text: Ptr<'a, DevText<'a>>) {

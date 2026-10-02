@@ -94,7 +94,7 @@ pub fn ftCo_HammerFall_IASA<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x28);
     let __inl: ArrV<'a, u8, 16> = frame_at(ctx, &__frame, 0xc);
     let mut gobj = gobj;
-    let _ = inl_ftCo_800C5DDC_unfused(ctx, gobj, Handle::addr(__inl));
+    let _ = inl_ftCo_800C5DDC_unfused_discard(ctx, gobj, Handle::addr(__inl));
 }
 
 pub fn ftCo_HammerFall_Phys<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -138,7 +138,11 @@ fn inl_inlineA0_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) 
     );
 }
 
-fn inl_ftCo_800C5DDC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: u32) -> i32 {
+fn inl_ftCo_800C5DDC_unfused_discard<'a>(
+    ctx: &'a Ctx,
+    gobj: HSD_GObj<'a>,
+    __in_caller: u32,
+) -> i32 {
     let __inl: ArrV<'a, u8, 16> = ptr(ctx, __in_caller + 0x0);
     let mut gobj = gobj;
     let mut fp: Fighter<'a> =
@@ -151,9 +155,9 @@ fn inl_ftCo_800C5DDC_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, __in_caller: 
         && (((fp).x683() as i32) >= (fns::p_ftCommonData(ctx).get()).x1C())
     {
         inl_inlineA0_unfused(ctx, gobj, Handle::addr(__inl));
-        return 1_i32;
+        return 0;
     }
-    return 0_i32;
+    return 0;
 }
 
 /// Registers this unit's ports.

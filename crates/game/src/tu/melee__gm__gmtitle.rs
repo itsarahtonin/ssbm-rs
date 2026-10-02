@@ -499,7 +499,7 @@ pub fn gm_Scene_Title_OnEnter<'a>(ctx: &'a Ctx, unused: Addr<'a>) {
     );
     fns::lbAudioAx_8002702C(ctx, (2_i32 as u32), (4_i32 as u64));
     fns::lbAudioAx_80027168(ctx);
-    let _ = inl_gmTitle_801A1A3C_unfused(ctx);
+    let _ = inl_gmTitle_801A1A3C_unfused_discard(ctx);
     inl_gmTitle_801A19AC_unfused(ctx);
     inl_gmTitle_801A1944_unfused(ctx);
     inl_gmTitle_801A185C_unfused(ctx);
@@ -723,7 +723,7 @@ fn inl_gmTitle_801A1AC0_unfused<'a>(ctx: &'a Ctx, __in_caller: u32) -> HSD_Archi
     );
 }
 
-fn inl_gmTitle_801A1A3C_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
+fn inl_gmTitle_801A1A3C_unfused_discard<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
     let mut gobj: HSD_GObj<'a> =
         fns::GObj_Create(ctx, (10_i32 as u16), (3_i32 as u8), (0_i32 as u8));
     let mut fog: HSD_Fog<'a> =
@@ -742,7 +742,7 @@ fn inl_gmTitle_801A1A3C_unfused<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
         (0_i32 as u32),
     );
     let _ = fns::HSD_GObj_SetupProc(ctx, gobj, fnptr(ctx, 0x801a1a18), (0_i32 as u8));
-    return gobj;
+    return null(ctx);
 }
 
 fn inl_gmTitle_801A19AC_unfused<'a>(ctx: &'a Ctx) {
