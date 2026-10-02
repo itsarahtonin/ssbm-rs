@@ -64,6 +64,7 @@ fuzz)
     mkdir -p $OUT
     grep -q "^cov-$NAME=" $L/binaries.txt || echo "cov-$NAME=$(git rev-parse --short HEAD)" >> $L/binaries.txt
     for c in ${CORPORA:-$DIR/$ROUND-*.corpus}; do
+        [[ -f $c ]] || { echo "no corpus $c"; continue; }
         n=$(basename $c .corpus)
         grep -q "^lockstep:" $OUT/$n.txt 2>/dev/null && continue
         env LOCKSTEP_MUTATE=$MUTATE LOCKSTEP_SEED=$SEED LOCKSTEP_TARGETS=$L/targets-$ROUND.txt \
