@@ -12,8 +12,9 @@
 # comparison with Dolphin covers what it does). A block that odd state can reach, such as a null
 # check the game never trips, belongs to probes and mutated checks instead, not here.
 #
-# FUNCTION+* covers every block of a function, for the functions no run can reach that are not
-# verified by probes.
+# FUNCTION+* covers every block of a function that nothing verified, for the functions no run can
+# reach that are not verified by probes, and for those whose every block the evidence covers,
+# such as the crash screen's.
 DSPCheckMailToDSP+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
 DSPCheckMailFromDSP+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
 DSPReadMailFromDSP+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
@@ -79,3 +80,187 @@ __start+* oracle # the boot entry: never returns, so no lockstep check can compa
 main+* oracle # never returns: it runs gm_801A4510, the scene loop, for good
 gm_801A4510+* oracle # the scene loop, which never returns
 gm_801A4D34+* oracle # runs a scene's frames until it ends, inside the scene loop: one call spans a whole scene of interrupts and video fields, which a check cannot replay
+
+# The crash screen (2026-10-02): only fn_HSDPanicHandler and fn_OSErrorHandler (melee/db/dberror) refer to debugconsole_main, and only db_SetupCrashHandler refers to them, installing them as the HSD panic callback and the OS error handlers. Blocks a crash in a run verified stay verified.
+fn_HSDPanicHandler+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+fn_OSErrorHandler+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80394314+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80394434+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80394544+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80394668+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80394950+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+Exception_ReportStackTrace+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+Exception_ReportCodeline+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+fn_80394DF4+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80394E8C+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80394F48+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80395550+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80395644+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_803956D8+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_803957C0+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80395970+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80395A78+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80395D88+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80396130+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80396188+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_803962A8+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_803966A0+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80396868+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80396884+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80396A20+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80396C78+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80396E40+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+fn_803970D8+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+fn_803970DC+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+fn_803970E0+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+fn_803970E4+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+fn_803970E8+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+fn_803970EC+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+fn_803970F0+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+fn_803970F4+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+fn_803970F8+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+fn_803970FC+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+fn_80397100+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+fn_80397104+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+fn_80397108+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+fn_8039710C+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80397110+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+fn_80397374+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80397520+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_803975D4+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+fn_80397814+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80397DA4+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+Exception_StoreDebugLevel+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+hsd_80397DFC+* fail # the crash screen: runs only from the HSD panic callback or an OS error handler
+
+# MetroTRK, the debugger's target side (2026-10-02): only __start refers to InitMetroTRK, calling it when the boot info's debugger flag (BI2 at 0x800000F4, +0xC) is 2 or 3, and only OSInit to EnableMetroTRKInterrupts, when BI2DebugFlag is 2 or more. A retail boot's flag is 0 (ssbm-run leaves 0x800000F4 null), so nothing starts TRK or installs its handlers; probes verified some of its blocks.
+EnableEXI2Interrupts+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+EnableMetroTRKInterrupts+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+InitMetroTRK+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+InitMetroTRKCommTable+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+ReserveEXI2Port+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKAcquireMutex+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKAppendBuffer+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKAppendBuffer1_ui16+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKAppendBuffer1_ui32+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKAppendBuffer1_ui64+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKAppendBuffer_ui32+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKAppendBuffer_ui8+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKConstructEvent+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKCopyEvent+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKDestructEvent+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKDispatchMessage+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKDoCPUType+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKDoConnect+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKDoContinue+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKDoDisconnect+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKDoFlushCache+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKDoNotifyStopped+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKDoReadMemory+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKDoReadRegisters+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKDoReset+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKDoStep+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKDoStop+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKDoSupportMask+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKDoUnsupported+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKDoVersions+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKDoWriteMemory+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKDoWriteRegisters+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKEXICallBack+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKGetBuffer+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKGetFreeBuffer+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKGetInput+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKGetNextEvent+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKHandleRequestEvent+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKHandleSupportEvent+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKIdle+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKInitializeDispatcher+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKInitializeEndian+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKInitializeEventQueue+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKInitializeIntDrivenUART+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKInitializeMessageBuffers+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKInitializeMutex+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKInitializeNub+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKInitializeSerialHandler+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKInitializeTarget+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKMessageIntoReply+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKMessageSend+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKNubMainLoop+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKNubWelcome+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKPPCAccessFPRegister+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKPPCAccessPairedSingleRegister+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKPPCAccessSPR+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKPPCAccessSpecialReg+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKPollUART+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKPostEvent+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKPostInterruptEvent+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKProcessInput+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKReadBuffer+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKReadBuffer1_ui16+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKReadBuffer1_ui32+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKReadBuffer1_ui64+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKReadBuffer1_ui8+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKReadBuffer_ui32+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKReadBuffer_ui8+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKReleaseBuffer+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKReleaseMutex+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKRequestSend+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKResetBuffer+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKRestoreExtended1Block+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKSaveExtended1Block+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKSendACK+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKSetBufferPosition+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKSetBufferUsed+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKStandardACK+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKSuppAccessFile+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKSwapAndGo+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetAccessDefault+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetAccessExtended1+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetAccessExtended2+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetAccessFP+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetAccessMemory+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetAddExceptionInfo+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetAddStopInfo+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetCPUMinorType+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetCPUType+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetCheckStep+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetContinue+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetDoStep+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetEnableTrace+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetFlushCache+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetGetPC+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetInterrupt+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetReadInstruction+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetSetInputPendingPtr+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetSetStopped+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetSingleStep+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetStepDone+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetStepOutOfRange+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetStop+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetStopped+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetSupportMask+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetSupportRequest+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetTranslate+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTargetVersions+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTerminateNub+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTerminateSerialHandler+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKTestForPacket+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKUARTInterruptHandler+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRKValidMemory32+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRK_ReadUARTN+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRK_WriteUARTN+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRK_board_display+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRK_copy_vector+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRK_fill_mem+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRK_flush_cache+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRK_main+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRK_memcpy+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRK_memset+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+TRK_ppc_memcpy+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+UnreserveEXI2Port+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+__TRK_copy_vectors+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+__TRK_get_MSR+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+__TRK_reset+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+__TRK_set_MSR+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+pad_00_80003298_init+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+usr_put_initialize+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
