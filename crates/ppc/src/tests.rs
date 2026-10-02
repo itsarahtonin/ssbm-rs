@@ -331,6 +331,7 @@ fn mutated_checks_drop_calls_to_no_function() {
     ctx.invoke(CODE);
     assert_eq!(ctx.regs.r(3), 7);
     assert_eq!(ctx.lockstep.stats.borrow()[&CODE].calls, 1, "only the real call ran");
+    assert_eq!(ctx.lockstep.stats.borrow()[&CODE].dropped, 8, "every mutated check dropped");
 }
 
 #[test]

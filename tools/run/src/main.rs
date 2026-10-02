@@ -76,7 +76,7 @@ fn calls_to(dol: &ssbm_disc::Dol, target: u32) -> Vec<u32> {
 /// A ledger's rows: per port, calls, mismatching calls, calls that differ only by reads of
 /// stack the original never wrote, runs, instructions the checks' originals ran, and
 /// mismatching calls with their inputs changed.
-type LedgerRows = std::collections::BTreeMap<u32, [u64; 6]>;
+type LedgerRows = std::collections::BTreeMap<u32, [u64; 7]>;
 
 /// The rows of the CSV ledger at `path`, if there is one.
 fn read_ledger(path: &str) -> LedgerRows {
@@ -91,7 +91,7 @@ fn read_ledger(path: &str) -> LedgerRows {
                 continue;
             };
             let n = |i: usize| f.get(i).and_then(|v| v.parse::<u64>().ok()).unwrap_or(0);
-            rows.insert(addr, [n(2), n(3), n(4), n(5), n(6), n(7)]);
+            rows.insert(addr, [n(2), n(3), n(4), n(5), n(6), n(7), n(8)]);
         }
     }
     rows
@@ -99,17 +99,18 @@ fn read_ledger(path: &str) -> LedgerRows {
 
 /// Writes the ledger at `path` as `base`, what it held before this run, with `checked` (address,
 /// calls, mismatching calls, calls that differ only by reads of stack the original never wrote,
-/// instructions the checks' originals ran, mismatching calls with their inputs changed) added.
+/// instructions the checks' originals ran, mismatching calls with their inputs changed, mutated
+/// checks dropped) added.
 /// Returns how many ports it has checked, and how many of them mismatch.
 fn update_ledger(
     path: &str,
     base: &LedgerRows,
-    checked: &[(u32, u64, u64, u64, u64, u64)],
+    checked: &[(u32, u64, u64, u64, u64, u64, u64)],
     ported: &[u32],
     name: &dyn Fn(u32) -> String,
 ) -> std::io::Result<(usize, usize)> {
     let mut rows = base.clone();
-    for &(addr, calls, bad, uninit, cost, mutated) in checked {
+    for &(addr, calls, bad, uninit, cost, mutated, dropped) in checked {
         let r = rows.entry(addr).or_default();
         r[0] += calls;
         r[1] += bad;
@@ -117,18 +118,21 @@ fn update_ledger(
         r[3] += 1;
         r[4] += cost;
         r[5] += mutated;
+        r[6] += dropped;
     }
-    let mut out = String::from("address,name,calls,mismatches,uninitialized,runs,cost,mutated\n");
+    let mut out =
+        String::from("address,name,calls,mismatches,uninitialized,runs,cost,mutated,dropped\n");
     for (addr, r) in &rows {
         out += &format!(
-            "{addr:#010x},{},{},{},{},{},{},{}\n",
+            "{addr:#010x},{},{},{},{},{},{},{},{}\n",
             name(*addr),
             r[0],
             r[1],
             r[2],
             r[3],
             r[4],
-            r[5]
+            r[5],
+            r[6]
         );
     }
     if let Some(dir) = std::path::Path::new(path).parent() {
@@ -181,13 +185,13 @@ impl Results {
         let mut said = Vec::new();
         // The ledger adds this run's checks to every port's, kept across runs.
         if let Some((path, base)) = &self.ledger {
-            let checked: Vec<(u32, u64, u64, u64, u64, u64)> = ctx
+            let checked: Vec<(u32, u64, u64, u64, u64, u64, u64)> = ctx
                 .lockstep
                 .stats
                 .borrow()
                 .iter()
                 .map(|(&a, s)| {
-                    (a, s.calls, s.mismatches, s.uninitialized, s.cost, s.mutated_mismatches)
+                    (a, s.calls, s.mismatches, s.uninitialized, s.cost, s.mutated_mismatches, s.dropped)
                 })
                 .collect();
             said.push(match update_ledger(path, base, &checked, ported, &|a| ctx.name_of(a)) {

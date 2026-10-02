@@ -123,6 +123,9 @@ pub struct Stats {
     pub uninitialized: u64,
     /// Mismatching calls whose inputs were changed at random from a call's.
     pub mutated_mismatches: u64,
+    /// Mutated checks dropped before they compared anything: their original faulted or ran
+    /// away, or read what only it keeps.
+    pub dropped: u64,
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
@@ -904,7 +907,12 @@ fn drop_check(ctx: &Ctx, traced: bool, enclosing: Phase, outermost: bool) {
         state.traces.borrow_mut().pop();
     }
     state.phase.set(enclosing);
-    state.checking.borrow_mut().pop();
+    let addr = state.checking.borrow_mut().pop();
+    if let Some(addr) = addr
+        && state.mutating.get()
+    {
+        state.stats.borrow_mut().entry(addr).or_default().dropped += 1;
+    }
     if !outermost {
         panic_any(Dropped);
     }
