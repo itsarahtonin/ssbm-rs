@@ -51,6 +51,56 @@ def mask(mb, me):
     return m
 
 
+def rotation(m, r):
+    """(shift, mask) of an instruction that rotates a register and masks it, as rlwinm and its
+    aliases do: the value it writes is rotl(source, shift) & mask. Else None."""
+    imm = [feasible.imm(x) for x in r[2:]]
+    if any(i is None for i in imm):
+        return None
+    if m == "rlwinm" and len(imm) == 3:
+        return imm[0], mask(imm[1], imm[2])
+    if m == "srwi" and len(imm) == 1:
+        return (32 - imm[0]) % 32, mask(imm[0], 31)
+    if m == "slwi" and len(imm) == 1:
+        return imm[0], mask(0, 31 - imm[0])
+    if m == "rotlwi" and len(imm) == 1:
+        return imm[0], 0xFFFFFFFF
+    if m == "extrwi" and len(imm) == 2:
+        n, b = imm
+        return (b + n) % 32, mask(32 - n, 31)
+    if m == "clrrwi" and len(imm) == 1:
+        return 0, mask(0, 31 - imm[0])
+    return None
+
+
+def rotr(v, n):
+    n %= 32
+    return ((v >> n) | (v << (32 - n))) & 0xFFFFFFFF if n else v
+
+
+def undo(steps, op, k):
+    """The value (op "=") or bits (op "&") a register must hold for what the steps computed
+    from it to equal k or have k's bits: the steps, outermost last, as source() lists them.
+    None where no value does."""
+    for step in reversed(steps):
+        kind = step[0]
+        if kind == "rot":
+            sh, m = step[1], step[2]
+            if op == "=" and k & ~m & 0xFFFFFFFF:
+                return None
+            k = rotr(k & m, sh)
+        elif kind == "add":
+            if op == "&":
+                return None
+            k = (k - step[1]) & 0xFFFFFFFF
+        elif kind == "sra":
+            if op == "&":
+                k = (k << step[1]) & 0xFFFFFFFF
+            else:
+                k = (k << step[1]) & 0xFFFFFFFF
+    return k
+
+
 def writes(m, ops, reg):
     """Whether instruction `m ops` writes `reg`."""
     r = feasible.regs(ops)
@@ -59,10 +109,12 @@ def writes(m, ops, reg):
     return bool(r) and r[0] == reg and not m.startswith(feasible.NOT_WRITING)
 
 
-def source(cfg, b, upto, reg, depth=0):
+def source(cfg, b, upto, reg, depth=0, steps=()):
     """What `reg` holds before instruction `upto` of block `b`: ("call", callee), ("reg", reg)
-    for an argument, ("load", pc, size), or None. Follows copies, lone predecessors, and a
-    register the whole function sets once, as the saved copy of an argument is."""
+    for an argument, ("load", pc, size), or None, with the steps that computed reg from it
+    last (rotations and masks, additions of a constant, arithmetic shifts), which undo() can
+    take back. Follows copies, lone predecessors, and a register the whole function sets once,
+    as the saved copy of an argument is."""
     blocks, preds = cfg
     block = blocks[b]
     if depth > 8:
@@ -79,15 +131,23 @@ def source(cfg, b, upto, reg, depth=0):
         if not writes(m, ops, reg):
             continue
         if m.rstrip(".") in PASSING and len(r) >= 2:
-            return source(cfg, b, j, r[1], depth + 1)
+            return source(cfg, b, j, r[1], depth + 1, steps)
+        rot = rotation(m.rstrip("."), r) if len(r) >= 2 else None
+        if rot is not None:
+            return source(cfg, b, j, r[1], depth + 1, (("rot",) + rot,) + steps)
+        if m in ("addi", "subi") and len(r) == 3 and r[1] != "r0" and feasible.imm(r[2]) is not None:
+            k = feasible.imm(r[2]) * (1 if m == "addi" else -1)
+            return source(cfg, b, j, r[1], depth + 1, (("add", k),) + steps)
+        if m.rstrip(".") == "srawi" and len(r) == 3 and feasible.imm(r[2]) is not None:
+            return source(cfg, b, j, r[1], depth + 1, (("sra", feasible.imm(r[2])),) + steps)
         if m in LOAD_SIZES:
-            return ("load", pc, LOAD_SIZES[m])
+            return ("load", pc, LOAD_SIZES[m], steps)
         return None
     if b == 0:
-        return ("reg", reg) if reg in ARGS else None
+        return ("reg", reg, steps) if reg in ARGS else None
     if len(preds[b]) == 1:
         p = preds[b][0]
-        return source(cfg, p, len(blocks[p]), reg, depth + 1)
+        return source(cfg, p, len(blocks[p]), reg, depth + 1, steps)
     # A saved register set once, in the entry block, holds what it was set to throughout: the
     # epilogue's reload of the caller's value from the stack comes after every use.
     if reg not in feasible.VOLATILE:
@@ -97,7 +157,7 @@ def source(cfg, b, upto, reg, depth=0):
         sets = [(i, j) for i, blk in enumerate(blocks) for j, (_, m, ops) in enumerate(blk)
                 if writes(m, ops, reg) and not reload(m, ops)]
         if len(sets) == 1 and sets[0][0] == 0:
-            return source(cfg, 0, sets[0][1] + 1, reg, depth + 1)
+            return source(cfg, 0, sets[0][1] + 1, reg, depth + 1, steps)
     return None
 
 
@@ -252,6 +312,10 @@ def main():
             if d is None or d[0] is None:
                 continue
             src, op, k = d
+            if src[0] in ("reg", "load") and isinstance(src[-1], tuple):
+                k = undo(src[-1], op, k)
+                if k is None or (op == "&" and not k):
+                    continue
             if src[0] == "call":
                 where = addrs.get(src[1], {})
                 at = where.get(unit) or (next(iter(where.values())) if len(where) == 1 else None)
