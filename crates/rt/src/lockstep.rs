@@ -37,12 +37,23 @@ const STACK_CLEARED: u32 = 0x1000;
 pub enum Target {
     /// What a callee returns, which a stand-in returns instead.
     Call(u32),
-    /// An argument register (r3 to r10), compared with `value`, or with its `bits` tested.
-    Reg { reg: usize, value: u32, bits: bool },
-    /// What the function's load at `pc` reads, `size` bytes, compared or tested likewise.
-    Load { pc: u32, size: u32, value: u32, bits: bool },
+    /// An argument register (r3 to r10), compared with `value` as `test` says.
+    Reg { reg: usize, value: u32, test: Test },
+    /// What the function's load at `pc` reads, `size` bytes, compared likewise.
+    Load { pc: u32, size: u32, value: u32, test: Test },
     /// What the loads at `pc` and `other` read, `size` bytes each, compared with each other.
     LoadSame { pc: u32, other: u32, size: u32 },
+}
+
+/// How a target's compare looks at its value.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Test {
+    /// Equal to the value: it, or a neighbor of it either side.
+    Equal,
+    /// The value's bits set: they are toggled.
+    Bits,
+    /// Any of the `n` values from it up, as a switch's jump table takes its cases.
+    Range(u32),
 }
 
 /// Which registers hold a function's result, and so are compared.
@@ -1095,17 +1106,16 @@ fn change_target(ctx: &Ctx, addr: u32, loaded: &[(u32, u32)]) -> Option<String> 
     if state.random().is_multiple_of(2) {
         return None;
     }
-    // A value near the one a compare looks for, or the bits a test looks at toggled.
-    let near = |old: u32, value: u32, bits: bool| {
-        if bits {
-            old ^ value
-        } else {
-            match state.random() % 3 {
-                0 => value.wrapping_sub(1),
-                1 => value.wrapping_add(1),
-                _ => value,
-            }
-        }
+    // A value near the one a compare looks for, the bits a test looks at toggled, or one of a
+    // switch's cases.
+    let near = |old: u32, value: u32, test: Test| match test {
+        Test::Bits => old ^ value,
+        Test::Range(n) => value.wrapping_add((state.random() % u64::from(n.max(1))) as u32),
+        Test::Equal => match state.random() % 3 {
+            0 => value.wrapping_sub(1),
+            1 => value.wrapping_add(1),
+            _ => value,
+        },
     };
     match all[(state.random() % all.len() as u64) as usize] {
         Target::Call(callee) => {
@@ -1127,13 +1137,13 @@ fn change_target(ctx: &Ctx, addr: u32, loaded: &[(u32, u32)]) -> Option<String> 
             state.stub.set(Some((callee, r3, f1)));
             Some(format!("{} returns r3 {r3:#X}, f1 {f1}", ctx.name_of(callee)))
         }
-        Target::Reg { reg, value, bits } => {
+        Target::Reg { reg, value, test } => {
             let old = ctx.regs.r(reg);
-            let new = near(old, value, bits);
+            let new = near(old, value, test);
             ctx.regs.set_r(reg, new);
             Some(format!("r{reg} {old:#X}->{new:#X}"))
         }
-        Target::Load { pc, size, value, bits } => {
+        Target::Load { pc, size, value, test } => {
             let at: Vec<u32> = loaded.iter().filter(|l| l.0 == pc).map(|l| l.1).collect();
             let ea = *at.get((state.random() % at.len().max(1) as u64) as usize)?;
             let (code_start, code_end) = state.code.get();
@@ -1149,7 +1159,7 @@ fn change_target(ctx: &Ctx, addr: u32, loaded: &[(u32, u32)]) -> Option<String> 
                 2 => u32::from(ctx.read_u16(ea)),
                 _ => ctx.read_u32(ea),
             };
-            let new = near(old, value, bits);
+            let new = near(old, value, test);
             match size {
                 1 => ctx.write_u8(ea, new as u8),
                 2 => ctx.write_u16(ea, new as u16),
@@ -1178,7 +1188,7 @@ fn change_target(ctx: &Ctx, addr: u32, loaded: &[(u32, u32)]) -> Option<String> 
                 _ => ctx.read_u32(a),
             };
             let (old, value) = (read(ea), read(from));
-            let new = near(old, value, false);
+            let new = near(old, value, Test::Equal);
             match size {
                 1 => ctx.write_u8(ea, new as u8),
                 2 => ctx.write_u16(ea, new as u16),

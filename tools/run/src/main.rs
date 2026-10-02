@@ -772,21 +772,43 @@ fn run() -> ExitCode {
             let mut targets = ctx.lockstep.targets.borrow_mut();
             for line in text.lines() {
                 let hex = |s: &str| u32::from_str_radix(s.trim_start_matches("0x"), 16).ok();
+                use ssbm_rt::lockstep::Test;
+                let test = |op: &str| if op == "&" { Test::Bits } else { Test::Equal };
                 let fields = line.split('#').next().unwrap_or("");
                 let w: Vec<&str> = fields.split_whitespace().collect();
                 let target = match w.as_slice() {
                     [_, "call", g] => hex(g).map(ssbm_rt::lockstep::Target::Call),
                     [_, "reg", n, op, k] => n.parse().ok().zip(hex(k)).map(|(reg, value)| {
-                        ssbm_rt::lockstep::Target::Reg { reg, value, bits: *op == "&" }
+                        ssbm_rt::lockstep::Target::Reg { reg, value, test: test(op) }
                     }),
+                    [_, "reg", n, "in", lo, count] => n
+                        .parse()
+                        .ok()
+                        .zip(hex(lo))
+                        .zip(count.parse().ok())
+                        .map(|((reg, value), n)| ssbm_rt::lockstep::Target::Reg {
+                            reg,
+                            value,
+                            test: Test::Range(n),
+                        }),
                     [_, "load", pc, size, "=", "load", other] => {
                         hex(pc).zip(size.parse().ok()).zip(hex(other)).map(|((pc, size), other)| {
                             ssbm_rt::lockstep::Target::LoadSame { pc, other, size }
                         })
                     }
+                    [_, "load", pc, size, "in", lo, count] => hex(pc)
+                        .zip(size.parse().ok())
+                        .zip(hex(lo))
+                        .zip(count.parse().ok())
+                        .map(|(((pc, size), value), n)| ssbm_rt::lockstep::Target::Load {
+                            pc,
+                            size,
+                            value,
+                            test: Test::Range(n),
+                        }),
                     [_, "load", pc, size, op, k] => {
                         hex(pc).zip(size.parse().ok()).zip(hex(k)).map(|((pc, size), value)| {
-                            ssbm_rt::lockstep::Target::Load { pc, size, value, bits: *op == "&" }
+                            ssbm_rt::lockstep::Target::Load { pc, size, value, test: test(op) }
                         })
                     }
                     _ => None,

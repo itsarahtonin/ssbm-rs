@@ -497,6 +497,65 @@ fn mutated_checks_reach_what_a_callee_result_decides() {
 }
 
 #[test]
+fn mutated_checks_reach_every_case_of_a_switch() {
+    // f: switch (*(u8*) 0x80600010) { case 0..=3: return 10 + it; default: return 0; } through
+    // a jump table at 0x80600100, where the byte is 3.
+    const TABLE: u32 = 0x8060_0100;
+    let f = [
+        0x3C80_8060, // lis r4, 0x8060
+        0x8804_0010, // lbz r0, 0x10(r4)
+        0x2800_0003, // cmplwi r0, 3
+        0x4181_003C, // bgt +0x3C (default)
+        0x3C80_8060, // lis r4, 0x8060
+        0x6084_0100, // ori r4, r4, 0x100
+        0x5400_103A, // slwi r0, r0, 2
+        0x7C04_002E, // lwzx r0, r4, r0
+        0x7C09_03A6, // mtctr r0
+        0x4E80_0420, // bctr
+        li(3, 10),
+        BLR,
+        li(3, 11),
+        BLR,
+        li(3, 12),
+        BLR,
+        li(3, 13),
+        BLR,
+        li(3, 0),
+        BLR,
+    ];
+    let mismatches = |port: fn(&Ctx)| {
+        let ctx = machine(&f);
+        for case in 0..4 {
+            ctx.write_u32(TABLE + 4 * case, CODE + 0x28 + 8 * case);
+        }
+        ctx.write_u8(0x8060_0010, 3);
+        ctx.register_port(CODE, port, ssbm_rt::lockstep::Returns::Int);
+        ctx.set_mode(CODE, Mode::Lockstep);
+        ctx.lockstep.mutations.set(50);
+        ctx.lockstep.rng.set(1);
+        let load = ssbm_rt::lockstep::Target::Load {
+            pc: CODE + 4,
+            size: 1,
+            value: 0,
+            test: ssbm_rt::lockstep::Test::Range(4),
+        };
+        ctx.lockstep.targets.borrow_mut().insert(CODE, vec![load]);
+        ctx.invoke(CODE);
+        assert_eq!(ctx.regs.r(3), 13, "the call itself goes on unchanged");
+        ctx.lockstep.mismatches.borrow().len()
+    };
+    assert_eq!(mismatches(|ctx| {
+        let case = ctx.read_u8(0x8060_0010);
+        ctx.regs.set_r(3, if case <= 3 { 10 + u32::from(case) } else { 0 });
+    }), 0);
+    // Case 1 alone is wrong: neither the byte nor its neighbors reach it.
+    assert!(mismatches(|ctx| {
+        let case = ctx.read_u8(0x8060_0010);
+        ctx.regs.set_r(3, match case { 1 => 99, 0..=3 => 10 + u32::from(case), _ => 0 });
+    }) > 0);
+}
+
+#[test]
 fn mutated_checks_reach_what_a_loaded_value_decides() {
     // f: return *(u8*) 0x80600010 == 7 ? 7 : 9, where the byte is 0.
     let f = [
@@ -516,7 +575,12 @@ fn mutated_checks_reach_what_a_loaded_value_decides() {
         ctx.set_mode(CODE, Mode::Lockstep);
         ctx.lockstep.mutations.set(50);
         ctx.lockstep.rng.set(1);
-        let load = ssbm_rt::lockstep::Target::Load { pc: CODE + 4, size: 1, value: 7, bits: false };
+        let load = ssbm_rt::lockstep::Target::Load {
+            pc: CODE + 4,
+            size: 1,
+            value: 7,
+            test: ssbm_rt::lockstep::Test::Equal,
+        };
         ctx.lockstep.targets.borrow_mut().insert(CODE, vec![load]);
         ctx.invoke(CODE);
         assert_eq!(ctx.regs.r(3), 9, "the call itself goes on unchanged");

@@ -317,6 +317,22 @@ def decide_in(cfg, b, start, consts):
     return "none"
 
 
+def switch(cfg, b, consts):
+    """The target of the switch whose bounds check ends block `b`: every case its jump table
+    takes, from the value that selects the first, as "load PC SIZE in LO COUNT" or "reg N in
+    LO COUNT". None where the selector is computed other than by adding a constant."""
+    d = decider(cfg, b, consts)
+    if d is None or d[0] is None or d[1] != "=" or d[0][0] not in ("load", "reg"):
+        return None
+    src, _, top = d
+    if not all(step[0] == "add" for step in src[-1]):
+        return None
+    lo = undo(src[-1], "=", 0)
+    if src[0] == "reg":
+        return f"reg {src[1][1:]} in {lo:#x} {top + 1}"
+    return f"load {src[1]:#010x} {src[2]} in {lo & ((1 << (8 * src[2])) - 1):#x} {top + 1}"
+
+
 def fails(block):
     """Whether the block calls what never returns, as a failed assertion does."""
     return any(coverage.is_call(m) and ops.split(",")[0].strip() in coverage.NORETURN
@@ -362,8 +378,18 @@ def main():
         unreached = feasible.infeasible(insns, labels)
         hit = [any(coverage.covered(bits, a) for a, _, _ in blk) for blk in blocks]
         seen = set()
+        # Cases of a switch no run took: blocks only its jump table leads to.
+        cases_left = any(not preds[j] and not hit[j] and blocks[j][0][0] not in unreached
+                         and not fails(blocks[j]) for j in range(1, len(blocks)))
         for i, blk in enumerate(blocks):
             if not hit[i]:
+                continue
+            if blk[-1][1] == "bctr" and cases_left and preds[i] == [i - 1]:
+                line = switch(cfg, i - 1, unit_consts[unit])
+                if line and line not in seen:
+                    seen.add(line)
+                    kinds["switch"] += 1
+                    lines.append(f"{insns[0][0]:#010x} {line} # {name}\n")
                 continue
             t = feasible.target(blk[-1][2])
             ways = [index.get(t)] if t is not None else []
