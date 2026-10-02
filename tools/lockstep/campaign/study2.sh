@@ -3,16 +3,18 @@
 # checked (everything else in DONE), MUTATE mutated checks per call and a deep trace of FUNC,
 # for FIELDS fields. Writes local/lockstep/study/FUNC.txt and prints the mismatches.
 #
-#   bash local/lockstep/study.sh FUNC JOB [FIELDS] [MUTATE] [SEED]
+#   bash tools/lockstep/campaign/study2.sh FUNC JOB [FIELDS] [MUTATE] [SEED]
+#
+# BIN defaults to the line-table build (as repro.sh), TARGETS to the latest round's targets.
 cd "$(dirname "$0")/../../.."
 . tools/lockstep/campaign/env.sh
 FUNC=$1 JOB=$2 FIELDS=${3:-6000} MUTATE=${4:-60} SEED=${5:-21}
 mkdir -p $L/study
 DONE=$L/study/done-not-$FUNC.txt
-$PY - "$FUNC" "$DONE" <<'EOF'
+$PY - "$FUNC" "$DONE" "$MELEE" <<'EOF'
 import re, sys
 keep, out = sys.argv[1], ["# everything but the function under study"]
-for line in open("$MELEE/config/GALE01/symbols.txt", encoding="utf-8"):
+for line in open(sys.argv[3] + "/config/GALE01/symbols.txt", encoding="utf-8"):
     m = re.match(r"(\S+) = \.text:0x([0-9A-F]+); // type:function", line)
     if m and m.group(1) != keep:
         out.append(f"0x{m.group(2).lower()} # {m.group(1)}")
@@ -35,8 +37,8 @@ for i in "${!rest[@]}"; do
 done
 # --fields given last wins.
 env "${envs[@]}" LOCKSTEP_DONE=$DONE LOCKSTEP_SEED=$SEED LOCKSTEP_MUTATE=$MUTATE \
-    LOCKSTEP_TRACE_CALLS=1 LOCKSTEP_TRACE_DEEP=$FUNC PROBES= LOCKSTEP_TARGETS=${TARGETS:-$L/targets-wave6.txt} \
-    timeout 5400 ${BIN:-./target/alt/release/ssbm-run-cov7$EXE} \
+    LOCKSTEP_TRACE_CALLS=1 LOCKSTEP_TRACE_DEEP=$FUNC PROBES= LOCKSTEP_TARGETS=${TARGETS:-$(ls -t $L/targets-*.txt | head -1)} \
+    timeout 5400 ${BIN:-target/dbg/release/ssbm-run$EXE} \
     "$SSBM_DISC" \
     "${rest[@]}" --fields "$FIELDS" --port all --lockstep > $L/study/$FUNC.txt 2>&1
 grep -n "^lockstep:\|call trace, original\|with its inputs changed:$" $L/study/$FUNC.txt | head -20
