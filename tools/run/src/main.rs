@@ -795,6 +795,11 @@ fn run() -> ExitCode {
             let seed = std::env::var("LOCKSTEP_SEED").ok().and_then(|v| v.parse().ok());
             ctx.lockstep.rng.set(seed.unwrap_or(1));
         }
+        // LOCKSTEP_DIRECTED=1 makes every other mutated check set exactly one of its function's
+        // targets and nothing else, each target, place and value in turn.
+        ctx.lockstep
+            .directed
+            .set(std::env::var_os("LOCKSTEP_DIRECTED").is_some());
         // LOCKSTEP_NEEDED=FILE lists, as coverage.py's --needed writes them, the blocks each
         // function still needs verified: its checks end once this run has verified them all.
         if let Ok(path) = std::env::var("LOCKSTEP_NEEDED") {

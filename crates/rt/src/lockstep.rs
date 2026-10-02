@@ -221,6 +221,13 @@ pub struct State {
     /// What decides the branches to code each function's checks have not reached: half its
     /// mutated checks change one of these.
     pub targets: RefCell<BTreeMap<u32, Vec<Target>>>,
+    /// Whether every other mutated check instead sets exactly one target, and nothing else,
+    /// going through the targets, the places their loads read and the values they look for in
+    /// turn, so each is tried alone: one condition met amid random changes is often undone by
+    /// them.
+    pub directed: Cell<bool>,
+    /// In a directed check, which of its target's places and values it takes.
+    exact: Cell<Option<u64>>,
     /// The blocks, as `[lo, hi)` address ranges, that each function still needs verified: once
     /// none are left, its checks end.
     pub needed: RefCell<BTreeMap<u32, Vec<(u32, u32)>>>,
@@ -1131,8 +1138,18 @@ fn mutated_checks(
         ctx.mem.restore(before);
         ctx.regs.restore(regs0);
         let kept = state.mismatches.borrow().len();
-        let mut changes = mutate(ctx, addr, inputs.reads);
-        changes.extend(change_targets(ctx, addr, inputs.loaded));
+        let n = state.targets.borrow().get(&addr).map_or(0, Vec::len) as u64;
+        let changes = if state.directed.get() && n > 0 && k % 2 == 0 {
+            let j = u64::from(k / 2);
+            state.exact.set(Some(j / n));
+            let change = change_target(ctx, addr, (j % n) as usize, inputs.loaded);
+            state.exact.set(None);
+            change.into_iter().collect()
+        } else {
+            let mut changes = mutate(ctx, addr, inputs.reads);
+            changes.extend(change_targets(ctx, addr, inputs.loaded));
+            changes
+        };
         let result = catch_unwind(AssertUnwindSafe(|| run(ctx, addr, native, returns)));
         state.stub.set(None);
         // Name what changed for the mismatches the report will show.
@@ -1203,13 +1220,21 @@ fn change_target(ctx: &Ctx, addr: u32, i: usize, loaded: &[(u32, u32)]) -> Optio
     let state = &ctx.lockstep;
     let targets = state.targets.borrow();
     let all = targets.get(&addr)?;
+    // A directed check takes the place its index names and the value it looks for itself; the
+    // index past the places picks among the other values below.
+    let exact = state.exact.get();
+    let pick = |n: usize| match exact {
+        Some(j) => (j % n.max(1) as u64) as usize,
+        None => (state.random() % n.max(1) as u64) as usize,
+    };
+    let variant = |n: usize, places: usize| exact.map(|j| (j / places.max(1) as u64) as usize % n);
     // A value near the one a compare looks for, the bits a test looks at toggled, or one of a
     // switch's cases.
-    let near = |old: u32, value: u32, test: Test| match test {
+    let near = |old: u32, value: u32, test: Test, places: usize| match test {
         Test::Bits => old ^ value,
         Test::Float => {
             let f = f32::from_bits(old);
-            let new: f32 = match state.random() % 8 {
+            let new: f32 = match variant(8, places).map_or_else(|| state.random() % 8, |v| v as u64) {
                 0 => 0.0,
                 1 => 1.0,
                 2 => -1.0,
@@ -1221,9 +1246,13 @@ fn change_target(ctx: &Ctx, addr: u32, i: usize, loaded: &[(u32, u32)]) -> Optio
             };
             new.to_bits()
         }
-        Test::Range(n) => value.wrapping_add((state.random() % u64::from(n.max(1))) as u32),
+        Test::Range(n) => value.wrapping_add(match variant(n.max(1) as usize, places) {
+            Some(v) => v as u32,
+            None => (state.random() % u64::from(n.max(1))) as u32,
+        }),
         // A pointer a null check looks at becomes null: its neighbors only fault.
         Test::Equal if value == 0 && (RAM_LO..RAM_HI).contains(&old) => 0,
+        Test::Equal if exact.is_some() => value,
         Test::Equal => match state.random() % 3 {
             0 => value.wrapping_sub(1),
             1 => value.wrapping_add(1),
@@ -1232,7 +1261,7 @@ fn change_target(ctx: &Ctx, addr: u32, i: usize, loaded: &[(u32, u32)]) -> Optio
     };
     match all[i] {
         Target::Call(callee) => {
-            let r3 = match state.random() % 6 {
+            let r3 = match variant(6, 1).map_or_else(|| state.random() % 6, |v| v as u64) {
                 0 => 0,
                 1 => 1,
                 2 => u32::MAX,
@@ -1240,7 +1269,7 @@ fn change_target(ctx: &Ctx, addr: u32, i: usize, loaded: &[(u32, u32)]) -> Optio
                 4 => (state.random() % 16) as u32,
                 _ => (state.random() % 256) as u32,
             };
-            let f1 = match state.random() % 5 {
+            let f1 = match variant(5, 6).map_or_else(|| state.random() % 5, |v| v as u64) {
                 0 => 0.0,
                 1 => 1.0,
                 2 => -1.0,
@@ -1252,13 +1281,13 @@ fn change_target(ctx: &Ctx, addr: u32, i: usize, loaded: &[(u32, u32)]) -> Optio
         }
         Target::Reg { reg, value, test } => {
             let old = ctx.regs.r(reg);
-            let new = near(old, value, test);
+            let new = near(old, value, test, 1);
             ctx.regs.set_r(reg, new);
             Some(format!("r{reg} {old:#X}->{new:#X}"))
         }
         Target::Load { pc, size, value, test } => {
             let at = state.load_addresses(loaded, pc);
-            let ea = *at.get((state.random() % at.len().max(1) as u64) as usize)?;
+            let ea = *at.get(pick(at.len()))?;
             let (code_start, code_end) = state.code.get();
             if !(RAM_LO..RAM_HI).contains(&ea)
                 || (code_start..code_end).contains(&ea)
@@ -1272,7 +1301,7 @@ fn change_target(ctx: &Ctx, addr: u32, i: usize, loaded: &[(u32, u32)]) -> Optio
                 2 => u32::from(ctx.read_u16(ea)),
                 _ => ctx.read_u32(ea),
             };
-            let new = near(old, value, test);
+            let new = near(old, value, test, at.len());
             match size {
                 1 => ctx.write_u8(ea, new as u8),
                 2 => ctx.write_u16(ea, new as u16),
@@ -1284,7 +1313,7 @@ fn change_target(ctx: &Ctx, addr: u32, i: usize, loaded: &[(u32, u32)]) -> Optio
             // The word the first load reads becomes what the other reads, or a neighbor of it.
             let pick = |pc: u32| {
                 let at = state.load_addresses(loaded, pc);
-                at.get((state.random() % at.len().max(1) as u64) as usize).copied()
+                at.get(pick(at.len())).copied()
             };
             let (ea, from) = (pick(pc)?, pick(other)?);
             let (code_start, code_end) = state.code.get();
@@ -1301,7 +1330,7 @@ fn change_target(ctx: &Ctx, addr: u32, i: usize, loaded: &[(u32, u32)]) -> Optio
                 _ => ctx.read_u32(a),
             };
             let (old, value) = (read(ea), read(from));
-            let new = near(old, value, Test::Equal);
+            let new = near(old, value, Test::Equal, 1);
             match size {
                 1 => ctx.write_u8(ea, new as u8),
                 2 => ctx.write_u16(ea, new as u16),
