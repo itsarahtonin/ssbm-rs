@@ -2049,7 +2049,7 @@ pub fn efLib_Cb_SetRotYZ_FromFighter<'a>(ctx: &'a Ctx, effect: EF_Effect<'a>) {
         inl_HSD_JObjSetRotationZ_unfused(ctx, jobj_1, half_pi);
     } else {
         inl_HSD_JObjSetRotationY_unfused(ctx, jobj_1, (fp::fdivs(3.1415927410125732, 2.0)));
-        inl_HSD_JObjSetRotationZ_unfused(ctx, jobj_1, fp::fneg(half_pi));
+        inl_HSD_JObjSetRotationZ_unfused_2(ctx, jobj_1, half_pi);
     }
 }
 
@@ -3087,6 +3087,39 @@ fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64
         )
     });
     (jobj).rotate().set_z(z);
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
+}
+
+fn inl_HSD_JObjSetRotationZ_unfused_2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+    let mut jobj = jobj;
+    let mut z = z;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bf7b4),
+            (0x2a9_i32 as u32),
+            cstr(ctx, 0x803bf7b4),
+        )
+    });
+    (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803bf7b4),
+            (0x2aa_i32 as u32),
+            cstr(ctx, 0x803bf7b4),
+        )
+    });
+    (jobj).rotate().set_z(fp::fneg(z));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {

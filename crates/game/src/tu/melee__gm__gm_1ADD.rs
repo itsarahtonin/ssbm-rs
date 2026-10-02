@@ -268,7 +268,7 @@ pub fn gm_801AE44C<'a>(ctx: &'a Ctx, arg0: i32, val: f64) {
                     inl_HSD_JObjAddTranslationY_unfused(
                         ctx,
                         ((((jobj).child()).child()).child()).next(),
-                        fp::fneg(val),
+                        val,
                     );
                 }
             }
@@ -293,7 +293,7 @@ pub fn gm_801AE544<'a>(ctx: &'a Ctx, arg0: i32, val: f64) {
                     inl_HSD_JObjAddTranslationY_unfused(
                         ctx,
                         (((((jobj).child()).child()).child()).next()).child(),
-                        fp::fneg(val),
+                        val,
                     );
                 }
             }
@@ -783,7 +783,7 @@ fn inl_HSD_JObjAddTranslationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: 
     });
     (jobj)
         .translate()
-        .set_y(fp::fadds((jobj).translate().y(), y));
+        .set_y(fp::fsubs((jobj).translate().y(), y));
     if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
         {
             if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {

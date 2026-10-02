@@ -149,7 +149,7 @@ pub fn it_2725_Logic23_ShieldBounced<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i3
     let mut jobj: HSD_JObj<'a> =
         (Handle::cast::<HSD_JObj<'a>>(inl_HSD_GObjGetHSDObj_unfused(ctx, gobj)));
     let mut rot_z: f64 = inl_HSD_JObjGetRotationZ_unfused(ctx, jobj);
-    inl_HSD_JObjSetRotationZ_unfused(ctx, jobj, fp::fneg(rot_z));
+    inl_HSD_JObjSetRotationZ_unfused_2(ctx, jobj, rot_z);
     return fns::itColl_BounceOffShield(ctx, gobj);
 }
 
@@ -252,6 +252,39 @@ fn inl_HSD_JObjGetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64
         )
     });
     return (jobj).rotate().z();
+}
+
+fn inl_HSD_JObjSetRotationZ_unfused_2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
+    let mut jobj = jobj;
+    let mut z = z;
+    (if !Handle::is_null((jobj)) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f6b28),
+            (0x2a9_i32 as u32),
+            cstr(ctx, 0x803f6b28),
+        )
+    });
+    (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
+        ({ () })
+    } else {
+        fns::__assert(
+            ctx,
+            cstr(ctx, 0x803f6b28),
+            (0x2aa_i32 as u32),
+            cstr(ctx, 0x803f6b28),
+        )
+    });
+    (jobj).rotate().set_z(fp::fneg(z));
+    if !(((jobj).flags() & ((shl_i32(1_i32, (25_i32 as u32))) as u32)) != 0) {
+        {
+            if (!Handle::is_null(jobj)) && (!(inl_HSD_JObjMtxIsDirty_unfused(ctx, jobj) != 0)) {
+                fns::HSD_JObjSetMtxDirtySub(ctx, jobj);
+            }
+        }
+    }
 }
 
 /// Registers this unit's ports.

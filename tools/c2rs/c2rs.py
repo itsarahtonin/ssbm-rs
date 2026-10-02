@@ -652,6 +652,11 @@ class Translator:
         # the product's factors, as MWCC substitutes the argument into that use (name -> negated).
         self.forward = forward or {}
         self.forwarded = {}  # parameter name -> (factor a, factor c, negated)
+        # An inline copy's float parameters whose argument negates a variable, which MWCC
+        # substitutes into every use: they take the variable, and read as its negation but
+        # where a `+` or `-` folds it, whose references are in `raw_refs`.
+        self.negvars = set()
+        self.raw_refs = set()
         self.in_args = 0
         self._call_sites = None
         # Statements the call being translated runs before it: its arguments with effects, in
@@ -717,7 +722,9 @@ class Translator:
             key = vkey(a, pname)
             if self.inline:
                 self.decisions[("fwd", a.spelling)] = self.forward.get(a.spelling)
-            if a.spelling in self.forward:
+            if self.forward.get(a.spelling) == "negvar":
+                self.negvars.add(a.spelling)
+            elif a.spelling in self.forward:
                 fa, fc = ident(rname + "__a"), ident(rname + "__c")
                 params.append(f"{fa}: {self.u.rust_value_ty(pt)}, {fc}: {self.u.rust_value_ty(pt)}")
                 self.forwarded[a.spelling] = (fa, fc, self.forward[a.spelling])
@@ -1942,6 +1949,13 @@ class Translator:
     def compound(self, c):
         op = BINOPS[_lib.clang_getCursorBinaryOperatorKind(c)][:-1]
         a, b = children(c)
+        lt = self.u.ctype(a.type)
+        if op in ("+", "-") and is_float(lt) and self.negation(b, params=True) is not None and not (
+                op == "+" and self.fuse and self.product(b, lt, True) is not None):
+            # MWCC makes `x += -b` x -= b, and `x -= -b` x += b, as it does `x + -b`; a negated
+            # product it contracts instead.
+            self.u.identities += 1
+            op, b = ("-" if op == "+" else "+"), self.take_negation(b)
         lv = self.lvalue(a)
         pre = []
         rhs = self.expr(b)
@@ -2175,6 +2189,9 @@ class Translator:
             if f is None:
                 raise Unsupported("function pointer to a function without an address")
             return Expr(f"fnptr(ctx, {f['addr']:#x})", self.u.ctype(c.type), True)
+        if r.kind == CK.PARM_DECL and r.spelling in self.negvars and c.hash not in self.raw_refs:
+            lv = self.lvalue(c)
+            return Expr(f"fp::fneg({lv.read()})", lv.ty, True)
         if r.kind == CK.PARM_DECL and r.spelling in self.forwarded:
             t = self.u.ctype(c.type)
             a, cc, neg = self.forwarded[r.spelling]
@@ -2312,15 +2329,15 @@ class Translator:
             if same is not None:
                 return self.identity_value(same, t)
         commute = True
-        if is_float(t) and op == "-" and self.negation(b) is not None:
+        if is_float(t) and op == "-" and self.negation(b, params=True) is not None:
             # MWCC makes `a - -b` a + b, in that order, before it contracts multiply-adds.
             self.u.identities += 1
-            op, b, commute = "+", self.negation(b), False
-        elif is_float(t) and op == "+" and self.negation(b) is not None and not (
+            op, b, commute = "+", self.take_negation(b), False
+        elif is_float(t) and op == "+" and self.negation(b, params=True) is not None and not (
                 self.fuse and (self.product(a, t) is not None or self.product(b, t, True) is not None)):
             # And `a + -b` a - b, where nothing contracts.
             self.u.identities += 1
-            op, b = "-", self.negation(b)
+            op, b = "-", self.take_negation(b)
         va, vb = self.expr(a), self.expr(b)
         if calls_or_effects(b) and (calls_or_effects(a) or self.reads_memory(a)) and \
                 not (op in ("+", "-") and is_float(t) and (self.product(a, t) or self.product(b, t, True))):
@@ -2536,13 +2553,60 @@ class Translator:
             return None if v is None else -v
         return None
 
-    def negation(self, node):
-        """What a unary minus negates, unless it negates a literal, else None."""
+    def negation(self, node, params=False):
+        """What a unary minus negates, unless it negates a literal, else None; with `params`,
+        a parameter that takes a negated variable is one too, of itself as passed."""
         n = strip(node)
+        if params and n.kind == CK.DECL_REF_EXPR and n.referenced is not None \
+                and n.referenced.kind == CK.PARM_DECL and n.referenced.spelling in self.negvars:
+            return n
         if n.kind == CK.UNARY_OPERATOR and UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(n)) == "-" \
                 and self.literal(n) is None:
             return children(n)[0]
         return None
+
+    def take_negation(self, node):
+        """negation(node, params=True), for a fold that uses it: a parameter then reads as
+        passed."""
+        m = self.negation(node, params=True)
+        if m is not None and strip(node).kind == CK.DECL_REF_EXPR:
+            self.raw_refs.add(m.hash)
+        return m
+
+    def negated_vars(self, fn, args):
+        """The arguments of a call to an inline function that negate a variable, passed to a
+        float parameter the body never changes: MWCC substitutes them into each use and folds
+        `y + -x` there, where it negates a load first. Index -> parameter name."""
+        params = [a for a in fn.get_children() if a.kind == CK.PARM_DECL]
+        body = [x for x in children(fn) if x.kind == CK.COMPOUND_STMT]
+        if not body:
+            return {}
+        changed = set()
+        for x in body[0].walk_preorder():
+            target = None
+            if x.kind == CK.COMPOUND_ASSIGNMENT_OPERATOR or (
+                    x.kind == CK.BINARY_OPERATOR and BINOPS.get(_lib.clang_getCursorBinaryOperatorKind(x)) == "="):
+                target = strip(children(x)[0])
+            elif x.kind == CK.UNARY_OPERATOR and UNOPS.get(_lib.clang_getCursorUnaryOperatorKind(x)) in \
+                    ("&", "++", "--", "post++", "post--"):
+                target = strip(children(x)[0])
+            if target is not None and target.kind == CK.DECL_REF_EXPR and target.referenced is not None:
+                changed.add(target.referenced.spelling)
+        out = {}
+        for i, (param, arg) in enumerate(zip(params, args)):
+            if not is_float(self.u.ctype(param.type)) or param.spelling in changed:
+                continue
+            x = self.negation(arg)
+            x = strip(x) if x is not None else None
+            if x is None or x.kind != CK.DECL_REF_EXPR or x.referenced is None:
+                continue
+            r = x.referenced
+            if r.kind == CK.PARM_DECL or (
+                    r.kind == CK.VAR_DECL
+                    and r.storage_class not in (ci.StorageClass.STATIC, ci.StorageClass.EXTERN)
+                    and r.semantic_parent is not None and r.semantic_parent.kind == CK.FUNCTION_DECL):
+                out[i] = param.spelling
+        return out
 
     def identity(self, op, a, b):
         """What MWCC's front end makes of a float `a op b` on a literal 0 or 1, or on two
@@ -2970,11 +3034,14 @@ class Translator:
                 # The original has no call here: MWCC inlined the function, so its code runs
                 # as part of this one, and patches to the function's own copy do not apply.
                 defn = ref.get_definition()
+                negs = self.negated_vars(defn, args)
+                args = [children(strip(a))[0] if i in negs else a for i, a in enumerate(args)]
                 fwd = self.forward_args(defn, args)
                 fnargs = self.fn_args(defn, args)
                 try:
                     rname = self.u.request_inline(defn, self.fuse, self, self.reg_ptr_args(ref, args),
-                                                  {pn: neg for pn, (_, _, neg) in fwd.values()},
+                                                  {pn: neg for pn, (_, _, neg) in fwd.values()}
+                                                  | {pn: "negvar" for pn in negs.values()},
                                                   self.same_args(defn, args), fnargs, discard)
                 except Unsupported as e:
                     self.u.inline_fallbacks.append((self.f.cursor.spelling, name, str(e)))
@@ -3015,6 +3082,8 @@ class Translator:
             defn = ref.get_definition()
             if defn is None:
                 raise Unsupported(f"call to {name}, which has no address or body")
+            negs = self.negated_vars(defn, args)
+            args = [children(strip(a))[0] if i in negs else a for i, a in enumerate(args)]
             fwd = self.forward_args(defn, args)
             fnargs = self.fn_args(defn, args)
             argv = self.forwarding(self.call_args(ft, args, inlined=True,
@@ -3022,7 +3091,8 @@ class Translator:
                                                   fwd=fwd),
                                    fwd)
             rname = self.u.request_inline(defn, self.fuse, self, self.reg_ptr_args(defn, args),
-                                          {pn: neg for pn, (_, _, neg) in fwd.values()},
+                                          {pn: neg for pn, (_, _, neg) in fwd.values()}
+                                          | {pn: "negvar" for pn in negs.values()},
                                           self.same_args(defn, args), fnargs, discard)
             argv += self.inline_region(rname)
             if t["k"] == "rec":
