@@ -217,18 +217,50 @@ def fsource(cfg, b, upto, reg, consts, depth=0):
 
 def decider(cfg, b, consts):
     """What decides the conditional branch ending block `b`: (source, "=", K) for a compare
-    with a constant, (source, "&", MASK) for a bit test, or None."""
+    with a constant, (source, "&", MASK) for a bit test, (("same", pc, other, size), "=", None)
+    for a compare of what two loads read, or None. The compare may sit in a lone predecessor's
+    tail, as a branch that tests one compare twice has."""
     block = cfg[0][b]
     bm = feasible.BRANCH.match(block[-1][1])
     if not bm or bm.group(1) in CTR:
         return None
-    for j in range(len(block) - 2, -1, -1):
+    cur, start = b, len(block) - 2
+    for _ in range(3):
+        found = decide_in(cfg, cur, start, consts)
+        if found != "none":
+            return found
+        preds = cfg[1][cur]
+        if len(preds) != 1:
+            return None
+        cur = preds[0]
+        start = len(cfg[0][cur]) - 1
+    return None
+
+
+def same_loads(x, y):
+    """The compare of two loads' values, of the same size and taken as read, as a source."""
+    if x and y and x[0] == "load" and y[0] == "load" and x[2] == y[2] \
+            and not (len(x) > 3 and x[3]) and not (len(y) > 3 and y[3]) and x[1] != y[1]:
+        return ("same", x[1], y[1], x[2])
+    return None
+
+
+def decide_in(cfg, b, start, consts):
+    """decider's search of block `b` back from instruction `start`: a result, None where what
+    sets the condition decides nothing a target names, or "none" where nothing in the block
+    sets it."""
+    block = cfg[0][b]
+    for j in range(start, -1, -1):
         _, m, ops = block[j]
         r = feasible.regs(ops)
         if m in ("cmpwi", "cmplwi"):
             x, k = (r[1], r[2]) if len(r) == 3 else (r[0], r[1])
             k = feasible.imm(k)
             return (source(cfg, b, j, x), "=", k & 0xFFFFFFFF) if k is not None else None
+        if m in ("cmpw", "cmplw"):
+            x, y = (r[1], r[2]) if len(r) == 3 else (r[0], r[1])
+            same = same_loads(source(cfg, b, j, x), source(cfg, b, j, y))
+            return (same, "=", None) if same else None
         if m in ("fcmpu", "fcmpo") and len(r) == 3:
             # A loaded single against a constant: the compare looks for that value, and the
             # floats next to it either side.
@@ -236,7 +268,8 @@ def decider(cfg, b, consts):
             for a, c in ((x, y), (y, x)):
                 if a and c and a[0] == "load" and c[0] == "const" and a[2] == c[2] == 4:
                     return (a, "=", c[1])
-            return None
+            same = same_loads(x, y)
+            return (same, "=", None) if same else None
         if m.startswith(("cmp", "fcmp")) or coverage.is_call(m):
             return None
         if m.endswith("."):
@@ -258,7 +291,7 @@ def decider(cfg, b, consts):
                 if mb is not None and me is not None:
                     return (source(cfg, b, j, r[1]), "&", mask(mb, me))
             return None
-    return None
+    return "none"
 
 
 def main():
@@ -316,7 +349,10 @@ def main():
                 k = undo(src[-1], op, k)
                 if k is None or (op == "&" and not k):
                     continue
-            if src[0] == "call":
+            if src[0] == "same":
+                line = f"load {src[1]:#010x} {src[3]} = load {src[2]:#010x}"
+                note = name
+            elif src[0] == "call":
                 where = addrs.get(src[1], {})
                 at = where.get(unit) or (next(iter(where.values())) if len(where) == 1 else None)
                 if at is None or src[1] == name:

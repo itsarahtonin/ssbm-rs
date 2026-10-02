@@ -41,6 +41,8 @@ pub enum Target {
     Reg { reg: usize, value: u32, bits: bool },
     /// What the function's load at `pc` reads, `size` bytes, compared or tested likewise.
     Load { pc: u32, size: u32, value: u32, bits: bool },
+    /// What the loads at `pc` and `other` read, `size` bytes each, compared with each other.
+    LoadSame { pc: u32, other: u32, size: u32 },
 }
 
 /// Which registers hold a function's result, and so are compared.
@@ -316,9 +318,10 @@ impl State {
             .get(&addr)
             .into_iter()
             .flatten()
-            .filter_map(|t| match *t {
-                Target::Load { pc, .. } => Some(pc),
-                _ => None,
+            .flat_map(|t| match *t {
+                Target::Load { pc, .. } => vec![pc],
+                Target::LoadSame { pc, other, .. } => vec![pc, other],
+                _ => Vec::new(),
             })
             .collect();
         self.loaded.borrow_mut().clear();
@@ -1120,6 +1123,35 @@ fn change_target(ctx: &Ctx, addr: u32, loaded: &[(u32, u32)]) -> Option<String> 
                 _ => ctx.write_u32(ea, new),
             }
             Some(format!("{ea:#010X} {old:#X}->{new:#X}"))
+        }
+        Target::LoadSame { pc, other, size } => {
+            // The word the first load reads becomes what the other reads, or a neighbor of it.
+            let pick = |pc: u32| {
+                let at: Vec<u32> = loaded.iter().filter(|l| l.0 == pc).map(|l| l.1).collect();
+                at.get((state.random() % at.len().max(1) as u64) as usize).copied()
+            };
+            let (ea, from) = (pick(pc)?, pick(other)?);
+            let (code_start, code_end) = state.code.get();
+            if !(RAM_LO..RAM_HI).contains(&ea)
+                || (code_start..code_end).contains(&ea)
+                || state.is_ram_code(ea & !3)
+                || state.constant.borrow().iter().any(|&(lo, hi)| (lo..hi).contains(&ea))
+            {
+                return None;
+            }
+            let read = |a: u32| match size {
+                1 => u32::from(ctx.read_u8(a)),
+                2 => u32::from(ctx.read_u16(a)),
+                _ => ctx.read_u32(a),
+            };
+            let (old, value) = (read(ea), read(from));
+            let new = near(old, value, false);
+            match size {
+                1 => ctx.write_u8(ea, new as u8),
+                2 => ctx.write_u16(ea, new as u16),
+                _ => ctx.write_u32(ea, new),
+            }
+            Some(format!("{ea:#010X} {old:#X}->{new:#X} (as {from:#010X})"))
         }
     }
 }

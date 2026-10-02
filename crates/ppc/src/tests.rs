@@ -499,6 +499,45 @@ fn mutated_checks_reach_what_a_loaded_value_decides() {
 }
 
 #[test]
+fn mutated_checks_reach_what_two_loaded_values_decide() {
+    // f: return *(u32*) 0x80600010 == *(u32*) 0x80600020 ? 7 : 9, where the words differ in
+    // every bit, as no single word's change at random makes them alike.
+    let f = [
+        0x3C80_8060, // lis r4, 0x8060
+        0x8004_0010, // lwz r0, 0x10(r4)
+        0x80A4_0020, // lwz r5, 0x20(r4)
+        0x7C00_2800, // cmpw r0, r5
+        0x4182_000C, // beq +12
+        li(3, 9),
+        BLR,
+        li(3, 7),
+        BLR,
+    ];
+    let mismatches = |port: fn(&Ctx)| {
+        let ctx = machine(&f);
+        ctx.write_u32(0x8060_0010, 0x1234_5678);
+        ctx.write_u32(0x8060_0020, 0xEDCB_A987);
+        ctx.register_port(CODE, port, ssbm_rt::lockstep::Returns::Int);
+        ctx.set_mode(CODE, Mode::Lockstep);
+        ctx.lockstep.mutations.set(50);
+        ctx.lockstep.rng.set(1);
+        let same = ssbm_rt::lockstep::Target::LoadSame { pc: CODE + 4, other: CODE + 8, size: 4 };
+        ctx.lockstep.targets.borrow_mut().insert(CODE, vec![same]);
+        ctx.invoke(CODE);
+        assert_eq!(ctx.regs.r(3), 9, "the call itself goes on unchanged");
+        ctx.lockstep.mismatches.borrow().len()
+    };
+    assert_eq!(mismatches(|ctx| {
+        let same = ctx.read_u32(0x8060_0010) == ctx.read_u32(0x8060_0020);
+        ctx.regs.set_r(3, if same { 7 } else { 9 });
+    }), 0);
+    assert!(mismatches(|ctx| {
+        let same = ctx.read_u32(0x8060_0010) == ctx.read_u32(0x8060_0020);
+        ctx.regs.set_r(3, if same { 8 } else { 9 });
+    }) > 0);
+}
+
+#[test]
 fn mutated_checks_tell_which_nan_an_add_passes_on() {
     // f(a, b): return b + a, which MWCC emits as fadds f1, f2, f1.
     let mismatches = |port: fn(&Ctx)| {

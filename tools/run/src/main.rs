@@ -770,6 +770,11 @@ fn run() -> ExitCode {
                     [_, "reg", n, op, k] => n.parse().ok().zip(hex(k)).map(|(reg, value)| {
                         ssbm_rt::lockstep::Target::Reg { reg, value, bits: *op == "&" }
                     }),
+                    [_, "load", pc, size, "=", "load", other] => {
+                        hex(pc).zip(size.parse().ok()).zip(hex(other)).map(|((pc, size), other)| {
+                            ssbm_rt::lockstep::Target::LoadSame { pc, other, size }
+                        })
+                    }
                     [_, "load", pc, size, op, k] => {
                         hex(pc).zip(size.parse().ok()).zip(hex(k)).map(|((pc, size), value)| {
                             ssbm_rt::lockstep::Target::Load { pc, size, value, bits: *op == "&" }
