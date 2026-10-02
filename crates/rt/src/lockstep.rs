@@ -250,6 +250,8 @@ pub struct State {
     pub first_look_only: Cell<bool>,
     /// Whether a side that departs from the original's interactions prints those around it.
     pub trace_log: Cell<bool>,
+    /// Whether the first few mutated checks of each function that are dropped print why.
+    pub drop_log: Cell<bool>,
     traces: RefCell<Vec<CallTrace>>,
     /// Whether a check is taking its second look at a mismatch, when the ports its port calls
     /// run unchecked: their own checks already ran.
@@ -543,11 +545,18 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     let original_resume = ctx.take_resume_at();
     let j1 = ctx.mem.end_journal();
     let wrote_code = state.mutating.get() && state.wrote_code(ctx, &j1);
-    if wrote_code
-        || broke_convention
-        || original_panic.as_ref().is_some_and(|p| p.is::<Runaway>())
-        || (outermost && mutating && original_panic.is_some())
-    {
+    let why = if wrote_code {
+        Some("its original wrote over code".to_string())
+    } else if broke_convention {
+        Some("its original broke the calling convention".to_string())
+    } else if let Some(Runaway(how)) = original_panic.as_ref().and_then(|p| p.downcast_ref()) {
+        Some(format!("its original {how}"))
+    } else if outermost && mutating {
+        original.as_ref().map(|p| format!("its original failed: {p}"))
+    } else {
+        None
+    };
+    if let Some(why) = why {
         // A mutated call that runs on and on may never return on the port's side. One that
         // writes over code then runs what ports never read, and one that writes over a frame's
         // saved registers or return address then returns with what ports never saved: drop
@@ -556,7 +565,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         // of its loads, which ports needn't keep.
         ctx.mem.restore(&j1);
         ctx.regs.restore(&regs0);
-        return drop_check(ctx, traced, enclosing, outermost);
+        return drop_check(ctx, traced, enclosing, outermost, &why);
     }
     let regs1 = ctx.regs.snapshot();
     let s1 = ctx.mem.capture(j1.keys());
@@ -588,6 +597,14 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     let port_dropped = port_failure
         .as_ref()
         .is_some_and(|p| p.is::<Dropped>() || (mutating && p.is::<Runaway>()));
+    let port_why = match &port_failure {
+        Some(p) if p.is::<Dropped>() => "a check its port made was dropped".to_string(),
+        Some(p) => match p.downcast_ref() {
+            Some(Runaway(how)) => format!("its port {how}"),
+            None => String::new(),
+        },
+        None => String::new(),
+    };
     let mut port = port_failure.map(|p| {
             if let Some(j) = crate::jump::describe(p.as_ref()) {
                 return j;
@@ -611,7 +628,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         // under changed inputs: the call can't be compared.
         ctx.mem.restore(&j2);
         ctx.regs.restore(&regs0);
-        return drop_check(ctx, traced, enclosing, outermost);
+        return drop_check(ctx, traced, enclosing, outermost, &port_why);
     }
     let regs2 = ctx.regs.snapshot();
     let s2 = ctx.mem.capture(j2.keys());
@@ -804,7 +821,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     if dropped {
         ctx.mem.restore(&j2);
         ctx.regs.restore(&regs0);
-        return drop_check(ctx, traced, enclosing, outermost);
+        return drop_check(ctx, traced, enclosing, outermost, "its second look ran away");
     }
     // Continue from the original's results.
     ctx.mem.restore(&j2);
@@ -901,7 +918,7 @@ struct Dropped;
 
 /// Ends a check that can't be compared, its memory and registers already as it found them.
 /// Nested in another check, it ends that one too.
-fn drop_check(ctx: &Ctx, traced: bool, enclosing: Phase, outermost: bool) {
+fn drop_check(ctx: &Ctx, traced: bool, enclosing: Phase, outermost: bool, why: &str) {
     let state = &ctx.lockstep;
     if traced {
         state.traces.borrow_mut().pop();
@@ -911,7 +928,15 @@ fn drop_check(ctx: &Ctx, traced: bool, enclosing: Phase, outermost: bool) {
     if let Some(addr) = addr
         && state.mutating.get()
     {
-        state.stats.borrow_mut().entry(addr).or_default().dropped += 1;
+        let n = {
+            let mut stats = state.stats.borrow_mut();
+            let s = stats.entry(addr).or_default();
+            s.dropped += 1;
+            s.dropped
+        };
+        if state.drop_log.get() && n <= 3 {
+            eprintln!("lockstep: dropped a mutated check of {}: {why}", ctx.name_of(addr));
+        }
     }
     if !outermost {
         panic_any(Dropped);
@@ -921,8 +946,8 @@ fn drop_check(ctx: &Ctx, traced: bool, enclosing: Phase, outermost: bool) {
 }
 
 /// Panic payload that ends a mutated check whose original runs on and on, from the heartbeat or
-/// the limit on its calls.
-pub struct Runaway;
+/// the limit on its calls, or that reaches what no call the game makes does. Names which.
+pub struct Runaway(pub &'static str);
 
 /// Checks the port of `addr` from a call no code made, whose arguments `setup` puts in place,
 /// on the state the game is in: as a mutated check, counted apart and undone after. Only outside
@@ -1320,7 +1345,7 @@ fn interact(ctx: &Ctx, kind: Kind, f: impl FnOnce() -> u32) -> u32 {
                 // then replays the same. A hook stands in for a wait, which would never end,
                 // and so would a loop polling hardware for what it never answers.
                 if matches!(kind, Kind::Hook(_)) || state.log.borrow().len() >= NULL_LOG_MAX {
-                    panic_any(Runaway);
+                    panic_any(Runaway("met hardware it waits on"));
                 }
                 if let Kind::Call(_) = kind {
                     ctx.regs.set_r(3, 0);

@@ -409,7 +409,7 @@ fn mutated_checks_leave_code_run_from_ram_as_it_is() {
     // As ssbm-run does: changed code may loop.
     ctx.set_heartbeat(|ctx, _| {
         if ctx.lockstep.is_mutating() && ctx.lockstep.in_original() {
-            std::panic::panic_any(ssbm_rt::lockstep::Runaway);
+            std::panic::panic_any(ssbm_rt::lockstep::Runaway("ran too long"));
         }
     });
     ctx.regs.set_r(4, PLACED);

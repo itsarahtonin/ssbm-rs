@@ -717,6 +717,11 @@ fn run() -> ExitCode {
         ctx.lockstep
             .trace_log
             .set(std::env::var_os("LOCKSTEP_TRACE_LOG").is_some());
+        // LOCKSTEP_DROP_LOG=1 prints why the first few mutated checks of each function that are
+        // dropped were.
+        ctx.lockstep
+            .drop_log
+            .set(std::env::var_os("LOCKSTEP_DROP_LOG").is_some());
         // LOCKSTEP_TRACE_DEEP=NAME prints the calls a check of that function makes at every
         // depth on both sides when they disagree, with the port's callees unchecked (needs
         // LOCKSTEP_TRACE_CALLS).
@@ -1041,7 +1046,7 @@ fn run() -> ExitCode {
         // A mutated check or probe whose original runs this long may never come back on the
         // port's side: lockstep drops it.
         if ctx.lockstep.is_mutating() && ctx.lockstep.in_original() {
-            panic::panic_any(ssbm_rt::lockstep::Runaway);
+            panic::panic_any(ssbm_rt::lockstep::Runaway("ran too long"));
         }
         let sdk = ctx.ext::<Sdk>();
         let f = sdk.hw.fields.get();

@@ -464,7 +464,7 @@ impl Ctx {
         } {
             // Changed inputs led the original to read a register its own code saved, which
             // ports keep nowhere: no call the game makes gets here.
-            std::panic::panic_any(lockstep::Runaway);
+            std::panic::panic_any(lockstep::Runaway("read a saved register"));
         }
         if let Some(log) = self.read_log.borrow_mut().as_mut()
             && log.len() < READ_LOG_MAX
@@ -901,7 +901,7 @@ impl Ctx {
             if n == 0 || self.invoke_depth.get() >= MUTATED_DEPTH {
                 // A mutated check's side that calls on and on, or recurses deeper than the
                 // game ever does, which would run out of stack first.
-                std::panic::panic_any(lockstep::Runaway);
+                std::panic::panic_any(lockstep::Runaway("made too many calls"));
             }
             self.lockstep.calls_left.set(Some(n - 1));
         }
@@ -919,7 +919,7 @@ impl Ctx {
         if self.lockstep.is_mutating() && self.lockstep.noreturn.borrow().contains(&addr) {
             // Its inputs fail an assertion, whose handlers save the CPU's registers, which
             // ports keep elsewhere, and never return.
-            std::panic::panic_any(lockstep::Runaway);
+            std::panic::panic_any(lockstep::Runaway("called a function that never returns"));
         }
         if let Some((r3, f1)) = self.lockstep.stubbed(addr) {
             // Stood in for by a mutated check, on both its sides alike.
@@ -939,7 +939,7 @@ impl Ctx {
                 // Every function has a port, so under changed inputs a call to an address
                 // with none went through a pointer that leads to no function, such as into
                 // the middle of one, which runs on whatever registers each side left.
-                std::panic::panic_any(lockstep::Runaway);
+                std::panic::panic_any(lockstep::Runaway("called no function"));
             }
             return self.run_original(addr);
         };

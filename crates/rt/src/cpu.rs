@@ -162,7 +162,7 @@ pub fn fill(ctx: &Ctx, i: usize, v: f64) {
 /// no port of the C ports in between leaves that register as the original's code does.
 pub fn unset_read(ctx: &Ctx) {
     if ctx.lockstep.is_mutating() {
-        std::panic::panic_any(crate::lockstep::Runaway);
+        std::panic::panic_any(crate::lockstep::Runaway("read a register no one set"));
     }
 }
 
