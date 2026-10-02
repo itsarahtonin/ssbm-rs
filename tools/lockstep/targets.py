@@ -109,15 +109,26 @@ def writes(m, ops, reg):
     return bool(r) and r[0] == reg and not m.startswith(feasible.NOT_WRITING)
 
 
+# What source() finds on a path that comes back around a loop without setting the register: no
+# definition of its own, so the other paths decide.
+AROUND = ("around",)
+
+
 def source(cfg, b, upto, reg, depth=0, steps=()):
     """What `reg` holds before instruction `upto` of block `b`: ("call", callee), ("reg", reg)
     for an argument, ("load", pc, size), or None, with the steps that computed reg from it
     last (rotations and masks, additions of a constant, arithmetic shifts), which undo() can
-    take back. Follows copies, lone predecessors, and a register the whole function sets once,
-    as the saved copy of an argument is."""
+    take back. Follows copies, predecessors that all agree, and a register the whole function
+    sets once, as the saved copy of an argument is."""
+    found = trace(cfg, b, upto, reg, depth, steps, frozenset(), [400])
+    return None if found == AROUND else found
+
+
+def trace(cfg, b, upto, reg, depth, steps, seen, budget):
     blocks, preds = cfg
     block = blocks[b]
-    if depth > 8:
+    budget[0] -= 1
+    if depth > 12 or budget[0] < 0:
         return None
     for j in range(upto - 1, -1, -1):
         pc, m, ops = block[j]
@@ -131,23 +142,27 @@ def source(cfg, b, upto, reg, depth=0, steps=()):
         if not writes(m, ops, reg):
             continue
         if m.rstrip(".") in PASSING and len(r) >= 2:
-            return source(cfg, b, j, r[1], depth + 1, steps)
+            return trace(cfg, b, j, r[1], depth + 1, steps, seen, budget)
         rot = rotation(m.rstrip("."), r) if len(r) >= 2 else None
         if rot is not None:
-            return source(cfg, b, j, r[1], depth + 1, (("rot",) + rot,) + steps)
+            return trace(cfg, b, j, r[1], depth + 1, (("rot",) + rot,) + steps, seen, budget)
         if m in ("addi", "subi") and len(r) == 3 and r[1] != "r0" and feasible.imm(r[2]) is not None:
             k = feasible.imm(r[2]) * (1 if m == "addi" else -1)
-            return source(cfg, b, j, r[1], depth + 1, (("add", k),) + steps)
+            return trace(cfg, b, j, r[1], depth + 1, (("add", k),) + steps, seen, budget)
         if m.rstrip(".") == "srawi" and len(r) == 3 and feasible.imm(r[2]) is not None:
-            return source(cfg, b, j, r[1], depth + 1, (("sra", feasible.imm(r[2])),) + steps)
+            k = feasible.imm(r[2])
+            return trace(cfg, b, j, r[1], depth + 1, (("sra", k),) + steps, seen, budget)
         if m in LOAD_SIZES:
             return ("load", pc, LOAD_SIZES[m], steps)
         return None
     if b == 0:
         return ("reg", reg, steps) if reg in ARGS else None
+    if b in seen:
+        return AROUND
+    seen = seen | {b}
     if len(preds[b]) == 1:
         p = preds[b][0]
-        return source(cfg, p, len(blocks[p]), reg, depth + 1, steps)
+        return trace(cfg, p, len(blocks[p]), reg, depth + 1, steps, seen, budget)
     # A saved register set once, in the entry block, holds what it was set to throughout: the
     # epilogue's reload of the caller's value from the stack comes after every use.
     if reg not in feasible.VOLATILE:
@@ -157,8 +172,16 @@ def source(cfg, b, upto, reg, depth=0, steps=()):
         sets = [(i, j) for i, blk in enumerate(blocks) for j, (_, m, ops) in enumerate(blk)
                 if writes(m, ops, reg) and not reload(m, ops)]
         if len(sets) == 1 and sets[0][0] == 0:
-            return source(cfg, 0, sets[0][1] + 1, reg, depth + 1, steps)
-    return None
+            return trace(cfg, 0, sets[0][1] + 1, reg, depth + 1, steps, seen, budget)
+    # Where paths join, what every path that sets it agrees on.
+    if not preds[b] or len(preds[b]) > 4:
+        return None
+    found = {trace(cfg, p, len(blocks[p]), reg, depth + 1, steps, seen, budget)
+             for p in preds[b]}
+    found.discard(AROUND)
+    if len(found) == 1:
+        return found.pop()
+    return AROUND if not found else None
 
 
 def constants(root, unit):
@@ -294,6 +317,12 @@ def decide_in(cfg, b, start, consts):
     return "none"
 
 
+def fails(block):
+    """Whether the block calls what never returns, as a failed assertion does."""
+    return any(coverage.is_call(m) and ops.split(",")[0].strip() in coverage.NORETURN
+               for _, m, ops in block)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("root")
@@ -339,7 +368,9 @@ def main():
             t = feasible.target(blk[-1][2])
             ways = [index.get(t)] if t is not None else []
             ways.append(i + 1 if i + 1 < len(blocks) else None)
-            if all(w is None or hit[w] or blocks[w][0][0] in unreached for w in ways):
+            # Blocks that only fail an assertion count for nothing, and end the check.
+            if all(w is None or hit[w] or blocks[w][0][0] in unreached or fails(blocks[w])
+                   for w in ways):
                 continue
             d = decider(cfg, i, unit_consts[unit])
             if d is None or d[0] is None:
