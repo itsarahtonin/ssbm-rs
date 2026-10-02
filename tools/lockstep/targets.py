@@ -114,6 +114,32 @@ def writes(m, ops, reg):
 AROUND = ("around",)
 
 
+STORE_SIZES = {"stw": 4, "sth": 2, "stb": 1}
+
+
+def forwarded(block, j, ops, size):
+    """Where the load `ops` at instruction `j` reads what the block stored there earlier: the
+    store's index and the register it stored, as MWCC reloads `--p->n` to test it. None where
+    something between may have changed the word or its base, or no store wrote it."""
+    r = feasible.regs(ops)
+    if len(r) != 2 or "(" not in r[1]:
+        return None
+    for i in range(j - 1, -1, -1):
+        _, m, o = block[i]
+        if coverage.is_call(m) or m.startswith(("stwu", "stmw", "stfd", "stfs", "stwx", "sthx",
+                                               "stbx", "dcb")):
+            return None
+        q = feasible.regs(o)
+        if m in STORE_SIZES and len(q) == 2:
+            if q[1] == r[1]:
+                return (i, q[0]) if STORE_SIZES[m] == size else None
+            continue
+        base = r[1][r[1].index("(") + 1:-1]
+        if writes(m, o, base):
+            return None
+    return None
+
+
 def source(cfg, b, upto, reg, depth=0, steps=()):
     """What `reg` holds before instruction `upto` of block `b`: ("call", callee), ("reg", reg)
     for an argument, ("load", pc, size), or None, with the steps that computed reg from it
@@ -153,6 +179,9 @@ def trace(cfg, b, upto, reg, depth, steps, seen, budget):
             k = feasible.imm(r[2])
             return trace(cfg, b, j, r[1], depth + 1, (("sra", k),) + steps, seen, budget)
         if m in LOAD_SIZES:
+            stored = forwarded(block, j, ops, LOAD_SIZES[m])
+            if stored is not None:
+                return trace(cfg, b, stored[0], stored[1], depth + 1, steps, seen, budget)
             return ("load", pc, LOAD_SIZES[m], steps)
         return None
     if b == 0:
