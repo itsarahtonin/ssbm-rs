@@ -1,0 +1,44 @@
+# The gap ledger: blocks of the original that no run can reach, which coverage.py --gaps counts
+# as explained. One block per line, by its function and its offset in it, with what keeps runs
+# out and the evidence for it:
+#
+#     FUNCTION+OFFSET KIND # evidence: the analysis, or the callers and the values they pass
+#
+# KIND is dead (no value that reaches the branch takes it), dev (developer-only code that nothing
+# in the game turns on) or hw (code that only hardware the SDK layer leaves out runs). A block
+# that odd state can reach, such as a null check the game never trips, belongs to probes and
+# mutated checks instead, not here.
+#
+# FUNCTION+* covers every block of a function, for the functions no run can reach that are not
+# verified by probes.
+DSPCheckMailToDSP+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+DSPCheckMailFromDSP+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+DSPReadMailFromDSP+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+DSPSendMailToDSP+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+DSPInit+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+DSPCheckInit+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+DSPAddTask+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+DSPAssertTask+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+OSInitAlarm+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+OSSetAlarm+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+OSSetPeriodicAlarm+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+OSCancelAlarm+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+__OSInitAudioSystem+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+OSReport+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+OSPanic+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+__OSInitMemoryProtection+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+OSResetSystem+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+WriteSram+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+__OSInitSram+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+SIInit+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+__OSReschedule+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+OSSleepThread+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+OSWakeupThread+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+PADReset+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+PADRecalibrate+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+PADInit+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+PADRead+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+PADSetSamplingRate+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+SIRefreshSamplingRate+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+PADControlMotor+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+PADSetSpec+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs

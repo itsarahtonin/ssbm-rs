@@ -2,7 +2,7 @@
 
     python tools/lockstep/coverage.py <decomp root> --coverage FILE... [--ledger FILE...]
         [--bar 0.9] [--dead FILE] [--stand-ins FILE] [--stale CHANGED=FILES]... [--csv OUT]
-        [--done OUT] [--reviewed FILE]
+        [--done OUT] [--reviewed FILE] [--gaps FILE]
 
 ssbm-run's LOCKSTEP_COVERAGE bitmaps mark each instruction of the original that ran within a
 check of its own function whose sides agreed. This splits every function of the decomp's
@@ -16,7 +16,9 @@ ssbm-run's STAND_INS), are counted apart: no run can check them. Results of a bi
 before a port last changed say nothing of it: each --stale gives a list of ports, as changed.py
 writes it, that take nothing from the results its glob matches. Functions whose mismatches
 with changed inputs were reviewed and found to come from the inputs, not the port (--reviewed,
-one per line with the reason), are no longer to review.
+one per line with the reason), are no longer to review. The gap ledger (--gaps, as gaps.txt
+describes it) explains blocks no run can reach; a function is complete when its countable blocks
+are all verified or explained.
 """
 
 import argparse
@@ -103,6 +105,17 @@ def covered(bits, addr):
     return i // 8 < len(bits) and bits[i // 8] >> (i % 8) & 1
 
 
+def load_gaps(path):
+    """function -> offsets of the blocks the gap ledger explains, or "*" for all of them"""
+    gaps = collections.defaultdict(set)
+    for line in open(path, encoding="utf-8") if path else ():
+        w = line.split("#")[0].split()
+        if w:
+            name, off = w[0].rsplit("+", 1)
+            gaps[name].add(off if off == "*" else int(off, 16))
+    return gaps
+
+
 def load_ledgers(paths, stale):
     """address -> [calls, mismatches, uninitialized, mismatches with inputs no real call gave]"""
     rows = collections.defaultdict(lambda: [0, 0, 0, 0])
@@ -131,6 +144,7 @@ def main():
     ap.add_argument("--csv")
     ap.add_argument("--done")
     ap.add_argument("--reviewed")
+    ap.add_argument("--gaps")
     args = ap.parse_args()
 
     def names(path):
@@ -150,6 +164,7 @@ def main():
     def stale(path):
         path = os.path.normcase(os.path.abspath(path))
         return set().union(*(starts for starts, files in stale_lists if path in files))
+    gaps = load_gaps(args.gaps)
     funcs = list(functions(args.root))
     spans = {insns[0][0]: (insns[0][0], insns[-1][0] + 4) for _, _, insns, _ in funcs}
     bits = load_bits([p for g in args.coverage for p in glob.glob(g)], spans, stale)
@@ -170,10 +185,13 @@ def main():
                              for _, m, ops in b)]
         done = sum(1 for b in countable if any(covered(bits, a) for a, _, _ in b))
         start = insns[0][0]
+        gap = gaps.get(name, ())
+        explained = sum(1 for b in countable if ("*" in gap or b[0][0] - start in gap)
+                        and not any(covered(bits, a) for a, _, _ in b))
         calls, bad, uninit, mutated = ledger.get(start, (0, 0, 0, 0))
         share = done / len(countable) if countable else 1.0
         rows.append((start, name, unit, len(bs), len(countable), done, share, calls, bad, uninit,
-                     mutated))
+                     mutated, explained))
 
     apart = [r for r in rows if r[1] in dead or r[1] in stand_ins]
     rows = [r for r in rows if r not in apart]
@@ -197,6 +215,12 @@ def main():
     print(f"checked: {len(checked)} functions; blocks verified: {blocks_done} "
           f"({100 * blocks_done / max(blocks_all, 1):.1f}%)")
     print(f"verified at {args.bar:.0%} of their blocks, with no mismatch: {len(verified)}")
+    complete = [r for r in rows if r[5] + r[11] >= r[4] and r[8] == 0 and (r[7] > 0 or r[5] == 0)]
+    print(f"blocks explained by the gap ledger: {sum(r[11] for r in rows)}; complete, every block "
+          f"verified or explained, with no mismatch: {len(complete)}")
+    whole = [r for r in apart if r[5] + r[11] >= r[4] and r[8] == 0]
+    print(f"of the functions no run can reach, every block verified by probes or explained: "
+          f"{len(whole)} of {len(apart)}")
     print(f"with mismatches: {len(mismatching)}")
     print(f"with mismatches only from changed inputs (mutations, probes), to review: "
           f"{sum(1 for r in rows if r[10] > 0 and r[8] == 0 and r[1] not in reviewed)}"
@@ -215,10 +239,11 @@ def main():
         with open(args.csv, "w", newline="", encoding="utf-8") as f:
             w = csv.writer(f)
             w.writerow(["address", "name", "unit", "blocks", "countable", "verified_blocks",
-                        "share", "calls", "mismatches", "uninitialized", "mutated"])
+                        "share", "calls", "mismatches", "uninitialized", "mutated",
+                        "explained"])
             for r in rows:
                 w.writerow([f"{r[0]:#010x}", r[1], r[2], r[3], r[4], r[5], f"{r[6]:.3f}",
-                            r[7], r[8], r[9], r[10]])
+                            r[7], r[8], r[9], r[10], r[11]])
     if args.done:
         with open(args.done, "w", encoding="utf-8") as f:
             f.write(f"# Functions verified at {args.bar:.0%} of their blocks with no mismatch\n")
