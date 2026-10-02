@@ -322,10 +322,25 @@ fn run() -> ExitCode {
 
     let default_hook = panic::take_hook();
     let trace = std::env::var_os("LOCKSTEP_TRACE").is_some();
+    // A deep trace also names the ports running when a port of the traced function faults.
+    let deep = std::env::var("LOCKSTEP_TRACE_DEEP").ok().map(|f| format!("::{f}"));
     panic::set_hook(Box::new(move |info| {
         // Lockstep catches and reports the panics of the checks it runs. LOCKSTEP_TRACE shows
         // where original code was jumping before one.
         if ssbm_rt::lockstep::checking() {
+            if let Some(f) = &deep
+                && let Some(fault) = info.payload().downcast_ref::<ssbm_rt::Fault>()
+            {
+                let trace = std::backtrace::Backtrace::force_capture().to_string();
+                let ports: Vec<&str> = trace
+                    .lines()
+                    .filter_map(|l| l.trim().split_once(": ssbm_game::tu::").map(|x| x.1))
+                    .collect();
+                if ports.iter().any(|p| p.contains(f.as_str())) {
+                    eprintln!("port fault: {fault}");
+                    eprintln!("  in {}", ports.join(" < "));
+                }
+            }
             if trace {
                 eprintln!("lockstep panic: {info}");
                 INTERP.with(|i| {
