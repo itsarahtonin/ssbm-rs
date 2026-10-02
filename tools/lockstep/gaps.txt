@@ -264,3 +264,47 @@ __TRK_reset+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
 __TRK_set_MSR+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
 pad_00_80003298_init+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
 usr_put_initialize+* dev # MetroTRK: runs only once a dev kit's debugger flag starts it
+
+# MCC and FIO, the dev kit's USB link to a host (2026-10-02): MCCInit runs only from hsd_803931A4, which main calls when DbLevel is not Master and R is held at boot, and from usb_exit_init on an event only MCCInit's callback queues. A retail disc runs at Master (no /develop.ini), so MCC is never initialized and every MCC and FIO call takes its not-initialized exit, which probes verified; the rest needs the link and a USB adapter on EXI, which the SDK layer leaves out.
+FIOExit+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+FIOFclose+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+FIOFopen+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+FIOFwrite+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+FIOInit+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+FlushChannelInfo+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+LoadChannelInfo+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCCheckAsyncDone+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCClose+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCEnumDevices+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCExiCallback+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCExit+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCGetChannelInfo+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCGetConnectionStatus+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCGetFreeBlocks+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCGetLastError+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCInit+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCNotify+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCOpen+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCRead+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCRxCallback+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCSetChannelEventMask+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCStreamClose+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCStreamOpen+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCStreamWrite+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCTxCallback+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MCCWrite+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MailboxCheck+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+MakeMemoryMap+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+NotifyCompulsorily+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+SearchFreeBlocks+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+SetChannelInfoDirty+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+WaitAMinute+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+callbackEventStream+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+fioMccChannelEvent+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+fioPacketMakeHeader+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+fioPacketReceiveDone+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+fioPacketReceiveResult+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+fioPacketResultWrite+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+fioPacketSendPacket+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+fioPacketWrite+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+mccInitializeCheck+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
