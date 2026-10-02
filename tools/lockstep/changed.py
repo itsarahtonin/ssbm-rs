@@ -65,10 +65,18 @@ def registered(adapter, fns):
     return next((c for c in re.findall(r"\b([A-Za-z_]\w*)\(ctx", adapter) if c in fns), None)
 
 
+def differing(old, new):
+    """The modules whose text, or whose hand ports', differs between the commits."""
+    out = subprocess.run(["git", "diff", "--name-only", old] + ([new] if new else []) +
+                         ["--", "crates/game/src/tu", "crates/game/src/manual"],
+                         capture_output=True, text=True, check=True).stdout.split()
+    return {p.replace("/manual/", "/tu/") for p in out if p.endswith(".rs")}
+
+
 def main():
     old = sys.argv[1]
     new = sys.argv[2] if len(sys.argv) > 2 else None
-    paths = sorted(set(files(old)) | set(files(new or "HEAD")))
+    paths = sorted((set(files(old)) | set(files(new or "HEAD"))) & differing(old, new))
     n = 0
     for path in paths:
         # A unit's hand ports live in manual/ under the same name.

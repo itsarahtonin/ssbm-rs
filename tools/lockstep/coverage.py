@@ -85,19 +85,22 @@ def blocks(insns, labels):
 
 
 def load_bits(paths, spans, stale):
-    bits = bytearray()
+    """The union of the bitmaps, each without the instructions of the ports stale for it."""
+    merged, masks = 0, {}
     for p in paths:
-        data = bytearray(open(p, "rb").read())
-        for start in stale(p):
-            for addr in range(*spans.get(start, (start, start))):
-                i = (addr - LO) // 4
-                if i // 8 < len(data):
-                    data[i // 8] &= ~(1 << (i % 8)) & 0xFF
-        if len(data) > len(bits):
-            bits.extend(b"\0" * (len(data) - len(bits)))
-        for i, b in enumerate(data):
-            bits[i] |= b
-    return bits
+        data = int.from_bytes(open(p, "rb").read(), "little")
+        starts = frozenset(stale(p))
+        if starts:
+            if starts not in masks:
+                mask = 0
+                for start in starts:
+                    lo, hi = spans.get(start, (start, start))
+                    if hi > lo:
+                        mask |= ((1 << ((hi - lo) // 4)) - 1) << ((lo - LO) // 4)
+                masks[starts] = mask
+            data &= ~masks[starts]
+        merged |= data
+    return bytearray(merged.to_bytes((merged.bit_length() + 7) // 8, "little"))
 
 
 def covered(bits, addr):
