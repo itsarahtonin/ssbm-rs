@@ -38,6 +38,7 @@ fn asm_mnDiagram3_PopulateRankings(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80245ba4_u32;
     loop {
         match pc {
@@ -396,7 +397,11 @@ fn asm_mnDiagram3_PopulateRankings(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[26].set(v);
                 }
+                unset |= 0x4000000;
                 // stw r26, 0x58(r29)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[29].get().wrapping_add(0x58_u32);
                     ctx.write_u32(ea, g[26].get());
@@ -466,7 +471,11 @@ fn asm_mnDiagram3_PopulateRankings(ctx: &Ctx) {
                     let v = g[3].get().rotate_left(0) & 0xff_u32;
                     g[27].set(v);
                 }
+                unset |= 0x8000000;
                 // cmpwi r27, 0x78
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[27].get() as i32, 120_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -480,6 +489,9 @@ fn asm_mnDiagram3_PopulateRankings(ctx: &Ctx) {
             }
             0x80245d1c_u32 => {
                 // mr r3, r27
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[27].get() | g[27].get();
                     g[3].set(v);
@@ -504,6 +516,9 @@ fn asm_mnDiagram3_PopulateRankings(ctx: &Ctx) {
                 // addi r4, r3, 0x0
                 g[4].set(g[3].get());
                 // addi r3, r26, 0x0
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[3].set(g[26].get());
                 // crset cr1eq
                 {
@@ -563,7 +578,11 @@ fn asm_mnDiagram3_PopulateRankings(ctx: &Ctx) {
                     let v = g[3].get().rotate_left(0) & 0xff_u32;
                     g[27].set(v);
                 }
+                unset |= 0x8000000;
                 // addi r3, r27, 0x0
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[3].set(g[27].get());
                 // li r4, 0x0
                 g[4].set(0_u32);
@@ -799,7 +818,11 @@ fn asm_mnDiagram3_PopulateRankings(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[28].set(v);
                 }
+                unset |= 0x10000000;
                 // stw r28, 0x5c(r29)
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[29].get().wrapping_add(0x5c_u32);
                     ctx.write_u32(ea, g[28].get());
@@ -1177,6 +1200,9 @@ fn asm_mnDiagram3_PopulateRankings(ctx: &Ctx) {
                     ctx.write_u32(ea, g[0].get());
                 }
                 // addi r3, r28, 0x0
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[3].set(g[28].get());
                 // addi r4, r1, 0x58
                 g[4].set(g[1].get().wrapping_add(0x58_u32));
@@ -1252,6 +1278,9 @@ fn asm_mnDiagram3_PopulateRankings(ctx: &Ctx) {
                 // addi r4, r31, 0x0
                 g[4].set(g[31].get());
                 // clrlwi r5, r27, 24
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[27].get().rotate_left(0) & 0xff_u32;
                     g[5].set(v);
@@ -1325,6 +1354,9 @@ fn asm_mnDiagram3_PopulateRankings(ctx: &Ctx) {
                 // addi r4, r31, 0x0
                 g[4].set(g[31].get());
                 // clrlwi r5, r27, 24
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[27].get().rotate_left(0) & 0xff_u32;
                     g[5].set(v);
@@ -1403,6 +1435,9 @@ fn asm_mnDiagram3_PopulateRankings(ctx: &Ctx) {
                 // addi r4, r31, 0x0
                 g[4].set(g[31].get());
                 // clrlwi r5, r27, 24
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[27].get().rotate_left(0) & 0xff_u32;
                     g[5].set(v);
@@ -1478,6 +1513,9 @@ fn asm_mnDiagram3_PopulateRankings(ctx: &Ctx) {
                 // addi r4, r31, 0x0
                 g[4].set(g[31].get());
                 // clrlwi r5, r27, 24
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[27].get().rotate_left(0) & 0xff_u32;
                     g[5].set(v);
@@ -1529,6 +1567,9 @@ fn asm_mnDiagram3_PopulateRankings(ctx: &Ctx) {
                     ctx.write_u32(ea, g[0].get());
                 }
                 // addi r3, r28, 0x0
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[3].set(g[28].get());
                 // addi r4, r1, 0x58
                 g[4].set(g[1].get().wrapping_add(0x58_u32));
@@ -1729,6 +1770,9 @@ fn asm_mnDiagram3_PopulateRankings(ctx: &Ctx) {
                 // addi r4, r31, 0x0
                 g[4].set(g[31].get());
                 // clrlwi r5, r27, 24
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[27].get().rotate_left(0) & 0xff_u32;
                     g[5].set(v);
@@ -1804,6 +1848,7 @@ fn asm_mnDiagram3_PopulateRankings(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x1c000000;
                 // lwz r0, 0xf4(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xf4_u32);

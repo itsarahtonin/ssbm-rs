@@ -794,6 +794,7 @@ fn asm_ifStatus_802F66A4(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x802f66a4_u32;
     loop {
         match pc {
@@ -866,6 +867,9 @@ fn asm_ifStatus_802F66A4(ctx: &Ctx) {
                     g[4].set(ctx.read_u32(ea));
                 }
                 // cmpwi r30, 0x0
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[30].get() as i32, 0_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1034,6 +1038,7 @@ fn asm_ifStatus_802F66A4(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x18_u32);
                     g[30].set(ctx.read_u32(ea));
                 }
+                unset |= 0x40000000;
                 // addi r1, r1, 0x20
                 g[1].set(g[1].get().wrapping_add(0x20_u32));
                 // mtlr r0

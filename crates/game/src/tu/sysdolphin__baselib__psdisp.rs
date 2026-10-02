@@ -511,6 +511,7 @@ fn asm_psDispParticles(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x803a0088_u32;
     loop {
         match pc {
@@ -1199,10 +1200,14 @@ fn asm_psDispParticles(ctx: &Ctx) {
                 // li r0, -0x1
                 g[0].set(0xffffffff_u32);
                 // rlwinm r19, r19, 0, 8, 6
+                if unset & 0x80000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[19].get().rotate_left(0) & 0xfeffffff_u32;
                     g[19].set(v);
                 }
+                unset |= 0x80000;
                 // stw r0, 0x7ac(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x7ac_u32);
@@ -4432,6 +4437,9 @@ fn asm_psDispParticles(ctx: &Ctx) {
                     g[0].set(ctx.read_u32(ea));
                 }
                 // xor r3, r0, r19
+                if unset & 0x80000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[0].get() ^ g[19].get();
                     g[3].set(v);
@@ -4631,6 +4639,7 @@ fn asm_psDispParticles(ctx: &Ctx) {
                 }
                 // li r19, 0x2
                 g[19].set(0x2_u32);
+                unset |= 0x80000;
                 // b .L_803A0EB8
                 pc = 0x803a0eb8_u32;
                 continue;
@@ -4644,6 +4653,7 @@ fn asm_psDispParticles(ctx: &Ctx) {
                 }
                 // li r19, 0x0
                 g[19].set(0_u32);
+                unset |= 0x80000;
                 pc = 0x803a0eb8_u32;
             }
             0x803a0eb8_u32 => {
@@ -5266,6 +5276,9 @@ fn asm_psDispParticles(ctx: &Ctx) {
                 // addi r7, r27, 0x0
                 g[7].set(g[27].get());
                 // addi r8, r19, 0x0
+                if unset & 0x80000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[8].set(g[19].get());
                 // addi r9, r20, 0x0
                 g[9].set(g[20].get());
@@ -5299,6 +5312,9 @@ fn asm_psDispParticles(ctx: &Ctx) {
                 // addi r7, r27, 0x0
                 g[7].set(g[27].get());
                 // addi r8, r19, 0x0
+                if unset & 0x80000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[8].set(g[19].get());
                 // addi r9, r20, 0x0
                 g[9].set(g[20].get());
@@ -18003,6 +18019,7 @@ fn asm_psDispParticles(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x4_u32);
                     g[19].set(ctx.read_u32(ea));
                 }
+                unset |= 0x80000;
                 // lwz r30, 0x0(r30)
                 {
                     let ea = g[30].get();
@@ -18086,6 +18103,7 @@ fn asm_psDispParticles(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x80000;
                 // lwz r0, 0x9a4(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x9a4_u32);

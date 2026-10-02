@@ -2005,6 +2005,7 @@ fn asm_MakeColorGenTExp(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8035f7d0_u32;
     loop {
         match pc {
@@ -2568,6 +2569,7 @@ fn asm_MakeColorGenTExp(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[14].set(v);
                 }
+                unset |= 0x4000;
                 pc = 0x8035f9b8_u32;
             }
             0x8035f9b8_u32 => {
@@ -2607,6 +2609,7 @@ fn asm_MakeColorGenTExp(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[18].set(v);
                 }
+                unset |= 0x40000;
                 pc = 0x8035f9dc_u32;
             }
             0x8035f9dc_u32 => {
@@ -2646,6 +2649,7 @@ fn asm_MakeColorGenTExp(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[19].set(v);
                 }
+                unset |= 0x80000;
                 pc = 0x8035fa00_u32;
             }
             0x8035fa00_u32 => {
@@ -2685,6 +2689,7 @@ fn asm_MakeColorGenTExp(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[21].set(v);
                 }
+                unset |= 0x200000;
                 pc = 0x8035fa24_u32;
             }
             0x8035fa24_u32 => {
@@ -2724,6 +2729,7 @@ fn asm_MakeColorGenTExp(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[22].set(v);
                 }
+                unset |= 0x400000;
                 pc = 0x8035fa48_u32;
             }
             0x8035fa48_u32 => {
@@ -3285,6 +3291,9 @@ fn asm_MakeColorGenTExp(ctx: &Ctx) {
                     ctx.write_u32(ea, g[0].get());
                 }
                 // stw r14, 0x0(r31)
+                if unset & 0x4000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[31].get();
                     ctx.write_u32(ea, g[14].get());
@@ -3303,6 +3312,9 @@ fn asm_MakeColorGenTExp(ctx: &Ctx) {
                     ctx.write_u32(ea, g[0].get());
                 }
                 // stw r18, 0x0(r31)
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[31].get();
                     ctx.write_u32(ea, g[18].get());
@@ -3321,6 +3333,9 @@ fn asm_MakeColorGenTExp(ctx: &Ctx) {
                     ctx.write_u32(ea, g[0].get());
                 }
                 // stw r19, 0x0(r31)
+                if unset & 0x80000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[31].get();
                     ctx.write_u32(ea, g[19].get());
@@ -3339,6 +3354,9 @@ fn asm_MakeColorGenTExp(ctx: &Ctx) {
                     ctx.write_u32(ea, g[0].get());
                 }
                 // stw r21, 0x0(r31)
+                if unset & 0x200000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[31].get();
                     ctx.write_u32(ea, g[21].get());
@@ -3357,6 +3375,9 @@ fn asm_MakeColorGenTExp(ctx: &Ctx) {
                     ctx.write_u32(ea, g[0].get());
                 }
                 // stw r22, 0x0(r31)
+                if unset & 0x400000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[31].get();
                     ctx.write_u32(ea, g[22].get());
@@ -4044,6 +4065,9 @@ fn asm_MakeColorGenTExp(ctx: &Ctx) {
                     ctx.write_u32(ea, g[0].get());
                 }
                 // stw r18, 0x0(r30)
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get();
                     ctx.write_u32(ea, g[18].get());
@@ -4062,6 +4086,9 @@ fn asm_MakeColorGenTExp(ctx: &Ctx) {
                     ctx.write_u32(ea, g[0].get());
                 }
                 // stw r19, 0x0(r30)
+                if unset & 0x80000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get();
                     ctx.write_u32(ea, g[19].get());
@@ -4080,6 +4107,9 @@ fn asm_MakeColorGenTExp(ctx: &Ctx) {
                     ctx.write_u32(ea, g[0].get());
                 }
                 // stw r21, 0x0(r30)
+                if unset & 0x200000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get();
                     ctx.write_u32(ea, g[21].get());
@@ -4098,6 +4128,9 @@ fn asm_MakeColorGenTExp(ctx: &Ctx) {
                     ctx.write_u32(ea, g[0].get());
                 }
                 // stw r22, 0x0(r30)
+                if unset & 0x400000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get();
                     ctx.write_u32(ea, g[22].get());
@@ -4405,6 +4438,7 @@ fn asm_MakeColorGenTExp(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x6c4000;
                 // lwz r0, 0xc4(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xc4_u32);

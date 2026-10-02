@@ -933,6 +933,7 @@ fn asm__tyDisplay_80318CB4(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80318cb4_u32;
     loop {
         match pc {
@@ -1552,6 +1553,9 @@ fn asm__tyDisplay_80318CB4(ctx: &Ctx) {
             }
             0x80318ea4_u32 => {
                 // add r3, r20, r20
+                if unset & 0x100000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(g[20].get(), g[20].get(), 0);
                     g[3].set(v);
@@ -2114,6 +2118,7 @@ fn asm__tyDisplay_80318CB4(ctx: &Ctx) {
                 }
                 // addi r20, r21, 0x0
                 g[20].set(g[21].get());
+                unset |= 0x100000;
                 // li r22, 0x0
                 g[22].set(0_u32);
                 // addi r21, r21, 0x6
@@ -3565,6 +3570,7 @@ fn asm__tyDisplay_80318CB4(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x100000;
                 // lwz r0, 0x174(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x174_u32);
@@ -13034,6 +13040,7 @@ fn asm__tyDisplay_8031B328(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8031b328_u32;
     loop {
         match pc {
@@ -13175,6 +13182,7 @@ fn asm__tyDisplay_8031B328(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[27].set(v);
                 }
+                unset |= 0x8000000;
                 // lbz r4, HSD_GObj_LightKind@sda21(r0)
                 {
                     let ea = g[13].get().wrapping_add(0xffffc1aa_u32);
@@ -13186,6 +13194,9 @@ fn asm__tyDisplay_8031B328(ctx: &Ctx) {
                     g[3].set(ctx.read_u32(ea));
                 }
                 // mr r5, r27
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[27].get() | g[27].get();
                     g[5].set(v);
@@ -13239,6 +13250,9 @@ fn asm__tyDisplay_8031B328(ctx: &Ctx) {
                 // addi r4, r1, 0x8
                 g[4].set(g[1].get().wrapping_add(0x8_u32));
                 // addi r3, r27, 0x0
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[3].set(g[27].get());
                 // stw r0, 0x8(r1)
                 {
@@ -13347,6 +13361,7 @@ fn asm__tyDisplay_8031B328(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x8000000;
                 // lwz r0, 0x44(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x44_u32);
@@ -14674,6 +14689,7 @@ fn asm_tyDisplay_8031B9DC(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8031b9dc_u32;
     loop {
         match pc {
@@ -14734,6 +14750,7 @@ fn asm_tyDisplay_8031B9DC(ctx: &Ctx) {
                     let ea = g[13].get().wrapping_add(0xffffb80c_u32);
                     g[31].set(ctx.read_u32(ea));
                 }
+                unset |= 0x80000000;
                 // b .L_8031BA24
                 pc = 0x8031ba24_u32;
                 continue;
@@ -14762,11 +14779,18 @@ fn asm_tyDisplay_8031B9DC(ctx: &Ctx) {
             }
             0x8031ba20_u32 => {
                 // addi r31, r31, 0x10
+                if unset & 0x80000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[31].set(g[31].get().wrapping_add(0x10_u32));
+                unset |= 0x80000000;
                 pc = 0x8031ba24_u32;
             }
             0x8031ba24_u32 => {
                 // lwz r0, 0x0(r31)
+                if unset & 0x80000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[31].get();
                     g[0].set(ctx.read_u32(ea));
@@ -14802,6 +14826,7 @@ fn asm_tyDisplay_8031B9DC(ctx: &Ctx) {
                     let ea = g[13].get().wrapping_add(0xffffb810_u32);
                     g[31].set(ctx.read_u32(ea));
                 }
+                unset |= 0x80000000;
                 // b .L_8031BA4C
                 pc = 0x8031ba4c_u32;
                 continue;
@@ -14822,11 +14847,18 @@ fn asm_tyDisplay_8031B9DC(ctx: &Ctx) {
             }
             0x8031ba48_u32 => {
                 // addi r31, r31, 0x10
+                if unset & 0x80000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[31].set(g[31].get().wrapping_add(0x10_u32));
+                unset |= 0x80000000;
                 pc = 0x8031ba4c_u32;
             }
             0x8031ba4c_u32 => {
                 // lwz r0, 0x0(r31)
+                if unset & 0x80000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[31].get();
                     g[0].set(ctx.read_u32(ea));
@@ -14845,6 +14877,9 @@ fn asm_tyDisplay_8031B9DC(ctx: &Ctx) {
             }
             0x8031ba58_u32 => {
                 // mr r3, r31
+                if unset & 0x80000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[31].get() | g[31].get();
                     g[3].set(v);
@@ -14859,6 +14894,7 @@ fn asm_tyDisplay_8031B9DC(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x1c_u32);
                     g[31].set(ctx.read_u32(ea));
                 }
+                unset |= 0x80000000;
                 // lwz r30, 0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x18_u32);

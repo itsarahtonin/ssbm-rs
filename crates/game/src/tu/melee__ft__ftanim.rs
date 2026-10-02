@@ -1708,6 +1708,7 @@ fn asm_ftAnim_8006F3DC(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8006f3dc_u32;
     loop {
         match pc {
@@ -1878,6 +1879,7 @@ fn asm_ftAnim_8006F3DC(ctx: &Ctx) {
                     let ea = g[3].get().wrapping_add(0x4_u32);
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x200000000;
                 // b .L_8006F474
                 pc = 0x8006f474_u32;
                 continue;
@@ -1907,6 +1909,7 @@ fn asm_ftAnim_8006F3DC(ctx: &Ctx) {
                 }
                 // bl lbGetJObjCurrFrame
                 c::call(ctx, 0x8000bdb4_u32, 0x8006f474_u32);
+                unset |= 0x200000000;
                 pc = 0x8006f474_u32;
             }
             0x8006f474_u32 => {
@@ -1920,6 +1923,9 @@ fn asm_ftAnim_8006F3DC(ctx: &Ctx) {
                 // mtlr r0
                 ctx.regs.set_spr(8, g[0].get());
                 // blr
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 let to = ctx.regs.lr.get() & !3;
                 if to != lr0 & !3 {
                     c::tail_call(ctx, to);
@@ -3306,6 +3312,7 @@ fn asm_ftAnim_80070CC4(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80070cc4_u32;
     loop {
         match pc {
@@ -3743,6 +3750,7 @@ fn asm_ftAnim_80070CC4(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x14_u32);
                     g[31].set(ctx.read_u32(ea));
                 }
+                unset |= 0x80000000;
                 // b .L_80070E50
                 pc = 0x80070e50_u32;
                 continue;
@@ -3788,6 +3796,9 @@ fn asm_ftAnim_80070CC4(ctx: &Ctx) {
                 // addi r3, r29, 0x0
                 g[3].set(g[29].get());
                 // addi r5, r31, 0x0
+                if unset & 0x80000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[5].set(g[31].get());
                 // bl ftAnim_8006FA58
                 c::call(ctx, 0x8006fa58_u32, 0x80070e60_u32);
@@ -3801,6 +3812,7 @@ fn asm_ftAnim_80070CC4(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x80000000;
                 // lwz r0, 0x44(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x44_u32);

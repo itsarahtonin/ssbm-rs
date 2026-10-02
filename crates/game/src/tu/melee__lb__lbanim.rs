@@ -39,6 +39,7 @@ fn asm_lbAnim_InitFrames(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8001e560_u32;
     loop {
         match pc {
@@ -104,6 +105,7 @@ fn asm_lbAnim_InitFrames(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[29].set(v);
                 }
+                unset |= 0x20000000;
                 pc = 0x8001e594_u32;
             }
             0x8001e594_u32 => {
@@ -225,6 +227,9 @@ fn asm_lbAnim_InitFrames(ctx: &Ctx) {
                     ctx.write_u32(ea, g[0].get());
                 }
                 // mr r3, r29
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[29].get() | g[29].get();
                     g[3].set(v);
@@ -241,6 +246,7 @@ fn asm_lbAnim_InitFrames(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x20000000;
                 // addi r1, r1, 0x28
                 g[1].set(g[1].get().wrapping_add(0x28_u32));
                 // mtlr r0

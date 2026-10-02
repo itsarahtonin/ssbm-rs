@@ -4396,6 +4396,7 @@ fn asm_resolveIKJoint1(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8037231c_u32;
     loop {
         match pc {
@@ -5894,6 +5895,7 @@ fn asm_resolveIKJoint1(ctx: &Ctx) {
                     let v = fp::fmuls(ctx.regs.f(29), ctx.regs.f(29));
                     c::fill(ctx, 28, v);
                 }
+                unset |= 0x1000000000000000;
                 // lfs f4, "@1709"@sda21(r0)
                 {
                     let ea = g[2].get().wrapping_add(0xffffeb88_u32);
@@ -5905,11 +5907,17 @@ fn asm_resolveIKJoint1(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fsubs f1, f5, f28
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(5), ctx.regs.f(28));
                     c::fill(ctx, 1, v);
                 }
                 // fadds f2, f5, f28
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fadds(ctx.regs.f(5), ctx.regs.f(28));
                     c::fill(ctx, 2, v);
@@ -5946,6 +5954,7 @@ fn asm_resolveIKJoint1(ctx: &Ctx) {
                     let v = ctx.regs.f(1);
                     ctx.regs.set_f(27, v);
                 }
+                unset |= 0x800000000000000;
                 // bge .L_80372860
                 if (c::cr_bit(ctx, 0) == false) {
                     pc = 0x80372860_u32;
@@ -5959,10 +5968,14 @@ fn asm_resolveIKJoint1(ctx: &Ctx) {
                     let v = ctx.regs.f(0);
                     ctx.regs.set_f(27, v);
                 }
+                unset |= 0x800000000000000;
                 pc = 0x80372860_u32;
             }
             0x80372860_u32 => {
                 // fsubs f3, f5, f27
+                if unset & 0x800000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(5), ctx.regs.f(27));
                     c::fill(ctx, 3, v);
@@ -6121,6 +6134,9 @@ fn asm_resolveIKJoint1(ctx: &Ctx) {
                     c::fill(ctx, 3, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fadds f2, f0, f27
+                if unset & 0x800000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fadds(ctx.regs.f(0), ctx.regs.f(27));
                     c::fill(ctx, 2, v);
@@ -6244,6 +6260,9 @@ fn asm_resolveIKJoint1(ctx: &Ctx) {
             }
             0x8037293c_u32 => {
                 // fmuls f29, f27, f5
+                if unset & 0x800000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmuls(ctx.regs.f(27), ctx.regs.f(5));
                     c::fill(ctx, 29, v);
@@ -6289,6 +6308,12 @@ fn asm_resolveIKJoint1(ctx: &Ctx) {
             }
             0x80372958_u32 => {
                 // fsubs f0, f28, f27
+                if unset & 0x800000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(28), ctx.regs.f(27));
                     c::fill(ctx, 0, v);
@@ -6742,11 +6767,13 @@ fn asm_resolveIKJoint1(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0xe8_u32);
                     ctx.regs.set_f(28, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x1000000000000000;
                 // lfd f27, 0xe0(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xe0_u32);
                     ctx.regs.set_f(27, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x800000000000000;
                 // lfd f26, 0xd8(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xd8_u32);

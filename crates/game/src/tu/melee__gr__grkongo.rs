@@ -5443,6 +5443,7 @@ fn asm_grKongo_801D7BBC(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x801d7bbc_u32;
     loop {
         match pc {
@@ -5939,6 +5940,7 @@ fn asm_grKongo_801D7BBC(ctx: &Ctx) {
             0x801d7d34_u32 => {
                 // li r29, 0x1
                 g[29].set(0x1_u32);
+                unset |= 0x20000000;
                 // b .L_801D7D40
                 pc = 0x801d7d40_u32;
                 continue;
@@ -5947,6 +5949,7 @@ fn asm_grKongo_801D7BBC(ctx: &Ctx) {
             0x801d7d3c_u32 => {
                 // li r29, 0x2
                 g[29].set(0x2_u32);
+                unset |= 0x20000000;
                 pc = 0x801d7d40_u32;
             }
             0x801d7d40_u32 => {
@@ -6005,6 +6008,7 @@ fn asm_grKongo_801D7BBC(ctx: &Ctx) {
             0x801d7d6c_u32 => {
                 // li r29, 0x7
                 g[29].set(0x7_u32);
+                unset |= 0x20000000;
                 // b .L_801D7D88
                 pc = 0x801d7d88_u32;
                 continue;
@@ -6026,6 +6030,7 @@ fn asm_grKongo_801D7BBC(ctx: &Ctx) {
             0x801d7d7c_u32 => {
                 // li r29, 0x8
                 g[29].set(0x8_u32);
+                unset |= 0x20000000;
                 // b .L_801D7D88
                 pc = 0x801d7d88_u32;
                 continue;
@@ -6034,6 +6039,7 @@ fn asm_grKongo_801D7BBC(ctx: &Ctx) {
             0x801d7d84_u32 => {
                 // li r29, 0x9
                 g[29].set(0x9_u32);
+                unset |= 0x20000000;
                 pc = 0x801d7d88_u32;
             }
             0x801d7d88_u32 => {
@@ -6284,6 +6290,9 @@ fn asm_grKongo_801D7BBC(ctx: &Ctx) {
             }
             0x801d7e38_u32 => {
                 // mr r3, r29
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[29].get() | g[29].get();
                     g[3].set(v);
@@ -6318,6 +6327,7 @@ fn asm_grKongo_801D7BBC(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x24_u32);
                     g[29].set(ctx.read_u32(ea));
                 }
+                unset |= 0x20000000;
                 // addi r1, r1, 0x38
                 g[1].set(g[1].get().wrapping_add(0x38_u32));
                 // mtlr r0

@@ -137,6 +137,7 @@ fn asm_lbMemory_80014FC8(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80014fc8_u32;
     loop {
         match pc {
@@ -308,6 +309,7 @@ fn asm_lbMemory_80014FC8(ctx: &Ctx) {
                 }
                 // addi r31, r3, 0x0
                 g[31].set(g[3].get());
+                unset |= 0x80000000;
                 // addi r26, r5, 0x0
                 g[26].set(g[5].get());
                 pc = 0x80015064_u32;
@@ -400,6 +402,9 @@ fn asm_lbMemory_80014FC8(ctx: &Ctx) {
                     ctx.write_u32(ea, g[30].get());
                 }
                 // stw r31, 0x4(r3)
+                if unset & 0x80000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[3].get().wrapping_add(0x4_u32);
                     ctx.write_u32(ea, g[31].get());
@@ -469,6 +474,7 @@ fn asm_lbMemory_80014FC8(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x80000000;
                 // lwz r0, 0x3c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x3c_u32);

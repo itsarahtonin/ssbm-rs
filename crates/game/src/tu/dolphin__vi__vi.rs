@@ -4042,6 +4042,7 @@ fn asm_VIGetTvFormat(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8035032c_u32;
     loop {
         match pc {
@@ -4165,6 +4166,7 @@ fn asm_VIGetTvFormat(ctx: &Ctx) {
             0x80350378_u32 => {
                 // li r31, 0x0
                 g[31].set(0_u32);
+                unset |= 0x80000000;
                 // b .L_8035038C
                 pc = 0x8035038c_u32;
                 continue;
@@ -4173,6 +4175,7 @@ fn asm_VIGetTvFormat(ctx: &Ctx) {
             0x80350380_u32 => {
                 // li r31, 0x1
                 g[31].set(0x1_u32);
+                unset |= 0x80000000;
                 // b .L_8035038C
                 pc = 0x8035038c_u32;
                 continue;
@@ -4184,6 +4187,7 @@ fn asm_VIGetTvFormat(ctx: &Ctx) {
                     let v = g[0].get() | g[0].get();
                     g[31].set(v);
                 }
+                unset |= 0x80000000;
                 pc = 0x8035038c_u32;
             }
             0x8035038c_u32 => {
@@ -4198,6 +4202,9 @@ fn asm_VIGetTvFormat(ctx: &Ctx) {
                     g[0].set(ctx.read_u32(ea));
                 }
                 // mr r3, r31
+                if unset & 0x80000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[31].get() | g[31].get();
                     g[3].set(v);
@@ -4207,6 +4214,7 @@ fn asm_VIGetTvFormat(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0xc_u32);
                     g[31].set(ctx.read_u32(ea));
                 }
+                unset |= 0x80000000;
                 // addi r1, r1, 0x10
                 g[1].set(g[1].get().wrapping_add(0x10_u32));
                 // mtlr r0

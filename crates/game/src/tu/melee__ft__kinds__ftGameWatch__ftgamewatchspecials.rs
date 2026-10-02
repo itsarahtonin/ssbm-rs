@@ -155,6 +155,7 @@ fn asm_ftGw_SpecialS_GetRandomInt(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8014c6b4_u32;
     loop {
         match pc {
@@ -357,6 +358,7 @@ fn asm_ftGw_SpecialS_GetRandomInt(ctx: &Ctx) {
                 g[3].set(g[1].get().wrapping_add(0x3c_u32));
                 // lwzx r30, r3, r0
                 g[30].set(ctx.read_u32(g[3].get().wrapping_add(g[0].get())));
+                unset |= 0x40000000;
                 // b .L_8014C774
                 pc = 0x8014c774_u32;
                 continue;
@@ -381,6 +383,9 @@ fn asm_ftGw_SpecialS_GetRandomInt(ctx: &Ctx) {
                     g[0].set(ctx.read_u32(ea));
                 }
                 // mr r3, r30
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[30].get() | g[30].get();
                     g[3].set(v);
@@ -391,6 +396,9 @@ fn asm_ftGw_SpecialS_GetRandomInt(ctx: &Ctx) {
                     ctx.write_u32(ea, g[0].get());
                 }
                 // stw r30, 0x222c(r31)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[31].get().wrapping_add(0x222c_u32);
                     ctx.write_u32(ea, g[30].get());
@@ -410,6 +418,7 @@ fn asm_ftGw_SpecialS_GetRandomInt(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x70_u32);
                     g[30].set(ctx.read_u32(ea));
                 }
+                unset |= 0x40000000;
                 // lwz r29, 0x6c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x6c_u32);

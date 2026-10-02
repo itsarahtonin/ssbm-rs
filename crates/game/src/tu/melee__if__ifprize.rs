@@ -871,6 +871,7 @@ fn asm_un_802FE918(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x802fe918_u32;
     loop {
         match pc {
@@ -992,6 +993,7 @@ fn asm_un_802FE918(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[27].set(v);
                 }
+                unset |= 0x8000000;
                 // b .L_802FE9C8
                 pc = 0x802fe9c8_u32;
                 continue;
@@ -1039,6 +1041,7 @@ fn asm_un_802FE918(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[27].set(v);
                 }
+                unset |= 0x8000000;
                 // b .L_802FE9C8
                 pc = 0x802fe9c8_u32;
                 continue;
@@ -1084,10 +1087,14 @@ fn asm_un_802FE918(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[27].set(v);
                 }
+                unset |= 0x8000000;
                 pc = 0x802fe9c8_u32;
             }
             0x802fe9c8_u32 => {
                 // stb r27, 0x0(r26)
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get();
                     ctx.write_u8(ea, g[27].get() as u8);
@@ -1347,6 +1354,7 @@ fn asm_un_802FE918(ctx: &Ctx) {
                     let ea = g[6].get();
                     g[27].set(u32::from(ctx.read_u16(ea)));
                 }
+                unset |= 0x8000000;
                 // li r4, 0x4a
                 g[4].set(0x4a_u32);
                 // bl HSD_SisLib_803A6530
@@ -1377,6 +1385,9 @@ fn asm_un_802FE918(ctx: &Ctx) {
             }
             0x802feab8_u32 => {
                 // addi r5, r27, 0x0
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[5].set(g[27].get());
                 // li r3, 0x2
                 g[3].set(0x2_u32);
@@ -1705,6 +1716,7 @@ fn asm_un_802FE918(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x8000000;
                 // lwz r0, 0x13c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x13c_u32);

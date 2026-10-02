@@ -526,6 +526,7 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8039dad4_u32;
     loop {
         match pc {
@@ -2426,11 +2427,13 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     let v = ctx.regs.f(0);
                     ctx.regs.set_f(18, v);
                 }
+                unset |= 0x4000000000000;
                 // fmadds f25, f0, f1, f19
                 {
                     let v = fp::fmadds(ctx.regs.f(0), ctx.regs.f(1), ctx.regs.f(19));
                     c::fill(ctx, 25, v);
                 }
+                unset |= 0x200000000000000;
                 // b .L_8039E16C
                 pc = 0x8039e16c_u32;
                 continue;
@@ -2517,11 +2520,13 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     let v = ctx.regs.f(0);
                     ctx.regs.set_f(18, v);
                 }
+                unset |= 0x4000000000000;
                 // fmadds f25, f0, f1, f19
                 {
                     let v = fp::fmadds(ctx.regs.f(0), ctx.regs.f(1), ctx.regs.f(19));
                     c::fill(ctx, 25, v);
                 }
+                unset |= 0x200000000000000;
                 // b .L_8039E16C
                 pc = 0x8039e16c_u32;
                 continue;
@@ -2581,6 +2586,7 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     let v = fp::fmul(ctx.regs.f(1), ctx.regs.f(4));
                     ctx.regs.set_f(25, v);
                 }
+                unset |= 0x200000000000000;
                 // lwz r3, 0x184(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x184_u32);
@@ -2594,10 +2600,14 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     ctx.write_u32(ea, g[3].get());
                 }
                 // frsp f25, f25
+                if unset & 0x200000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::frsp(ctx.regs.f(25));
                     c::fill(ctx, 25, v);
                 }
+                unset |= 0x200000000000000;
                 // stw r0, 0x188(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x188_u32);
@@ -2618,11 +2628,16 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     let v = fp::fdiv(ctx.regs.f(3), ctx.regs.f(0));
                     ctx.regs.set_f(18, v);
                 }
+                unset |= 0x4000000000000;
                 // frsp f18, f18
+                if unset & 0x4000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::frsp(ctx.regs.f(18));
                     c::fill(ctx, 18, v);
                 }
+                unset |= 0x4000000000000;
                 pc = 0x8039e16c_u32;
             }
             0x8039e16c_u32 => {
@@ -3016,10 +3031,17 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(23)));
                 }
                 // fadds f25, f25, f18
+                if unset & 0x4000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x200000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fadds(ctx.regs.f(25), ctx.regs.f(18));
                     c::fill(ctx, 25, v);
                 }
+                unset |= 0x200000000000000;
                 // lwz r0, 0x64(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x64_u32);
@@ -3153,6 +3175,7 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x60_u32);
                     c::fill(ctx, 25, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x200000000000000;
                 // bl HSD_Randf
                 c::call(ctx, 0x80380528_u32, 0x8039e304_u32);
                 pc = 0x8039e304_u32;
@@ -3169,6 +3192,9 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(23)));
                 }
                 // fsubs f0, f0, f25
+                if unset & 0x200000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(0), ctx.regs.f(25));
                     c::fill(ctx, 0, v);
@@ -3179,10 +3205,14 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     g[0].set(ctx.read_u32(ea));
                 }
                 // fmadds f25, f0, f1, f25
+                if unset & 0x200000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(0), ctx.regs.f(1), ctx.regs.f(25));
                     c::fill(ctx, 25, v);
                 }
+                unset |= 0x200000000000000;
                 // clrlwi r0, r0, 1
                 {
                     let v = g[0].get().rotate_left(0) & 0x7fffffff_u32;
@@ -3322,10 +3352,17 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     ctx.regs.set_f(29, v);
                 }
                 // fadds f25, f25, f18
+                if unset & 0x4000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x200000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fadds(ctx.regs.f(25), ctx.regs.f(18));
                     c::fill(ctx, 25, v);
                 }
+                unset |= 0x200000000000000;
                 // frsp f29, f29
                 {
                     let v = fp::frsp(ctx.regs.f(29));
@@ -3342,6 +3379,7 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x60_u32);
                     c::fill(ctx, 25, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x200000000000000;
                 // bl HSD_Randf
                 c::call(ctx, 0x80380528_u32, 0x8039e398_u32);
                 pc = 0x8039e398_u32;
@@ -3358,6 +3396,9 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     c::fill(ctx, 2, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fsubs f0, f0, f25
+                if unset & 0x200000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(0), ctx.regs.f(25));
                     c::fill(ctx, 0, v);
@@ -3368,10 +3409,14 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     ctx.regs.set_f(29, v);
                 }
                 // fmadds f25, f0, f1, f25
+                if unset & 0x200000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(0), ctx.regs.f(1), ctx.regs.f(25));
                     c::fill(ctx, 25, v);
                 }
+                unset |= 0x200000000000000;
                 // frsp f29, f29
                 {
                     let v = fp::frsp(ctx.regs.f(29));
@@ -3404,10 +3449,17 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     ctx.regs.set_f(0, v);
                 }
                 // fadds f25, f25, f18
+                if unset & 0x4000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x200000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fadds(ctx.regs.f(25), ctx.regs.f(18));
                     c::fill(ctx, 25, v);
                 }
+                unset |= 0x200000000000000;
                 // fmuls f29, f26, f0
                 {
                     let v = fp::fmuls(ctx.regs.f(26), ctx.regs.f(0));
@@ -3424,6 +3476,7 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x60_u32);
                     c::fill(ctx, 25, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x200000000000000;
                 // bl HSD_Randf
                 c::call(ctx, 0x80380528_u32, 0x8039e3d8_u32);
                 pc = 0x8039e3d8_u32;
@@ -3440,6 +3493,9 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     c::fill(ctx, 2, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fsubs f0, f0, f25
+                if unset & 0x200000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(0), ctx.regs.f(25));
                     c::fill(ctx, 0, v);
@@ -3450,14 +3506,21 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     c::fill(ctx, 29, v);
                 }
                 // fmadds f25, f0, f1, f25
+                if unset & 0x200000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(0), ctx.regs.f(1), ctx.regs.f(25));
                     c::fill(ctx, 25, v);
                 }
+                unset |= 0x200000000000000;
                 pc = 0x8039e3ec_u32;
             }
             0x8039e3ec_u32 => {
                 // fmr f1, f25
+                if unset & 0x200000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(25);
                     ctx.regs.set_f(1, v);
@@ -3473,6 +3536,9 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     c::fill(ctx, 0, v);
                 }
                 // fmr f1, f25
+                if unset & 0x200000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(25);
                     ctx.regs.set_f(1, v);
@@ -3669,6 +3735,9 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     c::fill(ctx, 23, v);
                 }
                 // fmr f1, f25
+                if unset & 0x200000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(25);
                     ctx.regs.set_f(1, v);
@@ -3684,6 +3753,9 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     c::fill(ctx, 0, v);
                 }
                 // fmr f1, f25
+                if unset & 0x200000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(25);
                     ctx.regs.set_f(1, v);
@@ -4258,10 +4330,17 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
             }
             0x8039e67c_u32 => {
                 // fadds f25, f25, f18
+                if unset & 0x4000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x200000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fadds(ctx.regs.f(25), ctx.regs.f(18));
                     c::fill(ctx, 25, v);
                 }
+                unset |= 0x200000000000000;
                 // b .L_8039E694
                 pc = 0x8039e694_u32;
                 continue;
@@ -4283,11 +4362,16 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     let v = fp::fmul(ctx.regs.f(16), ctx.regs.f(0));
                     ctx.regs.set_f(25, v);
                 }
+                unset |= 0x200000000000000;
                 // frsp f25, f25
+                if unset & 0x200000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::frsp(ctx.regs.f(25));
                     c::fill(ctx, 25, v);
                 }
+                unset |= 0x200000000000000;
                 pc = 0x8039e694_u32;
             }
             0x8039e694_u32 => {
@@ -4297,6 +4381,9 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(20)));
                 }
                 // fmr f4, f25
+                if unset & 0x200000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(25);
                     ctx.regs.set_f(4, v);
@@ -6669,6 +6756,7 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x1f8_u32);
                     ctx.regs.set_f(25, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x200000000000000;
                 // lfd f24, 0x1f0(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x1f0_u32);
@@ -6704,6 +6792,7 @@ fn asm_hsd_8039DAD4(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x1c0_u32);
                     ctx.regs.set_f(18, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x4000000000000;
                 // lfd f17, 0x1b8(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x1b8_u32);

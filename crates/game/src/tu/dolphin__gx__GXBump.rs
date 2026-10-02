@@ -921,6 +921,7 @@ fn asm___GXUpdateBPMask(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8033fcd4_u32;
     loop {
         match pc {
@@ -1036,6 +1037,7 @@ fn asm___GXUpdateBPMask(ctx: &Ctx) {
                     let v = g[0].get().rotate_left(0) & 0x7_u32;
                     g[5].set(v);
                 }
+                unset |= 0x20;
                 // b .L_8033FD48
                 pc = 0x8033fd48_u32;
                 continue;
@@ -1052,6 +1054,7 @@ fn asm___GXUpdateBPMask(ctx: &Ctx) {
                     let v = g[0].get().rotate_left(26) & 0x7_u32;
                     g[5].set(v);
                 }
+                unset |= 0x20;
                 // b .L_8033FD48
                 pc = 0x8033fd48_u32;
                 continue;
@@ -1068,6 +1071,7 @@ fn asm___GXUpdateBPMask(ctx: &Ctx) {
                     let v = g[0].get().rotate_left(20) & 0x7_u32;
                     g[5].set(v);
                 }
+                unset |= 0x20;
                 // b .L_8033FD48
                 pc = 0x8033fd48_u32;
                 continue;
@@ -1084,12 +1088,16 @@ fn asm___GXUpdateBPMask(ctx: &Ctx) {
                     let v = g[0].get().rotate_left(14) & 0x7_u32;
                     g[5].set(v);
                 }
+                unset |= 0x20;
                 pc = 0x8033fd48_u32;
             }
             0x8033fd48_u32 => {
                 // li r0, 0x1
                 g[0].set(0x1_u32);
                 // slw r0, r0, r5
+                if unset & 0x20 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = {
                         let n = g[5].get() & 0x3F;
@@ -1159,7 +1167,11 @@ fn asm___GXUpdateBPMask(ctx: &Ctx) {
                 g[0].set(0x61_u32);
                 // lis r5, 0xcc01
                 g[5].set(0xcc010000_u32);
+                unset |= 0x20;
                 // stb r0, -0x8000(r5)
+                if unset & 0x20 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[5].get().wrapping_add(0xffff8000_u32);
                     ctx.write_u8(ea, g[0].get() as u8);
@@ -1177,6 +1189,9 @@ fn asm___GXUpdateBPMask(ctx: &Ctx) {
                     g[3].set(ctx.read_u32(ea));
                 }
                 // stw r3, -0x8000(r5)
+                if unset & 0x20 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[5].get().wrapping_add(0xffff8000_u32);
                     ctx.write_u32(ea, g[3].get());

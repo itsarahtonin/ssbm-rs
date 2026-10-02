@@ -289,6 +289,7 @@ fn asm_it_80291DAC(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80291dac_u32;
     loop {
         match pc {
@@ -666,6 +667,7 @@ fn asm_it_80291DAC(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x44_u32);
                     g[6].set(ctx.read_u32(ea));
                 }
+                unset |= 0x40;
                 // b .L_80291ED8
                 pc = 0x80291ed8_u32;
                 continue;
@@ -696,6 +698,7 @@ fn asm_it_80291DAC(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x44_u32);
                     g[6].set(ctx.read_u32(ea));
                 }
+                unset |= 0x40;
                 // b .L_80291ED8
                 pc = 0x80291ed8_u32;
                 continue;
@@ -723,10 +726,14 @@ fn asm_it_80291DAC(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x44_u32);
                     g[6].set(ctx.read_u32(ea));
                 }
+                unset |= 0x40;
                 pc = 0x80291ed8_u32;
             }
             0x80291ed8_u32 => {
                 // subf. r0, r6, r7
+                if unset & 0x40 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(!g[6].get(), g[7].get(), 1);
                     g[0].set(v);
@@ -753,6 +760,9 @@ fn asm_it_80291DAC(ctx: &Ctx) {
             }
             0x80291ee8_u32 => {
                 // subf. r0, r6, r7
+                if unset & 0x40 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(!g[6].get(), g[7].get(), 1);
                     g[0].set(v);

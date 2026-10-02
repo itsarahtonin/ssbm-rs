@@ -3370,6 +3370,7 @@ fn asm_EXIGetID(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80346f90_u32;
     loop {
         match pc {
@@ -3544,6 +3545,7 @@ fn asm_EXIGetID(ctx: &Ctx) {
                 }
                 // addi r29, r3, 0x0
                 g[29].set(g[3].get());
+                unset |= 0x20000000;
                 // rlwinm. r0, r0, 0, 28, 28
                 {
                     let v = g[0].get().rotate_left(0) & 0x8_u32;
@@ -3582,6 +3584,9 @@ fn asm_EXIGetID(ctx: &Ctx) {
             }
             0x80347038_u32 => {
                 // mr r3, r29
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[29].get() | g[29].get();
                     g[3].set(v);
@@ -3642,6 +3647,9 @@ fn asm_EXIGetID(ctx: &Ctx) {
                     g[0].set(ctx.read_u32(ea));
                 }
                 // addi r3, r29, 0x0
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[3].set(g[29].get());
                 // ori r0, r0, 0x8
                 g[0].set(g[0].get() | 0x8_u32);
@@ -3686,6 +3694,7 @@ fn asm_EXIGetID(ctx: &Ctx) {
                     let ea = g[30].get();
                     g[29].set(ctx.read_u32(ea));
                 }
+                unset |= 0x20000000;
                 pc = 0x803470a0_u32;
             }
             0x803470a0_u32 => {
@@ -4285,6 +4294,9 @@ fn asm_EXIGetID(ctx: &Ctx) {
                 // lwzx r0, r4, r0
                 g[0].set(ctx.read_u32(g[4].get().wrapping_add(g[0].get())));
                 // subf r4, r29, r0
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(!g[29].get(), g[0].get(), 1);
                     g[4].set(v);
@@ -4328,6 +4340,9 @@ fn asm_EXIGetID(ctx: &Ctx) {
                     ctx.write_u32(ea, g[0].get());
                 }
                 // stw r29, 0x20(r31)
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[31].get().wrapping_add(0x20_u32);
                     ctx.write_u32(ea, g[29].get());
@@ -4405,6 +4420,7 @@ fn asm_EXIGetID(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x20000000;
                 // lwz r0, 0x44(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x44_u32);

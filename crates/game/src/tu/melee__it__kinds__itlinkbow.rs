@@ -112,6 +112,7 @@ fn asm_it_802AF32C(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x802af32c_u32;
     loop {
         match pc {
@@ -262,6 +263,7 @@ fn asm_it_802AF32C(ctx: &Ctx) {
             0x802af390_u32 => {
                 // bl ftLk_SpecialN_GetIndex
                 c::call(ctx, 0x800ecbc4_u32, 0x802af394_u32);
+                unset |= 0x10;
                 pc = 0x802af394_u32;
             }
             0x802af394_u32 => {
@@ -270,6 +272,7 @@ fn asm_it_802AF32C(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[4].set(v);
                 }
+                unset |= 0x10;
                 // b .L_802AF3A4
                 pc = 0x802af3a4_u32;
                 continue;
@@ -278,6 +281,7 @@ fn asm_it_802AF32C(ctx: &Ctx) {
             0x802af39c_u32 => {
                 // bl ftKb_SpecialNLk800FB394
                 c::call(ctx, 0x800fb394_u32, 0x802af3a0_u32);
+                unset |= 0x10;
                 pc = 0x802af3a0_u32;
             }
             0x802af3a0_u32 => {
@@ -286,6 +290,7 @@ fn asm_it_802AF32C(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[4].set(v);
                 }
+                unset |= 0x10;
                 pc = 0x802af3a4_u32;
             }
             0x802af3a4_u32 => {
@@ -297,6 +302,9 @@ fn asm_it_802AF32C(ctx: &Ctx) {
                     g[6].set(ctx.read_u32(ea));
                 }
                 // slwi r5, r4, 2
+                if unset & 0x10 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[4].get().rotate_left(2) & 0xfffffffc_u32;
                     g[5].set(v);
@@ -365,7 +373,11 @@ fn asm_it_802AF32C(ctx: &Ctx) {
                 // li r5, 0x2
                 g[5].set(0x2_u32);
                 // bl Item_80268E5C
+                if unset & 0x10 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x80268e5c_u32, 0x802af3ec_u32);
+                unset |= 0x10;
                 pc = 0x802af3ec_u32;
             }
             0x802af3ec_u32 => {
@@ -376,6 +388,7 @@ fn asm_it_802AF32C(ctx: &Ctx) {
                 }
                 // bl Item_802694CC
                 c::call(ctx, 0x802694cc_u32, 0x802af3f4_u32);
+                unset |= 0x10;
                 pc = 0x802af3f4_u32;
             }
             0x802af3f4_u32 => {
@@ -391,6 +404,7 @@ fn asm_it_802AF32C(ctx: &Ctx) {
                 }
                 // bl Item_80268DD4
                 c::call(ctx, 0x80268dd4_u32, 0x802af400_u32);
+                unset |= 0x10;
                 pc = 0x802af400_u32;
             }
             0x802af400_u32 => {
@@ -405,7 +419,11 @@ fn asm_it_802AF32C(ctx: &Ctx) {
                 // li r5, 0x2
                 g[5].set(0x2_u32);
                 // bl Item_80268E5C
+                if unset & 0x10 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x80268e5c_u32, 0x802af410_u32);
+                unset |= 0x10;
                 pc = 0x802af410_u32;
             }
             0x802af410_u32 => {
@@ -416,6 +434,7 @@ fn asm_it_802AF32C(ctx: &Ctx) {
                 }
                 // bl Item_802694CC
                 c::call(ctx, 0x802694cc_u32, 0x802af418_u32);
+                unset |= 0x10;
                 pc = 0x802af418_u32;
             }
             0x802af418_u32 => {
@@ -467,6 +486,7 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x802af434_u32;
     loop {
         match pc {
@@ -622,6 +642,7 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
             0x802af49c_u32 => {
                 // bl ftLk_SpecialN_GetIndex
                 c::call(ctx, 0x800ecbc4_u32, 0x802af4a0_u32);
+                unset |= 0x10;
                 pc = 0x802af4a0_u32;
             }
             0x802af4a0_u32 => {
@@ -630,6 +651,7 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[4].set(v);
                 }
+                unset |= 0x10;
                 // b .L_802AF4B0
                 pc = 0x802af4b0_u32;
                 continue;
@@ -638,6 +660,7 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
             0x802af4a8_u32 => {
                 // bl ftKb_SpecialNLk800FB394
                 c::call(ctx, 0x800fb394_u32, 0x802af4ac_u32);
+                unset |= 0x10;
                 pc = 0x802af4ac_u32;
             }
             0x802af4ac_u32 => {
@@ -646,10 +669,14 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[4].set(v);
                 }
+                unset |= 0x10;
                 pc = 0x802af4b0_u32;
             }
             0x802af4b0_u32 => {
                 // cmpwi r4, 0x3
+                if unset & 0x10 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[4].get() as i32, 3_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -671,6 +698,9 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
             }
             0x802af4bc_u32 => {
                 // cmpwi r4, 0x0
+                if unset & 0x10 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[4].get() as i32, 0_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -690,6 +720,9 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
             }
             0x802af4c8_u32 => {
                 // cmpwi r4, 0x6
+                if unset & 0x10 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[4].get() as i32, 6_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -712,10 +745,15 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
                 g[3].set(g[29].get());
                 // li r4, 0x0
                 g[4].set(0_u32);
+                unset |= 0x10;
                 // li r5, 0x2
                 g[5].set(0x2_u32);
                 // bl Item_80268E5C
+                if unset & 0x10 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x80268e5c_u32, 0x802af4e4_u32);
+                unset |= 0x10;
                 pc = 0x802af4e4_u32;
             }
             0x802af4e4_u32 => {
@@ -726,6 +764,7 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
                 }
                 // bl Item_802694CC
                 c::call(ctx, 0x802694cc_u32, 0x802af4ec_u32);
+                unset |= 0x10;
                 pc = 0x802af4ec_u32;
             }
             0x802af4ec_u32 => {
@@ -766,10 +805,15 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
                 g[3].set(g[13].get().wrapping_add(0xffff9d98_u32));
                 // li r4, 0x2f8
                 g[4].set(0x2f8_u32);
+                unset |= 0x10;
                 // li r5, "@279"@sda21
                 g[5].set(g[13].get().wrapping_add(0xffff9da0_u32));
                 // bl __assert
+                if unset & 0x10 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x80388220_u32, 0x802af514_u32);
+                unset |= 0x10;
                 pc = 0x802af514_u32;
             }
             0x802af514_u32 => {
@@ -847,10 +891,15 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
                 g[3].set(g[13].get().wrapping_add(0xffff9d98_u32));
                 // li r4, 0x234
                 g[4].set(0x234_u32);
+                unset |= 0x10;
                 // li r5, "@279"@sda21
                 g[5].set(g[13].get().wrapping_add(0xffff9da0_u32));
                 // bl __assert
+                if unset & 0x10 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x80388220_u32, 0x802af554_u32);
+                unset |= 0x10;
                 pc = 0x802af554_u32;
             }
             0x802af554_u32 => {
@@ -859,9 +908,13 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
                     let ea = g[31].get().wrapping_add(0x14_u32);
                     g[4].set(ctx.read_u32(ea));
                 }
+                unset |= 0x10;
                 // li r3, 0x0
                 g[3].set(0_u32);
                 // rlwinm. r0, r4, 0, 8, 8
+                if unset & 0x10 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[4].get().rotate_left(0) & 0x800000_u32;
                     g[0].set(v);
@@ -876,6 +929,9 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
             }
             0x802af564_u32 => {
                 // rlwinm. r0, r4, 0, 25, 25
+                if unset & 0x10 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[4].get().rotate_left(0) & 0x40_u32;
                     g[0].set(v);
@@ -914,6 +970,7 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
                 }
                 // bl HSD_JObjSetMtxDirtySub
                 c::call(ctx, 0x803732e8_u32, 0x802af580_u32);
+                unset |= 0x10;
                 pc = 0x802af580_u32;
             }
             0x802af580_u32 => {
@@ -927,10 +984,15 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
                 g[3].set(g[29].get());
                 // li r4, 0x3
                 g[4].set(0x3_u32);
+                unset |= 0x10;
                 // li r5, 0x2
                 g[5].set(0x2_u32);
                 // bl Item_80268E5C
+                if unset & 0x10 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x80268e5c_u32, 0x802af594_u32);
+                unset |= 0x10;
                 pc = 0x802af594_u32;
             }
             0x802af594_u32 => {
@@ -941,6 +1003,7 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
                 }
                 // bl Item_802694CC
                 c::call(ctx, 0x802694cc_u32, 0x802af59c_u32);
+                unset |= 0x10;
                 pc = 0x802af59c_u32;
             }
             0x802af59c_u32 => {
@@ -981,10 +1044,15 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
                 g[3].set(g[13].get().wrapping_add(0xffff9d98_u32));
                 // li r4, 0x2f8
                 g[4].set(0x2f8_u32);
+                unset |= 0x10;
                 // li r5, "@279"@sda21
                 g[5].set(g[13].get().wrapping_add(0xffff9da0_u32));
                 // bl __assert
+                if unset & 0x10 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x80388220_u32, 0x802af5c4_u32);
+                unset |= 0x10;
                 pc = 0x802af5c4_u32;
             }
             0x802af5c4_u32 => {
@@ -1062,10 +1130,15 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
                 g[3].set(g[13].get().wrapping_add(0xffff9d98_u32));
                 // li r4, 0x234
                 g[4].set(0x234_u32);
+                unset |= 0x10;
                 // li r5, "@279"@sda21
                 g[5].set(g[13].get().wrapping_add(0xffff9da0_u32));
                 // bl __assert
+                if unset & 0x10 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x80388220_u32, 0x802af604_u32);
+                unset |= 0x10;
                 pc = 0x802af604_u32;
             }
             0x802af604_u32 => {
@@ -1074,9 +1147,13 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
                     let ea = g[31].get().wrapping_add(0x14_u32);
                     g[4].set(ctx.read_u32(ea));
                 }
+                unset |= 0x10;
                 // li r3, 0x0
                 g[3].set(0_u32);
                 // rlwinm. r0, r4, 0, 8, 8
+                if unset & 0x10 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[4].get().rotate_left(0) & 0x800000_u32;
                     g[0].set(v);
@@ -1091,6 +1168,9 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
             }
             0x802af614_u32 => {
                 // rlwinm. r0, r4, 0, 25, 25
+                if unset & 0x10 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[4].get().rotate_left(0) & 0x40_u32;
                     g[0].set(v);
@@ -1129,6 +1209,7 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
                 }
                 // bl HSD_JObjSetMtxDirtySub
                 c::call(ctx, 0x803732e8_u32, 0x802af630_u32);
+                unset |= 0x10;
                 pc = 0x802af630_u32;
             }
             0x802af630_u32 => {

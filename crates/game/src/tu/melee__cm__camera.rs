@@ -420,6 +420,7 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8002958c_u32;
     loop {
         match pc {
@@ -611,6 +612,7 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
                     let ea = g[2].get().wrapping_add(0xffff8458_u32);
                     c::fill(ctx, 30, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x4000000000000000;
                 // fmuls f27, f26, f1
                 {
                     let v = fp::fmuls(ctx.regs.f(26), ctx.regs.f(1));
@@ -621,18 +623,27 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
                     let ea = g[2].get().wrapping_add(0xffff8420_u32);
                     c::fill(ctx, 28, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x1000000000000000;
                 // li r30, 0x0
                 g[30].set(0_u32);
                 // fmr f31, f30
+                if unset & 0x4000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(30);
                     ctx.regs.set_f(31, v);
                 }
+                unset |= 0x8000000000000000;
                 // fmr f29, f28
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(28);
                     ctx.regs.set_f(29, v);
                 }
+                unset |= 0x2000000000000000;
                 // lwz r31, cm_804D6468@sda21(r0)
                 {
                     let ea = g[13].get().wrapping_add(0xffffadc8_u32);
@@ -1148,6 +1159,9 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fcmpo cr0, f0, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(0), ctx.regs.f(31));
                 // bge .L_800297B0
                 if (c::cr_bit(ctx, 0) == false) {
@@ -1162,10 +1176,14 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
                     let v = ctx.regs.f(0);
                     ctx.regs.set_f(31, v);
                 }
+                unset |= 0x8000000000000000;
                 pc = 0x800297b0_u32;
             }
             0x800297b0_u32 => {
                 // fcmpo cr0, f0, f29
+                if unset & 0x2000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(0), ctx.regs.f(29));
                 // ble .L_800297BC
                 if (c::cr_bit(ctx, 1) == false) {
@@ -1180,6 +1198,7 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
                     let v = ctx.regs.f(0);
                     ctx.regs.set_f(29, v);
                 }
+                unset |= 0x2000000000000000;
                 pc = 0x800297bc_u32;
             }
             0x800297bc_u32 => {
@@ -1403,6 +1422,9 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fcmpo cr0, f0, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(0), ctx.regs.f(31));
                 // bge .L_80029864
                 if (c::cr_bit(ctx, 0) == false) {
@@ -1417,10 +1439,14 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
                     let v = ctx.regs.f(0);
                     ctx.regs.set_f(31, v);
                 }
+                unset |= 0x8000000000000000;
                 pc = 0x80029864_u32;
             }
             0x80029864_u32 => {
                 // fcmpo cr0, f0, f29
+                if unset & 0x2000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(0), ctx.regs.f(29));
                 // ble .L_80029870
                 if (c::cr_bit(ctx, 1) == false) {
@@ -1435,6 +1461,7 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
                     let v = ctx.regs.f(0);
                     ctx.regs.set_f(29, v);
                 }
+                unset |= 0x2000000000000000;
                 pc = 0x80029870_u32;
             }
             0x80029870_u32 => {
@@ -1658,6 +1685,9 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fcmpo cr0, f0, f30
+                if unset & 0x4000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(0), ctx.regs.f(30));
                 // bge .L_80029918
                 if (c::cr_bit(ctx, 0) == false) {
@@ -1672,10 +1702,14 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
                     let v = ctx.regs.f(0);
                     ctx.regs.set_f(30, v);
                 }
+                unset |= 0x4000000000000000;
                 pc = 0x80029918_u32;
             }
             0x80029918_u32 => {
                 // fcmpo cr0, f0, f28
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(0), ctx.regs.f(28));
                 // ble .L_80029924
                 if (c::cr_bit(ctx, 1) == false) {
@@ -1690,6 +1724,7 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
                     let v = ctx.regs.f(0);
                     ctx.regs.set_f(28, v);
                 }
+                unset |= 0x1000000000000000;
                 pc = 0x80029924_u32;
             }
             0x80029924_u32 => {
@@ -1913,6 +1948,9 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fcmpo cr0, f0, f30
+                if unset & 0x4000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(0), ctx.regs.f(30));
                 // bge .L_800299CC
                 if (c::cr_bit(ctx, 0) == false) {
@@ -1927,10 +1965,14 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
                     let v = ctx.regs.f(0);
                     ctx.regs.set_f(30, v);
                 }
+                unset |= 0x4000000000000000;
                 pc = 0x800299cc_u32;
             }
             0x800299cc_u32 => {
                 // fcmpo cr0, f0, f28
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(0), ctx.regs.f(28));
                 // ble .L_800299D8
                 if (c::cr_bit(ctx, 1) == false) {
@@ -1945,6 +1987,7 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
                     let v = ctx.regs.f(0);
                     ctx.regs.set_f(28, v);
                 }
+                unset |= 0x1000000000000000;
                 pc = 0x800299d8_u32;
             }
             0x800299d8_u32 => {
@@ -2009,21 +2052,25 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
                     let v = fp::fsubs(ctx.regs.f(1), ctx.regs.f(0));
                     c::fill(ctx, 31, v);
                 }
+                unset |= 0x8000000000000000;
                 // fsubs f30, f2, f0
                 {
                     let v = fp::fsubs(ctx.regs.f(2), ctx.regs.f(0));
                     c::fill(ctx, 30, v);
                 }
+                unset |= 0x4000000000000000;
                 // fadds f29, f0, f1
                 {
                     let v = fp::fadds(ctx.regs.f(0), ctx.regs.f(1));
                     c::fill(ctx, 29, v);
                 }
+                unset |= 0x2000000000000000;
                 // fadds f28, f0, f2
                 {
                     let v = fp::fadds(ctx.regs.f(0), ctx.regs.f(2));
                     c::fill(ctx, 28, v);
                 }
+                unset |= 0x1000000000000000;
                 pc = 0x80029a10_u32;
             }
             0x80029a10_u32 => {
@@ -2126,6 +2173,9 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
             }
             0x80029a58_u32 => {
                 // stfs f31, 0x0(r28)
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[28].get();
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(31)));
@@ -2146,6 +2196,9 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
                     c::fill(ctx, 0, v);
                 }
                 // fsubs f0, f30, f0
+                if unset & 0x4000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(30), ctx.regs.f(0));
                     c::fill(ctx, 0, v);
@@ -2156,11 +2209,17 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
                 }
                 // stfs f29, 0x8(r28)
+                if unset & 0x2000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[28].get().wrapping_add(0x8_u32);
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(29)));
                 }
                 // stfs f28, 0xc(r28)
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[28].get().wrapping_add(0xc_u32);
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(28)));
@@ -2185,21 +2244,25 @@ fn asm_Camera_8002958C(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0xa8_u32);
                     ctx.regs.set_f(31, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // lfd f30, 0xa0(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xa0_u32);
                     ctx.regs.set_f(30, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x4000000000000000;
                 // lfd f29, 0x98(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x98_u32);
                     ctx.regs.set_f(29, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x2000000000000000;
                 // lfd f28, 0x90(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x90_u32);
                     ctx.regs.set_f(28, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x1000000000000000;
                 // lfd f27, 0x88(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x88_u32);
@@ -15085,6 +15148,7 @@ fn asm_Camera_8002DFE4(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8002dfe4_u32;
     loop {
         match pc {
@@ -15297,6 +15361,7 @@ fn asm_Camera_8002DFE4(ctx: &Ctx) {
                     let v = fp::fdivs(ctx.regs.f(1), ctx.regs.f(0));
                     c::fill(ctx, 31, v);
                 }
+                unset |= 0x8000000000000000;
                 // b .L_8002E0B8
                 pc = 0x8002e0b8_u32;
                 continue;
@@ -15341,6 +15406,7 @@ fn asm_Camera_8002DFE4(ctx: &Ctx) {
                     let v = ctx.regs.f(1);
                     ctx.regs.set_f(31, v);
                 }
+                unset |= 0x8000000000000000;
                 pc = 0x8002e0b8_u32;
             }
             0x8002e0b8_u32 => {
@@ -15414,6 +15480,9 @@ fn asm_Camera_8002DFE4(ctx: &Ctx) {
                 // addi r3, r1, 0x14
                 g[3].set(g[1].get().wrapping_add(0x14_u32));
                 // fmuls f0, f0, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmuls(ctx.regs.f(0), ctx.regs.f(31));
                     c::fill(ctx, 0, v);
@@ -15429,6 +15498,9 @@ fn asm_Camera_8002DFE4(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fmuls f0, f0, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmuls(ctx.regs.f(0), ctx.regs.f(31));
                     c::fill(ctx, 0, v);
@@ -15444,6 +15516,9 @@ fn asm_Camera_8002DFE4(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fmuls f0, f0, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmuls(ctx.regs.f(0), ctx.regs.f(31));
                     c::fill(ctx, 0, v);
@@ -15506,6 +15581,7 @@ fn asm_Camera_8002DFE4(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x40_u32);
                     ctx.regs.set_f(31, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // lwz r31, 0x3c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x3c_u32);
@@ -15550,6 +15626,7 @@ fn asm_Camera_8002E158(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8002e158_u32;
     loop {
         match pc {
@@ -15682,6 +15759,7 @@ fn asm_Camera_8002E158(ctx: &Ctx) {
                     let ea = g[2].get().wrapping_add(0xffff8440_u32);
                     ctx.regs.set_f(4, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x1000000000;
                 // xoris r0, r0, 0x8000
                 g[0].set(g[0].get() ^ 0x80000000_u32);
                 // stw r4, 0x24(r1)
@@ -15717,11 +15795,17 @@ fn asm_Camera_8002E158(ctx: &Ctx) {
                     ctx.regs.set_f(0, f64::from_bits(ctx.read_u64(ea)));
                 }
                 // fsubs f3, f3, f4
+                if unset & 0x1000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(3), ctx.regs.f(4));
                     c::fill(ctx, 3, v);
                 }
                 // fsubs f0, f0, f4
+                if unset & 0x1000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(0), ctx.regs.f(4));
                     c::fill(ctx, 0, v);
@@ -15731,6 +15815,7 @@ fn asm_Camera_8002E158(ctx: &Ctx) {
                     let v = fp::fdivs(ctx.regs.f(3), ctx.regs.f(0));
                     c::fill(ctx, 4, v);
                 }
+                unset |= 0x1000000000;
                 // b .L_8002E20C
                 pc = 0x8002e20c_u32;
                 continue;
@@ -15775,6 +15860,7 @@ fn asm_Camera_8002E158(ctx: &Ctx) {
                     let v = ctx.regs.f(3);
                     ctx.regs.set_f(4, v);
                 }
+                unset |= 0x1000000000;
                 pc = 0x8002e20c_u32;
             }
             0x8002e20c_u32 => {
@@ -15808,6 +15894,9 @@ fn asm_Camera_8002E158(ctx: &Ctx) {
                     c::fill(ctx, 0, v);
                 }
                 // fmadds f0, f4, f0, f1
+                if unset & 0x1000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(4), ctx.regs.f(0), ctx.regs.f(1));
                     c::fill(ctx, 0, v);

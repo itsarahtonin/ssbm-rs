@@ -198,6 +198,7 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80398614_u32;
     loop {
         match pc {
@@ -265,8 +266,10 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                 }
                 // addi r8, r3, 0x8
                 g[8].set(g[3].get().wrapping_add(0x8_u32));
+                unset |= 0x100;
                 // li r0, 0x0
                 g[0].set(0_u32);
+                unset |= 0x1;
                 // cmpwi r6, 0x0
                 {
                     let (x, y) = (g[6].get() as i32, 0_i32);
@@ -274,6 +277,7 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                 }
                 // addi r7, r6, 0x0
                 g[7].set(g[6].get());
+                unset |= 0x80;
                 // li r6, 0x0
                 g[6].set(0_u32);
                 // ble .L_8039875C
@@ -285,11 +289,17 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x80398654_u32 => {
                 // cmpwi r7, 0x8
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[7].get() as i32, 8_i32);
                     c::compare(ctx, 0, x < y, x > y);
                 }
                 // subi r10, r7, 0x8
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[10].set(g[7].get().wrapping_add(0xfffffff8_u32));
                 // ble .L_80398990
                 if (c::cr_bit(ctx, 1) == false) {
@@ -470,12 +480,18 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x803986e8_u32 => {
                 // subf r9, r6, r7
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(!g[6].get(), g[7].get(), 1);
                     g[9].set(v);
                     let _ = (ca, ov);
                 }
                 // cmpw r6, r7
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[6].get() as i32, g[7].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -527,6 +543,7 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                     let ea = g[3].get().wrapping_add(0x4_u32);
                     g[0].set(ctx.read_u32(ea));
                 }
+                unset |= 0x1;
                 // addi r6, r3, 0xc
                 g[6].set(g[3].get().wrapping_add(0xc_u32));
                 // lwz r7, 0x8(r3)
@@ -534,25 +551,41 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                     let ea = g[3].get().wrapping_add(0x8_u32);
                     g[7].set(ctx.read_u32(ea));
                 }
+                unset |= 0x80;
                 // addi r9, r3, 0x0
                 g[9].set(g[3].get());
                 // slwi r8, r0, 2
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[0].get().rotate_left(2) & 0xfffffffc_u32;
                     g[8].set(v);
                 }
+                unset |= 0x100;
                 // add r7, r7, r0
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(g[7].get(), g[0].get(), 0);
                     g[7].set(v);
                     let _ = (ca, ov);
                 }
+                unset |= 0x80;
                 // subf r8, r8, r6
+                if unset & 0x100 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(!g[8].get(), g[6].get(), 1);
                     g[8].set(v);
                     let _ = (ca, ov);
                 }
+                unset |= 0x100;
                 // li r10, 0x0
                 g[10].set(0_u32);
                 // b .L_80398750
@@ -619,12 +652,21 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x8039875c_u32 => {
                 // subf r3, r0, r7
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(!g[0].get(), g[7].get(), 1);
                     g[3].set(v);
                     let _ = (ca, ov);
                 }
                 // slwi r6, r0, 2
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[0].get().rotate_left(2) & 0xfffffffc_u32;
                     g[6].set(v);
@@ -632,11 +674,20 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                 // mtctr r3
                 ctx.regs.set_spr(9, g[3].get());
                 // cmpw r0, r7
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[0].get() as i32, g[7].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
                 }
                 // add r6, r8, r6
+                if unset & 0x100 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(g[8].get(), g[6].get(), 0);
                     g[6].set(v);
@@ -673,12 +724,20 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                     let ea = g[3].get().wrapping_add(0x8_u32);
                     g[0].set(ctx.read_u32(ea));
                 }
+                unset |= 0x1;
                 // rlwinm r0, r0, 0, 7, 3
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[0].get().rotate_left(0) & 0xf1ffffff_u32;
                     g[0].set(v);
                 }
+                unset |= 0x1;
                 // stw r0, 0x8(r3)
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[3].get().wrapping_add(0x8_u32);
                     ctx.write_u32(ea, g[0].get());
@@ -693,9 +752,17 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                     let ea = g[3].get().wrapping_add(0x8_u32);
                     g[0].set(ctx.read_u32(ea));
                 }
+                unset |= 0x1;
                 // oris r0, r0, 0x800
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[0].set(g[0].get() | 0x8000000_u32);
+                unset |= 0x1;
                 // stw r0, 0x8(r3)
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[3].get().wrapping_add(0x8_u32);
                     ctx.write_u32(ea, g[0].get());
@@ -718,16 +785,27 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                     let ea = g[4].get();
                     g[0].set(ctx.read_u32(ea));
                 }
+                unset |= 0x1;
                 // addi r7, r4, 0x4
                 g[7].set(g[4].get().wrapping_add(0x4_u32));
+                unset |= 0x80;
                 // addi r6, r7, 0x0
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[6].set(g[7].get());
                 // cmpwi r0, 0x1
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[0].get() as i32, 1_i32);
                     c::compare(ctx, 0, x < y, x > y);
                 }
                 // mtctr r0
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 ctx.regs.set_spr(9, g[0].get());
                 // blt .L_803987D8
                 if (c::cr_bit(ctx, 0) == true) {
@@ -780,13 +858,22 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x803987d8_u32 => {
                 // cmpwi r0, 0x0
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[0].get() as i32, 0_i32);
                     c::compare(ctx, 0, x < y, x > y);
                 }
                 // mtctr r0
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 ctx.regs.set_spr(9, g[0].get());
                 // addi r3, r7, 0x0
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[3].set(g[7].get());
                 // ble .L_80398920
                 if (c::cr_bit(ctx, 1) == false) {
@@ -818,6 +905,7 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                 g[10].set(0_u32);
                 // li r7, 0x0
                 g[7].set(0_u32);
+                unset |= 0x80;
                 // b .L_80398824
                 pc = 0x80398824_u32;
                 continue;
@@ -825,8 +913,14 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x80398800_u32 => {
                 // addi r9, r7, 0x18
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[9].set(g[7].get().wrapping_add(0x18_u32));
                 // add r9, r8, r9
+                if unset & 0x100 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(g[8].get(), g[9].get(), 0);
                     g[9].set(v);
@@ -865,7 +959,11 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x8039881c_u32 => {
                 // addi r7, r7, 0x4
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[7].set(g[7].get().wrapping_add(0x4_u32));
+                unset |= 0x80;
                 // addi r10, r10, 0x1
                 g[10].set(g[10].get().wrapping_add(0x1_u32));
                 pc = 0x80398824_u32;
@@ -876,7 +974,11 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                     let ea = g[3].get();
                     g[8].set(ctx.read_u32(ea));
                 }
+                unset |= 0x100;
                 // lwz r6, 0x0(r8)
+                if unset & 0x100 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[8].get();
                     g[6].set(ctx.read_u32(ea));
@@ -895,6 +997,9 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x80398834_u32 => {
                 // lwz r6, 0x4(r8)
+                if unset & 0x100 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[8].get().wrapping_add(0x4_u32);
                     g[6].set(ctx.read_u32(ea));
@@ -928,6 +1033,9 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x8039884c_u32 => {
                 // lhz r6, 0x16(r8)
+                if unset & 0x100 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[8].get().wrapping_add(0x16_u32);
                     g[6].set(u32::from(ctx.read_u16(ea)));
@@ -947,6 +1055,9 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x80398858_u32 => {
                 // lwz r6, 0x0(r8)
+                if unset & 0x100 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[8].get();
                     g[6].set(ctx.read_u32(ea));
@@ -958,7 +1069,14 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                 }
                 // addi r7, r6, 0x18
                 g[7].set(g[6].get().wrapping_add(0x18_u32));
+                unset |= 0x80;
                 // lwzx r6, r8, r7
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x100 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[6].set(ctx.read_u32(g[8].get().wrapping_add(g[7].get())));
                 // cmplwi r6, 0x0
                 {
@@ -980,6 +1098,12 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                     let _ = (ca, ov);
                 }
                 // stwx r6, r8, r7
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x100 == 0 {
+                    c::unset_read(ctx);
+                }
                 ctx.write_u32(g[8].get().wrapping_add(g[7].get()), g[6].get());
                 // b .L_80398918
                 pc = 0x80398918_u32;
@@ -988,6 +1112,9 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x8039887c_u32 => {
                 // lhz r6, 0x14(r8)
+                if unset & 0x100 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[8].get().wrapping_add(0x14_u32);
                     g[6].set(u32::from(ctx.read_u16(ea)));
@@ -1006,6 +1133,9 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x80398888_u32 => {
                 // lwz r10, 0x0(r8)
+                if unset & 0x100 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[8].get();
                     g[10].set(ctx.read_u32(ea));
@@ -1015,6 +1145,7 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                     let v = g[10].get().rotate_left(2) & 0xfffffffc_u32;
                     g[8].set(v);
                 }
+                unset |= 0x100;
                 // b .L_803988B8
                 pc = 0x803988b8_u32;
                 continue;
@@ -1022,14 +1153,25 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x80398894_u32 => {
                 // addi r7, r8, 0x18
+                if unset & 0x100 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[7].set(g[8].get().wrapping_add(0x18_u32));
+                unset |= 0x80;
                 // add r7, r9, r7
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(g[9].get(), g[7].get(), 0);
                     g[7].set(v);
                     let _ = (ca, ov);
                 }
+                unset |= 0x80;
                 // lwz r6, 0x0(r7)
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[7].get();
                     g[6].set(ctx.read_u32(ea));
@@ -1054,6 +1196,9 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                     let _ = (ca, ov);
                 }
                 // stw r6, 0x0(r7)
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[7].get();
                     ctx.write_u32(ea, g[6].get());
@@ -1062,7 +1207,11 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x803988b0_u32 => {
                 // addi r8, r8, 0x4
+                if unset & 0x100 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[8].set(g[8].get().wrapping_add(0x4_u32));
+                unset |= 0x100;
                 // addi r10, r10, 0x1
                 g[10].set(g[10].get().wrapping_add(0x1_u32));
                 pc = 0x803988b8_u32;
@@ -1078,12 +1227,16 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                     let ea = g[9].get();
                     g[7].set(ctx.read_u32(ea));
                 }
+                unset |= 0x80;
                 // lhz r6, 0x14(r9)
                 {
                     let ea = g[9].get().wrapping_add(0x14_u32);
                     g[6].set(u32::from(ctx.read_u16(ea)));
                 }
                 // add r6, r7, r6
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(g[7].get(), g[6].get(), 0);
                     g[6].set(v);
@@ -1109,6 +1262,9 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x803988d4_u32 => {
                 // lwz r10, 0x0(r8)
+                if unset & 0x100 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[8].get();
                     g[10].set(ctx.read_u32(ea));
@@ -1118,6 +1274,7 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                     let v = g[10].get().rotate_left(2) & 0xfffffffc_u32;
                     g[7].set(v);
                 }
+                unset |= 0x80;
                 // b .L_80398904
                 pc = 0x80398904_u32;
                 continue;
@@ -1125,8 +1282,14 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x803988e0_u32 => {
                 // addi r9, r7, 0x18
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[9].set(g[7].get().wrapping_add(0x18_u32));
                 // add r9, r8, r9
+                if unset & 0x100 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(g[8].get(), g[9].get(), 0);
                     g[9].set(v);
@@ -1165,7 +1328,11 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x803988fc_u32 => {
                 // addi r7, r7, 0x4
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[7].set(g[7].get().wrapping_add(0x4_u32));
+                unset |= 0x80;
                 // addi r10, r10, 0x1
                 g[10].set(g[10].get().wrapping_add(0x1_u32));
                 pc = 0x80398904_u32;
@@ -1176,7 +1343,11 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                     let ea = g[3].get();
                     g[8].set(ctx.read_u32(ea));
                 }
+                unset |= 0x100;
                 // lwz r6, 0x0(r8)
+                if unset & 0x100 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[8].get();
                     g[6].set(ctx.read_u32(ea));
@@ -1226,11 +1397,17 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x80398928_u32 => {
                 // cmpwi r0, 0x1
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[0].get() as i32, 1_i32);
                     c::compare(ctx, 0, x < y, x > y);
                 }
                 // mtctr r0
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 ctx.regs.set_spr(9, g[0].get());
                 // addi r4, r5, 0x4
                 g[4].set(g[5].get().wrapping_add(0x4_u32));
@@ -1250,7 +1427,11 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                     let ea = g[4].get();
                     g[0].set(ctx.read_u32(ea));
                 }
+                unset |= 0x1;
                 // cmpwi r0, 0x0
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[0].get() as i32, 0_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1264,18 +1445,26 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x80398944_u32 => {
                 // add r0, r0, r5
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(g[0].get(), g[5].get(), 0);
                     g[0].set(v);
                     let _ = (ca, ov);
                 }
+                unset |= 0x1;
                 // stw r0, 0x0(r4)
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[4].get();
                     ctx.write_u32(ea, g[0].get());
                 }
                 // li r7, 0x0
                 g[7].set(0_u32);
+                unset |= 0x80;
                 // lwz r6, 0x0(r4)
                 {
                     let ea = g[4].get();
@@ -1297,7 +1486,11 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                     let ea = g[3].get().wrapping_add(0x4_u32);
                     g[0].set(ctx.read_u32(ea));
                 }
+                unset |= 0x1;
                 // cmplwi r0, 0x0
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[0].get(), 0x0_u32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1311,12 +1504,19 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
             }
             0x80398968_u32 => {
                 // add r0, r0, r5
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(g[0].get(), g[5].get(), 0);
                     g[0].set(v);
                     let _ = (ca, ov);
                 }
+                unset |= 0x1;
                 // stw r0, 0x4(r3)
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[3].get().wrapping_add(0x4_u32);
                     ctx.write_u32(ea, g[0].get());
@@ -1327,7 +1527,11 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                 // addi r3, r3, 0x4
                 g[3].set(g[3].get().wrapping_add(0x4_u32));
                 // addi r7, r7, 0x1
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[7].set(g[7].get().wrapping_add(0x1_u32));
+                unset |= 0x80;
                 pc = 0x80398978_u32;
             }
             0x80398978_u32 => {
@@ -1336,7 +1540,14 @@ fn asm_psInitDataBankLocate(ctx: &Ctx) {
                     let ea = g[6].get();
                     g[0].set(ctx.read_u32(ea));
                 }
+                unset |= 0x1;
                 // cmplw r7, r0
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x80 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[7].get(), g[0].get());
                     c::compare(ctx, 0, x < y, x > y);

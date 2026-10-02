@@ -48,6 +48,7 @@ fn asm___strtoul(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80325bd0_u32;
     loop {
         match pc {
@@ -191,6 +192,7 @@ fn asm___strtoul(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[18].set(v);
                 }
+                unset |= 0x40000;
                 pc = 0x80325c5c_u32;
             }
             0x80325c5c_u32 => {
@@ -269,6 +271,9 @@ fn asm___strtoul(ctx: &Ctx) {
             }
             0x80325c98_u32 => {
                 // clrlwi r0, r18, 24
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[18].get().rotate_left(0) & 0xff_u32;
                     g[0].set(v);
@@ -320,6 +325,7 @@ fn asm___strtoul(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[18].set(v);
                 }
+                unset |= 0x40000;
                 // b .L_80325EB4
                 pc = 0x80325eb4_u32;
                 continue;
@@ -327,6 +333,9 @@ fn asm___strtoul(ctx: &Ctx) {
             }
             0x80325cd0_u32 => {
                 // cmpwi r18, 0x2b
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[18].get() as i32, 43_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -361,6 +370,7 @@ fn asm___strtoul(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[18].set(v);
                 }
+                unset |= 0x40000;
                 // b .L_80325D2C
                 pc = 0x80325d2c_u32;
                 continue;
@@ -368,6 +378,9 @@ fn asm___strtoul(ctx: &Ctx) {
             }
             0x80325cfc_u32 => {
                 // cmpwi r18, 0x2d
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[18].get() as i32, 45_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -409,6 +422,7 @@ fn asm___strtoul(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[18].set(v);
                 }
+                unset |= 0x40000;
                 pc = 0x80325d2c_u32;
             }
             0x80325d2c_u32 => {
@@ -447,6 +461,9 @@ fn asm___strtoul(ctx: &Ctx) {
             }
             0x80325d44_u32 => {
                 // cmpwi r18, 0x30
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[18].get() as i32, 48_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -483,6 +500,7 @@ fn asm___strtoul(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[18].set(v);
                 }
+                unset |= 0x40000;
                 // b .L_80325EB4
                 pc = 0x80325eb4_u32;
                 continue;
@@ -498,6 +516,9 @@ fn asm___strtoul(ctx: &Ctx) {
             }
             0x80325d7c_u32 => {
                 // cmpwi r18, 0x58
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[18].get() as i32, 88_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -511,6 +532,9 @@ fn asm___strtoul(ctx: &Ctx) {
             }
             0x80325d84_u32 => {
                 // cmpwi r18, 0x78
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[18].get() as i32, 120_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -549,6 +573,7 @@ fn asm___strtoul(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[18].set(v);
                 }
+                unset |= 0x40000;
                 // b .L_80325EB4
                 pc = 0x80325eb4_u32;
                 continue;
@@ -627,6 +652,9 @@ fn asm___strtoul(ctx: &Ctx) {
             }
             0x80325de8_u32 => {
                 // clrlwi r0, r18, 24
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[18].get().rotate_left(0) & 0xff_u32;
                     g[0].set(v);
@@ -657,8 +685,15 @@ fn asm___strtoul(ctx: &Ctx) {
             }
             0x80325dfc_u32 => {
                 // subi r18, r18, 0x30
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[18].set(g[18].get().wrapping_add(0xffffffd0_u32));
+                unset |= 0x40000;
                 // cmpw r18, r28
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[18].get() as i32, g[28].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -698,7 +733,11 @@ fn asm___strtoul(ctx: &Ctx) {
             }
             0x80325e1c_u32 => {
                 // addi r18, r18, 0x30
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[18].set(g[18].get().wrapping_add(0x30_u32));
+                unset |= 0x40000;
                 // b .L_80325EB4
                 pc = 0x80325eb4_u32;
                 continue;
@@ -720,6 +759,9 @@ fn asm___strtoul(ctx: &Ctx) {
             }
             0x80325e2c_u32 => {
                 // mr r3, r18
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[18].get() | g[18].get();
                     g[3].set(v);
@@ -774,6 +816,9 @@ fn asm___strtoul(ctx: &Ctx) {
             }
             0x80325e58_u32 => {
                 // mr r3, r18
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[18].get() | g[18].get();
                     g[3].set(v);
@@ -785,6 +830,7 @@ fn asm___strtoul(ctx: &Ctx) {
             0x80325e60_u32 => {
                 // subi r18, r3, 0x37
                 g[18].set(g[3].get().wrapping_add(0xffffffc9_u32));
+                unset |= 0x40000;
                 pc = 0x80325e64_u32;
             }
             0x80325e64_u32 => {
@@ -827,6 +873,9 @@ fn asm___strtoul(ctx: &Ctx) {
                     c::set_ca(ctx, ca);
                 }
                 // cmplw r18, r0
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[18].get(), g[0].get());
                     c::compare(ctx, 0, x < y, x > y);
@@ -856,6 +905,9 @@ fn asm___strtoul(ctx: &Ctx) {
                 // addi r3, r30, 0x0
                 g[3].set(g[30].get());
                 // add r27, r27, r18
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(g[27].get(), g[18].get(), 0);
                     g[27].set(v);
@@ -879,6 +931,7 @@ fn asm___strtoul(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[18].set(v);
                 }
+                unset |= 0x40000;
                 pc = 0x80325eb4_u32;
             }
             0x80325eb4_u32 => {
@@ -896,6 +949,9 @@ fn asm___strtoul(ctx: &Ctx) {
             }
             0x80325ebc_u32 => {
                 // cmpwi r18, -0x1
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[18].get() as i32, -1_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -966,6 +1022,9 @@ fn asm___strtoul(ctx: &Ctx) {
                 // addi r3, r30, 0x0
                 g[3].set(g[30].get());
                 // addi r4, r18, 0x0
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[4].set(g[18].get());
                 // li r5, 0x1
                 g[5].set(0x1_u32);
@@ -986,6 +1045,7 @@ fn asm___strtoul(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x40000;
                 // lwz r0, 0x64(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x64_u32);

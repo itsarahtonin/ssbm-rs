@@ -38,6 +38,7 @@ fn asm_ftCo_LandingAir_EnterWithLag(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8008d5fc_u32;
     loop {
         match pc {
@@ -166,6 +167,7 @@ fn asm_ftCo_LandingAir_EnterWithLag(ctx: &Ctx) {
                     let ea = g[5].get().wrapping_add(0x1f8_u32);
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x200000000;
                 // li r4, 0x46
                 g[4].set(0x46_u32);
                 // b .L_8008D684
@@ -179,6 +181,7 @@ fn asm_ftCo_LandingAir_EnterWithLag(ctx: &Ctx) {
                     let ea = g[5].get().wrapping_add(0x1fc_u32);
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x200000000;
                 // li r4, 0x47
                 g[4].set(0x47_u32);
                 // b .L_8008D684
@@ -192,6 +195,7 @@ fn asm_ftCo_LandingAir_EnterWithLag(ctx: &Ctx) {
                     let ea = g[5].get().wrapping_add(0x200_u32);
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x200000000;
                 // li r4, 0x48
                 g[4].set(0x48_u32);
                 // b .L_8008D684
@@ -205,6 +209,7 @@ fn asm_ftCo_LandingAir_EnterWithLag(ctx: &Ctx) {
                     let ea = g[5].get().wrapping_add(0x204_u32);
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x200000000;
                 // li r4, 0x49
                 g[4].set(0x49_u32);
                 // b .L_8008D684
@@ -220,6 +225,7 @@ fn asm_ftCo_LandingAir_EnterWithLag(ctx: &Ctx) {
                     let ea = g[5].get().wrapping_add(0x208_u32);
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x200000000;
                 pc = 0x8008d684_u32;
             }
             0x8008d684_u32 => {
@@ -270,6 +276,9 @@ fn asm_ftCo_LandingAir_EnterWithLag(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fdivs f0, f1, f0
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fdivs(ctx.regs.f(1), ctx.regs.f(0));
                     c::fill(ctx, 0, v);
@@ -325,6 +334,7 @@ fn asm_ftCo_LandingAir_EnterWithLag(ctx: &Ctx) {
                     let ea = g[2].get().wrapping_add(0xffff8ad8_u32);
                     ctx.regs.set_f(1, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x200000000;
                 // stw r0, 0x2c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x2c_u32);
@@ -343,10 +353,14 @@ fn asm_ftCo_LandingAir_EnterWithLag(ctx: &Ctx) {
                     ctx.regs.set_f(0, f64::from_bits(ctx.read_u64(ea)));
                 }
                 // fsubs f1, f0, f1
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(0), ctx.regs.f(1));
                     c::fill(ctx, 1, v);
                 }
+                unset |= 0x200000000;
                 pc = 0x8008d6e4_u32;
             }
             0x8008d6e4_u32 => {
@@ -364,7 +378,11 @@ fn asm_ftCo_LandingAir_EnterWithLag(ctx: &Ctx) {
             }
             0x8008d6ec_u32 => {
                 // bl ftCo_LandingAir_EnterWithMsidLag
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x8008d708_u32, 0x8008d6f0_u32);
+                unset |= 0x200000000;
                 pc = 0x8008d6f0_u32;
             }
             0x8008d6f0_u32 => {
@@ -376,6 +394,7 @@ fn asm_ftCo_LandingAir_EnterWithLag(ctx: &Ctx) {
             0x8008d6f4_u32 => {
                 // bl ftCo_Landing_Enter_Basic
                 c::call(ctx, 0x800d5bf8_u32, 0x8008d6f8_u32);
+                unset |= 0x200000000;
                 pc = 0x8008d6f8_u32;
             }
             0x8008d6f8_u32 => {

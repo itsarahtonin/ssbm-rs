@@ -435,6 +435,7 @@ fn asm_ftKb_SpecialNFx_800FE100(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x800fe100_u32;
     loop {
         match pc {
@@ -683,6 +684,7 @@ fn asm_ftKb_SpecialNFx_800FE100(ctx: &Ctx) {
                     let ea = g[29].get().wrapping_add(0x240_u32);
                     g[28].set(ctx.read_u32(ea));
                 }
+                unset |= 0x10000000;
                 // b .L_800FE1C4
                 pc = 0x800fe1c4_u32;
                 continue;
@@ -694,6 +696,7 @@ fn asm_ftKb_SpecialNFx_800FE100(ctx: &Ctx) {
                     let ea = g[29].get().wrapping_add(0x264_u32);
                     g[28].set(ctx.read_u32(ea));
                 }
+                unset |= 0x10000000;
                 pc = 0x800fe1c4_u32;
             }
             0x800fe1c4_u32 => {
@@ -705,6 +708,9 @@ fn asm_ftKb_SpecialNFx_800FE100(ctx: &Ctx) {
                 // addi r3, r27, 0x0
                 g[3].set(g[27].get());
                 // addi r6, r28, 0x0
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[6].set(g[28].get());
                 // addi r4, r30, 0xb0
                 g[4].set(g[30].get().wrapping_add(0xb0_u32));
@@ -796,6 +802,7 @@ fn asm_ftKb_SpecialNFx_800FE100(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x10000000;
                 // lwz r0, 0x3c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x3c_u32);
@@ -829,6 +836,7 @@ fn asm_ftKb_SpecialNFx_800FE240(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x800fe240_u32;
     loop {
         match pc {
@@ -1037,6 +1045,7 @@ fn asm_ftKb_SpecialNFx_800FE240(ctx: &Ctx) {
                     let ea = g[29].get().wrapping_add(0x240_u32);
                     g[28].set(ctx.read_u32(ea));
                 }
+                unset |= 0x10000000;
                 // b .L_800FE2E4
                 pc = 0x800fe2e4_u32;
                 continue;
@@ -1048,6 +1057,7 @@ fn asm_ftKb_SpecialNFx_800FE240(ctx: &Ctx) {
                     let ea = g[29].get().wrapping_add(0x264_u32);
                     g[28].set(ctx.read_u32(ea));
                 }
+                unset |= 0x10000000;
                 pc = 0x800fe2e4_u32;
             }
             0x800fe2e4_u32 => {
@@ -1059,6 +1069,9 @@ fn asm_ftKb_SpecialNFx_800FE240(ctx: &Ctx) {
                 // addi r3, r27, 0x0
                 g[3].set(g[27].get());
                 // addi r6, r28, 0x0
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[6].set(g[28].get());
                 // addi r4, r30, 0xb0
                 g[4].set(g[30].get().wrapping_add(0xb0_u32));
@@ -1150,6 +1163,7 @@ fn asm_ftKb_SpecialNFx_800FE240(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x10000000;
                 // lwz r0, 0x3c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x3c_u32);
@@ -1389,6 +1403,7 @@ fn asm_ftKb_FxSpecialAirNEnd_Anim(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x800fe928_u32;
     loop {
         match pc {
@@ -1669,6 +1684,7 @@ fn asm_ftKb_FxSpecialAirNEnd_Anim(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x238_u32);
                     c::fill(ctx, 31, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // b .L_800FE9FC
                 pc = 0x800fe9fc_u32;
                 continue;
@@ -1680,6 +1696,7 @@ fn asm_ftKb_FxSpecialAirNEnd_Anim(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x25c_u32);
                     c::fill(ctx, 31, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x8000000000000000;
                 pc = 0x800fe9fc_u32;
             }
             0x800fe9fc_u32 => {
@@ -1689,6 +1706,9 @@ fn asm_ftKb_FxSpecialAirNEnd_Anim(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fcmpu cr0, f0, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(0), ctx.regs.f(31));
                 // bne .L_800FEA14
                 if (c::cr_bit(ctx, 2) == false) {
@@ -1715,6 +1735,9 @@ fn asm_ftKb_FxSpecialAirNEnd_Anim(ctx: &Ctx) {
             }
             0x800fea14_u32 => {
                 // fmr f2, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(31);
                     ctx.regs.set_f(2, v);
@@ -1747,6 +1770,7 @@ fn asm_ftKb_FxSpecialAirNEnd_Anim(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x30_u32);
                     ctx.regs.set_f(31, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // lwz r31, 0x2c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x2c_u32);

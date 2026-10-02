@@ -42,6 +42,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x801f686c_u32;
     loop {
         match pc {
@@ -267,6 +268,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                 g[0].set((g[7].get() as i32).wrapping_mul(12_i32) as u32);
                 // lwzx r30, r31, r0
                 g[30].set(ctx.read_u32(g[31].get().wrapping_add(g[0].get())));
+                unset |= 0x40000000;
                 // b .L_801F6A3C
                 pc = 0x801f6a3c_u32;
                 continue;
@@ -327,6 +329,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                 g[0].set((g[7].get() as i32).wrapping_mul(12_i32) as u32);
                 // lwzx r30, r31, r0
                 g[30].set(ctx.read_u32(g[31].get().wrapping_add(g[0].get())));
+                unset |= 0x40000000;
                 // b .L_801F6A3C
                 pc = 0x801f6a3c_u32;
                 continue;
@@ -386,6 +389,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                 g[0].set((g[7].get() as i32).wrapping_mul(12_i32) as u32);
                 // lwzx r30, r31, r0
                 g[30].set(ctx.read_u32(g[31].get().wrapping_add(g[0].get())));
+                unset |= 0x40000000;
                 // b .L_801F6A3C
                 pc = 0x801f6a3c_u32;
                 continue;
@@ -445,6 +449,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                 g[0].set((g[7].get() as i32).wrapping_mul(12_i32) as u32);
                 // lwzx r30, r31, r0
                 g[30].set(ctx.read_u32(g[31].get().wrapping_add(g[0].get())));
+                unset |= 0x40000000;
                 // b .L_801F6A3C
                 pc = 0x801f6a3c_u32;
                 continue;
@@ -504,6 +509,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                 g[0].set((g[7].get() as i32).wrapping_mul(12_i32) as u32);
                 // lwzx r30, r31, r0
                 g[30].set(ctx.read_u32(g[31].get().wrapping_add(g[0].get())));
+                unset |= 0x40000000;
                 // b .L_801F6A3C
                 pc = 0x801f6a3c_u32;
                 continue;
@@ -562,6 +568,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                 g[0].set((g[7].get() as i32).wrapping_mul(12_i32) as u32);
                 // lwzx r30, r31, r0
                 g[30].set(ctx.read_u32(g[31].get().wrapping_add(g[0].get())));
+                unset |= 0x40000000;
                 // b .L_801F6A3C
                 pc = 0x801f6a3c_u32;
                 continue;
@@ -651,6 +658,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6a7c_u32 => {
                 // cmpw r30, r5
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[30].get() as i32, g[5].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -667,6 +677,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                 g[0].set((g[7].get() as i32).wrapping_mul(12_i32) as u32);
                 // lwzx r29, r31, r0
                 g[29].set(ctx.read_u32(g[31].get().wrapping_add(g[0].get())));
+                unset |= 0x20000000;
                 // b .L_801F6BB0
                 pc = 0x801f6bb0_u32;
                 continue;
@@ -724,6 +735,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6ab8_u32 => {
                 // cmpw r30, r5
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[30].get() as i32, g[5].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -740,6 +754,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                 g[0].set((g[7].get() as i32).wrapping_mul(12_i32) as u32);
                 // lwzx r29, r31, r0
                 g[29].set(ctx.read_u32(g[31].get().wrapping_add(g[0].get())));
+                unset |= 0x20000000;
                 // b .L_801F6BB0
                 pc = 0x801f6bb0_u32;
                 continue;
@@ -796,6 +811,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6af0_u32 => {
                 // cmpw r30, r5
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[30].get() as i32, g[5].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -812,6 +830,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                 g[0].set((g[7].get() as i32).wrapping_mul(12_i32) as u32);
                 // lwzx r29, r31, r0
                 g[29].set(ctx.read_u32(g[31].get().wrapping_add(g[0].get())));
+                unset |= 0x20000000;
                 // b .L_801F6BB0
                 pc = 0x801f6bb0_u32;
                 continue;
@@ -868,6 +887,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6b28_u32 => {
                 // cmpw r30, r5
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[30].get() as i32, g[5].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -884,6 +906,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                 g[0].set((g[7].get() as i32).wrapping_mul(12_i32) as u32);
                 // lwzx r29, r31, r0
                 g[29].set(ctx.read_u32(g[31].get().wrapping_add(g[0].get())));
+                unset |= 0x20000000;
                 // b .L_801F6BB0
                 pc = 0x801f6bb0_u32;
                 continue;
@@ -940,6 +963,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6b60_u32 => {
                 // cmpw r30, r5
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[30].get() as i32, g[5].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -956,6 +982,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                 g[0].set((g[7].get() as i32).wrapping_mul(12_i32) as u32);
                 // lwzx r29, r31, r0
                 g[29].set(ctx.read_u32(g[31].get().wrapping_add(g[0].get())));
+                unset |= 0x20000000;
                 // b .L_801F6BB0
                 pc = 0x801f6bb0_u32;
                 continue;
@@ -1011,6 +1038,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6b98_u32 => {
                 // cmpw r30, r5
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[30].get() as i32, g[5].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1027,6 +1057,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                 g[0].set((g[7].get() as i32).wrapping_mul(12_i32) as u32);
                 // lwzx r29, r31, r0
                 g[29].set(ctx.read_u32(g[31].get().wrapping_add(g[0].get())));
+                unset |= 0x20000000;
                 // b .L_801F6BB0
                 pc = 0x801f6bb0_u32;
                 continue;
@@ -1116,6 +1147,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6bf0_u32 => {
                 // cmpw r30, r5
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[30].get() as i32, g[5].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1129,6 +1163,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6bf8_u32 => {
                 // cmpw r29, r5
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[29].get() as i32, g[5].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1145,6 +1182,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                 g[0].set((g[7].get() as i32).wrapping_mul(12_i32) as u32);
                 // lwzx r28, r31, r0
                 g[28].set(ctx.read_u32(g[31].get().wrapping_add(g[0].get())));
+                unset |= 0x10000000;
                 // b .L_801F6D54
                 pc = 0x801f6d54_u32;
                 continue;
@@ -1202,6 +1240,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6c34_u32 => {
                 // cmpw r30, r5
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[30].get() as i32, g[5].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1215,6 +1256,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6c3c_u32 => {
                 // cmpw r29, r5
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[29].get() as i32, g[5].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1231,6 +1275,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                 g[0].set((g[7].get() as i32).wrapping_mul(12_i32) as u32);
                 // lwzx r28, r31, r0
                 g[28].set(ctx.read_u32(g[31].get().wrapping_add(g[0].get())));
+                unset |= 0x10000000;
                 // b .L_801F6D54
                 pc = 0x801f6d54_u32;
                 continue;
@@ -1287,6 +1332,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6c74_u32 => {
                 // cmpw r30, r5
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[30].get() as i32, g[5].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1300,6 +1348,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6c7c_u32 => {
                 // cmpw r29, r5
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[29].get() as i32, g[5].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1316,6 +1367,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                 g[0].set((g[7].get() as i32).wrapping_mul(12_i32) as u32);
                 // lwzx r28, r31, r0
                 g[28].set(ctx.read_u32(g[31].get().wrapping_add(g[0].get())));
+                unset |= 0x10000000;
                 // b .L_801F6D54
                 pc = 0x801f6d54_u32;
                 continue;
@@ -1372,6 +1424,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6cb4_u32 => {
                 // cmpw r30, r5
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[30].get() as i32, g[5].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1385,6 +1440,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6cbc_u32 => {
                 // cmpw r29, r5
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[29].get() as i32, g[5].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1401,6 +1459,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                 g[0].set((g[7].get() as i32).wrapping_mul(12_i32) as u32);
                 // lwzx r28, r31, r0
                 g[28].set(ctx.read_u32(g[31].get().wrapping_add(g[0].get())));
+                unset |= 0x10000000;
                 // b .L_801F6D54
                 pc = 0x801f6d54_u32;
                 continue;
@@ -1457,6 +1516,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6cf4_u32 => {
                 // cmpw r30, r5
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[30].get() as i32, g[5].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1470,6 +1532,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6cfc_u32 => {
                 // cmpw r29, r5
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[29].get() as i32, g[5].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1486,6 +1551,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                 g[0].set((g[7].get() as i32).wrapping_mul(12_i32) as u32);
                 // lwzx r28, r31, r0
                 g[28].set(ctx.read_u32(g[31].get().wrapping_add(g[0].get())));
+                unset |= 0x10000000;
                 // b .L_801F6D54
                 pc = 0x801f6d54_u32;
                 continue;
@@ -1541,6 +1607,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6d34_u32 => {
                 // cmpw r30, r5
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[30].get() as i32, g[5].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1554,6 +1623,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6d3c_u32 => {
                 // cmpw r29, r5
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[29].get() as i32, g[5].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1570,6 +1642,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                 g[0].set((g[7].get() as i32).wrapping_mul(12_i32) as u32);
                 // lwzx r28, r31, r0
                 g[28].set(ctx.read_u32(g[31].get().wrapping_add(g[0].get())));
+                unset |= 0x10000000;
                 // b .L_801F6D54
                 pc = 0x801f6d54_u32;
                 continue;
@@ -1659,6 +1732,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                     g[3].set(ctx.read_u32(ea));
                 }
                 // mulli r0, r30, 0xc
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[0].set((g[30].get() as i32).wrapping_mul(12_i32) as u32);
                 // fadds f31, f31, f1
                 {
@@ -1696,6 +1772,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6dc4_u32 => {
                 // mulli r0, r29, 0xc
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[0].set((g[29].get() as i32).wrapping_mul(12_i32) as u32);
                 // fadds f31, f31, f1
                 {
@@ -1724,6 +1803,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6ddc_u32 => {
                 // mulli r0, r28, 0xc
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[0].set((g[28].get() as i32).wrapping_mul(12_i32) as u32);
                 // fadds f30, f31, f1
                 {
@@ -1777,6 +1859,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                     g[28].set(v);
                     c::update_cr0(ctx, v);
                 }
+                unset |= 0x10000000;
                 // bne .L_801F6E24
                 if (c::cr_bit(ctx, 2) == false) {
                     pc = 0x801f6e24_u32;
@@ -1797,6 +1880,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6e24_u32 => {
                 // lwz r0, 0x28(r28)
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[28].get().wrapping_add(0x28_u32);
                     g[0].set(ctx.read_u32(ea));
@@ -1974,6 +2060,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6eb4_u32 => {
                 // stw r28, grIm_804D69E8@sda21(r0)
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[13].get().wrapping_add(0xffffb348_u32);
                     ctx.write_u32(ea, g[28].get());
@@ -2008,6 +2097,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                     g[28].set(v);
                     c::update_cr0(ctx, v);
                 }
+                unset |= 0x10000000;
                 // bne .L_801F6EE8
                 if (c::cr_bit(ctx, 2) == false) {
                     pc = 0x801f6ee8_u32;
@@ -2028,6 +2118,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6ee8_u32 => {
                 // lwz r27, 0x28(r28)
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[28].get().wrapping_add(0x28_u32);
                     g[27].set(ctx.read_u32(ea));
@@ -2200,6 +2293,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6f74_u32 => {
                 // stw r28, grIm_804D69EC@sda21(r0)
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[13].get().wrapping_add(0xffffb34c_u32);
                     ctx.write_u32(ea, g[28].get());
@@ -2234,6 +2330,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                     g[28].set(v);
                     c::update_cr0(ctx, v);
                 }
+                unset |= 0x10000000;
                 // bne .L_801F6FA8
                 if (c::cr_bit(ctx, 2) == false) {
                     pc = 0x801f6fa8_u32;
@@ -2254,6 +2351,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f6fa8_u32 => {
                 // lwz r27, 0x28(r28)
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[28].get().wrapping_add(0x28_u32);
                     g[27].set(ctx.read_u32(ea));
@@ -2426,6 +2526,9 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
             }
             0x801f7034_u32 => {
                 // stw r28, grIm_804D69F0@sda21(r0)
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[13].get().wrapping_add(0xffffb350_u32);
                     ctx.write_u32(ea, g[28].get());
@@ -2485,6 +2588,7 @@ fn asm_grIceMt_801F686C(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x70000000;
                 // lwz r0, 0x4c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x4c_u32);
@@ -3003,6 +3107,7 @@ fn asm_stageGObj10_GObjProc(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x801f7a2c_u32;
     loop {
         match pc {
@@ -3106,6 +3211,7 @@ fn asm_stageGObj10_GObjProc(ctx: &Ctx) {
                 }
                 // addi r30, r3, 0x0
                 g[30].set(g[3].get());
+                unset |= 0x40000000;
                 // extrwi. r0, r0, 1, 28
                 {
                     let v = g[0].get().rotate_left(29) & 0x1_u32;
@@ -3859,6 +3965,9 @@ fn asm_stageGObj10_GObjProc(ctx: &Ctx) {
             }
             0x801f7cec_u32 => {
                 // cmpwi r30, 0x0
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[30].get() as i32, 0_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -4031,6 +4140,7 @@ fn asm_stageGObj10_GObjProc(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x48_u32);
                     g[30].set(ctx.read_u32(ea));
                 }
+                unset |= 0x40000000;
                 // lwz r29, 0x44(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x44_u32);

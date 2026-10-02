@@ -133,6 +133,7 @@ fn asm_it_8026C75C(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8026c75c_u32;
     loop {
         match pc {
@@ -340,6 +341,7 @@ fn asm_it_8026C75C(ctx: &Ctx) {
                 }
                 // addi r30, r5, 0x0
                 g[30].set(g[5].get());
+                unset |= 0x40000000;
                 // lhzx r0, r3, r0
                 g[0].set(u32::from(ctx.read_u16(g[3].get().wrapping_add(g[0].get()))));
                 // li r29, 0x1
@@ -427,6 +429,9 @@ fn asm_it_8026C75C(ctx: &Ctx) {
             }
             0x8026c850_u32 => {
                 // sth r30, 0x8(r28)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[28].get().wrapping_add(0x8_u32);
                     ctx.write_u16(ea, g[30].get() as u16);
@@ -476,6 +481,7 @@ fn asm_it_8026C75C(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x28_u32);
                     g[30].set(ctx.read_u32(ea));
                 }
+                unset |= 0x40000000;
                 // lwz r29, 0x24(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x24_u32);

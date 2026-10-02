@@ -173,6 +173,7 @@ fn asm_lbVector_RotateAboutUnitAxis(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8000d8f4_u32;
     loop {
         match pc {
@@ -620,16 +621,21 @@ fn asm_lbVector_RotateAboutUnitAxis(ctx: &Ctx) {
                     let ea = g[4].get().wrapping_add(0x8_u32);
                     c::fill(ctx, 2, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x400000000;
                 // lfs f1, 0x4(r4)
                 {
                     let ea = g[4].get().wrapping_add(0x4_u32);
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fdivs f2, f2, f0
+                if unset & 0x400000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fdivs(ctx.regs.f(2), ctx.regs.f(0));
                     c::fill(ctx, 2, v);
                 }
+                unset |= 0x400000000;
                 // lfs f5, 0x8(r3)
                 {
                     let ea = g[3].get().wrapping_add(0x8_u32);
@@ -650,22 +656,35 @@ fn asm_lbVector_RotateAboutUnitAxis(ctx: &Ctx) {
                     let v = fp::fdivs(ctx.regs.f(1), ctx.regs.f(0));
                     c::fill(ctx, 3, v);
                 }
+                unset |= 0x800000000;
                 // fmuls f4, f5, f3
+                if unset & 0x800000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmuls(ctx.regs.f(5), ctx.regs.f(3));
                     c::fill(ctx, 4, v);
                 }
                 // fmuls f1, f5, f2
+                if unset & 0x400000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmuls(ctx.regs.f(5), ctx.regs.f(2));
                     c::fill(ctx, 1, v);
                 }
                 // fmsubs f12, f6, f2, f4
+                if unset & 0x400000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmsubs(ctx.regs.f(6), ctx.regs.f(2), ctx.regs.f(4));
                     c::fill(ctx, 12, v);
                 }
                 // fmadds f5, f6, f3, f1
+                if unset & 0x800000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(6), ctx.regs.f(3), ctx.regs.f(1));
                     c::fill(ctx, 5, v);
@@ -780,6 +799,9 @@ fn asm_lbVector_RotateAboutUnitAxis(ctx: &Ctx) {
             }
             0x8000dac8_u32 => {
                 // fmuls f4, f5, f3
+                if unset & 0x800000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmuls(ctx.regs.f(5), ctx.regs.f(3));
                     c::fill(ctx, 4, v);
@@ -795,21 +817,34 @@ fn asm_lbVector_RotateAboutUnitAxis(ctx: &Ctx) {
                     ctx.regs.set_f(1, v);
                 }
                 // fmuls f0, f5, f2
+                if unset & 0x400000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmuls(ctx.regs.f(5), ctx.regs.f(2));
                     c::fill(ctx, 0, v);
                 }
                 // fmadds f2, f6, f2, f4
+                if unset & 0x400000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(6), ctx.regs.f(2), ctx.regs.f(4));
                     c::fill(ctx, 2, v);
                 }
+                unset |= 0x400000000;
                 // fmadds f0, f1, f3, f0
+                if unset & 0x800000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(1), ctx.regs.f(3), ctx.regs.f(0));
                     c::fill(ctx, 0, v);
                 }
                 // stfs f2, 0x4(r3)
+                if unset & 0x400000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[3].get().wrapping_add(0x4_u32);
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(2)));
@@ -869,6 +904,7 @@ fn asm_lbVector_Rotate(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8000db00_u32;
     loop {
         match pc {
@@ -1228,31 +1264,45 @@ fn asm_lbVector_Rotate(ctx: &Ctx) {
                     let ea = g[3].get().wrapping_add(0x4_u32);
                     c::fill(ctx, 3, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x800000000;
                 // fmuls f2, f1, f6
                 {
                     let v = fp::fmuls(ctx.regs.f(1), ctx.regs.f(6));
                     c::fill(ctx, 2, v);
                 }
+                unset |= 0x400000000;
                 // lfs f0, 0x0(r3)
                 {
                     let ea = g[3].get();
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x100000000;
                 // fmuls f1, f1, f4
                 {
                     let v = fp::fmuls(ctx.regs.f(1), ctx.regs.f(4));
                     c::fill(ctx, 1, v);
                 }
                 // fmsubs f2, f3, f4, f2
+                if unset & 0x400000000 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x800000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmsubs(ctx.regs.f(3), ctx.regs.f(4), ctx.regs.f(2));
                     c::fill(ctx, 2, v);
                 }
+                unset |= 0x400000000;
                 // fmadds f3, f3, f6, f1
+                if unset & 0x800000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(3), ctx.regs.f(6), ctx.regs.f(1));
                     c::fill(ctx, 3, v);
                 }
+                unset |= 0x800000000;
                 // b .L_8000DC5C
                 pc = 0x8000dc5c_u32;
                 continue;
@@ -1269,31 +1319,45 @@ fn asm_lbVector_Rotate(ctx: &Ctx) {
                     let ea = g[3].get().wrapping_add(0x8_u32);
                     c::fill(ctx, 3, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x800000000;
                 // fmuls f0, f5, f6
                 {
                     let v = fp::fmuls(ctx.regs.f(5), ctx.regs.f(6));
                     c::fill(ctx, 0, v);
                 }
+                unset |= 0x100000000;
                 // lfs f2, 0x4(r3)
                 {
                     let ea = g[3].get().wrapping_add(0x4_u32);
                     c::fill(ctx, 2, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x400000000;
                 // fmuls f1, f3, f6
+                if unset & 0x800000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmuls(ctx.regs.f(3), ctx.regs.f(6));
                     c::fill(ctx, 1, v);
                 }
                 // fmsubs f3, f3, f4, f0
+                if unset & 0x100000000 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x800000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmsubs(ctx.regs.f(3), ctx.regs.f(4), ctx.regs.f(0));
                     c::fill(ctx, 3, v);
                 }
+                unset |= 0x800000000;
                 // fmadds f0, f5, f4, f1
                 {
                     let v = fp::fmadds(ctx.regs.f(5), ctx.regs.f(4), ctx.regs.f(1));
                     c::fill(ctx, 0, v);
                 }
+                unset |= 0x100000000;
                 // b .L_8000DC5C
                 pc = 0x8000dc5c_u32;
                 continue;
@@ -1310,45 +1374,68 @@ fn asm_lbVector_Rotate(ctx: &Ctx) {
                     let ea = g[3].get();
                     c::fill(ctx, 2, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x400000000;
                 // fmuls f0, f1, f6
                 {
                     let v = fp::fmuls(ctx.regs.f(1), ctx.regs.f(6));
                     c::fill(ctx, 0, v);
                 }
+                unset |= 0x100000000;
                 // lfs f3, 0x8(r3)
                 {
                     let ea = g[3].get().wrapping_add(0x8_u32);
                     c::fill(ctx, 3, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x800000000;
                 // fmuls f1, f1, f4
                 {
                     let v = fp::fmuls(ctx.regs.f(1), ctx.regs.f(4));
                     c::fill(ctx, 1, v);
                 }
                 // fmsubs f0, f2, f4, f0
+                if unset & 0x100000000 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x400000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmsubs(ctx.regs.f(2), ctx.regs.f(4), ctx.regs.f(0));
                     c::fill(ctx, 0, v);
                 }
+                unset |= 0x100000000;
                 // fmadds f2, f2, f6, f1
+                if unset & 0x400000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(2), ctx.regs.f(6), ctx.regs.f(1));
                     c::fill(ctx, 2, v);
                 }
+                unset |= 0x400000000;
                 pc = 0x8000dc5c_u32;
             }
             0x8000dc5c_u32 => {
                 // stfs f0, 0x0(r3)
+                if unset & 0x100000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[3].get();
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
                 }
                 // stfs f2, 0x4(r3)
+                if unset & 0x400000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[3].get().wrapping_add(0x4_u32);
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(2)));
                 }
                 // stfs f3, 0x8(r3)
+                if unset & 0x800000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[3].get().wrapping_add(0x8_u32);
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(3)));

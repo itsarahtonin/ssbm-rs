@@ -219,10 +219,11 @@ class Program:
         live, _ = self.liveness(name, extra)
         return live - self.params(name)[0] - FIXED
 
-    def blocks(self, name, extra, rets):
+    def blocks(self, name, extra, rets, at=None):
         """`name`'s code as blocks: (instructions' effects, successors), each effect (callee or
         None, registers written, registers read), with what each callee reads beyond its
-        parameters (`extra`) and what a return reads (`rets`)."""
+        parameters (`extra`) and what a return reads (`rets`); `at`, if given, gets each
+        instruction's effect by its address."""
         insns, labels, cases = self.funcs[name]
         addrs = [a for a, _, _ in insns]
         index = {a: i for i, a in enumerate(addrs)}
@@ -237,6 +238,11 @@ class Program:
         out = []
         for s, e in bounds:
             effects, nxt, falls = [], [], True
+
+            def put(effect):
+                effects.append(effect)
+                if at is not None:
+                    at[a] = effect
             for a in range(s, e, 4):
                 _, m, ops = insns[index[a]]
                 if m in ("bl", "b") and ops and ops[0] in self.funcs:
@@ -245,27 +251,27 @@ class Program:
                         continue  # saves the caller's registers
                     if callee.startswith(("_restgpr", "_restfpr")):
                         n = int(re.sub(r"\D", "", callee) or 14)
-                        effects.append((None, {("r" if "gpr" in callee else "f", i)
+                        put((None, {("r" if "gpr" in callee else "f", i)
                                                for i in range(n, 32)}, set()))
                         continue
                     reads = self.passed(callee) | extra.get(callee, set())
                     if m == "b":
                         # A tail call returns for this function.
-                        effects.append((callee, set(), reads | rets))
+                        put((callee, set(), reads | rets))
                         falls = False
                         break
-                    effects.append((callee, set(VOLATILE), reads))
+                    put((callee, set(VOLATILE), reads))
                     continue
                 if m == "bl":
-                    effects.append((None, set(VOLATILE), set()))  # code without a listing
+                    put((None, set(VOLATILE), set()))  # code without a listing
                     continue
                 if m.startswith("b"):
                     if m.endswith(("lrl", "ctrl")):
                         # An indirect call, whose arguments are set before it.
-                        effects.append((None, set(VOLATILE), set()))
+                        put((None, set(VOLATILE), set()))
                         continue
                     if m.endswith("lr"):
-                        effects.append((None, set(), set(rets)))  # a return, perhaps conditional
+                        put((None, set(), set(rets)))  # a return, perhaps conditional
                         falls = m != "blr"
                         if falls:
                             continue
@@ -286,11 +292,18 @@ class Program:
                 if m in STORES and any(MEM.match(o) and MEM.match(o).group(1) == "1" for o in ops):
                     # Storing a callee-saved register to the frame saves the caller's value.
                     r = r - CALLEE_SAVED
-                effects.append((None, w, r))
+                put((None, w, r))
             if falls and e in index:
                 nxt.append(e)
             out.append((effects, [block_of[t] for t in nxt]))
         return out
+
+    def effects_at(self, name):
+        """{address: (callee or None, registers written, registers read)} of `name`'s
+        instructions, as `blocks` gives them."""
+        at = {}
+        self.blocks(name, {}, self.params(name)[1], at)
+        return at
 
     def liveness(self, name, extra, rets=None):
         """(registers live at `name`'s entry, [(callee, registers live once it returns)]),

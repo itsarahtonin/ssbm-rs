@@ -153,6 +153,7 @@ fn asm_ftKb_PkSpecialAirN_Anim(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x800fa254_u32;
     loop {
         match pc {
@@ -571,6 +572,7 @@ fn asm_ftKb_PkSpecialAirN_Anim(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x1d0_u32);
                     c::fill(ctx, 31, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // b .L_800FA3B4
                 pc = 0x800fa3b4_u32;
                 continue;
@@ -582,6 +584,7 @@ fn asm_ftKb_PkSpecialAirN_Anim(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x1ec_u32);
                     c::fill(ctx, 31, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x8000000000000000;
                 pc = 0x800fa3b4_u32;
             }
             0x800fa3b4_u32 => {
@@ -614,6 +617,9 @@ fn asm_ftKb_PkSpecialAirN_Anim(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fcmpu cr0, f0, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(0), ctx.regs.f(31));
                 // bne .L_800FA3DC
                 if (c::cr_bit(ctx, 2) == false) {
@@ -640,6 +646,9 @@ fn asm_ftKb_PkSpecialAirN_Anim(ctx: &Ctx) {
             }
             0x800fa3dc_u32 => {
                 // fmr f2, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(31);
                     ctx.regs.set_f(2, v);
@@ -672,6 +681,7 @@ fn asm_ftKb_PkSpecialAirN_Anim(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x30_u32);
                     ctx.regs.set_f(31, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // lwz r31, 0x2c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x2c_u32);

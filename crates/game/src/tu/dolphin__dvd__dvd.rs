@@ -4703,6 +4703,7 @@ fn asm_DVDCheckDisk(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80339f50_u32;
     loop {
         match pc {
@@ -4883,6 +4884,7 @@ fn asm_DVDCheckDisk(ctx: &Ctx) {
             0x80339fe0_u32 => {
                 // li r31, 0x1
                 g[31].set(0x1_u32);
+                unset |= 0x80000000;
                 // b .L_8033A018
                 pc = 0x8033a018_u32;
                 continue;
@@ -4891,6 +4893,7 @@ fn asm_DVDCheckDisk(ctx: &Ctx) {
             0x80339fe8_u32 => {
                 // li r31, 0x0
                 g[31].set(0_u32);
+                unset |= 0x80000000;
                 // b .L_8033A018
                 pc = 0x8033a018_u32;
                 continue;
@@ -4936,6 +4939,7 @@ fn asm_DVDCheckDisk(ctx: &Ctx) {
             0x8033a00c_u32 => {
                 // li r31, 0x0
                 g[31].set(0_u32);
+                unset |= 0x80000000;
                 // b .L_8033A018
                 pc = 0x8033a018_u32;
                 continue;
@@ -4944,6 +4948,7 @@ fn asm_DVDCheckDisk(ctx: &Ctx) {
             0x8033a014_u32 => {
                 // li r31, 0x1
                 g[31].set(0x1_u32);
+                unset |= 0x80000000;
                 pc = 0x8033a018_u32;
             }
             0x8033a018_u32 => {
@@ -4958,6 +4963,9 @@ fn asm_DVDCheckDisk(ctx: &Ctx) {
                     g[0].set(ctx.read_u32(ea));
                 }
                 // mr r3, r31
+                if unset & 0x80000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[31].get() | g[31].get();
                     g[3].set(v);
@@ -4967,6 +4975,7 @@ fn asm_DVDCheckDisk(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0xc_u32);
                     g[31].set(ctx.read_u32(ea));
                 }
+                unset |= 0x80000000;
                 // addi r1, r1, 0x10
                 g[1].set(g[1].get().wrapping_add(0x10_u32));
                 // mtlr r0

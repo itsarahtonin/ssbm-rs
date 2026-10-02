@@ -144,6 +144,7 @@ fn asm_ftWalkCommon_800DFDDC(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x800dfddc_u32;
     loop {
         match pc {
@@ -266,6 +267,7 @@ fn asm_ftWalkCommon_800DFDDC(ctx: &Ctx) {
                     let v = ctx.regs.f(0);
                     ctx.regs.set_f(31, v);
                 }
+                unset |= 0x8000000000000000;
                 // b .L_800DFEA0
                 pc = 0x800dfea0_u32;
                 continue;
@@ -386,6 +388,7 @@ fn asm_ftWalkCommon_800DFDDC(ctx: &Ctx) {
                     let v = fp::fdivs(ctx.regs.f(1), ctx.regs.f(0));
                     c::fill(ctx, 31, v);
                 }
+                unset |= 0x8000000000000000;
                 // b .L_800DFEA0
                 pc = 0x800dfea0_u32;
                 continue;
@@ -402,6 +405,7 @@ fn asm_ftWalkCommon_800DFDDC(ctx: &Ctx) {
                     let v = fp::fdivs(ctx.regs.f(1), ctx.regs.f(0));
                     c::fill(ctx, 31, v);
                 }
+                unset |= 0x8000000000000000;
                 // b .L_800DFEA0
                 pc = 0x800dfea0_u32;
                 continue;
@@ -418,6 +422,7 @@ fn asm_ftWalkCommon_800DFDDC(ctx: &Ctx) {
                     let v = fp::fdivs(ctx.regs.f(1), ctx.regs.f(0));
                     c::fill(ctx, 31, v);
                 }
+                unset |= 0x8000000000000000;
                 pc = 0x800dfea0_u32;
             }
             0x800dfea0_u32 => {
@@ -427,6 +432,9 @@ fn asm_ftWalkCommon_800DFDDC(ctx: &Ctx) {
                     g[3].set(v);
                 }
                 // fmr f1, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(31);
                     ctx.regs.set_f(1, v);
@@ -446,6 +454,7 @@ fn asm_ftWalkCommon_800DFDDC(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x18_u32);
                     ctx.regs.set_f(31, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // lwz r31, 0x14(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x14_u32);

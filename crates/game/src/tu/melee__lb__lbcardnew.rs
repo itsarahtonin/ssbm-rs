@@ -1022,6 +1022,7 @@ fn asm_taskMount(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8001a184_u32;
     loop {
         match pc {
@@ -1370,6 +1371,7 @@ fn asm_taskMount(ctx: &Ctx) {
                     let v = g[0].get() | g[0].get();
                     g[26].set(v);
                 }
+                unset |= 0x4000000;
                 // li r25, 0x1
                 g[25].set(0x1_u32);
                 // li r5, 0x0
@@ -1669,6 +1671,9 @@ fn asm_taskMount(ctx: &Ctx) {
             }
             0x8001a374_u32 => {
                 // mr r3, r26
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[26].get() | g[26].get();
                     g[3].set(v);
@@ -1714,6 +1719,7 @@ fn asm_taskMount(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x4000000;
                 // lwz r0, 0x3c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x3c_u32);
@@ -2137,6 +2143,7 @@ fn asm_taskFormat(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8001a8a4_u32;
     loop {
         match pc {
@@ -2216,6 +2223,7 @@ fn asm_taskFormat(ctx: &Ctx) {
                     let v = g[0].get() | g[0].get();
                     g[28].set(v);
                 }
+                unset |= 0x10000000;
                 // li r27, 0x1
                 g[27].set(0x1_u32);
                 // bl CARDFormatAsync
@@ -2462,6 +2470,9 @@ fn asm_taskFormat(ctx: &Ctx) {
             }
             0x8001a99c_u32 => {
                 // mr r3, r28
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[28].get() | g[28].get();
                     g[3].set(v);
@@ -2507,6 +2518,7 @@ fn asm_taskFormat(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x10000000;
                 // lwz r0, 0x2c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x2c_u32);

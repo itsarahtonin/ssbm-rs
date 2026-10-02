@@ -47,6 +47,7 @@ fn asm_TRKSuppAccessFile(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x803289e4_u32;
     loop {
         match pc {
@@ -566,6 +567,7 @@ fn asm_TRKSuppAccessFile(ctx: &Ctx) {
             0x80328b7c_u32 => {
                 // addi r29, r3, 0x0
                 g[29].set(g[3].get());
+                unset |= 0x20000000;
                 // li r4, 0x2
                 g[4].set(0x2_u32);
                 // bl TRKSetBufferPosition
@@ -587,6 +589,9 @@ fn asm_TRKSuppAccessFile(ctx: &Ctx) {
             }
             0x80328b90_u32 => {
                 // addi r3, r29, 0x0
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[3].set(g[29].get());
                 // addi r4, r1, 0x8
                 g[4].set(g[1].get().wrapping_add(0x8_u32));
@@ -617,6 +622,9 @@ fn asm_TRKSuppAccessFile(ctx: &Ctx) {
             }
             0x80328ba8_u32 => {
                 // addi r3, r29, 0x0
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[3].set(g[29].get());
                 // addi r4, r1, 0xa
                 g[4].set(g[1].get().wrapping_add(0xa_u32));
@@ -665,6 +673,9 @@ fn asm_TRKSuppAccessFile(ctx: &Ctx) {
                     g[3].set(u32::from(ctx.read_u16(ea)));
                 }
                 // lwz r4, 0x8(r29)
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[29].get().wrapping_add(0x8_u32);
                     g[4].set(ctx.read_u32(ea));
@@ -738,6 +749,9 @@ fn asm_TRKSuppAccessFile(ctx: &Ctx) {
             }
             0x80328c04_u32 => {
                 // addi r3, r29, 0x0
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[3].set(g[29].get());
                 // add r4, r27, r28
                 {
@@ -982,6 +996,7 @@ fn asm_TRKSuppAccessFile(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x20000000;
                 // addi r1, r1, 0x48
                 g[1].set(g[1].get().wrapping_add(0x48_u32));
                 // lwz r0, 0x4(r1)
@@ -1023,6 +1038,7 @@ fn asm_TRKRequestSend(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80328cbc_u32;
     loop {
         match pc {
@@ -1118,6 +1134,7 @@ fn asm_TRKRequestSend(ctx: &Ctx) {
             0x80328d14_u32 => {
                 // li r28, 0x0
                 g[28].set(0_u32);
+                unset |= 0x10000000;
                 pc = 0x80328d18_u32;
             }
             0x80328d18_u32 => {
@@ -1163,8 +1180,15 @@ fn asm_TRKRequestSend(ctx: &Ctx) {
             }
             0x80328d34_u32 => {
                 // addi r28, r28, 0x1
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[28].set(g[28].get().wrapping_add(0x1_u32));
+                unset |= 0x10000000;
                 // cmplw r28, r31
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[28].get(), g[31].get());
                     c::compare(ctx, 0, x < y, x > y);
@@ -1199,6 +1223,7 @@ fn asm_TRKRequestSend(ctx: &Ctx) {
             0x80328d50_u32 => {
                 // addi r29, r3, 0x0
                 g[29].set(g[3].get());
+                unset |= 0x20000000;
                 // li r4, 0x0
                 g[4].set(0_u32);
                 // bl TRKSetBufferPosition
@@ -1207,6 +1232,9 @@ fn asm_TRKRequestSend(ctx: &Ctx) {
             }
             0x80328d5c_u32 => {
                 // addi r3, r29, 0x0
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[3].set(g[29].get());
                 // addi r4, r1, 0x8
                 g[4].set(g[1].get().wrapping_add(0x8_u32));
@@ -1289,6 +1317,9 @@ fn asm_TRKRequestSend(ctx: &Ctx) {
             }
             0x80328d9c_u32 => {
                 // lwz r0, 0x8(r29)
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[29].get().wrapping_add(0x8_u32);
                     g[0].set(ctx.read_u32(ea));
@@ -1338,6 +1369,9 @@ fn asm_TRKRequestSend(ctx: &Ctx) {
             }
             0x80328dbc_u32 => {
                 // addi r3, r29, 0x0
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[3].set(g[29].get());
                 // addi r4, r1, 0x9
                 g[4].set(g[1].get().wrapping_add(0x9_u32));
@@ -1551,6 +1585,7 @@ fn asm_TRKRequestSend(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x30000000;
                 // addi r1, r1, 0x38
                 g[1].set(g[1].get().wrapping_add(0x38_u32));
                 // lwz r0, 0x4(r1)

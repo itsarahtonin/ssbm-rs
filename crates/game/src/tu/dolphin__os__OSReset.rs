@@ -229,6 +229,7 @@ fn asm_OSResetSystem(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8034844c_u32;
     loop {
         match pc {
@@ -304,6 +305,7 @@ fn asm_OSResetSystem(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[31].set(v);
                 }
+                unset |= 0x80000000;
                 pc = 0x80348484_u32;
             }
             0x80348484_u32 => {
@@ -966,6 +968,9 @@ fn asm_OSResetSystem(ctx: &Ctx) {
             }
             0x80348698_u32 => {
                 // mr r3, r31
+                if unset & 0x80000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[31].get() | g[31].get();
                     g[3].set(v);
@@ -982,6 +987,7 @@ fn asm_OSResetSystem(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x80000000;
                 // lwz r0, 0x44(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x44_u32);

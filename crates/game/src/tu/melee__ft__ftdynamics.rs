@@ -4411,6 +4411,7 @@ fn asm_ftCo_8009DD94(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8009dd94_u32;
     loop {
         match pc {
@@ -4513,6 +4514,7 @@ fn asm_ftCo_8009DD94(ctx: &Ctx) {
                     let ea = g[24].get().wrapping_add(0x2c_u32);
                     c::fill(ctx, 31, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // cmplwi r24, 0x0
                 {
                     let (x, y) = (g[24].get(), 0x0_u32);
@@ -5102,6 +5104,9 @@ fn asm_ftCo_8009DD94(ctx: &Ctx) {
                     c::compare(ctx, 0, x < y, x > y);
                 }
                 // stfs f31, 0x2c(r24)
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[24].get().wrapping_add(0x2c_u32);
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(31)));
@@ -5380,6 +5385,7 @@ fn asm_ftCo_8009DD94(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x48_u32);
                     ctx.regs.set_f(31, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // addi r1, r1, 0x50
                 g[1].set(g[1].get().wrapping_add(0x50_u32));
                 // mtlr r0

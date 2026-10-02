@@ -177,6 +177,7 @@ fn asm_ftNs_SpecialAirHi_CollisionModVel(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80117f24_u32;
     loop {
         match pc {
@@ -342,13 +343,18 @@ fn asm_ftNs_SpecialAirHi_CollisionModVel(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x16c_u32);
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x200000000;
                 // lfs f2, 0x168(r30)
                 {
                     let ea = g[30].get().wrapping_add(0x168_u32);
                     c::fill(ctx, 2, fp::lfs(ctx.read_u32(ea)));
                 }
                 // bl atan2f
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x80022c30_u32, 0x80117fa4_u32);
+                unset |= 0x200000000;
                 pc = 0x80117fa4_u32;
             }
             0x80117fa4_u32 => {
@@ -369,19 +375,30 @@ fn asm_ftNs_SpecialAirHi_CollisionModVel(ctx: &Ctx) {
             }
             0x80117fb0_u32 => {
                 // fadd f1, f1, f2
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fadd(ctx.regs.f(1), ctx.regs.f(2));
                     ctx.regs.set_f(1, v);
                 }
+                unset |= 0x200000000;
                 // frsp f1, f1
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::frsp(ctx.regs.f(1));
                     c::fill(ctx, 1, v);
                 }
+                unset |= 0x200000000;
                 pc = 0x80117fb8_u32;
             }
             0x80117fb8_u32 => {
                 // fcmpo cr0, f1, f0
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(1), ctx.regs.f(0));
                 // blt .L_80117FB0
                 if (c::cr_bit(ctx, 0) == true) {
@@ -403,19 +420,30 @@ fn asm_ftNs_SpecialAirHi_CollisionModVel(ctx: &Ctx) {
             }
             0x80117fc8_u32 => {
                 // fsub f1, f1, f0
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsub(ctx.regs.f(1), ctx.regs.f(0));
                     ctx.regs.set_f(1, v);
                 }
+                unset |= 0x200000000;
                 // frsp f1, f1
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::frsp(ctx.regs.f(1));
                     c::fill(ctx, 1, v);
                 }
+                unset |= 0x200000000;
                 pc = 0x80117fd0_u32;
             }
             0x80117fd0_u32 => {
                 // fcmpo cr0, f1, f0
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(1), ctx.regs.f(0));
                 // bgt .L_80117FC8
                 if (c::cr_bit(ctx, 1) == true) {
@@ -519,6 +547,9 @@ fn asm_ftNs_SpecialAirHi_CollisionModVel(ctx: &Ctx) {
             }
             0x8011801c_u32 => {
                 // fsubs f2, f3, f1
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(3), ctx.regs.f(1));
                     c::fill(ctx, 2, v);
@@ -544,15 +575,23 @@ fn asm_ftNs_SpecialAirHi_CollisionModVel(ctx: &Ctx) {
                     ctx.regs.set_f(0, f64::from_bits(ctx.read_u64(ea)));
                 }
                 // fadd f1, f1, f0
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fadd(ctx.regs.f(1), ctx.regs.f(0));
                     ctx.regs.set_f(1, v);
                 }
+                unset |= 0x200000000;
                 // frsp f1, f1
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::frsp(ctx.regs.f(1));
                     c::fill(ctx, 1, v);
                 }
+                unset |= 0x200000000;
                 // b .L_80118048
                 pc = 0x80118048_u32;
                 continue;
@@ -565,15 +604,23 @@ fn asm_ftNs_SpecialAirHi_CollisionModVel(ctx: &Ctx) {
                     ctx.regs.set_f(0, f64::from_bits(ctx.read_u64(ea)));
                 }
                 // fsub f1, f1, f0
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsub(ctx.regs.f(1), ctx.regs.f(0));
                     ctx.regs.set_f(1, v);
                 }
+                unset |= 0x200000000;
                 // frsp f1, f1
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::frsp(ctx.regs.f(1));
                     c::fill(ctx, 1, v);
                 }
+                unset |= 0x200000000;
                 pc = 0x80118048_u32;
             }
             0x80118048_u32 => {
@@ -601,13 +648,18 @@ fn asm_ftNs_SpecialAirHi_CollisionModVel(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x180_u32);
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x200000000;
                 // lfs f2, 0x17c(r30)
                 {
                     let ea = g[30].get().wrapping_add(0x17c_u32);
                     c::fill(ctx, 2, fp::lfs(ctx.read_u32(ea)));
                 }
                 // bl atan2f
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x80022c30_u32, 0x80118060_u32);
+                unset |= 0x200000000;
                 pc = 0x80118060_u32;
             }
             0x80118060_u32 => {
@@ -622,6 +674,9 @@ fn asm_ftNs_SpecialAirHi_CollisionModVel(ctx: &Ctx) {
                     ctx.regs.set_f(2, f64::from_bits(ctx.read_u64(ea)));
                 }
                 // fadd f3, f0, f1
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fadd(ctx.regs.f(0), ctx.regs.f(1));
                     ctx.regs.set_f(3, v);
@@ -730,15 +785,23 @@ fn asm_ftNs_SpecialAirHi_CollisionModVel(ctx: &Ctx) {
                     ctx.regs.set_f(0, f64::from_bits(ctx.read_u64(ea)));
                 }
                 // fadd f1, f1, f0
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fadd(ctx.regs.f(1), ctx.regs.f(0));
                     ctx.regs.set_f(1, v);
                 }
+                unset |= 0x200000000;
                 // frsp f1, f1
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::frsp(ctx.regs.f(1));
                     c::fill(ctx, 1, v);
                 }
+                unset |= 0x200000000;
                 // b .L_801180D0
                 pc = 0x801180d0_u32;
                 continue;
@@ -751,15 +814,23 @@ fn asm_ftNs_SpecialAirHi_CollisionModVel(ctx: &Ctx) {
                     ctx.regs.set_f(0, f64::from_bits(ctx.read_u64(ea)));
                 }
                 // fsub f1, f1, f0
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsub(ctx.regs.f(1), ctx.regs.f(0));
                     ctx.regs.set_f(1, v);
                 }
+                unset |= 0x200000000;
                 // frsp f1, f1
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::frsp(ctx.regs.f(1));
                     c::fill(ctx, 1, v);
                 }
+                unset |= 0x200000000;
                 pc = 0x801180d0_u32;
             }
             0x801180d0_u32 => {
@@ -798,12 +869,20 @@ fn asm_ftNs_SpecialAirHi_CollisionModVel(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fsubs f1, f1, f0
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(1), ctx.regs.f(0));
                     c::fill(ctx, 1, v);
                 }
+                unset |= 0x200000000;
                 // bl lbVector_RotateAboutUnitAxis
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x8000d8f4_u32, 0x801180f8_u32);
+                unset |= 0x200000000;
                 pc = 0x801180f8_u32;
             }
             0x801180f8_u32 => {
@@ -812,17 +891,25 @@ fn asm_ftNs_SpecialAirHi_CollisionModVel(ctx: &Ctx) {
                     let ea = g[31].get().wrapping_add(0x84_u32);
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x200000000;
                 // lfs f2, 0x80(r31)
                 {
                     let ea = g[31].get().wrapping_add(0x80_u32);
                     c::fill(ctx, 2, fp::lfs(ctx.read_u32(ea)));
                 }
                 // bl atan2f
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x80022c30_u32, 0x80118104_u32);
+                unset |= 0x200000000;
                 pc = 0x80118104_u32;
             }
             0x80118104_u32 => {
                 // stfs f1, 0x2368(r31)
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[31].get().wrapping_add(0x2368_u32);
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(1)));

@@ -4234,6 +4234,7 @@ fn asm_mnDiagram2_GetAggregatedFighterRank(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8024589c_u32;
     loop {
         match pc {
@@ -4419,6 +4420,7 @@ fn asm_mnDiagram2_GetAggregatedFighterRank(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[25].set(v);
                 }
+                unset |= 0x2000000;
                 // b .L_8024596C
                 pc = 0x8024596c_u32;
                 continue;
@@ -4441,6 +4443,7 @@ fn asm_mnDiagram2_GetAggregatedFighterRank(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[25].set(v);
                 }
+                unset |= 0x2000000;
                 // b .L_8024596C
                 pc = 0x8024596c_u32;
                 continue;
@@ -4462,10 +4465,14 @@ fn asm_mnDiagram2_GetAggregatedFighterRank(ctx: &Ctx) {
                     let v = g[3].get().rotate_left(0) & 0xff_u32;
                     g[25].set(v);
                 }
+                unset |= 0x2000000;
                 pc = 0x8024596c_u32;
             }
             0x8024596c_u32 => {
                 // cmpwi r25, 0x19
+                if unset & 0x2000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[25].get() as i32, 25_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -4495,6 +4502,9 @@ fn asm_mnDiagram2_GetAggregatedFighterRank(ctx: &Ctx) {
                     g[0].set(u32::from(ctx.read_u8(ea)));
                 }
                 // cmpw r25, r0
+                if unset & 0x2000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[25].get() as i32, g[0].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -4676,6 +4686,9 @@ fn asm_mnDiagram2_GetAggregatedFighterRank(ctx: &Ctx) {
                     let _ = (ca, ov);
                 }
                 // subfe r0, r22, r22
+                if unset & 0x400000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(!g[22].get(), g[22].get(), c::ca(ctx));
                     g[0].set(v);
@@ -4915,6 +4928,7 @@ fn asm_mnDiagram2_GetAggregatedFighterRank(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x2400000;
                 // lwz r0, 0x1e4(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x1e4_u32);

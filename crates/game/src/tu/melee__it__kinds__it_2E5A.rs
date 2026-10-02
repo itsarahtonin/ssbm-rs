@@ -895,6 +895,7 @@ fn asm_it_802E609C(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x802e609c_u32;
     loop {
         match pc {
@@ -1019,6 +1020,7 @@ fn asm_it_802E609C(ctx: &Ctx) {
                 }
                 // addi r30, r3, 0x0
                 g[30].set(g[3].get());
+                unset |= 0x40000000;
                 // li r29, 0x1
                 g[29].set(0x1_u32);
                 pc = 0x802e6100_u32;
@@ -1087,6 +1089,9 @@ fn asm_it_802E609C(ctx: &Ctx) {
             }
             0x802e6134_u32 => {
                 // mr r3, r30
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[30].get() | g[30].get();
                     g[3].set(v);
@@ -1098,6 +1103,7 @@ fn asm_it_802E609C(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x40000000;
                 // lwz r0, 0x2c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x2c_u32);

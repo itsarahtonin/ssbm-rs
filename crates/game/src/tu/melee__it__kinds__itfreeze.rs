@@ -45,6 +45,7 @@ fn asm_it_8028EB88(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8028eb88_u32;
     loop {
         match pc {
@@ -102,6 +103,7 @@ fn asm_it_8028EB88(ctx: &Ctx) {
                     let ea = g[31].get().wrapping_add(0x2c_u32);
                     g[5].set(ctx.read_u32(ea));
                 }
+                unset |= 0x20;
                 pc = 0x8028ebb0_u32;
             }
             0x8028ebb0_u32 => {
@@ -113,6 +115,9 @@ fn asm_it_8028EB88(ctx: &Ctx) {
                     ctx.write_u32(ea, g[0].get());
                 }
                 // cmplwi r5, 0x0
+                if unset & 0x20 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[5].get(), 0x0_u32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -156,11 +161,17 @@ fn asm_it_8028EB88(ctx: &Ctx) {
             }
             0x8028ebd8_u32 => {
                 // lwz r3, 0x4c(r5)
+                if unset & 0x20 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[5].get().wrapping_add(0x4c_u32);
                     g[3].set(ctx.read_u32(ea));
                 }
                 // lwz r0, 0x50(r5)
+                if unset & 0x20 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[5].get().wrapping_add(0x50_u32);
                     g[0].set(ctx.read_u32(ea));
@@ -176,6 +187,9 @@ fn asm_it_8028EB88(ctx: &Ctx) {
                     ctx.write_u32(ea, g[0].get());
                 }
                 // lwz r0, 0x54(r5)
+                if unset & 0x20 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[5].get().wrapping_add(0x54_u32);
                     g[0].set(ctx.read_u32(ea));
@@ -231,6 +245,7 @@ fn asm_it_8028EB88(ctx: &Ctx) {
                 }
                 // li r5, 0x0
                 g[5].set(0_u32);
+                unset |= 0x20;
                 // lfs f0, "@167"@sda21(r0)
                 {
                     let ea = g[2].get().wrapping_add(0xffffd090_u32);
@@ -239,6 +254,9 @@ fn asm_it_8028EB88(ctx: &Ctx) {
                 // li r4, 0x1
                 g[4].set(0x1_u32);
                 // sth r5, 0x58(r1)
+                if unset & 0x20 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[1].get().wrapping_add(0x58_u32);
                     ctx.write_u16(ea, g[5].get() as u16);
@@ -261,6 +279,9 @@ fn asm_it_8028EB88(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
                 }
                 // stw r5, 0x1c(r1)
+                if unset & 0x20 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[1].get().wrapping_add(0x1c_u32);
                     ctx.write_u32(ea, g[5].get());
@@ -291,12 +312,16 @@ fn asm_it_8028EB88(ctx: &Ctx) {
                     ctx.write_u8(ea, g[0].get() as u8);
                 }
                 // stw r5, 0x5c(r1)
+                if unset & 0x20 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[1].get().wrapping_add(0x5c_u32);
                     ctx.write_u32(ea, g[5].get());
                 }
                 // bl Item_80268B18
                 c::call(ctx, 0x80268b18_u32, 0x8028ec50_u32);
+                unset |= 0x20;
                 pc = 0x8028ec50_u32;
             }
             0x8028ec50_u32 => {
@@ -321,6 +346,7 @@ fn asm_it_8028EB88(ctx: &Ctx) {
                 }
                 // bl it_3F14_Logic17_Spawned
                 c::call(ctx, 0x8028ed50_u32, 0x8028ec60_u32);
+                unset |= 0x20;
                 pc = 0x8028ec60_u32;
             }
             0x8028ec60_u32 => {
@@ -335,6 +361,7 @@ fn asm_it_8028EB88(ctx: &Ctx) {
                 g[4].set(g[31].get());
                 // bl it_8028F434
                 c::call(ctx, 0x8028f434_u32, 0x8028ec70_u32);
+                unset |= 0x20;
                 pc = 0x8028ec70_u32;
             }
             0x8028ec70_u32 => {

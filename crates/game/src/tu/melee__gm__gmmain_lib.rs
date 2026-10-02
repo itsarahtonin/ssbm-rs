@@ -1516,6 +1516,7 @@ fn asm_gmMainLib_8015F600(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8015f600_u32;
     loop {
         match pc {
@@ -1952,6 +1953,7 @@ fn asm_gmMainLib_8015F600(ctx: &Ctx) {
             0x8015f768_u32 => {
                 // li r27, 0x0
                 g[27].set(0_u32);
+                unset |= 0x8000000;
                 // b .L_8015F774
                 pc = 0x8015f774_u32;
                 continue;
@@ -1960,10 +1962,14 @@ fn asm_gmMainLib_8015F600(ctx: &Ctx) {
             0x8015f770_u32 => {
                 // li r27, 0x1
                 g[27].set(0x1_u32);
+                unset |= 0x8000000;
                 pc = 0x8015f774_u32;
             }
             0x8015f774_u32 => {
                 // mr r3, r27
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[27].get() | g[27].get();
                     g[3].set(v);
@@ -2086,12 +2092,16 @@ fn asm_gmMainLib_8015F600(ctx: &Ctx) {
                     g[27].set(v);
                     let _ = (ca, ov);
                 }
+                unset |= 0x8000000;
                 // lwz r5, gmMainLib_804D3EE0@sda21(r0)
                 {
                     let ea = g[13].get().wrapping_add(0xffff8840_u32);
                     g[5].set(ctx.read_u32(ea));
                 }
                 // clrlwi r6, r27, 24
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[27].get().rotate_left(0) & 0xff_u32;
                     g[6].set(v);
@@ -2585,6 +2595,9 @@ fn asm_gmMainLib_8015F600(ctx: &Ctx) {
                     ctx.write_u8(ea, g[0].get() as u8);
                 }
                 // clrlwi r3, r27, 24
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[27].get().rotate_left(0) & 0xff_u32;
                     g[3].set(v);
@@ -2778,6 +2791,7 @@ fn asm_gmMainLib_8015F600(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x8000000;
                 // lwz r0, 0xb4(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xb4_u32);

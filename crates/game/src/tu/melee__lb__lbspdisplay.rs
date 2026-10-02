@@ -39,6 +39,7 @@ fn asm_lb_80011AC4(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80011ac4_u32;
     loop {
         match pc {
@@ -188,6 +189,7 @@ fn asm_lb_80011AC4(ctx: &Ctx) {
                     let v = g[30].get() | g[30].get();
                     g[29].set(v);
                 }
+                unset |= 0x20000000;
                 pc = 0x80011b3c_u32;
             }
             0x80011b3c_u32 => {
@@ -217,6 +219,9 @@ fn asm_lb_80011AC4(ctx: &Ctx) {
             }
             0x80011b50_u32 => {
                 // mr r3, r29
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[29].get() | g[29].get();
                     g[3].set(v);
@@ -241,6 +246,7 @@ fn asm_lb_80011AC4(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x14_u32);
                     g[29].set(ctx.read_u32(ea));
                 }
+                unset |= 0x20000000;
                 // lwz r28, 0x10(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x10_u32);

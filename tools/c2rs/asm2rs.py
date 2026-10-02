@@ -65,9 +65,14 @@ def add(base, off):
 class Emitter:
     """Rust for one function's instructions."""
 
-    def __init__(self, name, words, jump_targets=()):
+    def __init__(self, name, words, jump_targets=(), watch=(), effects=None):
         self.name = name
         self.words = words
+        # Registers the function reads before it sets them, which hold what code far up its
+        # callers left, and each instruction's (callee, written, read) registers: the port calls
+        # c::unset_read where it reads one of them unset.
+        self.watch = set(watch) if effects else set()
+        self.effects = effects or {}
         self.start = words[0][0]
         self.end = words[-1][0] + 4
         # Where the function's jump tables send its `bctr`s.
@@ -605,10 +610,19 @@ class Emitter:
                 blocks.append(cur)
             stmts = self.emit(pc, w)
             cur[1].append(f"// {text}")
+            _, written, read = self.effects.get(pc, (None, set(), set()))
+            for reg in sorted(read & self.watch):
+                cur[1].append(f"if unset & {watch_bit(reg):#x} == 0 {{ c::unset_read(ctx); }}")
             cur[1].extend(stmts)
+            bits = sum(watch_bit(reg) for reg in written & self.watch)
+            if bits:
+                cur[1].append(f"unset |= {bits:#x};")
         straight = len(blocks) == 1
         out = ["let g = &ctx.regs.gpr;", "let f = &ctx.regs.fpr;", "let lr0 = ctx.regs.lr.get();",
                "let _ = (g, f, lr0);"]
+        if self.watch:
+            # A bit per watched register this call has set.
+            out.append("let mut unset: u64 = 0;")
         if straight:
             out += blocks[0][1]
             return out
@@ -626,14 +640,21 @@ class Emitter:
         return out
 
 
+def watch_bit(reg):
+    """The bit of `unset` for a register, ("r", n) or ("f", n)."""
+    kind, n = reg
+    return 1 << (n if kind == "r" else 32 + n)
+
+
 def jump_targets(listing):
     """The code addresses the listing's jump tables hold, as `.rel <function>, .L_<address>`."""
     return {int(t, 16) for t in re.findall(r"\.rel \w+, \.L_([0-9A-F]{8})", listing)}
 
 
-def translate(listing, name):
-    """Rust statements for the body of `name`'s port, from its instructions in `listing`."""
+def translate(listing, name, watch=(), effects=None):
+    """Rust statements for the body of `name`'s port, from its instructions in `listing`; with
+    `watch` and `effects`, as `Emitter` takes them, it reports reads of those registers unset."""
     words = function_words(listing, name)
     if not words:
         raise AsmUnsupported(f"{name} not in the listing")
-    return Emitter(name, words, jump_targets(listing)).body()
+    return Emitter(name, words, jump_targets(listing), watch, effects).body()

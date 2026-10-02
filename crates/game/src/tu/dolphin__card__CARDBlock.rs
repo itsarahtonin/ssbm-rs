@@ -130,6 +130,7 @@ fn asm___CARDAllocBlock(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80354b5c_u32;
     loop {
         match pc {
@@ -389,6 +390,9 @@ fn asm___CARDAllocBlock(ctx: &Ctx) {
             }
             0x80354c30_u32 => {
                 // clrlslwi r6, r31, 16, 1
+                if unset & 0x80000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[31].get().rotate_left(1) & 0x1fffe_u32;
                     g[6].set(v);
@@ -405,6 +409,7 @@ fn asm___CARDAllocBlock(ctx: &Ctx) {
                 }
                 // addi r31, r11, 0x0
                 g[31].set(g[11].get());
+                unset |= 0x80000000;
                 // subi r4, r4, 0x1
                 g[4].set(g[4].get().wrapping_add(0xffffffff_u32));
                 pc = 0x80354c44_u32;
@@ -453,6 +458,7 @@ fn asm___CARDAllocBlock(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x1c_u32);
                     g[31].set(ctx.read_u32(ea));
                 }
+                unset |= 0x80000000;
                 // lwz r30, 0x18(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x18_u32);

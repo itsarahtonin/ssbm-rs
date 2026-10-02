@@ -100,6 +100,7 @@ fn asm_itRaikou_UnkMotion0_Anim(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x802cf978_u32;
     loop {
         match pc {
@@ -337,6 +338,7 @@ fn asm_itRaikou_UnkMotion0_Anim(ctx: &Ctx) {
             0x802cfa24_u32 => {
                 // li r29, 0x2746
                 g[29].set(0x2746_u32);
+                unset |= 0x20000000;
                 // b .L_802CFA38
                 pc = 0x802cfa38_u32;
                 continue;
@@ -345,6 +347,7 @@ fn asm_itRaikou_UnkMotion0_Anim(ctx: &Ctx) {
             0x802cfa2c_u32 => {
                 // li r29, 0x2747
                 g[29].set(0x2747_u32);
+                unset |= 0x20000000;
                 // b .L_802CFA38
                 pc = 0x802cfa38_u32;
                 continue;
@@ -353,12 +356,16 @@ fn asm_itRaikou_UnkMotion0_Anim(ctx: &Ctx) {
             0x802cfa34_u32 => {
                 // li r29, 0x2748
                 g[29].set(0x2748_u32);
+                unset |= 0x20000000;
                 pc = 0x802cfa38_u32;
             }
             0x802cfa38_u32 => {
                 // addi r3, r31, 0x0
                 g[3].set(g[31].get());
                 // addi r4, r29, 0x0
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[4].set(g[29].get());
                 // li r5, 0x7f
                 g[5].set(0x7f_u32);
@@ -407,6 +414,7 @@ fn asm_itRaikou_UnkMotion0_Anim(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x14_u32);
                     g[29].set(ctx.read_u32(ea));
                 }
+                unset |= 0x20000000;
                 // addi r1, r1, 0x20
                 g[1].set(g[1].get().wrapping_add(0x20_u32));
                 // mtlr r0

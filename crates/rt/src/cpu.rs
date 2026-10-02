@@ -157,6 +157,15 @@ pub fn fill(ctx: &Ctx, i: usize, v: f64) {
     ctx.regs.fpr[i].set(Ps::splat(v))
 }
 
+/// A port transliterated from machine code reads a register its C never sets before setting
+/// it, which holds what code far up its callers left: a mutated check that gets here ends, as
+/// no port of the C ports in between leaves that register as the original's code does.
+pub fn unset_read(ctx: &Ctx) {
+    if ctx.lockstep.is_mutating() {
+        std::panic::panic_any(crate::lockstep::Runaway);
+    }
+}
+
 /// A `bl` from a port transliterated from assembly: the callee returns to `ret`, where the
 /// port goes on.
 pub fn call(ctx: &Ctx, target: u32, ret: u32) {

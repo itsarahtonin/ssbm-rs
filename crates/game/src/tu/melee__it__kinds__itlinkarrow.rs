@@ -731,6 +731,7 @@ fn asm_itLinkArrow_802A850C(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x802a850c_u32;
     loop {
         match pc {
@@ -2016,10 +2017,14 @@ fn asm_itLinkArrow_802A850C(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[30].set(v);
                 }
+                unset |= 0x40000000;
                 pc = 0x802a8920_u32;
             }
             0x802a8920_u32 => {
                 // stw r30, 0xe88(r28)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[28].get().wrapping_add(0xe88_u32);
                     ctx.write_u32(ea, g[30].get());
@@ -2062,10 +2067,14 @@ fn asm_itLinkArrow_802A850C(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[29].set(v);
                 }
+                unset |= 0x20000000;
                 pc = 0x802a8940_u32;
             }
             0x802a8940_u32 => {
                 // stw r29, 0xe8c(r28)
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[28].get().wrapping_add(0xe8c_u32);
                     ctx.write_u32(ea, g[29].get());
@@ -2101,6 +2110,7 @@ fn asm_itLinkArrow_802A850C(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x60000000;
                 // lwz r0, 0xcc(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xcc_u32);

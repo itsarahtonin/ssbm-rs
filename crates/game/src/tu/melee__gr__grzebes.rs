@@ -4966,6 +4966,7 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x801dbb60_u32;
     loop {
         match pc {
@@ -5132,6 +5133,7 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                 }
                 // addi r31, r4, 0x0
                 g[31].set(g[4].get());
+                unset |= 0x80000000;
                 // bgt .L_801DBCC8
                 if (c::cr_bit(ctx, 1) == true) {
                     pc = 0x801dbcc8_u32;
@@ -5196,6 +5198,7 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                 }
                 // addi r31, r4, 0x0
                 g[31].set(g[4].get());
+                unset |= 0x80000000;
                 // bgt .L_801DBCC8
                 if (c::cr_bit(ctx, 1) == true) {
                     pc = 0x801dbcc8_u32;
@@ -5260,6 +5263,7 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                 }
                 // addi r31, r4, 0x0
                 g[31].set(g[4].get());
+                unset |= 0x80000000;
                 // bgt .L_801DBCC8
                 if (c::cr_bit(ctx, 1) == true) {
                     pc = 0x801dbcc8_u32;
@@ -5324,6 +5328,7 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                 }
                 // addi r31, r4, 0x0
                 g[31].set(g[4].get());
+                unset |= 0x80000000;
                 // bgt .L_801DBCC8
                 if (c::cr_bit(ctx, 1) == true) {
                     pc = 0x801dbcc8_u32;
@@ -5388,6 +5393,7 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                 }
                 // addi r31, r4, 0x0
                 g[31].set(g[4].get());
+                unset |= 0x80000000;
                 // bgt .L_801DBCC8
                 if (c::cr_bit(ctx, 1) == true) {
                     pc = 0x801dbcc8_u32;
@@ -5463,6 +5469,9 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
             }
             0x801dbcf0_u32 => {
                 // mulli r0, r31, 0x24
+                if unset & 0x80000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[0].set((g[31].get() as i32).wrapping_mul(36_i32) as u32);
                 // lfs f3, "@186"@sda21(r0)
                 {
@@ -5756,6 +5765,7 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                     let v = ctx.regs.f(3);
                     ctx.regs.set_f(31, v);
                 }
+                unset |= 0x8000000000000000;
                 // fcmpo cr0, f4, f0
                 c::fp_compare(ctx, 0, ctx.regs.f(4), ctx.regs.f(0));
                 // fmr f30, f2
@@ -5763,16 +5773,19 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                     let v = ctx.regs.f(2);
                     ctx.regs.set_f(30, v);
                 }
+                unset |= 0x4000000000000000;
                 // fmr f29, f5
                 {
                     let v = ctx.regs.f(5);
                     ctx.regs.set_f(29, v);
                 }
+                unset |= 0x2000000000000000;
                 // fmr f28, f6
                 {
                     let v = ctx.regs.f(6);
                     ctx.regs.set_f(28, v);
                 }
+                unset |= 0x1000000000000000;
                 // ble .L_801DBDF4
                 if (c::cr_bit(ctx, 1) == false) {
                     pc = 0x801dbdf4_u32;
@@ -5786,6 +5799,7 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                     let v = g[5].get() | g[5].get();
                     g[31].set(v);
                 }
+                unset |= 0x80000000;
                 // b .L_801DBDF8
                 pc = 0x801dbdf8_u32;
                 continue;
@@ -5797,6 +5811,7 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                     let v = g[6].get() | g[6].get();
                     g[31].set(v);
                 }
+                unset |= 0x80000000;
                 pc = 0x801dbdf8_u32;
             }
             0x801dbdf8_u32 => {
@@ -5877,6 +5892,9 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
             }
             0x801dbe40_u32 => {
                 // mulli r0, r31, 0x24
+                if unset & 0x80000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[0].set((g[31].get() as i32).wrapping_mul(36_i32) as u32);
                 // lfd f1, "@1351"@sda21(r0)
                 {
@@ -5948,6 +5966,12 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
             }
             0x801dbe7c_u32 => {
                 // fsubs f11, f28, f30
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x4000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(28), ctx.regs.f(30));
                     c::fill(ctx, 11, v);
@@ -5960,6 +5984,12 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                 // li r0, 0x14
                 g[0].set(0x14_u32);
                 // fsubs f10, f29, f31
+                if unset & 0x2000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(29), ctx.regs.f(31));
                     c::fill(ctx, 10, v);
@@ -6076,11 +6106,17 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                     c::fill(ctx, 25, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fsubs f13, f26, f30
+                if unset & 0x4000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(26), ctx.regs.f(30));
                     c::fill(ctx, 13, v);
                 }
                 // fsubs f27, f25, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(25), ctx.regs.f(31));
                     c::fill(ctx, 27, v);
@@ -6137,11 +6173,17 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
             }
             0x801dbf10_u32 => {
                 // fsubs f25, f25, f29
+                if unset & 0x2000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(25), ctx.regs.f(29));
                     c::fill(ctx, 25, v);
                 }
                 // fsubs f13, f26, f28
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(26), ctx.regs.f(28));
                     c::fill(ctx, 13, v);
@@ -6168,11 +6210,17 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
             }
             0x801dbf28_u32 => {
                 // fmadds f27, f10, f9, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(10), ctx.regs.f(9), ctx.regs.f(31));
                     c::fill(ctx, 27, v);
                 }
                 // fmadds f13, f11, f9, f30
+                if unset & 0x4000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(11), ctx.regs.f(9), ctx.regs.f(30));
                     c::fill(ctx, 13, v);
@@ -6349,11 +6397,17 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                     c::fill(ctx, 9, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fsubs f10, f10, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(10), ctx.regs.f(31));
                     c::fill(ctx, 10, v);
                 }
                 // fsubs f9, f9, f30
+                if unset & 0x4000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(9), ctx.regs.f(30));
                     c::fill(ctx, 9, v);
@@ -6522,6 +6576,9 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                     c::fill(ctx, 10, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fsubs f12, f12, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(12), ctx.regs.f(31));
                     c::fill(ctx, 12, v);
@@ -6532,29 +6589,52 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                     c::fill(ctx, 13, v);
                 }
                 // fsubs f9, f10, f30
+                if unset & 0x4000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(10), ctx.regs.f(30));
                     c::fill(ctx, 9, v);
                 }
                 // fmadds f31, f13, f12, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(13), ctx.regs.f(12), ctx.regs.f(31));
                     c::fill(ctx, 31, v);
                 }
+                unset |= 0x8000000000000000;
                 // fmadds f30, f13, f9, f30
+                if unset & 0x4000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(13), ctx.regs.f(9), ctx.regs.f(30));
                     c::fill(ctx, 30, v);
                 }
+                unset |= 0x4000000000000000;
                 pc = 0x801dc050_u32;
             }
             0x801dc050_u32 => {
                 // fsubs f10, f30, f28
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x4000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(30), ctx.regs.f(28));
                     c::fill(ctx, 10, v);
                 }
                 // fsubs f9, f31, f29
+                if unset & 0x2000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(31), ctx.regs.f(29));
                     c::fill(ctx, 9, v);
@@ -6683,15 +6763,23 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                     c::fill(ctx, 11, v);
                 }
                 // fmadds f29, f9, f11, f29
+                if unset & 0x2000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(9), ctx.regs.f(11), ctx.regs.f(29));
                     c::fill(ctx, 29, v);
                 }
+                unset |= 0x2000000000000000;
                 // fmadds f28, f10, f11, f28
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(10), ctx.regs.f(11), ctx.regs.f(28));
                     c::fill(ctx, 28, v);
                 }
+                unset |= 0x1000000000000000;
                 // b .L_801DC1D8
                 pc = 0x801dc1d8_u32;
                 continue;
@@ -6709,11 +6797,17 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                     c::fill(ctx, 9, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fsubs f10, f10, f29
+                if unset & 0x2000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(10), ctx.regs.f(29));
                     c::fill(ctx, 10, v);
                 }
                 // fsubs f9, f9, f28
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(9), ctx.regs.f(28));
                     c::fill(ctx, 9, v);
@@ -6882,6 +6976,9 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                     c::fill(ctx, 10, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fsubs f12, f12, f29
+                if unset & 0x2000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(12), ctx.regs.f(29));
                     c::fill(ctx, 12, v);
@@ -6892,29 +6989,52 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                     c::fill(ctx, 13, v);
                 }
                 // fsubs f9, f10, f28
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(10), ctx.regs.f(28));
                     c::fill(ctx, 9, v);
                 }
                 // fmadds f29, f13, f12, f29
+                if unset & 0x2000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(13), ctx.regs.f(12), ctx.regs.f(29));
                     c::fill(ctx, 29, v);
                 }
+                unset |= 0x2000000000000000;
                 // fmadds f28, f13, f9, f28
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(13), ctx.regs.f(9), ctx.regs.f(28));
                     c::fill(ctx, 28, v);
                 }
+                unset |= 0x1000000000000000;
                 pc = 0x801dc168_u32;
             }
             0x801dc168_u32 => {
                 // fsubs f10, f28, f30
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x4000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(28), ctx.regs.f(30));
                     c::fill(ctx, 10, v);
                 }
                 // fsubs f9, f29, f31
+                if unset & 0x2000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(29), ctx.regs.f(31));
                     c::fill(ctx, 9, v);
@@ -7043,24 +7163,44 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                     c::fill(ctx, 11, v);
                 }
                 // fmadds f31, f9, f11, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(9), ctx.regs.f(11), ctx.regs.f(31));
                     c::fill(ctx, 31, v);
                 }
+                unset |= 0x8000000000000000;
                 // fmadds f30, f10, f11, f30
+                if unset & 0x4000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmadds(ctx.regs.f(10), ctx.regs.f(11), ctx.regs.f(30));
                     c::fill(ctx, 30, v);
                 }
+                unset |= 0x4000000000000000;
                 pc = 0x801dc1d8_u32;
             }
             0x801dc1d8_u32 => {
                 // fsubs f11, f28, f30
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x4000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(28), ctx.regs.f(30));
                     c::fill(ctx, 11, v);
                 }
                 // fsubs f10, f29, f31
+                if unset & 0x2000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(29), ctx.regs.f(31));
                     c::fill(ctx, 10, v);
@@ -7101,11 +7241,17 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                     c::fill(ctx, 3, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fmr f1, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(31);
                     ctx.regs.set_f(1, v);
                 }
                 // fmr f2, f30
+                if unset & 0x4000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(30);
                     ctx.regs.set_f(2, v);
@@ -7116,11 +7262,17 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                     g[3].set(v);
                 }
                 // fmr f4, f29
+                if unset & 0x2000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(29);
                     ctx.regs.set_f(4, v);
                 }
                 // fmr f5, f28
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(28);
                     ctx.regs.set_f(5, v);
@@ -7161,6 +7313,7 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x80000000;
                 // lwz r0, 0x74(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x74_u32);
@@ -7171,21 +7324,25 @@ fn asm_grZebes_801DBB60(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x68_u32);
                     ctx.regs.set_f(31, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // lfd f30, 0x60(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x60_u32);
                     ctx.regs.set_f(30, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x4000000000000000;
                 // lfd f29, 0x58(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x58_u32);
                     ctx.regs.set_f(29, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x2000000000000000;
                 // lfd f28, 0x50(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x50_u32);
                     ctx.regs.set_f(28, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x1000000000000000;
                 // lfd f27, 0x48(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x48_u32);

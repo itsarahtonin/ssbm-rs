@@ -39,6 +39,7 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x803805dc_u32;
     loop {
         match pc {
@@ -202,6 +203,9 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
                     c::update_cr0(ctx, v);
                 }
                 // slwi r3, r30, 8
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[30].get().rotate_left(8) & 0xffffff00_u32;
                     g[3].set(v);
@@ -211,6 +215,7 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
                     let v = g[3].get() | g[0].get();
                     g[30].set(v);
                 }
+                unset |= 0x40000000;
                 // addi r29, r29, 0x1
                 g[29].set(g[29].get().wrapping_add(0x1_u32));
                 // bne .L_80380650
@@ -222,6 +227,9 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
             }
             0x80380670_u32 => {
                 // cmpwi r28, 0x6
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[28].get() as i32, 6_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -243,6 +251,9 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
             }
             0x8038067c_u32 => {
                 // cmpwi r28, 0x3
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[28].get() as i32, 3_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -264,6 +275,9 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
             }
             0x80380688_u32 => {
                 // cmpwi r28, 0x2
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[28].get() as i32, 2_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -283,6 +297,9 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
             }
             0x80380694_u32 => {
                 // cmpwi r28, 0x5
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[28].get() as i32, 5_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -302,6 +319,9 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
             }
             0x803806a0_u32 => {
                 // cmpwi r28, 0xff
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[28].get() as i32, 255_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -323,6 +343,9 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
             }
             0x803806ac_u32 => {
                 // cmpwi r28, 0x3c
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[28].get() as i32, 60_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -342,6 +365,9 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
             }
             0x803806b8_u32 => {
                 // cmplw r30, r24
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[30].get(), g[24].get());
                     c::compare(ctx, 0, x < y, x > y);
@@ -366,6 +392,9 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
             }
             0x803806d0_u32 => {
                 // slwi r0, r30, 2
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[30].get().rotate_left(2) & 0xfffffffc_u32;
                     g[0].set(v);
@@ -419,6 +448,9 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
             }
             0x80380700_u32 => {
                 // cmplw r21, r30
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[21].get(), g[30].get());
                     c::compare(ctx, 0, x < y, x > y);
@@ -471,6 +503,9 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
             }
             0x80380728_u32 => {
                 // cmplw r3, r30
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[3].get(), g[30].get());
                     c::compare(ctx, 0, x < y, x > y);
@@ -497,6 +532,9 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
             }
             0x80380738_u32 => {
                 // addi r4, r30, 0x0
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[4].set(g[30].get());
                 // crclr cr1eq
                 {
@@ -596,6 +634,9 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
             }
             0x80380794_u32 => {
                 // add r29, r29, r30
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(g[29].get(), g[30].get(), 0);
                     g[29].set(v);
@@ -626,6 +667,9 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
             }
             0x803807a8_u32 => {
                 // add r29, r29, r30
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(g[29].get(), g[30].get(), 0);
                     g[29].set(v);
@@ -640,6 +684,9 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
                 // addi r3, r23, 0x0
                 g[3].set(g[23].get());
                 // addi r4, r30, 0x0
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[4].set(g[30].get());
                 // bl HSD_SListAllocAndPrepend
                 c::call(ctx, 0x8037e538_u32, 0x803807bc_u32);
@@ -690,9 +737,13 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
                     let ea = g[29].get();
                     g[28].set(u32::from(ctx.read_u8(ea)));
                 }
+                unset |= 0x10000000;
                 // addi r29, r29, 0x1
                 g[29].set(g[29].get().wrapping_add(0x1_u32));
                 // addi r4, r28, 0x0
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[4].set(g[28].get());
                 // cmpwi r4, 0x20
                 {
@@ -1524,6 +1575,7 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
                 g[27].set(0x1_u32);
                 // li r30, 0x0
                 g[30].set(0_u32);
+                unset |= 0x40000000;
                 // b .L_80380650
                 pc = 0x80380650_u32;
                 continue;
@@ -1534,6 +1586,7 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
                 g[27].set(0x2_u32);
                 // li r30, 0x0
                 g[30].set(0_u32);
+                unset |= 0x40000000;
                 // b .L_80380650
                 pc = 0x80380650_u32;
                 continue;
@@ -1544,6 +1597,7 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
                 g[27].set(0x4_u32);
                 // li r30, 0x0
                 g[30].set(0_u32);
+                unset |= 0x40000000;
                 // b .L_80380650
                 pc = 0x80380650_u32;
                 continue;
@@ -6775,6 +6829,7 @@ fn asm_HSD_ByteCodeEval(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x50000000;
                 // lwz r0, 0xb4(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xb4_u32);

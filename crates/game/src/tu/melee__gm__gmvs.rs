@@ -2531,6 +2531,7 @@ fn asm_fn_8016DEEC(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8016deec_u32;
     loop {
         match pc {
@@ -2945,7 +2946,14 @@ fn asm_fn_8016DEEC(ctx: &Ctx) {
                     let v = ctx.regs.f(0);
                     ctx.regs.set_f(26, v);
                 }
+                unset |= 0x400000000000000;
                 // fcmpo cr0, f25, f26
+                if unset & 0x200000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
+                if unset & 0x400000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(25), ctx.regs.f(26));
                 // bge .L_8016E058
                 if (c::cr_bit(ctx, 0) == false) {
@@ -2961,10 +2969,14 @@ fn asm_fn_8016DEEC(ctx: &Ctx) {
                     g[23].set(v);
                 }
                 // fmr f25, f26
+                if unset & 0x400000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(26);
                     ctx.regs.set_f(25, v);
                 }
+                unset |= 0x200000000000000;
                 pc = 0x8016e058_u32;
             }
             0x8016e058_u32 => {
@@ -3211,11 +3223,13 @@ fn asm_fn_8016DEEC(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x68_u32);
                     ctx.regs.set_f(26, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x400000000000000;
                 // lfd f25, 0x60(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x60_u32);
                     ctx.regs.set_f(25, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x200000000000000;
                 // addi r1, r1, 0x98
                 g[1].set(g[1].get().wrapping_add(0x98_u32));
                 // mtlr r0

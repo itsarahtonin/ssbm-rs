@@ -207,6 +207,7 @@ fn asm_itNesspkflash_UnkMotion0_Anim(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x802aab70_u32;
     loop {
         match pc {
@@ -448,6 +449,7 @@ fn asm_itNesspkflash_UnkMotion0_Anim(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[28].set(v);
                 }
+                unset |= 0x10000000;
                 // b .L_802AAC2C
                 pc = 0x802aac2c_u32;
                 continue;
@@ -464,10 +466,14 @@ fn asm_itNesspkflash_UnkMotion0_Anim(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[28].set(v);
                 }
+                unset |= 0x10000000;
                 pc = 0x802aac2c_u32;
             }
             0x802aac2c_u32 => {
                 // cmpwi r28, 0x1
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[28].get() as i32, 1_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -790,6 +796,7 @@ fn asm_itNesspkflash_UnkMotion0_Anim(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x10000000;
                 // li r3, 0x0
                 g[3].set(0_u32);
                 // lwz r0, 0x3c(r1)
@@ -897,6 +904,7 @@ fn asm_itNesspkflash_UnkMotion0_Phys(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x802aafdc_u32;
     loop {
         match pc {
@@ -1041,6 +1049,7 @@ fn asm_itNesspkflash_UnkMotion0_Phys(ctx: &Ctx) {
             0x802ab03c_u32 => {
                 // bl ftNs_SpecialN_CheckSpecialNHold
                 c::call(ctx, 0x80116ebc_u32, 0x802ab040_u32);
+                unset |= 0x10;
                 pc = 0x802ab040_u32;
             }
             0x802ab040_u32 => {
@@ -1049,6 +1058,7 @@ fn asm_itNesspkflash_UnkMotion0_Phys(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[4].set(v);
                 }
+                unset |= 0x10;
                 // b .L_802AB050
                 pc = 0x802ab050_u32;
                 continue;
@@ -1057,6 +1067,7 @@ fn asm_itNesspkflash_UnkMotion0_Phys(ctx: &Ctx) {
             0x802ab048_u32 => {
                 // bl ftKb_SpecialNNs_800FEC78
                 c::call(ctx, 0x800fec78_u32, 0x802ab04c_u32);
+                unset |= 0x10;
                 pc = 0x802ab04c_u32;
             }
             0x802ab04c_u32 => {
@@ -1065,10 +1076,14 @@ fn asm_itNesspkflash_UnkMotion0_Phys(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[4].set(v);
                 }
+                unset |= 0x10;
                 pc = 0x802ab050_u32;
             }
             0x802ab050_u32 => {
                 // cmpwi r4, 0x1
+                if unset & 0x10 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[4].get() as i32, 1_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1088,10 +1103,15 @@ fn asm_itNesspkflash_UnkMotion0_Phys(ctx: &Ctx) {
                 }
                 // addi r4, r1, 0x10
                 g[4].set(g[1].get().wrapping_add(0x10_u32));
+                unset |= 0x10;
                 // addi r5, r1, 0x14
                 g[5].set(g[1].get().wrapping_add(0x14_u32));
                 // bl ftLib_GetLStick
+                if unset & 0x10 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x800865d8_u32, 0x802ab068_u32);
+                unset |= 0x10;
                 pc = 0x802ab068_u32;
             }
             0x802ab068_u32 => {

@@ -38,6 +38,7 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x800c2600_u32;
     loop {
         match pc {
@@ -395,6 +396,7 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[30].set(v);
                 }
+                unset |= 0x40000000;
                 // b .L_800C27C8
                 pc = 0x800c27c8_u32;
                 continue;
@@ -485,6 +487,7 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                 }
                 // addi r30, r3, 0x64
                 g[30].set(g[3].get().wrapping_add(0x64_u32));
+                unset |= 0x40000000;
                 // b .L_800C27C8
                 pc = 0x800c27c8_u32;
                 continue;
@@ -498,6 +501,7 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                 }
                 // addi r30, r3, 0x78
                 g[30].set(g[3].get().wrapping_add(0x78_u32));
+                unset |= 0x40000000;
                 pc = 0x800c27c8_u32;
             }
             0x800c27c8_u32 => {
@@ -971,10 +975,14 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     let v = g[0].get() | g[0].get();
                     g[25].set(v);
                 }
+                unset |= 0x2000000;
                 pc = 0x800c2940_u32;
             }
             0x800c2940_u32 => {
                 // addi r6, r25, 0x0
+                if unset & 0x2000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[6].set(g[25].get());
                 // subi r5, r5, 0x1
                 g[5].set(g[5].get().wrapping_add(0xffffffff_u32));
@@ -1020,6 +1028,9 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     g[3].set(u32::from(ctx.read_u8(ea)));
                 }
                 // lfs f1, 0x0(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get();
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
@@ -1027,6 +1038,9 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                 // addi r23, r1, 0x74
                 g[23].set(g[1].get().wrapping_add(0x74_u32));
                 // lfs f0, 0x4(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0x4_u32);
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
@@ -1150,6 +1164,9 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // lbz r4, 0x9(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0x9_u32);
                     g[4].set(u32::from(ctx.read_u8(ea)));
@@ -1160,6 +1177,9 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     c::fill(ctx, 30, v);
                 }
                 // lbz r0, 0x8(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0x8_u32);
                     g[0].set(u32::from(ctx.read_u8(ea)));
@@ -1321,6 +1341,9 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     g[22].set(ctx.read_u32(ea));
                 }
                 // lbz r0, 0xa(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0xa_u32);
                     g[0].set(u32::from(ctx.read_u8(ea)));
@@ -1331,6 +1354,9 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     ctx.write_u8(ea, g[0].get() as u8);
                 }
                 // lbz r0, 0xb(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0xb_u32);
                     g[0].set(u32::from(ctx.read_u8(ea)));
@@ -1341,6 +1367,9 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     ctx.write_u8(ea, g[0].get() as u8);
                 }
                 // lbz r0, 0xc(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0xc_u32);
                     g[0].set(u32::from(ctx.read_u8(ea)));
@@ -1416,6 +1445,9 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
                 }
                 // lbz r0, 0xe(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0xe_u32);
                     g[0].set(u32::from(ctx.read_u8(ea)));
@@ -1426,6 +1458,9 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     ctx.write_u8(ea, g[0].get() as u8);
                 }
                 // lbz r0, 0xf(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0xf_u32);
                     g[0].set(u32::from(ctx.read_u8(ea)));
@@ -1436,6 +1471,9 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     ctx.write_u8(ea, g[0].get() as u8);
                 }
                 // lbz r0, 0x10(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0x10_u32);
                     g[0].set(u32::from(ctx.read_u8(ea)));
@@ -1501,6 +1539,7 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     let v = g[0].get() | g[0].get();
                     g[25].set(v);
                 }
+                unset |= 0x2000000;
                 // addi r3, r26, 0xc
                 g[3].set(g[26].get().wrapping_add(0xc_u32));
                 // addi r4, r21, 0xc
@@ -1707,11 +1746,17 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     ctx.write_u32(ea, g[3].get());
                 }
                 // lbz r3, 0x9(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0x9_u32);
                     g[3].set(u32::from(ctx.read_u8(ea)));
                 }
                 // lbz r0, 0x8(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0x8_u32);
                     g[0].set(u32::from(ctx.read_u8(ea)));
@@ -2041,6 +2086,9 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
                 }
                 // lbz r0, 0xa(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0xa_u32);
                     g[0].set(u32::from(ctx.read_u8(ea)));
@@ -2051,6 +2099,9 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     ctx.write_u8(ea, g[0].get() as u8);
                 }
                 // lbz r0, 0xb(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0xb_u32);
                     g[0].set(u32::from(ctx.read_u8(ea)));
@@ -2061,6 +2112,9 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     ctx.write_u8(ea, g[0].get() as u8);
                 }
                 // lbz r0, 0xc(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0xc_u32);
                     g[0].set(u32::from(ctx.read_u8(ea)));
@@ -2121,6 +2175,9 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
                 }
                 // lbz r0, 0xe(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0xe_u32);
                     g[0].set(u32::from(ctx.read_u8(ea)));
@@ -2131,6 +2188,9 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     ctx.write_u8(ea, g[0].get() as u8);
                 }
                 // lbz r0, 0xf(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0xf_u32);
                     g[0].set(u32::from(ctx.read_u8(ea)));
@@ -2141,6 +2201,9 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                     ctx.write_u8(ea, g[0].get() as u8);
                 }
                 // lbz r0, 0x10(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0x10_u32);
                     g[0].set(u32::from(ctx.read_u8(ea)));
@@ -2174,6 +2237,9 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
             }
             0x800c2d2c_u32 => {
                 // addi r5, r25, 0x0
+                if unset & 0x2000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[5].set(g[25].get());
                 // subi r27, r27, 0x1
                 g[27].set(g[27].get().wrapping_add(0xffffffff_u32));
@@ -2856,6 +2922,7 @@ fn asm_ftCo_800C2600(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x42000000;
                 // lwz r0, 0xb14(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xb14_u32);
@@ -2979,6 +3046,7 @@ fn asm_ftCo_800C2FD8(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x800c2fd8_u32;
     loop {
         match pc {
@@ -3112,6 +3180,7 @@ fn asm_ftCo_800C2FD8(ctx: &Ctx) {
             0x800c303c_u32 => {
                 // bl itGetKind
                 c::call(ctx, 0x8026b300_u32, 0x800c3040_u32);
+                unset |= 0x20;
                 pc = 0x800c3040_u32;
             }
             0x800c3040_u32 => {
@@ -3143,13 +3212,19 @@ fn asm_ftCo_800C2FD8(ctx: &Ctx) {
                 g[4].set(g[31].get().wrapping_add(0x20f8_u32));
                 // addi r5, r31, 0x20fc
                 g[5].set(g[31].get().wrapping_add(0x20fc_u32));
+                unset |= 0x20;
                 // bl it_802852B8
+                if unset & 0x20 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x802852b8_u32, 0x800c305c_u32);
+                unset |= 0x20;
                 pc = 0x800c305c_u32;
             }
             0x800c305c_u32 => {
                 // li r29, 0x1
                 g[29].set(0x1_u32);
+                unset |= 0x20000000;
                 // b .L_800C3088
                 pc = 0x800c3088_u32;
                 continue;
@@ -3167,6 +3242,7 @@ fn asm_ftCo_800C2FD8(ctx: &Ctx) {
                 g[3].set(g[3].get().wrapping_add(0x6bd8_u32));
                 // bl OSReport
                 c::call(ctx, 0x803456a8_u32, 0x800c3074_u32);
+                unset |= 0x20;
                 pc = 0x800c3074_u32;
             }
             0x800c3074_u32 => {
@@ -3178,8 +3254,13 @@ fn asm_ftCo_800C2FD8(ctx: &Ctx) {
                 g[4].set(0x16d_u32);
                 // li r5, "@392"@sda21
                 g[5].set(g[13].get().wrapping_add(0xffff8590_u32));
+                unset |= 0x20;
                 // bl __assert
+                if unset & 0x20 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x80388220_u32, 0x800c3088_u32);
+                unset |= 0x20;
                 pc = 0x800c3088_u32;
             }
             0x800c3088_u32 => {
@@ -3190,6 +3271,7 @@ fn asm_ftCo_800C2FD8(ctx: &Ctx) {
                 }
                 // bl it_80285314
                 c::call(ctx, 0x80285314_u32, 0x800c3090_u32);
+                unset |= 0x20;
                 pc = 0x800c3090_u32;
             }
             0x800c3090_u32 => {
@@ -3255,6 +3337,7 @@ fn asm_ftCo_800C2FD8(ctx: &Ctx) {
                 }
                 // addi r5, r3, 0x64
                 g[5].set(g[3].get().wrapping_add(0x64_u32));
+                unset |= 0x20;
                 // b .L_800C30D4
                 pc = 0x800c30d4_u32;
                 continue;
@@ -3268,22 +3351,30 @@ fn asm_ftCo_800C2FD8(ctx: &Ctx) {
                 }
                 // addi r5, r3, 0x78
                 g[5].set(g[3].get().wrapping_add(0x78_u32));
+                unset |= 0x20;
                 pc = 0x800c30d4_u32;
             }
             0x800c30d4_u32 => {
                 // lfs f0, 0x18(r5)
+                if unset & 0x20 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[5].get().wrapping_add(0x18_u32);
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // li r29, 0x0
                 g[29].set(0_u32);
+                unset |= 0x20000000;
                 // stfs f0, 0x20f8(r31)
                 {
                     let ea = g[31].get().wrapping_add(0x20f8_u32);
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
                 }
                 // lfs f0, 0x1c(r5)
+                if unset & 0x20 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[5].get().wrapping_add(0x1c_u32);
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
@@ -3294,6 +3385,9 @@ fn asm_ftCo_800C2FD8(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
                 }
                 // lwz r0, 0x14(r5)
+                if unset & 0x20 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[5].get().wrapping_add(0x14_u32);
                     g[0].set(ctx.read_u32(ea));
@@ -3317,14 +3411,22 @@ fn asm_ftCo_800C2FD8(ctx: &Ctx) {
                 g[3].set(g[28].get());
                 // addi r5, r30, 0x0
                 g[5].set(g[30].get());
+                unset |= 0x20;
                 // li r4, 0x0
                 g[4].set(0_u32);
                 // bl lb_8000B1CC
+                if unset & 0x20 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x8000b1cc_u32, 0x800c3108_u32);
+                unset |= 0x20;
                 pc = 0x800c3108_u32;
             }
             0x800c3108_u32 => {
                 // slwi r0, r29, 2
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[29].get().rotate_left(2) & 0xfffffffc_u32;
                     g[0].set(v);
@@ -3474,6 +3576,7 @@ fn asm_ftCo_800C2FD8(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x24_u32);
                     g[29].set(ctx.read_u32(ea));
                 }
+                unset |= 0x20000000;
                 // lwz r28, 0x20(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x20_u32);

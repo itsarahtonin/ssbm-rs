@@ -44,6 +44,7 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80063930_u32;
     loop {
         match pc {
@@ -8881,15 +8882,22 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
             }
             0x800657a8_u32 => {
                 // stw r27, 0x0(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get();
                     ctx.write_u32(ea, g[27].get());
                 }
                 // lwz r26, 0x0(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get();
                     g[26].set(ctx.read_u32(ea));
                 }
+                unset |= 0x4000000;
                 // b .L_800657BC
                 pc = 0x800657bc_u32;
                 continue;
@@ -8898,7 +8906,11 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
             0x800657b4_u32 => {
                 // addi r26, r27, 0x0
                 g[26].set(g[27].get());
+                unset |= 0x4000000;
                 // addi r31, r26, 0x0
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[31].set(g[26].get());
                 pc = 0x800657bc_u32;
             }
@@ -9047,6 +9059,7 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     let v = g[27].get() | g[27].get();
                     g[26].set(v);
                 }
+                unset |= 0x4000000;
                 // bl __va_arg
                 c::call(ctx, 0x80322620_u32, 0x8006584c_u32);
                 pc = 0x8006584c_u32;
@@ -9226,6 +9239,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
             }
             0x800658d8_u32 => {
                 // mr r3, r26
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[26].get() | g[26].get();
                     g[3].set(v);
@@ -9428,6 +9444,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
             }
             0x8006597c_u32 => {
                 // mr r3, r26
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[26].get() | g[26].get();
                     g[3].set(v);
@@ -9477,6 +9496,7 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
             0x800659a4_u32 => {
                 // addi r26, r3, 0x0
                 g[26].set(g[3].get());
+                unset |= 0x4000000;
                 // addi r3, r30, 0x0
                 g[3].set(g[30].get());
                 // li r4, 0x1
@@ -9494,6 +9514,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                 // addi r3, r24, 0x0
                 g[3].set(g[24].get());
                 // lwz r6, 0x0(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get();
                     g[6].set(ctx.read_u32(ea));
@@ -10549,6 +10572,7 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     g[26].set(v);
                     c::update_cr0(ctx, v);
                 }
+                unset |= 0x4000000;
                 // beq .L_80067240
                 if (c::cr_bit(ctx, 2) == true) {
                     pc = 0x80067240_u32;
@@ -10577,6 +10601,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     g[3].set(v);
                 }
                 // lwz r6, 0x54(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x54_u32);
                     g[6].set(ctx.read_u32(ea));
@@ -10624,6 +10651,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     g[4].set(ctx.read_u32(ea));
                 }
                 // lwz r3, 0x54(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x54_u32);
                     g[3].set(ctx.read_u32(ea));
@@ -10639,6 +10669,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
                 }
                 // lwz r3, 0x54(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x54_u32);
                     g[3].set(ctx.read_u32(ea));
@@ -10649,6 +10682,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
                 }
                 // lwz r3, 0x54(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x54_u32);
                     g[3].set(ctx.read_u32(ea));
@@ -12373,6 +12409,7 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     g[26].set(v);
                     c::update_cr0(ctx, v);
                 }
+                unset |= 0x4000000;
                 // beq .L_80067240
                 if (c::cr_bit(ctx, 2) == true) {
                     pc = 0x80067240_u32;
@@ -12401,6 +12438,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     g[3].set(v);
                 }
                 // lwz r6, 0x54(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x54_u32);
                     g[6].set(ctx.read_u32(ea));
@@ -12448,6 +12488,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     g[4].set(ctx.read_u32(ea));
                 }
                 // lwz r3, 0x54(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x54_u32);
                     g[3].set(ctx.read_u32(ea));
@@ -12463,6 +12506,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
                 }
                 // lwz r3, 0x54(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x54_u32);
                     g[3].set(ctx.read_u32(ea));
@@ -12473,6 +12519,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
                 }
                 // lwz r3, 0x54(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x54_u32);
                     g[3].set(ctx.read_u32(ea));
@@ -12648,6 +12697,7 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     g[26].set(v);
                     c::update_cr0(ctx, v);
                 }
+                unset |= 0x4000000;
                 // beq .L_80067240
                 if (c::cr_bit(ctx, 2) == true) {
                     pc = 0x80067240_u32;
@@ -12676,6 +12726,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     g[3].set(v);
                 }
                 // lwz r6, 0x54(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x54_u32);
                     g[6].set(ctx.read_u32(ea));
@@ -12723,6 +12776,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     g[4].set(ctx.read_u32(ea));
                 }
                 // lwz r3, 0x54(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x54_u32);
                     g[3].set(ctx.read_u32(ea));
@@ -12738,6 +12794,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
                 }
                 // lwz r3, 0x54(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x54_u32);
                     g[3].set(ctx.read_u32(ea));
@@ -12748,6 +12807,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
                 }
                 // lwz r3, 0x54(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x54_u32);
                     g[3].set(ctx.read_u32(ea));
@@ -13320,6 +13382,7 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     g[26].set(v);
                     c::update_cr0(ctx, v);
                 }
+                unset |= 0x4000000;
                 // beq .L_80067240
                 if (c::cr_bit(ctx, 2) == true) {
                     pc = 0x80067240_u32;
@@ -13343,6 +13406,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     g[5].set(ctx.read_u32(ea));
                 }
                 // lwz r4, 0x54(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x54_u32);
                     g[4].set(ctx.read_u32(ea));
@@ -13378,6 +13444,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     ctx.write_u32(ea, g[0].get());
                 }
                 // lwz r3, 0x54(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x54_u32);
                     g[3].set(ctx.read_u32(ea));
@@ -13388,6 +13457,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(28)));
                 }
                 // lwz r3, 0x54(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x54_u32);
                     g[3].set(ctx.read_u32(ea));
@@ -13398,6 +13470,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(28)));
                 }
                 // lwz r3, 0x54(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x54_u32);
                     g[3].set(ctx.read_u32(ea));
@@ -16621,6 +16696,7 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                 g[3].set(0x80460000_u32);
                 // addi r26, r3, efLib_AnimQueue@l
                 g[26].set(g[3].get().wrapping_add(0xffff8ee0_u32));
+                unset |= 0x4000000;
                 // b .L_80067268
                 pc = 0x80067268_u32;
                 continue;
@@ -16645,6 +16721,9 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                     ctx.write_u32(ea, g[3].get());
                 }
                 // add r3, r26, r0
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(g[26].get(), g[0].get(), 0);
                     g[3].set(v);
@@ -16690,6 +16769,7 @@ fn asm_efAsync_Dispatch(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x4000000;
                 // lwz r0, 0x21c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x21c_u32);

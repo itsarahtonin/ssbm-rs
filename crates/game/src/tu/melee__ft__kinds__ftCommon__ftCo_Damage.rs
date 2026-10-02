@@ -3193,6 +3193,7 @@ fn asm_ftCo_8008E9D0(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8008e9d0_u32;
     loop {
         match pc {
@@ -3541,6 +3542,7 @@ fn asm_ftCo_8008E9D0(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[31].set(v);
                 }
+                unset |= 0x80000000;
                 // b .L_8008EB24
                 pc = 0x8008eb24_u32;
                 continue;
@@ -3561,6 +3563,7 @@ fn asm_ftCo_8008E9D0(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[31].set(v);
                 }
+                unset |= 0x80000000;
                 // b .L_8008EB24
                 pc = 0x8008eb24_u32;
                 continue;
@@ -3581,6 +3584,7 @@ fn asm_ftCo_8008E9D0(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[31].set(v);
                 }
+                unset |= 0x80000000;
                 // b .L_8008EB24
                 pc = 0x8008eb24_u32;
                 continue;
@@ -3601,6 +3605,7 @@ fn asm_ftCo_8008E9D0(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[31].set(v);
                 }
+                unset |= 0x80000000;
                 // b .L_8008EB24
                 pc = 0x8008eb24_u32;
                 continue;
@@ -3621,10 +3626,14 @@ fn asm_ftCo_8008E9D0(ctx: &Ctx) {
                     let v = g[3].get() | g[3].get();
                     g[31].set(v);
                 }
+                unset |= 0x80000000;
                 pc = 0x8008eb24_u32;
             }
             0x8008eb24_u32 => {
                 // cmpwi r31, 0x0
+                if unset & 0x80000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[31].get() as i32, 0_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -3667,6 +3676,7 @@ fn asm_ftCo_8008E9D0(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x2c_u32);
                     g[31].set(ctx.read_u32(ea));
                 }
+                unset |= 0x80000000;
                 // lwz r30, 0x28(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x28_u32);

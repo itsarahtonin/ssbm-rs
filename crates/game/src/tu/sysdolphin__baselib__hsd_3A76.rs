@@ -653,6 +653,7 @@ fn asm_HSD_SisLib_803A8134(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x803a8134_u32;
     loop {
         match pc {
@@ -804,6 +805,7 @@ fn asm_HSD_SisLib_803A8134(ctx: &Ctx) {
                     let ea = g[4].get().wrapping_add(0x4_u32);
                     g[29].set(ctx.read_u32(ea));
                 }
+                unset |= 0x20000000;
                 pc = 0x803a81b4_u32;
             }
             0x803a81b4_u32 => {
@@ -1478,6 +1480,9 @@ fn asm_HSD_SisLib_803A8134(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // add r4, r29, r0
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(g[29].get(), g[0].get(), 0);
                     g[4].set(v);
@@ -1672,6 +1677,7 @@ fn asm_HSD_SisLib_803A8134(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x20000000;
                 // lwz r0, 0x9c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x9c_u32);
@@ -1745,6 +1751,7 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x803a84bc_u32;
     loop {
         match pc {
@@ -2614,6 +2621,7 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
                     let v = ctx.regs.f(4);
                     ctx.regs.set_f(17, v);
                 }
+                unset |= 0x2000000000000;
                 // lfs f1, 0x10(r31)
                 {
                     let ea = g[31].get().wrapping_add(0x10_u32);
@@ -2624,6 +2632,7 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
                     let v = ctx.regs.f(5);
                     ctx.regs.set_f(15, v);
                 }
+                unset |= 0x800000000000;
                 // lfs f0, 0x28(r31)
                 {
                     let ea = g[31].get().wrapping_add(0x28_u32);
@@ -2634,11 +2643,13 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
                     let v = fp::fmadds(ctx.regs.f(3), ctx.regs.f(2), ctx.regs.f(4));
                     c::fill(ctx, 19, v);
                 }
+                unset |= 0x8000000000000;
                 // fmadds f16, f1, f0, f5
                 {
                     let v = fp::fmadds(ctx.regs.f(1), ctx.regs.f(0), ctx.regs.f(5));
                     c::fill(ctx, 16, v);
                 }
+                unset |= 0x1000000000000;
                 // li r5, 0x7
                 g[5].set(0x7_u32);
                 // li r6, 0x7
@@ -2688,6 +2699,9 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
                 // lis r3, 0xcc01
                 g[3].set(0xcc010000_u32);
                 // fneg f3, f15
+                if unset & 0x800000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fneg(ctx.regs.f(15));
                     ctx.regs.set_f(3, v);
@@ -2698,6 +2712,9 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
                 // stfs f17, -0x8000(r3)
+                if unset & 0x2000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[3].get().wrapping_add(0xffff8000_u32);
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(17)));
@@ -2708,6 +2725,9 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fneg f4, f16
+                if unset & 0x1000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fneg(ctx.regs.f(16));
                     ctx.regs.set_f(4, v);
@@ -2733,6 +2753,9 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(1)));
                 }
                 // stfs f19, -0x8000(r3)
+                if unset & 0x8000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[3].get().wrapping_add(0xffff8000_u32);
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(19)));
@@ -2758,6 +2781,9 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(1)));
                 }
                 // stfs f19, -0x8000(r3)
+                if unset & 0x8000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[3].get().wrapping_add(0xffff8000_u32);
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(19)));
@@ -2783,6 +2809,9 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
                 }
                 // stfs f17, -0x8000(r3)
+                if unset & 0x2000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[3].get().wrapping_add(0xffff8000_u32);
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(17)));
@@ -2908,21 +2937,25 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
                     let v = fp::fmadds(ctx.regs.f(3), ctx.regs.f(4), ctx.regs.f(5));
                     c::fill(ctx, 17, v);
                 }
+                unset |= 0x2000000000000;
                 // fmadds f19, f4, f2, f5
                 {
                     let v = fp::fmadds(ctx.regs.f(4), ctx.regs.f(2), ctx.regs.f(5));
                     c::fill(ctx, 19, v);
                 }
+                unset |= 0x8000000000000;
                 // fmadds f15, f1, f6, f7
                 {
                     let v = fp::fmadds(ctx.regs.f(1), ctx.regs.f(6), ctx.regs.f(7));
                     c::fill(ctx, 15, v);
                 }
+                unset |= 0x800000000000;
                 // fmadds f16, f6, f0, f7
                 {
                     let v = fp::fmadds(ctx.regs.f(6), ctx.regs.f(0), ctx.regs.f(7));
                     c::fill(ctx, 16, v);
                 }
+                unset |= 0x1000000000000;
                 pc = 0x803a8930_u32;
             }
             0x803a8930_u32 => {
@@ -5376,6 +5409,9 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
             }
             0x803a912c_u32 => {
                 // fcmpo cr0, f17, f29
+                if unset & 0x2000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(17), ctx.regs.f(29));
                 // bgt .L_803A928C
                 if (c::cr_bit(ctx, 1) == true) {
@@ -5386,6 +5422,9 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
             }
             0x803a9134_u32 => {
                 // fcmpo cr0, f19, f31
+                if unset & 0x8000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(19), ctx.regs.f(31));
                 // blt .L_803A928C
                 if (c::cr_bit(ctx, 0) == true) {
@@ -5396,6 +5435,9 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
             }
             0x803a913c_u32 => {
                 // fcmpo cr0, f15, f28
+                if unset & 0x800000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(15), ctx.regs.f(28));
                 // bgt .L_803A928C
                 if (c::cr_bit(ctx, 1) == true) {
@@ -5406,6 +5448,9 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
             }
             0x803a9144_u32 => {
                 // fcmpo cr0, f16, f27
+                if unset & 0x1000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(16), ctx.regs.f(27));
                 // blt .L_803A928C
                 if (c::cr_bit(ctx, 0) == true) {
@@ -5416,6 +5461,9 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
             }
             0x803a914c_u32 => {
                 // fcmpo cr0, f17, f31
+                if unset & 0x2000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(17), ctx.regs.f(31));
                 // ble .L_803A9160
                 if (c::cr_bit(ctx, 1) == false) {
@@ -5426,6 +5474,9 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
             }
             0x803a9154_u32 => {
                 // fsubs f2, f17, f31
+                if unset & 0x2000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(17), ctx.regs.f(31));
                     c::fill(ctx, 2, v);
@@ -5444,6 +5495,9 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
             }
             0x803a9160_u32 => {
                 // fcmpo cr0, f19, f29
+                if unset & 0x8000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(19), ctx.regs.f(29));
                 // bge .L_803A9178
                 if (c::cr_bit(ctx, 0) == false) {
@@ -5454,6 +5508,9 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
             }
             0x803a9168_u32 => {
                 // fsubs f2, f29, f19
+                if unset & 0x8000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(29), ctx.regs.f(19));
                     c::fill(ctx, 2, v);
@@ -5477,6 +5534,9 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
             }
             0x803a9178_u32 => {
                 // fcmpo cr0, f15, f27
+                if unset & 0x800000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(15), ctx.regs.f(27));
                 // ble .L_803A918C
                 if (c::cr_bit(ctx, 1) == false) {
@@ -5487,6 +5547,9 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
             }
             0x803a9180_u32 => {
                 // fsubs f1, f15, f27
+                if unset & 0x800000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(15), ctx.regs.f(27));
                     c::fill(ctx, 1, v);
@@ -5505,6 +5568,9 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
             }
             0x803a918c_u32 => {
                 // fcmpo cr0, f16, f28
+                if unset & 0x1000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(16), ctx.regs.f(28));
                 // bge .L_803A91A4
                 if (c::cr_bit(ctx, 0) == false) {
@@ -5515,6 +5581,9 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
             }
             0x803a9194_u32 => {
                 // fsubs f1, f28, f16
+                if unset & 0x1000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(28), ctx.regs.f(16));
                     c::fill(ctx, 1, v);
@@ -6308,6 +6377,7 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x160_u32);
                     ctx.regs.set_f(19, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x8000000000000;
                 // lfd f18, 0x158(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x158_u32);
@@ -6318,16 +6388,19 @@ fn asm_HSD_SisLib_803A84BC(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x150_u32);
                     ctx.regs.set_f(17, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x2000000000000;
                 // lfd f16, 0x148(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x148_u32);
                     ctx.regs.set_f(16, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x1000000000000;
                 // lfd f15, 0x140(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x140_u32);
                     ctx.regs.set_f(15, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x800000000000;
                 // lfd f14, 0x138(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x138_u32);

@@ -109,6 +109,7 @@ fn asm_it_802A2568(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x802a2568_u32;
     loop {
         match pc {
@@ -698,6 +699,7 @@ fn asm_it_802A2568(ctx: &Ctx) {
                 g[18].set(g[27].get().wrapping_add(0x30_u32));
                 // addi r19, r27, 0x0
                 g[19].set(g[27].get());
+                unset |= 0x80000;
                 // stw r26, 0x1d4(r27)
                 {
                     let ea = g[27].get().wrapping_add(0x1d4_u32);
@@ -1076,6 +1078,7 @@ fn asm_it_802A2568(ctx: &Ctx) {
                 g[5].set(0_u32);
                 // addi r21, r27, 0x30
                 g[21].set(g[27].get().wrapping_add(0x30_u32));
+                unset |= 0x200000;
                 // stw r5, 0x0(r27)
                 {
                     let ea = g[27].get();
@@ -1083,7 +1086,11 @@ fn asm_it_802A2568(ctx: &Ctx) {
                 }
                 // addi r20, r27, 0x0
                 g[20].set(g[27].get());
+                unset |= 0x100000;
                 // addi r3, r21, 0x0
+                if unset & 0x200000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[3].set(g[21].get());
                 // stw r18, 0x4(r27)
                 {
@@ -1271,6 +1278,9 @@ fn asm_it_802A2568(ctx: &Ctx) {
             }
             0x802a2940_u32 => {
                 // lbz r0, 0x34(r21)
+                if unset & 0x200000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[21].get().wrapping_add(0x34_u32);
                     g[0].set(u32::from(ctx.read_u8(ea)));
@@ -1298,6 +1308,9 @@ fn asm_it_802A2568(ctx: &Ctx) {
                     ctx.regs.set_f(3, v);
                 }
                 // stb r0, 0x34(r21)
+                if unset & 0x200000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[21].get().wrapping_add(0x34_u32);
                     ctx.write_u8(ea, g[0].get() as u8);
@@ -1308,6 +1321,9 @@ fn asm_it_802A2568(ctx: &Ctx) {
                     ctx.regs.set_f(4, v);
                 }
                 // addi r3, r21, 0x0
+                if unset & 0x200000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[3].set(g[21].get());
                 // li r4, 0x0
                 g[4].set(0_u32);
@@ -1368,6 +1384,7 @@ fn asm_it_802A2568(ctx: &Ctx) {
                     let ea = g[28].get().wrapping_add(0x28_u32);
                     g[21].set(ctx.read_u32(ea));
                 }
+                unset |= 0x200000;
                 // b .L_802A2AD0
                 pc = 0x802a2ad0_u32;
                 continue;
@@ -1764,16 +1781,25 @@ fn asm_it_802A2568(ctx: &Ctx) {
             }
             0x802a2aec_u32 => {
                 // stw r20, 0xdd4(r30)
+                if unset & 0x100000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0xdd4_u32);
                     ctx.write_u32(ea, g[20].get());
                 }
                 // mr r3, r21
+                if unset & 0x200000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[21].get() | g[21].get();
                     g[3].set(v);
                 }
                 // stw r19, 0xdd8(r30)
+                if unset & 0x80000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0xdd8_u32);
                     ctx.write_u32(ea, g[19].get());
@@ -1788,6 +1814,7 @@ fn asm_it_802A2568(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x380000;
                 // lwz r0, 0x94(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x94_u32);

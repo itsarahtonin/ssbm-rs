@@ -38,6 +38,7 @@ fn asm_HSD_CObjEraseScreen(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x803676f8_u32;
     loop {
         match pc {
@@ -315,31 +316,41 @@ fn asm_HSD_CObjEraseScreen(ctx: &Ctx) {
                     let v = fp::fmuls(ctx.regs.f(31), ctx.regs.f(1));
                     c::fill(ctx, 28, v);
                 }
+                unset |= 0x1000000000000000;
                 // lfs f0, 0x44(r28)
                 {
                     let ea = g[28].get().wrapping_add(0x44_u32);
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fmuls f0, f28, f0
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fmuls(ctx.regs.f(28), ctx.regs.f(0));
                     c::fill(ctx, 0, v);
                 }
                 // fneg f27, f28
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fneg(ctx.regs.f(28));
                     ctx.regs.set_f(27, v);
                 }
+                unset |= 0x800000000000000;
                 // fmr f29, f0
                 {
                     let v = ctx.regs.f(0);
                     ctx.regs.set_f(29, v);
                 }
+                unset |= 0x2000000000000000;
                 // fneg f30, f0
                 {
                     let v = fp::fneg(ctx.regs.f(0));
                     ctx.regs.set_f(30, v);
                 }
+                unset |= 0x4000000000000000;
                 // b .L_8036781C
                 pc = 0x8036781c_u32;
                 continue;
@@ -386,21 +397,25 @@ fn asm_HSD_CObjEraseScreen(ctx: &Ctx) {
                     let v = fp::fmuls(ctx.regs.f(4), ctx.regs.f(3));
                     c::fill(ctx, 29, v);
                 }
+                unset |= 0x2000000000000000;
                 // fmuls f30, f4, f2
                 {
                     let v = fp::fmuls(ctx.regs.f(4), ctx.regs.f(2));
                     c::fill(ctx, 30, v);
                 }
+                unset |= 0x4000000000000000;
                 // fmuls f28, f4, f1
                 {
                     let v = fp::fmuls(ctx.regs.f(4), ctx.regs.f(1));
                     c::fill(ctx, 28, v);
                 }
+                unset |= 0x1000000000000000;
                 // fmuls f27, f4, f0
                 {
                     let v = fp::fmuls(ctx.regs.f(4), ctx.regs.f(0));
                     c::fill(ctx, 27, v);
                 }
+                unset |= 0x800000000000000;
                 // b .L_8036781C
                 pc = 0x8036781c_u32;
                 continue;
@@ -412,25 +427,32 @@ fn asm_HSD_CObjEraseScreen(ctx: &Ctx) {
                     let ea = g[28].get().wrapping_add(0x4c_u32);
                     c::fill(ctx, 29, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x2000000000000000;
                 // lfs f30, 0x48(r28)
                 {
                     let ea = g[28].get().wrapping_add(0x48_u32);
                     c::fill(ctx, 30, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x4000000000000000;
                 // lfs f28, 0x40(r28)
                 {
                     let ea = g[28].get().wrapping_add(0x40_u32);
                     c::fill(ctx, 28, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x1000000000000000;
                 // lfs f27, 0x44(r28)
                 {
                     let ea = g[28].get().wrapping_add(0x44_u32);
                     c::fill(ctx, 27, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x800000000000000;
                 pc = 0x8036781c_u32;
             }
             0x8036781c_u32 => {
                 // fmr f1, f28
+                if unset & 0x1000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(28);
                     ctx.regs.set_f(1, v);
@@ -441,6 +463,9 @@ fn asm_HSD_CObjEraseScreen(ctx: &Ctx) {
                     g[3].set(v);
                 }
                 // fmr f2, f27
+                if unset & 0x800000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(27);
                     ctx.regs.set_f(2, v);
@@ -451,11 +476,17 @@ fn asm_HSD_CObjEraseScreen(ctx: &Ctx) {
                     g[4].set(v);
                 }
                 // fmr f3, f30
+                if unset & 0x4000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(30);
                     ctx.regs.set_f(3, v);
                 }
                 // fmr f4, f29
+                if unset & 0x2000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(29);
                     ctx.regs.set_f(4, v);
@@ -490,21 +521,25 @@ fn asm_HSD_CObjEraseScreen(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x40_u32);
                     ctx.regs.set_f(30, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x4000000000000000;
                 // lfd f29, 0x38(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x38_u32);
                     ctx.regs.set_f(29, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x2000000000000000;
                 // lfd f28, 0x30(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x30_u32);
                     ctx.regs.set_f(28, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x1000000000000000;
                 // lfd f27, 0x28(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x28_u32);
                     ctx.regs.set_f(27, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x800000000000000;
                 // lwz r31, 0x24(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x24_u32);
@@ -699,6 +734,7 @@ fn asm_makeProjectionMtx(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80367b68_u32;
     loop {
         match pc {
@@ -808,6 +844,7 @@ fn asm_makeProjectionMtx(ctx: &Ctx) {
                 }
                 // li r31, 0x0
                 g[31].set(0_u32);
+                unset |= 0x80000000;
                 // lfs f3, 0x38(r5)
                 {
                     let ea = g[5].get().wrapping_add(0x38_u32);
@@ -846,6 +883,7 @@ fn asm_makeProjectionMtx(ctx: &Ctx) {
                 }
                 // li r31, 0x0
                 g[31].set(0_u32);
+                unset |= 0x80000000;
                 // lfs f3, 0x48(r5)
                 {
                     let ea = g[5].get().wrapping_add(0x48_u32);
@@ -894,6 +932,7 @@ fn asm_makeProjectionMtx(ctx: &Ctx) {
                 }
                 // li r31, 0x1
                 g[31].set(0x1_u32);
+                unset |= 0x80000000;
                 // lfs f3, 0x48(r5)
                 {
                     let ea = g[5].get().wrapping_add(0x48_u32);
@@ -920,6 +959,9 @@ fn asm_makeProjectionMtx(ctx: &Ctx) {
             }
             0x80367c10_u32 => {
                 // mr r3, r31
+                if unset & 0x80000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[31].get() | g[31].get();
                     g[3].set(v);
@@ -934,6 +976,7 @@ fn asm_makeProjectionMtx(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x14_u32);
                     g[31].set(ctx.read_u32(ea));
                 }
+                unset |= 0x80000000;
                 // addi r1, r1, 0x18
                 g[1].set(g[1].get().wrapping_add(0x18_u32));
                 // mtlr r0
@@ -963,6 +1006,7 @@ fn asm_setupNormalCamera(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80367c28_u32;
     loop {
         match pc {
@@ -1579,6 +1623,7 @@ fn asm_setupNormalCamera(ctx: &Ctx) {
                 }
                 // li r31, 0x0
                 g[31].set(0_u32);
+                unset |= 0x80000000;
                 // lfs f3, 0x38(r30)
                 {
                     let ea = g[30].get().wrapping_add(0x38_u32);
@@ -1614,6 +1659,7 @@ fn asm_setupNormalCamera(ctx: &Ctx) {
                 }
                 // li r31, 0x0
                 g[31].set(0_u32);
+                unset |= 0x80000000;
                 // lfs f3, 0x48(r30)
                 {
                     let ea = g[30].get().wrapping_add(0x48_u32);
@@ -1659,6 +1705,7 @@ fn asm_setupNormalCamera(ctx: &Ctx) {
                 }
                 // li r31, 0x1
                 g[31].set(0x1_u32);
+                unset |= 0x80000000;
                 // lfs f3, 0x48(r30)
                 {
                     let ea = g[30].get().wrapping_add(0x48_u32);
@@ -1685,6 +1732,9 @@ fn asm_setupNormalCamera(ctx: &Ctx) {
             }
             0x80367e74_u32 => {
                 // addi r4, r31, 0x0
+                if unset & 0x80000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[4].set(g[31].get());
                 // addi r3, r1, 0x1c
                 g[3].set(g[1].get().wrapping_add(0x1c_u32));
@@ -1700,6 +1750,7 @@ fn asm_setupNormalCamera(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x80000000;
                 // li r3, 0x1
                 g[3].set(0x1_u32);
                 // lwz r0, 0xcc(r1)
@@ -1766,6 +1817,7 @@ fn asm_setupTopHalfCamera(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80367eb0_u32;
     loop {
         match pc {
@@ -2224,6 +2276,7 @@ fn asm_setupTopHalfCamera(ctx: &Ctx) {
                 }
                 // li r27, 0x0
                 g[27].set(0_u32);
+                unset |= 0x8000000;
                 // lfs f0, 0x40(r26)
                 {
                     let ea = g[26].get().wrapping_add(0x40_u32);
@@ -2331,6 +2384,7 @@ fn asm_setupTopHalfCamera(ctx: &Ctx) {
                 }
                 // li r27, 0x0
                 g[27].set(0_u32);
+                unset |= 0x8000000;
                 // lfs f3, 0x48(r26)
                 {
                     let ea = g[26].get().wrapping_add(0x48_u32);
@@ -2386,6 +2440,7 @@ fn asm_setupTopHalfCamera(ctx: &Ctx) {
                 }
                 // li r27, 0x1
                 g[27].set(0x1_u32);
+                unset |= 0x8000000;
                 // lfs f3, 0x48(r26)
                 {
                     let ea = g[26].get().wrapping_add(0x48_u32);
@@ -2424,6 +2479,9 @@ fn asm_setupTopHalfCamera(ctx: &Ctx) {
                 // addi r3, r1, 0x10
                 g[3].set(g[1].get().wrapping_add(0x10_u32));
                 // addi r4, r27, 0x0
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[4].set(g[27].get());
                 // bl GXSetProjection
                 c::call(ctx, 0x803412bc_u32, 0x803680d4_u32);
@@ -2442,6 +2500,7 @@ fn asm_setupTopHalfCamera(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x8000000;
                 // lwz r0, 0x8c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x8c_u32);
@@ -2491,6 +2550,7 @@ fn asm_setupBottomHalfCamera(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x803680f8_u32;
     loop {
         match pc {
@@ -3068,6 +3128,7 @@ fn asm_setupBottomHalfCamera(ctx: &Ctx) {
                 }
                 // li r31, 0x0
                 g[31].set(0_u32);
+                unset |= 0x80000000;
                 // lfs f0, 0x40(r30)
                 {
                     let ea = g[30].get().wrapping_add(0x40_u32);
@@ -3180,6 +3241,7 @@ fn asm_setupBottomHalfCamera(ctx: &Ctx) {
                 }
                 // li r31, 0x0
                 g[31].set(0_u32);
+                unset |= 0x80000000;
                 // lfs f3, 0x48(r30)
                 {
                     let ea = g[30].get().wrapping_add(0x48_u32);
@@ -3235,6 +3297,7 @@ fn asm_setupBottomHalfCamera(ctx: &Ctx) {
                 }
                 // li r31, 0x1
                 g[31].set(0x1_u32);
+                unset |= 0x80000000;
                 // lfs f3, 0x48(r30)
                 {
                     let ea = g[30].get().wrapping_add(0x48_u32);
@@ -3273,6 +3336,9 @@ fn asm_setupBottomHalfCamera(ctx: &Ctx) {
                 // addi r3, r1, 0x14
                 g[3].set(g[1].get().wrapping_add(0x14_u32));
                 // addi r4, r31, 0x0
+                if unset & 0x80000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[4].set(g[31].get());
                 // bl GXSetProjection
                 c::call(ctx, 0x803412bc_u32, 0x80368380_u32);
@@ -3291,6 +3357,7 @@ fn asm_setupBottomHalfCamera(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x80000000;
                 // lwz r0, 0xac(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xac_u32);

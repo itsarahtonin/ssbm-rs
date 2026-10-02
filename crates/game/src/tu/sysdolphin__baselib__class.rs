@@ -342,6 +342,7 @@ fn asm_hsdAllocMemPiece(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80381fa8_u32;
     loop {
         match pc {
@@ -742,6 +743,7 @@ fn asm_hsdAllocMemPiece(ctx: &Ctx) {
                     g[30].set(v);
                     c::update_cr0(ctx, v);
                 }
+                unset |= 0x40000000;
                 // bne .L_803820F0
                 if (c::cr_bit(ctx, 2) == false) {
                     pc = 0x803820f0_u32;
@@ -813,6 +815,9 @@ fn asm_hsdAllocMemPiece(ctx: &Ctx) {
                     g[4].set(ctx.read_u32(ea));
                 }
                 // lwz r0, 0xc(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0xc_u32);
                     g[0].set(ctx.read_u32(ea));
@@ -829,11 +834,17 @@ fn asm_hsdAllocMemPiece(ctx: &Ctx) {
                     ctx.write_u32(ea, g[0].get());
                 }
                 // stw r4, 0xc(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0xc_u32);
                     ctx.write_u32(ea, g[4].get());
                 }
                 // lwz r4, 0x4(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0x4_u32);
                     g[4].set(ctx.read_u32(ea));
@@ -841,11 +852,17 @@ fn asm_hsdAllocMemPiece(ctx: &Ctx) {
                 // addi r0, r4, 0x1
                 g[0].set(g[4].get().wrapping_add(0x1_u32));
                 // stw r0, 0x4(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0x4_u32);
                     ctx.write_u32(ea, g[0].get());
                 }
                 // lwz r4, 0x8(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0x8_u32);
                     g[4].set(ctx.read_u32(ea));
@@ -853,6 +870,9 @@ fn asm_hsdAllocMemPiece(ctx: &Ctx) {
                 // addi r0, r4, 0x1
                 g[0].set(g[4].get().wrapping_add(0x1_u32));
                 // stw r0, 0x8(r30)
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[30].get().wrapping_add(0x8_u32);
                     ctx.write_u32(ea, g[0].get());
@@ -890,6 +910,7 @@ fn asm_hsdAllocMemPiece(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x18_u32);
                     g[30].set(ctx.read_u32(ea));
                 }
+                unset |= 0x40000000;
                 // lwz r29, 0x14(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x14_u32);

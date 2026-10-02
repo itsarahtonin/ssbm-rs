@@ -414,6 +414,7 @@ fn asm_ftMs_SpecialS_80137940(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80137940_u32;
     loop {
         match pc {
@@ -514,6 +515,7 @@ fn asm_ftMs_SpecialS_80137940(ctx: &Ctx) {
             0x80137984_u32 => {
                 // li r30, 0x167
                 g[30].set(0x167_u32);
+                unset |= 0x40000000;
                 // b .L_80137990
                 pc = 0x80137990_u32;
                 continue;
@@ -522,6 +524,7 @@ fn asm_ftMs_SpecialS_80137940(ctx: &Ctx) {
             0x8013798c_u32 => {
                 // li r30, 0x168
                 g[30].set(0x168_u32);
+                unset |= 0x40000000;
                 pc = 0x80137990_u32;
             }
             0x80137990_u32 => {
@@ -548,6 +551,9 @@ fn asm_ftMs_SpecialS_80137940(ctx: &Ctx) {
                     c::fill(ctx, 3, fp::lfs(ctx.read_u32(ea)));
                 }
                 // addi r4, r30, 0x0
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[4].set(g[30].get());
                 // addi r5, r5, 0x508c
                 g[5].set(g[5].get().wrapping_add(0x508c_u32));
@@ -573,6 +579,7 @@ fn asm_ftMs_SpecialS_80137940(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x18_u32);
                     g[30].set(ctx.read_u32(ea));
                 }
+                unset |= 0x40000000;
                 // lwz r29, 0x14(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x14_u32);
@@ -606,6 +613,7 @@ fn asm_ftMs_SpecialS_801379D0(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x801379d0_u32;
     loop {
         match pc {
@@ -713,6 +721,7 @@ fn asm_ftMs_SpecialS_801379D0(ctx: &Ctx) {
             0x80137a1c_u32 => {
                 // li r30, 0x15e
                 g[30].set(0x15e_u32);
+                unset |= 0x40000000;
                 // b .L_80137A28
                 pc = 0x80137a28_u32;
                 continue;
@@ -721,6 +730,7 @@ fn asm_ftMs_SpecialS_801379D0(ctx: &Ctx) {
             0x80137a24_u32 => {
                 // li r30, 0x15f
                 g[30].set(0x15f_u32);
+                unset |= 0x40000000;
                 pc = 0x80137a28_u32;
             }
             0x80137a28_u32 => {
@@ -747,6 +757,9 @@ fn asm_ftMs_SpecialS_801379D0(ctx: &Ctx) {
                     c::fill(ctx, 3, fp::lfs(ctx.read_u32(ea)));
                 }
                 // addi r4, r30, 0x0
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[4].set(g[30].get());
                 // addi r5, r5, 0x508c
                 g[5].set(g[5].get().wrapping_add(0x508c_u32));
@@ -772,6 +785,7 @@ fn asm_ftMs_SpecialS_801379D0(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x18_u32);
                     g[30].set(ctx.read_u32(ea));
                 }
+                unset |= 0x40000000;
                 // lwz r29, 0x14(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x14_u32);
@@ -1058,6 +1072,7 @@ fn asm_ftMs_SpecialS_80137CBC(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80137cbc_u32;
     loop {
         match pc {
@@ -1177,6 +1192,7 @@ fn asm_ftMs_SpecialS_80137CBC(ctx: &Ctx) {
             0x80137d0c_u32 => {
                 // li r30, 0x169
                 g[30].set(0x169_u32);
+                unset |= 0x40000000;
                 // b .L_80137D20
                 pc = 0x80137d20_u32;
                 continue;
@@ -1185,6 +1201,7 @@ fn asm_ftMs_SpecialS_80137CBC(ctx: &Ctx) {
             0x80137d14_u32 => {
                 // li r30, 0x16b
                 g[30].set(0x16b_u32);
+                unset |= 0x40000000;
                 // b .L_80137D20
                 pc = 0x80137d20_u32;
                 continue;
@@ -1193,6 +1210,7 @@ fn asm_ftMs_SpecialS_80137CBC(ctx: &Ctx) {
             0x80137d1c_u32 => {
                 // li r30, 0x16a
                 g[30].set(0x16a_u32);
+                unset |= 0x40000000;
                 pc = 0x80137d20_u32;
             }
             0x80137d20_u32 => {
@@ -1219,6 +1237,9 @@ fn asm_ftMs_SpecialS_80137CBC(ctx: &Ctx) {
                     c::fill(ctx, 3, fp::lfs(ctx.read_u32(ea)));
                 }
                 // addi r4, r30, 0x0
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[4].set(g[30].get());
                 // addi r5, r5, 0x508c
                 g[5].set(g[5].get().wrapping_add(0x508c_u32));
@@ -1244,6 +1265,7 @@ fn asm_ftMs_SpecialS_80137CBC(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x18_u32);
                     g[30].set(ctx.read_u32(ea));
                 }
+                unset |= 0x40000000;
                 // lwz r29, 0x14(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x14_u32);
@@ -1277,6 +1299,7 @@ fn asm_ftMs_SpecialS_80137D60(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80137d60_u32;
     loop {
         match pc {
@@ -1403,6 +1426,7 @@ fn asm_ftMs_SpecialS_80137D60(ctx: &Ctx) {
             0x80137db8_u32 => {
                 // li r30, 0x160
                 g[30].set(0x160_u32);
+                unset |= 0x40000000;
                 // b .L_80137DCC
                 pc = 0x80137dcc_u32;
                 continue;
@@ -1411,6 +1435,7 @@ fn asm_ftMs_SpecialS_80137D60(ctx: &Ctx) {
             0x80137dc0_u32 => {
                 // li r30, 0x162
                 g[30].set(0x162_u32);
+                unset |= 0x40000000;
                 // b .L_80137DCC
                 pc = 0x80137dcc_u32;
                 continue;
@@ -1419,6 +1444,7 @@ fn asm_ftMs_SpecialS_80137D60(ctx: &Ctx) {
             0x80137dc8_u32 => {
                 // li r30, 0x161
                 g[30].set(0x161_u32);
+                unset |= 0x40000000;
                 pc = 0x80137dcc_u32;
             }
             0x80137dcc_u32 => {
@@ -1445,6 +1471,9 @@ fn asm_ftMs_SpecialS_80137D60(ctx: &Ctx) {
                     c::fill(ctx, 3, fp::lfs(ctx.read_u32(ea)));
                 }
                 // addi r4, r30, 0x0
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[4].set(g[30].get());
                 // addi r5, r5, 0x508c
                 g[5].set(g[5].get().wrapping_add(0x508c_u32));
@@ -1470,6 +1499,7 @@ fn asm_ftMs_SpecialS_80137D60(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x18_u32);
                     g[30].set(ctx.read_u32(ea));
                 }
+                unset |= 0x40000000;
                 // lwz r29, 0x14(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x14_u32);
@@ -1739,6 +1769,7 @@ fn asm_ftMs_SpecialS_80137FF8(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80137ff8_u32;
     loop {
         match pc {
@@ -1858,6 +1889,7 @@ fn asm_ftMs_SpecialS_80137FF8(ctx: &Ctx) {
             0x80138048_u32 => {
                 // li r30, 0x16c
                 g[30].set(0x16c_u32);
+                unset |= 0x40000000;
                 // b .L_8013805C
                 pc = 0x8013805c_u32;
                 continue;
@@ -1866,6 +1898,7 @@ fn asm_ftMs_SpecialS_80137FF8(ctx: &Ctx) {
             0x80138050_u32 => {
                 // li r30, 0x16e
                 g[30].set(0x16e_u32);
+                unset |= 0x40000000;
                 // b .L_8013805C
                 pc = 0x8013805c_u32;
                 continue;
@@ -1874,6 +1907,7 @@ fn asm_ftMs_SpecialS_80137FF8(ctx: &Ctx) {
             0x80138058_u32 => {
                 // li r30, 0x16d
                 g[30].set(0x16d_u32);
+                unset |= 0x40000000;
                 pc = 0x8013805c_u32;
             }
             0x8013805c_u32 => {
@@ -1900,6 +1934,9 @@ fn asm_ftMs_SpecialS_80137FF8(ctx: &Ctx) {
                     c::fill(ctx, 3, fp::lfs(ctx.read_u32(ea)));
                 }
                 // addi r4, r30, 0x0
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[4].set(g[30].get());
                 // addi r5, r5, 0x508c
                 g[5].set(g[5].get().wrapping_add(0x508c_u32));
@@ -1925,6 +1962,7 @@ fn asm_ftMs_SpecialS_80137FF8(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x18_u32);
                     g[30].set(ctx.read_u32(ea));
                 }
+                unset |= 0x40000000;
                 // lwz r29, 0x14(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x14_u32);
@@ -1958,6 +1996,7 @@ fn asm_ftMs_SpecialS_8013809C(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8013809c_u32;
     loop {
         match pc {
@@ -2084,6 +2123,7 @@ fn asm_ftMs_SpecialS_8013809C(ctx: &Ctx) {
             0x801380f4_u32 => {
                 // li r30, 0x163
                 g[30].set(0x163_u32);
+                unset |= 0x40000000;
                 // b .L_80138108
                 pc = 0x80138108_u32;
                 continue;
@@ -2092,6 +2132,7 @@ fn asm_ftMs_SpecialS_8013809C(ctx: &Ctx) {
             0x801380fc_u32 => {
                 // li r30, 0x165
                 g[30].set(0x165_u32);
+                unset |= 0x40000000;
                 // b .L_80138108
                 pc = 0x80138108_u32;
                 continue;
@@ -2100,6 +2141,7 @@ fn asm_ftMs_SpecialS_8013809C(ctx: &Ctx) {
             0x80138104_u32 => {
                 // li r30, 0x164
                 g[30].set(0x164_u32);
+                unset |= 0x40000000;
                 pc = 0x80138108_u32;
             }
             0x80138108_u32 => {
@@ -2126,6 +2168,9 @@ fn asm_ftMs_SpecialS_8013809C(ctx: &Ctx) {
                     c::fill(ctx, 3, fp::lfs(ctx.read_u32(ea)));
                 }
                 // addi r4, r30, 0x0
+                if unset & 0x40000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[4].set(g[30].get());
                 // addi r5, r5, 0x508c
                 g[5].set(g[5].get().wrapping_add(0x508c_u32));
@@ -2151,6 +2196,7 @@ fn asm_ftMs_SpecialS_8013809C(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x18_u32);
                     g[30].set(ctx.read_u32(ea));
                 }
+                unset |= 0x40000000;
                 // lwz r29, 0x14(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x14_u32);

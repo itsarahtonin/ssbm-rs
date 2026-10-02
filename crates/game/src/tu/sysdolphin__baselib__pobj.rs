@@ -2029,6 +2029,7 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8036d7e4_u32;
     loop {
         match pc {
@@ -2289,6 +2290,7 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
             0x8036d8b8_u32 => {
                 // li r24, 0x0
                 g[24].set(0_u32);
+                unset |= 0x1000000;
                 // b .L_8036D8E8
                 pc = 0x8036d8e8_u32;
                 continue;
@@ -2333,6 +2335,7 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
             0x8036d8e4_u32 => {
                 // li r24, 0x1
                 g[24].set(0x1_u32);
+                unset |= 0x1000000;
                 pc = 0x8036d8e8_u32;
             }
             0x8036d8e8_u32 => {
@@ -2793,6 +2796,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
             }
             0x8036da64_u32 => {
                 // cmpwi r24, 0x0
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[24].get() as i32, 0_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -3219,6 +3225,7 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                 g[26].set(0_u32);
                 // addi r24, r26, 0x0
                 g[24].set(g[26].get());
+                unset |= 0x1000000;
                 // addi r23, r27, 0x1
                 g[23].set(g[27].get().wrapping_add(0x1_u32));
                 // b .L_8036DC80
@@ -3285,6 +3292,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
                 // addi r3, r24, 0x4
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[3].set(g[24].get().wrapping_add(0x4_u32));
                 // lfs f0, 0x50(r1)
                 {
@@ -3292,6 +3302,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // addi r0, r24, 0x8
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[0].set(g[24].get().wrapping_add(0x8_u32));
                 // lwz r4, normal_buffer@sda21(r0)
                 {
@@ -3311,12 +3324,19 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     c::fill(ctx, 0, v);
                 }
                 // stfsx f0, r4, r24
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 ctx.write_u32(
                     g[4].get().wrapping_add(g[24].get()),
                     fp::stfs(ctx.regs.f(0)),
                 );
                 // addi r24, r24, 0xc
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[24].set(g[24].get().wrapping_add(0xc_u32));
+                unset |= 0x1000000;
                 // lfs f1, 0x60(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x60_u32);
@@ -3642,6 +3662,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
             }
             0x8036dd68_u32 => {
                 // cmpwi r24, 0x0
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[24].get() as i32, 0_i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -3663,6 +3686,7 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                 g[26].set(0_u32);
                 // li r24, 0x0
                 g[24].set(0_u32);
+                unset |= 0x1000000;
                 // li r29, 0x9
                 g[29].set(0x9_u32);
                 // li r27, 0x1
@@ -3683,6 +3707,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                 // addi r5, r26, 0x0
                 g[5].set(g[26].get());
                 // add r6, r0, r24
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(g[0].get(), g[24].get(), 0);
                     g[6].set(v);
@@ -3804,6 +3831,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
                 // lfsx f0, r24, r9
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fill(
                     ctx,
                     0,
@@ -3825,6 +3855,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                 // addi r4, r9, 0x14
                 g[4].set(g[9].get().wrapping_add(0x14_u32));
                 // stfsx f0, r24, r9
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 ctx.write_u32(
                     g[24].get().wrapping_add(g[9].get()),
                     fp::stfs(ctx.regs.f(0)),
@@ -3839,6 +3872,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                 // addi r0, r9, 0x1c
                 g[0].set(g[9].get().wrapping_add(0x1c_u32));
                 // lfsx f0, r24, r8
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fill(
                     ctx,
                     0,
@@ -3854,6 +3890,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     c::fill(ctx, 0, v);
                 }
                 // stfsx f0, r24, r8
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 ctx.write_u32(
                     g[24].get().wrapping_add(g[8].get()),
                     fp::stfs(ctx.regs.f(0)),
@@ -3864,6 +3903,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
                 // lfsx f0, r24, r7
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fill(
                     ctx,
                     0,
@@ -3875,6 +3917,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     c::fill(ctx, 0, v);
                 }
                 // stfsx f0, r24, r7
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 ctx.write_u32(
                     g[24].get().wrapping_add(g[7].get()),
                     fp::stfs(ctx.regs.f(0)),
@@ -3885,6 +3930,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
                 // lfsx f0, r24, r6
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fill(
                     ctx,
                     0,
@@ -3896,6 +3944,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     c::fill(ctx, 0, v);
                 }
                 // stfsx f0, r24, r6
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 ctx.write_u32(
                     g[24].get().wrapping_add(g[6].get()),
                     fp::stfs(ctx.regs.f(0)),
@@ -3906,6 +3957,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
                 // lfsx f0, r24, r5
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fill(
                     ctx,
                     0,
@@ -3917,6 +3971,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     c::fill(ctx, 0, v);
                 }
                 // stfsx f0, r24, r5
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 ctx.write_u32(
                     g[24].get().wrapping_add(g[5].get()),
                     fp::stfs(ctx.regs.f(0)),
@@ -3927,6 +3984,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
                 // lfsx f0, r24, r4
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fill(
                     ctx,
                     0,
@@ -3938,6 +3998,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     c::fill(ctx, 0, v);
                 }
                 // stfsx f0, r24, r4
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 ctx.write_u32(
                     g[24].get().wrapping_add(g[4].get()),
                     fp::stfs(ctx.regs.f(0)),
@@ -3948,6 +4011,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
                 // lfsx f0, r24, r3
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fill(
                     ctx,
                     0,
@@ -3959,6 +4025,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     c::fill(ctx, 0, v);
                 }
                 // stfsx f0, r24, r3
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 ctx.write_u32(
                     g[24].get().wrapping_add(g[3].get()),
                     fp::stfs(ctx.regs.f(0)),
@@ -3971,6 +4040,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                 // addi r11, r11, 0x20
                 g[11].set(g[11].get().wrapping_add(0x20_u32));
                 // lfsx f0, r24, r0
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fill(
                     ctx,
                     0,
@@ -3982,6 +4054,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     c::fill(ctx, 0, v);
                 }
                 // stfsx f0, r24, r0
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 ctx.write_u32(
                     g[24].get().wrapping_add(g[0].get()),
                     fp::stfs(ctx.regs.f(0)),
@@ -4038,6 +4113,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
                 // lfsx f0, r24, r0
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fill(
                     ctx,
                     0,
@@ -4053,6 +4131,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     c::fill(ctx, 0, v);
                 }
                 // stfsx f0, r24, r0
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 ctx.write_u32(
                     g[24].get().wrapping_add(g[0].get()),
                     fp::stfs(ctx.regs.f(0)),
@@ -4091,7 +4172,11 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
             }
             0x8036defc_u32 => {
                 // addi r24, r24, 0x24
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[24].set(g[24].get().wrapping_add(0x24_u32));
+                unset |= 0x1000000;
                 // addi r26, r26, 0x1
                 g[26].set(g[26].get().wrapping_add(0x1_u32));
                 pc = 0x8036df04_u32;
@@ -4160,6 +4245,7 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
             0x8036df3c_u32 => {
                 // addi r24, r23, 0x0
                 g[24].set(g[23].get());
+                unset |= 0x1000000;
                 // li r27, 0x0
                 g[27].set(0_u32);
                 // b .L_8036DFBC
@@ -4169,6 +4255,9 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
             }
             0x8036df48_u32 => {
                 // lfs f0, 0x0(r24)
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[24].get();
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
@@ -4215,7 +4304,11 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                     g[0].set(ctx.read_u32(ea));
                 }
                 // addi r24, r24, 0x4
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[24].set(g[24].get().wrapping_add(0x4_u32));
+                unset |= 0x1000000;
                 // lfs f1, 0x14(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x14_u32);
@@ -4420,6 +4513,7 @@ fn asm_drawShapeAnim(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x1000000;
                 // lwz r0, 0x114(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x114_u32);

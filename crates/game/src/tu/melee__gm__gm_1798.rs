@@ -94,6 +94,7 @@ fn asm_fn_80179990(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80179990_u32;
     loop {
         match pc {
@@ -283,6 +284,7 @@ fn asm_fn_80179990(ctx: &Ctx) {
                     let v = g[0].get() | g[0].get();
                     g[25].set(v);
                 }
+                unset |= 0x2000000;
                 pc = 0x80179a28_u32;
             }
             0x80179a28_u32 => {
@@ -697,6 +699,9 @@ fn asm_fn_80179990(ctx: &Ctx) {
             }
             0x80179b90_u32 => {
                 // lwz r3, 0x18(r25)
+                if unset & 0x2000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[25].get().wrapping_add(0x18_u32);
                     g[3].set(ctx.read_u32(ea));
@@ -1179,6 +1184,7 @@ fn asm_fn_80179990(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x2000000;
                 // lwz r0, 0x64(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x64_u32);

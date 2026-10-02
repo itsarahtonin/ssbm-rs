@@ -470,6 +470,7 @@ fn asm_mnNameNew_KeySetup(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8023b3fc_u32;
     loop {
         match pc {
@@ -612,6 +613,7 @@ fn asm_mnNameNew_KeySetup(ctx: &Ctx) {
                 }
                 // addi r29, r25, 0x34
                 g[29].set(g[25].get().wrapping_add(0x34_u32));
+                unset |= 0x20000000;
                 // b .L_8023B488
                 pc = 0x8023b488_u32;
                 continue;
@@ -627,6 +629,7 @@ fn asm_mnNameNew_KeySetup(ctx: &Ctx) {
                 }
                 // addi r29, r25, 0xfc
                 g[29].set(g[25].get().wrapping_add(0xfc_u32));
+                unset |= 0x20000000;
                 // b .L_8023B488
                 pc = 0x8023b488_u32;
                 continue;
@@ -642,6 +645,7 @@ fn asm_mnNameNew_KeySetup(ctx: &Ctx) {
                 }
                 // addi r29, r25, 0x1c4
                 g[29].set(g[25].get().wrapping_add(0x1c4_u32));
+                unset |= 0x20000000;
                 pc = 0x8023b488_u32;
             }
             0x8023b488_u32 => {
@@ -2387,11 +2391,15 @@ fn asm_mnNameNew_KeySetup(ctx: &Ctx) {
                     ctx.regs.set_f(30, v);
                 }
                 // add r29, r29, r0
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(g[29].get(), g[0].get(), 0);
                     g[29].set(v);
                     let _ = (ca, ov);
                 }
+                unset |= 0x20000000;
                 // addi r31, r4, 0x6667
                 g[31].set(g[4].get().wrapping_add(0x6667_u32));
                 // addi r26, r3, mn_804A04F0@l
@@ -2429,6 +2437,9 @@ fn asm_mnNameNew_KeySetup(ctx: &Ctx) {
                     c::set_cr_bit(ctx, 6, x == y);
                 }
                 // lwz r4, 0x0(r29)
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[29].get();
                     g[4].set(ctx.read_u32(ea));
@@ -2620,7 +2631,11 @@ fn asm_mnNameNew_KeySetup(ctx: &Ctx) {
                     c::compare(ctx, 0, x < y, x > y);
                 }
                 // addi r29, r29, 0x4
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[29].set(g[29].get().wrapping_add(0x4_u32));
+                unset |= 0x20000000;
                 // blt .L_8023B9CC
                 if (c::cr_bit(ctx, 0) == true) {
                     pc = 0x8023b9cc_u32;
@@ -2641,6 +2656,7 @@ fn asm_mnNameNew_KeySetup(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x20000000;
                 // lwz r0, 0xac(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xac_u32);

@@ -4085,7 +4085,13 @@ def asm_port(unit, cursor, f, why="its source is assembly"):
         raise Unsupported("variadic assembly")
     if ft["ret"]["k"] == "rec":
         raise Unsupported("assembly returning a struct")
-    body = asm2rs.translate(unit.listing, f.get("symbol") or name)
+    symbol = f.get("symbol") or name
+    watch, effects = (), None
+    if why == UNSET_REASON or name in UNSET_FROM_MACHINE_CODE:
+        # Its reads of registers its C never sets hold what code far up its callers left.
+        watch = flow().reads(symbol, {}) if symbol in flow().funcs else set()
+        effects = flow().effects_at(symbol) if watch else None
+    body = asm2rs.translate(unit.listing, symbol, watch, effects)
     params, puts = [], []
     for i, pt in enumerate(ft["params"]):
         if pt["k"] == "arr":
@@ -4123,6 +4129,7 @@ def translate_unit(args):
     prog = PROGRAM[0] if PROGRAM else Program(root, types_path)
     if not PROGRAM:
         PROGRAM.append(prog)
+        PATHS.extend((root, types_path))
     index = ci.Index.create()
     # Code for MWCC on the Gekko (such as __va_arg) is plain C where the file parses with it.
     gekko = True
@@ -4313,6 +4320,15 @@ def translate_unit(args):
 
 
 PROGRAM = []
+# (decomp root, types.json) of this run, and its regflow.Program once something needs it.
+PATHS = []
+FLOW = []
+
+
+def flow():
+    if not FLOW:
+        FLOW.append(regflow.Program(*PATHS))
+    return FLOW[0]
 
 
 def _request_inline(self, defn, fuse, caller, reg_ptrs=frozenset(), forward=None, same=frozenset(),

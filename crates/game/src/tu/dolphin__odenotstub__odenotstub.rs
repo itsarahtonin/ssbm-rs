@@ -2045,6 +2045,7 @@ fn asm_DBQueryData(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8032b6d4_u32;
     loop {
         match pc {
@@ -2100,6 +2101,7 @@ fn asm_DBQueryData(ctx: &Ctx) {
             0x8032b6fc_u32 => {
                 // addi r31, r3, 0x0
                 g[31].set(g[3].get());
+                unset |= 0x80000000;
                 // addi r3, r1, 0x8
                 g[3].set(g[1].get().wrapping_add(0x8_u32));
                 // bl DBGReadStatus
@@ -2199,6 +2201,9 @@ fn asm_DBQueryData(ctx: &Ctx) {
             }
             0x8032b750_u32 => {
                 // mr r3, r31
+                if unset & 0x80000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[31].get() | g[31].get();
                     g[3].set(v);
@@ -2218,6 +2223,7 @@ fn asm_DBQueryData(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x14_u32);
                     g[31].set(ctx.read_u32(ea));
                 }
+                unset |= 0x80000000;
                 // addi r1, r1, 0x18
                 g[1].set(g[1].get().wrapping_add(0x18_u32));
                 // lwz r3, RecvDataLeng@sda21(r0)

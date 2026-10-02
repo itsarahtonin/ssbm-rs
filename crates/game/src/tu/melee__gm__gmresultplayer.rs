@@ -44,6 +44,7 @@ fn asm_fn_80177748(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80177748_u32;
     loop {
         match pc {
@@ -280,6 +281,7 @@ fn asm_fn_80177748(ctx: &Ctx) {
             0x80177838_u32 => {
                 // li r24, 0x4
                 g[24].set(0x4_u32);
+                unset |= 0x1000000;
                 // b .L_80177894
                 pc = 0x80177894_u32;
                 continue;
@@ -324,6 +326,7 @@ fn asm_fn_80177748(ctx: &Ctx) {
             0x80177858_u32 => {
                 // li r24, 0x5
                 g[24].set(0x5_u32);
+                unset |= 0x1000000;
                 // b .L_80177894
                 pc = 0x80177894_u32;
                 continue;
@@ -335,6 +338,7 @@ fn asm_fn_80177748(ctx: &Ctx) {
                     let ea = g[28].get().wrapping_add(0x5d_u32);
                     g[24].set(u32::from(ctx.read_u8(ea)));
                 }
+                unset |= 0x1000000;
                 // b .L_80177894
                 pc = 0x80177894_u32;
                 continue;
@@ -374,6 +378,7 @@ fn asm_fn_80177748(ctx: &Ctx) {
             0x8017787c_u32 => {
                 // li r24, 0x5
                 g[24].set(0x5_u32);
+                unset |= 0x1000000;
                 // b .L_80177894
                 pc = 0x80177894_u32;
                 continue;
@@ -391,6 +396,7 @@ fn asm_fn_80177748(ctx: &Ctx) {
                 g[0].set(g[3].get().wrapping_add(0x24_u32));
                 // lbzx r24, r26, r0
                 g[24].set(u32::from(ctx.read_u8(g[26].get().wrapping_add(g[0].get()))));
+                unset |= 0x1000000;
                 pc = 0x80177894_u32;
             }
             0x80177894_u32 => {
@@ -428,6 +434,9 @@ fn asm_fn_80177748(ctx: &Ctx) {
             }
             0x801778b8_u32 => {
                 // xoris r0, r24, 0x8000
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[0].set(g[24].get() ^ 0x80000000_u32);
                 // crset cr1eq
                 {
@@ -505,6 +514,7 @@ fn asm_fn_80177748(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x1000000;
                 // lwz r0, 0x54(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x54_u32);

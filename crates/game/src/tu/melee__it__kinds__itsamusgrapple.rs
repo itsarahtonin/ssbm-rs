@@ -278,6 +278,7 @@ fn asm_it_802B75FC(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x802b75fc_u32;
     loop {
         match pc {
@@ -943,6 +944,7 @@ fn asm_it_802B75FC(ctx: &Ctx) {
                 g[20].set(g[29].get().wrapping_add(0x30_u32));
                 // addi r17, r29, 0x0
                 g[17].set(g[29].get());
+                unset |= 0x20000;
                 // stw r27, 0x1d4(r29)
                 {
                     let ea = g[29].get().wrapping_add(0x1d4_u32);
@@ -1201,15 +1203,20 @@ fn asm_it_802B75FC(ctx: &Ctx) {
                 }
                 // li r19, 0x0
                 g[19].set(0_u32);
+                unset |= 0x80000;
                 // addi r21, r29, 0x30
                 g[21].set(g[29].get().wrapping_add(0x30_u32));
                 // stw r19, 0x0(r29)
+                if unset & 0x80000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[29].get();
                     ctx.write_u32(ea, g[19].get());
                 }
                 // addi r18, r29, 0x0
                 g[18].set(g[29].get());
+                unset |= 0x40000;
                 // addi r3, r21, 0x0
                 g[3].set(g[21].get());
                 // stw r20, 0x4(r29)
@@ -1293,6 +1300,9 @@ fn asm_it_802B75FC(ctx: &Ctx) {
                     g[0].set(u32::from(ctx.read_u8(ea)));
                 }
                 // rlwimi r0, r19, 7, 24, 24
+                if unset & 0x80000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = (g[19].get().rotate_left(7) & 0x80_u32) | (g[0].get() & 0xffffff7f_u32);
                     g[0].set(v);
@@ -1308,6 +1318,9 @@ fn asm_it_802B75FC(ctx: &Ctx) {
                     g[0].set(u32::from(ctx.read_u8(ea)));
                 }
                 // rlwimi r0, r19, 6, 25, 25
+                if unset & 0x80000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = (g[19].get().rotate_left(6) & 0x40_u32) | (g[0].get() & 0xffffffbf_u32);
                     g[0].set(v);
@@ -1323,6 +1336,9 @@ fn asm_it_802B75FC(ctx: &Ctx) {
                     g[0].set(u32::from(ctx.read_u8(ea)));
                 }
                 // rlwimi r0, r19, 5, 26, 26
+                if unset & 0x80000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = (g[19].get().rotate_left(5) & 0x20_u32) | (g[0].get() & 0xffffffdf_u32);
                     g[0].set(v);
@@ -1498,6 +1514,7 @@ fn asm_it_802B75FC(ctx: &Ctx) {
                     let ea = g[3].get();
                     g[19].set(ctx.read_u32(ea));
                 }
+                unset |= 0x80000;
                 pc = 0x802b7a18_u32;
             }
             0x802b7a18_u32 => {
@@ -1575,6 +1592,9 @@ fn asm_it_802B75FC(ctx: &Ctx) {
                     g[3].set(ctx.read_u32(ea));
                 }
                 // mr r6, r19
+                if unset & 0x80000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[19].get() | g[19].get();
                     g[6].set(v);
@@ -1604,6 +1624,7 @@ fn asm_it_802B75FC(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x28_u32);
                     g[19].set(ctx.read_u32(ea));
                 }
+                unset |= 0x80000;
                 // b .L_802B7B48
                 pc = 0x802b7b48_u32;
                 continue;
@@ -1909,16 +1930,25 @@ fn asm_it_802B75FC(ctx: &Ctx) {
             }
             0x802b7b64_u32 => {
                 // stw r18, 0xdd4(r26)
+                if unset & 0x40000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0xdd4_u32);
                     ctx.write_u32(ea, g[18].get());
                 }
                 // mr r3, r19
+                if unset & 0x80000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[19].get() | g[19].get();
                     g[3].set(v);
                 }
                 // stw r17, 0xdd8(r26)
+                if unset & 0x20000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0xdd8_u32);
                     ctx.write_u32(ea, g[17].get());
@@ -1933,6 +1963,7 @@ fn asm_it_802B75FC(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0xe0000;
                 // lwz r0, 0x7c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x7c_u32);

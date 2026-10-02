@@ -980,6 +980,7 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8023fed4_u32;
     loop {
         match pc {
@@ -1135,6 +1136,7 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                 }
                 // addi r27, r29, 0x2
                 g[27].set(g[29].get().wrapping_add(0x2_u32));
+                unset |= 0x8000000;
                 // lhz r3, 0x2(r29)
                 {
                     let ea = g[29].get().wrapping_add(0x2_u32);
@@ -1151,13 +1153,18 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     g[26].set(v);
                     let _ = (ca, ov);
                 }
+                unset |= 0x4000000;
                 // clrlwi r24, r3, 24
                 {
                     let v = g[3].get().rotate_left(0) & 0xff_u32;
                     g[24].set(v);
                 }
                 // addi r26, r26, 0x1c
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[26].set(g[26].get().wrapping_add(0x1c_u32));
+                unset |= 0x4000000;
                 // b .L_8023FFB4
                 pc = 0x8023ffb4_u32;
                 continue;
@@ -1165,6 +1172,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
             }
             0x8023ff80_u32 => {
                 // mr r25, r26
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[26].get() | g[26].get();
                     g[25].set(v);
@@ -1182,7 +1192,11 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                 // addi r25, r25, 0x1
                 g[25].set(g[25].get().wrapping_add(0x1_u32));
                 // addi r26, r26, 0x1
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[26].set(g[26].get().wrapping_add(0x1_u32));
+                unset |= 0x4000000;
                 // blt .L_8023FFA0
                 if (c::cr_bit(ctx, 0) == true) {
                     pc = 0x8023ffa0_u32;
@@ -1255,6 +1269,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
             }
             0x8023ffc4_u32 => {
                 // lhz r3, 0x0(r27)
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[27].get();
                     g[3].set(u32::from(ctx.read_u16(ea)));
@@ -1284,8 +1301,13 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     g[27].set(v);
                     let _ = (ca, ov);
                 }
+                unset |= 0x8000000;
                 // addi r27, r27, 0x1c
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[27].set(g[27].get().wrapping_add(0x1c_u32));
+                unset |= 0x8000000;
                 // b .L_80240014
                 pc = 0x80240014_u32;
                 continue;
@@ -1293,10 +1315,14 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
             }
             0x8023ffe0_u32 => {
                 // mr r26, r27
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[27].get() | g[27].get();
                     g[26].set(v);
                 }
+                unset |= 0x4000000;
                 pc = 0x8023ffe4_u32;
             }
             0x8023ffe4_u32 => {
@@ -1308,9 +1334,17 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     c::compare(ctx, 0, x < y, x > y);
                 }
                 // addi r26, r26, 0x1
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[26].set(g[26].get().wrapping_add(0x1_u32));
+                unset |= 0x4000000;
                 // addi r27, r27, 0x1
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[27].set(g[27].get().wrapping_add(0x1_u32));
+                unset |= 0x8000000;
                 // blt .L_80240000
                 if (c::cr_bit(ctx, 0) == true) {
                     pc = 0x80240000_u32;
@@ -1328,6 +1362,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
             }
             0x80240000_u32 => {
                 // lbz r3, 0x0(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get();
                     g[3].set(u32::from(ctx.read_u8(ea)));
@@ -1455,6 +1492,7 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                 g[27].set(u32::from(
                     ctx.read_u8(g[30].get().wrapping_add(g[23].get())),
                 ));
+                unset |= 0x8000000;
                 // b .L_8024009C
                 pc = 0x8024009c_u32;
                 continue;
@@ -1490,6 +1528,7 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
             0x80240078_u32 => {
                 // li r27, 0x19
                 g[27].set(0x19_u32);
+                unset |= 0x8000000;
                 // b .L_8024009C
                 pc = 0x8024009c_u32;
                 continue;
@@ -1590,6 +1629,7 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                 g[26].set(u32::from(
                     ctx.read_u8(g[30].get().wrapping_add(g[23].get())),
                 ));
+                unset |= 0x4000000;
                 // b .L_80240100
                 pc = 0x80240100_u32;
                 continue;
@@ -1625,6 +1665,7 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
             0x802400dc_u32 => {
                 // li r26, 0x19
                 g[26].set(0x19_u32);
+                unset |= 0x4000000;
                 // b .L_80240100
                 pc = 0x80240100_u32;
                 continue;
@@ -1673,11 +1714,17 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
             }
             0x80240100_u32 => {
                 // clrlwi r3, r27, 24
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[27].get().rotate_left(0) & 0xff_u32;
                     g[3].set(v);
                 }
                 // clrlwi r4, r26, 24
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[26].get().rotate_left(0) & 0xff_u32;
                     g[4].set(v);
@@ -1888,7 +1935,11 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     let ea = g[3].get().wrapping_add(0x2c_u32);
                     g[26].set(ctx.read_u32(ea));
                 }
+                unset |= 0x4000000;
                 // lhz r0, 0x3c(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x3c_u32);
                     g[0].set(u32::from(ctx.read_u16(ea)));
@@ -1916,6 +1967,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     ctx.write_u8(ea, g[25].get() as u8);
                 }
                 // lhz r0, 0x3c(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x3c_u32);
                     g[0].set(u32::from(ctx.read_u16(ea)));
@@ -1936,6 +1990,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     ctx.write_u8(ea, g[25].get() as u8);
                 }
                 // lhz r0, 0x3e(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x3e_u32);
                     g[0].set(u32::from(ctx.read_u16(ea)));
@@ -1963,6 +2020,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     ctx.write_u8(ea, g[25].get() as u8);
                 }
                 // lhz r0, 0x3e(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x3e_u32);
                     g[0].set(u32::from(ctx.read_u16(ea)));
@@ -1983,6 +2043,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     ctx.write_u8(ea, g[25].get() as u8);
                 }
                 // lbz r25, 0x44(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get().wrapping_add(0x44_u32);
                     g[25].set(u32::from(ctx.read_u8(ea)));
@@ -2924,7 +2987,11 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     let v = g[0].get().rotate_left(0) & 0xff_u32;
                     g[27].set(v);
                 }
+                unset |= 0x8000000;
                 // cmpw r23, r27
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[23].get() as i32, g[27].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -2943,14 +3010,22 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     g[26].set(v);
                     let _ = (ca, ov);
                 }
+                unset |= 0x4000000;
                 // li r24, 0xa
                 g[24].set(0xa_u32);
                 // addi r26, r26, 0x1c
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[26].set(g[26].get().wrapping_add(0x1c_u32));
+                unset |= 0x4000000;
                 pc = 0x802404d8_u32;
             }
             0x802404d8_u32 => {
                 // mr r25, r26
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[26].get() | g[26].get();
                     g[25].set(v);
@@ -2968,7 +3043,11 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                 // addi r25, r25, 0x1
                 g[25].set(g[25].get().wrapping_add(0x1_u32));
                 // addi r26, r26, 0x1
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[26].set(g[26].get().wrapping_add(0x1_u32));
+                unset |= 0x4000000;
                 // blt .L_802404F8
                 if (c::cr_bit(ctx, 0) == true) {
                     pc = 0x802404f8_u32;
@@ -3073,6 +3152,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     g[0].set(v);
                 }
                 // or r0, r0, r27
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[0].get() | g[27].get();
                     g[0].set(v);
@@ -3546,7 +3628,11 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     let v = g[0].get().rotate_left(0) & 0xff_u32;
                     g[27].set(v);
                 }
+                unset |= 0x8000000;
                 // cmpw r23, r27
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[23].get() as i32, g[27].get() as i32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -3565,14 +3651,22 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     g[26].set(v);
                     let _ = (ca, ov);
                 }
+                unset |= 0x4000000;
                 // li r24, 0x7
                 g[24].set(0x7_u32);
                 // addi r26, r26, 0x1c
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[26].set(g[26].get().wrapping_add(0x1c_u32));
+                unset |= 0x4000000;
                 pc = 0x802406a0_u32;
             }
             0x802406a0_u32 => {
                 // mr r25, r26
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[26].get() | g[26].get();
                     g[25].set(v);
@@ -3590,7 +3684,11 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                 // addi r25, r25, 0x1
                 g[25].set(g[25].get().wrapping_add(0x1_u32));
                 // addi r26, r26, 0x1
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[26].set(g[26].get().wrapping_add(0x1_u32));
+                unset |= 0x4000000;
                 // blt .L_802406C0
                 if (c::cr_bit(ctx, 0) == true) {
                     pc = 0x802406c0_u32;
@@ -3695,6 +3793,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     g[0].set(v);
                 }
                 // rlwimi r0, r27, 8, 0, 23
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = (g[27].get().rotate_left(8) & 0xffffff00_u32) | (g[0].get() & 0xff_u32);
                     g[0].set(v);
@@ -3813,6 +3914,7 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                 }
                 // addi r26, r3, 0x2
                 g[26].set(g[3].get().wrapping_add(0x2_u32));
+                unset |= 0x4000000;
                 // clrlwi. r3, r0, 24
                 {
                     let v = g[0].get().rotate_left(0) & 0xff_u32;
@@ -3850,6 +3952,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
             }
             0x80240774_u32 => {
                 // lhz r0, 0x0(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get();
                     g[0].set(u32::from(ctx.read_u16(ea)));
@@ -3865,6 +3970,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     g[0].set(v);
                 }
                 // sth r0, 0x0(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get();
                     ctx.write_u16(ea, g[0].get() as u16);
@@ -4066,6 +4174,7 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                 g[3].set(g[3].get().wrapping_add(0x4f0_u32));
                 // addi r27, r3, 0x2
                 g[27].set(g[3].get().wrapping_add(0x2_u32));
+                unset |= 0x8000000;
                 // lhz r0, 0x2(r3)
                 {
                     let ea = g[3].get().wrapping_add(0x2_u32);
@@ -4112,6 +4221,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
             }
             0x8024083c_u32 => {
                 // lhz r0, 0x0(r27)
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[27].get();
                     g[0].set(u32::from(ctx.read_u16(ea)));
@@ -4127,6 +4239,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     g[0].set(v);
                 }
                 // sth r0, 0x0(r27)
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[27].get();
                     ctx.write_u16(ea, g[0].get() as u16);
@@ -4166,9 +4281,13 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     g[27].set(v);
                     let _ = (ca, ov);
                 }
+                unset |= 0x8000000;
                 // addi r24, r23, 0x0
                 g[24].set(g[23].get());
                 // addi r25, r27, 0x0
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[25].set(g[27].get());
                 pc = 0x8024086c_u32;
             }
@@ -4259,6 +4378,7 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                 g[26].set(u32::from(
                     ctx.read_u8(g[30].get().wrapping_add(g[23].get())),
                 ));
+                unset |= 0x4000000;
                 // b .L_802408E8
                 pc = 0x802408e8_u32;
                 continue;
@@ -4266,6 +4386,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
             }
             0x802408b0_u32 => {
                 // mr r25, r27
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[27].get() | g[27].get();
                     g[25].set(v);
@@ -4283,7 +4406,11 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                 // addi r25, r25, 0x1
                 g[25].set(g[25].get().wrapping_add(0x1_u32));
                 // addi r27, r27, 0x1
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[27].set(g[27].get().wrapping_add(0x1_u32));
+                unset |= 0x8000000;
                 // blt .L_802408D0
                 if (c::cr_bit(ctx, 0) == true) {
                     pc = 0x802408d0_u32;
@@ -4294,6 +4421,7 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
             0x802408c8_u32 => {
                 // li r26, 0x19
                 g[26].set(0x19_u32);
+                unset |= 0x4000000;
                 // b .L_802408E8
                 pc = 0x802408e8_u32;
                 continue;
@@ -4339,6 +4467,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
             }
             0x802408e8_u32 => {
                 // clrlwi r0, r26, 24
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[26].get().rotate_left(0) & 0xff_u32;
                     g[0].set(v);
@@ -4441,6 +4572,7 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                 }
                 // addi r26, r3, 0x2
                 g[26].set(g[3].get().wrapping_add(0x2_u32));
+                unset |= 0x4000000;
                 // srawi. r3, r0, 8
                 {
                     let s = g[0].get() as i32;
@@ -4480,6 +4612,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
             }
             0x80240958_u32 => {
                 // lhz r0, 0x0(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get();
                     g[0].set(u32::from(ctx.read_u16(ea)));
@@ -4495,6 +4630,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     g[0].set(v);
                 }
                 // sth r0, 0x0(r26)
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[26].get();
                     ctx.write_u16(ea, g[0].get() as u16);
@@ -4698,6 +4836,7 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                 g[3].set(g[3].get().wrapping_add(0x4f0_u32));
                 // addi r27, r3, 0x2
                 g[27].set(g[3].get().wrapping_add(0x2_u32));
+                unset |= 0x8000000;
                 // lhz r0, 0x2(r3)
                 {
                     let ea = g[3].get().wrapping_add(0x2_u32);
@@ -4746,6 +4885,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
             }
             0x80240a20_u32 => {
                 // lhz r0, 0x0(r27)
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[27].get();
                     g[0].set(u32::from(ctx.read_u16(ea)));
@@ -4761,6 +4903,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     g[0].set(v);
                 }
                 // sth r0, 0x0(r27)
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[27].get();
                     ctx.write_u16(ea, g[0].get() as u16);
@@ -4802,9 +4947,13 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                     g[27].set(v);
                     let _ = (ca, ov);
                 }
+                unset |= 0x8000000;
                 // addi r24, r23, 0x0
                 g[24].set(g[23].get());
                 // addi r25, r27, 0x0
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[25].set(g[27].get());
                 pc = 0x80240a50_u32;
             }
@@ -4895,6 +5044,7 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                 g[26].set(u32::from(
                     ctx.read_u8(g[30].get().wrapping_add(g[23].get())),
                 ));
+                unset |= 0x4000000;
                 // b .L_80240ACC
                 pc = 0x80240acc_u32;
                 continue;
@@ -4902,6 +5052,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
             }
             0x80240a94_u32 => {
                 // mr r25, r27
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[27].get() | g[27].get();
                     g[25].set(v);
@@ -4919,7 +5072,11 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                 // addi r25, r25, 0x1
                 g[25].set(g[25].get().wrapping_add(0x1_u32));
                 // addi r27, r27, 0x1
+                if unset & 0x8000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[27].set(g[27].get().wrapping_add(0x1_u32));
+                unset |= 0x8000000;
                 // blt .L_80240AB4
                 if (c::cr_bit(ctx, 0) == true) {
                     pc = 0x80240ab4_u32;
@@ -4930,6 +5087,7 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
             0x80240aac_u32 => {
                 // li r26, 0x19
                 g[26].set(0x19_u32);
+                unset |= 0x4000000;
                 // b .L_80240ACC
                 pc = 0x80240acc_u32;
                 continue;
@@ -4975,6 +5133,9 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
             }
             0x80240acc_u32 => {
                 // clrlwi r0, r26, 24
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[26].get().rotate_left(0) & 0xff_u32;
                     g[0].set(v);
@@ -5053,6 +5214,7 @@ fn asm_mnDiagram_InputProc(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0xc000000;
                 // lwz r0, 0x84(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x84_u32);
@@ -5751,6 +5913,7 @@ fn asm_mnDiagram_UpdateScrollArrows(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x802417d0_u32;
     loop {
         match pc {
@@ -5828,6 +5991,7 @@ fn asm_mnDiagram_UpdateScrollArrows(ctx: &Ctx) {
                 }
                 // li r26, 0xa
                 g[26].set(0xa_u32);
+                unset |= 0x4000000;
                 // clrlwi r23, r0, 24
                 {
                     let v = g[0].get().rotate_left(0) & 0xff_u32;
@@ -5903,12 +6067,16 @@ fn asm_mnDiagram_UpdateScrollArrows(ctx: &Ctx) {
             }
             0x80241854_u32 => {
                 // subic. r26, r26, 0x1
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, _) = c::add3(g[26].get(), 0xffffffff_u32, 0);
                     g[26].set(v);
                     c::set_ca(ctx, ca);
                     c::update_cr0(ctx, v);
                 }
+                unset |= 0x4000000;
                 // bgt .L_80241824
                 if (c::cr_bit(ctx, 1) == true) {
                     pc = 0x80241824_u32;
@@ -6017,6 +6185,7 @@ fn asm_mnDiagram_UpdateScrollArrows(ctx: &Ctx) {
                 g[26].set(u32::from(
                     ctx.read_u8(g[31].get().wrapping_add(g[22].get())),
                 ));
+                unset |= 0x4000000;
                 // b .L_802418E8
                 pc = 0x802418e8_u32;
                 continue;
@@ -6052,6 +6221,7 @@ fn asm_mnDiagram_UpdateScrollArrows(ctx: &Ctx) {
             0x802418c8_u32 => {
                 // li r26, 0x19
                 g[26].set(0x19_u32);
+                unset |= 0x4000000;
                 // b .L_802418E8
                 pc = 0x802418e8_u32;
                 continue;
@@ -6097,6 +6267,9 @@ fn asm_mnDiagram_UpdateScrollArrows(ctx: &Ctx) {
             }
             0x802418e8_u32 => {
                 // clrlwi r0, r26, 24
+                if unset & 0x4000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[26].get().rotate_left(0) & 0xff_u32;
                     g[0].set(v);
@@ -6570,6 +6743,7 @@ fn asm_mnDiagram_UpdateScrollArrows(ctx: &Ctx) {
                 g[29].set(u32::from(
                     ctx.read_u8(g[31].get().wrapping_add(g[22].get())),
                 ));
+                unset |= 0x20000000;
                 // b .L_80241AAC
                 pc = 0x80241aac_u32;
                 continue;
@@ -6605,6 +6779,7 @@ fn asm_mnDiagram_UpdateScrollArrows(ctx: &Ctx) {
             0x80241a8c_u32 => {
                 // li r29, 0x19
                 g[29].set(0x19_u32);
+                unset |= 0x20000000;
                 // b .L_80241AAC
                 pc = 0x80241aac_u32;
                 continue;
@@ -6650,6 +6825,9 @@ fn asm_mnDiagram_UpdateScrollArrows(ctx: &Ctx) {
             }
             0x80241aac_u32 => {
                 // clrlwi r0, r29, 24
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[29].get().rotate_left(0) & 0xff_u32;
                     g[0].set(v);
@@ -6698,6 +6876,7 @@ fn asm_mnDiagram_UpdateScrollArrows(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x24000000;
                 // lwz r0, 0x44(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x44_u32);
@@ -7712,6 +7891,7 @@ fn asm_mnDiagram_DrawGridValues(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8024227c_u32;
     loop {
         match pc {
@@ -8130,6 +8310,7 @@ fn asm_mnDiagram_DrawGridValues(ctx: &Ctx) {
                 g[21].set(u32::from(
                     ctx.read_u8(g[31].get().wrapping_add(g[18].get())),
                 ));
+                unset |= 0x200000;
                 // b .L_80242410
                 pc = 0x80242410_u32;
                 continue;
@@ -8165,6 +8346,7 @@ fn asm_mnDiagram_DrawGridValues(ctx: &Ctx) {
             0x802423ec_u32 => {
                 // li r21, 0x19
                 g[21].set(0x19_u32);
+                unset |= 0x200000;
                 // b .L_80242410
                 pc = 0x80242410_u32;
                 continue;
@@ -8217,6 +8399,9 @@ fn asm_mnDiagram_DrawGridValues(ctx: &Ctx) {
                 // addi r18, r19, 0x0
                 g[18].set(g[19].get());
                 // clrlslwi r16, r21, 24, 1
+                if unset & 0x200000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[21].get().rotate_left(1) & 0x1fe_u32;
                     g[16].set(v);
@@ -8959,6 +9144,7 @@ fn asm_mnDiagram_DrawGridValues(ctx: &Ctx) {
                 g[23].set(u32::from(
                     ctx.read_u8(g[31].get().wrapping_add(g[17].get())),
                 ));
+                unset |= 0x800000;
                 // b .L_802426A0
                 pc = 0x802426a0_u32;
                 continue;
@@ -8994,6 +9180,7 @@ fn asm_mnDiagram_DrawGridValues(ctx: &Ctx) {
             0x8024267c_u32 => {
                 // li r23, 0x19
                 g[23].set(0x19_u32);
+                unset |= 0x800000;
                 // b .L_802426A0
                 pc = 0x802426a0_u32;
                 continue;
@@ -9047,6 +9234,9 @@ fn asm_mnDiagram_DrawGridValues(ctx: &Ctx) {
                     c::compare(ctx, 0, x < y, x > y);
                 }
                 // clrlwi r19, r23, 24
+                if unset & 0x800000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[23].get().rotate_left(0) & 0xff_u32;
                     g[19].set(v);
@@ -9211,6 +9401,7 @@ fn asm_mnDiagram_DrawGridValues(ctx: &Ctx) {
                 g[24].set(u32::from(
                     ctx.read_u8(g[31].get().wrapping_add(g[17].get())),
                 ));
+                unset |= 0x1000000;
                 // b .L_80242768
                 pc = 0x80242768_u32;
                 continue;
@@ -9246,6 +9437,7 @@ fn asm_mnDiagram_DrawGridValues(ctx: &Ctx) {
             0x80242744_u32 => {
                 // li r24, 0x19
                 g[24].set(0x19_u32);
+                unset |= 0x1000000;
                 // b .L_80242768
                 pc = 0x80242768_u32;
                 continue;
@@ -9304,6 +9496,9 @@ fn asm_mnDiagram_DrawGridValues(ctx: &Ctx) {
             }
             0x80242770_u32 => {
                 // clrlslwi r0, r24, 24, 1
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[24].get().rotate_left(1) & 0x1fe_u32;
                     g[0].set(v);
@@ -9364,6 +9559,7 @@ fn asm_mnDiagram_DrawGridValues(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x1a00000;
                 // lwz r0, 0xa4(r1)
                 {
                     let ea = g[1].get().wrapping_add(0xa4_u32);

@@ -1018,6 +1018,7 @@ fn asm_GXInitTexCacheRegion(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8033f108_u32;
     loop {
         match pc {
@@ -1083,6 +1084,7 @@ fn asm_GXInitTexCacheRegion(ctx: &Ctx) {
             0x8033f12c_u32 => {
                 // li r10, 0x3
                 g[10].set(0x3_u32);
+                unset |= 0x400;
                 // b .L_8033F140
                 pc = 0x8033f140_u32;
                 continue;
@@ -1091,6 +1093,7 @@ fn asm_GXInitTexCacheRegion(ctx: &Ctx) {
             0x8033f134_u32 => {
                 // li r10, 0x4
                 g[10].set(0x4_u32);
+                unset |= 0x400;
                 // b .L_8033F140
                 pc = 0x8033f140_u32;
                 continue;
@@ -1099,6 +1102,7 @@ fn asm_GXInitTexCacheRegion(ctx: &Ctx) {
             0x8033f13c_u32 => {
                 // li r10, 0x5
                 g[10].set(0x5_u32);
+                unset |= 0x400;
                 pc = 0x8033f140_u32;
             }
             0x8033f140_u32 => {
@@ -1115,6 +1119,9 @@ fn asm_GXInitTexCacheRegion(ctx: &Ctx) {
                     g[6].set(v);
                 }
                 // slwi r5, r10, 15
+                if unset & 0x400 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[10].get().rotate_left(15) & 0xffff8000_u32;
                     g[5].set(v);
@@ -1125,6 +1132,9 @@ fn asm_GXInitTexCacheRegion(ctx: &Ctx) {
                     g[9].set(ctx.read_u32(ea));
                 }
                 // slwi r0, r10, 18
+                if unset & 0x400 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[10].get().rotate_left(18) & 0xfffc0000_u32;
                     g[0].set(v);
@@ -1268,6 +1278,7 @@ fn asm_GXInitTexCacheRegion(ctx: &Ctx) {
             0x8033f1b8_u32 => {
                 // li r10, 0x3
                 g[10].set(0x3_u32);
+                unset |= 0x400;
                 // b .L_8033F1D4
                 pc = 0x8033f1d4_u32;
                 continue;
@@ -1276,6 +1287,7 @@ fn asm_GXInitTexCacheRegion(ctx: &Ctx) {
             0x8033f1c0_u32 => {
                 // li r10, 0x4
                 g[10].set(0x4_u32);
+                unset |= 0x400;
                 // b .L_8033F1D4
                 pc = 0x8033f1d4_u32;
                 continue;
@@ -1284,6 +1296,7 @@ fn asm_GXInitTexCacheRegion(ctx: &Ctx) {
             0x8033f1c8_u32 => {
                 // li r10, 0x5
                 g[10].set(0x5_u32);
+                unset |= 0x400;
                 // b .L_8033F1D4
                 pc = 0x8033f1d4_u32;
                 continue;
@@ -1292,6 +1305,7 @@ fn asm_GXInitTexCacheRegion(ctx: &Ctx) {
             0x8033f1d0_u32 => {
                 // li r10, 0x0
                 g[10].set(0_u32);
+                unset |= 0x400;
                 pc = 0x8033f1d4_u32;
             }
             0x8033f1d4_u32 => {
@@ -1308,6 +1322,9 @@ fn asm_GXInitTexCacheRegion(ctx: &Ctx) {
                     g[7].set(v);
                 }
                 // slwi r6, r10, 15
+                if unset & 0x400 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[10].get().rotate_left(15) & 0xffff8000_u32;
                     g[6].set(v);
@@ -1318,6 +1335,9 @@ fn asm_GXInitTexCacheRegion(ctx: &Ctx) {
                     g[8].set(ctx.read_u32(ea));
                 }
                 // slwi r5, r10, 18
+                if unset & 0x400 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[10].get().rotate_left(18) & 0xfffc0000_u32;
                     g[5].set(v);
@@ -1626,6 +1646,7 @@ fn asm___GXSetSUTexRegs(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8033f3ac_u32;
     loop {
         match pc {
@@ -1781,11 +1802,13 @@ fn asm___GXSetSUTexRegs(ctx: &Ctx) {
                     let v = g[0].get().rotate_left(0) & 0x7_u32;
                     g[29].set(v);
                 }
+                unset |= 0x20000000;
                 // extrwi r28, r0, 3, 26
                 {
                     let v = g[0].get().rotate_left(29) & 0x7_u32;
                     g[28].set(v);
                 }
+                unset |= 0x10000000;
                 // b .L_8033F458
                 pc = 0x8033f458_u32;
                 continue;
@@ -1807,11 +1830,13 @@ fn asm___GXSetSUTexRegs(ctx: &Ctx) {
                     let v = g[0].get().rotate_left(26) & 0x7_u32;
                     g[29].set(v);
                 }
+                unset |= 0x20000000;
                 // extrwi r28, r0, 3, 20
                 {
                     let v = g[0].get().rotate_left(23) & 0x7_u32;
                     g[28].set(v);
                 }
+                unset |= 0x10000000;
                 // b .L_8033F458
                 pc = 0x8033f458_u32;
                 continue;
@@ -1833,11 +1858,13 @@ fn asm___GXSetSUTexRegs(ctx: &Ctx) {
                     let v = g[0].get().rotate_left(20) & 0x7_u32;
                     g[29].set(v);
                 }
+                unset |= 0x20000000;
                 // extrwi r28, r0, 3, 14
                 {
                     let v = g[0].get().rotate_left(17) & 0x7_u32;
                     g[28].set(v);
                 }
+                unset |= 0x10000000;
                 // b .L_8033F458
                 pc = 0x8033f458_u32;
                 continue;
@@ -1859,11 +1886,13 @@ fn asm___GXSetSUTexRegs(ctx: &Ctx) {
                     let v = g[0].get().rotate_left(14) & 0x7_u32;
                     g[29].set(v);
                 }
+                unset |= 0x20000000;
                 // extrwi r28, r0, 3, 8
                 {
                     let v = g[0].get().rotate_left(11) & 0x7_u32;
                     g[28].set(v);
                 }
+                unset |= 0x10000000;
                 pc = 0x8033f458_u32;
             }
             0x8033f458_u32 => {
@@ -1875,6 +1904,9 @@ fn asm___GXSetSUTexRegs(ctx: &Ctx) {
                 // li r0, 0x1
                 g[0].set(0x1_u32);
                 // slw r0, r0, r28
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = {
                         let n = g[28].get() & 0x3F;
@@ -1902,8 +1934,14 @@ fn asm___GXSetSUTexRegs(ctx: &Ctx) {
             }
             0x8033f470_u32 => {
                 // addi r3, r29, 0x0
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[3].set(g[29].get());
                 // addi r4, r28, 0x0
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[4].set(g[28].get());
                 // bl __SetSURegs
                 c::call(ctx, 0x8033f2e0_u32, 0x8033f47c_u32);
@@ -1971,6 +2009,7 @@ fn asm___GXSetSUTexRegs(ctx: &Ctx) {
                     let v = g[3].get().rotate_left(0) & 0xfffffeff_u32;
                     g[29].set(v);
                 }
+                unset |= 0x20000000;
                 // beq .L_8033F4C4
                 if (c::cr_bit(ctx, 2) == true) {
                     pc = 0x8033f4c4_u32;
@@ -1989,6 +2028,7 @@ fn asm___GXSetSUTexRegs(ctx: &Ctx) {
                     let v = g[0].get().rotate_left(17) & 0x7_u32;
                     g[28].set(v);
                 }
+                unset |= 0x10000000;
                 // b .L_8033F4CC
                 pc = 0x8033f4cc_u32;
                 continue;
@@ -2005,10 +2045,14 @@ fn asm___GXSetSUTexRegs(ctx: &Ctx) {
                     let v = g[0].get().rotate_left(29) & 0x7_u32;
                     g[28].set(v);
                 }
+                unset |= 0x10000000;
                 pc = 0x8033f4cc_u32;
             }
             0x8033f4cc_u32 => {
                 // cmplwi r29, 0xff
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[29].get(), 0xff_u32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -2029,6 +2073,9 @@ fn asm___GXSetSUTexRegs(ctx: &Ctx) {
                     g[3].set(ctx.read_u32(ea));
                 }
                 // slw r0, r0, r28
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = {
                         let n = g[28].get() & 0x3F;
@@ -2051,8 +2098,14 @@ fn asm___GXSetSUTexRegs(ctx: &Ctx) {
             }
             0x8033f4e8_u32 => {
                 // addi r3, r29, 0x0
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[3].set(g[29].get());
                 // addi r4, r28, 0x0
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[4].set(g[28].get());
                 // bl __SetSURegs
                 c::call(ctx, 0x8033f2e0_u32, 0x8033f4f4_u32);
@@ -2086,6 +2139,7 @@ fn asm___GXSetSUTexRegs(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x30000000;
                 // lwz r0, 0x2c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x2c_u32);

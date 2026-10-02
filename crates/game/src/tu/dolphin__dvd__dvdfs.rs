@@ -61,6 +61,7 @@ fn asm_DVDConvertPathToEntrynum(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8033796c_u32;
     loop {
         match pc {
@@ -410,6 +411,7 @@ fn asm_DVDConvertPathToEntrynum(ctx: &Ctx) {
             0x80337a78_u32 => {
                 // addi r24, r28, 0x1
                 g[24].set(g[28].get().wrapping_add(0x1_u32));
+                unset |= 0x1000000;
                 // li r5, 0x1
                 g[5].set(0x1_u32);
                 // b .L_80337A90
@@ -492,6 +494,9 @@ fn asm_DVDConvertPathToEntrynum(ctx: &Ctx) {
             }
             0x80337ab4_u32 => {
                 // subf r0, r24, r28
+                if unset & 0x1000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(!g[24].get(), g[28].get(), 1);
                     g[0].set(v);
@@ -1023,6 +1028,7 @@ fn asm_DVDConvertPathToEntrynum(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x1000000;
                 // lwz r0, 0x4c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x4c_u32);

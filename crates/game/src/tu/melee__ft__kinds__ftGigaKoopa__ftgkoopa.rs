@@ -329,6 +329,7 @@ fn asm_ftGk_Init_GetMotionFileString(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x8014f9a4_u32;
     loop {
         match pc {
@@ -354,6 +355,7 @@ fn asm_ftGk_Init_GetMotionFileString(ctx: &Ctx) {
             0x8014f9b0_u32 => {
                 // li r0, 0xe
                 g[0].set(0xe_u32);
+                unset |= 0x1;
                 pc = 0x8014f9b4_u32;
             }
             0x8014f9b4_u32 => {
@@ -362,11 +364,18 @@ fn asm_ftGk_Init_GetMotionFileString(ctx: &Ctx) {
                 // addi r3, r3, ftGk_Init_803D3984@l
                 g[3].set(g[3].get().wrapping_add(0x3984_u32));
                 // slwi r0, r0, 2
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[0].get().rotate_left(2) & 0xfffffffc_u32;
                     g[0].set(v);
                 }
+                unset |= 0x1;
                 // add r3, r3, r0
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ca, ov) = c::add3(g[3].get(), g[0].get(), 0);
                     g[3].set(v);

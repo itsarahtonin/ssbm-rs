@@ -180,6 +180,7 @@ fn asm_ftKb_SpecialNLk800FB500(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x800fb500_u32;
     loop {
         match pc {
@@ -345,6 +346,7 @@ fn asm_ftKb_SpecialNLk800FB500(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x274_u32);
                     g[29].set(ctx.read_u32(ea));
                 }
+                unset |= 0x20000000;
                 // b .L_800FB584
                 pc = 0x800fb584_u32;
                 continue;
@@ -356,6 +358,7 @@ fn asm_ftKb_SpecialNLk800FB500(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x288_u32);
                     g[29].set(ctx.read_u32(ea));
                 }
+                unset |= 0x20000000;
                 pc = 0x800fb584_u32;
             }
             0x800fb584_u32 => {
@@ -367,6 +370,9 @@ fn asm_ftKb_SpecialNLk800FB500(ctx: &Ctx) {
                 // addi r3, r28, 0x0
                 g[3].set(g[28].get());
                 // addi r6, r29, 0x0
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[6].set(g[29].get());
                 // addi r4, r1, 0x18
                 g[4].set(g[1].get().wrapping_add(0x18_u32));
@@ -457,6 +463,7 @@ fn asm_ftKb_SpecialNLk800FB500(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x2c_u32);
                     g[29].set(ctx.read_u32(ea));
                 }
+                unset |= 0x20000000;
                 // lwz r28, 0x28(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x28_u32);
@@ -491,6 +498,7 @@ fn asm_ftKb_SpecialNLk800FB5F4(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x800fb5f4_u32;
     loop {
         match pc {
@@ -631,6 +639,7 @@ fn asm_ftKb_SpecialNLk800FB5F4(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x278_u32);
                     g[29].set(ctx.read_u32(ea));
                 }
+                unset |= 0x20000000;
                 // b .L_800FB664
                 pc = 0x800fb664_u32;
                 continue;
@@ -642,6 +651,7 @@ fn asm_ftKb_SpecialNLk800FB5F4(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x28c_u32);
                     g[29].set(ctx.read_u32(ea));
                 }
+                unset |= 0x20000000;
                 pc = 0x800fb664_u32;
             }
             0x800fb664_u32 => {
@@ -653,6 +663,9 @@ fn asm_ftKb_SpecialNLk800FB5F4(ctx: &Ctx) {
                 // addi r3, r28, 0x0
                 g[3].set(g[28].get());
                 // addi r6, r29, 0x0
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[6].set(g[29].get());
                 // addi r4, r1, 0x18
                 g[4].set(g[1].get().wrapping_add(0x18_u32));
@@ -751,6 +764,7 @@ fn asm_ftKb_SpecialNLk800FB5F4(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x2c_u32);
                     g[29].set(ctx.read_u32(ea));
                 }
+                unset |= 0x20000000;
                 // lwz r28, 0x28(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x28_u32);
@@ -784,6 +798,7 @@ fn asm_ftKb_SpecialNLk800FB6DC(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x800fb6dc_u32;
     loop {
         match pc {
@@ -993,6 +1008,7 @@ fn asm_ftKb_SpecialNLk800FB6DC(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x268_u32);
                     c::fill(ctx, 31, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // b .L_800FB788
                 pc = 0x800fb788_u32;
                 continue;
@@ -1004,10 +1020,14 @@ fn asm_ftKb_SpecialNLk800FB6DC(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x27c_u32);
                     c::fill(ctx, 31, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x8000000000000000;
                 pc = 0x800fb788_u32;
             }
             0x800fb788_u32 => {
                 // fmr f3, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(31);
                     ctx.regs.set_f(3, v);
@@ -1119,6 +1139,7 @@ fn asm_ftKb_SpecialNLk800FB6DC(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x60_u32);
                     ctx.regs.set_f(31, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // lwz r31, 0x5c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x5c_u32);
@@ -1201,6 +1222,7 @@ fn asm_ftKb_SpecialNLk800FB880(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x800fb880_u32;
     loop {
         match pc {
@@ -1475,6 +1497,7 @@ fn asm_ftKb_SpecialNLk800FB880(ctx: &Ctx) {
                     let ea = g[29].get().wrapping_add(0x26c_u32);
                     c::fill(ctx, 31, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // b .L_800FB964
                 pc = 0x800fb964_u32;
                 continue;
@@ -1486,6 +1509,7 @@ fn asm_ftKb_SpecialNLk800FB880(ctx: &Ctx) {
                     let ea = g[29].get().wrapping_add(0x280_u32);
                     c::fill(ctx, 31, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x8000000000000000;
                 pc = 0x800fb964_u32;
             }
             0x800fb964_u32 => {
@@ -1495,6 +1519,9 @@ fn asm_ftKb_SpecialNLk800FB880(ctx: &Ctx) {
                     g[3].set(v);
                 }
                 // fmr f1, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(31);
                     ctx.regs.set_f(1, v);
@@ -1675,6 +1702,7 @@ fn asm_ftKb_SpecialNLk800FB880(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x48_u32);
                     ctx.regs.set_f(31, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // lwz r31, 0x44(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x44_u32);
@@ -1718,6 +1746,7 @@ fn asm_ftKb_SpecialNLk800FBA00(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x800fba00_u32;
     loop {
         match pc {
@@ -1972,6 +2001,7 @@ fn asm_ftKb_SpecialNLk800FBA00(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x26c_u32);
                     c::fill(ctx, 31, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // b .L_800FBAD4
                 pc = 0x800fbad4_u32;
                 continue;
@@ -1983,6 +2013,7 @@ fn asm_ftKb_SpecialNLk800FBA00(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x280_u32);
                     c::fill(ctx, 31, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x8000000000000000;
                 pc = 0x800fbad4_u32;
             }
             0x800fbad4_u32 => {
@@ -1992,6 +2023,9 @@ fn asm_ftKb_SpecialNLk800FBA00(ctx: &Ctx) {
                     g[3].set(v);
                 }
                 // fmr f1, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(31);
                     ctx.regs.set_f(1, v);
@@ -2202,6 +2236,7 @@ fn asm_ftKb_SpecialNLk800FBA00(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x270_u32);
                     c::fill(ctx, 31, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // b .L_800FBB70
                 pc = 0x800fbb70_u32;
                 continue;
@@ -2213,6 +2248,7 @@ fn asm_ftKb_SpecialNLk800FBA00(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x284_u32);
                     c::fill(ctx, 31, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x8000000000000000;
                 pc = 0x800fbb70_u32;
             }
             0x800fbb70_u32 => {
@@ -2222,6 +2258,9 @@ fn asm_ftKb_SpecialNLk800FBA00(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fcmpu cr0, f0, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(0), ctx.regs.f(31));
                 // bne .L_800FBB88
                 if (c::cr_bit(ctx, 2) == false) {
@@ -2248,6 +2287,9 @@ fn asm_ftKb_SpecialNLk800FBA00(ctx: &Ctx) {
             }
             0x800fbb88_u32 => {
                 // fmr f2, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(31);
                     ctx.regs.set_f(2, v);
@@ -2280,6 +2322,7 @@ fn asm_ftKb_SpecialNLk800FBA00(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x48_u32);
                     ctx.regs.set_f(31, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // lwz r31, 0x44(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x44_u32);
@@ -2323,6 +2366,7 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x800fbbc4_u32;
     loop {
         match pc {
@@ -2483,6 +2527,7 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                     let ea = g[3].get().wrapping_add(0x26c_u32);
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x200000000;
                 // b .L_800FBC44
                 pc = 0x800fbc44_u32;
                 continue;
@@ -2494,6 +2539,7 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                     let ea = g[3].get().wrapping_add(0x280_u32);
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x200000000;
                 pc = 0x800fbc44_u32;
             }
             0x800fbc44_u32 => {
@@ -2503,7 +2549,11 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                     g[3].set(v);
                 }
                 // bl ftAnim_SetAnimRate
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x8006f190_u32, 0x800fbc4c_u32);
+                unset |= 0x200000000;
                 pc = 0x800fbc4c_u32;
             }
             0x800fbc4c_u32 => {
@@ -2514,6 +2564,7 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                 }
                 // bl ftKb_SpecialNLk800FB500
                 c::call(ctx, 0x800fb500_u32, 0x800fbc54_u32);
+                unset |= 0x200000000;
                 pc = 0x800fbc54_u32;
             }
             0x800fbc54_u32 => {
@@ -2610,6 +2661,7 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x48_u32);
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x200000000;
                 // stw r3, 0x54(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x54_u32);
@@ -2636,6 +2688,9 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fsubs f0, f1, f0
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(1), ctx.regs.f(0));
                     c::fill(ctx, 0, v);
@@ -2650,12 +2705,16 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x4c_u32);
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x200000000;
                 // lfs f0, 0x58(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x58_u32);
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fsubs f0, f1, f0
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(1), ctx.regs.f(0));
                     c::fill(ctx, 0, v);
@@ -2685,6 +2744,7 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x40_u32);
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x200000000;
                 // lfs f2, 0x48(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x48_u32);
@@ -2696,21 +2756,32 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fsubs f1, f3, f1
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = fp::fsubs(ctx.regs.f(3), ctx.regs.f(1));
                     c::fill(ctx, 1, v);
                 }
+                unset |= 0x200000000;
                 // fsubs f2, f2, f0
                 {
                     let v = fp::fsubs(ctx.regs.f(2), ctx.regs.f(0));
                     c::fill(ctx, 2, v);
                 }
                 // bl atan2f
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x80022c30_u32, 0x800fbcec_u32);
+                unset |= 0x200000000;
                 pc = 0x800fbcec_u32;
             }
             0x800fbcec_u32 => {
                 // stfs f1, 0x2348(r29)
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[29].get().wrapping_add(0x2348_u32);
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(1)));
@@ -2739,6 +2810,7 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                 g[5].set(g[1].get().wrapping_add(0x3c_u32));
                 // bl it_802A8398
                 c::call(ctx, 0x802a8398_u32, 0x800fbd08_u32);
+                unset |= 0x200000000;
                 pc = 0x800fbd08_u32;
             }
             0x800fbd08_u32 => {
@@ -2749,6 +2821,7 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                 }
                 // bl ftAnim_IsFramesRemaining
                 c::call(ctx, 0x8006f238_u32, 0x800fbd10_u32);
+                unset |= 0x200000000;
                 pc = 0x800fbd10_u32;
             }
             0x800fbd10_u32 => {
@@ -2827,6 +2900,7 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                     let ea = g[2].get().wrapping_add(0xffff9a28_u32);
                     c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x200000000;
                 // lis r5, 0x4
                 g[5].set(0x40000_u32);
                 // lfs f2, "@398"@sda21(r0)
@@ -2840,6 +2914,9 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                     g[3].set(v);
                 }
                 // fmr f3, f1
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(1);
                     ctx.regs.set_f(3, v);
@@ -2849,7 +2926,11 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                 // li r6, 0x0
                 g[6].set(0_u32);
                 // bl Fighter_ChangeMotionState
+                if unset & 0x200000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x800693ac_u32, 0x800fbd60_u32);
+                unset |= 0x200000000;
                 pc = 0x800fbd60_u32;
             }
             0x800fbd60_u32 => {
@@ -2883,6 +2964,7 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                 }
                 // bl ftAnim_8006EBA4
                 c::call(ctx, 0x8006eba4_u32, 0x800fbd84_u32);
+                unset |= 0x200000000;
                 pc = 0x800fbd84_u32;
             }
             0x800fbd84_u32 => {
@@ -3017,6 +3099,7 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                 }
                 // bl ft_8008A2BC
                 c::call(ctx, 0x8008a2bc_u32, 0x800fbde0_u32);
+                unset |= 0x200000000;
                 pc = 0x800fbde0_u32;
             }
             0x800fbde0_u32 => {
@@ -3111,6 +3194,7 @@ fn asm_ftKb_LkSpecialAirNStart_Anim(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x800fbf34_u32;
     loop {
         match pc {
@@ -3784,6 +3868,7 @@ fn asm_ftKb_LkSpecialAirNStart_Anim(ctx: &Ctx) {
                     let ea = g[28].get().wrapping_add(0x270_u32);
                     c::fill(ctx, 31, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // b .L_800FC148
                 pc = 0x800fc148_u32;
                 continue;
@@ -3795,6 +3880,7 @@ fn asm_ftKb_LkSpecialAirNStart_Anim(ctx: &Ctx) {
                     let ea = g[28].get().wrapping_add(0x284_u32);
                     c::fill(ctx, 31, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x8000000000000000;
                 pc = 0x800fc148_u32;
             }
             0x800fc148_u32 => {
@@ -3804,6 +3890,9 @@ fn asm_ftKb_LkSpecialAirNStart_Anim(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fcmpu cr0, f0, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(0), ctx.regs.f(31));
                 // bne .L_800FC160
                 if (c::cr_bit(ctx, 2) == false) {
@@ -3830,6 +3919,9 @@ fn asm_ftKb_LkSpecialAirNStart_Anim(ctx: &Ctx) {
             }
             0x800fc160_u32 => {
                 // fmr f2, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(31);
                     ctx.regs.set_f(2, v);
@@ -3862,6 +3954,7 @@ fn asm_ftKb_LkSpecialAirNStart_Anim(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x70_u32);
                     ctx.regs.set_f(31, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // lwz r31, 0x6c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x6c_u32);
@@ -3942,6 +4035,7 @@ fn asm_ftKb_LkSpecialAirNEnd_Anim(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x800fc274_u32;
     loop {
         match pc {
@@ -4181,6 +4275,7 @@ fn asm_ftKb_LkSpecialAirNEnd_Anim(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x270_u32);
                     c::fill(ctx, 31, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // b .L_800FC320
                 pc = 0x800fc320_u32;
                 continue;
@@ -4192,6 +4287,7 @@ fn asm_ftKb_LkSpecialAirNEnd_Anim(ctx: &Ctx) {
                     let ea = g[30].get().wrapping_add(0x284_u32);
                     c::fill(ctx, 31, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x8000000000000000;
                 pc = 0x800fc320_u32;
             }
             0x800fc320_u32 => {
@@ -4201,6 +4297,9 @@ fn asm_ftKb_LkSpecialAirNEnd_Anim(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fcmpu cr0, f0, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(0), ctx.regs.f(31));
                 // bne .L_800FC338
                 if (c::cr_bit(ctx, 2) == false) {
@@ -4227,6 +4326,9 @@ fn asm_ftKb_LkSpecialAirNEnd_Anim(ctx: &Ctx) {
             }
             0x800fc338_u32 => {
                 // fmr f2, f31
+                if unset & 0x8000000000000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = ctx.regs.f(31);
                     ctx.regs.set_f(2, v);
@@ -4259,6 +4361,7 @@ fn asm_ftKb_LkSpecialAirNEnd_Anim(ctx: &Ctx) {
                     let ea = g[1].get().wrapping_add(0x40_u32);
                     ctx.regs.set_f(31, f64::from_bits(ctx.read_u64(ea)));
                 }
+                unset |= 0x8000000000000000;
                 // lwz r31, 0x3c(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x3c_u32);
@@ -4302,6 +4405,7 @@ fn asm_ftKb_LkSpecialNStart_IASA(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x800fc374_u32;
     loop {
         match pc {
@@ -4430,6 +4534,7 @@ fn asm_ftKb_LkSpecialNStart_IASA(ctx: &Ctx) {
                     let ea = g[4].get().wrapping_add(0x268_u32);
                     c::fill(ctx, 2, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x400000000;
                 // b .L_800FC3D8
                 pc = 0x800fc3d8_u32;
                 continue;
@@ -4441,6 +4546,7 @@ fn asm_ftKb_LkSpecialNStart_IASA(ctx: &Ctx) {
                     let ea = g[4].get().wrapping_add(0x27c_u32);
                     c::fill(ctx, 2, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x400000000;
                 pc = 0x800fc3d8_u32;
             }
             0x800fc3d8_u32 => {
@@ -4450,6 +4556,9 @@ fn asm_ftKb_LkSpecialNStart_IASA(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fcmpo cr0, f0, f2
+                if unset & 0x400000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(0), ctx.regs.f(2));
                 // ble .L_800FC3E8
                 if (c::cr_bit(ctx, 1) == false) {
@@ -4460,6 +4569,9 @@ fn asm_ftKb_LkSpecialNStart_IASA(ctx: &Ctx) {
             }
             0x800fc3e4_u32 => {
                 // stfs f2, 0x2344(r3)
+                if unset & 0x400000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[3].get().wrapping_add(0x2344_u32);
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(2)));
@@ -4555,6 +4667,7 @@ fn asm_ftKb_LkSpecialNStart_IASA(ctx: &Ctx) {
                     let ea = g[2].get().wrapping_add(0xffff9a30_u32);
                     c::fill(ctx, 2, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x400000000;
                 // mr r3, r31
                 {
                     let v = g[31].get() | g[31].get();
@@ -4570,7 +4683,11 @@ fn asm_ftKb_LkSpecialNStart_IASA(ctx: &Ctx) {
                 // li r6, 0x0
                 g[6].set(0_u32);
                 // bl Fighter_ChangeMotionState
+                if unset & 0x400000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x800693ac_u32, 0x800fc43c_u32);
+                unset |= 0x400000000;
                 pc = 0x800fc43c_u32;
             }
             0x800fc43c_u32 => {
@@ -4721,6 +4838,7 @@ fn asm_ftKb_LkSpecialAirNStart_IASA(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x800fc540_u32;
     loop {
         match pc {
@@ -4849,6 +4967,7 @@ fn asm_ftKb_LkSpecialAirNStart_IASA(ctx: &Ctx) {
                     let ea = g[4].get().wrapping_add(0x268_u32);
                     c::fill(ctx, 2, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x400000000;
                 // b .L_800FC5A4
                 pc = 0x800fc5a4_u32;
                 continue;
@@ -4860,6 +4979,7 @@ fn asm_ftKb_LkSpecialAirNStart_IASA(ctx: &Ctx) {
                     let ea = g[4].get().wrapping_add(0x27c_u32);
                     c::fill(ctx, 2, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x400000000;
                 pc = 0x800fc5a4_u32;
             }
             0x800fc5a4_u32 => {
@@ -4869,6 +4989,9 @@ fn asm_ftKb_LkSpecialAirNStart_IASA(ctx: &Ctx) {
                     c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
                 }
                 // fcmpo cr0, f0, f2
+                if unset & 0x400000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::fp_compare(ctx, 0, ctx.regs.f(0), ctx.regs.f(2));
                 // ble .L_800FC5B4
                 if (c::cr_bit(ctx, 1) == false) {
@@ -4879,6 +5002,9 @@ fn asm_ftKb_LkSpecialAirNStart_IASA(ctx: &Ctx) {
             }
             0x800fc5b0_u32 => {
                 // stfs f2, 0x2344(r3)
+                if unset & 0x400000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[3].get().wrapping_add(0x2344_u32);
                     ctx.write_u32(ea, fp::stfs(ctx.regs.f(2)));
@@ -4974,6 +5100,7 @@ fn asm_ftKb_LkSpecialAirNStart_IASA(ctx: &Ctx) {
                     let ea = g[2].get().wrapping_add(0xffff9a30_u32);
                     c::fill(ctx, 2, fp::lfs(ctx.read_u32(ea)));
                 }
+                unset |= 0x400000000;
                 // mr r3, r31
                 {
                     let v = g[31].get() | g[31].get();
@@ -4989,7 +5116,11 @@ fn asm_ftKb_LkSpecialAirNStart_IASA(ctx: &Ctx) {
                 // li r6, 0x0
                 g[6].set(0_u32);
                 // bl Fighter_ChangeMotionState
+                if unset & 0x400000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 c::call(ctx, 0x800693ac_u32, 0x800fc608_u32);
+                unset |= 0x400000000;
                 pc = 0x800fc608_u32;
             }
             0x800fc608_u32 => {

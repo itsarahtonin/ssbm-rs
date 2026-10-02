@@ -365,6 +365,7 @@ fn asm_long2str(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x803250c0_u32;
     loop {
         match pc {
@@ -514,6 +515,7 @@ fn asm_long2str(ctx: &Ctx) {
                 }
                 // li r0, 0xa
                 g[0].set(0xa_u32);
+                unset |= 0x1;
                 // bge .L_80325174
                 if (c::cr_bit(ctx, 0) == false) {
                     pc = 0x80325174_u32;
@@ -538,13 +540,18 @@ fn asm_long2str(ctx: &Ctx) {
             0x80325148_u32 => {
                 // li r0, 0x0
                 g[0].set(0_u32);
+                unset |= 0x1;
                 // stb r0, 0x1(r5)
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[5].get().wrapping_add(0x1_u32);
                     ctx.write_u8(ea, g[0].get() as u8);
                 }
                 // li r0, 0x8
                 g[0].set(0x8_u32);
+                unset |= 0x1;
                 // b .L_80325174
                 pc = 0x80325174_u32;
                 continue;
@@ -553,13 +560,18 @@ fn asm_long2str(ctx: &Ctx) {
             0x80325158_u32 => {
                 // li r0, 0x0
                 g[0].set(0_u32);
+                unset |= 0x1;
                 // stb r0, 0x1(r5)
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[5].get().wrapping_add(0x1_u32);
                     ctx.write_u8(ea, g[0].get() as u8);
                 }
                 // li r0, 0xa
                 g[0].set(0xa_u32);
+                unset |= 0x1;
                 // b .L_80325174
                 pc = 0x80325174_u32;
                 continue;
@@ -568,17 +580,25 @@ fn asm_long2str(ctx: &Ctx) {
             0x80325168_u32 => {
                 // li r0, 0x0
                 g[0].set(0_u32);
+                unset |= 0x1;
                 // stb r0, 0x1(r5)
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[5].get().wrapping_add(0x1_u32);
                     ctx.write_u8(ea, g[0].get() as u8);
                 }
                 // li r0, 0x10
                 g[0].set(0x10_u32);
+                unset |= 0x1;
                 pc = 0x80325174_u32;
             }
             0x80325174_u32 => {
                 // divwu r9, r3, r0
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ov) = {
                         let (x, y) = (g[3].get(), g[0].get());
@@ -588,6 +608,9 @@ fn asm_long2str(ctx: &Ctx) {
                     let _ = ov;
                 }
                 // mullw r9, r9, r0
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ov) = {
                         let p = i64::from(g[9].get() as i32) * i64::from(g[0].get() as i32);
@@ -603,6 +626,9 @@ fn asm_long2str(ctx: &Ctx) {
                     let _ = (ca, ov);
                 }
                 // divwu r3, r3, r0
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (v, ov) = {
                         let (x, y) = (g[3].get(), g[0].get());
@@ -691,6 +717,9 @@ fn asm_long2str(ctx: &Ctx) {
             }
             0x803251c4_u32 => {
                 // cmplwi r0, 0x8
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[0].get(), 0x8_u32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -827,6 +856,9 @@ fn asm_long2str(ctx: &Ctx) {
             }
             0x80325224_u32 => {
                 // cmplwi r0, 0x10
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[0].get(), 0x10_u32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -951,6 +983,9 @@ fn asm_long2str(ctx: &Ctx) {
             }
             0x8032527c_u32 => {
                 // cmplwi r0, 0x10
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[0].get(), 0x10_u32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -968,7 +1003,11 @@ fn asm_long2str(ctx: &Ctx) {
                     let ea = g[5].get().wrapping_add(0x3_u32);
                     g[0].set(u32::from(ctx.read_u8(ea)));
                 }
+                unset |= 0x1;
                 // cmplwi r0, 0x0
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[0].get(), 0x0_u32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -988,12 +1027,16 @@ fn asm_long2str(ctx: &Ctx) {
                 }
                 // li r0, 0x30
                 g[0].set(0x30_u32);
+                unset |= 0x1;
                 // stb r3, -0x1(r6)
                 {
                     let ea = g[6].get().wrapping_add(0xffffffff_u32);
                     ctx.write_u8(ea, g[3].get() as u8);
                 }
                 // stbu r0, -0x2(r6)
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[6].get().wrapping_add(0xfffffffe_u32);
                     ctx.write_u8(ea, g[0].get() as u8);
@@ -1017,7 +1060,11 @@ fn asm_long2str(ctx: &Ctx) {
             0x803252a8_u32 => {
                 // li r0, 0x2d
                 g[0].set(0x2d_u32);
+                unset |= 0x1;
                 // stbu r0, -0x1(r6)
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[6].get().wrapping_add(0xffffffff_u32);
                     ctx.write_u8(ea, g[0].get() as u8);
@@ -1034,7 +1081,11 @@ fn asm_long2str(ctx: &Ctx) {
                     let ea = g[5].get().wrapping_add(0x1_u32);
                     g[0].set(u32::from(ctx.read_u8(ea)));
                 }
+                unset |= 0x1;
                 // cmplwi r0, 0x1
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[0].get(), 0x1_u32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1049,7 +1100,11 @@ fn asm_long2str(ctx: &Ctx) {
             0x803252c0_u32 => {
                 // li r0, 0x2b
                 g[0].set(0x2b_u32);
+                unset |= 0x1;
                 // stbu r0, -0x1(r6)
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[6].get().wrapping_add(0xffffffff_u32);
                     ctx.write_u8(ea, g[0].get() as u8);
@@ -1062,6 +1117,9 @@ fn asm_long2str(ctx: &Ctx) {
             }
             0x803252cc_u32 => {
                 // cmplwi r0, 0x2
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let (x, y) = (g[0].get(), 0x2_u32);
                     c::compare(ctx, 0, x < y, x > y);
@@ -1076,7 +1134,11 @@ fn asm_long2str(ctx: &Ctx) {
             0x803252d4_u32 => {
                 // li r0, 0x20
                 g[0].set(0x20_u32);
+                unset |= 0x1;
                 // stbu r0, -0x1(r6)
+                if unset & 0x1 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let ea = g[6].get().wrapping_add(0xffffffff_u32);
                     ctx.write_u8(ea, g[0].get() as u8);
@@ -1120,6 +1182,7 @@ fn asm_longlong2str(ctx: &Ctx) {
     let f = &ctx.regs.fpr;
     let lr0 = ctx.regs.lr.get();
     let _ = (g, f, lr0);
+    let mut unset: u64 = 0;
     let mut pc: u32 = 0x80324de0_u32;
     loop {
         match pc {
@@ -1335,8 +1398,10 @@ fn asm_longlong2str(ctx: &Ctx) {
                 }
                 // li r28, 0xa
                 g[28].set(0xa_u32);
+                unset |= 0x10000000;
                 // li r29, 0x0
                 g[29].set(0_u32);
+                unset |= 0x20000000;
                 // beq .L_80324EE8
                 if (c::cr_bit(ctx, 2) == true) {
                     pc = 0x80324ee8_u32;
@@ -1375,8 +1440,10 @@ fn asm_longlong2str(ctx: &Ctx) {
                 }
                 // li r28, 0x8
                 g[28].set(0x8_u32);
+                unset |= 0x10000000;
                 // li r29, 0x0
                 g[29].set(0_u32);
+                unset |= 0x20000000;
                 // b .L_80324EE8
                 pc = 0x80324ee8_u32;
                 continue;
@@ -1392,8 +1459,10 @@ fn asm_longlong2str(ctx: &Ctx) {
                 }
                 // li r28, 0xa
                 g[28].set(0xa_u32);
+                unset |= 0x10000000;
                 // li r29, 0x0
                 g[29].set(0_u32);
+                unset |= 0x20000000;
                 // b .L_80324EE8
                 pc = 0x80324ee8_u32;
                 continue;
@@ -1409,8 +1478,10 @@ fn asm_longlong2str(ctx: &Ctx) {
                 }
                 // li r28, 0x10
                 g[28].set(0x10_u32);
+                unset |= 0x10000000;
                 // li r29, 0x0
                 g[29].set(0_u32);
+                unset |= 0x20000000;
                 pc = 0x80324ee8_u32;
             }
             0x80324ee8_u32 => {
@@ -1419,8 +1490,14 @@ fn asm_longlong2str(ctx: &Ctx) {
                 // addi r4, r30, 0x0
                 g[4].set(g[30].get());
                 // addi r5, r29, 0x0
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[5].set(g[29].get());
                 // addi r6, r28, 0x0
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[6].set(g[28].get());
                 // bl __mod2u
                 c::call(ctx, 0x80322b40_u32, 0x80324efc_u32);
@@ -1434,8 +1511,14 @@ fn asm_longlong2str(ctx: &Ctx) {
                 // addi r4, r30, 0x0
                 g[4].set(g[30].get());
                 // addi r5, r29, 0x0
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[5].set(g[29].get());
                 // addi r6, r28, 0x0
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 g[6].set(g[28].get());
                 // bl __div2u
                 c::call(ctx, 0x8032291c_u32, 0x80324f14_u32);
@@ -1540,11 +1623,17 @@ fn asm_longlong2str(ctx: &Ctx) {
                 // li r0, 0x8
                 g[0].set(0x8_u32);
                 // xor r3, r28, r0
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[28].get() ^ g[0].get();
                     g[3].set(v);
                 }
                 // xor r0, r29, r4
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[29].get() ^ g[4].get();
                     g[0].set(v);
@@ -1691,11 +1780,17 @@ fn asm_longlong2str(ctx: &Ctx) {
                 // li r0, 0x0
                 g[0].set(0_u32);
                 // xor r3, r28, r3
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[28].get() ^ g[3].get();
                     g[3].set(v);
                 }
                 // xor r0, r29, r0
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[29].get() ^ g[0].get();
                     g[0].set(v);
@@ -1827,11 +1922,17 @@ fn asm_longlong2str(ctx: &Ctx) {
                 // li r0, 0x0
                 g[0].set(0_u32);
                 // xor r3, r28, r3
+                if unset & 0x10000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[28].get() ^ g[3].get();
                     g[3].set(v);
                 }
                 // xor r0, r29, r0
+                if unset & 0x20000000 == 0 {
+                    c::unset_read(ctx);
+                }
                 {
                     let v = g[29].get() ^ g[0].get();
                     g[0].set(v);
@@ -1987,6 +2088,7 @@ fn asm_longlong2str(ctx: &Ctx) {
                         g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
                     }
                 }
+                unset |= 0x30000000;
                 // lwz r0, 0x44(r1)
                 {
                     let ea = g[1].get().wrapping_add(0x44_u32);
