@@ -173,7 +173,8 @@ def trace(cfg, b, upto, reg, depth, steps, seen, budget):
                 if writes(m, ops, reg) and not reload(m, ops)]
         if len(sets) == 1 and sets[0][0] == 0:
             return trace(cfg, 0, sets[0][1] + 1, reg, depth + 1, steps, seen, budget)
-    # Where paths join, what every path that sets it agrees on.
+    # Where paths join, what every path that sets it agrees on; where they differ, ("any", ...)
+    # the loads, calls and arguments some path takes it from, each a target of its own.
     if not preds[b] or len(preds[b]) > 4:
         return None
     found = {trace(cfg, p, len(blocks[p]), reg, depth + 1, steps, seen, budget)
@@ -181,7 +182,13 @@ def trace(cfg, b, upto, reg, depth, steps, seen, budget):
     found.discard(AROUND)
     if len(found) == 1:
         return found.pop()
-    return AROUND if not found else None
+    if not found:
+        return AROUND
+    some = set()
+    for f in found:
+        if f is not None:
+            some.update(f[1] if f[0] == "any" else (f,))
+    return ("any", tuple(sorted(some, key=repr))) if some else None
 
 
 def constants(root, unit):
@@ -288,7 +295,7 @@ def decide_in(cfg, b, start, consts):
                 return (same, "=", None)
             # A loaded bound against what the function computes, as a loop's count against its
             # counter: 0 and its neighbors skip the loop or end it at once.
-            loads = [s for s in (sx, sy) if s and s[0] == "load"]
+            loads = [s for s in (sx, sy) if s and s[0] in ("load", "any")]
             if len(loads) == 1 and None in (sx, sy):
                 return (loads[0], "=", 0)
             return None
@@ -345,6 +352,30 @@ def fails(block):
     """Whether the block calls what never returns, as a failed assertion does."""
     return any(coverage.is_call(m) and ops.split(",")[0].strip() in coverage.NORETURN
                for _, m, ops in block)
+
+
+def target(src, op, k, name, unit, addrs):
+    """The line naming source `src` as a target of function `name`, with its note, or None."""
+    if src[0] in ("reg", "load") and isinstance(src[-1], tuple):
+        k = undo(src[-1], op, k)
+        if k is None or (op == "&" and not k):
+            return None
+    if src[0] == "same":
+        return f"load {src[1]:#010x} {src[3]} = load {src[2]:#010x}", name
+    if src[0] == "call":
+        where = addrs.get(src[1], {})
+        at = where.get(unit) or (next(iter(where.values())) if len(where) == 1 else None)
+        if at is None or src[1] == name:
+            return None
+        return f"call {at:#010x}", f"{name} {src[1]}"
+    if src[0] == "reg":
+        return f"reg {src[1][1:]} {op} {k:#x}", name
+    size = src[2]
+    if op == "&":
+        k &= (1 << (8 * size)) - 1
+        if not k:
+            return None
+    return f"load {src[1]:#010x} {size} {op} {k:#x}", name
 
 
 def main():
@@ -410,35 +441,12 @@ def main():
             if d is None or d[0] is None:
                 continue
             src, op, k = d
-            if src[0] in ("reg", "load") and isinstance(src[-1], tuple):
-                k = undo(src[-1], op, k)
-                if k is None or (op == "&" and not k):
-                    continue
-            if src[0] == "same":
-                line = f"load {src[1]:#010x} {src[3]} = load {src[2]:#010x}"
-                note = name
-            elif src[0] == "call":
-                where = addrs.get(src[1], {})
-                at = where.get(unit) or (next(iter(where.values())) if len(where) == 1 else None)
-                if at is None or src[1] == name:
-                    continue
-                line = f"call {at:#010x}"
-                note = f"{name} {src[1]}"
-            elif src[0] == "reg":
-                line = f"reg {src[1][1:]} {op} {k:#x}"
-                note = name
-            else:
-                size = src[2]
-                if op == "&":
-                    k &= (1 << (8 * size)) - 1
-                    if not k:
-                        continue
-                line = f"load {src[1]:#010x} {size} {op} {k:#x}"
-                note = name
-            if line not in seen:
-                seen.add(line)
-                kinds[src[0]] += 1
-                lines.append(f"{insns[0][0]:#010x} {line} # {note}\n")
+            for one in src[1] if src[0] == "any" else (src,):
+                found = target(one, op, k, name, unit, addrs)
+                if found and found[0] not in seen:
+                    seen.add(found[0])
+                    kinds[one[0]] += 1
+                    lines.append(f"{insns[0][0]:#010x} {found[0]} # {found[1]}\n")
     with open(args.out, "w") as f:
         f.writelines(lines)
     print(f"{len(lines)} targets in {len({ln.split()[0] for ln in lines})} functions: "
