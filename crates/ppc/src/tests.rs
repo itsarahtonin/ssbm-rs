@@ -497,6 +497,46 @@ fn mutated_checks_reach_what_a_callee_result_decides() {
 }
 
 #[test]
+fn mutated_checks_make_a_null_checked_pointer_null() {
+    // f: p = *(u32*) 0x80600010; return p ? *p : 7, where p points to 5. A target at the null
+    // check makes p null, never a neighbor of null that only faults.
+    let ctx = machine(&[
+        0x3C80_8060, // lis r4, 0x8060
+        0x80A4_0010, // lwz r5, 0x10(r4)
+        0x2805_0000, // cmplwi r5, 0
+        0x4182_000C, // beq +12
+        0x8065_0000, // lwz r3, 0(r5)
+        BLR,
+        li(3, 7),
+        BLR,
+    ]);
+    ctx.write_u32(0x8060_0010, 0x8060_0100);
+    ctx.write_u32(0x8060_0100, 5);
+    ctx.register_port(
+        CODE,
+        |ctx| {
+            let p = ctx.read_u32(0x8060_0010);
+            ctx.regs.set_r(3, if p == 0 { 7 } else { ctx.read_u32(p) });
+        },
+        ssbm_rt::lockstep::Returns::Int,
+    );
+    ctx.set_mode(CODE, Mode::Lockstep);
+    ctx.lockstep.mutations.set(50);
+    ctx.lockstep.rng.set(1);
+    let load = ssbm_rt::lockstep::Target::Load {
+        pc: CODE + 4,
+        size: 4,
+        value: 0,
+        test: ssbm_rt::lockstep::Test::Equal,
+    };
+    ctx.lockstep.targets.borrow_mut().insert(CODE, vec![load]);
+    ctx.invoke(CODE);
+    assert_eq!(ctx.regs.r(3), 5);
+    assert!(ctx.lockstep.mismatches.borrow().is_empty());
+    assert_eq!(ctx.lockstep.stats.borrow()[&CODE].dropped, 0, "no pointer next to null");
+}
+
+#[test]
 fn mutated_checks_reach_every_case_of_a_switch() {
     // f: switch (*(u8*) 0x80600010) { case 0..=3: return 10 + it; default: return 0; } through
     // a jump table at 0x80600100, where the byte is 3.

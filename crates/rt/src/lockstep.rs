@@ -1111,6 +1111,8 @@ fn change_target(ctx: &Ctx, addr: u32, loaded: &[(u32, u32)]) -> Option<String> 
     let near = |old: u32, value: u32, test: Test| match test {
         Test::Bits => old ^ value,
         Test::Range(n) => value.wrapping_add((state.random() % u64::from(n.max(1))) as u32),
+        // A pointer a null check looks at becomes null: its neighbors only fault.
+        Test::Equal if value == 0 && (RAM_LO..RAM_HI).contains(&old) => 0,
         Test::Equal => match state.random() % 3 {
             0 => value.wrapping_sub(1),
             1 => value.wrapping_add(1),
