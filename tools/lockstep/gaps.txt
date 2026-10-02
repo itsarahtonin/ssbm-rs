@@ -308,3 +308,8 @@ fioPacketResultWrite+* dev # MCC/FIO: runs past its not-initialized exit only on
 fioPacketSendPacket+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
 fioPacketWrite+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
 mccInitializeCheck+* dev # MCC/FIO: runs past its not-initialized exit only once the dev kit's USB link is up
+
+# Threads and jumps (2026-10-02):
+OSExitThread+* fail # OSCreateThread makes it each thread's return address; the game's only OSCreateThread call (hsd_80397DA4, debugconsole_main) starts the crash screen's thread
+__setjmp+* oracle # ports call Ctx::setjmp (rt jump.rs) instead, so its port never runs; each check of a caller (granime, hsd_3B33, hsd_3B34) compares the original's setjmp with that
+__longjmp+* oracle # ports unwind to Ctx::setjmp (rt jump.rs) instead, so its port never runs; each check of a caller compares the original's longjmp with that
