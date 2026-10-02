@@ -196,6 +196,40 @@ fn mutated_checks_drop_calls_whose_original_fails() {
 }
 
 #[test]
+fn mutated_checks_drop_calls_whose_port_reads_an_unset_register() {
+    // f(n): return n == 1 ? 7 : r5, where r5 holds what code far up left. The port reads it
+    // through c::unset_read, as c2rs's ports from machine code do, which ends a mutated check.
+    let ctx = machine(&[
+        0x2C03_0001, // cmpwi r3, 1
+        0x4082_000C, // bne +12
+        li(3, 7),
+        BLR,
+        0x7CA3_2B78, // mr r3, r5
+        BLR,
+    ]);
+    ctx.register_port(
+        CODE,
+        |ctx| {
+            if ctx.regs.r(3) == 1 {
+                ctx.regs.set_r(3, 7);
+            } else {
+                ssbm_rt::cpu::unset_read(ctx);
+                ctx.regs.set_r(3, ctx.regs.r(5));
+            }
+        },
+        ssbm_rt::lockstep::Returns::Int,
+    );
+    ctx.set_mode(CODE, Mode::Lockstep);
+    ctx.lockstep.mutations.set(50);
+    ctx.lockstep.rng.set(1);
+    ctx.regs.set_r(3, 1);
+    ctx.invoke(CODE);
+    assert_eq!(ctx.regs.r(3), 7);
+    assert!(ctx.lockstep.mismatches.borrow().is_empty());
+    assert_eq!(ctx.lockstep.stats.borrow()[&CODE].mutated_mismatches, 0);
+}
+
+#[test]
 fn mutated_checks_leave_code_run_from_ram_as_it_is() {
     // f(p): jumps to p, where `li r3, 5; blr` lies in RAM past the game's code, as playback
     // places injected code; mutated checks change bytes behind p.

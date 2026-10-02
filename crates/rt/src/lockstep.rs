@@ -559,7 +559,11 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     let rechecking = state.rechecking.replace(state.rechecking.get() || deep);
     let calls_left = state.calls_left.replace(state.mutating.get().then_some(MUTATED_CALLS));
     let port_failure = passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_native(addr, native))));
-    let port_dropped = port_failure.as_ref().is_some_and(|p| p.is::<Dropped>());
+    // A mutated check whose port runs away, or reads a register no one set (c::unset_read),
+    // ends as one whose original does.
+    let port_dropped = port_failure
+        .as_ref()
+        .is_some_and(|p| p.is::<Dropped>() || (mutating && p.is::<Runaway>()));
     let mut port = port_failure.map(|p| {
             if let Some(j) = crate::jump::describe(p.as_ref()) {
                 return j;
@@ -579,8 +583,8 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     let port_resume = ctx.take_resume_at();
     let j2 = ctx.mem.end_journal();
     if port_dropped {
-        // A check of a port this one's port called had to be dropped: the call can't be
-        // compared without it.
+        // A check of a port this one's port called had to be dropped, or the port ran away
+        // under changed inputs: the call can't be compared.
         ctx.mem.restore(&j2);
         ctx.regs.restore(&regs0);
         return drop_check(ctx, traced, enclosing, outermost);
@@ -665,7 +669,9 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
             clear_stack(ctx, sp);
             let port_again =
                 passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_native(addr, native))));
-            dropped |= port_again.as_ref().is_some_and(|p| p.is::<Dropped>());
+            dropped |= port_again
+                .as_ref()
+                .is_some_and(|p| p.is::<Dropped>() || (mutating && p.is::<Runaway>()));
             ctx.truncate_natives(natives);
             let _ = ctx.take_resume_at();
             let j4 = ctx.mem.end_journal();
