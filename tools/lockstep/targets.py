@@ -282,8 +282,16 @@ def decide_in(cfg, b, start, consts):
             return (source(cfg, b, j, x), "=", k & 0xFFFFFFFF) if k is not None else None
         if m in ("cmpw", "cmplw"):
             x, y = (r[1], r[2]) if len(r) == 3 else (r[0], r[1])
-            same = same_loads(source(cfg, b, j, x), source(cfg, b, j, y))
-            return (same, "=", None) if same else None
+            sx, sy = source(cfg, b, j, x), source(cfg, b, j, y)
+            same = same_loads(sx, sy)
+            if same:
+                return (same, "=", None)
+            # A loaded bound against what the function computes, as a loop's count against its
+            # counter: 0 and its neighbors skip the loop or end it at once.
+            loads = [s for s in (sx, sy) if s and s[0] == "load"]
+            if len(loads) == 1 and None in (sx, sy):
+                return (loads[0], "=", 0)
+            return None
         if m in ("fcmpu", "fcmpo") and len(r) == 3:
             # A loaded single against a constant: the compare looks for that value, and the
             # floats next to it either side.
