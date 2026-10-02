@@ -5,9 +5,12 @@
 #     FUNCTION+OFFSET KIND # evidence: the analysis, or the callers and the values they pass
 #
 # KIND is dead (no value that reaches the branch takes it), dev (developer-only code that nothing
-# in the game turns on) or hw (code that only hardware the SDK layer leaves out runs). A block
-# that odd state can reach, such as a null check the game never trips, belongs to probes and
-# mutated checks instead, not here.
+# in the game turns on), fail (code that runs only once the game has failed: exception handlers,
+# crash dumps, exit), hw (code that only hardware the SDK layer leaves out runs, or that the SDK
+# layer stands in for) or oracle (provisional: code every game runs that lockstep cannot check,
+# because it never returns or runs as an exception handler; the replay rotation's frame
+# comparison with Dolphin covers what it does). A block that odd state can reach, such as a null
+# check the game never trips, belongs to probes and mutated checks instead, not here.
 #
 # FUNCTION+* covers every block of a function, for the functions no run can reach that are not
 # verified by probes.
@@ -42,3 +45,37 @@ PADSetSamplingRate+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): n
 SIRefreshSamplingRate+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
 PADControlMotor+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
 PADSetSpec+* hw # the SDK layer stands in for it (ssbm-run STAND_INS): neither the original nor the port runs
+
+# Never called in any run (2026-10-02):
+TRKLoadContext+* dev # MetroTRK, the debugger's target side: runs only with a debugger attached through the dev kit
+TRKInterruptHandler+* dev # MetroTRK: runs only with a debugger attached
+TRKExceptionHandler+* dev # MetroTRK: runs only with a debugger attached
+TRKInterruptHandlerEnableInterrupts+* dev # MetroTRK: runs only with a debugger attached
+__DBExceptionDestinationAux+* dev # dolphin/db: hands exceptions to an attached debugger
+__DBExceptionDestination+* dev # dolphin/db: hands exceptions to an attached debugger
+DBInitInterrupts+* dev # odenotstub: debugger interrupt setup, for a dev kit's debugger
+FIOQuery+* dev # dolphin/mcc/fio: host file I/O over a dev kit's USB adapter
+hsd_80394314+* dev # debugconsole_main: the HSD debug console, which nothing in the retail game opens
+fn_80397814+* dev # debugconsole_main: the HSD debug console, which nothing in the retail game opens
+printf+* dead # its one caller, gmtoulib at 8018F4D8, prints "impossible stage num" for a stage mnSelStageRandom does not return
+OSDefaultExceptionHandler+* fail # the OS's handler for exceptions nothing else takes: a failing game
+__OSUnhandledException+* fail # reports an exception no handler takes and halts
+OSDumpContext+* fail # prints the registers of a failed context, for __OSUnhandledException
+DMAErrorHandler+* fail # reports a failed DMA transfer
+PPCHalt+* fail # halts the CPU for good, after a failure or exit
+exit+* fail # MSL exit: the game never exits; only a failure path would reach it
+_ExitProcess+* fail # the EABI exit hook, after exit
+__assert+* fail # never returns; coverage.py already leaves out blocks that call it
+__OSDispatchInterrupt+* hw # the exception vector's interrupt dispatcher: the SDK layer reads __OSInterruptTable and calls the handler itself (crates/sdk/src/lib.rs, deliver_one)
+ExternalInterruptHandler+* hw # the external interrupt exception vector, which the SDK layer stands in for as above
+OSLoadContext+* hw # switches threads by returning from an exception (rfi), which the interpreter does not emulate; thread switches are the SDK layer's
+OSSwitchFPUContext+* hw # the floating-point unavailable exception's handler; the interpreter raises no exceptions
+GXCPInterruptHandler+* hw # command processor FIFO overflow/underflow interrupt, which the SDK layer never raises
+GXTokenInterruptHandler+* hw # pixel engine token interrupt, which the SDK layer never raises
+__OSResetSWInterruptHandler+* hw # the console's reset switch, which no run presses
+__ARChecksize+* hw # sizes ARAM by probing the hardware at boot; the SDK layer sets ARAM up instead
+__fstLoad+* hw # loads the disc's file table for the apploader path the SDK layer's boot replaces
+__start+* oracle # the boot entry: never returns, so no lockstep check can compare it; every run starts here
+main+* oracle # never returns: it runs gm_801A4510, the scene loop, for good
+gm_801A4510+* oracle # the scene loop, which never returns
+gm_801A4D34+* oracle # runs a scene's frames until it ends, inside the scene loop: one call spans a whole scene of interrupts and video fields, which a check cannot replay
