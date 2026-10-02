@@ -850,6 +850,12 @@ impl Ctx {
             .entry(addr)
             .or_else(|| resolved().then(|| self.entry(addr)).flatten())
         else {
+            if self.lockstep.is_mutating() {
+                // Every function has a port, so under changed inputs a call to an address
+                // with none went through a pointer that leads to no function, such as into
+                // the middle of one, which runs on whatever registers each side left.
+                std::panic::panic_any(lockstep::Runaway);
+            }
             return self.run_original(addr);
         };
         match e.mode {

@@ -196,6 +196,30 @@ fn mutated_checks_drop_calls_whose_original_fails() {
 }
 
 #[test]
+fn mutated_checks_drop_calls_to_no_function() {
+    // f calls through a pointer into the middle of code no port starts at, as a garbage table
+    // entry does: its mutated checks end there, and its real call is checked.
+    const MID: u32 = CODE + 0x44;
+    let ctx = machine(&[li(3, 7), BLR]);
+    ctx.write_u32(MID, li(4, 1));
+    ctx.write_u32(MID + 4, BLR);
+    ctx.register_port(
+        CODE,
+        |ctx| {
+            ctx.invoke(MID);
+            ctx.regs.set_r(3, 7);
+        },
+        ssbm_rt::lockstep::Returns::Int,
+    );
+    ctx.set_mode(CODE, Mode::Lockstep);
+    ctx.lockstep.mutations.set(8);
+    ctx.lockstep.rng.set(1);
+    ctx.invoke(CODE);
+    assert_eq!(ctx.regs.r(3), 7);
+    assert_eq!(ctx.lockstep.stats.borrow()[&CODE].calls, 1, "only the real call ran");
+}
+
+#[test]
 fn checks_roll_back_the_locked_cache() {
     // f(p): *p += 1, with p in the locked cache. The port runs on what the original found.
     const P: u32 = 0xE000_0000;
