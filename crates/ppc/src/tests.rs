@@ -196,6 +196,41 @@ fn mutated_checks_drop_calls_whose_original_fails() {
 }
 
 #[test]
+fn mutated_checks_drop_calls_that_read_a_saved_register() {
+    // f(i): saves r31, stores 5 at 8(r1), returns the word at r1 + i. Changed inputs make i 12,
+    // the saved r31's slot, which only the original's frame holds.
+    let ctx = machine(&[
+        0x9421_FFF0, // stwu r1, -16(r1)
+        0x93E1_000C, // stw r31, 12(r1)
+        li(4, 5),
+        0x9081_0008, // stw r4, 8(r1)
+        0x7C61_182E, // lwzx r3, r1, r3
+        0x83E1_000C, // lwz r31, 12(r1)
+        addi(1, 1, 16),
+        BLR,
+    ]);
+    ctx.register_port(
+        CODE,
+        |ctx| {
+            let i = ctx.regs.r(3);
+            let _frame = ctx.stack_frame(16);
+            let sp = ctx.regs.r(1);
+            ctx.write_u32(sp + 8, 5);
+            ctx.regs.set_r(3, ctx.read_u32(sp.wrapping_add(i)));
+        },
+        ssbm_rt::lockstep::Returns::Int,
+    );
+    ctx.set_mode(CODE, Mode::Lockstep);
+    ctx.lockstep.mutations.set(400);
+    ctx.lockstep.rng.set(1);
+    ctx.regs.set_r(31, 0x1234);
+    ctx.regs.set_r(3, 8);
+    ctx.invoke(CODE);
+    assert_eq!(ctx.regs.r(3), 5);
+    assert!(ctx.lockstep.mismatches.borrow().is_empty());
+}
+
+#[test]
 fn mutated_checks_drop_calls_to_no_function() {
     // f calls through a pointer into the middle of code no port starts at, as a garbage table
     // entry does: its mutated checks end there, and its real call is checked.

@@ -193,6 +193,13 @@ pub struct Ctx {
     /// what hears of reads of the rest.
     shadow: RefCell<Option<StackShadow>>,
     shadow_on: Cell<bool>,
+    /// The words of the stack `[saves_lo, saves_hi)` original code saved registers in, a bit
+    /// each, while `begin_save_tracking` runs, and whether a load is restoring one.
+    saves: RefCell<Vec<u64>>,
+    saves_lo: Cell<u32>,
+    saves_hi: Cell<u32>,
+    saves_on: Cell<bool>,
+    restoring: Cell<bool>,
     /// The addresses read while a read log is open (see `begin_read_log`), which `shadow_on`
     /// also gates.
     read_log: RefCell<Option<Vec<u32>>>,
@@ -277,6 +284,11 @@ impl Ctx {
             resolver: RefCell::default(),
             shadow: RefCell::default(),
             shadow_on: Cell::new(false),
+            saves: RefCell::default(),
+            saves_lo: Cell::new(0),
+            saves_hi: Cell::new(0),
+            saves_on: Cell::new(false),
+            restoring: Cell::new(false),
             read_log: RefCell::default(),
             running_original: Cell::new(false),
             zero_frames: Cell::new(false),
@@ -325,7 +337,65 @@ impl Ctx {
 
     pub(crate) fn end_stack_shadow(&self) {
         *self.shadow.borrow_mut() = None;
-        self.shadow_on.set(self.read_log.borrow().is_some());
+        self.shadow_on
+            .set(self.read_log.borrow().is_some() || self.saves_on.get());
+    }
+
+    /// Starts noting the stack words original code saves registers in, which ports keep
+    /// nowhere: a load of one that does not restore its register ends a mutated check.
+    pub(crate) fn begin_save_tracking(&self, lo: u32, hi: u32) {
+        let words = (hi.wrapping_sub(lo) / 4) as usize;
+        let mut saves = self.saves.borrow_mut();
+        saves.clear();
+        saves.resize(words.div_ceil(64), 0);
+        self.saves_lo.set(lo);
+        self.saves_hi.set(hi);
+        self.saves_on.set(true);
+        self.shadow_on.set(true);
+    }
+
+    pub(crate) fn end_save_tracking(&self) {
+        self.saves_on.set(false);
+        self.shadow_on
+            .set(self.read_log.borrow().is_some() || self.shadow.borrow().is_some());
+    }
+
+    #[inline]
+    pub fn tracks_saves(&self) -> bool {
+        self.saves_on.get()
+    }
+
+    /// The bit of the tracked stack word at `addr`, if it is one.
+    #[inline]
+    fn save_bit(&self, addr: u32) -> Option<usize> {
+        let (lo, hi) = (self.saves_lo.get(), self.saves_hi.get());
+        (lo <= addr && addr < hi).then(|| ((addr - lo) / 4) as usize)
+    }
+
+    /// Marks or clears the tracked words of the `len` bytes at `addr`.
+    fn mark_saves(&self, addr: u32, len: u32, saved: bool) {
+        let mut saves = self.saves.borrow_mut();
+        for word in (addr & !3..addr.wrapping_add(len)).step_by(4) {
+            if let Some(i) = self.save_bit(word) {
+                if saved {
+                    saves[i / 64] |= 1 << (i % 64);
+                } else {
+                    saves[i / 64] &= !(1 << (i % 64));
+                }
+            }
+        }
+    }
+
+    /// Original code saved a register in the `len` bytes at `addr`.
+    pub fn note_save(&self, addr: u32, len: u32) {
+        if self.saves_on.get() {
+            self.mark_saves(addr, len, true);
+        }
+    }
+
+    /// Whether the loads that follow restore saved registers.
+    pub fn set_restoring(&self, on: bool) {
+        self.restoring.set(on);
     }
 
     /// Starts noting the address of every read.
@@ -337,7 +407,8 @@ impl Ctx {
     /// Stops noting reads and returns the words read, each once.
     pub(crate) fn end_read_log(&self) -> Vec<u32> {
         let mut words = self.read_log.borrow_mut().take().unwrap_or_default();
-        self.shadow_on.set(self.shadow.borrow().is_some());
+        self.shadow_on
+            .set(self.shadow.borrow().is_some() || self.saves_on.get());
         words.sort_unstable();
         words.dedup();
         words
@@ -369,6 +440,9 @@ impl Ctx {
 
     #[cold]
     fn shadow_write(&self, addr: u32, len: u32) {
+        if self.saves_on.get() {
+            self.mark_saves(addr, len, false);
+        }
         if let Some(sh) = self.shadow.borrow_mut().as_mut() {
             for i in 0..len {
                 let off = addr.wrapping_add(i).wrapping_sub(sh.lo) as usize;
@@ -381,6 +455,17 @@ impl Ctx {
 
     #[cold]
     fn shadow_read(&self, addr: u32, len: u32) {
+        if self.saves_on.get() && !self.restoring.get() && self.running_original.get() && {
+            let saves = self.saves.borrow();
+            (addr & !3..addr.wrapping_add(len))
+                .step_by(4)
+                .filter_map(|w| self.save_bit(w))
+                .any(|i| saves[i / 64] >> (i % 64) & 1 != 0)
+        } {
+            // Changed inputs led the original to read a register its own code saved, which
+            // ports keep nowhere: no call the game makes gets here.
+            std::panic::panic_any(lockstep::Runaway);
+        }
         if let Some(log) = self.read_log.borrow_mut().as_mut()
             && log.len() < READ_LOG_MAX
         {

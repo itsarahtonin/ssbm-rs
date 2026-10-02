@@ -651,6 +651,19 @@ fn load_store(ctx: &Ctx, w: u32) {
         // `stwu r1, -n(r1)` allocates a frame.
         ctx.stack_allocated(ea, r(ctx, 1));
     }
+    // Saves and restores of the registers a call keeps, and of the link register, through the
+    // stack pointer, for lockstep to tell from other uses of those words.
+    let saves = ctx.tracks_saves();
+    let restore = saves
+        && match op {
+            46 => true,
+            32 | 33 => a == 1 && (d >= 14 || d == 0),
+            50 | 51 => a == 1 && d >= 14,
+            _ => false,
+        };
+    if restore {
+        ctx.set_restoring(true);
+    }
     match op {
         32 | 33 => set_r(ctx, d, ctx.read_u32(ea)),
         34 | 35 => set_r(ctx, d, u32::from(ctx.read_u8(ea))),
@@ -674,6 +687,19 @@ fn load_store(ctx: &Ctx, w: u32) {
         52 | 53 => ctx.write_u32(ea, fp::stfs(f0(ctx, d))),
         54 | 55 => ctx.write_u64(ea, f0(ctx, d).to_bits()),
         _ => unreachable!(),
+    }
+    if restore {
+        ctx.set_restoring(false);
+    }
+    if saves {
+        match op {
+            47 => ctx.note_save(ea, 4 * (32 - d as u32)),
+            36 | 37 if a == 1 && (d >= 14 || (d == 0 && r(ctx, 0) == ctx.regs.lr.get())) => {
+                ctx.note_save(ea, 4)
+            }
+            54 | 55 if a == 1 && d >= 14 => ctx.note_save(ea, 8),
+            _ => {}
+        }
     }
     if update {
         set_r(ctx, a, ea);

@@ -501,7 +501,13 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         ctx.begin_read_log();
         state.watch_loads(addr);
     }
+    if mutating {
+        ctx.begin_save_tracking(ctx.stack_floor(sp, STACK_SCRATCH), sp);
+    }
     let original_panic = passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr))));
+    if mutating {
+        ctx.end_save_tracking();
+    }
     let (reads, loaded) = if log_reads {
         (ctx.end_read_log(), state.end_watch())
     } else {
@@ -653,7 +659,13 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         if log_writes {
             ctx.mem.begin_log();
         }
+        if mutating {
+            ctx.begin_save_tracking(ctx.stack_floor(sp, STACK_SCRATCH), sp);
+        }
         let again = passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr))));
+        if mutating {
+            ctx.end_save_tracking();
+        }
         let original_writes = if log_writes { ctx.mem.end_log() } else { Vec::new() };
         dropped |= again
             .as_ref()
