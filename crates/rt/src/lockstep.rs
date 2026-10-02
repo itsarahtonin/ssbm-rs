@@ -194,6 +194,10 @@ pub struct State {
     pub mutations: Cell<u32>,
     mutating: Cell<bool>,
     pub rng: Cell<u64>,
+    /// What each mutated check's own stream starts from (`rng` when the first one runs), and
+    /// how many of each function's calls have had mutated checks.
+    seed: Cell<u64>,
+    mutated_calls: RefCell<BTreeMap<u32, u64>>,
     /// What decides the branches to code each function's checks have not reached: half its
     /// mutated checks change one of these.
     pub targets: RefCell<BTreeMap<u32, Vec<Target>>>,
@@ -938,6 +942,17 @@ pub fn probe(ctx: &Ctx, addr: u32, setup: impl FnOnce(&Ctx)) -> bool {
     true
 }
 
+/// The start of a mutated check's stream of random numbers (splitmix64 over its identity).
+fn stream(seed: u64, addr: u32, nth: u64, k: u32) -> u64 {
+    let mut x = seed
+        ^ u64::from(addr).wrapping_mul(0x9E37_79B9_7F4A_7C15)
+        ^ nth.wrapping_mul(0xBF58_476D_1CE4_E5B9)
+        ^ u64::from(k).wrapping_mul(0x94D0_49BB_1331_11EB);
+    x = (x ^ (x >> 30)).wrapping_mul(0xBF58_476D_1CE4_E5B9);
+    x = (x ^ (x >> 27)).wrapping_mul(0x94D0_49BB_1331_11EB);
+    (x ^ (x >> 31)).max(1)
+}
+
 /// Calls a port under a mutated check may make: a runaway loop makes many more.
 const MUTATED_CALLS: u64 = 10_000_000;
 
@@ -969,7 +984,20 @@ fn mutated_checks(
     let after = ctx.mem.capture(before.keys());
     let _ = ctx.take_resume_at();
     let mut stop = None;
-    for _ in 0..state.mutations.get() {
+    if state.seed.get() == 0 {
+        state.seed.set(state.rng.get().max(1));
+    }
+    let nth = {
+        let mut calls = state.mutated_calls.borrow_mut();
+        let n = calls.entry(addr).or_default();
+        *n += 1;
+        *n
+    };
+    for k in 0..state.mutations.get() {
+        // Each mutated check draws from its own stream, of the seed, the function, which of
+        // its calls this is and which of the call's checks: another run that reaches the same
+        // call, a narrower or traced one, changes its inputs alike.
+        state.rng.set(stream(state.seed.get(), addr, nth, k));
         ctx.mem.begin_journal();
         ctx.mem.restore(before);
         ctx.regs.restore(regs0);

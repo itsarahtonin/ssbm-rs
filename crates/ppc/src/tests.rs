@@ -196,6 +196,41 @@ fn mutated_checks_drop_calls_whose_original_fails() {
 }
 
 #[test]
+fn mutated_checks_change_a_call_alike_whatever_ran_before() {
+    // f(n) = n + 1, whose port is wrong for n with bit 4 set; g's checks, run first in one of
+    // the two machines, must not change which of f's mutated checks find that.
+    const G: u32 = CODE + 0x40;
+    let found = |g_first: bool| {
+        let ctx = machine(&[addi(3, 3, 1), BLR]);
+        ctx.write_u32(G, li(3, 0));
+        ctx.write_u32(G + 4, BLR);
+        ctx.register_port(
+            CODE,
+            |ctx| {
+                let n = ctx.regs.r(3);
+                ctx.regs.set_r(3, if n & 0x10 != 0 { n } else { n + 1 });
+            },
+            ssbm_rt::lockstep::Returns::Int,
+        );
+        ctx.register_port(G, |ctx| ctx.regs.set_r(3, 0), ssbm_rt::lockstep::Returns::Int);
+        ctx.set_mode(CODE, Mode::Lockstep);
+        ctx.set_mode(G, Mode::Lockstep);
+        ctx.lockstep.mutations.set(400);
+        ctx.lockstep.rng.set(7);
+        if g_first {
+            ctx.invoke(G);
+        }
+        ctx.regs.set_r(3, 1);
+        ctx.invoke(CODE);
+        let calls: Vec<u64> = ctx.lockstep.mismatches.borrow().iter().map(|m| m.call).collect();
+        calls
+    };
+    let alone = found(false);
+    assert!(!alone.is_empty(), "some mutated check sets bit 4");
+    assert_eq!(found(true), alone);
+}
+
+#[test]
 fn checks_end_once_the_blocks_still_needed_are_verified() {
     // f(n): return n != 0 ? 1 : 2, whose `return 2` block alone is still needed.
     let ctx = machine(&[
