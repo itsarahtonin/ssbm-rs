@@ -17,6 +17,7 @@
 
 use std::cell::{Cell, RefCell};
 use std::collections::{BTreeMap, BTreeSet, HashMap};
+use std::rc::Rc;
 use std::panic::{AssertUnwindSafe, catch_unwind, panic_any, resume_unwind};
 
 use gekko_fp::Ps;
@@ -269,6 +270,13 @@ pub struct State {
     pub trace_log: Cell<bool>,
     /// Whether the first few mutated checks of each function that are dropped print why.
     pub drop_log: Cell<bool>,
+    /// What the run does with outermost calls it may save (crate::capture): given the
+    /// function, whether its check mismatched and a way to take the call, as the check ends.
+    #[allow(clippy::type_complexity)]
+    pub capture: RefCell<Option<Rc<dyn Fn(&Ctx, u32, bool, &dyn Fn() -> crate::capture::Call)>>>,
+    /// Checks that have mismatched, at any depth, for a capture to tell whether the call it may
+    /// save had one inside it.
+    mismatched: Cell<u64>,
     traces: RefCell<Vec<CallTrace>>,
     /// Whether a check is taking its second look at a mismatch, when the ports its port calls
     /// run unchecked: their own checks already ran.
@@ -472,6 +480,18 @@ impl State {
         self.mutating.get()
     }
 
+    /// The callee a mutated check stands in for, with what it returns.
+    pub fn stub_now(&self) -> Option<(u32, u32, f64)> {
+        self.stub.get()
+    }
+
+    /// Checks the calls that follow as a saved call was checked: as mutated checks if `mutated`,
+    /// standing in for `stub`'s callee.
+    pub fn resume(&self, mutated: bool, stub: Option<(u32, u32, f64)>) {
+        self.mutating.set(mutated);
+        self.stub.set(stub);
+    }
+
     /// How far checks have got through the world's interactions: it grows while the original
     /// makes them and while the port replays them, where video fields do not advance.
     pub fn progress(&self) -> usize {
@@ -512,6 +532,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     }
     let outermost = !state.active.get();
     let enclosing = state.phase.get();
+    let mismatched_before = state.mismatched.get();
     if outermost {
         state.active.set(true);
         CHECKING.with(|c| c.set(true));
@@ -870,6 +891,14 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     }
     // Continue from the original's results.
     ctx.mem.restore(&j2);
+    // Memory and registers are as the call found them: the run may save it.
+    let capture = state.capture.borrow().clone();
+    if outermost && let Some(capture) = capture {
+        // It, or a check inside it.
+        let mismatched =
+            (!uninitialized && !diffs.is_empty()) || state.mismatched.get() > mismatched_before;
+        capture(ctx, addr, mismatched, &|| crate::capture::Call::take(ctx, addr, &regs0));
+    }
     ctx.mem.restore(&s1);
     ctx.regs.restore(&regs1);
     if let Some(at) = original_resume {
@@ -920,6 +949,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     if uninitialized {
         entry.uninitialized += 1;
     } else if !diffs.is_empty() {
+        state.mismatched.set(state.mismatched.get() + 1);
         let mutated = state.mutating.get();
         let n = if mutated {
             &mut entry.mutated_mismatches

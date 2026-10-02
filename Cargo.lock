@@ -1190,6 +1190,7 @@ dependencies = [
  "ssbm-sdk",
  "ssbm-slippi",
  "ssbm-types",
+ "zstd",
 ]
 
 [[package]]

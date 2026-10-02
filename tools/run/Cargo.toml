@@ -16,3 +16,4 @@ ssbm-sdk.workspace = true
 ssbm-slippi.workspace = true
 ssbm-game.workspace = true
 ssbm-types.workspace = true
+zstd = "0.12"

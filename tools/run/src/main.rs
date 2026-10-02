@@ -33,6 +33,7 @@ use ssbm_rt::{Ctx, Stop};
 use ssbm_sdk::{Sdk, boot, hw};
 
 mod matches;
+mod calls;
 mod monkey;
 mod probe;
 
@@ -255,6 +256,8 @@ fn run() -> ExitCode {
     let mut match_seed: Option<u64> = None;
     let mut start_mode: Option<u32> = None;
     let mut card_path: Option<std::path::PathBuf> = None;
+    let mut call_path: Option<std::path::PathBuf> = None;
+    let mut repeat = 1u32;
     let mut args = std::env::args().skip(1);
     while let Some(a) = args.next() {
         match a.as_str() {
@@ -303,6 +306,15 @@ fn run() -> ExitCode {
                 )
             }
             "--card" => card_path = Some(args.next().expect("--card FILE").into()),
+            // --call FILE checks a saved call (calls.rs) again instead of booting, --repeat
+            // times.
+            "--call" => call_path = Some(args.next().expect("--call FILE").into()),
+            "--repeat" => {
+                repeat = args
+                    .next()
+                    .and_then(|v| v.parse().ok())
+                    .expect("--repeat N")
+            }
             "--fp" => {
                 fp_mode = match args.next().as_deref() {
                     Some("hardware") => Some(gekko_fp::FpMode::Hardware),
@@ -728,6 +740,14 @@ fn run() -> ExitCode {
         ctx.lockstep
             .trace_log
             .set(std::env::var_os("LOCKSTEP_TRACE_LOG").is_some());
+        // CAPTURE=DIR saves mismatching calls, and a few of each function CAPTURE_FUNCS names,
+        // for `--call` (calls.rs).
+        if let Ok(dir) = std::env::var("CAPTURE") {
+            let funcs = std::env::var("CAPTURE_FUNCS")
+                .map(|v| v.split(',').map(|n| ssbm_sdk::sym(n.trim())).collect())
+                .unwrap_or_default();
+            calls::install_capture(&ctx, dir.into(), funcs);
+        }
         // LOCKSTEP_DROP_LOG=1 prints why the first few mutated checks of each function that are
         // dropped were.
         ctx.lockstep
@@ -1138,6 +1158,10 @@ fn run() -> ExitCode {
     });
 
     let result = panic::catch_unwind(AssertUnwindSafe(|| {
+        if let Some(path) = &call_path {
+            calls::replay(&ctx, path, repeat);
+            return;
+        }
         let entry = boot::boot(&ctx, boot::DEFAULT_CLOCK);
         // FILL_ARENA=byte fills the heap arena with that byte as main starts, to show whether a
         // divergence depends on memory the game never initializes.

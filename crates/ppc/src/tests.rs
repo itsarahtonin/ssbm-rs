@@ -631,6 +631,50 @@ fn mutated_checks_make_a_null_checked_pointer_null() {
 }
 
 #[test]
+fn saved_calls_mismatch_again_apart_from_their_run() {
+    // f: return *(u32*) 0x80600010, which the port gets wrong when it is 7. The run saves the
+    // mismatching call; a fresh machine that loads it mismatches the same way.
+    let f = [
+        0x3C80_8060, // lis r4, 0x8060
+        0x8064_0010, // lwz r3, 0x10(r4)
+        BLR,
+    ];
+    let port = |ctx: &Ctx| {
+        let v = ctx.read_u32(0x8060_0010);
+        ctx.regs.set_r(3, if v == 7 { 8 } else { v });
+    };
+    let machine_with_port = || {
+        let ctx = machine(&f);
+        ctx.register_port(CODE, port, ssbm_rt::lockstep::Returns::Int);
+        ctx.set_mode(CODE, Mode::Lockstep);
+        ctx
+    };
+    let ctx = machine_with_port();
+    let saved: std::rc::Rc<std::cell::RefCell<Vec<Vec<u8>>>> = Default::default();
+    let into = saved.clone();
+    *ctx.lockstep.capture.borrow_mut() = Some(std::rc::Rc::new(move |_, _, mismatched, take| {
+        if mismatched {
+            into.borrow_mut().push(take().to_bytes());
+        }
+    }));
+    ctx.write_u32(0x8060_0010, 7);
+    ctx.regs.set_r(3, 0x1234);
+    ctx.invoke(CODE);
+    assert_eq!(ctx.lockstep.mismatches.borrow().len(), 1);
+    // The machine goes on: what it saved is the call as it found it.
+    ctx.write_u32(0x8060_0010, 1);
+    let call = ssbm_rt::capture::Call::from_bytes(&saved.borrow()[0]).expect("a saved call");
+    assert_eq!(call.addr, CODE);
+    let again = machine_with_port();
+    call.load(&again);
+    assert_eq!(again.read_u32(0x8060_0010), 7);
+    assert_eq!(again.regs.r(3), 0x1234);
+    again.lockstep.resume(call.mutated, call.stub);
+    again.invoke(call.addr);
+    assert_eq!(again.lockstep.mismatches.borrow().len(), 1);
+}
+
+#[test]
 fn mutated_checks_reach_every_case_of_a_switch() {
     // f: switch (*(u8*) 0x80600010) { case 0..=3: return 10 + it; default: return 0; } through
     // a jump table at 0x80600100, where the byte is 3.

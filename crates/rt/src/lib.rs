@@ -15,6 +15,7 @@ use std::rc::Rc;
 pub use ssbm_mem::{MEM1_SIZE, Mem, PAGE_SIZE, Pages};
 
 mod call;
+pub mod capture;
 pub mod coverage;
 pub mod cpu;
 mod jump;
