@@ -54,6 +54,9 @@ pub enum Test {
     Bits,
     /// Any of the `n` values from it up, as a switch's jump table takes its cases.
     Range(u32),
+    /// A single that feeds what a float compare computes: 0, 1 or -1, itself negated, doubled
+    /// or halved, or a large value.
+    Float,
 }
 
 /// Which registers hold a function's result, and so are compared.
@@ -1164,6 +1167,20 @@ fn change_target(ctx: &Ctx, addr: u32, i: usize, loaded: &[(u32, u32)]) -> Optio
     // switch's cases.
     let near = |old: u32, value: u32, test: Test| match test {
         Test::Bits => old ^ value,
+        Test::Float => {
+            let f = f32::from_bits(old);
+            let new: f32 = match state.random() % 8 {
+                0 => 0.0,
+                1 => 1.0,
+                2 => -1.0,
+                3 => -f,
+                4 => f * 2.0,
+                5 => f * 0.5,
+                6 => 1.0e6,
+                _ => -1.0e6,
+            };
+            new.to_bits()
+        }
         Test::Range(n) => value.wrapping_add((state.random() % u64::from(n.max(1))) as u32),
         // A pointer a null check looks at becomes null: its neighbors only fault.
         Test::Equal if value == 0 && (RAM_LO..RAM_HI).contains(&old) => 0,

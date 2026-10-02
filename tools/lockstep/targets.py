@@ -274,6 +274,42 @@ def fsource(cfg, b, upto, reg, consts, depth=0):
     return None
 
 
+FLOAT_MATH = ("fadds", "fsubs", "fmuls", "fdivs", "fadd", "fsub", "fmul", "fdiv", "fmadds",
+              "fmsubs", "fnmadds", "fnmsubs", "fmadd", "fmsub", "fnmadd", "fnmsub", "fneg",
+              "fabs", "fnabs", "frsp", "fmr")
+
+
+def feeders(cfg, b, upto, reg, depth=0, found=None):
+    """The singles loaded into what float register `reg` holds before instruction `upto` of
+    block `b` computes from, through float arithmetic: ("fload", pc) for each lfs, the loads
+    a target changes to move a computed value about."""
+    found = set() if found is None else found
+    blocks, preds = cfg
+    block = blocks[b]
+    if depth > 6 or len(found) >= 6:
+        return found
+    for j in range(upto - 1, -1, -1):
+        pc, m, ops = block[j]
+        r = feasible.regs(ops)
+        if coverage.is_call(m):
+            if reg in FVOLATILE:
+                return found
+            continue
+        if not r or r[0] != reg or m.startswith(feasible.NOT_WRITING):
+            continue
+        if m == "lfs" and len(r) == 2 and "@sda21" not in r[1]:
+            found.add(("fload", pc))
+        elif m.rstrip(".") in FLOAT_MATH:
+            for x in r[1:]:
+                if x.startswith("f"):
+                    feeders(cfg, b, j, x, depth + 1, found)
+        return found
+    if len(preds[b]) == 1:
+        p = preds[b][0]
+        feeders(cfg, p, len(blocks[p]), reg, depth + 1, found)
+    return found
+
+
 def decider(cfg, b, consts):
     """What decides the conditional branch ending block `b`: (source, "=", K) for a compare
     with a constant, (source, "&", MASK) for a bit test, (("same", pc, other, size), "=", None)
@@ -336,7 +372,11 @@ def decide_in(cfg, b, start, consts):
                 if a and c and a[0] == "load" and c[0] == "const" and a[2] == c[2] == 4:
                     return (a, "=", c[1])
             same = same_loads(x, y)
-            return (same, "=", None) if same else None
+            if same:
+                return (same, "=", None)
+            # Values the function computes: the singles they come from, moved about.
+            fed = feeders(cfg, b, j, r[1]) | feeders(cfg, b, j, r[2])
+            return (("any", tuple(sorted(fed))), "~", None) if fed else None
         if m.startswith(("cmp", "fcmp")) or coverage.is_call(m):
             return None
         if m.endswith("."):
@@ -391,6 +431,8 @@ def target(src, op, k, name, unit, addrs):
             return None
     if src[0] == "same":
         return f"load {src[1]:#010x} {src[3]} = load {src[2]:#010x}", name
+    if src[0] == "fload":
+        return f"load {src[1]:#010x} 4 ~ 0x0", name
     if src[0] == "call":
         where = addrs.get(src[1], {})
         at = where.get(unit) or (next(iter(where.values())) if len(where) == 1 else None)

@@ -781,7 +781,11 @@ fn run() -> ExitCode {
             for line in text.lines() {
                 let hex = |s: &str| u32::from_str_radix(s.trim_start_matches("0x"), 16).ok();
                 use ssbm_rt::lockstep::Test;
-                let test = |op: &str| if op == "&" { Test::Bits } else { Test::Equal };
+                let test = |op: &str| match op {
+                    "&" => Test::Bits,
+                    "~" => Test::Float,
+                    _ => Test::Equal,
+                };
                 let fields = line.split('#').next().unwrap_or("");
                 let w: Vec<&str> = fields.split_whitespace().collect();
                 let target = match w.as_slice() {

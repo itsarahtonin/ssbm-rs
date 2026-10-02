@@ -543,6 +543,54 @@ fn mutated_checks_meet_conditions_behind_one_another() {
 }
 
 #[test]
+fn mutated_checks_move_the_singles_a_float_compare_computes_from() {
+    // f: return a + a > b ? 99 : 0, for the singles a = 1 at 0x80600010 and b = 5 at
+    // 0x80600014: no constant to aim at, but moving a or b about reaches 99.
+    let f = [
+        0x3C80_8060, // lis r4, 0x8060
+        0xC024_0010, // lfs f1, 0x10(r4)
+        0xC044_0014, // lfs f2, 0x14(r4)
+        0xEC21_082A, // fadds f1, f1, f1
+        0xFC01_1040, // fcmpo cr0, f1, f2
+        0x4081_000C, // ble +12
+        li(3, 99),
+        BLR,
+        li(3, 0),
+        BLR,
+    ];
+    let mismatches = |port: fn(&Ctx)| {
+        let ctx = machine(&f);
+        ctx.write_u32(0x8060_0010, 1.0f32.to_bits());
+        ctx.write_u32(0x8060_0014, 5.0f32.to_bits());
+        ctx.register_port(CODE, port, ssbm_rt::lockstep::Returns::Int);
+        ctx.set_mode(CODE, Mode::Lockstep);
+        ctx.lockstep.mutations.set(50);
+        ctx.lockstep.rng.set(1);
+        let single = |pc| ssbm_rt::lockstep::Target::Load {
+            pc,
+            size: 4,
+            value: 0,
+            test: ssbm_rt::lockstep::Test::Float,
+        };
+        let targets = vec![single(CODE + 4), single(CODE + 8)];
+        ctx.lockstep.targets.borrow_mut().insert(CODE, targets);
+        ctx.invoke(CODE);
+        assert_eq!(ctx.regs.r(3), 0, "the call itself goes on unchanged");
+        ctx.lockstep.mismatches.borrow().len()
+    };
+    assert_eq!(mismatches(|ctx| {
+        let a = f32::from_bits(ctx.read_u32(0x8060_0010));
+        let over = a + a > f32::from_bits(ctx.read_u32(0x8060_0014));
+        ctx.regs.set_r(3, if over { 99 } else { 0 });
+    }), 0);
+    assert!(mismatches(|ctx| {
+        let a = f32::from_bits(ctx.read_u32(0x8060_0010));
+        let over = a + a > f32::from_bits(ctx.read_u32(0x8060_0014));
+        ctx.regs.set_r(3, if over { 98 } else { 0 });
+    }) > 0);
+}
+
+#[test]
 fn mutated_checks_make_a_null_checked_pointer_null() {
     // f: p = *(u32*) 0x80600010; return p ? *p : 7, where p points to 5. A target at the null
     // check makes p null, never a neighbor of null that only faults.
