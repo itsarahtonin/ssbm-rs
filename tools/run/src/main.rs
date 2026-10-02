@@ -653,14 +653,14 @@ fn run() -> ExitCode {
         // So are the literals MWCC places in writable sections, such as short strings in
         // .sdata, which the C never writes: a format string that loses its terminator sends
         // printf through whatever follows.
-        ctx.lockstep.arg_regs.borrow_mut().extend(
-            ssbm_types::symbols::ARG_REGS.iter().map(|&(a, g, f)| (a, (g, f))),
-        );
         ctx.lockstep.constant.borrow_mut().extend(
             ssbm_types::symbols::SYMBOLS
                 .iter()
                 .filter(|s| !s.3 && s.2.starts_with('@') && s.1 > 0)
                 .map(|s| (s.0, s.0 + s.1)),
+        );
+        ctx.lockstep.arg_regs.borrow_mut().extend(
+            ssbm_types::symbols::ARG_REGS.iter().map(|&(a, g, f)| (a, (g, f))),
         );
         let checking = checking.clone();
         let enable = move |ctx: &Ctx| {
