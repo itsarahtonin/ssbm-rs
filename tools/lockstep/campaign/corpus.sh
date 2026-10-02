@@ -8,15 +8,17 @@
 #   bash tools/lockstep/campaign/corpus.sh fuzz ROUND NAME [MUTATE] [SEED] [REPEAT]
 #
 # collect reruns JOB (its line in jobs-ROUND*.txt) for FIELDS fields (3000) checking only the
-# functions needed-ROUND.txt names, unmutated, and saves up to five real calls of each, spread
-# out, into $L/corpus/ROUND-JOB.corpus. fuzz checks every corpus of ROUND REPEAT times (1) with
-# MUTATE mutated checks each (200), aimed by targets-ROUND.txt, into $L/cov-NAME (one results
-# file per corpus), and adds cov-NAME to binaries.txt at HEAD.
+# functions needed-ROUND.txt names, unmutated, and saves real calls of each (spread out, and
+# those that run new code) into DIR/ROUND-JOB.corpus. fuzz checks every corpus of ROUND in DIR
+# (or those CORPORA names) REPEAT times (1) with MUTATE mutated checks each (200), aimed by
+# targets-ROUND.txt, into $L/cov-NAME (one results file per corpus, skipping corpora done
+# there), and adds cov-NAME to binaries.txt at HEAD. DIR is CORPUS_DIR, $L/corpus by default.
 cd "$(dirname "$0")/../../.."
 . tools/lockstep/campaign/env.sh
 need_disc
 BIN=${BIN:-target/t2/release/ssbm-run$EXE}
-mkdir -p $L/corpus
+DIR=${CORPUS_DIR:-$L/corpus}
+mkdir -p $DIR
 case $1 in
 collect)
     ROUND=$2 JOB=$3 FIELDS=${4:-3000}
@@ -29,13 +31,13 @@ collect)
     done
     for i in "${!rest[@]}"; do
         if [[ ${rest[$i]} == --card ]]; then
-            copy=$L/corpus/$ROUND-$JOB.raw
+            copy=$DIR/$ROUND-$JOB.raw
             cp $L/cards/template-saved.raw "$copy"
             rest[$((i + 1))]=$copy
         fi
     done
     # Everything but the needed functions goes unchecked, so the run is quick.
-    done=$L/corpus/done-not-needed-$ROUND.txt
+    done=$DIR/done-not-needed-$ROUND.txt
     if [[ ! -f $done ]]; then
         $PY - "$MELEE" $L/needed-$ROUND.txt $done <<'EOF'
 import re, sys
@@ -48,7 +50,7 @@ for line in open(sys.argv[1] + "/config/GALE01/symbols.txt", encoding="utf-8"):
 open(sys.argv[3], "w").write("\n".join(out) + "\n")
 EOF
     fi
-    out=$L/corpus/$ROUND-$JOB
+    out=$DIR/$ROUND-$JOB
     rm -f $out.corpus
     env "${envs[@]}" LOCKSTEP_MUTATE=0 PROBES= LOCKSTEP_DONE=$done \
         LOCKSTEP_CALLS=100000 LOCKSTEP_BUDGET=1000000000 \
@@ -61,8 +63,9 @@ fuzz)
     OUT=$L/cov-$NAME
     mkdir -p $OUT
     grep -q "^cov-$NAME=" $L/binaries.txt || echo "cov-$NAME=$(git rev-parse --short HEAD)" >> $L/binaries.txt
-    for c in $L/corpus/$ROUND-*.corpus; do
+    for c in ${CORPORA:-$DIR/$ROUND-*.corpus}; do
         n=$(basename $c .corpus)
+        grep -q "^lockstep:" $OUT/$n.txt 2>/dev/null && continue
         env LOCKSTEP_MUTATE=$MUTATE LOCKSTEP_SEED=$SEED LOCKSTEP_TARGETS=$L/targets-$ROUND.txt \
             LOCKSTEP_NEEDED=$L/needed-$ROUND.txt LOCKSTEP_DONE=$L/done-$ROUND.txt \
             LOCKSTEP_COVERAGE=$OUT/$n.bin LOCKSTEP_LEDGER=$OUT/$n.csv \
