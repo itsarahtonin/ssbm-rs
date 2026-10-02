@@ -455,9 +455,8 @@ fn run() -> ExitCode {
     // RECORDS=SEED fills each fighter's records with random KOs and stats there, for the Data
     // screens.
     let records = std::env::var("RECORDS").ok().map(|v| v.parse().expect("RECORDS=SEED"));
-    if unlock || menu.is_some() || records.is_some() {
-        matches::install_main_menu(&ctx, unlock, menu, records);
-    }
+    let save_setup = (unlock || menu.is_some() || records.is_some())
+        .then(|| matches::install_main_menu(&ctx, unlock, menu, records));
     // GAME_LANGUAGE=jp runs the game in Japanese.
     if std::env::var("GAME_LANGUAGE").is_ok_and(|v| v == "jp") {
         matches::install_japanese(&ctx);
@@ -494,6 +493,10 @@ fn run() -> ExitCode {
                 {
                     first.set(false);
                     ctx.regs.set_r(3, mode);
+                    // A run that starts past the main menu gets its save data changes here.
+                    if let Some(setup) = &save_setup {
+                        setup.apply(ctx);
+                    }
                 }
                 if log_modes {
                     let fields = ctx.ext::<Sdk>().hw.fields.get();
@@ -1176,11 +1179,11 @@ fn run() -> ExitCode {
 
     let result = panic::catch_unwind(AssertUnwindSafe(|| {
         if let Some(path) = &call_path {
-            calls::replay(&ctx, path, repeat);
+            calls::replay(&ctx, dol.as_ref(), path, repeat);
             return;
         }
         if let Some(path) = &corpus_path {
-            calls::replay_corpus(&ctx, path, repeat);
+            calls::replay_corpus(&ctx, dol.as_ref(), path, repeat);
             return;
         }
         let entry = boot::boot(&ctx, boot::DEFAULT_CLOCK);

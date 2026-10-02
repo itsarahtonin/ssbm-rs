@@ -123,10 +123,38 @@ pub fn install_capture(
     }));
 }
 
+/// Keeps original the functions whose code in `call`'s memory differs from the disc's, as a run
+/// does with those its replay's Gecko codes patch (Slippi's): a call saved from a replay run
+/// carries the patched code, and checking it against the unpatched port would find the patch.
+fn keep_patched(ctx: &Ctx, dol: Option<&ssbm_disc::Dol>, call: &Call) {
+    let Some(dol) = dol else { return };
+    let mut kept = Vec::new();
+    for section in dol.sections.iter().filter(|s| s.kind == ssbm_disc::SectionKind::Text) {
+        let code = dol.section_data(section);
+        let at = (section.addr - 0x8000_0000) as usize;
+        let Some(saved) = call.mem1.get(at..at + code.len()) else { continue };
+        for (i, (a, b)) in code.chunks_exact(4).zip(saved.chunks_exact(4)).enumerate() {
+            if a != b {
+                for f in ssbm_types::functions_overlapping(section.addr + 4 * i as u32, 4) {
+                    if !kept.contains(&f) {
+                        ctx.set_mode(f, ssbm_rt::Mode::Original);
+                        kept.push(f);
+                    }
+                }
+            }
+        }
+    }
+    if !kept.is_empty() {
+        let names: Vec<String> = kept.iter().map(|&f| ctx.name_of(f)).collect();
+        eprintln!("patched in the saved memory, so kept original: {}", names.join(", "));
+    }
+}
+
 /// Checks the saved call at `path` again, `repeat` times, each from the state it was saved in;
 /// LOCKSTEP_MUTATE adds mutated checks of each as a run's checks do.
-pub fn replay(ctx: &Ctx, path: &Path, repeat: u32) {
+pub fn replay(ctx: &Ctx, dol: Option<&ssbm_disc::Dol>, path: &Path, repeat: u32) {
     let call = read(path);
+    keep_patched(ctx, dol, &call);
     eprintln!(
         "checking {} again{}, {repeat} times",
         ctx.name_of(call.addr),
@@ -256,8 +284,12 @@ impl Corpus {
 }
 
 /// Checks every call in the corpus at `path` again, `repeat` times each.
-pub fn replay_corpus(ctx: &Ctx, path: &Path, repeat: u32) {
+pub fn replay_corpus(ctx: &Ctx, dol: Option<&ssbm_disc::Dol>, path: &Path, repeat: u32) {
     let corpus = Corpus::read(path);
+    // A corpus comes from one run, so its first call has the code all of them run.
+    if corpus.len() > 0 {
+        keep_patched(ctx, dol, &corpus.call(0));
+    }
     eprintln!(
         "checking the {} calls of {} again, {repeat} times each",
         corpus.len(),
