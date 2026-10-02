@@ -227,6 +227,10 @@ impl Mem {
         self.recording.get() & JOURNAL != 0
     }
 
+    pub fn is_logging(&self) -> bool {
+        self.recording.get() & LOG != 0
+    }
+
     /// Starts logging every write, in order.
     pub fn begin_log(&self) {
         assert!(self.recording.get() & LOG == 0, "write logs do not nest");

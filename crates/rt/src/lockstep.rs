@@ -622,6 +622,10 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     // leftovers the port cannot reproduce. Otherwise they differ given the same stack, and the
     // differences are those of this second look.
     let mut uninitialized = false;
+    // A deep trace of a mutated check also logs each side's writes in its second look, to
+    // show where they part when they disagree.
+    let log_writes = deep && mutating && !ctx.mem.is_logging();
+    let mut write_logs = None;
     let mut dropped = false;
     // An original that faults through a bad pointer, as mutated inputs make one, may also have
     // read stack it never wrote before: its second look faults likewise, if it agrees.
@@ -646,7 +650,11 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         }
         ctx.mem.begin_journal();
         clear_stack(ctx, sp);
+        if log_writes {
+            ctx.mem.begin_log();
+        }
         let again = passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_original(addr))));
+        let original_writes = if log_writes { ctx.mem.end_log() } else { Vec::new() };
         dropped |= again
             .as_ref()
             .is_some_and(|p| p.is::<Runaway>());
@@ -667,8 +675,14 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
             }
             ctx.mem.begin_journal();
             clear_stack(ctx, sp);
+            if log_writes {
+                ctx.mem.begin_log();
+            }
             let port_again =
                 passing_stop(catch_unwind(AssertUnwindSafe(|| ctx.run_native(addr, native))));
+            if log_writes {
+                write_logs = Some((original_writes, ctx.mem.end_log()));
+            }
             dropped |= port_again
                 .as_ref()
                 .is_some_and(|p| p.is::<Dropped>() || (mutating && p.is::<Runaway>()));
@@ -713,6 +727,15 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
             eprintln!("{} call trace, original | port:", ctx.name_of(addr));
             for i in 0..t.original.len().max(t.port.len()) {
                 eprintln!("  {i:4} {:70} | {}", show(t.original.get(i)), show(t.port.get(i)));
+            }
+            if let Some((original, port)) = &write_logs {
+                let show = |w: Option<&(u32, Vec<u8>)>| {
+                    w.map(|(a, data)| format!("{a:08X} {data:02X?}")).unwrap_or_default()
+                };
+                eprintln!("{} writes, original | port:", ctx.name_of(addr));
+                for i in 0..original.len().max(port.len()) {
+                    eprintln!("  {i:5} {:40} | {}", show(original.get(i)), show(port.get(i)));
+                }
             }
         }
         if !diffs.is_empty() {
