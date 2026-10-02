@@ -904,6 +904,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
             mismatched,
             mutated: state.mutating.get(),
             cost,
+            novel: ctx.coverage.novel(&hits),
             interacted: end > start,
         };
         capture(ctx, ended, &|| crate::capture::Call::take(ctx, addr, &regs0));

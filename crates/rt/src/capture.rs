@@ -26,6 +26,8 @@ pub struct Ended {
     pub mutated: bool,
     /// Instructions its original ran.
     pub cost: u64,
+    /// Instructions of the function its original ran that no check had verified before.
+    pub novel: u32,
     /// Whether its original met hardware or the SDK layer, whose state lives outside memory:
     /// checked again, it would find them as they are then, not as they were.
     pub interacted: bool,

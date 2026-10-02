@@ -98,6 +98,22 @@ impl Coverage {
         }
     }
 
+    /// How many of the instructions in `hits` no check has verified yet.
+    pub(crate) fn novel(&self, hits: &Hits) -> u32 {
+        let Hits(lo, bits) = hits;
+        let covered = self.covered.borrow();
+        let mut n = 0;
+        for (i, &w) in bits.iter().enumerate() {
+            for b in 0..64 {
+                if w & (1 << b) != 0 {
+                    let at = ((lo - LO) / 4) as usize + i * 64 + b;
+                    n += u32::from(covered.get(at / 64).is_none_or(|c| c >> (at % 64) & 1 == 0));
+                }
+            }
+        }
+        n
+    }
+
     /// Whether the instruction at `pc` is verified.
     pub fn is_covered(&self, pc: u32) -> bool {
         let covered = self.covered.borrow();

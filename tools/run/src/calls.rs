@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 //! Saved calls (ssbm_rt::capture) as files: CAPTURE=DIR saves each function's first two
-//! mismatching checks, and with CAPTURE_FUNCS=NAME,... a few real calls of those functions and
-//! their first mutated checks, named for how each ended, as DIR/NAME-KIND-N.call (zstd);
+//! mismatching checks, and with CAPTURE_FUNCS=NAME,... a few real calls of those functions
+//! (spread out, and those that run code of them no check had run) and their first mutated
+//! checks, named for how each ended, as DIR/NAME-KIND-N.call (zstd);
 //! `--call FILE` checks one again apart from any run. With CORPUS=FILE the real calls go into
 //! one corpus file instead, which keeps each distinct page of memory once, and `--corpus FILE`
 //! checks every call in one again. The files hold captured game memory: keep them under local/.
@@ -56,6 +57,11 @@ const COST_MAX: u64 = 5_000_000;
 /// they find the game in different states.
 const SAVED_CALLS: [u64; 5] = [1, 10, 100, 1000, 10000];
 
+/// Real calls of a function CAPTURE_FUNCS asks for that are saved besides those because they
+/// ran instructions of it no check had verified before, as a fuzzer keeps inputs that reach new
+/// code: their states are the ones mutated checks reach further from.
+const NOVEL_CALLS: u32 = 20;
+
 pub fn read(path: &Path) -> Call {
     let packed = std::fs::read(path).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
     let bytes = zstd::decode_all(&packed[..]).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
@@ -79,13 +85,14 @@ pub fn install_capture(
 ) {
     std::fs::create_dir_all(&dir).unwrap_or_else(|e| panic!("{}: {e}", dir.display()));
     let corpus = corpus.map(|p| RefCell::new(CorpusWriter::create(&p)));
-    // Per function: mismatches saved, real calls seen, mutated checks seen.
-    let counts: RefCell<BTreeMap<u32, (u32, u64, u64)>> = RefCell::default();
+    // Per function: mismatches saved, real calls seen, mutated checks seen, real calls saved
+    // for running new code.
+    let counts: RefCell<BTreeMap<u32, (u32, u64, u64, u32)>> = RefCell::default();
     let saved = RefCell::new(0u32);
     *ctx.lockstep.capture.borrow_mut() = Some(Rc::new(move |ctx, ended: Ended, take| {
-        let Ended { addr, mismatched, mutated, cost, interacted } = ended;
+        let Ended { addr, mismatched, mutated, cost, novel, interacted } = ended;
         let mut counts = counts.borrow_mut();
-        let (mismatches, calls, mutations) = counts.entry(addr).or_default();
+        let (mismatches, calls, mutations, novels) = counts.entry(addr).or_default();
         let wanted = if mismatched {
             *mismatches += 1;
             *mismatches <= MISMATCHES
@@ -98,7 +105,14 @@ pub fn install_capture(
             && ctx.ext::<ssbm_sdk::Sdk>().hw.fields.get() >= from
         {
             *calls += 1;
-            SAVED_CALLS.contains(calls)
+            if SAVED_CALLS.contains(calls) {
+                true
+            } else if novel > 0 && *novels < NOVEL_CALLS {
+                *novels += 1;
+                true
+            } else {
+                false
+            }
         } else {
             false
         };
