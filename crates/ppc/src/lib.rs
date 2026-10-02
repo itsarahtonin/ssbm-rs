@@ -691,13 +691,12 @@ fn load_store(ctx: &Ctx, w: u32) {
     if restore {
         ctx.set_restoring(false);
     }
-    if saves {
+    if saves && a == 1 {
         match op {
-            47 => ctx.note_save(ea, 4 * (32 - d as u32)),
-            36 | 37 if a == 1 && (d >= 14 || (d == 0 && r(ctx, 0) == ctx.regs.lr.get())) => {
-                ctx.note_save(ea, 4)
-            }
-            54 | 55 if a == 1 && d >= 14 => ctx.note_save(ea, 8),
+            47 => ctx.note_gpr_store(ea, d as u32, 4 * (32 - d as u32)),
+            36 | 37 if d >= 14 => ctx.note_gpr_store(ea, d as u32, 4),
+            36 | 37 if d == 0 && r(ctx, 0) == ctx.regs.lr.get() => ctx.note_save(ea, 4),
+            54 | 55 if d >= 14 => ctx.note_fpr_store(ea, d as u32),
             _ => {}
         }
     }

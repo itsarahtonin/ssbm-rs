@@ -200,6 +200,8 @@ pub struct Ctx {
     saves_hi: Cell<u32>,
     saves_on: Cell<bool>,
     restoring: Cell<bool>,
+    /// The top of the latest frame floating-point registers were saved in, and how many.
+    saved_fprs: Cell<(u32, u32)>,
     /// The addresses read while a read log is open (see `begin_read_log`), which `shadow_on`
     /// also gates.
     read_log: RefCell<Option<Vec<u32>>>,
@@ -289,6 +291,7 @@ impl Ctx {
             saves_hi: Cell::new(0),
             saves_on: Cell::new(false),
             restoring: Cell::new(false),
+            saved_fprs: Cell::new((0, 0)),
             read_log: RefCell::default(),
             running_original: Cell::new(false),
             zero_frames: Cell::new(false),
@@ -393,6 +396,41 @@ impl Ctx {
         }
     }
 
+    /// The top of the frame at r1, from its back chain.
+    fn frame_top(&self) -> Option<u32> {
+        self.mem.read_u32(self.regs.r(1)).ok()
+    }
+
+    /// Original code stored f`fpr` at `addr` through r1: a save where that is its slot, MWCC's
+    /// prologue putting f31 at the top of the frame and the rest below.
+    pub fn note_fpr_store(&self, addr: u32, fpr: u32) {
+        let Some(top) = self.frame_top().filter(|_| self.saves_on.get()) else {
+            return;
+        };
+        if addr == top.wrapping_sub(8 * (32 - fpr)) {
+            let (at, n) = self.saved_fprs.get();
+            let n = if at == top { n.max(32 - fpr) } else { 32 - fpr };
+            self.saved_fprs.set((top, n));
+            self.mark_saves(addr, 8, true);
+        }
+    }
+
+    /// Original code stored r`gpr` (to r31, `len` bytes) at `addr` through r1: a save where
+    /// that is its slot, just below the floating-point registers the prologue saved first.
+    /// Elsewhere it is a local, such as the 0x43300000 an int's conversion to float stores.
+    pub fn note_gpr_store(&self, addr: u32, gpr: u32, len: u32) {
+        let Some(top) = self.frame_top().filter(|_| self.saves_on.get()) else {
+            return;
+        };
+        let fprs = match self.saved_fprs.get() {
+            (at, n) if at == top => n,
+            _ => 0,
+        };
+        if addr == top.wrapping_sub(8 * fprs + 4 * (32 - gpr)) {
+            self.mark_saves(addr, len, true);
+        }
+    }
+
     /// Whether the loads that follow restore saved registers.
     pub fn set_restoring(&self, on: bool) {
         self.restoring.set(on);
@@ -420,6 +458,9 @@ impl Ctx {
     pub fn stack_allocated(&self, new_sp: u32, sp: u32) {
         if self.shadow_on.get() {
             self.shadow_unwrite(new_sp, sp);
+        }
+        if self.saves_on.get() && new_sp < sp {
+            self.mark_saves(new_sp, sp - new_sp, false);
         }
         if self.zero_frames.get() && new_sp < sp {
             let _ = self.mem.write_bytes(new_sp, &vec![0; (sp - new_sp) as usize]);

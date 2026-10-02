@@ -310,6 +310,39 @@ fn mutated_checks_drop_calls_that_read_a_saved_register() {
 }
 
 #[test]
+fn mutated_checks_keep_calls_that_store_a_kept_register_as_a_local() {
+    // f(x): converts x to a double as MWCC does, through a local whose high word comes from
+    // r31, which it saved. Reading that local back reads no saved register.
+    let ctx = machine(&[
+        0x9421_FFE8, // stwu r1, -24(r1)
+        0x93E1_0014, // stw r31, 20(r1)
+        0x3FE0_4330, // lis r31, 0x4330
+        0x93E1_0008, // stw r31, 8(r1)
+        0x9061_000C, // stw r3, 12(r1)
+        0xC821_0008, // lfd f1, 8(r1)
+        0x83E1_0014, // lwz r31, 20(r1)
+        addi(1, 1, 24),
+        BLR,
+    ]);
+    ctx.register_port(
+        CODE,
+        |ctx| {
+            let x = ctx.regs.r(3);
+            ctx.regs.set_f(1, f64::from_bits(0x4330_0000_0000_0000 | u64::from(x)));
+        },
+        ssbm_rt::lockstep::Returns::Float,
+    );
+    ctx.set_mode(CODE, Mode::Lockstep);
+    ctx.lockstep.mutations.set(8);
+    ctx.lockstep.rng.set(1);
+    ctx.regs.set_r(3, 7);
+    ctx.invoke(CODE);
+    assert_eq!(ctx.regs.f(1).to_bits(), 0x4330_0000_0000_0007);
+    assert!(ctx.lockstep.mismatches.borrow().is_empty());
+    assert_eq!(ctx.lockstep.stats.borrow()[&CODE].dropped, 0, "no mutated check dropped");
+}
+
+#[test]
 fn mutated_checks_drop_calls_to_no_function() {
     // f calls through a pointer into the middle of code no port starts at, as a garbage table
     // entry does: its mutated checks end there, and its real call is checked.
