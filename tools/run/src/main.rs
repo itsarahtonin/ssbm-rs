@@ -438,8 +438,11 @@ fn run() -> ExitCode {
         let v: Vec<u8> = m.split(',').map(|x| x.trim().parse().expect("MENU=KIND,SELECTION")).collect();
         (v[0], v.get(1).copied().unwrap_or(0))
     });
-    if unlock || menu.is_some() {
-        matches::install_main_menu(&ctx, unlock, menu);
+    // RECORDS=SEED fills each fighter's records with random KOs and stats there, for the Data
+    // screens.
+    let records = std::env::var("RECORDS").ok().map(|v| v.parse().expect("RECORDS=SEED"));
+    if unlock || menu.is_some() || records.is_some() {
+        matches::install_main_menu(&ctx, unlock, menu, records);
     }
     // GAME_LANGUAGE=jp runs the game in Japanese.
     if std::env::var("GAME_LANGUAGE").is_ok_and(|v| v == "jp") {

@@ -97,10 +97,14 @@ pub fn install_japanese(ctx: &Ctx) {
 /// as the save data of the game's debug levels is, so the menus and modes have all of them to
 /// show; with `menu` (MenuKind, selection), opens that menu with that item under the cursor, as
 /// coming back from one of its modes does, for input to go on from there.
-pub fn install_main_menu(ctx: &Ctx, unlock: bool, menu: Option<(u8, u8)>) {
+pub fn install_main_menu(ctx: &Ctx, unlock: bool, menu: Option<(u8, u8)>, records: Option<u64>) {
+    let rng = records.map(Rng::new);
     ctx.set_hook(
         ssbm_sdk::sym("mnMain_Scene_OnEnter"),
         Rc::new(move |ctx| {
+            if let Some(rng) = &rng {
+                fill_records(ctx, rng);
+            }
             if unlock {
                 let game = gmm_x0(At::new(ctx, ctx.read_u32(ssbm_sdk::sym("gmMainLib_804D3EE0"))));
                 let save = game.thing().save_data();
@@ -119,6 +123,45 @@ pub fn install_main_menu(ctx: &Ctx, unlock: bool, menu: Option<(u8, u8)>) {
             }
         }),
     );
+}
+
+/// Gives each fighter's records random KO counts and stats, a third of them none, for the Data
+/// screens to show what a played save does.
+fn fill_records(ctx: &Ctx, rng: &Rng) {
+    let game = gmm_x0(At::new(ctx, ctx.read_u32(ssbm_sdk::sym("gmMainLib_804D3EE0"))));
+    let fighters = game.thing().save_data().x1F2C();
+    for i in 0..25 {
+        if rng.chance(33) {
+            continue;
+        }
+        let fd = fighters.get(i);
+        for j in 0..25 {
+            fd.fighter_kos().set(j, rng.below(400) as u16);
+        }
+        let st = fd.stats();
+        let total = rng.below(100_000) as u32;
+        st.set_attacks_total(total);
+        st.set_attacks_hit(rng.below(u64::from(total) + 1) as u32);
+        st.set_sd_count(rng.below(500) as u16);
+        st.set_damage_dealt(rng.below(1_000_000) as i32);
+        st.set_damage_taken(rng.below(1_000_000) as i32);
+        st.set_damage_recovered(rng.below(10_000) as i32);
+        st.set_peak_damage(rng.below(999) as u16);
+        let matches = rng.below(5000) as u16;
+        st.set_match_count(matches);
+        let won = rng.below(u64::from(matches) + 1) as u16;
+        st.set_victories(won);
+        st.set_losses(matches - won);
+        st.set_play_time(rng.below(10_000_000) as u32);
+        st.set_total_player_count(rng.below(20_000) as u32);
+        st.set_walk_distance(rng.below(10_000_000) as i32);
+        st.set_run_distance(rng.below(10_000_000) as i32);
+        st.set_fall_distance(rng.below(10_000_000) as i32);
+        st.set_peak_height(rng.below(100_000) as i32);
+        st.set_coins_collected(rng.below(10_000) as i32);
+        st.set_coins_swiped(rng.below(10_000) as i32);
+        st.set_coins_lost(rng.below(10_000) as i32);
+    }
 }
 
 /// Makes every match's human players level 9 CPUs, so the modes that end when the player
