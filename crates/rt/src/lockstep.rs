@@ -222,9 +222,9 @@ pub struct State {
     /// mutated checks change one of these.
     pub targets: RefCell<BTreeMap<u32, Vec<Target>>>,
     /// Whether every other mutated check instead sets exactly one target, and nothing else,
-    /// going through the targets, the places their loads read and the values they look for in
-    /// turn, so each is tried alone: one condition met amid random changes is often undone by
-    /// them.
+    /// going through the targets, the places their loads read and the values they look for (or
+    /// their neighbors) in turn, so each is tried alone: one condition met amid random changes
+    /// is often undone by them.
     pub directed: Cell<bool>,
     /// In a directed check, which of its target's places and values it takes.
     exact: Cell<Option<u64>>,
@@ -283,6 +283,10 @@ pub struct State {
     pub capture: RefCell<
         Option<Rc<dyn Fn(&Ctx, crate::capture::Ended, &dyn Fn() -> crate::capture::Call)>>,
     >,
+    /// Whether nested checks' calls may be saved too: checked again apart from their run, they
+    /// are outermost and so get mutated checks, which a function whose callers are checked
+    /// whenever it runs never gets in a run.
+    pub capture_nested: Cell<bool>,
     /// Checks that have mismatched, at any depth, for a capture to tell whether the call it may
     /// save had one inside it.
     mismatched: Cell<u64>,
@@ -902,7 +906,9 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     ctx.mem.restore(&j2);
     // Memory and registers are as the call found them: the run may save it.
     let capture = state.capture.borrow().clone();
-    if outermost && let Some(capture) = capture {
+    if (outermost || state.capture_nested.get())
+        && let Some(capture) = capture
+    {
         // It, or a check inside it.
         let mismatched =
             (!uninitialized && !diffs.is_empty()) || state.mismatched.get() > mismatched_before;
@@ -1252,7 +1258,12 @@ fn change_target(ctx: &Ctx, addr: u32, i: usize, loaded: &[(u32, u32)]) -> Optio
         }),
         // A pointer a null check looks at becomes null: its neighbors only fault.
         Test::Equal if value == 0 && (RAM_LO..RAM_HI).contains(&old) => 0,
-        Test::Equal if exact.is_some() => value,
+        // The side of a compare left unverified is as often the unequal one.
+        Test::Equal if exact.is_some() => match variant(3, places) {
+            Some(0) => value,
+            Some(1) => value.wrapping_add(1),
+            _ => value.wrapping_sub(1),
+        },
         Test::Equal => match state.random() % 3 {
             0 => value.wrapping_sub(1),
             1 => value.wrapping_add(1),

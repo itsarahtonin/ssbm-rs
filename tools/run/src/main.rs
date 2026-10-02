@@ -763,6 +763,10 @@ fn run() -> ExitCode {
             // CAPTURE_FROM=FIELD (300) saves real calls from that field on, past booting.
             let from = std::env::var("CAPTURE_FROM").map_or(300, |v| v.parse().expect("FIELD"));
             calls::install_capture(&ctx, dir.into(), funcs, corpus, from);
+            // CAPTURE_NESTED=1 saves calls checked inside other checks as well.
+            ctx.lockstep
+                .capture_nested
+                .set(std::env::var_os("CAPTURE_NESTED").is_some());
         }
         // LOCKSTEP_DROP_LOG=1 prints why the first few mutated checks of each function that are
         // dropped were.
@@ -796,7 +800,7 @@ fn run() -> ExitCode {
             ctx.lockstep.rng.set(seed.unwrap_or(1));
         }
         // LOCKSTEP_DIRECTED=1 makes every other mutated check set exactly one of its function's
-        // targets and nothing else, each target, place and value in turn.
+        // targets and nothing else, each target, place and value (or neighbor) in turn.
         ctx.lockstep
             .directed
             .set(std::env::var_os("LOCKSTEP_DIRECTED").is_some());
