@@ -397,10 +397,32 @@ def main():
         for a, tu in fn_tus:
             w.write(f"    ({a:#x}, {json.dumps(tu)}),\n")
         w.write("];\n")
+        w.write("/// (address, integer registers, float registers) of the parameters of every function\n"
+                "/// with a C prototype that isn't variadic: r3 on and f1 on, the rest on the stack.\n")
+        w.write("pub static ARG_REGS: &[(u32, u8, u8)] = &[\n")
+        for f in sorted((f for f in data["functions"] if f["addr"] is not None
+                         and not (f["type"] or {}).get("variadic")), key=lambda f: f["addr"]):
+            gprs, fprs = arg_regs(f["type"] or {})
+            w.write(f"    ({f['addr']:#x}, {gprs}, {fprs}),\n")
+        w.write("];\n")
 
     print(f"records {len(g.records)}, enum consts {len(consts)}, functions "
           f"{sum(len(v) for v in fns_by_tu.values())}, globals {sum(len(v) for v in globals_by_tu.values())}, "
           f"TU scopes {len(tus)}")
+
+
+def arg_regs(ft):
+    """How many of r3..r10 and f1..f8 a function of C type `ft` takes its parameters in."""
+    g, f = 3, 1
+    for p in ft.get("params") or []:
+        if p.get("k") == "float":
+            f += 1
+        elif p.get("k") in ("int", "enum") and p.get("size") == 8:
+            g += g % 2 == 0  # a pair starts at an odd register
+            g += 2
+        else:
+            g += 1
+    return min(g, 11) - 3, min(f, 9) - 1
 
 
 if __name__ == "__main__":

@@ -219,6 +219,10 @@ pub struct State {
     /// Functions that never return, such as `__assert` and `OSPanic`: a mutated check that
     /// calls one ends there, as one whose inputs fail an assertion.
     pub noreturn: RefCell<BTreeSet<u32>>,
+    /// How many of r3..r10 and f1..f8 each function with a known prototype takes: mutated
+    /// checks change only those. What the other registers hold is what its callers left, which
+    /// ports don't keep as the original does.
+    pub arg_regs: RefCell<BTreeMap<u32, (u8, u8)>>,
     /// Calls a port under a mutated check may still make, which stops one that would never
     /// return.
     pub(crate) calls_left: Cell<Option<u64>>,
@@ -910,7 +914,7 @@ fn mutated_checks(
         ctx.mem.restore(before);
         ctx.regs.restore(regs0);
         let kept = state.mismatches.borrow().len();
-        let mut changes = mutate(ctx, inputs.reads);
+        let mut changes = mutate(ctx, addr, inputs.reads);
         changes.extend(change_target(ctx, addr, inputs.loaded));
         let result = catch_unwind(AssertUnwindSafe(|| run(ctx, addr, native, returns)));
         state.stub.set(None);
@@ -1035,7 +1039,7 @@ fn change_target(ctx: &Ctx, addr: u32, loaded: &[(u32, u32)]) -> Option<String> 
 /// what ports keep out of it, and counts, flags and floats are what reach the branches real
 /// calls miss. Some words and floats become NaNs, of either sign and with some payload: of two
 /// NaN operands, an operation passes on the first one's, which ports then must have first too.
-fn mutate(ctx: &Ctx, reads: &[u32]) -> Vec<String> {
+fn mutate(ctx: &Ctx, addr: u32, reads: &[u32]) -> Vec<String> {
     let state = &ctx.lockstep;
     let next = || state.random();
     let ram = |a: u32| (RAM_LO..RAM_HI).contains(&a);
@@ -1069,7 +1073,8 @@ fn mutate(ctx: &Ctx, reads: &[u32]) -> Vec<String> {
             changes.borrow_mut().push(format!("{at:#010X} {old:02X}->{new:02X}"));
         }
     };
-    for r in 3..=10 {
+    let (gprs, fprs) = state.arg_regs.borrow().get(&addr).copied().unwrap_or((8, 8));
+    for r in 3..3 + usize::from(gprs) {
         let v = ctx.regs.r(r);
         if ram(v) {
             for _ in 0..=next() % 3 {
@@ -1115,7 +1120,7 @@ fn mutate(ctx: &Ctx, reads: &[u32]) -> Vec<String> {
             }
         }
     }
-    for f in 1..=8 {
+    for f in 1..1 + usize::from(fprs) {
         if next() % 3 == 0 {
             let v = ctx.regs.f(f);
             let new = match next() % 6 {
