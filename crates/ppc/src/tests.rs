@@ -497,6 +497,52 @@ fn mutated_checks_reach_what_a_callee_result_decides() {
 }
 
 #[test]
+fn mutated_checks_meet_conditions_behind_one_another() {
+    // f: return a == 1 && b == 2 ? 99 : 0, for the bytes a at 0x80600010 and b at 0x80600020,
+    // both 0: b's load runs only once a mutated check makes a 1, and only checks that change
+    // both reach 99.
+    let f = [
+        0x3C80_8060, // lis r4, 0x8060
+        0x8804_0010, // lbz r0, 0x10(r4)
+        0x2C00_0001, // cmpwi r0, 1
+        0x4082_0018, // bne +0x18
+        0x8804_0020, // lbz r0, 0x20(r4)
+        0x2C00_0002, // cmpwi r0, 2
+        0x4082_000C, // bne +0xC
+        li(3, 99),
+        BLR,
+        li(3, 0),
+        BLR,
+    ];
+    let mismatches = |port: fn(&Ctx)| {
+        let ctx = machine(&f);
+        ctx.register_port(CODE, port, ssbm_rt::lockstep::Returns::Int);
+        ctx.set_mode(CODE, Mode::Lockstep);
+        ctx.lockstep.mutations.set(400);
+        ctx.lockstep.rng.set(1);
+        let load = |pc, value| ssbm_rt::lockstep::Target::Load {
+            pc,
+            size: 1,
+            value,
+            test: ssbm_rt::lockstep::Test::Equal,
+        };
+        let targets = vec![load(CODE + 4, 1), load(CODE + 0x10, 2)];
+        ctx.lockstep.targets.borrow_mut().insert(CODE, targets);
+        ctx.invoke(CODE);
+        assert_eq!(ctx.regs.r(3), 0, "the call itself goes on unchanged");
+        ctx.lockstep.mismatches.borrow().len()
+    };
+    assert_eq!(mismatches(|ctx| {
+        let met = ctx.read_u8(0x8060_0010) == 1 && ctx.read_u8(0x8060_0020) == 2;
+        ctx.regs.set_r(3, if met { 99 } else { 0 });
+    }), 0);
+    assert!(mismatches(|ctx| {
+        let met = ctx.read_u8(0x8060_0010) == 1 && ctx.read_u8(0x8060_0020) == 2;
+        ctx.regs.set_r(3, if met { 98 } else { 0 });
+    }) > 0);
+}
+
+#[test]
 fn mutated_checks_make_a_null_checked_pointer_null() {
     // f: p = *(u32*) 0x80600010; return p ? *p : 7, where p points to 5. A target at the null
     // check makes p null, never a neighbor of null that only faults.
