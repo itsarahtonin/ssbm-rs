@@ -445,6 +445,14 @@ fn run() -> ExitCode {
     if std::env::var("GAME_LANGUAGE").is_ok_and(|v| v == "jp") {
         matches::install_japanese(&ctx);
     }
+    // DBLEVEL=N runs the game at debug level N (DbLKind: 1 to 4), as a disc with /develop.ini
+    // does, from after its boot's USB check: a retail disc has none and runs at 0.
+    if let Some(level) = std::env::var("DBLEVEL").ok().map(|v| v.parse::<u32>().expect("DBLEVEL=N")) {
+        ctx.set_hook(
+            ssbm_sdk::sym("db_InitScreenshot"),
+            Rc::new(move |ctx| ctx.write_u32(ssbm_sdk::sym("DbLevel"), level)),
+        );
+    }
     // EVENT=N makes the Event mode start at event match N (from 0).
     if let Some(n) = std::env::var("EVENT").ok().and_then(|v| v.parse().ok()) {
         matches::install_event(&ctx, n);
