@@ -150,6 +150,9 @@ struct Results {
 /// Fields between saves of a run's results, so a run cut short keeps most of them.
 const SAVE_EVERY: u64 = 1800;
 
+/// Stalls (heartbeats with no video field, eight at a time) in a row that end a run.
+const STALLS_MAX: u32 = 4;
+
 /// Fields between counts of what a run verified beyond LOCKSTEP_KNOWN.
 const STALE_EVERY: u64 = 300;
 
@@ -1014,6 +1017,9 @@ fn run() -> ExitCode {
     // Every heartbeat, report progress; if no field passed in a while, show where it spins.
     let last_fields = Cell::new((0u64, 0usize));
     let stuck = Cell::new(0u32);
+    // Stalls in a row with no field passing: a game that never gets going again, as one stuck
+    // in an error loop does, ends the run instead of spinning until the campaign's timeout.
+    let stalls = Cell::new(0u32);
     let pcs: std::cell::RefCell<HashMap<u32, u32>> = Default::default();
     let interp2 = interp.clone();
     ctx.set_heartbeat(move |ctx, pc| {
@@ -1048,6 +1054,11 @@ fn run() -> ExitCode {
                 // Lockstep may catch this and go on, from before the port that spun.
                 stuck.set(0);
                 pcs.borrow_mut().clear();
+                stalls.set(stalls.get() + 1);
+                if stalls.get() >= STALLS_MAX {
+                    eprintln!("stopping: {STALLS_MAX} stalls without a video field");
+                    panic::panic_any(Stop);
+                }
                 panic!(
                     "stuck: no video field for {} instructions",
                     8 * ssbm_rt::HEARTBEAT
@@ -1056,6 +1067,9 @@ fn run() -> ExitCode {
         } else {
             stuck.set(0);
             pcs.borrow_mut().clear();
+            if f != last_fields.get().0 {
+                stalls.set(0);
+            }
             last_fields.set(progress);
         }
         eprintln!(
