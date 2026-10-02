@@ -25,7 +25,14 @@ fi
 
 if [[ ! -f $DATA/.downloaded ]]; then
     echo "downloading release $RELEASE"
-    gh release download "$RELEASE" -R "$GH_REPO" -D "$DATA" --clobber
+    # gh release download goes through GraphQL, which Claude Code's cloud proxy refuses; the REST
+    # asset endpoints work there.
+    if ! gh release download "$RELEASE" -R "$GH_REPO" -D "$DATA" --clobber; then
+        gh api "repos/$GH_REPO/releases/tags/$RELEASE" --jq '.assets[] | "\(.id) \(.name)"' |
+            while read -r id name; do
+                gh api -H "Accept: application/octet-stream" "repos/$GH_REPO/releases/assets/$id" > "$DATA/$name"
+            done
+    fi
     touch "$DATA/.downloaded"
 fi
 disc=$(ls "$DATA"/*.iso | head -1)
