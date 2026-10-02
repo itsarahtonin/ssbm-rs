@@ -96,26 +96,21 @@ pub fn install_japanese(ctx: &Ctx) {
 /// Whenever the main menu comes up: with `unlock`, unlocks every character, stage and trophy,
 /// as the save data of the game's debug levels is, so the menus and modes have all of them to
 /// show; with `menu` (MenuKind, selection), opens that menu with that item under the cursor, as
-/// coming back from one of its modes does, for input to go on from there.
-pub fn install_main_menu(ctx: &Ctx, unlock: bool, menu: Option<(u8, u8)>, records: Option<u64>) {
-    let rng = records.map(Rng::new);
+/// coming back from one of its modes does, for input to go on from there. Returns what a run
+/// that starts in a mode past the main menu applies to the save data there instead
+/// (`SaveSetup::apply`).
+pub fn install_main_menu(
+    ctx: &Ctx,
+    unlock: bool,
+    menu: Option<(u8, u8)>,
+    records: Option<u64>,
+) -> Rc<SaveSetup> {
+    let setup = Rc::new(SaveSetup { unlock, records: records.map(Rng::new) });
+    let on_menu = setup.clone();
     ctx.set_hook(
         ssbm_sdk::sym("mnMain_Scene_OnEnter"),
         Rc::new(move |ctx| {
-            if let Some(rng) = &rng {
-                fill_records(ctx, rng);
-            }
-            if unlock {
-                let game = gmm_x0(At::new(ctx, ctx.read_u32(ssbm_sdk::sym("gmMainLib_804D3EE0"))));
-                let save = game.thing().save_data();
-                save.set_unlocked_characters(save.unlocked_characters() | 0x7FF);
-                save.set_x186A(save.x186A() | 0x7FF);
-                save.set_x186C(0xFF);
-                // The 300 trophies, a bit each.
-                for i in 0..10 {
-                    save.x1B58().set(i, if i < 9 { u32::MAX } else { 0xFFF });
-                }
-            }
+            on_menu.apply(ctx);
             if let Some((kind, selection)) = menu {
                 let data = MenuEnterData(At::new(ctx, ctx.regs.r(3)));
                 data.set_menu_kind(kind);
@@ -123,6 +118,40 @@ pub fn install_main_menu(ctx: &Ctx, unlock: bool, menu: Option<(u8, u8)>, record
             }
         }),
     );
+    setup
+}
+
+/// What UNLOCK_ALL and RECORDS change in the save data.
+pub struct SaveSetup {
+    unlock: bool,
+    records: Option<Rng>,
+}
+
+impl SaveSetup {
+    pub fn apply(&self, ctx: &Ctx) {
+        if let Some(rng) = &self.records {
+            fill_records(ctx, rng);
+        }
+        if self.unlock {
+            let game = gmm_x0(At::new(ctx, ctx.read_u32(ssbm_sdk::sym("gmMainLib_804D3EE0"))));
+            let save = game.thing().save_data();
+            save.set_unlocked_characters(save.unlocked_characters() | 0x7FF);
+            save.set_x186A(save.x186A() | 0x7FF);
+            save.set_x186C(0xFF);
+            // The 300 trophies, a bit each.
+            for i in 0..10 {
+                save.x1B58().set(i, if i < 9 { u32::MAX } else { 0xFFF });
+            }
+            // And each of the 293 owned, as the Gallery and Lottery count them (Toy_SetUnlockState's
+            // award): the low byte the copies owned, 1 to 3 here, and 0x8000 one not yet
+            // looked at, every fourth.
+            let owned = save.trophy_flags();
+            for i in 0..293 {
+                owned.set(i, (1 + i as u16 % 3) | if i % 4 == 0 { 0x8000 } else { 0 });
+            }
+            save.set_trophy_count(293);
+        }
+    }
 }
 
 /// Gives each fighter's records random KO counts and stats, a third of them none, for the Data

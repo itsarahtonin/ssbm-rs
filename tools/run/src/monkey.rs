@@ -59,12 +59,12 @@ impl Rng {
     }
 }
 
-/// A new random state for one controller.
-fn press(rng: &Rng) -> PadStatus {
+/// A new random state for one controller, B pressed with probability `b` percent.
+fn press(rng: &Rng, b: u64) -> PadStatus {
     let mut button = 0;
     for (bit, p) in [
         (A, 30),
-        (B, 20),
+        (B, b),
         (X, 12),
         (Y, 12),
         (Z, 5),
@@ -104,23 +104,26 @@ fn press(rng: &Rng) -> PadStatus {
     }
 }
 
-/// Changes each controller's input every few fields, from field `from` on.
+/// Changes each controller's input every few fields, from field `from` on. MONKEY_B=N presses B
+/// with probability N percent (20) instead: lower, input stays longer in the screens B backs out
+/// of, such as a trophy being viewed or a character select screen.
 pub fn install(sdk: &Rc<Sdk>, seed: u64, from: u64) {
     let rng = Rc::new(Rng::new(seed));
-    schedule(sdk, rng, from);
+    let b = std::env::var("MONKEY_B").map_or(20, |v| v.parse().expect("MONKEY_B=PERCENT"));
+    schedule(sdk, rng, b, from);
 }
 
-fn schedule(sdk: &Rc<Sdk>, rng: Rc<Rng>, field: u64) {
+fn schedule(sdk: &Rc<Sdk>, rng: Rc<Rng>, b: u64, field: u64) {
     sdk.schedule(hw::field_start(field), move |ctx| {
         let sdk = ctx.ext::<Sdk>();
         {
             let mut pads = sdk.dev.pads.borrow_mut();
             for pad in pads.iter_mut() {
                 if !pad.connected || rng.chance(15) {
-                    *pad = press(&rng);
+                    *pad = press(&rng, b);
                 }
             }
         }
-        schedule(&sdk, rng, field + 1);
+        schedule(&sdk, rng, b, field + 1);
     });
 }
