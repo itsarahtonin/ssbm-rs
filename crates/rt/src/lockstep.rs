@@ -352,7 +352,7 @@ impl State {
     fn wrote_code(&self, ctx: &Ctx, before: &Pages) -> bool {
         let (lo, hi) = self.code.get();
         before.iter().any(|(&page, old)| {
-            let at = 0x8000_0000 + page * ssbm_mem::PAGE_SIZE;
+            let at = ssbm_mem::page_addr(page);
             if at < hi && at + ssbm_mem::PAGE_SIZE > lo {
                 return true;
             }
@@ -1427,7 +1427,7 @@ fn compare(ctx: &Ctx, a: &Outcome, b: &Outcome, returns: Returns, sp: u32) -> Ve
             // Whole words, so a value that differs reads as one, such as a float's sign.
             let (lo, hi) = (start & !3, ((i + 3) & !3).min(PAGE_SIZE as usize));
             diffs.push(Diff::Mem {
-                addr: 0x8000_0000 | (page * PAGE_SIZE + lo as u32),
+                addr: ssbm_mem::page_addr(page) + lo as u32,
                 original: expected[lo..hi].to_vec(),
                 port: actual[lo..hi].to_vec(),
             });

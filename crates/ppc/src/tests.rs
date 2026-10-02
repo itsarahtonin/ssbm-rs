@@ -196,6 +196,31 @@ fn mutated_checks_drop_calls_whose_original_fails() {
 }
 
 #[test]
+fn checks_roll_back_the_locked_cache() {
+    // f(p): *p += 1, with p in the locked cache. The port runs on what the original found.
+    const P: u32 = 0xE000_0000;
+    let ctx = machine(&[
+        0x8083_0000, // lwz r4, 0(r3)
+        addi(4, 4, 1),
+        0x9083_0000, // stw r4, 0(r3)
+        BLR,
+    ]);
+    ctx.register_port(
+        CODE,
+        |ctx| {
+            let p = ctx.regs.r(3);
+            ctx.write_u32(p, ctx.read_u32(p) + 1);
+        },
+        ssbm_rt::lockstep::Returns::Nothing,
+    );
+    ctx.set_mode(CODE, Mode::Lockstep);
+    ctx.regs.set_r(3, P);
+    ctx.invoke(CODE);
+    assert_eq!(ctx.read_u32(P), 1);
+    assert!(ctx.lockstep.mismatches.borrow().is_empty());
+}
+
+#[test]
 fn mutated_checks_drop_calls_whose_port_reads_an_unset_register() {
     // f(n): return n == 1 ? 7 : r5, where r5 holds what code far up left. The port reads it
     // through c::unset_read, as c2rs's ports from machine code do, which ends a mutated check.

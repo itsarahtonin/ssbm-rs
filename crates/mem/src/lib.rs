@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-//! GameCube main memory (MEM1): 24 MB of big-endian RAM at its original 32-bit addresses.
+//! GameCube main memory (MEM1): 24 MB of big-endian RAM at its original 32-bit addresses, and
+//! the 16 KB of cache the CPU can lock as scratch memory at `0xE000_0000`.
 //!
 //! Writes take `&self` so typed handles can share one `Mem`. Floats go through `gekko-fp`'s
 //! `lfs`/`stfs`, so loads and stores match the CPU bit for bit. A page journal records the
@@ -15,6 +16,9 @@ use std::fmt;
 pub const MEM1_SIZE: u32 = 0x0180_0000;
 /// Journal granularity.
 pub const PAGE_SIZE: u32 = 0x1000;
+/// Where the locked cache is mapped, and its size.
+pub const LOCKED_CACHE: u32 = 0xE000_0000;
+pub const LOCKED_CACHE_SIZE: u32 = 0x4000;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, thiserror::Error)]
 pub enum MemError {
@@ -27,7 +31,9 @@ pub type Result<T> = std::result::Result<T, MemError>;
 /// Page contents keyed by page index, used both for journals and snapshots.
 pub type Pages = BTreeMap<u32, Box<[u8]>>;
 
-/// Main memory, mapped at `0x8000_0000` (cached) and mirrored at `0xC000_0000` (uncached).
+/// Main memory, mapped at `0x8000_0000` (cached) and mirrored at `0xC000_0000` (uncached), and
+/// the locked cache, which journals and logs cover alike: it follows MEM1 in `mem1`, so its
+/// pages come after MEM1's.
 pub struct Mem {
     mem1: Box<[Cell<u8>]>,
     /// `JOURNAL` and `LOG` bits: what writes must also record.
@@ -76,11 +82,31 @@ pub fn phys(addr: u32, len: u32) -> Option<u32> {
     (matches!(addr >> 30, 0b10 | 0b11) && in_range).then_some(phys)
 }
 
+/// Offset of `addr` in `Mem`'s storage, if `len` bytes there are mapped: MEM1's physical
+/// address, or past MEM1 for the locked cache.
+#[inline]
+fn offset(addr: u32, len: u32) -> Option<u32> {
+    phys(addr, len).or_else(|| {
+        let off = addr.wrapping_sub(LOCKED_CACHE);
+        (off < LOCKED_CACHE_SIZE && off + len <= LOCKED_CACHE_SIZE).then_some(MEM1_SIZE + off)
+    })
+}
+
+/// The address of a page of `Mem`'s storage, as a journal or snapshot keys it.
+pub fn page_addr(page: u32) -> u32 {
+    let at = page * PAGE_SIZE;
+    if at < MEM1_SIZE {
+        0x8000_0000 | at
+    } else {
+        LOCKED_CACHE + (at - MEM1_SIZE)
+    }
+}
+
 impl Mem {
     /// Zeroed memory, as the console starts.
     pub fn new() -> Self {
         Self {
-            mem1: vec![Cell::new(0); MEM1_SIZE as usize].into_boxed_slice(),
+            mem1: vec![Cell::new(0); (MEM1_SIZE + LOCKED_CACHE_SIZE) as usize].into_boxed_slice(),
             recording: Cell::new(0),
             journal: RefCell::default(),
             log: RefCell::default(),
@@ -89,7 +115,7 @@ impl Mem {
 
     #[inline]
     fn cells(&self, addr: u32, len: u32) -> Result<&[Cell<u8>]> {
-        match phys(addr, len) {
+        match offset(addr, len) {
             Some(p) => Ok(&self.mem1[p as usize..(p + len) as usize]),
             None => Err(MemError::Unmapped { addr, len }),
         }
@@ -125,8 +151,8 @@ impl Mem {
     fn note_write(&self, addr: u32, data: &[u8]) {
         let recording = self.recording.get();
         if recording & JOURNAL != 0 {
-            let phys = addr & 0x3FFF_FFFF;
             let len = data.len() as u32;
+            let phys = offset(addr, len).expect("a write that was mapped");
             let mut journals = self.journal.borrow_mut();
             let journal = journals.last_mut().expect("journaling without a journal");
             for page in phys / PAGE_SIZE..=(phys + len.max(1) - 1) / PAGE_SIZE {
@@ -234,7 +260,10 @@ impl Mem {
 
     /// A copy of all of MEM1.
     pub fn to_vec(&self) -> Vec<u8> {
-        self.mem1.iter().map(Cell::get).collect()
+        self.mem1[..MEM1_SIZE as usize]
+            .iter()
+            .map(Cell::get)
+            .collect()
     }
 }
 
@@ -270,7 +299,20 @@ mod tests {
             })
         );
         assert!(mem.read_u8(0x0000_0000).is_err());
-        assert!(mem.write_u8(0xE000_0000, 1).is_err());
+        assert!(mem.write_u8(0xE000_4000, 1).is_err());
+    }
+
+    #[test]
+    fn journals_cover_the_locked_cache() {
+        let mem = Mem::new();
+        mem.write_u32(0xE000_3FFC, 5).unwrap();
+        mem.begin_journal();
+        mem.write_u32(0xE000_3FFC, 6).unwrap();
+        let original = mem.end_journal();
+        let page = *original.keys().next().unwrap();
+        assert_eq!(page_addr(page), 0xE000_3000);
+        mem.restore(&original);
+        assert_eq!(mem.read_u32(0xE000_3FFC), Ok(5));
     }
 
     #[test]

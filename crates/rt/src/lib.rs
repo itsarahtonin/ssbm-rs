@@ -145,8 +145,6 @@ impl fmt::Display for Fault {
 
 const MMIO_BASE: u32 = 0xCC00_0000;
 const MMIO_END: u32 = 0xCC01_0000;
-const LOCKED_CACHE: u32 = 0xE000_0000;
-const LOCKED_CACHE_SIZE: u32 = 0x4000;
 /// Return address that ends a call into original code.
 pub const RETURN_SENTINEL: u32 = 0xFFFF_FFF0;
 
@@ -154,7 +152,6 @@ pub const RETURN_SENTINEL: u32 = 0xFFFF_FFF0;
 pub struct Ctx {
     pub mem: Mem,
     pub regs: Regs,
-    locked_cache: Box<[Cell<u8>]>,
     dispatch: RefCell<HashMap<u32, Entry>>,
     backend: OnceCell<Box<dyn Backend>>,
     mmio: OnceCell<Box<dyn Mmio>>,
@@ -256,7 +253,6 @@ impl Ctx {
         Self {
             mem: Mem::new(),
             regs: Regs::default(),
-            locked_cache: vec![Cell::new(0); LOCKED_CACHE_SIZE as usize].into_boxed_slice(),
             dispatch: RefCell::default(),
             backend: OnceCell::new(),
             mmio: OnceCell::new(),
@@ -583,25 +579,13 @@ impl Ctx {
         std::panic::panic_any(Fault { addr, len, write })
     }
 
-    #[inline]
-    fn locked(&self, addr: u32, len: u32) -> Option<&[Cell<u8>]> {
-        let off = addr.wrapping_sub(LOCKED_CACHE);
-        (off < LOCKED_CACHE_SIZE && off + len <= LOCKED_CACHE_SIZE)
-            .then(|| &self.locked_cache[off as usize..(off + len) as usize])
-    }
-
     fn read_slow(&self, addr: u32, len: u32) -> u64 {
         if (MMIO_BASE..MMIO_END).contains(&addr)
             && let Some(mmio) = self.mmio.get()
         {
             return u64::from(lockstep::mmio_read(self, mmio.as_ref(), addr, len));
         }
-        match self.locked(addr, len) {
-            Some(cells) => cells
-                .iter()
-                .fold(0, |acc, c| (acc << 8) | u64::from(c.get())),
-            None => self.fault(addr, len, false),
-        }
+        self.fault(addr, len, false)
     }
 
     fn write_slow(&self, addr: u32, len: u32, value: u64) {
@@ -610,14 +594,7 @@ impl Ctx {
         {
             return lockstep::mmio_write(self, mmio.as_ref(), addr, len, value as u32);
         }
-        match self.locked(addr, len) {
-            Some(cells) => {
-                for (i, c) in cells.iter().enumerate() {
-                    c.set((value >> (8 * (len as usize - 1 - i))) as u8);
-                }
-            }
-            None => self.fault(addr, len, true),
-        }
+        self.fault(addr, len, true)
     }
 
     #[inline]
