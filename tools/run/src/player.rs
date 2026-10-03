@@ -7,7 +7,7 @@
 
 use std::path::PathBuf;
 
-use rfd::{FileDialog, MessageButtons, MessageDialog, MessageLevel};
+use rfd::{FileDialog, MessageButtons, MessageDialog, MessageDialogResult, MessageLevel};
 
 /// The settings folder.
 fn folder() -> PathBuf {
@@ -28,6 +28,24 @@ fn error(text: &str) {
         .show();
 }
 
+/// The first launch's word on what ssbm-rs needs, after `note` if any: true to browse for it,
+/// false to quit.
+fn welcome(note: &str) -> bool {
+    const BROWSE: &str = "Browse\u{2026}";
+    let result = MessageDialog::new()
+        .set_level(MessageLevel::Info)
+        .set_title("ssbm-rs")
+        .set_description(format!(
+            "{note}ssbm-rs plays Super Smash Bros. Melee from your own copy of the game.\n\n\
+             Choose a disc image of Melee, NTSC version 1.02 (game ID GALE01, revision 2), \
+             such as an .iso or .rvz file. ssbm-rs remembers it, so you only do this once."
+        ))
+        .set_buttons(MessageButtons::OkCancelCustom(BROWSE.to_owned(), "Quit".to_owned()))
+        .show();
+    matches!(result, MessageDialogResult::Ok)
+        || matches!(&result, MessageDialogResult::Custom(s) if s == BROWSE)
+}
+
 /// The arguments a double-click means, or None when given some: the disc (the one remembered,
 /// or one asked for), a window, and the card in the settings folder. Exits if asked for a disc
 /// and given none.
@@ -38,25 +56,35 @@ pub fn args() -> Option<Vec<String>> {
     std::panic::set_hook(Box::new(|info| error(&format!("ssbm-rs stopped: {info}"))));
     let folder = folder();
     let remembered = folder.join("disc.txt");
-    let mut disc = std::fs::read_to_string(&remembered)
+    let before = std::fs::read_to_string(&remembered)
         .ok()
-        .map(|s| PathBuf::from(s.trim()))
-        .filter(|p| ssbm_disc::Disc::open(p).is_ok());
+        .map(|s| PathBuf::from(s.trim()));
+    let mut disc = before.clone().filter(|p| ssbm_disc::Disc::open(p).is_ok());
+    // Until it has one: a word on what it needs, then the file browser.
+    let mut note = match &before {
+        Some(p) if disc.is_none() => format!(
+            "The disc image ssbm-rs played before can't be opened anymore:\n{}\n\n",
+            p.display()
+        ),
+        _ => String::new(),
+    };
     while disc.is_none() {
+        if !welcome(&note) {
+            std::process::exit(0);
+        }
         let Some(path) = FileDialog::new()
             .set_title("Choose your Super Smash Bros. Melee disc image (NTSC 1.02)")
             .add_filter("Disc images", &["iso", "gcm", "rvz", "ciso", "gcz", "wbfs", "nfs"])
             .add_filter("All files", &["*"])
             .pick_file()
         else {
-            std::process::exit(0);
+            continue;
         };
         match ssbm_disc::Disc::open(&path) {
             Ok(_) => disc = Some(path),
-            Err(e) => error(&format!(
-                "{} isn't a disc ssbm-rs plays: {e}\n\nIt needs Super Smash Bros. Melee, NTSC 1.02 (GALE01, revision 2).",
-                path.display()
-            )),
+            Err(e) => {
+                note = format!("{} isn't a disc ssbm-rs can play ({e}).\n\n", path.display())
+            }
         }
     }
     let disc = disc.unwrap();
