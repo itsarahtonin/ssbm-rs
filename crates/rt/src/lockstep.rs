@@ -44,6 +44,22 @@ pub enum Target {
     Load { pc: u32, size: u32, value: u32, test: Test },
     /// What the loads at `pc` and `other` read, `size` bytes each, compared with each other.
     LoadSame { pc: u32, other: u32, size: u32 },
+    /// The compare (or record form) at `pc`, whose value `targets.py` could not trace to a
+    /// load: where it came from is found as the original runs (`State::note_load`), and that
+    /// word is changed as a load target's is.
+    Cmp { pc: u32, value: u32, test: Test },
+}
+
+/// Where a register's value came from while an original runs: the word a load read, plus what
+/// adds since put on it (`delta`), or masked since (`exact` false); and the value it had then,
+/// so a register something untracked has changed since, such as native code, is told apart.
+#[derive(Clone, Copy, Debug)]
+struct Origin {
+    ea: u32,
+    size: u8,
+    delta: u32,
+    exact: bool,
+    value: u32,
 }
 
 /// How a target's compare looks at its value.
@@ -242,6 +258,15 @@ pub struct State {
     watch: RefCell<Vec<u32>>,
     watching: Cell<bool>,
     loaded: RefCell<Vec<(u32, u32)>>,
+    /// Whether the watched function has compare targets, so where registers' values come from
+    /// is tracked through every instruction its original runs; that origin per register; and
+    /// the one the running instruction is about to give its destination.
+    tracking: Cell<bool>,
+    origins: RefCell<[Option<Origin>; 32]>,
+    pending: Cell<Option<(usize, Origin)>>,
+    /// The size and transform of the word each compare target's value came from, by (compare,
+    /// address), for changing it.
+    cmp_words: RefCell<HashMap<(u32, u32), (u8, u32, bool)>>,
     /// Where each target's load read lately, in any check, by its address: a load the call
     /// under check never ran, behind a condition a mutated check met, is changed there.
     seen_loads: RefCell<HashMap<u32, Vec<u32>>>,
@@ -335,10 +360,28 @@ impl State {
         self.watching.get()
     }
 
-    /// The interpreter is about to run instruction `w` at `pc`: if it is a load a target of the
-    /// function under check names, note where it reads.
+    /// The interpreter is about to run instruction `w` at `pc`: where registers' values come
+    /// from is tracked, if compare targets need it, and a load a target of the function under
+    /// check names notes where it reads, a compare target where its value came from.
     pub fn note_load(&self, ctx: &Ctx, pc: u32, w: u32) {
+        if self.tracking.get() {
+            self.track(ctx, w);
+        }
         if self.watch.borrow().binary_search(&pc).is_err() {
+            return;
+        }
+        if let Some(r) = compared(w) {
+            let origin = self.origins.borrow()[r].filter(|o| o.value == ctx.regs.r(r));
+            if let Some(o) = origin {
+                let mut loaded = self.loaded.borrow_mut();
+                if loaded.len() < 256 {
+                    loaded.push((pc, o.ea));
+                }
+                let mut words = self.cmp_words.borrow_mut();
+                if words.len() < 1 << 16 {
+                    words.insert((pc, o.ea), (o.size, o.delta, o.exact));
+                }
+            }
             return;
         }
         let (op, ra, rb) = (w >> 26, ((w >> 16) & 31) as usize, ((w >> 11) & 31) as usize);
@@ -358,15 +401,68 @@ impl State {
         }
     }
 
+    /// The instruction the interpreter has just run gave its destination register the value
+    /// `note_load` saw coming: note where that came from.
+    #[inline]
+    pub fn after_insn(&self, ctx: &Ctx) {
+        if let Some((r, o)) = self.pending.take() {
+            self.origins.borrow_mut()[r] = Some(Origin { value: ctx.regs.r(r), ..o });
+        }
+    }
+
+    /// Notes what instruction `w` is about to give a register: a word it loads, or another
+    /// register's origin copied, added to or masked.
+    fn track(&self, ctx: &Ctx, w: u32) {
+        let (op, d, a, b) = (w >> 26, fd(w), fa(w), fb(w));
+        let simm = w as u16 as i16 as u32;
+        let load = |size: u8, ea: u32| {
+            Some((d, Origin { ea, size, delta: 0, exact: true, value: 0 }))
+        };
+        let base = |r: usize| if r == 0 { 0 } else { ctx.regs.r(r) };
+        let from = |dst: usize, src: usize, delta: u32, exact: bool| {
+            self.origins.borrow()[src].filter(|o| o.value == ctx.regs.r(src)).map(|o| {
+                let delta = o.delta.wrapping_add(delta);
+                (dst, Origin { delta, exact: o.exact && exact, ..o })
+            })
+        };
+        let pending = match op {
+            // lwz(u), lbz(u), lhz(u), lha(u)
+            32 | 33 => load(4, base(a).wrapping_add(simm)),
+            34 | 35 => load(1, base(a).wrapping_add(simm)),
+            40..=43 => load(2, base(a).wrapping_add(simm)),
+            // addi with a register
+            14 if a != 0 => from(d, a, simm, true),
+            // rlwinm without a rotation: a mask, as clrlwi is
+            21 if (w >> 11) & 31 == 0 => from(a, d, 0, false),
+            31 => match (w >> 1) & 0x3FF {
+                23 | 55 => load(4, base(a).wrapping_add(ctx.regs.r(b))),
+                87 | 119 => load(1, base(a).wrapping_add(ctx.regs.r(b))),
+                279 | 311 | 343 | 375 => load(2, base(a).wrapping_add(ctx.regs.r(b))),
+                // mr, extsb, extsh
+                444 if d == b => from(a, d, 0, true),
+                954 | 922 => from(a, d, 0, true),
+                _ => None,
+            },
+            _ => None,
+        };
+        self.pending.set(pending);
+    }
+
     /// Starts noting where the loads `addr`'s targets name read.
     fn watch_loads(&self, addr: u32) {
         let targets = self.targets.borrow();
+        let tracking = targets
+            .get(&addr)
+            .is_some_and(|ts| ts.iter().any(|t| matches!(t, Target::Cmp { .. })));
+        self.tracking.set(tracking);
+        *self.origins.borrow_mut() = [None; 32];
+        self.pending.set(None);
         let mut pcs: Vec<u32> = targets
             .get(&addr)
             .into_iter()
             .flatten()
             .flat_map(|t| match *t {
-                Target::Load { pc, .. } => vec![pc],
+                Target::Load { pc, .. } | Target::Cmp { pc, .. } => vec![pc],
                 Target::LoadSame { pc, other, .. } => vec![pc, other],
                 _ => Vec::new(),
             })
@@ -382,6 +478,8 @@ impl State {
     /// Stops noting loads; returns where each read, as (load, address).
     fn end_watch(&self) -> Vec<(u32, u32)> {
         self.watching.set(false);
+        self.tracking.set(false);
+        self.pending.set(None);
         self.watch.borrow_mut().clear();
         let loaded = std::mem::take(&mut *self.loaded.borrow_mut());
         let mut seen = self.seen_loads.borrow_mut();
@@ -1194,6 +1292,33 @@ fn mutated_checks(
     }
 }
 
+#[inline]
+fn fd(w: u32) -> usize {
+    ((w >> 21) & 31) as usize
+}
+#[inline]
+fn fa(w: u32) -> usize {
+    ((w >> 16) & 31) as usize
+}
+#[inline]
+fn fb(w: u32) -> usize {
+    ((w >> 11) & 31) as usize
+}
+
+/// The register whose value instruction `w` compares with a constant or tests, for compare
+/// targets: cmpwi's and cmplwi's, or a record form's source (andi., rlwinm., mr., extsb.,
+/// extsh.).
+fn compared(w: u32) -> Option<usize> {
+    let rc = w & 1 != 0;
+    match w >> 26 {
+        10 | 11 => Some(fa(w)),
+        28 => Some(fd(w)),
+        21 if rc => Some(fd(w)),
+        31 if rc && matches!((w >> 1) & 0x3FF, 444 | 954 | 922) => Some(fd(w)),
+        _ => None,
+    }
+}
+
 /// What the original of an outermost check read that its mutated checks may change: every
 /// word, and where the loads its function's targets name read.
 struct Inputs<'a> {
@@ -1325,6 +1450,33 @@ fn change_target(ctx: &Ctx, addr: u32, i: usize, loaded: &[(u32, u32)]) -> Optio
                 _ => ctx.write_u32(ea, new),
             }
             Some(format!("{ea:#010X} {old:#X}->{new:#X}"))
+        }
+        Target::Cmp { pc, value, test } => {
+            let at = state.load_addresses(loaded, pc);
+            let ea = *at.get(pick(at.len()))?;
+            let (size, delta, exact) = *state.cmp_words.borrow().get(&(pc, ea))?;
+            let (code_start, code_end) = state.code.get();
+            if !(RAM_LO..RAM_HI).contains(&ea)
+                || (code_start..code_end).contains(&ea)
+                || state.is_ram_code(ea & !3)
+                || state.constant.borrow().iter().any(|&(lo, hi)| (lo..hi).contains(&ea))
+            {
+                return None;
+            }
+            let old = match size {
+                1 => u32::from(ctx.read_u8(ea)),
+                2 => u32::from(ctx.read_u16(ea)),
+                _ => ctx.read_u32(ea),
+            };
+            // The word, such that what the compare sees after the adds since is the value.
+            let want = if exact && test != Test::Bits { value.wrapping_sub(delta) } else { value };
+            let new = near(old, want, test, at.len());
+            match size {
+                1 => ctx.write_u8(ea, new as u8),
+                2 => ctx.write_u16(ea, new as u16),
+                _ => ctx.write_u32(ea, new),
+            }
+            Some(format!("{ea:#010X} {old:#X}->{new:#X} (for the compare at {pc:#010X})"))
         }
         Target::LoadSame { pc, other, size } => {
             // The word the first load reads becomes what the other reads, or a neighbor of it.

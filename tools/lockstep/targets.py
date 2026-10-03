@@ -351,7 +351,10 @@ def decide_in(cfg, b, start, consts):
         if m in ("cmpwi", "cmplwi"):
             x, k = (r[1], r[2]) if len(r) == 3 else (r[0], r[1])
             k = feasible.imm(k)
-            return (source(cfg, b, j, x), "=", k & 0xFFFFFFFF) if k is not None else None
+            if k is None:
+                return None
+            # A value traced nowhere: the compare itself, whose value's word the run finds.
+            return (source(cfg, b, j, x) or ("cmp", block[j][0]), "=", k & 0xFFFFFFFF)
         if m in ("cmpw", "cmplw"):
             x, y = (r[1], r[2]) if len(r) == 3 else (r[0], r[1])
             sx, sy = source(cfg, b, j, x), source(cfg, b, j, y)
@@ -381,22 +384,24 @@ def decide_in(cfg, b, start, consts):
             return None
         if m.endswith("."):
             base = m[:-1]
+            src = (lambda: source(cfg, b, j, r[1]) or ("cmp", block[j][0]))
             if base in ("mr", "or") and len(r) >= 2:
-                return (source(cfg, b, j, r[1]), "=", 0)
+                return (src(), "=", 0)
             if base == "extsb" or base == "extsh":
-                return (source(cfg, b, j, r[1]), "=", 0)
+                return (src(), "=", 0)
             if base == "andi" and len(r) == 3 and feasible.imm(r[2]) is not None:
-                return (source(cfg, b, j, r[1]), "&", feasible.imm(r[2]))
+                return (src(), "&", feasible.imm(r[2]))
             if base == "clrlwi" and len(r) == 3 and feasible.imm(r[2]) is not None:
-                return (source(cfg, b, j, r[1]), "&", (1 << (32 - feasible.imm(r[2]))) - 1)
+                return (src(), "&", (1 << (32 - feasible.imm(r[2]))) - 1)
             if base == "extrwi" and len(r) == 4:
                 n, at = feasible.imm(r[2]), feasible.imm(r[3])
                 if n is not None and at is not None:
+                    # Rotated: the run's word would need the bits moved back, so traced only.
                     return (source(cfg, b, j, r[1]), "&", ((1 << n) - 1) << (32 - at - n))
             if base == "rlwinm" and len(r) == 5 and feasible.imm(r[2]) == 0:
                 mb, me = feasible.imm(r[3]), feasible.imm(r[4])
                 if mb is not None and me is not None:
-                    return (source(cfg, b, j, r[1]), "&", mask(mb, me))
+                    return (src(), "&", mask(mb, me))
             return None
     return "none"
 
@@ -429,6 +434,8 @@ def target(src, op, k, name, unit, addrs):
         k = undo(src[-1], op, k)
         if k is None or (op == "&" and not k):
             return None
+    if src[0] == "cmp":
+        return f"cmp {src[1]:#010x} {op} {k:#x}", name
     if src[0] == "same":
         return f"load {src[1]:#010x} {src[3]} = load {src[2]:#010x}", name
     if src[0] == "fload":
