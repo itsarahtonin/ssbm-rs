@@ -1130,6 +1130,13 @@ fn run() -> ExitCode {
     // Stalls in a row with no field passing: a game that never gets going again, as one stuck
     // in an error loop does, ends the run instead of spinning until the campaign's timeout.
     let stalls = Cell::new(0u32);
+    // STALLS=N and STALL_BEATS=M let screens that work long between fields finish, as the
+    // snapshot album does decoding every picture on the card: a stall is M heartbeats with no
+    // field (8), and N of them in a row end the run (4).
+    let stalls_max: u32 =
+        std::env::var("STALLS").map_or(STALLS_MAX, |v| v.parse().expect("STALLS=N"));
+    let stall_beats: u32 =
+        std::env::var("STALL_BEATS").map_or(8, |v| v.parse().expect("STALL_BEATS=N"));
     let pcs: std::cell::RefCell<HashMap<u32, u32>> = Default::default();
     let interp2 = interp.clone();
     ctx.set_heartbeat(move |ctx, pc| {
@@ -1159,7 +1166,7 @@ fn run() -> ExitCode {
                     .collect();
                 eprintln!("stalled at {}: {}", ctx.name_of(pc), ports.join(" < "));
             }
-            if stuck.get() >= 8 {
+            if stuck.get() >= stall_beats {
                 let mut hot: Vec<_> = pcs.borrow().iter().map(|(&pc, &n)| (n, pc)).collect();
                 hot.sort_unstable_by(|a, b| b.cmp(a));
                 for (n, pc) in hot.iter().take(8) {
@@ -1169,13 +1176,13 @@ fn run() -> ExitCode {
                 stuck.set(0);
                 pcs.borrow_mut().clear();
                 stalls.set(stalls.get() + 1);
-                if stalls.get() >= STALLS_MAX {
-                    eprintln!("stopping: {STALLS_MAX} stalls without a video field");
+                if stalls.get() >= stalls_max {
+                    eprintln!("stopping: {stalls_max} stalls without a video field");
                     panic::panic_any(Stop);
                 }
                 panic!(
                     "stuck: no video field for {} instructions",
-                    8 * ssbm_rt::HEARTBEAT
+                    u64::from(stall_beats) * ssbm_rt::HEARTBEAT
                 );
             }
         } else {
