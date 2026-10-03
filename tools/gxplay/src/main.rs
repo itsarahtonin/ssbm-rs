@@ -113,6 +113,7 @@ fn diff(ours: &Path, reference: &Path, diffs: Option<&Path>) {
                     width: a.0,
                     height: a.1,
                     rgba: img,
+                    texture: None,
                 },
             )
             .expect("saving a diff");
