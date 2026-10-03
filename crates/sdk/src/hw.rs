@@ -208,6 +208,11 @@ impl Hw {
         self.set16(off + 2, (v >> 16) as u16);
     }
 
+    /// Records a Dolphin FIFO log of `count` frames from frame `start` to `path`.
+    pub fn record_dff(&self, path: std::path::PathBuf, start: u64, count: usize) {
+        self.gp.borrow_mut().record_dff(path, start, count);
+    }
+
     /// Prints who writes the BP registers `regs` to the pipe, and the frame (diagnostics).
     pub fn trace_bp(&self, regs: Vec<u8>) {
         *self.trace_bp.borrow_mut() = regs;
@@ -498,6 +503,7 @@ impl Hw {
             self.cp_ptr(CP_FIFO_END) & 0x03FF_FFE0,
         );
         let mut rptr = self.cp_ptr(CP_FIFO_RPTR) & 0x03FF_FFE0;
+        self.gp.borrow_mut().set_fifo(base, end);
         let mut chunk = [0u8; 32];
         for _ in 0..(1 << 20) {
             if rptr == next {

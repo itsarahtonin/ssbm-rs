@@ -458,6 +458,17 @@ fn run() -> ExitCode {
             .map(|n| (n, open(&format!("{path}.{n}"))));
         sdk.hw.record_gx(open(&path), detail);
     }
+    // GX_DFF=FILE records a Dolphin FIFO log for its FIFO player, of GX_DFF_FRAMES=START,COUNT
+    // frames (default 0,1).
+    if let Ok(path) = std::env::var("GX_DFF") {
+        let frames = std::env::var("GX_DFF_FRAMES").unwrap_or_else(|_| "0,1".into());
+        let (start, count) = frames.split_once(',').expect("GX_DFF_FRAMES=START,COUNT");
+        sdk.hw.record_dff(
+            path.into(),
+            start.trim().parse().expect("START"),
+            count.trim().parse().expect("COUNT"),
+        );
+    }
     // GX_TRACE_BP=E0,64 prints each write of those BP registers with the ports making it.
     if let Ok(regs) = std::env::var("GX_TRACE_BP") {
         let regs = regs.split(',').map(|r| u8::from_str_radix(r.trim(), 16).expect("GX_TRACE_BP=E0,64"));

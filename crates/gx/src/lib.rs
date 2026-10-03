@@ -18,9 +18,17 @@ pub mod vertex;
 use texture::Image;
 
 /// Memory the GPU reads: display lists, vertex arrays, textures and palettes, by physical
-/// address.
+/// address. `command` sees each command the FIFO brings (not those of display lists), whole,
+/// once it has run.
 pub trait Memory {
     fn read(&self, phys: u32, out: &mut [u8]);
+    fn command(&self, _bytes: &[u8]) {}
+}
+
+/// Whether the BP write `value` (register and value) triggers an EFB copy to the XFB, the
+/// frame's picture.
+pub fn is_xfb_copy(value: u32) -> bool {
+    (value >> 24) as usize == TRIGGER_EFB_COPY && value & (1 << 14) != 0
 }
 
 pub(crate) fn bits(v: u32, at: u32, width: u32) -> u32 {
@@ -119,6 +127,8 @@ pub struct State {
     xf_hash: SetHash,
     /// Bytes of a command the stream hasn't finished.
     buf: Vec<u8>,
+    /// Display lists being run.
+    depth: u32,
 }
 
 impl Default for State {
@@ -167,6 +177,7 @@ impl State {
             cp_hash: SetHash::default(),
             xf_hash: SetHash::default(),
             buf: Vec::new(),
+            depth: 0,
         };
         // The hashes start as those of all-zero registers.
         for reg in 0..256 {
@@ -303,7 +314,9 @@ impl State {
                     mem.read(addr & 0x03FF_FFFF, &mut list);
                     // A display list holds whole commands; the FIFO's parse state is untouched.
                     let saved = std::mem::take(&mut self.buf);
+                    self.depth += 1;
                     let used = self.run(mem, &list, out, digests);
+                    self.depth -= 1;
                     self.buf = saved;
                     assert!(
                         list[used..].iter().all(|&b| b == 0),
@@ -345,6 +358,9 @@ impl State {
                     &rest[..rest.len().min(16)]
                 ),
             };
+            if self.depth == 0 {
+                mem.command(&rest[..len]);
+            }
             at += len;
         }
         at

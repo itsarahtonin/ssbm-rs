@@ -4,9 +4,13 @@
 //! reports the commands that signal the CPU. A recorder can log each frame's draws and copies,
 //! digested by what they use, to compare two runs' streams.
 
+use std::cell::RefCell;
 use std::io::Write;
+use std::path::PathBuf;
 
 use ssbm_gx::{Event, Produced, State};
+
+use crate::dff::{self, Log};
 use ssbm_rt::Ctx;
 
 /// A command with an effect outside the GPU.
@@ -18,15 +22,45 @@ pub(crate) enum Effect {
     Token { token: u16, interrupt: bool },
 }
 
-/// Main memory as the GPU reads it, by physical address.
-struct GpuMemory<'a>(&'a Ctx);
+/// Main memory as the GPU reads it, by physical address. A FIFO log being recorded takes each
+/// command, notes what a command read at the point in the frame where it starts, and ends a
+/// frame after its copy to the XFB.
+struct GpuMemory<'a> {
+    ctx: &'a Ctx,
+    log: Option<&'a RefCell<Log>>,
+    /// The game's FIFO ring.
+    fifo: (u32, u32),
+}
 
 impl ssbm_gx::Memory for GpuMemory<'_> {
     fn read(&self, phys: u32, out: &mut [u8]) {
-        if self.0.mem.read_bytes(0x8000_0000 | (phys & 0x01FF_FFFF), out).is_err() {
+        let phys = phys & 0x01FF_FFFF;
+        if self.ctx.mem.read_bytes(0x8000_0000 | phys, out).is_err() {
             out.fill(0);
         }
+        if let Some(log) = self.log {
+            let mut log = log.borrow_mut();
+            let position = log.position();
+            log.read(phys, out, dff::VERTEX_STREAM, position);
+        }
     }
+
+    fn command(&self, bytes: &[u8]) {
+        if let Some(log) = self.log {
+            let mut log = log.borrow_mut();
+            log.fifo(bytes);
+            if bytes[0] == 0x61 && ssbm_gx::is_xfb_copy(u32::from_be_bytes([bytes[1], bytes[2], bytes[3], bytes[4]])) {
+                log.end_frame(self.fifo.0, self.fifo.1);
+            }
+        }
+    }
+}
+
+/// A FIFO log to record: `count` frames from frame `start`, saved to `path`.
+struct DffPlan {
+    path: PathBuf,
+    start: u64,
+    count: usize,
 }
 
 pub(crate) struct Gp {
@@ -34,6 +68,12 @@ pub(crate) struct Gp {
     pub draws: u64,
     finishes: u64,
     record: Option<Record>,
+    dff: Option<DffPlan>,
+    dff_log: Option<RefCell<Log>>,
+    /// Copies to the XFB so far: the frames a FIFO log counts.
+    xfb_copies: u64,
+    /// The game's FIFO ring, which the FIFO player writes a frame's commands through.
+    fifo: (u32, u32),
 }
 
 impl Default for Gp {
@@ -43,6 +83,10 @@ impl Default for Gp {
             draws: 0,
             finishes: 0,
             record: None,
+            dff: None,
+            dff_log: None,
+            xfb_copies: 0,
+            fifo: (0, 0),
         }
     }
 }
@@ -116,17 +160,46 @@ impl Gp {
         });
     }
 
+    /// Records a Dolphin FIFO log of `count` frames from frame `start` to `path` (dff.rs).
+    pub fn record_dff(&mut self, path: PathBuf, start: u64, count: usize) {
+        self.dff = Some(DffPlan { path, start, count });
+        if start == 0 {
+            self.begin_dff();
+        }
+    }
+
+    fn begin_dff(&mut self) {
+        let s = &self.state;
+        self.dff_log = Some(RefCell::new(Log::new(&s.bp, &s.cp, &s.xf, &s.tmem)));
+    }
+
+    /// The game's FIFO ring, as the CP's registers set it.
+    pub fn set_fifo(&mut self, start: u32, end: u32) {
+        self.fifo = (start, end);
+    }
+
     /// Feeds bytes from the FIFO and runs every command they complete.
     pub fn feed(&mut self, ctx: &Ctx, data: &[u8], out: &mut Vec<Effect>) {
         let mut produced = Vec::new();
-        self.state.feed(&GpuMemory(ctx), data, &mut produced, self.record.is_some());
+        let mem = GpuMemory {
+            ctx,
+            log: self.dff_log.as_ref(),
+            fifo: self.fifo,
+        };
+        // A FIFO log needs what draws read, which digesting them reads.
+        let digests = self.record.is_some() || self.dff_log.is_some();
+        self.state.feed(&mem, data, &mut produced, digests);
         for p in produced {
             if let Some(r) = &mut self.record {
                 r.event(&p);
             }
             match p.event {
                 Event::Draw { .. } => self.draws += 1,
-                Event::Copy(_) => {}
+                Event::Copy(v) => {
+                    if ssbm_gx::is_xfb_copy(v | (ssbm_gx::TRIGGER_EFB_COPY as u32) << 24) {
+                        self.xfb_copies += 1;
+                    }
+                }
                 Event::Finish => {
                     self.finishes += 1;
                     if let Some(r) = &mut self.record {
@@ -137,5 +210,32 @@ impl Gp {
                 Event::Token { token, interrupt } => out.push(Effect::Token { token, interrupt }),
             }
         }
+        self.dff_progress();
+    }
+}
+
+impl Gp {
+    /// A FIFO log starts once its first frame's XFB copy is past, from the state then, and is
+    /// saved once it holds its frames.
+    fn dff_progress(&mut self) {
+        let Some(plan) = &self.dff else { return };
+        let (start, count, path) = (plan.start, plan.count, plan.path.clone());
+        let Some(log) = &self.dff_log else {
+            if self.xfb_copies >= start {
+                self.begin_dff();
+            }
+            return;
+        };
+        let log = log.borrow();
+        if log.frames() < count {
+            return;
+        }
+        let file = std::fs::File::create(&path).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
+        log.save(&mut std::io::BufWriter::new(file))
+            .unwrap_or_else(|e| panic!("{}: {e}", path.display()));
+        eprintln!("FIFO log of {} frames saved to {}", log.frames(), path.display());
+        drop(log);
+        self.dff_log = None;
+        self.dff = None;
     }
 }
