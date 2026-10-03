@@ -158,5 +158,12 @@ fn cache_control_matches_the_original() {
         same(&ctx, "ICEnable", |c| c.call::<_, ()>(addr::ICEnable, ()), |c| cache::ICEnable(c));
         same(&ctx, "ICFlashInvalidate", |c| c.call::<_, ()>(addr::ICFlashInvalidate, ()), |c| cache::ICFlashInvalidate(c));
         same(&ctx, "LCDisable", |c| c.call::<_, ()>(addr::LCDisable, ()), |c| cache::LCDisable(c));
+        for i in 0..0x200 {
+            ctx.write_u8(0xE000_0000 + i, rng.word() as u8);
+        }
+        let (dest, tag) = (SCRATCH + ((rng.word() % 0x100) & !31), 0xE000_0000 + ((rng.word() % 0x100) & !31));
+        let blocks = 1 + rng.word() % 8;
+        let (d, t) = (ssbm_game::support::ptr(&ctx, dest), ssbm_game::support::ptr(&ctx, tag));
+        same(&ctx, "LCStoreBlocks", |c| c.call::<_, ()>(addr::LCStoreBlocks, (dest, tag, blocks)), |c| cache::LCStoreBlocks(c, d, t, blocks));
     }
 }
