@@ -1215,6 +1215,12 @@ impl Ctx {
         self.hooks.borrow().contains_key(&addr)
     }
 
+    /// The hook at `addr` and what skips it, for a hook that adds to it instead of replacing it.
+    pub fn hook(&self, addr: u32) -> Option<(Hook, Option<HookSkip>)> {
+        let hook = self.hooks.borrow().get(&addr).cloned()?;
+        Some((hook, self.hook_skips.borrow().get(&addr).copied()))
+    }
+
     pub fn run_hook(&self, addr: u32) {
         let skip = self.hook_skips.borrow().get(&addr).copied();
         if skip.is_some_and(|skip| skip(self)) {

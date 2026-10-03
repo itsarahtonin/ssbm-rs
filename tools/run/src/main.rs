@@ -1062,13 +1062,15 @@ fn run() -> ExitCode {
     }
 
     // CALLS=name,... logs each call to these functions (symbols or hex addresses) with its
-    // first four arguments.
+    // first four arguments, then runs the hook already there (the SDK's wait points, say).
     if let Ok(names) = std::env::var("CALLS") {
         for name in names.split(',').map(str::trim) {
             let dev = slippi.clone();
             let addr = u32::from_str_radix(name.trim_start_matches("0x"), 16)
                 .unwrap_or_else(|_| ssbm_sdk::sym(name));
             let name = name.to_owned();
+            let before = ctx.hook(addr);
+            ctx.remove_hook(addr);
             ctx.set_hook(
                 addr,
                 Rc::new(move |ctx| {
@@ -1081,14 +1083,21 @@ fn run() -> ExitCode {
                         None => format!("field {}", ctx.ext::<Sdk>().hw.fields.get()),
                     };
                     let r = &ctx.regs;
+                    let run = before
+                        .as_ref()
+                        .filter(|(_, skip)| !skip.is_some_and(|skip| skip(ctx)));
                     eprintln!(
-                        "{when}: {name}({:08X}, {:08X}, {:08X}, {:08X}) from {}",
+                        "{when}: {name}({:08X}, {:08X}, {:08X}, {:08X}) from {}{}",
                         r.r(3),
                         r.r(4),
                         r.r(5),
                         r.r(6),
-                        ctx.name_of(r.lr.get())
+                        ctx.name_of(r.lr.get()),
+                        if run.is_some() { " [hooked]" } else { "" }
                     );
+                    if let Some((hook, _)) = run {
+                        hook(ctx);
+                    }
                 }),
             );
         }
