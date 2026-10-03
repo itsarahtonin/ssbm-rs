@@ -51,7 +51,7 @@ pub struct Link {
 static LINK: OnceLock<Arc<Link>> = OnceLock::new();
 
 pub fn requested() -> bool {
-    std::env::args().any(|a| a == "--window")
+    crate::args().iter().any(|a| a == "--window")
 }
 
 /// The GPU, on the main thread before the game starts; the window comes once the event loop runs.

@@ -20,6 +20,11 @@
 //!
 //! For debugging, `LOCKSTEP_TRACE` shows the jumps original code made before a panic inside a
 //! lockstep check, and `STUCK_TRACE` the ports running at each heartbeat of a stall.
+//!
+//! The `player` feature builds it for players (player.rs): double-clicked, it plays in a window.
+
+// The player's build is a Windows app, without a console.
+#![cfg_attr(feature = "player", windows_subsystem = "windows")]
 
 use std::cell::{Cell, RefCell};
 use std::collections::HashMap;
@@ -39,6 +44,8 @@ mod probe;
 mod wav;
 #[cfg(feature = "window")]
 mod adapter;
+#[cfg(feature = "player")]
+mod player;
 #[cfg(feature = "window")]
 mod window;
 
@@ -237,7 +244,18 @@ const READ_ONLY: [(u32, u32); 2] = [(0x803B_7240, 0x803B_9840), (0x804D_79E0, 0x
 /// lockstep checks make them deep.
 const STACK_SIZE: usize = 1 << 30;
 
+static ARGS: std::sync::OnceLock<Vec<String>> = std::sync::OnceLock::new();
+
+/// The command line, or in the player's build what a double-click means.
+fn args() -> &'static [String] {
+    ARGS.get_or_init(|| std::env::args().collect())
+}
+
 fn main() -> ExitCode {
+    #[cfg(feature = "player")]
+    if let Some(args) = player::args() {
+        let _ = ARGS.set(args);
+    }
     // --window: the window and the GPU on this thread, the game on its own.
     #[cfg(feature = "window")]
     if window::requested() {
@@ -265,7 +283,7 @@ fn main() -> ExitCode {
 fn run() -> ExitCode {
     let mut disc_path = std::env::var("SSBM_DISC").ok();
     // A window plays until it's closed.
-    let mut fields = if std::env::args().any(|a| a == "--window") { u64::MAX / 4 } else { 600 };
+    let mut fields = if args().iter().any(|a| a == "--window") { u64::MAX / 4 } else { 600 };
     let mut replay_path = None;
     let mut fp_mode = None;
     let mut known_path = None;
@@ -280,7 +298,7 @@ fn run() -> ExitCode {
     let mut call_path: Option<std::path::PathBuf> = None;
     let mut corpus_path: Option<std::path::PathBuf> = None;
     let mut repeat = 1u32;
-    let mut args = std::env::args().skip(1);
+    let mut args = crate::args().iter().cloned().skip(1);
     while let Some(a) = args.next() {
         match a.as_str() {
             "--fields" => {
