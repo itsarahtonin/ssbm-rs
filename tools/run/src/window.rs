@@ -24,6 +24,8 @@ use winit::window::{Window, WindowId};
 
 const FIELD_RATE: f64 = 60_000.0 / 1_001.0;
 const AUDIO_RATE: u32 = 32_000;
+/// A GameCube drive's average read rate, in bytes a second.
+const DISC_RATE: u64 = 3_000_000;
 /// Audio queued beyond this many samples is dropped, to keep latency down.
 const AUDIO_MAX: usize = AUDIO_RATE as usize / 5;
 
@@ -98,6 +100,8 @@ pub fn start() -> Gpu {
 /// to real time, each field.
 pub fn install(sdk: &Rc<Sdk>, live_input: bool) {
     let link = LINK.get().expect("window::start first").clone();
+    // Disc reads at a drive's pace, which the music needs (Hw::set_disc_rate).
+    sdk.hw.set_disc_rate(Some(DISC_RATE));
     let mut renderer = ssbm_render::Renderer::with_device(link.device.clone(), link.queue.clone());
     // Frames stay on the GPU, which shows them.
     renderer.xfb_on_gpu = true;
