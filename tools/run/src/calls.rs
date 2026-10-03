@@ -32,10 +32,30 @@ pub fn past_deadline(executed: u64) -> bool {
     DEADLINE.with(|d| d.get() != 0 && executed > d.get())
 }
 
+thread_local! {
+    /// CALL_POKE=ADDR=BYTE,...: bytes to change in every call checked again, which then checks
+    /// as a mutated check, to replay exactly the changed inputs a run's mismatch reported.
+    static POKES: Vec<(u32, u8)> = std::env::var("CALL_POKE").map_or_else(|_| Vec::new(), |v| {
+        v.split(',')
+            .map(|p| {
+                let (a, b) = p.split_once('=').expect("CALL_POKE=ADDR=BYTE,...");
+                let num = |s: &str| u32::from_str_radix(s.trim().trim_start_matches("0x"), 16);
+                (num(a).expect("ADDR"), num(b).expect("BYTE") as u8)
+            })
+            .collect()
+    });
+}
+
 /// Checks `call` again from the state it was saved in.
 fn check(ctx: &Ctx, call: &Call) {
     call.load(ctx);
-    ctx.lockstep.resume(call.mutated, call.stub);
+    let poked = POKES.with(|pokes| {
+        for &(addr, byte) in pokes {
+            ctx.write_u8(addr, byte);
+        }
+        !pokes.is_empty()
+    });
+    ctx.lockstep.resume(call.mutated || poked, call.stub);
     DEADLINE.with(|d| d.set(ctx.executed() + REPLAY_MAX));
     ctx.invoke(call.addr);
     DEADLINE.with(|d| d.set(0));
