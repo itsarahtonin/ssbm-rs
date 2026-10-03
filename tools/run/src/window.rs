@@ -33,6 +33,8 @@ pub struct Link {
     /// Stereo samples at 32 kHz, left then right.
     audio: Mutex<VecDeque<[i16; 2]>>,
     quit: AtomicBool,
+    /// Wakes the window when a frame is done.
+    proxy: OnceLock<winit::event_loop::EventLoopProxy<()>>,
     /// Fields and frames so far, for the rates logged.
     fields: std::sync::atomic::AtomicU64,
     frames: std::sync::atomic::AtomicU64,
@@ -76,6 +78,7 @@ pub fn start() -> Gpu {
         frame: Mutex::new(None),
         audio: Mutex::new(VecDeque::new()),
         quit: AtomicBool::new(false),
+        proxy: OnceLock::new(),
         fields: Default::default(),
         frames: Default::default(),
     });
@@ -92,6 +95,9 @@ pub fn install(sdk: &Rc<Sdk>, live_input: bool) {
     renderer.on_frame(move |f| {
         frames.frames.fetch_add(1, Ordering::Relaxed);
         *frames.frame.lock().unwrap() = Some(f);
+        if let Some(proxy) = frames.proxy.get() {
+            let _ = proxy.send_event(());
+        }
     });
     sdk.hw.set_renderer(Box::new(renderer));
     sdk.dev.mix_audio.set(true);
@@ -164,8 +170,9 @@ pub fn run(gpu: Gpu) {
     } else {
         start_audio(link.clone())
     };
-    let event_loop = EventLoop::new().expect("an event loop");
-    event_loop.set_control_flow(ControlFlow::Poll);
+    let event_loop = EventLoop::with_user_event().build().expect("an event loop");
+    let _ = link.proxy.set(event_loop.create_proxy());
+    event_loop.set_control_flow(ControlFlow::Wait);
     let mut app = App {
         gpu,
         link,
@@ -522,7 +529,7 @@ impl App {
     }
 }
 
-impl ApplicationHandler for App {
+impl ApplicationHandler<()> for App {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
         if self.window.is_none() {
             let shown = self.show(event_loop);
@@ -559,18 +566,14 @@ impl ApplicationHandler for App {
                     self.keys.remove(&code);
                 }
             }
-            WindowEvent::RedrawRequested => {
-                self.poll_input();
-                self.draw();
-                if let Some(shown) = &self.window {
-                    shown.window.request_redraw();
-                }
-            }
+            WindowEvent::RedrawRequested => self.draw(),
             _ => {}
         }
     }
 
-    fn about_to_wait(&mut self, _event_loop: &ActiveEventLoop) {
+    /// A frame is done: read the controllers for the next and show it.
+    fn user_event(&mut self, _event_loop: &ActiveEventLoop, _: ()) {
+        self.poll_input();
         if let Some(shown) = &self.window {
             shown.window.request_redraw();
         }
