@@ -33,6 +33,8 @@ const DSP_FRAME_TICKS: u64 = TB_HZ / 2000;
 
 pub struct Devices {
     pub pads: RefCell<[PadStatus; 4]>,
+    /// What `PADControlMotor` last asked of each controller's rumble motor (`PAD_MOTOR_*`).
+    pub motors: Cell<[u32; 4]>,
     /// The DSP task (the AX microcode), and mail it is waiting on.
     dsp_task: Cell<u32>,
     dsp_init: Cell<bool>,
@@ -63,6 +65,7 @@ impl Default for Devices {
         };
         Self {
             pads: RefCell::new([pad; 4]),
+            motors: Cell::new([0; 4]),
             dsp_task: Cell::new(0),
             dsp_init: Cell::new(false),
             mail: RefCell::default(),
@@ -81,7 +84,14 @@ pub(crate) fn install(ctx: &Ctx, card: bool) {
     reg("PADReset", |ctx| ret(ctx, 1));
     reg("PADRecalibrate", |ctx| ret(ctx, 1));
     reg("PADRead", pad_read);
-    reg("PADControlMotor", |_| {});
+    reg("PADControlMotor", |ctx| {
+        let motors = &ctx.ext::<Sdk>().dev.motors;
+        let mut m = motors.get();
+        if let Some(chan) = m.get_mut(ctx.regs.r(3) as usize) {
+            *chan = ctx.regs.r(4);
+        }
+        motors.set(m);
+    });
     reg("PADSetSpec", |_| {});
     reg("PADSetSamplingRate", |_| {});
     reg("SIRefreshSamplingRate", |_| {});

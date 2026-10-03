@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-//! `--window`: plays the game in a window. The main thread owns the window, the GPU, controllers
-//! (gilrs, with the keyboard as a fallback) and the audio output (cpal); the game thread renders
-//! each frame on the same GPU and paces itself to the video interface's 59.94 fields a second.
-//! With a replay, the replay plays the controllers. SSBM_MUTE=1 leaves the sound out, and every
-//! five seconds the rates the game and the window keep go to stderr.
+//! `--window`: plays the game in a window. The main thread owns the window, the GPU, a gamepad
+//! (gilrs) with the keyboard, and the audio output (cpal); the game thread renders each frame on
+//! the same GPU and paces itself to the video interface's 59.94 fields a second. GameCube
+//! controllers on a Wii U adapter (adapter.rs) play their own ports, and the gamepad with the
+//! keyboard plays the first port left. With a replay, the replay plays the controllers.
+//! SSBM_MUTE=1 leaves the sound out, SSBM_NO_ADAPTER=1 leaves the adapter alone, and every five
+//! seconds the rates the game and the window keep go to stderr.
 
 use std::collections::VecDeque;
 use std::rc::Rc;
@@ -12,6 +14,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex, OnceLock};
 use std::time::{Duration, Instant};
 
+use crate::adapter::{self, Adapter};
 use ssbm_sdk::{PadStatus, Sdk, hw};
 use winit::application::ApplicationHandler;
 use winit::event::{ElementState, KeyEvent, WindowEvent};
@@ -28,7 +31,9 @@ const AUDIO_MAX: usize = AUDIO_RATE as usize / 5;
 pub struct Link {
     device: wgpu::Device,
     queue: wgpu::Queue,
-    pads: Mutex<[PadStatus; 4]>,
+    /// The gamepad and the keyboard, as one controller.
+    host: Mutex<PadStatus>,
+    adapter: OnceLock<Arc<Adapter>>,
     frame: Mutex<Option<ssbm_render::Frame>>,
     /// Stereo samples at 32 kHz, left then right.
     audio: Mutex<VecDeque<[i16; 2]>>,
@@ -69,12 +74,11 @@ pub fn start() -> Gpu {
     let link = Arc::new(Link {
         device,
         queue,
-        pads: Mutex::new(
-            [PadStatus {
-                connected: true,
-                ..PadStatus::default()
-            }; 4],
-        ),
+        host: Mutex::new(PadStatus {
+            connected: true,
+            ..PadStatus::default()
+        }),
+        adapter: OnceLock::new(),
         frame: Mutex::new(None),
         audio: Mutex::new(VecDeque::new()),
         quit: AtomicBool::new(false),
@@ -100,6 +104,9 @@ pub fn install(sdk: &Rc<Sdk>, live_input: bool) {
         }
     });
     sdk.hw.set_renderer(Box::new(renderer));
+    if live_input && std::env::var_os("SSBM_NO_ADAPTER").is_none() {
+        let _ = link.adapter.set(adapter::start());
+    }
     sdk.dev.mix_audio.set(true);
     let audio = link.clone();
     sdk.hw.set_audio_out(Box::new(move |block| {
@@ -115,17 +122,27 @@ pub fn install(sdk: &Rc<Sdk>, live_input: bool) {
             q.pop_front();
         }
     }));
-    pace(sdk, link, live_input, Instant::now(), 0);
+    let input = live_input.then(Input::default);
+    pace(sdk, link, input, Instant::now(), 0);
 }
 
-fn pace(sdk: &Rc<Sdk>, link: Arc<Link>, live_input: bool, start: Instant, field: u64) {
+/// Stops any rumble, then exits.
+pub fn exit(code: i32) -> ! {
+    if let Some(a) = LINK.get().and_then(|l| l.adapter.get()) {
+        a.stop();
+    }
+    std::process::exit(code);
+}
+
+fn pace(sdk: &Rc<Sdk>, link: Arc<Link>, mut input: Option<Input>, start: Instant, field: u64) {
     sdk.schedule(hw::field_start(field), move |ctx| {
         let sdk = ctx.ext::<Sdk>();
         if link.quit.load(Ordering::Relaxed) {
-            std::process::exit(0);
+            exit(0);
         }
-        if live_input {
-            *sdk.dev.pads.borrow_mut() = *link.pads.lock().unwrap();
+        if let Some(input) = &mut input {
+            let pads = input.read(&link, sdk.dev.motors.get());
+            *sdk.dev.pads.borrow_mut() = pads;
         }
         link.fields.fetch_add(1, Ordering::Relaxed);
         let due = start + Duration::from_secs_f64(field as f64 / FIELD_RATE);
@@ -139,8 +156,67 @@ fn pace(sdk: &Rc<Sdk>, link: Arc<Link>, live_input: bool, start: Instant, field:
         } else {
             start
         };
-        pace(&sdk, link, live_input, start, field + 1);
+        pace(&sdk, link, input, start, field + 1);
     });
+}
+
+/// The live controllers, put together each field.
+#[derive(Default)]
+struct Input {
+    last: [PadStatus; 4],
+    /// What plays each port (0 nothing, 1 the gamepad and keyboard, 2 the adapter), for the log.
+    layout: [u8; 4],
+}
+
+impl Input {
+    /// The four ports: the adapter's where it has controllers, the gamepad and keyboard on the
+    /// first one left. The motors the game wants on go to the adapter.
+    fn read(&mut self, link: &Link, motors: [u32; 4]) -> [PadStatus; 4] {
+        let adapter = link.adapter.get();
+        let mut ports = adapter.map_or([None; 4], |a| a.ports());
+        let mut layout = ports.map(|p| if p.is_some() { 2 } else { 0 });
+        if let Some(i) = ports.iter().position(Option::is_none) {
+            ports[i] = Some(*link.host.lock().unwrap());
+            layout[i] = 1;
+        }
+        if layout != self.layout {
+            let ports: Vec<_> = (0..4)
+                .filter_map(|i| match layout[i] {
+                    1 => Some(format!("port {} the gamepad and keyboard", i + 1)),
+                    2 => Some(format!("port {} the GameCube controller on the adapter", i + 1)),
+                    _ => None,
+                })
+                .collect();
+            eprintln!("window: {}", ports.join(", "));
+            self.layout = layout;
+        }
+        if let Some(a) = adapter {
+            // PAD_MOTOR_RUMBLE.
+            a.rumble(motors.map(|m| m == 1));
+        }
+        let pads = ports.map(Option::unwrap_or_default);
+        // SSBM_TRACE_PADS=1 logs the controllers as they change.
+        if std::env::var_os("SSBM_TRACE_PADS").is_some() {
+            for (i, (p, last)) in pads.iter().zip(&self.last).enumerate() {
+                if p != last {
+                    eprintln!(
+                        "pad {}: buttons {:04x}, stick {} {}, c-stick {} {}, triggers {} {}{}",
+                        i + 1,
+                        p.button,
+                        p.stick_x,
+                        p.stick_y,
+                        p.substick_x,
+                        p.substick_y,
+                        p.trigger_l,
+                        p.trigger_r,
+                        if p.connected { "" } else { " (none)" }
+                    );
+                }
+            }
+        }
+        self.last = pads;
+        pads
+    }
 }
 
 /// Waits until `due`: sleeps while far from it (Windows sleeps in steps as long as 15.6 ms), then
@@ -180,15 +256,14 @@ pub fn run(gpu: Gpu) {
         gilrs: {
             let g = gilrs::Gilrs::new().ok();
             match g.as_ref().and_then(|g| g.gamepads().next()) {
-                Some((_, gp)) => eprintln!("window: controller 1 is {} (and the keyboard)", gp.name()),
-                None => eprintln!("window: no gamepad found; controller 1 is the keyboard"),
+                Some((_, gp)) => eprintln!("window: gamepad {}", gp.name()),
+                None => eprintln!("window: no gamepad found, only the keyboard"),
             }
             g
         },
         keys: Default::default(),
         presented: 0,
         since: Instant::now(),
-        last_pad: PadStatus::default(),
     };
     event_loop
         .run_app(&mut app)
@@ -212,7 +287,6 @@ struct App {
     keys: std::collections::HashSet<KeyCode>,
     presented: u64,
     since: Instant,
-    last_pad: PadStatus,
 }
 
 const BLIT: &str = r#"
@@ -450,7 +524,7 @@ impl App {
         self.presented += 1;
     }
 
-    /// Controller 1 from the first gamepad and the keyboard.
+    /// The gamepad and the keyboard, as one controller.
     fn poll_input(&mut self) {
         let mut pad = PadStatus {
             connected: true,
@@ -541,21 +615,7 @@ impl App {
                 pad.trigger_r = 255;
             }
         }
-        // SSBM_TRACE_PADS=1 logs controller 1 as it changes.
-        if pad != self.last_pad && std::env::var_os("SSBM_TRACE_PADS").is_some() {
-            eprintln!(
-                "pad 1: buttons {:04x}, stick {} {}, c-stick {} {}, triggers {} {}",
-                pad.button,
-                pad.stick_x,
-                pad.stick_y,
-                pad.substick_x,
-                pad.substick_y,
-                pad.trigger_l,
-                pad.trigger_r
-            );
-        }
-        self.last_pad = pad;
-        self.link.pads.lock().unwrap()[0] = pad;
+        *self.link.host.lock().unwrap() = pad;
     }
 }
 
@@ -577,7 +637,7 @@ impl ApplicationHandler<()> for App {
             WindowEvent::CloseRequested => {
                 self.link.quit.store(true, Ordering::Relaxed);
                 event_loop.exit();
-                std::process::exit(0);
+                exit(0);
             }
             WindowEvent::Resized(size) => {
                 if let Some(shown) = &mut self.window {

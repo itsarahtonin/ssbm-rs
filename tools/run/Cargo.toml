@@ -20,6 +20,7 @@ pollster = { version = "1", optional = true }
 winit = { version = "0.30", optional = true }
 gilrs = { version = "0.11", optional = true }
 cpal = { version = "0.18", optional = true }
+nusb = { version = "0.2", optional = true }
 ssbm-slippi.workspace = true
 ssbm-game.workspace = true
 ssbm-types.workspace = true
@@ -29,4 +30,4 @@ zstd = "0.12"
 # AX_CHECK: Dolphin's AX microcode, built from its source, to check ssbm-ax against.
 ax-check = ["dep:ax-dolphin"]
 # --window: play in a window, with controllers and sound.
-window = ["dep:wgpu", "dep:pollster", "dep:winit", "dep:gilrs", "dep:cpal"]
+window = ["dep:wgpu", "dep:pollster", "dep:winit", "dep:gilrs", "dep:cpal", "dep:nusb"]

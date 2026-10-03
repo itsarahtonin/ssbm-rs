@@ -38,6 +38,8 @@ mod monkey;
 mod probe;
 mod wav;
 #[cfg(feature = "window")]
+mod adapter;
+#[cfg(feature = "window")]
 mod window;
 
 /// Ports lockstep does not check (see where they are set).
@@ -245,7 +247,7 @@ fn main() -> ExitCode {
             .stack_size(STACK_SIZE)
             .spawn(|| {
                 let code = run();
-                std::process::exit(if code == ExitCode::SUCCESS { 0 } else { 1 });
+                window::exit(if code == ExitCode::SUCCESS { 0 } else { 1 });
             })
             .expect("start the game thread");
         window::run(gpu);

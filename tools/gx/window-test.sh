@@ -3,6 +3,7 @@
 # (hidden.ps1), presses keys in it the way a keyboard does (keys.ps1, run on that desktop too),
 # and checks the game answers: X (A) skips the opening movie to the title, Enter (Start) opens the
 # main menu, and the left arrow moves the stick. BIN is a binary built with the window feature.
+# It leaves a GameCube adapter alone unless ADAPTER=1, which also shows what the adapter reads.
 #
 #   cargo build --release -p ssbm-run --features window --target-dir target/w
 #   BIN=target/w/release/ssbm-run.exe bash tools/gx/window-test.sh
@@ -18,6 +19,7 @@ cat > "$out/game.cmd" <<EOF
 set SSBM_MUTE=1
 set MODES=1
 set SSBM_TRACE_PADS=1
+$([[ ${ADAPTER:-0} == 1 ]] || echo "set SSBM_NO_ADAPTER=1")
 cd /d "$(cygpath -wa .)"
 "$(cygpath -wa "$BIN")" "$(cygpath -w "$SSBM_DISC")" --window --card "$w\\card.raw" --fields 1200 --port all 2> "$w\\game.log"
 EOF
@@ -44,7 +46,8 @@ check "the movie skipped to the title" "game mode 0x00"
 check "Start pressed" "pad 1: buttons 1000"
 check "the main menu opened" "game mode 0x01"
 check "the stick pushed left" "stick -127 0"
-grep -E "controller 1|no gamepad" "$log"
+grep -E "window: (gamepad|no gamepad|port|GameCube|found)" "$log"
+[[ ${ADAPTER:-0} == 1 ]] && grep -E "^pad [2-4]" "$log" | head
 grep "window:.*fields" "$log" | tail -1
 [[ $ok == 1 ]] || { cat "$out/keys.log"; echo "logs in $out"; exit 1; }
 rm -rf "$out"
