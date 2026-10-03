@@ -20,7 +20,7 @@ A frame is within tolerance when its PSNR is at least 38 dB and no more than 0.2
 
 ## Playing in a window
 
-`cargo build --release -p ssbm-run --features window` builds `--window`: the game in a window at 59.94 fields a second, with sound, the first gamepad as controller 1 (A south, B west, X east, Y north, Z right shoulder, analog triggers for L and R, sticks and D-pad as they are), or the keyboard (arrows the stick, X A, Z B, C X, S Y, D Z, Q L, W R, Enter Start, IJKL the C-stick). With `--replay` the replay plays the controllers. `SSBM_MUTE=1` leaves the sound out; the rates the game and the window keep go to stderr every five seconds.
+`cargo build --release -p ssbm-run --features window` builds `--window`: the game in a window at 59.94 fields a second, with sound, the first gamepad as controller 1 (A south, B west, X east, Y north, Z right shoulder, analog triggers for L and R, sticks and D-pad as they are), or the keyboard (arrows the stick, X A, Z B, C X, S Y, D Z, Q L, W R, Enter Start, IJKL the C-stick). The keyboard adds to the gamepad rather than standing in only without one. With `--replay` the replay plays the controllers. `SSBM_MUTE=1` leaves the sound out; the rates the game and the window keep go to stderr every five seconds, and `SSBM_TRACE_PADS=1` (`SSBM_TRACE_EVENTS=1`) logs controller 1 as it changes (the window's events). `BIN=... bash tools/gx/window-test.sh` tests the controls unattended: it boots the window on a hidden desktop, presses keys in it as a keyboard does (`keys.ps1`), and checks that A skips the opening movie, Start opens the main menu and the stick moves.
 
 ## The progress page
 

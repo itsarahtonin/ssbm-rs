@@ -181,6 +181,7 @@ pub fn run(gpu: Gpu) {
         keys: Default::default(),
         presented: 0,
         since: Instant::now(),
+        last_pad: PadStatus::default(),
     };
     event_loop
         .run_app(&mut app)
@@ -204,6 +205,7 @@ struct App {
     keys: std::collections::HashSet<KeyCode>,
     presented: u64,
     since: Instant,
+    last_pad: PadStatus,
 }
 
 const BLIT: &str = r#"
@@ -441,17 +443,15 @@ impl App {
         self.presented += 1;
     }
 
-    /// Controller 1 from the first gamepad, or else the keyboard.
+    /// Controller 1 from the first gamepad and the keyboard.
     fn poll_input(&mut self) {
         let mut pad = PadStatus {
             connected: true,
             ..PadStatus::default()
         };
-        let mut from_gamepad = false;
         if let Some(g) = &mut self.gilrs {
             while g.next_event().is_some() {}
             if let Some((_, gp)) = g.gamepads().next() {
-                from_gamepad = true;
                 use gilrs::{Axis, Button};
                 let bits = [
                     (Button::South, 0x0100),        // A
@@ -490,7 +490,8 @@ impl App {
                 }
             }
         }
-        if !from_gamepad {
+        // The keyboard adds to the gamepad: its buttons, and its directions where it has any.
+        {
             let k = |c: KeyCode| self.keys.contains(&c);
             let bits = [
                 (KeyCode::KeyX, 0x0100),
@@ -514,10 +515,18 @@ impl App {
                     _ => 0,
                 }
             };
-            pad.stick_x = dir(KeyCode::ArrowLeft, KeyCode::ArrowRight);
-            pad.stick_y = dir(KeyCode::ArrowDown, KeyCode::ArrowUp);
-            pad.substick_x = dir(KeyCode::KeyJ, KeyCode::KeyL);
-            pad.substick_y = dir(KeyCode::KeyK, KeyCode::KeyI);
+            let set = |axis: &mut i8, v: i8| {
+                if v != 0 {
+                    *axis = v;
+                }
+            };
+            set(
+                &mut pad.stick_x,
+                dir(KeyCode::ArrowLeft, KeyCode::ArrowRight),
+            );
+            set(&mut pad.stick_y, dir(KeyCode::ArrowDown, KeyCode::ArrowUp));
+            set(&mut pad.substick_x, dir(KeyCode::KeyJ, KeyCode::KeyL));
+            set(&mut pad.substick_y, dir(KeyCode::KeyK, KeyCode::KeyI));
             if pad.button & 0x0040 != 0 {
                 pad.trigger_l = 255;
             }
@@ -525,6 +534,20 @@ impl App {
                 pad.trigger_r = 255;
             }
         }
+        // SSBM_TRACE_PADS=1 logs controller 1 as it changes.
+        if pad != self.last_pad && std::env::var_os("SSBM_TRACE_PADS").is_some() {
+            eprintln!(
+                "pad 1: buttons {:04x}, stick {} {}, c-stick {} {}, triggers {} {}",
+                pad.button,
+                pad.stick_x,
+                pad.stick_y,
+                pad.substick_x,
+                pad.substick_y,
+                pad.trigger_l,
+                pad.trigger_r
+            );
+        }
+        self.last_pad = pad;
         self.link.pads.lock().unwrap()[0] = pad;
     }
 }
@@ -538,6 +561,11 @@ impl ApplicationHandler<()> for App {
     }
 
     fn window_event(&mut self, event_loop: &ActiveEventLoop, _id: WindowId, event: WindowEvent) {
+        if std::env::var_os("SSBM_TRACE_EVENTS").is_some()
+            && !matches!(event, WindowEvent::RedrawRequested)
+        {
+            eprintln!("window event: {event:?}");
+        }
         match event {
             WindowEvent::CloseRequested => {
                 self.link.quit.store(true, Ordering::Relaxed);
