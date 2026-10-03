@@ -238,7 +238,12 @@ pub fn psq_load(ctx: &Ctx, ea: u32, fd: usize, single: bool, i: usize) {
         _ => panic!("psq_l with invalid GQR{i} load type {ty}"),
     };
     let s = dequant_scale(scale);
-    let read = |addr: u32| ctx.read_be(addr, size) as u32;
+    // Each value in one access of its size, as the CPU makes it.
+    let read = |addr: u32| match size {
+        4 => ctx.read_u32(addr),
+        2 => u32::from(ctx.read_u16(addr)),
+        _ => u32::from(ctx.read_u8(addr)),
+    };
     let ps0 = conv(read(ea), s);
     let ps1 = if single {
         1.0
@@ -255,19 +260,28 @@ pub fn psq_store(ctx: &Ctx, ea: u32, fs: usize, single: bool, i: usize) {
     let v = ctx.regs.fpr[fs].get();
     let q = quant_scale(scale);
     let clamp = |x: f64, min: f32, max: f32| (x as f32 * q).clamp(min, max);
-    let (size, conv): (u32, Box<dyn Fn(f64) -> u32>) = match ty {
-        0 => (4, Box::new(fp::stfs_ftz)),
-        4 => (1, Box::new(|x| clamp(x, 0.0, 255.0) as u8 as u32)),
-        5 => (2, Box::new(|x| clamp(x, 0.0, 65535.0) as u16 as u32)),
-        6 => (1, Box::new(|x| clamp(x, -128.0, 127.0) as i8 as u8 as u32)),
-        7 => (
-            2,
-            Box::new(|x| clamp(x, -32768.0, 32767.0) as i16 as u16 as u32),
-        ),
+    let size = match ty {
+        0 => 4,
+        4 | 6 => 1,
+        5 | 7 => 2,
         _ => panic!("psq_st with invalid GQR{i} store type {ty}"),
     };
-    ctx.write_be(ea, size, u64::from(conv(v.ps0)));
+    let conv = |x: f64| match ty {
+        0 => fp::stfs_ftz(x),
+        4 => clamp(x, 0.0, 255.0) as u8 as u32,
+        5 => clamp(x, 0.0, 65535.0) as u16 as u32,
+        6 => clamp(x, -128.0, 127.0) as i8 as u8 as u32,
+        _ => clamp(x, -32768.0, 32767.0) as i16 as u16 as u32,
+    };
+    // Each value in one access of its size, as the CPU makes it: the GX FIFO, where most of
+    // these go, takes the same bytes either way, in far fewer writes.
+    let store = |addr: u32, value: u32| match size {
+        4 => ctx.write_u32(addr, value),
+        2 => ctx.write_u16(addr, value as u16),
+        _ => ctx.write_u8(addr, value as u8),
+    };
+    store(ea, conv(v.ps0));
     if !single {
-        ctx.write_be(ea.wrapping_add(size), size, u64::from(conv(v.ps1)));
+        store(ea.wrapping_add(size), conv(v.ps1));
     }
 }
