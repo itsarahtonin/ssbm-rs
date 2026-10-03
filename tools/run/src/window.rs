@@ -177,7 +177,14 @@ pub fn run(gpu: Gpu) {
         gpu,
         link,
         window: None,
-        gilrs: gilrs::Gilrs::new().ok(),
+        gilrs: {
+            let g = gilrs::Gilrs::new().ok();
+            match g.as_ref().and_then(|g| g.gamepads().next()) {
+                Some((_, gp)) => eprintln!("window: controller 1 is {} (and the keyboard)", gp.name()),
+                None => eprintln!("window: no gamepad found; controller 1 is the keyboard"),
+            }
+            g
+        },
         keys: Default::default(),
         presented: 0,
         since: Instant::now(),

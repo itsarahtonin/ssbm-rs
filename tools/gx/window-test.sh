@@ -44,6 +44,7 @@ check "the movie skipped to the title" "game mode 0x00"
 check "Start pressed" "pad 1: buttons 1000"
 check "the main menu opened" "game mode 0x01"
 check "the stick pushed left" "stick -127 0"
-grep "window:" "$log" | tail -1
+grep -E "controller 1|no gamepad" "$log"
+grep "window:.*fields" "$log" | tail -1
 [[ $ok == 1 ]] || { cat "$out/keys.log"; echo "logs in $out"; exit 1; }
 rm -rf "$out"
