@@ -1,9 +1,9 @@
 #!/bin/bash
 # Reviews one function's mutated mismatches by fuzzing it alone: reruns JOB (its line in
-# jobs-ROUND*.txt) for FIELDS fields (6000) checking only FUNC and saving its real calls (spread
-# out, and those that run new code) into a corpus, then checks every saved call again with
-# MUTATE mutated checks (2000) and feedback, aimed by the latest targets, saving the mismatching
-# ones for --call. Writes local/lockstep/review/FUNC-*; prints the fuzz pass's summary.
+# jobs-ROUND*.txt) for FIELDS fields (6000) checking only FUNC and saving its real calls (every
+# EVERY-th, 20 by default, up to 400, and those that run new code) into a corpus, then checks
+# every saved call again with MUTATE mutated checks (2000) and feedback, aimed by the latest
+# targets, saving the mismatching ones for --call. Writes local/lockstep/review/FUNC-*; prints the fuzz pass's summary.
 #
 #   bash tools/lockstep/campaign/review.sh FUNC ROUND JOB [FIELDS] [MUTATE]
 cd "$(dirname "$0")/../../.."
@@ -40,6 +40,7 @@ out=$R/$FUNC
 rm -f $out.corpus
 env "${envs[@]}" LOCKSTEP_MUTATE=0 PROBES= LOCKSTEP_DONE=$done LOCKSTEP_CALLS=100000 \
     LOCKSTEP_BUDGET=1000000000 CAPTURE=$out.d CORPUS=$out.corpus CAPTURE_FUNCS=$FUNC \
+    CAPTURE_EVERY=${EVERY:-20} \
     timeout 7200 $BIN "$SSBM_DISC" "${rest[@]}" --fields $FIELDS --port all --lockstep > $out-collect.txt 2>&1
 [[ -f $out.corpus ]] || { echo "$FUNC: no calls saved ($(tail -1 $out-collect.txt))"; exit 1; }
 targets=$(ls -t $L/targets-*.txt | head -1)

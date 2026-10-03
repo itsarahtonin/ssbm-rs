@@ -62,6 +62,9 @@ const SAVED_CALLS: [u64; 5] = [1, 10, 100, 1000, 10000];
 /// code: their states are the ones mutated checks reach further from.
 const NOVEL_CALLS: u32 = 20;
 
+/// The most real calls CAPTURE_EVERY saves per function.
+const EVERY_CALLS: u64 = 400;
+
 pub fn read(path: &Path) -> Call {
     let packed = std::fs::read(path).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
     let bytes = zstd::decode_all(&packed[..]).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
@@ -85,6 +88,10 @@ pub fn install_capture(
 ) {
     std::fs::create_dir_all(&dir).unwrap_or_else(|e| panic!("{}: {e}", dir.display()));
     let corpus = corpus.map(|p| RefCell::new(CorpusWriter::create(&p)));
+    // CAPTURE_EVERY=N saves every Nth real call as well, up to EVERY_CALLS per function, for a
+    // corpus of one function's many states.
+    let every: u64 =
+        std::env::var("CAPTURE_EVERY").map_or(0, |v| v.parse().expect("CAPTURE_EVERY=N"));
     // Per function: mismatches saved, real calls seen, mutated checks seen, real calls saved
     // for running new code.
     let counts: RefCell<BTreeMap<u32, (u32, u64, u64, u32)>> = RefCell::default();
@@ -105,7 +112,8 @@ pub fn install_capture(
             && ctx.ext::<ssbm_sdk::Sdk>().hw.fields.get() >= from
         {
             *calls += 1;
-            if SAVED_CALLS.contains(calls) {
+            let spaced = every > 0 && *calls % every == 0 && *calls / every <= EVERY_CALLS;
+            if SAVED_CALLS.contains(calls) || spaced {
                 true
             } else if novel > 0 && *novels < NOVEL_CALLS {
                 *novels += 1;
