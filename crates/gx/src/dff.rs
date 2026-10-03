@@ -57,7 +57,12 @@ impl Log {
             xf: xf.to_vec(),
             tmem: tmem.to_vec(),
             frames: Vec::new(),
-            current: Frame { fifo: Vec::new(), updates: Vec::new(), fifo_start: 0, fifo_end: 0 },
+            current: Frame {
+                fifo: Vec::new(),
+                updates: Vec::new(),
+                fifo_start: 0,
+                fifo_end: 0,
+            },
             shadow: vec![0; MEM1_SIZE],
         }
     }
@@ -76,7 +81,12 @@ impl Log {
             return;
         }
         self.shadow[start..end].copy_from_slice(&data[..end - start]);
-        self.current.updates.push(Update { position, address, data: data[..end - start].to_vec(), kind });
+        self.current.updates.push(Update {
+            position,
+            address,
+            data: data[..end - start].to_vec(),
+            kind,
+        });
     }
 
     /// Where the bytes fed last start in this frame's commands.
@@ -86,7 +96,12 @@ impl Log {
 
     /// Ends a frame, whose commands went through the FIFO ring `fifo_start..fifo_end`.
     pub fn end_frame(&mut self, fifo_start: u32, fifo_end: u32) {
-        let empty = Frame { fifo: Vec::new(), updates: Vec::new(), fifo_start: 0, fifo_end: 0 };
+        let empty = Frame {
+            fifo: Vec::new(),
+            updates: Vec::new(),
+            fifo_start: 0,
+            fifo_end: 0,
+        };
         let mut frame = std::mem::replace(&mut self.current, empty);
         frame.fifo_start = fifo_start;
         frame.fifo_end = fifo_end;
@@ -138,7 +153,13 @@ impl Log {
                 e.extend([u.kind, 0, 0, 0]);
                 block(out, e, &mut at)?;
             }
-            infos.push((fifo_at, frame.fifo.len() as u32, frame, table_at, frame.updates.len() as u32));
+            infos.push((
+                fifo_at,
+                frame.fifo.len() as u32,
+                frame,
+                table_at,
+                frame.updates.len() as u32,
+            ));
         }
 
         let mut header = Vec::with_capacity(HEADER_SIZE as usize);
@@ -177,5 +198,88 @@ impl Log {
             out.write_all(&info)?;
         }
         Ok(())
+    }
+}
+
+/// A memory update of a frame being played: `data` goes to `address` once the frame's commands
+/// reach `position`.
+pub struct MemoryUpdate {
+    pub position: u32,
+    pub address: u32,
+    pub data: Vec<u8>,
+}
+
+/// A frame of a FIFO log being played.
+pub struct FrameData {
+    pub fifo: Vec<u8>,
+    pub updates: Vec<MemoryUpdate>,
+}
+
+/// A FIFO log as read: the GPU's registers and memories when it starts, then frames.
+pub struct File {
+    pub bp: Vec<u32>,
+    pub cp: Vec<u32>,
+    /// XF memory then its registers, as `State::xf` holds them.
+    pub xf: Vec<u32>,
+    pub tmem: Vec<u8>,
+    pub frames: Vec<FrameData>,
+}
+
+impl File {
+    pub fn read(bytes: &[u8]) -> Result<File, String> {
+        let u32_at = |at: usize| -> Result<u32, String> {
+            bytes
+                .get(at..at + 4)
+                .map(|b| u32::from_le_bytes([b[0], b[1], b[2], b[3]]))
+                .ok_or_else(|| format!("truncated at {at:#x}"))
+        };
+        let u64_at = |at: usize| -> Result<u64, String> {
+            Ok(u64::from(u32_at(at)?) | u64::from(u32_at(at + 4)?) << 32)
+        };
+        let slice = |at: u64, len: usize| -> Result<&[u8], String> {
+            bytes
+                .get(at as usize..at as usize + len)
+                .ok_or_else(|| format!("truncated block at {at:#x}"))
+        };
+        let words = |at: u64, n: u32| -> Result<Vec<u32>, String> {
+            Ok(slice(at, n as usize * 4)?
+                .chunks_exact(4)
+                .map(|b| u32::from_le_bytes([b[0], b[1], b[2], b[3]]))
+                .collect())
+        };
+        if u32_at(0)? != FILE_ID {
+            return Err("not a FIFO log".into());
+        }
+        let bp = words(u64_at(12)?, u32_at(20)?)?;
+        let cp = words(u64_at(24)?, u32_at(32)?)?;
+        let mut xf = words(u64_at(36)?, u32_at(44)?)?;
+        xf.resize(0x1000, 0);
+        xf.extend(words(u64_at(48)?, u32_at(56)?)?);
+        let frame_list = u64_at(60)?;
+        let count = u32_at(68)?;
+        let tmem = slice(u64_at(76)?, u32_at(84)? as usize)?.to_vec();
+        let mut frames = Vec::new();
+        for i in 0..count as usize {
+            let info = frame_list as usize + i * FRAME_INFO_SIZE as usize;
+            let fifo = slice(u64_at(info)?, u32_at(info + 8)? as usize)?.to_vec();
+            let table = u64_at(info + 20)? as usize;
+            let mut updates = Vec::new();
+            for k in 0..u32_at(info + 28)? as usize {
+                let e = table + k * UPDATE_SIZE as usize;
+                updates.push(MemoryUpdate {
+                    position: u32_at(e)?,
+                    address: u32_at(e + 4)?,
+                    data: slice(u64_at(e + 8)?, u32_at(e + 16)? as usize)?.to_vec(),
+                });
+            }
+            frames.push(FrameData { fifo, updates });
+        }
+        Ok(File {
+            bp,
+            cp,
+            xf,
+            tmem,
+            frames,
+        })
     }
 }

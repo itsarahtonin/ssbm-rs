@@ -10,7 +10,7 @@ use std::path::PathBuf;
 
 use ssbm_gx::{Event, Produced, State};
 
-use crate::dff::{self, Log};
+use ssbm_gx::dff::{self, Log};
 use ssbm_rt::Ctx;
 
 /// A command with an effect outside the GPU.
@@ -49,7 +49,11 @@ impl ssbm_gx::Memory for GpuMemory<'_> {
         if let Some(log) = self.log {
             let mut log = log.borrow_mut();
             log.fifo(bytes);
-            if bytes[0] == 0x61 && ssbm_gx::is_xfb_copy(u32::from_be_bytes([bytes[1], bytes[2], bytes[3], bytes[4]])) {
+            if bytes[0] == 0x61
+                && ssbm_gx::is_xfb_copy(u32::from_be_bytes([
+                    bytes[1], bytes[2], bytes[3], bytes[4],
+                ]))
+            {
                 log.end_frame(self.fifo.0, self.fifo.1);
             }
         }
@@ -111,7 +115,11 @@ impl Record {
         self.events += 1;
         self.hash = ssbm_gx::fnv(self.hash, &d.total().to_le_bytes());
         let line = match &p.event {
-            Event::Draw { primitive, vat, count } => {
+            Event::Draw {
+                primitive,
+                vat,
+                count,
+            } => {
                 self.draws += 1;
                 format!("DRAW {primitive:02X} vat {vat} count {count}")
             }
@@ -230,10 +238,15 @@ impl Gp {
         if log.frames() < count {
             return;
         }
-        let file = std::fs::File::create(&path).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
+        let file =
+            std::fs::File::create(&path).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
         log.save(&mut std::io::BufWriter::new(file))
             .unwrap_or_else(|e| panic!("{}: {e}", path.display()));
-        eprintln!("FIFO log of {} frames saved to {}", log.frames(), path.display());
+        eprintln!(
+            "FIFO log of {} frames saved to {}",
+            log.frames(),
+            path.display()
+        );
         drop(log);
         self.dff_log = None;
         self.dff = None;

@@ -11,18 +11,43 @@
 //! actually uses (vertex bytes, indexed attributes from memory, the textures it samples and the
 //! TEV register components its stages read), so two runs' streams compare on what they draw.
 
+pub mod dff;
 pub mod tev;
 pub mod texture;
 pub mod vertex;
+pub mod xform;
 
 use texture::Image;
 
-/// Memory the GPU reads: display lists, vertex arrays, textures and palettes, by physical
-/// address. `command` sees each command the FIFO brings (not those of display lists), whole,
-/// once it has run.
+/// The GPU's host: memory the GPU reads (display lists, vertex arrays, textures and palettes,
+/// by physical address), and what sees the stream run. `command` sees each command the FIFO
+/// brings (not those of display lists), whole, once it has run; a host that `draws` gets each
+/// draw with its vertices fetched, and each EFB copy, with the state as it stands for it.
 pub trait Memory {
     fn read(&self, phys: u32, out: &mut [u8]);
     fn command(&self, _bytes: &[u8]) {}
+    fn draws(&self) -> bool {
+        false
+    }
+    fn draw(&self, _state: &State, _draw: &Draw<'_>) {}
+    fn copy(&self, _state: &State, _value: u32) {}
+}
+
+/// A draw: its primitive (the opcode's top five bits), vertex format, and vertices, each its
+/// attributes' bytes in `layout` order, an indexed attribute's fetched from its array.
+pub struct Draw<'a> {
+    pub primitive: u8,
+    pub vat: u8,
+    pub count: u16,
+    pub layout: &'a [vertex::Attr],
+    pub data: &'a [u8],
+}
+
+/// What draws the stream: a renderer, given each draw and EFB copy with the state as it stands
+/// for it and the memory the GPU reads.
+pub trait Sink {
+    fn draw(&mut self, state: &State, draw: &Draw<'_>, mem: &dyn Memory);
+    fn copy(&mut self, state: &State, value: u32, mem: &dyn Memory);
 }
 
 /// Whether the BP write `value` (register and value) triggers an EFB copy to the XFB, the
@@ -150,8 +175,17 @@ pub struct Digest {
 
 impl Digest {
     pub fn total(&self) -> u64 {
-        let parts = [self.bp, self.cp, self.xf, self.tev, self.vertices, self.textures];
-        parts.iter().fold(FNV_OFFSET, |h, p| fnv(h, &p.to_le_bytes()))
+        let parts = [
+            self.bp,
+            self.cp,
+            self.xf,
+            self.tev,
+            self.vertices,
+            self.textures,
+        ];
+        parts
+            .iter()
+            .fold(FNV_OFFSET, |h, p| fnv(h, &p.to_le_bytes()))
     }
 }
 
@@ -192,6 +226,43 @@ impl State {
         s
     }
 
+    /// The state a FIFO log starts from: its registers and memories, as if each register had
+    /// been written last (so a TEV register holds its color or its konst, by the type bit).
+    pub fn load(bp: &[u32], cp: &[u32], xf: &[u32], tmem: &[u8]) -> Self {
+        let mut s = State::new();
+        for (reg, &v) in bp.iter().enumerate().take(256) {
+            s.bp_hash
+                .update(1, reg, 0, if trigger(reg) { 0 } else { v });
+            s.bp[reg] = v;
+            if (TEV_COLOR..TEV_COLOR + 8).contains(&reg) {
+                s.set_tev_color(reg, v);
+            }
+        }
+        for (reg, &v) in cp.iter().enumerate().take(256) {
+            s.cp_hash.update(2, reg, 0, v);
+            s.cp[reg] = v;
+        }
+        for (addr, &v) in xf.iter().enumerate().take(XF_SIZE) {
+            s.xf_hash.update(3, addr, 0, v);
+            s.xf[addr] = v;
+        }
+        let n = tmem.len().min(TMEM_SIZE);
+        s.tmem[..n].copy_from_slice(&tmem[..n]);
+        s
+    }
+
+    fn set_tev_color(&mut self, reg: usize, new: u32) {
+        let i = (reg - TEV_COLOR) / 2;
+        let konst = new & (1 << 23) != 0;
+        let field = new & 0x7F_F7FF;
+        match (reg % 2 == 0, konst) {
+            (true, false) => self.color_ra[i] = field,
+            (false, false) => self.color_bg[i] = field,
+            (true, true) => self.konst_ra[i] = field,
+            (false, true) => self.konst_bg[i] = field,
+        }
+    }
+
     fn write_bp(&mut self, value: u32, mem: &dyn Memory, out: &mut Vec<Produced>, digests: bool) {
         let reg = (value >> 24) as usize;
         let value = value & 0x00FF_FFFF;
@@ -211,27 +282,27 @@ impl State {
             self.bp_hash.update(1, reg, old, new);
         }
         match reg {
-            SETDRAWDONE if new & 0xFF == 2 => out.push(Produced { event: Event::Finish, digest: None }),
+            SETDRAWDONE if new & 0xFF == 2 => out.push(Produced {
+                event: Event::Finish,
+                digest: None,
+            }),
             PE_TOKEN | PE_TOKEN_INT => out.push(Produced {
-                event: Event::Token { token: new as u16, interrupt: reg == PE_TOKEN_INT },
+                event: Event::Token {
+                    token: new as u16,
+                    interrupt: reg == PE_TOKEN_INT,
+                },
                 digest: None,
             }),
             TRIGGER_EFB_COPY => {
+                mem.copy(self, new);
                 let digest = digests.then(|| self.copy_digest(new));
-                out.push(Produced { event: Event::Copy(new), digest });
+                out.push(Produced {
+                    event: Event::Copy(new),
+                    digest,
+                });
             }
             LOADTLUT1 => self.load_tlut(mem),
-            0xE0..=0xE7 => {
-                let i = (reg - TEV_COLOR) / 2;
-                let konst = new & (1 << 23) != 0;
-                let field = new & 0x7F_F7FF;
-                match (reg % 2 == 0, konst) {
-                    (true, false) => self.color_ra[i] = field,
-                    (false, false) => self.color_bg[i] = field,
-                    (true, true) => self.konst_ra[i] = field,
-                    (false, true) => self.konst_bg[i] = field,
-                }
-            }
+            0xE0..=0xE7 => self.set_tev_color(reg, new),
             _ => {}
         }
     }
@@ -269,7 +340,13 @@ impl State {
     }
 
     /// Runs the complete commands at the start of `data`; returns the bytes they used.
-    pub fn run(&mut self, mem: &dyn Memory, data: &[u8], out: &mut Vec<Produced>, digests: bool) -> usize {
+    pub fn run(
+        &mut self,
+        mem: &dyn Memory,
+        data: &[u8],
+        out: &mut Vec<Produced>,
+        digests: bool,
+    ) -> usize {
         let mut at = 0;
         while at < data.len() {
             let rest = &data[at..];
@@ -342,13 +419,35 @@ impl State {
                     if rest.len() < len {
                         break;
                     }
-                    let digest = digests.then(|| {
-                        let mut bytes = Vec::new();
-                        vertex::fetch(&self.cp, &layout, u32::from(count), &rest[3..], mem, &mut bytes);
-                        self.draw_digest(op, &bytes, mem)
-                    });
+                    let draws = mem.draws();
+                    let mut bytes = Vec::new();
+                    if digests || draws {
+                        vertex::fetch(
+                            &self.cp,
+                            &layout,
+                            u32::from(count),
+                            &rest[3..],
+                            mem,
+                            &mut bytes,
+                        );
+                    }
+                    if draws {
+                        let draw = Draw {
+                            primitive: op & 0xF8,
+                            vat: op & 7,
+                            count,
+                            layout: &layout,
+                            data: &bytes,
+                        };
+                        mem.draw(self, &draw);
+                    }
+                    let digest = digests.then(|| self.draw_digest(op, &bytes, mem));
                     out.push(Produced {
-                        event: Event::Draw { primitive: op & 0xF8, vat: op & 7, count },
+                        event: Event::Draw {
+                            primitive: op & 0xF8,
+                            vat: op & 7,
+                            count,
+                        },
                         digest,
                     });
                     len
@@ -443,7 +542,9 @@ impl State {
     fn copy_digest(&self, value: u32) -> Digest {
         // The copy's own registers: source rectangle, destination, stride, scale, clear
         // values, filters, and the trigger.
-        let regs = [0x01, 0x02, 0x03, 0x04, 0x49, 0x4A, 0x4B, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x53, 0x54];
+        let regs = [
+            0x01, 0x02, 0x03, 0x04, 0x49, 0x4A, 0x4B, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x53, 0x54,
+        ];
         let mut h = FNV_OFFSET;
         for r in regs {
             h = fnv(h, &self.bp[r].to_le_bytes());

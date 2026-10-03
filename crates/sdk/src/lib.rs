@@ -27,7 +27,6 @@ pub mod boot;
 mod card;
 pub use card::Card;
 mod devices;
-mod dff;
 pub use devices::PadStatus;
 mod gp;
 pub mod hw;

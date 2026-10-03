@@ -58,11 +58,21 @@ pub fn usage(bp: &[u32; 256]) -> Usage {
             (bits(ksel, 14, 5), bits(ksel, 19, 5))
         };
         // Color inputs a, b, c, d.
-        for input in [bits(cc, 12, 4), bits(cc, 8, 4), bits(cc, 4, 4), bits(cc, 0, 4)] {
+        for input in [
+            bits(cc, 12, 4),
+            bits(cc, 8, 4),
+            bits(cc, 4, 4),
+            bits(cc, 0, 4),
+        ] {
             match input {
                 0..=7 => {
                     let reg = (input / 2) as usize;
-                    read(&mut out, &written, reg, if input % 2 == 0 { RGB } else { A });
+                    read(
+                        &mut out,
+                        &written,
+                        reg,
+                        if input % 2 == 0 { RGB } else { A },
+                    );
                 }
                 14 => {
                     if let Some((reg, comps)) = konst_sel(kcsel, false) {
@@ -73,7 +83,12 @@ pub fn usage(bp: &[u32; 256]) -> Usage {
             }
         }
         // Alpha inputs a, b, c, d.
-        for input in [bits(ac, 13, 3), bits(ac, 10, 3), bits(ac, 7, 3), bits(ac, 4, 3)] {
+        for input in [
+            bits(ac, 13, 3),
+            bits(ac, 10, 3),
+            bits(ac, 7, 3),
+            bits(ac, 4, 3),
+        ] {
             match input {
                 0..=3 => read(&mut out, &written, input as usize, A),
                 6 => {
@@ -131,7 +146,10 @@ mod tests {
         bp[ALPHA_ENV] = (7 << 13) | (7 << 10) | (7 << 7) | (7 << 4);
         stage(&mut bp, 1, 2, 1);
         let u = usage(&bp);
-        assert_eq!(u.color[1], A, "C0's color comes from stage 0; its alpha from BP");
+        assert_eq!(
+            u.color[1], A,
+            "C0's color comes from stage 0; its alpha from BP"
+        );
     }
 
     #[test]
