@@ -51,8 +51,11 @@ FEATURES = [
 ]
 
 # The rungs not measured by this page's data yet: (status, detail).
-AUDIO = ("not started", "AX mixing against Dolphin's DSP output, next after the renderer")
-WINDOW = ("in progress", "Frames render live (GX_RENDER); window, controllers and pacing to come")
+WINDOW = (
+    "in progress",
+    "--window plays at 59.9 fields/s on a replay (headroom to ~65); controllers and keyboard mapped, "
+    "to be tried with a real controller",
+)
 
 
 def git(*args):
@@ -95,6 +98,26 @@ def image(path, img_dir, name):
         return None
     shutil.copyfile(path, os.path.join(img_dir, name))
     return "img/" + name
+
+
+def audio_results():
+    """Per run of audio.sh: command lists checked against Dolphin's AX, those that differ, and
+    whether the replay synced with mixing."""
+    out = []
+    path = os.path.join(GX, "audio", "summary.txt")
+    if not os.path.exists(path):
+        return out
+    for line in open(path, encoding="utf-8"):
+        parts = [p.strip() for p in line.split("|")]
+        if len(parts) < 3:
+            continue
+        name, lists, sync = parts[0], parts[1], parts[2]
+        w = lists.split()
+        checked = int(w[0]) if w and w[0].isdigit() else 0
+        differ = int(w[3]) if len(w) > 3 and w[3].isdigit() else None
+        synced = sync == "no replay" or " 0 diverge" in sync
+        out.append({"name": name, "lists": checked, "differ": differ, "sync": sync, "synced": synced})
+    return out
 
 
 def frame_results(img_dir):
@@ -161,7 +184,7 @@ def main():
         "streams": streams,
         "frames": frames,
         "features": [{"name": n, "status": s, "note": t} for n, s, t in FEATURES],
-        "audio": {"status": AUDIO[0], "detail": AUDIO[1]},
+        "audio": audio_results(),
         "window": {"status": WINDOW[0], "detail": WINDOW[1]},
         "history": history,
     }

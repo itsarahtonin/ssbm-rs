@@ -102,6 +102,10 @@ figcaption { font-size: 11px; color: var(--muted); text-transform: uppercase; le
       <div class="list"><table><thead><tr><th>Replay</th><th class="r">Frames</th><th class="r">Differ</th><th class="r">First</th></tr></thead><tbody id="streams"></tbody></table></div>
     </section>
     <section>
+      <h2>Audio: ssbm-ax against Dolphin's AX</h2>
+      <div class="list"><table><thead><tr><th>Run</th><th class="r">Lists</th><th class="r">Differ</th><th>Replay</th></tr></thead><tbody id="audio"></tbody></table></div>
+    </section>
+    <section>
       <h2>History</h2>
       <div class="chart" id="chart"></div>
     </section>
@@ -135,6 +139,11 @@ const zero = streams.filter((s) => s.differ === 0).length;
 const runs = D.frames.filter((f) => f.frames.length);
 const ok = runs.filter((f) => f.ok).length;
 const worst = runs.length ? Math.min(...runs.map((f) => f.worst.psnr)) : null;
+const audioRuns = D.audio.filter((a) => a.lists > 0);
+const audioZero = audioRuns.filter((a) => a.differ === 0).length;
+const audioLists = audioRuns.reduce((s, a) => s + a.lists, 0);
+const audioUnsynced = D.audio.filter((a) => !a.synced).length;
+const audioDone = audioZero >= 41;
 const median = (() => {
   const v = runs.map((f) => f.worst.psnr).sort((a, b) => a - b);
   return v.length ? v[Math.floor(v.length / 2)] : null;
@@ -144,7 +153,7 @@ $("stats").innerHTML = [
   stat("GX streams", `${zero}/${streams.length}`, `smoke replays at zero diff (${D.streams.length} in the set)`),
   stat("Frames", `${ok}/${runs.length}`, "runs within tolerance of Dolphin"),
   stat("Median PSNR", median === null ? "–" : `${median.toFixed(1)} dB`, worst === null ? "" : `worst ${worst.toFixed(1)} dB`),
-  stat("Audio", D.audio.status, "AX against Dolphin's DSP"),
+  stat("Audio", `${audioZero}/${D.audio.length || 41}`, "runs whose AX matches Dolphin's"),
   stat("Window", D.window.status, "60 Hz with controllers"),
 ].join("");
 
@@ -163,7 +172,9 @@ $("ladder").innerHTML = [
   rung(2, "Frames match Dolphin", "The wgpu renderer draws what Dolphin's software renderer draws from the same FIFO logs, within tolerance, on the smoke replays and a menu run.",
     framesDone ? "done" : "in progress", runs.length ? ok / Math.max(runs.length, 41) : 0,
     `${ok} of ${runs.length} runs within tolerance`),
-  rung(3, "Audio matches", "AX mixing matches Dolphin's DSP output.", D.audio.status, D.audio.status === "not started" ? 0 : null, esc(D.audio.detail)),
+  rung(3, "Audio matches", "AX mixing matches Dolphin's DSP output: every command list of the smoke replays and a menu run, byte for byte against Dolphin's AX code built from its source.",
+    audioDone ? "done" : "in progress", audioZero / 41,
+    `${audioZero} of ${D.audio.length} runs checked with no list differing (${audioLists.toLocaleString()} command lists)${audioUnsynced ? `; ${audioUnsynced} replays desync with mixing on` : ""}`),
   rung(4, "Windowed build", "Plays in a window with controllers at 60 Hz.", D.window.status, null, esc(D.window.detail)),
 ].join("");
 
@@ -235,6 +246,7 @@ $("streams").innerHTML = D.streams.map((s) => s.done
   ? `<tr><td><i class="dot" style="background:${s.differ ? "var(--bad)" : "var(--ok)"}"></i><span class="mono">${esc(short(s.name))}</span></td><td class="r num">${s.frames}</td><td class="r num">${s.differ}</td><td class="r num">${s.first ?? "–"}</td></tr>`
   : `<tr><td colspan="4"><i class="dot" style="background:var(--idle)"></i><span class="mono">${esc(short(s.name))}</span> <span class="g">running</span></td></tr>`).join("");
 
+$("audio").innerHTML = D.audio.length ? D.audio.map((a) => `<tr><td><i class="dot" style="background:${a.differ === 0 && a.synced ? "var(--ok)" : a.differ ? "var(--bad)" : "var(--warn)"}"></i><span class="mono">${esc(short(a.name))}</span></td><td class="r num">${a.lists.toLocaleString()}</td><td class="r num">${a.differ ?? "–"}</td><td class="g">${a.synced ? "synced" : esc(a.sync)}</td></tr>`).join("") : `<tr><td colspan="4" class="g">Not checked yet.</td></tr>`;
 $("feats").innerHTML = D.features.map((f) => `<div class="feat"><span class="n"><i class="dot" style="background:${statusColor[f.status]}"></i>${esc(f.name)}</span><span class="s">${esc(f.status)} · ${esc(f.note)}</span></div>`).join("");
 
 (function chart() {
