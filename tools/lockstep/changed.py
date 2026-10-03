@@ -7,14 +7,51 @@ Compares each registered port of crates/game/src/tu at the two commits (NEW defa
 working tree), with the inline copies and machine code it calls counted as part of it, and the
 hand ports of crates/game/src/manual, and prints the address and name of each that differs, in
 LOCKSTEP_DONE's format.
+
+A port that differs only in the address it passes a string literal at, where the older address
+holds an empty string in $MELEE's DOL, counts as unchanged: c2rs gave every literal a macro
+made (an assertion's file name and condition) its unit's first empty string until the fix to
+string_bytes, and the address reaches the game only as a call's argument or a stored value,
+which lockstep compares, so a run that took such a path mismatched there (lists of functions
+given to report-all.sh set those results aside) and one that didn't holds for either port.
 """
 
+import os
 import re
+import struct
 import subprocess
 import sys
 
 FN = re.compile(r"^(pub )?fn (\w+)[<(]", re.M)
 REGISTER = re.compile(r"register_port\(\s*(0x[0-9a-f]+),\s*(.*?)Returns::", re.S)
+CSTR = re.compile(r"cstr\(ctx, (0x[0-9a-f]+)\)")
+
+
+def load_dol():
+    """(address, bytes) of each section of $MELEE's DOL, or none without it."""
+    path = os.path.join(os.environ.get("MELEE", ""), "build", "GALE01", "main.dol")
+    if not os.environ.get("MELEE") or not os.path.exists(path):
+        return []
+    data = open(path, "rb").read()
+    offs, addrs, sizes = (struct.unpack_from(">18I", data, at) for at in (0, 0x48, 0x90))
+    return [(a, data[o:o + n]) for o, a, n in zip(offs, addrs, sizes) if n]
+
+
+DOL = load_dol()
+
+
+def empty_string(addr):
+    return any(a <= addr < a + len(blob) and blob[addr - a] == 0 for a, blob in DOL)
+
+
+def same(old, new):
+    """Whether two closures are the same but for string addresses the older had wrong."""
+    if old == new:
+        return True
+    a, b = CSTR.split(old), CSTR.split(new)
+    if len(a) != len(b) or a[0::2] != b[0::2]:
+        return False
+    return all(x == y or empty_string(int(x, 16)) for x, y in zip(a[1::2], b[1::2]))
 
 
 def files(rev):
@@ -92,10 +129,10 @@ def main():
             hand = re.search(r"manual::(\w+)", adapter)
             if hand:
                 name = hand.group(1)
-                changed = closure(name, hand_a) != closure(name, hand_b)
+                changed = not same(closure(name, hand_a), closure(name, hand_b))
             else:
                 name = registered(adapter, fb)
-                changed = name is not None and closure(name, fa) != closure(name, fb)
+                changed = name is not None and not same(closure(name, fa), closure(name, fb))
             if changed:
                 print(f"{addr} # {name}")
                 n += 1

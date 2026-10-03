@@ -13,6 +13,7 @@ import ctypes
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 from concurrent.futures import ProcessPoolExecutor
@@ -266,7 +267,10 @@ def linker_symbols(elf, known):
     """Symbols the linker script defines, such as `_stack_end` or `__ArenaLo`, which only the
     built ELF has, as objects C code can declare `extern`."""
     nm = os.path.join("build", "binutils", "powerpc-eabi-nm" + (".exe" if os.name == "nt" else ""))
-    if not os.path.exists(elf) or not os.path.exists(nm):
+    # Without the decomp's binutils (a build from a copied build/ has none), the host's nm reads
+    # the ELF's symbol table just as well.
+    nm = nm if os.path.exists(nm) else shutil.which("nm")
+    if not os.path.exists(elf) or not nm:
         return []
     out = subprocess.run([nm, elf], capture_output=True, text=True, check=True).stdout
     syms = []

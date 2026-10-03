@@ -478,9 +478,10 @@ class Unit:
     @staticmethod
     def string_forms(data):
         """Other spellings the game's data may hold a literal in: the base name of a __FILE__
-        path, as MWCC gives it, and Shift-JIS for text the decomp writes in UTF-8."""
+        path (a unit's or a header's), as MWCC gives it, and Shift-JIS for text the decomp writes
+        in UTF-8."""
         forms = []
-        if data.endswith(b".c") and b"/" in data:
+        if data.endswith((b".c", b".h")) and b"/" in data:
             forms.append(data.rsplit(b"/", 1)[1])
         try:
             sjis = data.decode("utf-8").encode("cp932")
@@ -2220,8 +2221,9 @@ class Translator:
 
     def string_bytes(self, c):
         toks = [t.spelling for t in c.get_tokens()]
-        if not all(tok.startswith('"') for tok in toks):
-            # A literal a macro makes, from `#x` or `__FILE__`: clang spells it expanded.
+        if not toks or not all(tok.startswith('"') for tok in toks):
+            # A literal a macro makes, from `#x` or `__FILE__`: clang spells it expanded, and
+            # may give it no tokens at all.
             sp = c.spelling
             if len(sp) < 2 or not (sp.startswith('"') and sp.endswith('"')):
                 raise Unsupported("string literal token")
