@@ -221,6 +221,7 @@ pub struct State {
     /// Display lists being run.
     depth: u32,
     tracking: std::cell::RefCell<Tracking>,
+    fetched: Vec<u8>,
 }
 
 impl Default for State {
@@ -280,6 +281,7 @@ impl State {
             buf: Vec::new(),
             depth: 0,
             tracking: Default::default(),
+            fetched: Vec::new(),
         };
         // The hashes start as those of all-zero registers.
         for reg in 0..256 {
@@ -559,7 +561,9 @@ impl State {
                         break;
                     }
                     let draws = mem.draws();
-                    let mut bytes = Vec::new();
+                    // The vertices fetched, in a buffer kept from draw to draw.
+                    let mut bytes = std::mem::take(&mut self.fetched);
+                    bytes.clear();
                     if digests || draws {
                         vertex::fetch(
                             &self.cp,
@@ -581,6 +585,7 @@ impl State {
                         mem.draw(self, &draw);
                     }
                     let digest = digests.then(|| self.draw_digest(op, &bytes, mem));
+                    self.fetched = bytes;
                     out.push(Produced {
                         event: Event::Draw {
                             primitive: op & 0xF8,
