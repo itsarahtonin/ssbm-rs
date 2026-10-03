@@ -2046,9 +2046,9 @@ pub fn taskOpen<'a>(ctx: &'a Ctx, filename: Val<'a, i8>, entries: LbCardEntry<'a
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803bab5c),
+                        cstr(ctx, 0x803baae0),
                         (0x2c8_i32 as u32),
-                        cstr(ctx, 0x803bab5c),
+                        cstr(ctx, 0x803bab50),
                     )
                 });
                 fns::hsd_803B24E4(
@@ -5084,9 +5084,9 @@ fn inl_getNewTask_unfused<'a>(ctx: &'a Ctx) -> CardTask<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803bab5c),
+            cstr(ctx, 0x803baae0),
             (0x154_i32 as u32),
-            cstr(ctx, 0x803bab5c),
+            cstr(ctx, 0x803baaec),
         )
     });
     return result;

@@ -63,7 +63,7 @@ pub fn grTFox_80220C2C<'a>(ctx: &'a Ctx, arg0: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e8a68),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e89e8))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e8a8c))),
                 VarArg::Int(203_i32 as u32),
                 VarArg::Int(arg0 as u32),
             ],

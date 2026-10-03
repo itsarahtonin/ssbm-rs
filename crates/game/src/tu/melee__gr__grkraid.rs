@@ -82,7 +82,7 @@ pub fn grKraid_801FE0C4<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e4d40),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b8278))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e4d64))),
                 VarArg::Int(223_i32 as u32),
                 VarArg::Int(gobj_id as u32),
             ],
@@ -880,9 +880,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8278),
+            cstr(ctx, 0x804d4770),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803b8278),
+            cstr(ctx, 0x804d4778),
         )
     });
     result = 0_i32;
@@ -902,9 +902,9 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8278),
+            cstr(ctx, 0x804d4770),
             (0x2f8_i32 as u32),
-            cstr(ctx, 0x803b8278),
+            cstr(ctx, 0x804d4778),
         )
     });
     (if !Handle::is_null((scale)) {
@@ -912,7 +912,7 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8278),
+            cstr(ctx, 0x804d4770),
             (0x2f9_i32 as u32),
             cstr(ctx, 0x803b8278),
         )
@@ -961,9 +961,9 @@ fn inl_HSD_JObjAddRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8278),
+            cstr(ctx, 0x804d4770),
             (0x41d_i32 as u32),
-            cstr(ctx, 0x803b8278),
+            cstr(ctx, 0x804d4778),
         )
     });
     (jobj).rotate().set_z(fp::fadds((jobj).rotate().z(), z));
@@ -990,9 +990,9 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f6
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8278),
+            cstr(ctx, 0x804d4770),
             (0x3a4_i32 as u32),
-            cstr(ctx, 0x803b8278),
+            cstr(ctx, 0x804d4778),
         )
     });
     (jobj).translate().set_x(x);

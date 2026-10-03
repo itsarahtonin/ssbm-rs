@@ -86,9 +86,9 @@ pub fn ft_800CD914<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803c6ec8),
+                cstr(ctx, 0x803c6eb8),
                 (100_i32 as u32),
-                cstr(ctx, 0x803c6ec8),
+                cstr(ctx, 0x803c6ecc),
             )
         });
         if (fp).cmd_vars().at(0_i32).get() != (0x83d60_i32 as u32) {

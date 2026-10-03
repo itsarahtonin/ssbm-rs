@@ -407,9 +407,9 @@ pub fn grPushOn_80218888<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     } else {
                         fns::__assert(
                             ctx,
-                            cstr(ctx, 0x803b8440),
+                            cstr(ctx, 0x803e7b68),
                             (0x1c5_i32 as u32),
-                            cstr(ctx, 0x803b8440),
+                            cstr(ctx, 0x804d4930),
                         )
                     });
                 }
@@ -740,7 +740,7 @@ pub fn grPushOn_802190D0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803b8440),
+                    cstr(ctx, 0x803e7b68),
                     (0x2ba_i32 as u32),
                     cstr(ctx, 0x803e7ca8),
                 )
@@ -827,9 +827,9 @@ pub fn grPushOn_80219230<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8440),
+            cstr(ctx, 0x803e7b68),
             (0x35d_i32 as u32),
-            cstr(ctx, 0x803b8440),
+            cstr(ctx, 0x804d4930),
         )
     });
     #[allow(unreachable_code)]
@@ -1003,9 +1003,9 @@ fn inl_HSD_LObjSetNext_unfused<'a>(ctx: &'a Ctx, lobj: HSD_LObj<'a>, next: HSD_L
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8440),
+            cstr(ctx, 0x804d4938),
             (0x136_i32 as u32),
-            cstr(ctx, 0x803b8440),
+            cstr(ctx, 0x804d4940),
         )
     });
     (lobj).set_next(next);

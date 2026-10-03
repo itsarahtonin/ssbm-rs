@@ -576,9 +576,9 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b74f0),
+            cstr(ctx, 0x804d3ca8),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803b74f0),
+            cstr(ctx, 0x804d3cb0),
         )
     });
     result = 0_i32;
@@ -597,9 +597,9 @@ fn inl_HSD_JObjAddRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y__
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b74f0),
+            cstr(ctx, 0x804d3ca8),
             (0x411_i32 as u32),
-            cstr(ctx, 0x803b74f0),
+            cstr(ctx, 0x804d3cb0),
         )
     });
     (jobj)

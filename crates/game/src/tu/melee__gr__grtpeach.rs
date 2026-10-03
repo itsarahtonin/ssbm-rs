@@ -59,7 +59,7 @@ pub fn grTPeach_80222958<'a>(ctx: &'a Ctx, index: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e9180),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e9100))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e91a4))),
                 VarArg::Int(195_i32 as u32),
                 VarArg::Int(index as u32),
             ],

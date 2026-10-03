@@ -7902,9 +7902,9 @@ pub fn Toy_80307470<'a>(ctx: &'a Ctx, arg0: i32) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b87a8),
+                cstr(ctx, 0x804d5a48),
                 (0x9b1_i32 as u32),
-                cstr(ctx, 0x803b87a8),
+                cstr(ctx, 0x804d5a50),
             )
         });
     }
@@ -8000,9 +8000,9 @@ pub fn Toy_80307470<'a>(ctx: &'a Ctx, arg0: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b87a8),
+            cstr(ctx, 0x804d5a48),
             (0x9e6_i32 as u32),
-            cstr(ctx, 0x803b87a8),
+            cstr(ctx, 0x804d5a50),
         )
     });
 }
@@ -8033,9 +8033,9 @@ pub fn _Toy_803075E8<'a>(ctx: &'a Ctx, arg0: i32) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b87a8),
+                cstr(ctx, 0x804d5a48),
                 (0xa41_i32 as u32),
-                cstr(ctx, 0x803b87a8),
+                cstr(ctx, 0x804d5a50),
             )
         });
     }
@@ -8131,9 +8131,9 @@ pub fn _Toy_803075E8<'a>(ctx: &'a Ctx, arg0: i32) {
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803b87a8),
+                    cstr(ctx, 0x804d5a48),
                     (0xa75_i32 as u32),
-                    cstr(ctx, 0x803b87a8),
+                    cstr(ctx, 0x804d5a50),
                 )
             });
         }
@@ -9155,9 +9155,9 @@ pub fn Toy_80308354<'a>(ctx: &'a Ctx, idx: i16) -> i32 {
                 );
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803b87a8),
+                    cstr(ctx, 0x804d5a48),
                     (0xc2a_i32 as u32),
-                    cstr(ctx, 0x803b87a8),
+                    cstr(ctx, 0x804d5a50),
                 )
             })
         });
@@ -50696,9 +50696,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b87a8),
+            cstr(ctx, 0x804d5a64),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803b87a8),
+            cstr(ctx, 0x804d5a6c),
         )
     });
     result = 0_i32;
@@ -50718,9 +50718,9 @@ fn inl_HSD_JObjAddTranslationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b87a8),
+            cstr(ctx, 0x804d5a64),
             (0x45a_i32 as u32),
-            cstr(ctx, 0x803b87a8),
+            cstr(ctx, 0x804d5a6c),
         )
     });
     (jobj)
@@ -50743,9 +50743,9 @@ fn inl_HSD_JObjSetScaleX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b87a8),
+            cstr(ctx, 0x804d5a64),
             (0x308_i32 as u32),
-            cstr(ctx, 0x803b87a8),
+            cstr(ctx, 0x804d5a6c),
         )
     });
     (jobj).scale().set_x(x);
@@ -50766,9 +50766,9 @@ fn inl_HSD_JObjSetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b87a8),
+            cstr(ctx, 0x804d5a64),
             (0x317_i32 as u32),
-            cstr(ctx, 0x803b87a8),
+            cstr(ctx, 0x804d5a6c),
         )
     });
     (jobj).scale().set_y(y);
@@ -50789,9 +50789,9 @@ fn inl_HSD_JObjSetScaleZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b87a8),
+            cstr(ctx, 0x804d5a64),
             (0x326_i32 as u32),
-            cstr(ctx, 0x803b87a8),
+            cstr(ctx, 0x804d5a6c),
         )
     });
     (jobj).scale().set_z(z);
@@ -50811,9 +50811,9 @@ fn inl_HSD_JObjGetScaleY_unfused_discard<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b87a8),
+            cstr(ctx, 0x804d5a64),
             (0x378_i32 as u32),
-            cstr(ctx, 0x803b87a8),
+            cstr(ctx, 0x804d5a6c),
         )
     });
     return 0.0;

@@ -853,9 +853,9 @@ pub fn mpIsland_8005B004<'a>(
                     } else {
                         fns::__assert(
                             ctx,
-                            cstr(ctx, 0x803b73e8),
+                            cstr(ctx, 0x803bf790),
                             (0x206_i32 as u32),
-                            cstr(ctx, 0x803b73e8),
+                            cstr(ctx, 0x804d3998),
                         )
                     });
                 } else {
@@ -1049,9 +1049,9 @@ fn inl_mpIsland_AssertSeg_unfused<'a>(ctx: &'a Ctx, mpisp: mp_UnkStruct0<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b73e8),
+            cstr(ctx, 0x803bf790),
             (62_i32 as u32),
-            cstr(ctx, 0x803b73e8),
+            cstr(ctx, 0x804d3990),
         )
     });
 }

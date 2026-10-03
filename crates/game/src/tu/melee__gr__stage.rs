@@ -1014,9 +1014,9 @@ pub fn Stage_80225074<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b84c8),
+                cstr(ctx, 0x804d49f8),
                 (0x20e_i32 as u32),
-                cstr(ctx, 0x803b84c8),
+                cstr(ctx, 0x804d4a00),
             )
         });
     }

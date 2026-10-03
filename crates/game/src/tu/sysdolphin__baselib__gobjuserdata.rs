@@ -43,9 +43,9 @@ pub fn GObj_InitUserData<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804085ec),
+            cstr(ctx, 0x80408590),
             (40_i32 as u32),
-            cstr(ctx, 0x804085ec),
+            cstr(ctx, 0x804085a0),
         )
     });
     (gobj).set_user_data_kind(kind);
@@ -64,9 +64,9 @@ pub fn GObj_RemoveUserData<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804085ec),
+            cstr(ctx, 0x80408590),
             (99_i32 as u32),
-            cstr(ctx, 0x804085ec),
+            cstr(ctx, 0x804085d0),
         )
     });
     (gobj)

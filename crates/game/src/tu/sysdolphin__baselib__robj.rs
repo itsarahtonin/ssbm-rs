@@ -240,9 +240,9 @@ pub fn HSD_RObjGetGlobalPosition<'a>(
                         } else {
                             fns::__assert(
                                 ctx,
-                                cstr(ctx, 0x803b9580),
+                                cstr(ctx, 0x804d5eb8),
                                 (0x1f2_i32 as u32),
-                                cstr(ctx, 0x803b9580),
+                                cstr(ctx, 0x80406e68),
                             )
                         });
                         inl_HSD_JObjSetupMatrix_unfused(ctx, (rp).u().jobj());
@@ -421,9 +421,9 @@ pub fn resolveCnsOrientation<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b9580),
+            cstr(ctx, 0x804d5eb8),
             (0x276_i32 as u32),
-            cstr(ctx, 0x803b9580),
+            cstr(ctx, 0x804d5ed0),
         )
     });
     robj = inl_inlined_HSD_RObjGetByType(ctx, robj, (0x10000000_i32 as u32), (4_i32 as u32));
@@ -564,9 +564,9 @@ pub fn resolveLimits<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, obj: Addr<'a>, update
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b9580),
+            cstr(ctx, 0x804d5eb8),
             (0x2e1_i32 as u32),
-            cstr(ctx, 0x803b9580),
+            cstr(ctx, 0x80406ebc),
         )
     });
     rp = robj;
@@ -822,7 +822,7 @@ pub fn HSD_RObjLoadDesc<'a>(ctx: &'a Ctx, robjdesc: HSD_RObjDesc<'a>) -> HSD_ROb
             if __case <= 5 {
                 fns::HSD_Panic(
                     ctx,
-                    cstr(ctx, 0x803b9580),
+                    cstr(ctx, 0x804d5eb8),
                     (0x3c0_i32 as u32),
                     cstr(ctx, 0x80406ef8),
                 );
@@ -884,9 +884,9 @@ pub fn HSD_RObjAlloc<'a>(ctx: &'a Ctx) -> HSD_RObj<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b9580),
+            cstr(ctx, 0x804d5eb8),
             (0x408_i32 as u32),
-            cstr(ctx, 0x803b9580),
+            cstr(ctx, 0x804d5ed4),
         )
     });
     let _ = fns::memset(ctx, Handle::cast::<Addr<'a>>(new), 0_i32, 28_u32);
@@ -2496,9 +2496,9 @@ pub fn HSD_RObjSetConstraintObj<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, o: Addr<'a
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803b9580),
+                    cstr(ctx, 0x804d5eb8),
                     (0x560_i32 as u32),
-                    cstr(ctx, 0x803b9580),
+                    cstr(ctx, 0x80406ef4),
                 )
             });
         }
@@ -2629,9 +2629,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b9580),
+            cstr(ctx, 0x804d5ec0),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803b9580),
+            cstr(ctx, 0x80406ebc),
         )
     });
     result = 0_i32;
@@ -2735,9 +2735,9 @@ fn inl_HSD_JObjGetMtxPtr<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'a, F32, 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b9580),
+            cstr(ctx, 0x804d5ec0),
             (0x478_i32 as u32),
-            cstr(ctx, 0x803b9580),
+            cstr(ctx, 0x80406ebc),
         )
     });
     ctx.call::<_, ()>(0x80007d68, (jobj,));
@@ -2819,9 +2819,9 @@ fn inl_iref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b9580),
+            cstr(ctx, 0x80406ec4),
             (158_i32 as u32),
-            cstr(ctx, 0x803b9580),
+            cstr(ctx, 0x80406ed0),
         )
     });
 }
@@ -2857,9 +2857,9 @@ fn inl_HSD_RObjResolveRefs_unfused<'a>(ctx: &'a Ctx, robj: HSD_RObj<'a>, desc: H
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803b9580),
+                        cstr(ctx, 0x804d5eb8),
                         (0x373_i32 as u32),
-                        cstr(ctx, 0x803b9580),
+                        cstr(ctx, 0x80406eb4),
                     )
                 });
                 inl_HSD_JObjRefThis_unfused(ctx, (robj).u().jobj());
@@ -2953,7 +2953,7 @@ fn inl_HSD_RObjLoadDesc_unfused<'a>(ctx: &'a Ctx, robjdesc: HSD_RObjDesc<'a>) ->
             if __case <= 5 {
                 fns::HSD_Panic(
                     ctx,
-                    cstr(ctx, 0x803b9580),
+                    cstr(ctx, 0x804d5eb8),
                     (0x3c0_i32 as u32),
                     cstr(ctx, 0x80406ef8),
                 );
@@ -3018,9 +3018,9 @@ fn inl_HSD_RvalueAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_Rvalue<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b9580),
+            cstr(ctx, 0x804d5eb8),
             (0x4c8_i32 as u32),
-            cstr(ctx, 0x803b9580),
+            cstr(ctx, 0x804d5edc),
         )
     });
     let _ = fns::memset(ctx, Handle::cast::<Addr<'a>>(rvalue), 0_i32, 12_u32);
@@ -3073,9 +3073,9 @@ fn inl_HSD_RvalueResolveRefs_unfused<'a>(
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b9580),
+                cstr(ctx, 0x804d5eb8),
                 (0x535_i32 as u32),
-                cstr(ctx, 0x803b9580),
+                cstr(ctx, 0x80406f98),
             )
         });
         inl_HSD_JObjRefThis_unfused(ctx, (rvalue).jobj());

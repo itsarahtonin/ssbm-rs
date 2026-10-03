@@ -929,9 +929,9 @@ pub fn ftLib_ApplyMetalBox<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, item_gobj: HSD_
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d83d4),
+            cstr(ctx, 0x804d3ac8),
             (0x45d_i32 as u32),
-            cstr(ctx, 0x804d83d4),
+            cstr(ctx, 0x803c5460),
         )
     });
     {
@@ -1267,9 +1267,9 @@ pub fn ftLib_GetGroundSlopeAngle<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> f64 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d83d4),
+            cstr(ctx, 0x804d3ac8),
             (0x5ed_i32 as u32),
-            cstr(ctx, 0x804d83d4),
+            cstr(ctx, 0x803c5488),
         )
     });
     {

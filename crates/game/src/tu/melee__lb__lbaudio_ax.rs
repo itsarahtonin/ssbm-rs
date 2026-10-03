@@ -2756,9 +2756,9 @@ pub fn lbAudioAx_80027168<'a>(ctx: &'a Ctx) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803bb300),
+                cstr(ctx, 0x803bca80),
                 (0xdb3_i32 as u32),
-                cstr(ctx, 0x803bb300),
+                cstr(ctx, 0x804d3930),
             )
         });
     }
@@ -3354,9 +3354,9 @@ pub fn lbAudioAx_8002838C<'a>(ctx: &'a Ctx) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803bb300),
+                cstr(ctx, 0x803bca80),
                 (0xf6e_i32 as u32),
-                cstr(ctx, 0x803bb300),
+                cstr(ctx, 0x803bcab4),
             )
         });
         let _ = fns::HSD_AudioSFXSetupAux(
@@ -3383,9 +3383,9 @@ pub fn lbAudioAx_8002838C<'a>(ctx: &'a Ctx) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803bb300),
+                cstr(ctx, 0x803bca80),
                 (0xf72_i32 as u32),
-                cstr(ctx, 0x803bb300),
+                cstr(ctx, 0x803bcae4),
             )
         });
         let _ = fns::HSD_AudioSFXSetupAux(

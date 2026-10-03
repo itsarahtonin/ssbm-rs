@@ -60,7 +60,7 @@ pub fn grTPichu_80222C3C<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e9240),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e91c0))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e9264))),
                 VarArg::Int(194_i32 as u32),
                 VarArg::Int(gobj_id as u32),
             ],

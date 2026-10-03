@@ -70,7 +70,7 @@ pub fn grStory_801E30D8<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e2780),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e26f0))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e27a4))),
                 VarArg::Int(220_i32 as u32),
                 VarArg::Int(gobj_id as u32),
             ],

@@ -138,9 +138,9 @@ pub fn it_802790C0<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'
                     fns::OSReport(ctx, cstr(ctx, 0x803f22e8), &[]);
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803f230c),
+                        cstr(ctx, 0x803f2300),
                         (139_i32 as u32),
-                        cstr(ctx, 0x803f230c),
+                        cstr(ctx, 0x804d51c0),
                     )
                 })
             });

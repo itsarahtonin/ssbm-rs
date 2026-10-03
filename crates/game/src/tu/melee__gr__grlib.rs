@@ -248,9 +248,9 @@ pub fn grLib_801C9A70<'a>(ctx: &'a Ctx, arg0: i32, v: Vec<'a>) {
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x804d4588),
+                    cstr(ctx, 0x804d4570),
                     (0x122_i32 as u32),
-                    cstr(ctx, 0x804d4588),
+                    cstr(ctx, 0x804d4578),
                 )
             });
         }
@@ -604,9 +604,9 @@ fn inl_HSD_JObjGetTranslationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d4588),
+            cstr(ctx, 0x804d457c),
             (0x3e1_i32 as u32),
-            cstr(ctx, 0x804d4588),
+            cstr(ctx, 0x804d4584),
         )
     });
     return (jobj).translate().x();
@@ -619,9 +619,9 @@ fn inl_HSD_JObjGetTranslationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d4588),
+            cstr(ctx, 0x804d457c),
             (0x3ee_i32 as u32),
-            cstr(ctx, 0x804d4588),
+            cstr(ctx, 0x804d4584),
         )
     });
     return (jobj).translate().y();

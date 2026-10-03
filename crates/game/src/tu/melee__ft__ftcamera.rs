@@ -144,7 +144,7 @@ pub fn ftCamera_80076320<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c0c3c),
+            cstr(ctx, 0x803c0c08),
             (137_i32 as u32),
             cstr(ctx, 0x803c0c14),
         )

@@ -2759,7 +2759,7 @@ pub fn setupStageCallbacks<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e4834),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b8220))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e46f8))),
                 VarArg::Int(0x35c_i32 as u32),
                 VarArg::Int(gobj_id as u32),
             ],
@@ -3070,9 +3070,9 @@ pub fn stageGObj10_Callback1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b8220),
+                cstr(ctx, 0x803e46f8),
                 (0x475_i32 as u32),
-                cstr(ctx, 0x803b8220),
+                cstr(ctx, 0x804d4728),
             )
         });
         fns::Ground_801C4A08(ctx, mgobj);
@@ -3084,9 +3084,9 @@ pub fn stageGObj10_Callback1<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> i32 {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b8220),
+                cstr(ctx, 0x803e46f8),
                 (0x47a_i32 as u32),
-                cstr(ctx, 0x803b8220),
+                cstr(ctx, 0x804d4728),
             )
         });
         fns::Ground_801C4A08(ctx, mgobj);
@@ -4860,9 +4860,9 @@ pub fn stageGObj8_GObjProc<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x803e46f8),
             (0x78f_i32 as u32),
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4718),
         )
     });
     cur = inl_HSD_JObjGetTranslationY(ctx, jobj);
@@ -4948,9 +4948,9 @@ pub fn grIceMt_801F8CDC<'a>(
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b8220),
+                cstr(ctx, 0x803e46f8),
                 (0x7d4_i32 as u32),
-                cstr(ctx, 0x803b8220),
+                cstr(ctx, 0x803e4858),
             )
         });
         {
@@ -4976,9 +4976,9 @@ pub fn grIceMt_801F8CDC<'a>(
                     } else {
                         fns::__assert(
                             ctx,
-                            cstr(ctx, 0x803b8220),
+                            cstr(ctx, 0x803e46f8),
                             (0x7e3_i32 as u32),
-                            cstr(ctx, 0x803b8220),
+                            cstr(ctx, 0x803e4878),
                         )
                     });
                     block_jobj =
@@ -4988,9 +4988,9 @@ pub fn grIceMt_801F8CDC<'a>(
                     } else {
                         fns::__assert(
                             ctx,
-                            cstr(ctx, 0x803b8220),
+                            cstr(ctx, 0x803e46f8),
                             (0x7e6_i32 as u32),
-                            cstr(ctx, 0x803b8220),
+                            cstr(ctx, 0x803e4884),
                         )
                     });
                     fns::HSD_JObjAddChild(ctx, coll_jobj, block_jobj);
@@ -5072,9 +5072,9 @@ pub fn fn_801F8E58<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, out: Val<'a, i32>) -> i
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x803e46f8),
             (0x81d_i32 as u32),
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4730),
         )
     });
     chosen = inl_grIceMt_GetRandomIndex_unfused(ctx, max, list.at(0));
@@ -5529,9 +5529,9 @@ pub fn grIceMt_801F9668<'a>(ctx: &'a Ctx, arg0: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x803e46f8),
             (0xa37_i32 as u32),
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4734),
         )
     });
     bg_gp = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, bg_gobj)));
@@ -5540,9 +5540,9 @@ pub fn grIceMt_801F9668<'a>(ctx: &'a Ctx, arg0: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x803e46f8),
             (0xa38_i32 as u32),
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d473c),
         )
     });
     (bg_gp).u().icemt_bg().set_x0(arg0);
@@ -6174,9 +6174,9 @@ pub fn grIceMt_801F993C<'a>(ctx: &'a Ctx, under_id: i32, upper_id: i32) -> f64 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x803e46f8),
             (0xa9d_i32 as u32),
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x803e4890),
         )
     });
     {
@@ -6195,9 +6195,9 @@ pub fn grIceMt_801F993C<'a>(ctx: &'a Ctx, under_id: i32, upper_id: i32) -> f64 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x803e46f8),
             (0xaa2_i32 as u32),
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x803e48ac),
         )
     });
     return fp::fnmsubs(
@@ -6256,9 +6256,9 @@ pub fn grIceMt_801F9ACC<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x803e46f8),
             (0xab9_i32 as u32),
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4728),
         )
     });
     jobj = Handle::cast::<HSD_JObj<'a>>((mgobj).hsd_obj());
@@ -6267,9 +6267,9 @@ pub fn grIceMt_801F9ACC<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x803e46f8),
             (0xaba_i32 as u32),
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4718),
         )
     });
     cur = inl_HSD_JObjGetTranslationY_unfused(ctx, jobj);
@@ -6346,9 +6346,9 @@ pub fn grIceMt_801F9ACC<'a>(
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803b8220),
+                    cstr(ctx, 0x803e46f8),
                     (0xaf3_i32 as u32),
-                    cstr(ctx, 0x803b8220),
+                    cstr(ctx, 0x804d4728),
                 )
             });
             fns::Ground_801C4A08(ctx, mgobj);
@@ -6367,9 +6367,9 @@ pub fn grIceMt_801F9ACC<'a>(
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803b8220),
+                    cstr(ctx, 0x803e46f8),
                     (0xafe_i32 as u32),
-                    cstr(ctx, 0x803b8220),
+                    cstr(ctx, 0x804d4728),
                 )
             });
             jobj = Handle::cast::<HSD_JObj<'a>>((mgobj).hsd_obj());
@@ -6378,9 +6378,9 @@ pub fn grIceMt_801F9ACC<'a>(
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803b8220),
+                    cstr(ctx, 0x803e46f8),
                     (0xaff_i32 as u32),
-                    cstr(ctx, 0x803b8220),
+                    cstr(ctx, 0x804d4718),
                 )
             });
             inl_HSD_JObjSetTranslateY_unfused(ctx, jobj, fp::fsubs(cur, y1));
@@ -6423,9 +6423,9 @@ pub fn grIceMt_801F9ACC<'a>(
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803b8220),
+                    cstr(ctx, 0x803e46f8),
                     (0xb13_i32 as u32),
-                    cstr(ctx, 0x803b8220),
+                    cstr(ctx, 0x804d4728),
                 )
             });
             fns::Ground_801C4A08(ctx, mgobj);
@@ -6444,9 +6444,9 @@ pub fn grIceMt_801F9ACC<'a>(
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803b8220),
+                    cstr(ctx, 0x803e46f8),
                     (0xb1e_i32 as u32),
-                    cstr(ctx, 0x803b8220),
+                    cstr(ctx, 0x804d4728),
                 )
             });
             jobj = Handle::cast::<HSD_JObj<'a>>((mgobj).hsd_obj());
@@ -6455,9 +6455,9 @@ pub fn grIceMt_801F9ACC<'a>(
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803b8220),
+                    cstr(ctx, 0x803e46f8),
                     (0xb1f_i32 as u32),
-                    cstr(ctx, 0x803b8220),
+                    cstr(ctx, 0x804d4718),
                 )
             });
             inl_HSD_JObjSetTranslateY_unfused(ctx, jobj, fp::fadds(y1, (fp::fadds(cur, y0))));
@@ -6523,9 +6523,9 @@ pub fn grIceMt_801FA0BC<'a>(ctx: &'a Ctx, ids: grIceMt_GObj9_GObj10_UnderUpperId
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b8220),
+                cstr(ctx, 0x803e46f8),
                 (0xb44_i32 as u32),
-                cstr(ctx, 0x803b8220),
+                cstr(ctx, 0x804d4728),
             )
         });
         jobj = Handle::cast::<HSD_JObj<'a>>((mgobj).hsd_obj());
@@ -6534,9 +6534,9 @@ pub fn grIceMt_801FA0BC<'a>(ctx: &'a Ctx, ids: grIceMt_GObj9_GObj10_UnderUpperId
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b8220),
+                cstr(ctx, 0x803e46f8),
                 (0xb46_i32 as u32),
-                cstr(ctx, 0x803b8220),
+                cstr(ctx, 0x804d4718),
             )
         });
         inl_HSD_JObjSetTranslateY(
@@ -6555,9 +6555,9 @@ pub fn grIceMt_801FA0BC<'a>(ctx: &'a Ctx, ids: grIceMt_GObj9_GObj10_UnderUpperId
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b8220),
+                cstr(ctx, 0x803e46f8),
                 (0xb50_i32 as u32),
-                cstr(ctx, 0x803b8220),
+                cstr(ctx, 0x804d4728),
             )
         });
         jobj = Handle::cast::<HSD_JObj<'a>>((mgobj).hsd_obj());
@@ -6566,9 +6566,9 @@ pub fn grIceMt_801FA0BC<'a>(ctx: &'a Ctx, ids: grIceMt_GObj9_GObj10_UnderUpperId
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b8220),
+                cstr(ctx, 0x803e46f8),
                 (0xb52_i32 as u32),
-                cstr(ctx, 0x803b8220),
+                cstr(ctx, 0x804d4718),
             )
         });
         inl_HSD_JObjSetTranslateY_2(ctx, jobj, fp::fneg(20.0), fns::Ground_801C0498(ctx));
@@ -6727,9 +6727,9 @@ pub fn grIceMt_801FA500<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_JObj<'a>
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x803e46f8),
             (0xbb1_i32 as u32),
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4718),
         )
     });
     jobj = inl_HSD_JObjGetChild_unfused(ctx, jobj);
@@ -6738,9 +6738,9 @@ pub fn grIceMt_801FA500<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: HSD_JObj<'a>
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x803e46f8),
             (0xbb2_i32 as u32),
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4718),
         )
     });
     'l1: while !Handle::is_null(jobj) {
@@ -6930,9 +6930,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4720),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4718),
         )
     });
     result = 0_i32;
@@ -6952,9 +6952,9 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4720),
             (0x394_i32 as u32),
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4718),
         )
     });
     (if !Handle::is_null((translate)) {
@@ -6962,7 +6962,7 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4720),
             (0x395_i32 as u32),
             cstr(ctx, 0x803b8220),
         )
@@ -6989,9 +6989,9 @@ fn inl_HSD_JObjGetTranslationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4720),
             (0x3ee_i32 as u32),
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4718),
         )
     });
     return (jobj).translate().y();
@@ -7005,9 +7005,9 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4720),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4718),
         )
     });
     result = 0_i32;
@@ -7027,9 +7027,9 @@ fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4720),
             (0x3b3_i32 as u32),
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4718),
         )
     });
     (jobj).translate().set_y(y);
@@ -7100,9 +7100,9 @@ fn inl_HSD_JObjGetTranslationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4720),
             (0x3ee_i32 as u32),
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4718),
         )
     });
     return (jobj).translate().y();
@@ -7116,9 +7116,9 @@ fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f6
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4720),
             (0x3b3_i32 as u32),
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4718),
         )
     });
     (jobj).translate().set_y(y);
@@ -7138,9 +7138,9 @@ fn inl_HSD_JObjSetTranslateY_2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4720),
             (0x3b3_i32 as u32),
-            cstr(ctx, 0x803b8220),
+            cstr(ctx, 0x804d4718),
         )
     });
     (jobj).translate().set_y(fp::fmuls(y__a, y__c));

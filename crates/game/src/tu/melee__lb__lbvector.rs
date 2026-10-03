@@ -1783,9 +1783,9 @@ pub fn lbVector_WorldToScreen<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803ba0d4),
+            cstr(ctx, 0x803ba050),
             (0x2a4_i32 as u32),
-            cstr(ctx, 0x803ba0d4),
+            cstr(ctx, 0x804d3720),
         )
     });
     (if ((pos3d).x() > fp::fneg(50000.0)) && ((pos3d).x() < 50000.0) {
@@ -1793,9 +1793,9 @@ pub fn lbVector_WorldToScreen<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803ba0d4),
+            cstr(ctx, 0x803ba050),
             (0x2a5_i32 as u32),
-            cstr(ctx, 0x803ba0d4),
+            cstr(ctx, 0x803ba05c),
         )
     });
     (if ((pos3d).y() > fp::fneg(50000.0)) && ((pos3d).y() < 50000.0) {
@@ -1803,9 +1803,9 @@ pub fn lbVector_WorldToScreen<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803ba0d4),
+            cstr(ctx, 0x803ba050),
             (0x2a6_i32 as u32),
-            cstr(ctx, 0x803ba0d4),
+            cstr(ctx, 0x803ba084),
         )
     });
     (if ((pos3d).z() > fp::fneg(50000.0)) && ((pos3d).z() < 50000.0) {
@@ -1813,9 +1813,9 @@ pub fn lbVector_WorldToScreen<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803ba0d4),
+            cstr(ctx, 0x803ba050),
             (0x2a7_i32 as u32),
-            cstr(ctx, 0x803ba0d4),
+            cstr(ctx, 0x803ba0ac),
         )
     });
     Handle::copy_from(point, (pos3d));

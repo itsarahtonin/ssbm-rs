@@ -359,9 +359,9 @@ pub fn HSD_TExpMakeDag<'a>(ctx: &'a Ctx, root: HSD_TExp<'a>, list: HSD_TExpDag<'
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407ae4),
+            cstr(ctx, 0x80407aa0),
             (238_i32 as u32),
-            cstr(ctx, 0x80407ae4),
+            cstr(ctx, 0x80407aac),
         )
     });
     base = sp94.at(0);
@@ -382,9 +382,9 @@ pub fn HSD_TExpMakeDag<'a>(ctx: &'a Ctx, root: HSD_TExp<'a>, list: HSD_TExpDag<'
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x80407ae4),
+                        cstr(ctx, 0x80407aa0),
                         (246_i32 as u32),
-                        cstr(ctx, 0x80407ae4),
+                        cstr(ctx, 0x80407ad0),
                     )
                 });
                 tmp = sp94.at(j).get();
@@ -575,9 +575,9 @@ pub fn HSD_TExpMakeDag<'a>(ctx: &'a Ctx, root: HSD_TExp<'a>, list: HSD_TExpDag<'
                                 } else {
                                     fns::__assert(
                                         ctx,
-                                        cstr(ctx, 0x80407ae4),
+                                        cstr(ctx, 0x80407aa0),
                                         (0x145_i32 as u32),
-                                        cstr(ctx, 0x80407ae4),
+                                        cstr(ctx, 0x804d5ff0),
                                     )
                                 });
                             }
@@ -643,9 +643,9 @@ pub fn HSD_TExpMakeDag<'a>(ctx: &'a Ctx, root: HSD_TExp<'a>, list: HSD_TExpDag<'
                                 } else {
                                     fns::__assert(
                                         ctx,
-                                        cstr(ctx, 0x80407ae4),
+                                        cstr(ctx, 0x80407aa0),
                                         (0x15b_i32 as u32),
-                                        cstr(ctx, 0x80407ae4),
+                                        cstr(ctx, 0x804d5ff0),
                                     )
                                 });
                             }

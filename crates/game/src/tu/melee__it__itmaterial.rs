@@ -170,9 +170,9 @@ pub fn it_80277F90<'a>(
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803f1f94),
+                    cstr(ctx, 0x803f20a8),
                     (221_i32 as u32),
-                    cstr(ctx, 0x803f1f94),
+                    cstr(ctx, 0x804d51b8),
                 )
             });
         }
@@ -323,9 +323,9 @@ pub fn it_80278108<'a>(ctx: &'a Ctx, item: Item<'a>, mobj: HSD_MObj<'a>, texp: H
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803f1f94),
+                    cstr(ctx, 0x803f20a8),
                     (0x144_i32 as u32),
-                    cstr(ctx, 0x803f1f94),
+                    cstr(ctx, 0x804d51b8),
                 )
             });
         }
@@ -351,9 +351,9 @@ pub fn it_80278108<'a>(ctx: &'a Ctx, item: Item<'a>, mobj: HSD_MObj<'a>, texp: H
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803f1f94),
+                    cstr(ctx, 0x803f20a8),
                     (0x152_i32 as u32),
-                    cstr(ctx, 0x803f1f94),
+                    cstr(ctx, 0x804d51b8),
                 )
             });
         }

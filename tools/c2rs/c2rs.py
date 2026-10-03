@@ -2045,7 +2045,16 @@ class Translator:
             return Expr(self.int_literal(int(val), t), t, True)
         if k == CK.STRING_LITERAL:
             data = self.string_bytes(c)
-            addr = self.u.string_addr(data)
+            try:
+                addr = self.u.string_addr(data)
+            except Unsupported:
+                if all(t.spelling.startswith('"') for t in c.get_tokens()) and \
+                        any(True for _ in c.get_tokens()):
+                    raise
+                # A literal a macro makes that the unit's data lacks, such as the condition of
+                # an assertion MWCC proved always true and dropped: the original never reaches
+                # it, so any address serves.
+                addr = self.u.string_addr(b"")
             return Expr(f"cstr(ctx, {addr:#x})", {"k": "arr", "of": {"k": "int", "size": 1, "signed": True},
                                                    "n": len(data) + 1, "string": True}, True)
         if k == CK.DECL_REF_EXPR:

@@ -885,7 +885,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                         fns::OSReport(ctx, cstr(ctx, 0x80402420), &[VarArg::Int(0x566_i32 as u32)]);
                         fns::OSPanic(
                             ctx,
-                            cstr(ctx, 0x8040277c),
+                            cstr(ctx, 0x80402480),
                             0x566_i32,
                             cstr(ctx, 0x8040277c),
                             &[],
@@ -904,7 +904,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                         fns::OSReport(ctx, cstr(ctx, 0x8040248c), &[VarArg::Int(0x56b_i32 as u32)]);
                         fns::OSPanic(
                             ctx,
-                            cstr(ctx, 0x8040277c),
+                            cstr(ctx, 0x80402480),
                             0x56b_i32,
                             cstr(ctx, 0x8040277c),
                             &[],
@@ -919,7 +919,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                     fns::OSReport(ctx, cstr(ctx, 0x804024ec), &[VarArg::Int(0x56d_i32 as u32)]);
                     fns::OSPanic(
                         ctx,
-                        cstr(ctx, 0x8040277c),
+                        cstr(ctx, 0x80402480),
                         0x56d_i32,
                         cstr(ctx, 0x8040277c),
                         &[],
@@ -939,7 +939,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
         fns::OSReport(ctx, cstr(ctx, 0x80402534), &[VarArg::Int(0x572_i32 as u32)]);
         fns::OSPanic(
             ctx,
-            cstr(ctx, 0x8040277c),
+            cstr(ctx, 0x80402480),
             0x572_i32,
             cstr(ctx, 0x8040277c),
             &[],
@@ -955,7 +955,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
         fns::OSReport(ctx, cstr(ctx, 0x804025b4), &[VarArg::Int(0x574_i32 as u32)]);
         fns::OSPanic(
             ctx,
-            cstr(ctx, 0x8040277c),
+            cstr(ctx, 0x80402480),
             0x574_i32,
             cstr(ctx, 0x8040277c),
             &[],
@@ -972,7 +972,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                 fns::OSReport(ctx, cstr(ctx, 0x80402634), &[VarArg::Int(0x57c_i32 as u32)]);
                 fns::OSPanic(
                     ctx,
-                    cstr(ctx, 0x8040277c),
+                    cstr(ctx, 0x80402480),
                     0x57c_i32,
                     cstr(ctx, 0x8040277c),
                     &[],
@@ -985,7 +985,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                 fns::OSReport(ctx, cstr(ctx, 0x804026b0), &[VarArg::Int(0x57e_i32 as u32)]);
                 fns::OSPanic(
                     ctx,
-                    cstr(ctx, 0x8040277c),
+                    cstr(ctx, 0x80402480),
                     0x57e_i32,
                     cstr(ctx, 0x8040277c),
                     &[],
@@ -995,7 +995,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                 fns::OSReport(ctx, cstr(ctx, 0x8040272c), &[VarArg::Int(0x581_i32 as u32)]);
                 fns::OSPanic(
                     ctx,
-                    cstr(ctx, 0x8040277c),
+                    cstr(ctx, 0x80402480),
                     0x581_i32,
                     cstr(ctx, 0x8040277c),
                     &[],
@@ -1007,7 +1007,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                 fns::OSReport(ctx, cstr(ctx, 0x80402780), &[VarArg::Int(0x584_i32 as u32)]);
                 fns::OSPanic(
                     ctx,
-                    cstr(ctx, 0x8040277c),
+                    cstr(ctx, 0x80402480),
                     0x584_i32,
                     cstr(ctx, 0x8040277c),
                     &[],
@@ -1017,7 +1017,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                 fns::OSReport(ctx, cstr(ctx, 0x804027f4), &[VarArg::Int(0x585_i32 as u32)]);
                 fns::OSPanic(
                     ctx,
-                    cstr(ctx, 0x8040277c),
+                    cstr(ctx, 0x80402480),
                     0x585_i32,
                     cstr(ctx, 0x8040277c),
                     &[],
@@ -1028,7 +1028,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                 fns::OSReport(ctx, cstr(ctx, 0x80402830), &[VarArg::Int(0x586_i32 as u32)]);
                 fns::OSPanic(
                     ctx,
-                    cstr(ctx, 0x8040277c),
+                    cstr(ctx, 0x80402480),
                     0x586_i32,
                     cstr(ctx, 0x8040277c),
                     &[],
@@ -1057,7 +1057,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                             );
                             fns::OSPanic(
                                 ctx,
-                                cstr(ctx, 0x8040277c),
+                                cstr(ctx, 0x80402480),
                                 0x58c_i32,
                                 cstr(ctx, 0x8040277c),
                                 &[],
@@ -1076,7 +1076,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                             );
                             fns::OSPanic(
                                 ctx,
-                                cstr(ctx, 0x8040277c),
+                                cstr(ctx, 0x80402480),
                                 0x58d_i32,
                                 cstr(ctx, 0x8040277c),
                                 &[],
@@ -1093,7 +1093,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                             );
                             fns::OSPanic(
                                 ctx,
-                                cstr(ctx, 0x8040277c),
+                                cstr(ctx, 0x80402480),
                                 0x58e_i32,
                                 cstr(ctx, 0x8040277c),
                                 &[],
@@ -1107,7 +1107,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                         fns::OSReport(ctx, cstr(ctx, 0x80402980), &[VarArg::Int(0x592_i32 as u32)]);
                         fns::OSPanic(
                             ctx,
-                            cstr(ctx, 0x8040277c),
+                            cstr(ctx, 0x80402480),
                             0x592_i32,
                             cstr(ctx, 0x8040277c),
                             &[],
@@ -1117,7 +1117,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                         fns::OSReport(ctx, cstr(ctx, 0x804029c4), &[VarArg::Int(0x593_i32 as u32)]);
                         fns::OSPanic(
                             ctx,
-                            cstr(ctx, 0x8040277c),
+                            cstr(ctx, 0x80402480),
                             0x593_i32,
                             cstr(ctx, 0x8040277c),
                             &[],
@@ -1130,7 +1130,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                         fns::OSReport(ctx, cstr(ctx, 0x80402924), &[VarArg::Int(0x594_i32 as u32)]);
                         fns::OSPanic(
                             ctx,
-                            cstr(ctx, 0x8040277c),
+                            cstr(ctx, 0x80402480),
                             0x594_i32,
                             cstr(ctx, 0x8040277c),
                             &[],
@@ -1143,7 +1143,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                         fns::OSReport(ctx, cstr(ctx, 0x80402a00), &[VarArg::Int(0x597_i32 as u32)]);
                         fns::OSPanic(
                             ctx,
-                            cstr(ctx, 0x8040277c),
+                            cstr(ctx, 0x80402480),
                             0x597_i32,
                             cstr(ctx, 0x8040277c),
                             &[],
@@ -1155,7 +1155,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                         fns::OSReport(ctx, cstr(ctx, 0x80402a3c), &[VarArg::Int(0x598_i32 as u32)]);
                         fns::OSPanic(
                             ctx,
-                            cstr(ctx, 0x8040277c),
+                            cstr(ctx, 0x80402480),
                             0x598_i32,
                             cstr(ctx, 0x8040277c),
                             &[],
@@ -1165,7 +1165,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                         fns::OSReport(ctx, cstr(ctx, 0x80402a80), &[VarArg::Int(0x599_i32 as u32)]);
                         fns::OSPanic(
                             ctx,
-                            cstr(ctx, 0x8040277c),
+                            cstr(ctx, 0x80402480),
                             0x599_i32,
                             cstr(ctx, 0x8040277c),
                             &[],
@@ -1183,7 +1183,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                             );
                             fns::OSPanic(
                                 ctx,
-                                cstr(ctx, 0x8040277c),
+                                cstr(ctx, 0x80402480),
                                 0x59c_i32,
                                 cstr(ctx, 0x8040277c),
                                 &[],
@@ -1198,7 +1198,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                             );
                             fns::OSPanic(
                                 ctx,
-                                cstr(ctx, 0x8040277c),
+                                cstr(ctx, 0x80402480),
                                 0x5a0_i32,
                                 cstr(ctx, 0x8040277c),
                                 &[],
@@ -1209,7 +1209,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                         fns::OSReport(ctx, cstr(ctx, 0x80402b00), &[VarArg::Int(0x5a2_i32 as u32)]);
                         fns::OSPanic(
                             ctx,
-                            cstr(ctx, 0x8040277c),
+                            cstr(ctx, 0x80402480),
                             0x5a2_i32,
                             cstr(ctx, 0x8040277c),
                             &[],
@@ -1224,7 +1224,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                         fns::OSReport(ctx, cstr(ctx, 0x80402b40), &[VarArg::Int(0x5a6_i32 as u32)]);
                         fns::OSPanic(
                             ctx,
-                            cstr(ctx, 0x8040277c),
+                            cstr(ctx, 0x80402480),
                             0x5a6_i32,
                             cstr(ctx, 0x8040277c),
                             &[],
@@ -1254,7 +1254,7 @@ pub fn OSCheckActiveThreads<'a>(ctx: &'a Ctx) -> i32 {
                 fns::OSReport(ctx, cstr(ctx, 0x80402bf0), &[VarArg::Int(0x5b1_i32 as u32)]);
                 fns::OSPanic(
                     ctx,
-                    cstr(ctx, 0x8040277c),
+                    cstr(ctx, 0x80402480),
                     0x5b1_i32,
                     cstr(ctx, 0x8040277c),
                     &[],

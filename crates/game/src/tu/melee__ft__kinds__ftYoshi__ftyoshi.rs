@@ -79,9 +79,9 @@ pub fn ftYs_Init_8012B6E8<'a>(ctx: &'a Ctx, fp: Fighter<'a>, unk_struct_arg: S_U
                                 fns::OSReport(ctx, cstr(ctx, 0x803cea50), &[]);
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x803b75c0),
+                                    cstr(ctx, 0x803cea70),
                                     (97_i32 as u32),
-                                    cstr(ctx, 0x803b75c0),
+                                    cstr(ctx, 0x804d3e50),
                                 )
                             })
                         });
@@ -222,9 +222,9 @@ pub fn ftYs_Init_OnLoad<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 fns::OSReport(ctx, cstr(ctx, 0x803cea7c), &[]);
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803b75c0),
+                    cstr(ctx, 0x803cea70),
                     (113_i32 as u32),
-                    cstr(ctx, 0x803b75c0),
+                    cstr(ctx, 0x804d3e50),
                 )
             })
         });
@@ -534,9 +534,9 @@ fn inl_HSD_AObjGetEndFrame_unfused<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) -> f64 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b75c0),
+            cstr(ctx, 0x804d3e40),
             (170_i32 as u32),
-            cstr(ctx, 0x803b75c0),
+            cstr(ctx, 0x804d3e48),
         )
     });
     return (aobj).end_frame();

@@ -215,9 +215,9 @@ pub fn TObjUpdateFunc<'a>(ctx: &'a Ctx, obj: Addr<'a>, r#type: i32, val: HSD_Obj
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x80405574),
+                        cstr(ctx, 0x804d5c90),
                         (0x114_i32 as u32),
-                        cstr(ctx, 0x80405574),
+                        cstr(ctx, 0x804055b8),
                     )
                 });
                 n = fp::fctiwz((val).fv());
@@ -547,9 +547,9 @@ pub fn HSD_TObjLoadDesc<'a>(ctx: &'a Ctx, td: _HSD_TObjDesc<'a>) -> HSD_TObj<'a>
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x80405574),
+                    cstr(ctx, 0x804d5c90),
                     (0x1d4_i32 as u32),
-                    cstr(ctx, 0x80405574),
+                    cstr(ctx, 0x80405a30),
                 )
             });
         }
@@ -873,7 +873,7 @@ pub fn HSD_TexMapID2PTTexMtx<'a>(ctx: &'a Ctx, id: i32) -> u32 {
         if __case <= 8 {
             fns::HSD_Panic(
                 ctx,
-                cstr(ctx, 0x80405574),
+                cstr(ctx, 0x804d5c90),
                 (0x23e_i32 as u32),
                 cstr(ctx, 0x8040562c),
             );
@@ -900,9 +900,9 @@ pub fn MakeTextureMtx<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80405574),
+            cstr(ctx, 0x804d5c90),
             (0x24d_i32 as u32),
-            cstr(ctx, 0x80405574),
+            cstr(ctx, 0x80405664),
         )
     });
     scale.set_x(
@@ -6109,9 +6109,9 @@ pub fn HSD_TObjSetup<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x80405574),
+                        cstr(ctx, 0x804d5c90),
                         (0x62a_i32 as u32),
-                        cstr(ctx, 0x80405574),
+                        cstr(ctx, 0x80405814),
                     )
                 });
                 (if !Handle::is_null(((imagedesc).image_ptr())) {
@@ -6119,9 +6119,9 @@ pub fn HSD_TObjSetup<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x80405574),
+                        cstr(ctx, 0x804d5c90),
                         (0x62b_i32 as u32),
-                        cstr(ctx, 0x80405574),
+                        cstr(ctx, 0x80405820),
                     )
                 });
                 lod = (if !Handle::is_null((tobj).lod()) {
@@ -6159,9 +6159,9 @@ pub fn HSD_TObjSetup<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
                             } else {
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x80405574),
+                                    cstr(ctx, 0x804d5c90),
                                     (0x63b_i32 as u32),
-                                    cstr(ctx, 0x80405574),
+                                    cstr(ctx, 0x804d5cac),
                                 )
                             });
                             {
@@ -6260,9 +6260,9 @@ pub fn HSD_TObjSetup<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
                         } else {
                             fns::__assert(
                                 ctx,
-                                cstr(ctx, 0x80405574),
+                                cstr(ctx, 0x804d5c90),
                                 (0x677_i32 as u32),
-                                cstr(ctx, 0x80405574),
+                                cstr(ctx, 0x804d5ca8),
                             )
                         });
                     }
@@ -6334,9 +6334,9 @@ pub fn HSD_TGTex2Index<'a>(ctx: &'a Ctx, tgtex: i32) -> u32 {
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x80405574),
+                    cstr(ctx, 0x804d5c90),
                     (0x6a5_i32 as u32),
-                    cstr(ctx, 0x80405574),
+                    cstr(ctx, 0x804d5ca8),
                 )
             });
         }
@@ -6386,9 +6386,9 @@ pub fn HSD_TexCoordID2TexGenSrc<'a>(ctx: &'a Ctx, coord: i32) -> i32 {
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x80405574),
+                    cstr(ctx, 0x804d5c90),
                     (0x6ca_i32 as u32),
-                    cstr(ctx, 0x80405574),
+                    cstr(ctx, 0x804d5ca8),
                 )
             });
         }
@@ -6441,9 +6441,9 @@ pub fn HSD_TexCoord2Index<'a>(ctx: &'a Ctx, coord_id: i32) -> u32 {
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x80405574),
+                    cstr(ctx, 0x804d5c90),
                     (0x6f0_i32 as u32),
-                    cstr(ctx, 0x80405574),
+                    cstr(ctx, 0x804d5ca8),
                 )
             });
         }
@@ -6496,9 +6496,9 @@ pub fn HSD_Index2TexCoord<'a>(ctx: &'a Ctx, index: u32) -> i32 {
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x80405574),
+                    cstr(ctx, 0x804d5c90),
                     (0x708_i32 as u32),
-                    cstr(ctx, 0x80405574),
+                    cstr(ctx, 0x804d5ca8),
                 )
             });
         }
@@ -6560,7 +6560,7 @@ pub fn HSD_TexMtx2Index<'a>(ctx: &'a Ctx, texmtx: i32) -> u32 {
         if __case <= 11 {
             fns::HSD_Panic(
                 ctx,
-                cstr(ctx, 0x80405574),
+                cstr(ctx, 0x804d5c90),
                 (0x735_i32 as u32),
                 cstr(ctx, 0x804058b8),
             );
@@ -6624,7 +6624,7 @@ pub fn HSD_Index2TexMtx<'a>(ctx: &'a Ctx, index: u32) -> i32 {
             fns::OSReport(ctx, cstr(ctx, 0x80405958), &[VarArg::Int(index as u32)]);
             fns::HSD_Panic(
                 ctx,
-                cstr(ctx, 0x80405574),
+                cstr(ctx, 0x804d5c90),
                 (0x755_i32 as u32),
                 cstr(ctx, 0x80405574),
             );
@@ -6678,9 +6678,9 @@ pub fn HSD_Index2TexMap<'a>(ctx: &'a Ctx, index: u32) -> i32 {
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x80405574),
+                    cstr(ctx, 0x804d5c90),
                     (0x77b_i32 as u32),
-                    cstr(ctx, 0x80405574),
+                    cstr(ctx, 0x804d5ca8),
                 )
             });
         }
@@ -6733,9 +6733,9 @@ pub fn HSD_TexMap2Index<'a>(ctx: &'a Ctx, mapid: i32) -> u32 {
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x80405574),
+                    cstr(ctx, 0x804d5c90),
                     (0x793_i32 as u32),
-                    cstr(ctx, 0x80405574),
+                    cstr(ctx, 0x804d5ca8),
                 )
             });
         }
@@ -6774,9 +6774,9 @@ pub fn HSD_TObjAlloc<'a>(ctx: &'a Ctx) -> HSD_TObj<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80405574),
+            cstr(ctx, 0x804d5c90),
             (0x7f8_i32 as u32),
-            cstr(ctx, 0x80405574),
+            cstr(ctx, 0x804d5cb8),
         )
     });
     return new;
@@ -7573,7 +7573,7 @@ fn inl_HSD_TexMapID2PTTexMtx_unfused<'a>(ctx: &'a Ctx, id: i32) -> u32 {
         if __case <= 8 {
             fns::HSD_Panic(
                 ctx,
-                cstr(ctx, 0x80405574),
+                cstr(ctx, 0x804d5c90),
                 (0x23e_i32 as u32),
                 cstr(ctx, 0x8040562c),
             );

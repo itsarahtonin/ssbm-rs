@@ -526,9 +526,9 @@ pub fn HSD_FObjAlloc<'a>(ctx: &'a Ctx) -> HSD_FObj<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406364),
+            cstr(ctx, 0x804d5d58),
             (0x2f3_i32 as u32),
-            cstr(ctx, 0x80406364),
+            cstr(ctx, 0x804d5d60),
         )
     });
     let _ = fns::memset(ctx, Handle::cast::<Addr<'a>>(new), 0_i32, 48_u32);
@@ -636,9 +636,9 @@ fn inl_FObjAnimCON_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406364),
+            cstr(ctx, 0x804d5d58),
             (0x17f_i32 as u32),
-            cstr(ctx, 0x80406364),
+            cstr(ctx, 0x80406368),
         )
     });
     (fobj).set_p0((fobj).p1());
@@ -666,9 +666,9 @@ fn inl_FObjAnimLinear_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406364),
+            cstr(ctx, 0x804d5d58),
             (0x193_i32 as u32),
-            cstr(ctx, 0x80406364),
+            cstr(ctx, 0x80406368),
         )
     });
     (fobj).set_p0((fobj).p1());
@@ -696,9 +696,9 @@ fn inl_FObjAnimSPL0_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406364),
+            cstr(ctx, 0x804d5d58),
             (0x1a7_i32 as u32),
-            cstr(ctx, 0x80406364),
+            cstr(ctx, 0x80406368),
         )
     });
     (fobj).set_p0((fobj).p1());
@@ -724,9 +724,9 @@ fn inl_FObjAnimSPL_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406364),
+            cstr(ctx, 0x804d5d58),
             (0x1b9_i32 as u32),
-            cstr(ctx, 0x80406364),
+            cstr(ctx, 0x80406368),
         )
     });
     (fobj).set_p0((fobj).p1());
@@ -756,9 +756,9 @@ fn inl_FObjAnimSLP_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406364),
+            cstr(ctx, 0x804d5d58),
             (0x1cc_i32 as u32),
-            cstr(ctx, 0x80406364),
+            cstr(ctx, 0x80406368),
         )
     });
     (fobj).set_d0((fobj).d1());
@@ -778,9 +778,9 @@ fn inl_FObjAnimKey_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406364),
+            cstr(ctx, 0x804d5d58),
             (0x1e9_i32 as u32),
-            cstr(ctx, 0x80406364),
+            cstr(ctx, 0x80406368),
         )
     });
     statics::sysdolphin__baselib__fobj::FObjLaunchKeyData(ctx, fobj);
@@ -881,9 +881,9 @@ fn inl_FObjLoadWait_unfused<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) -> u32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406364),
+            cstr(ctx, 0x804d5d58),
             (0x16c_i32 as u32),
-            cstr(ctx, 0x80406364),
+            cstr(ctx, 0x80406350),
         )
     });
     if (((Handle::addr((fobj).ad()).wrapping_sub(Handle::addr((fobj).ad_head())) as i32) / 1)

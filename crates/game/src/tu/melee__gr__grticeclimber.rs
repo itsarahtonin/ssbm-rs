@@ -60,7 +60,7 @@ pub fn setupStageCallbacks<'a>(ctx: &'a Ctx, id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e8b28),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e8aa8))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e8b4c))),
                 VarArg::Int(202_i32 as u32),
                 VarArg::Int(id as u32),
             ],

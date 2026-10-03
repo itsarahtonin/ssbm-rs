@@ -125,9 +125,9 @@ pub fn HSD_PerfCountEnvelopeBlending<'a>(ctx: &'a Ctx, n: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407188),
+            cstr(ctx, 0x804d5f38),
             (164_i32 as u32),
-            cstr(ctx, 0x80407188),
+            cstr(ctx, 0x804d5f40),
         )
     });
     fns::HSD_PerfCurrentStat(ctx).env_blend().at(n).set(

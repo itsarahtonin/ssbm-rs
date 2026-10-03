@@ -47,9 +47,9 @@ pub fn HSD_ObjAllocAddFree<'a>(ctx: &'a Ctx, data: _HSD_ObjAllocData<'a>, num: u
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406e48),
+            cstr(ctx, 0x80406e58),
             (238_i32 as u32),
-            cstr(ctx, 0x80406e48),
+            cstr(ctx, 0x804d5eb0),
         )
     });
     pool_size = (data).size().wrapping_mul(num);
@@ -190,9 +190,9 @@ pub fn HSD_ObjAllocInit<'a>(ctx: &'a Ctx, data: _HSD_ObjAllocData<'a>, size: u32
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406e48),
+            cstr(ctx, 0x80406e58),
             (0x185_i32 as u32),
-            cstr(ctx, 0x80406e48),
+            cstr(ctx, 0x804d5eb0),
         )
     });
     if !Handle::is_null(data) {

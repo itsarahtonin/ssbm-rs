@@ -7786,9 +7786,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8000558c),
+            cstr(ctx, 0x804d636c),
             (0x234_i32 as u32),
-            cstr(ctx, 0x8000558c),
+            cstr(ctx, 0x804d6374),
         )
     });
     result = 0_i32;
@@ -7853,9 +7853,9 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8000558c),
+            cstr(ctx, 0x804d636c),
             (0x234_i32 as u32),
-            cstr(ctx, 0x8000558c),
+            cstr(ctx, 0x804d6374),
         )
     });
     result = 0_i32;
@@ -7887,9 +7887,9 @@ fn inl_ref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x8000558c),
+                cstr(ctx, 0x8040c2a4),
                 (93_i32 as u32),
-                cstr(ctx, 0x8000558c),
+                cstr(ctx, 0x8040c2b0),
             )
         });
     }

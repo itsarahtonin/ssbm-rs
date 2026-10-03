@@ -69,7 +69,7 @@ pub fn grFigureGet_802195CC<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e7d68),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b8470))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e7d8c))),
                 VarArg::Int(187_i32 as u32),
                 VarArg::Int(gobj_id as u32),
             ],

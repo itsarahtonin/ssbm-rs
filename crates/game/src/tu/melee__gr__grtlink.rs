@@ -60,7 +60,7 @@ pub fn grTLink_802219D0<'a>(ctx: &'a Ctx, arg0: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e8dc0),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e8d40))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e8de4))),
                 VarArg::Int(195_i32 as u32),
                 VarArg::Int(arg0 as u32),
             ],

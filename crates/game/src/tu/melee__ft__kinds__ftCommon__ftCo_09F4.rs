@@ -194,9 +194,9 @@ fn inl_HSD_JObjGetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c5780),
+            cstr(ctx, 0x804d3b58),
             (0x2da_i32 as u32),
-            cstr(ctx, 0x803c5780),
+            cstr(ctx, 0x804d3b60),
         )
     });
     return (jobj).rotate().y();

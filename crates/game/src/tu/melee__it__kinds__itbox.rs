@@ -1476,9 +1476,9 @@ fn inl_HSD_JObjGetRotation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate:
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5230),
             (0x2bb_i32 as u32),
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5238),
         )
     });
     (if !Handle::is_null((rotate)) {
@@ -1486,7 +1486,7 @@ fn inl_HSD_JObjGetRotation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate:
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5230),
             (0x2bc_i32 as u32),
             cstr(ctx, 0x803f587c),
         )
@@ -1502,9 +1502,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5230),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5238),
         )
     });
     result = 0_i32;
@@ -1524,9 +1524,9 @@ fn inl_HSD_JObjSetRotation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate:
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5230),
             (0x26a_i32 as u32),
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5238),
         )
     });
     (if !Handle::is_null((rotate)) {
@@ -1534,7 +1534,7 @@ fn inl_HSD_JObjSetRotation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate:
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5230),
             (0x26b_i32 as u32),
             cstr(ctx, 0x803f587c),
         )
@@ -1606,9 +1606,9 @@ fn inl_HSD_JObjGetRotation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate: Quatern
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5230),
             (0x2bb_i32 as u32),
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5238),
         )
     });
     (if !Handle::is_null((rotate)) {
@@ -1616,7 +1616,7 @@ fn inl_HSD_JObjGetRotation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate: Quatern
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5230),
             (0x2bc_i32 as u32),
             cstr(ctx, 0x803f587c),
         )
@@ -1632,9 +1632,9 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5230),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5238),
         )
     });
     result = 0_i32;
@@ -1654,9 +1654,9 @@ fn inl_HSD_JObjSetRotation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate: Quatern
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5230),
             (0x26a_i32 as u32),
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5238),
         )
     });
     (if !Handle::is_null((rotate)) {
@@ -1664,7 +1664,7 @@ fn inl_HSD_JObjSetRotation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate: Quatern
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5230),
             (0x26b_i32 as u32),
             cstr(ctx, 0x803f587c),
         )
@@ -1687,9 +1687,9 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5230),
             (0x3d3_i32 as u32),
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5238),
         )
     });
     (if !Handle::is_null((translate)) {
@@ -1697,7 +1697,7 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f587c),
+            cstr(ctx, 0x804d5230),
             (0x3d4_i32 as u32),
             cstr(ctx, 0x803f587c),
         )

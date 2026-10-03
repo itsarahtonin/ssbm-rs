@@ -117,9 +117,9 @@ pub fn ftCo_800CED30<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                         fns::OSReport(ctx, cstr(ctx, 0x803c6f40), &[]);
                         fns::__assert(
                             ctx,
-                            cstr(ctx, 0x804d8f30),
+                            cstr(ctx, 0x803c6f60),
                             (54_i32 as u32),
-                            cstr(ctx, 0x804d8f30),
+                            cstr(ctx, 0x804d3cd0),
                         )
                     })
                 });

@@ -62,9 +62,9 @@ pub fn GObj_SetupGXLink<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804084fc),
+            cstr(ctx, 0x804084f0),
             (167_i32 as u32),
-            cstr(ctx, 0x804084fc),
+            cstr(ctx, 0x80408500),
         )
     });
     (gobj).set_render_cb(render_cb);
@@ -117,9 +117,9 @@ pub fn HSD_GObjGXLink_8039084C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804084fc),
+            cstr(ctx, 0x804084f0),
             (0x19f_i32 as u32),
-            cstr(ctx, 0x804084fc),
+            cstr(ctx, 0x8040852c),
         )
     });
     prev = (gobj).prev_gx();
@@ -155,9 +155,9 @@ pub fn HSD_GObjGXLink_80390908<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, gx_link: u8
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804084fc),
+            cstr(ctx, 0x804084f0),
             (0x217_i32 as u32),
-            cstr(ctx, 0x804084fc),
+            cstr(ctx, 0x80408500),
         )
     });
     fns::HSD_GObjGXLink_8039084C(ctx, gobj);

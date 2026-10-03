@@ -83,7 +83,7 @@ pub fn grShrine_80201D20<'a>(ctx: &'a Ctx, arg0: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e5164),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b829c))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e5188))),
                 VarArg::Int(205_i32 as u32),
                 VarArg::Int(arg0 as u32),
             ],

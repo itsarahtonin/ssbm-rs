@@ -78,7 +78,7 @@ pub fn grGarden_80202C78<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e5314),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e5258))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e5338))),
                 VarArg::Int(227_i32 as u32),
                 VarArg::Int(gobj_id as u32),
             ],
@@ -554,9 +554,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803e5258),
+            cstr(ctx, 0x804d47a8),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803e5258),
+            cstr(ctx, 0x804d47b0),
         )
     });
     result = 0_i32;
@@ -576,9 +576,9 @@ fn inl_HSD_JObjSetTranslateX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f6
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803e5258),
+            cstr(ctx, 0x804d47a8),
             (0x3a4_i32 as u32),
-            cstr(ctx, 0x803e5258),
+            cstr(ctx, 0x804d47b0),
         )
     });
     (jobj).translate().set_x(x);

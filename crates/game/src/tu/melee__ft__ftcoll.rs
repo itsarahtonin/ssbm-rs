@@ -70,9 +70,9 @@ pub fn ftColl_80076640<'a>(ctx: &'a Ctx, fp: Fighter<'a>, dmg_: Val<'a, F32>) ->
                     fns::OSReport(ctx, cstr(ctx, 0x803c0c58), &[VarArg::Float((dmg_).get())]);
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803c0c40),
+                        cstr(ctx, 0x803c0c74),
                         (183_i32 as u32),
-                        cstr(ctx, 0x803c0c40),
+                        cstr(ctx, 0x804d3a68),
                     )
                 })
             });
@@ -130,9 +130,9 @@ pub fn ftColl_80076764<'a>(
                 );
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803c0c40),
+                    cstr(ctx, 0x803c0c74),
                     (249_i32 as u32),
-                    cstr(ctx, 0x803c0c40),
+                    cstr(ctx, 0x804d3a68),
                 )
             })
         });
@@ -540,9 +540,9 @@ pub fn ftColl_80076ED8<'a>(
                                     );
                                     fns::__assert(
                                         ctx,
-                                        cstr(ctx, 0x803c0c40),
+                                        cstr(ctx, 0x803c0c74),
                                         (227_i32 as u32),
-                                        cstr(ctx, 0x803c0c40),
+                                        cstr(ctx, 0x804d3a68),
                                     )
                                 })
                             });
@@ -1006,9 +1006,9 @@ pub fn ftColl_80077C60<'a>(
                                         );
                                         fns::__assert(
                                             ctx,
-                                            cstr(ctx, 0x803c0c40),
+                                            cstr(ctx, 0x803c0c74),
                                             (0x110_i32 as u32),
-                                            cstr(ctx, 0x803c0c40),
+                                            cstr(ctx, 0x804d3a68),
                                         )
                                     })
                                 });
@@ -1098,9 +1098,9 @@ pub fn ftColl_80077C60<'a>(
                                 );
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x803c0c40),
+                                    cstr(ctx, 0x803c0c74),
                                     (183_i32 as u32),
-                                    cstr(ctx, 0x803c0c40),
+                                    cstr(ctx, 0x804d3a68),
                                 )
                             })
                         });
@@ -1148,9 +1148,9 @@ pub fn ftColl_80077C60<'a>(
                                 );
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x803c0c40),
+                                    cstr(ctx, 0x803c0c74),
                                     (227_i32 as u32),
-                                    cstr(ctx, 0x803c0c40),
+                                    cstr(ctx, 0x804d3a68),
                                 )
                             })
                         });
@@ -10836,9 +10836,9 @@ pub fn ftColl_8007B128<'a>(ctx: &'a Ctx, fighter_gobj: HSD_GObj<'a>, bone_id: i3
             fns::OSReport(ctx, cstr(ctx, 0x803c0cf0), &[]);
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803c0c40),
+                cstr(ctx, 0x803c0c74),
                 (0x888_i32 as u32),
-                cstr(ctx, 0x803c0c40),
+                cstr(ctx, 0x804d3a68),
             )
         })
     });
@@ -10928,9 +10928,9 @@ pub fn ftColl_8007B320<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 fns::OSReport(ctx, cstr(ctx, 0x803c0d1c), &[]);
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803c0c40),
+                    cstr(ctx, 0x803c0c74),
                     (0x8c9_i32 as u32),
-                    cstr(ctx, 0x803c0c40),
+                    cstr(ctx, 0x804d3a68),
                 )
             })
         });
@@ -10966,9 +10966,9 @@ pub fn ftColl_8007B320<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 fns::OSReport(ctx, cstr(ctx, 0x803c0d34), &[]);
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803c0c40),
+                    cstr(ctx, 0x803c0c74),
                     (0x8df_i32 as u32),
-                    cstr(ctx, 0x803c0c40),
+                    cstr(ctx, 0x804d3a68),
                 )
             })
         });
@@ -11828,9 +11828,9 @@ fn inl_tiplog_unfused<'a>(
                 );
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803c0c40),
+                    cstr(ctx, 0x803c0c74),
                     (0x110_i32 as u32),
-                    cstr(ctx, 0x803c0c40),
+                    cstr(ctx, 0x804d3a68),
                 )
             })
         });
@@ -11850,9 +11850,9 @@ fn inl_inlineB2_unfused<'a>(ctx: &'a Ctx, fp1: Fighter<'a>, dmg_: f64, var_r24_3
                     fns::OSReport(ctx, cstr(ctx, 0x803c0c58), &[VarArg::Float(dmg_)]);
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803c0c40),
+                        cstr(ctx, 0x803c0c74),
                         (183_i32 as u32),
-                        cstr(ctx, 0x803c0c40),
+                        cstr(ctx, 0x804d3a68),
                     )
                 })
             });
@@ -12168,9 +12168,9 @@ fn inl_ftColl_80076640_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, dmg_: Val<'a, 
                     fns::OSReport(ctx, cstr(ctx, 0x803c0c58), &[VarArg::Float((dmg_).get())]);
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803c0c40),
+                        cstr(ctx, 0x803c0c74),
                         (183_i32 as u32),
-                        cstr(ctx, 0x803c0c40),
+                        cstr(ctx, 0x804d3a68),
                     )
                 })
             });

@@ -287,7 +287,7 @@ pub fn HSD_JObjMakePositionMtx<'a>(
             if __case <= 4 {
                 fns::HSD_Panic(
                     ctx,
-                    cstr(ctx, 0x80406ae0),
+                    cstr(ctx, 0x80406b04),
                     (0x142_i32 as u32),
                     cstr(ctx, 0x80406b14),
                 );
@@ -316,9 +316,9 @@ pub fn _HSD_mkEnvelopeModelNodeMtx<'a>(
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x80406ae0),
+                cstr(ctx, 0x80406b04),
                 (0x1a6_i32 as u32),
-                cstr(ctx, 0x80406ae0),
+                cstr(ctx, 0x804d5df0),
             )
         });
         if Handle::addr(x) == Handle::addr(m) {
@@ -1079,9 +1079,9 @@ fn inl_HSD_JObjFindSkeleton_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> HSD
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406ae0),
+            cstr(ctx, 0x80406b04),
             (0x156_i32 as u32),
-            cstr(ctx, 0x80406ae0),
+            cstr(ctx, 0x804d5de8),
         )
     });
     {
@@ -1109,9 +1109,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406ae0),
+            cstr(ctx, 0x804d5df4),
             (0x234_i32 as u32),
-            cstr(ctx, 0x80406ae0),
+            cstr(ctx, 0x804d5de8),
         )
     });
     result = 0_i32;

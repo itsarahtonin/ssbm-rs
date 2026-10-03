@@ -211,9 +211,9 @@ pub fn HSD_SObjLib_803A477C<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b9658),
+            cstr(ctx, 0x8040c3b0),
             (0x11f_i32 as u32),
-            cstr(ctx, 0x803b9658),
+            cstr(ctx, 0x804d6388),
         )
     });
     if !Handle::is_null(tlut) {

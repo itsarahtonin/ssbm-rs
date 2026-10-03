@@ -43,9 +43,9 @@ pub fn fn_8001E910<'a>(ctx: &'a Ctx, arg0: i32, arg1: u32, arg2: Addr<'a>, cance
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803badb8),
+            cstr(ctx, 0x803badb0),
             (0x148_i32 as u32),
-            cstr(ctx, 0x803badb8),
+            cstr(ctx, 0x803badbc),
         )
     });
     tick_diff = (fns::OSGetTick(ctx).wrapping_sub((streamPlayer).unk_13C()) as i32);
@@ -96,9 +96,9 @@ pub fn fn_8001E910<'a>(ctx: &'a Ctx, arg0: i32, arg1: u32, arg2: Addr<'a>, cance
                     );
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803badb8),
+                        cstr(ctx, 0x803badb0),
                         (0x121_i32 as u32),
-                        cstr(ctx, 0x803badb8),
+                        cstr(ctx, 0x803badec),
                     )
                 })
             });
@@ -352,9 +352,9 @@ pub fn fn_8001ECF4<'a>(ctx: &'a Ctx, data: THPDecComp<'a>, buf: Addr<'a>) {
                         } else {
                             fns::__assert(
                                 ctx,
-                                cstr(ctx, 0x803badb8),
+                                cstr(ctx, 0x803badb0),
                                 (0x10a_i32 as u32),
-                                cstr(ctx, 0x803badb8),
+                                cstr(ctx, 0x804d3830),
                             )
                         });
                     }
@@ -521,9 +521,9 @@ pub fn fn_8001F13C<'a>(ctx: &'a Ctx, streamPlayer: THPDecComp<'a>) -> i32 {
                     );
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803badb8),
+                        cstr(ctx, 0x803badb0),
                         (0x121_i32 as u32),
-                        cstr(ctx, 0x803badb8),
+                        cstr(ctx, 0x803badec),
                     )
                 })
             });
@@ -621,9 +621,9 @@ pub fn lbMthp_8001F410<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803badb8),
+            cstr(ctx, 0x803badb0),
             (0x341_i32 as u32),
-            cstr(ctx, 0x803badb8),
+            cstr(ctx, 0x803bafb8),
         )
     });
     statics::melee__lb__lbmthp::MoviePlayer(ctx).set_power(1_i32);
@@ -640,9 +640,9 @@ pub fn lbMthp_8001F410<'a>(
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803badb8),
+                cstr(ctx, 0x803badb0),
                 (0x350_i32 as u32),
-                cstr(ctx, 0x803badb8),
+                cstr(ctx, 0x803bafcc),
             )
         });
         statics::melee__lb__lbmthp::MoviePlayer(ctx).set_unk_140(null::<Addr<'a>>(ctx));

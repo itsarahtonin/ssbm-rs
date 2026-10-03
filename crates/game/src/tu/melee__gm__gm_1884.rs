@@ -1307,9 +1307,9 @@ fn inl_HSD_JObjGetTranslationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803d9828),
+            cstr(ctx, 0x804d4140),
             (0x3e1_i32 as u32),
-            cstr(ctx, 0x803d9828),
+            cstr(ctx, 0x804d4148),
         )
     });
     return (jobj).translate().x();
@@ -1354,9 +1354,9 @@ fn inl_HSD_JObjGetTranslation2_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tra
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803d9828),
+            cstr(ctx, 0x804d4140),
             (0x3d3_i32 as u32),
-            cstr(ctx, 0x803d9828),
+            cstr(ctx, 0x804d4148),
         )
     });
     Handle::copy_from((translate), (jobj).translate());

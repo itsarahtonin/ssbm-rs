@@ -63,7 +63,7 @@ pub fn grFigure2_8020E314<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e63a4),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e6338))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e63c8))),
                 VarArg::Int(196_i32 as u32),
                 VarArg::Int(gobj_id as u32),
             ],

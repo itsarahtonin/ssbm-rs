@@ -60,7 +60,7 @@ pub fn grTCaptain_8021FD04<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e8698),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e8618))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e86bc))),
                 VarArg::Int(215_i32 as u32),
                 VarArg::Int(gobj_id as u32),
             ],

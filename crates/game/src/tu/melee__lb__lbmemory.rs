@@ -37,9 +37,9 @@ pub fn lbMemory_80014E24<'a>(ctx: &'a Ctx, arenaLo: Addr<'a>, arenaHi: Addr<'a>)
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803ba324),
+            cstr(ctx, 0x803ba2c0),
             (123_i32 as u32),
-            cstr(ctx, 0x803ba324),
+            cstr(ctx, 0x803ba2cc),
         )
     });
     if (Handle::addr(arenaLo) < 0x80000000_u32) && (Handle::addr(arenaHi) < 0x80000000_u32) {
@@ -50,9 +50,9 @@ pub fn lbMemory_80014E24<'a>(ctx: &'a Ctx, arenaLo: Addr<'a>, arenaHi: Addr<'a>)
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803ba324),
+                cstr(ctx, 0x803ba2c0),
                 (128_i32 as u32),
-                cstr(ctx, 0x803ba324),
+                cstr(ctx, 0x803ba2dc),
             )
         });
     }
@@ -75,9 +75,9 @@ pub fn lbMemory_80014EEC<'a>(ctx: &'a Ctx, handle: Handle_<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803ba324),
+            cstr(ctx, 0x803ba2c0),
             (149_i32 as u32),
-            cstr(ctx, 0x803ba324),
+            cstr(ctx, 0x804d3788),
         )
     });
     {
@@ -527,9 +527,9 @@ pub fn lbMemFreeToHeap<'a>(ctx: &'a Ctx, h: Handle_<'a>, addr: Addr<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803ba324),
+            cstr(ctx, 0x803ba2c0),
             (0x11b_i32 as u32),
-            cstr(ctx, 0x803ba324),
+            cstr(ctx, 0x804d3790),
         )
     });
 }
@@ -548,9 +548,9 @@ pub fn fn_80015184<'a>(ctx: &'a Ctx, alarm: OSAlarm<'a>, context: OSContext<'a>)
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803ba324),
+            cstr(ctx, 0x803ba2c0),
             (0x127_i32 as u32),
-            cstr(ctx, 0x803ba324),
+            cstr(ctx, 0x804d3794),
         )
     });
     offset = (p).offset();
@@ -640,9 +640,9 @@ pub fn lbMemory_80015320<'a>(ctx: &'a Ctx, arg0: i32, arg1: u32, arg2: Addr<'a>,
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803ba324),
+            cstr(ctx, 0x803ba2c0),
             (0x188_i32 as u32),
-            cstr(ctx, 0x803ba324),
+            cstr(ctx, 0x803ba374),
         )
     });
     if !Handle::is_null(block) {
@@ -787,9 +787,9 @@ fn inl_start_ram_copy_unfused<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803ba324),
+            cstr(ctx, 0x803ba2c0),
             (0x14f_i32 as u32),
-            cstr(ctx, 0x803ba324),
+            cstr(ctx, 0x803ba368),
         )
     });
     (p).set_src(Handle::cast::<Val<'a, u8>>(src));
@@ -840,9 +840,9 @@ fn inl_lbMemory_80015320_unfused<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803ba324),
+            cstr(ctx, 0x803ba2c0),
             (0x188_i32 as u32),
-            cstr(ctx, 0x803ba324),
+            cstr(ctx, 0x803ba374),
         )
     });
     if !Handle::is_null(block) {
@@ -908,9 +908,9 @@ fn inl_lbMemory_80014E24_unfused<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803ba324),
+            cstr(ctx, 0x803ba2c0),
             (123_i32 as u32),
-            cstr(ctx, 0x803ba324),
+            cstr(ctx, 0x803ba2cc),
         )
     });
     if (Handle::addr(arenaLo) < 0x80000000_u32) && (Handle::addr(arenaHi) < 0x80000000_u32) {
@@ -921,9 +921,9 @@ fn inl_lbMemory_80014E24_unfused<'a>(
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803ba324),
+                cstr(ctx, 0x803ba2c0),
                 (128_i32 as u32),
-                cstr(ctx, 0x803ba324),
+                cstr(ctx, 0x803ba2dc),
             )
         });
     }
@@ -945,9 +945,9 @@ fn inl_lbMemory_80014EEC_unfused<'a>(ctx: &'a Ctx, handle: Handle_<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803ba324),
+            cstr(ctx, 0x803ba2c0),
             (149_i32 as u32),
-            cstr(ctx, 0x803ba324),
+            cstr(ctx, 0x804d3788),
         )
     });
     {

@@ -558,9 +558,9 @@ fn inl_pl_CalculateAverage_unfused<'a>(ctx: &'a Ctx, val: f64, total: f64) -> f6
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d7f80),
+            cstr(ctx, 0x803bd250),
             (16_i32 as u32),
-            cstr(ctx, 0x804d7f80),
+            cstr(ctx, 0x803bd260),
         )
     });
     return fp::fdivs(val, total);

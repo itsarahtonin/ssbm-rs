@@ -448,9 +448,9 @@ pub fn fn_801C8EF8<'a>(ctx: &'a Ctx, mobj: HSD_MObj<'a>, rendermode: u32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803e0a24),
+            cstr(ctx, 0x803e0b14),
             (243_i32 as u32),
-            cstr(ctx, 0x803e0a24),
+            cstr(ctx, 0x803e0b24),
         )
     });
     fns::HSD_TExpSetupTev(ctx, (mobj).tevdesc(), (mobj).texp());
@@ -930,9 +930,9 @@ fn inl_fn_801C8EF8_inline_unfused<'a>(
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803e0a24),
+                        cstr(ctx, 0x803e0b14),
                         (122_i32 as u32),
-                        cstr(ctx, 0x803e0a24),
+                        cstr(ctx, 0x804d4568),
                     )
                 });
             }
@@ -966,9 +966,9 @@ fn inl_fn_801C8EF8_inline_unfused<'a>(
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803e0a24),
+                        cstr(ctx, 0x803e0b14),
                         (136_i32 as u32),
-                        cstr(ctx, 0x803e0a24),
+                        cstr(ctx, 0x804d4568),
                     )
                 });
             }
@@ -1019,9 +1019,9 @@ fn inl_fn_801C8EF8_inline_unfused<'a>(
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803e0a24),
+                        cstr(ctx, 0x803e0b14),
                         (167_i32 as u32),
-                        cstr(ctx, 0x803e0a24),
+                        cstr(ctx, 0x804d4568),
                     )
                 });
             }

@@ -72,9 +72,9 @@ pub fn ftBossLib_ReportGObjSlotType<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
             fns::OSReport(ctx, cstr(ctx, 0x803d49c0), &[]);
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b75e8),
+                cstr(ctx, 0x803d49d8),
                 (103_i32 as u32),
-                cstr(ctx, 0x803b75e8),
+                cstr(ctx, 0x803d49e4),
             )
         })
     });
@@ -582,9 +582,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b75e8),
+            cstr(ctx, 0x804d3ed0),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803b75e8),
+            cstr(ctx, 0x804d3ed8),
         )
     });
     result = 0_i32;
@@ -604,9 +604,9 @@ fn inl_HSD_JObjSetRotation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate:
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b75e8),
+            cstr(ctx, 0x804d3ed0),
             (0x26a_i32 as u32),
-            cstr(ctx, 0x803b75e8),
+            cstr(ctx, 0x804d3ed8),
         )
     });
     (if !Handle::is_null((rotate)) {
@@ -614,7 +614,7 @@ fn inl_HSD_JObjSetRotation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, rotate:
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b75e8),
+            cstr(ctx, 0x804d3ed0),
             (0x26b_i32 as u32),
             cstr(ctx, 0x803b75e8),
         )

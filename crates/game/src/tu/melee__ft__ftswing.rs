@@ -71,9 +71,9 @@ pub fn fn_800CCEC4<'a>(ctx: &'a Ctx, x: i32) -> i32 {
                     fns::OSReport(ctx, cstr(ctx, 0x803c6de8), &[]);
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803c6d70),
+                        cstr(ctx, 0x803c6e00),
                         (82_i32 as u32),
-                        cstr(ctx, 0x803c6d70),
+                        cstr(ctx, 0x804d3cb8),
                     )
                 })
             });
@@ -117,9 +117,9 @@ pub fn ftCo_Attack_800CCF58<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c6d70),
+            cstr(ctx, 0x803c6e00),
             (124_i32 as u32),
-            cstr(ctx, 0x803c6d70),
+            cstr(ctx, 0x803c6e64),
         )
     });
     swing_type = inl_fn_800CCEC4_unfused(ctx, fns::itGetKind(ctx, (fp).item_gobj()));
@@ -207,9 +207,9 @@ fn inl_fn_800CCEC4_unfused<'a>(ctx: &'a Ctx, x: i32) -> i32 {
                     fns::OSReport(ctx, cstr(ctx, 0x803c6de8), &[]);
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803c6d70),
+                        cstr(ctx, 0x803c6e00),
                         (82_i32 as u32),
-                        cstr(ctx, 0x803c6d70),
+                        cstr(ctx, 0x804d3cb8),
                     )
                 })
             });
@@ -241,9 +241,9 @@ fn inl_get_anim_id_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, swing_type: i32, a
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803c6d70),
+                        cstr(ctx, 0x803c6e00),
                         (97_i32 as u32),
-                        cstr(ctx, 0x803c6d70),
+                        cstr(ctx, 0x804d3cb8),
                     )
                 });
             }

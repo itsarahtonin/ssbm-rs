@@ -153,9 +153,9 @@ pub fn fn_801AA854<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803dbfdc),
+                        cstr(ctx, 0x803dd128),
                         (0x167_i32 as u32),
-                        cstr(ctx, 0x803dbfdc),
+                        cstr(ctx, 0x803dd138),
                     )
                 });
                 {
@@ -182,9 +182,9 @@ pub fn fn_801AA854<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
                             } else {
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x803dbfdc),
+                                    cstr(ctx, 0x803dd128),
                                     (0x169_i32 as u32),
-                                    cstr(ctx, 0x803dbfdc),
+                                    cstr(ctx, 0x803dd170),
                                 )
                             });
                             (if !Handle::is_null(
@@ -205,9 +205,9 @@ pub fn fn_801AA854<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, code: i32) {
                             } else {
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x803dbfdc),
+                                    cstr(ctx, 0x803dd128),
                                     (0x16a_i32 as u32),
-                                    cstr(ctx, 0x803dbfdc),
+                                    cstr(ctx, 0x803dd19c),
                                 )
                             });
                             fns::PSMTXConcat(
@@ -7737,9 +7737,9 @@ fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803dbfdc),
+            cstr(ctx, 0x804d42d0),
             (0x478_i32 as u32),
-            cstr(ctx, 0x803dbfdc),
+            cstr(ctx, 0x804d42d8),
         )
     });
     ctx.call::<_, ()>(0x80007d68, (jobj,));

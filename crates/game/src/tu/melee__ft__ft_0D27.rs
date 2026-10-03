@@ -305,9 +305,9 @@ fn inl_HSD_JObjGetScaleX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c6ff0),
+            cstr(ctx, 0x804d3cd8),
             (0x36b_i32 as u32),
-            cstr(ctx, 0x803c6ff0),
+            cstr(ctx, 0x804d3ce0),
         )
     });
     return (jobj).scale().x();

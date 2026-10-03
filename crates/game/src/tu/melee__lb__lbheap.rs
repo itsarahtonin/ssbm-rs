@@ -456,9 +456,9 @@ pub fn lbHeap_80015CA8<'a>(ctx: &'a Ctx, arg0: i32, addr: Addr<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803ba380),
+            cstr(ctx, 0x803ba3d0),
             (0x143_i32 as u32),
-            cstr(ctx, 0x803ba380),
+            cstr(ctx, 0x803ba3dc),
         )
     });
     if (p).r#type() == 0_i32 {

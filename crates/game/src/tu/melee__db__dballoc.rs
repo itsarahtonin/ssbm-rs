@@ -106,9 +106,9 @@ fn inl_HSD_ObjAllocGetPeak_unfused<'a>(ctx: &'a Ctx, data: _HSD_ObjAllocData<'a>
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803eae64),
+            cstr(ctx, 0x803eae58),
             (237_i32 as u32),
-            cstr(ctx, 0x803eae64),
+            cstr(ctx, 0x804d4b28),
         )
     });
     return (data).peak();
@@ -126,9 +126,9 @@ fn inl_HSD_ObjAllocSetNumLimit_unfused<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803eae64),
+            cstr(ctx, 0x803eae58),
             (251_i32 as u32),
-            cstr(ctx, 0x803eae64),
+            cstr(ctx, 0x804d4b28),
         )
     });
     (data).set_num_limit(num_limit);
@@ -141,9 +141,9 @@ fn inl_HSD_ObjAllocEnableNumLimit_unfused<'a>(ctx: &'a Ctx, data: _HSD_ObjAllocD
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803eae64),
+            cstr(ctx, 0x803eae58),
             (0x116_i32 as u32),
-            cstr(ctx, 0x803eae64),
+            cstr(ctx, 0x804d4b28),
         )
     });
     (data).set_num_limit_flag((1_i32 as u32));
@@ -156,9 +156,9 @@ fn inl_HSD_ObjAllocDisableNumLimit_unfused<'a>(ctx: &'a Ctx, data: _HSD_ObjAlloc
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803eae64),
+            cstr(ctx, 0x803eae58),
             (0x123_i32 as u32),
-            cstr(ctx, 0x803eae64),
+            cstr(ctx, 0x804d4b28),
         )
     });
     (data).set_num_limit_flag((0_i32 as u32));

@@ -769,9 +769,9 @@ pub fn grDatFiles_801C62B4<'a>(ctx: &'a Ctx) -> UnkArchiveStruct<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803e0758),
+            cstr(ctx, 0x803e07d4),
             (229_i32 as u32),
-            cstr(ctx, 0x803e0758),
+            cstr(ctx, 0x804d4548),
         )
     });
     #[allow(unreachable_code)]
@@ -827,9 +827,9 @@ pub fn grDatFiles_801C6478<'a>(ctx: &'a Ctx, data: Addr<'a>, length: i32) -> Unk
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803e0758),
+            cstr(ctx, 0x803e07d4),
             (0x122_i32 as u32),
-            cstr(ctx, 0x803e0758),
+            cstr(ctx, 0x804d454c),
         )
     });
     (arc).set_unk0(archive);
@@ -863,9 +863,9 @@ fn inl_grDatFiles_801C62B4_unfused<'a>(ctx: &'a Ctx) -> UnkArchiveStruct<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803e0758),
+            cstr(ctx, 0x803e07d4),
             (229_i32 as u32),
-            cstr(ctx, 0x803e0758),
+            cstr(ctx, 0x804d4548),
         )
     });
     #[allow(unreachable_code)]

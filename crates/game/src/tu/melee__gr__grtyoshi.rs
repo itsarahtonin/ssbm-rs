@@ -60,7 +60,7 @@ pub fn grTYoshi_80223BEC<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e9608),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e9588))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e962c))),
                 VarArg::Int(195_i32 as u32),
                 VarArg::Int(gobj_id as u32),
             ],

@@ -182,9 +182,9 @@ pub fn ftpickupitem_8009447C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, item_gobj: HS
             fns::OSReport(ctx, cstr(ctx, 0x803c5580), &[]);
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x804d8588),
+                cstr(ctx, 0x803c55a4),
                 (174_i32 as u32),
-                cstr(ctx, 0x804d8588),
+                cstr(ctx, 0x803c55b4),
             )
         })
     });
@@ -494,9 +494,9 @@ pub fn ftpickupitem_80094B6C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, item_gobj: HS
             fns::OSReport(ctx, cstr(ctx, 0x803c5580), &[]);
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x804d8588),
+                cstr(ctx, 0x803c55a4),
                 (0x18f_i32 as u32),
-                cstr(ctx, 0x804d8588),
+                cstr(ctx, 0x803c55b4),
             )
         })
     });

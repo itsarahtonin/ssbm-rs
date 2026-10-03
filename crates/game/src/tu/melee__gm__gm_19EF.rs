@@ -5787,9 +5787,9 @@ fn inl_HSD_AObjGetCurrFrame_unfused<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) -> f64
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803da404),
+            cstr(ctx, 0x804d4204),
             (146_i32 as u32),
-            cstr(ctx, 0x803da404),
+            cstr(ctx, 0x804d420c),
         )
     });
     return (aobj).curr_frame();
@@ -5802,9 +5802,9 @@ fn inl_HSD_AObjGetEndFrame_unfused<'a>(ctx: &'a Ctx, aobj: HSD_AObj<'a>) -> f64 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803da404),
+            cstr(ctx, 0x804d4204),
             (170_i32 as u32),
-            cstr(ctx, 0x803da404),
+            cstr(ctx, 0x804d420c),
         )
     });
     return (aobj).end_frame();

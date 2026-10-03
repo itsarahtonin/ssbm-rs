@@ -446,9 +446,9 @@ pub fn HSD_MObjLoadDesc<'a>(ctx: &'a Ctx, mobjdesc: _HSD_MObjDesc<'a>) -> HSD_MO
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x80405e2c),
+                    cstr(ctx, 0x804d5ce0),
                     (0x161_i32 as u32),
-                    cstr(ctx, 0x80405e2c),
+                    cstr(ctx, 0x80405fac),
                 )
             });
         }
@@ -494,9 +494,9 @@ pub fn MObjMakeTExp<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80405e2c),
+            cstr(ctx, 0x804d5ce0),
             (0x1a0_i32 as u32),
-            cstr(ctx, 0x80405e2c),
+            cstr(ctx, 0x804d5cf0),
         )
     });
     (list).set(null::<HSD_TExp<'a>>(ctx));
@@ -960,9 +960,9 @@ pub fn MObjSetupTev<'a>(ctx: &'a Ctx, mobj: HSD_MObj<'a>, tobj: HSD_TObj<'a>, ar
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80405e2c),
+            cstr(ctx, 0x804d5ce0),
             (0x270_i32 as u32),
-            cstr(ctx, 0x80405e2c),
+            cstr(ctx, 0x80405ed4),
         )
     });
     fns::HSD_TExpSetupTev(ctx, (mobj).tevdesc(), (mobj).texp());
@@ -1053,9 +1053,9 @@ pub fn HSD_MObjSetToonTextureImage<'a>(ctx: &'a Ctx, imagedesc: HSD_ImageDesc<'a
                 fns::OSReport(ctx, cstr(ctx, 0x80405f40), &[]);
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x80405e2c),
+                    cstr(ctx, 0x804d5ce0),
                     (0x2f8_i32 as u32),
-                    cstr(ctx, 0x80405e2c),
+                    cstr(ctx, 0x80405f60),
                 )
             })
         });
@@ -1115,9 +1115,9 @@ pub fn HSD_MObjAlloc<'a>(ctx: &'a Ctx) -> HSD_MObj<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80405e2c),
+            cstr(ctx, 0x804d5ce0),
             (0x393_i32 as u32),
-            cstr(ctx, 0x80405e2c),
+            cstr(ctx, 0x80405fac),
         )
     });
     return mobj;
@@ -1252,9 +1252,9 @@ pub fn HSD_MObjAddShadowTexture<'a>(ctx: &'a Ctx, tobj: HSD_TObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80405e2c),
+            cstr(ctx, 0x804d5ce0),
             (0x3de_i32 as u32),
-            cstr(ctx, 0x80405e2c),
+            cstr(ctx, 0x804d5cfc),
         )
     });
     {

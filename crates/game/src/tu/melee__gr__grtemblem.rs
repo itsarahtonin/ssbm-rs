@@ -59,7 +59,7 @@ pub fn grTRoy_80224498<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e9850),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e97d0))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e9874))),
                 VarArg::Int(195_i32 as u32),
                 VarArg::Int(gobj_id as u32),
             ],

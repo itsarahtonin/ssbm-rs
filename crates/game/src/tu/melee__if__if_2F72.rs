@@ -512,9 +512,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f97a4),
+            cstr(ctx, 0x804d57c8),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803f97a4),
+            cstr(ctx, 0x804d57d0),
         )
     });
     result = 0_i32;
@@ -534,9 +534,9 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f97a4),
+            cstr(ctx, 0x804d57c8),
             (0x394_i32 as u32),
-            cstr(ctx, 0x803f97a4),
+            cstr(ctx, 0x804d57d0),
         )
     });
     (if !Handle::is_null((translate)) {
@@ -544,9 +544,9 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f97a4),
+            cstr(ctx, 0x804d57c8),
             (0x395_i32 as u32),
-            cstr(ctx, 0x803f97a4),
+            cstr(ctx, 0x803f9798),
         )
     });
     Handle::copy_from((jobj).translate(), (translate));

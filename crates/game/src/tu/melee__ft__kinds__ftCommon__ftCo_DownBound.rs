@@ -546,9 +546,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c5700),
+            cstr(ctx, 0x804d3b18),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803c5700),
+            cstr(ctx, 0x804d3b20),
         )
     });
     result = 0_i32;

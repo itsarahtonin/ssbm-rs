@@ -312,9 +312,9 @@ pub fn ft_800C85B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                         fns::OSReport(ctx, cstr(ctx, 0x803c6d30), &[]);
                                         fns::__assert(
                                             ctx,
-                                            cstr(ctx, 0x803c6d6c),
+                                            cstr(ctx, 0x803c6d24),
                                             (248_i32 as u32),
-                                            cstr(ctx, 0x803c6d6c),
+                                            cstr(ctx, 0x804d3c94),
                                         )
                                     })
                                 });
@@ -347,9 +347,9 @@ pub fn ft_800C85B8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                                 fns::OSReport(ctx, cstr(ctx, 0x803c6d54), &[]);
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x803c6d6c),
+                                    cstr(ctx, 0x803c6d24),
                                     (0x106_i32 as u32),
-                                    cstr(ctx, 0x803c6d6c),
+                                    cstr(ctx, 0x804d3c94),
                                 )
                             })
                         });

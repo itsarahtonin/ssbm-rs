@@ -2199,9 +2199,9 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d3b04),
+            cstr(ctx, 0x804d3af8),
             (0x234_i32 as u32),
-            cstr(ctx, 0x804d3b04),
+            cstr(ctx, 0x804d3b00),
         )
     });
     result = 0_i32;
@@ -2221,9 +2221,9 @@ fn inl_HSD_JObjSetScale<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d3b04),
+            cstr(ctx, 0x804d3af8),
             (0x2f8_i32 as u32),
-            cstr(ctx, 0x804d3b04),
+            cstr(ctx, 0x804d3b00),
         )
     });
     (if !Handle::is_null((scale)) {
@@ -2231,7 +2231,7 @@ fn inl_HSD_JObjSetScale<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d3b04),
+            cstr(ctx, 0x804d3af8),
             (0x2f9_i32 as u32),
             cstr(ctx, 0x804d3b04),
         )
@@ -2308,9 +2308,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d3b04),
+            cstr(ctx, 0x804d3af8),
             (0x234_i32 as u32),
-            cstr(ctx, 0x804d3b04),
+            cstr(ctx, 0x804d3b00),
         )
     });
     result = 0_i32;
@@ -2330,9 +2330,9 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d3b04),
+            cstr(ctx, 0x804d3af8),
             (0x394_i32 as u32),
-            cstr(ctx, 0x804d3b04),
+            cstr(ctx, 0x804d3b00),
         )
     });
     (if !Handle::is_null((translate)) {
@@ -2340,7 +2340,7 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d3b04),
+            cstr(ctx, 0x804d3af8),
             (0x395_i32 as u32),
             cstr(ctx, 0x804d3b04),
         )

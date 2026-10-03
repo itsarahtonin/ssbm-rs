@@ -1041,9 +1041,9 @@ pub fn lb_800121FC<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b72a8),
+            cstr(ctx, 0x803ba1c0),
             (41_i32 as u32),
-            cstr(ctx, 0x803b72a8),
+            cstr(ctx, 0x803ba1d0),
         )
     });
     {

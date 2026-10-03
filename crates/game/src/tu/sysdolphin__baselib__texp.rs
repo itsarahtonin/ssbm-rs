@@ -175,9 +175,9 @@ pub fn HSD_TExpFreeList<'a>(
                             } else {
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x8040775c),
+                                    cstr(ctx, 0x804d5fc8),
                                     (219_i32 as u32),
-                                    cstr(ctx, 0x8040775c),
+                                    cstr(ctx, 0x804d5fd8),
                                 )
                             });
                         }
@@ -254,9 +254,9 @@ pub fn HSD_TExpFreeList<'a>(
                             } else {
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x8040775c),
+                                    cstr(ctx, 0x804d5fc8),
                                     (0x10b_i32 as u32),
-                                    cstr(ctx, 0x8040775c),
+                                    cstr(ctx, 0x804d5fd8),
                                 )
                             });
                         }
@@ -861,9 +861,9 @@ pub fn HSD_TExpColorOp<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fc8),
             (0x198_i32 as u32),
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fd0),
         )
     });
     (if inl_HSD_TExpGetType_unfused(ctx, texp) == (((enums::HSD_TE_TEV as i32) as u32) as i32) {
@@ -871,9 +871,9 @@ pub fn HSD_TExpColorOp<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fc8),
             (0x199_i32 as u32),
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x80407760),
         )
     });
     (texp).tev().set_c_op((op as u8));
@@ -912,9 +912,9 @@ pub fn HSD_TExpAlphaOp<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fc8),
             (0x1b2_i32 as u32),
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fd0),
         )
     });
     (if inl_HSD_TExpGetType_unfused(ctx, texp) == (((enums::HSD_TE_TEV as i32) as u32) as i32) {
@@ -922,9 +922,9 @@ pub fn HSD_TExpAlphaOp<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fc8),
             (0x1b3_i32 as u32),
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x80407760),
         )
     });
     (texp).tev().set_a_op((op as u8));
@@ -1060,9 +1060,9 @@ pub fn HSD_TExpColorInSub<'a>(
                     } else {
                         fns::__assert(
                             ctx,
-                            cstr(ctx, 0x8040775c),
+                            cstr(ctx, 0x804d5fc8),
                             (0x1f2_i32 as u32),
-                            cstr(ctx, 0x8040775c),
+                            cstr(ctx, 0x804d5fd8),
                         )
                     });
                     break 's2;
@@ -1073,7 +1073,7 @@ pub fn HSD_TExpColorInSub<'a>(
             } else if ((tev).kcsel() as i32) == (ksel as i32) {
                 fns::HSD_Panic(
                     ctx,
-                    cstr(ctx, 0x8040775c),
+                    cstr(ctx, 0x804d5fc8),
                     (0x1f7_i32 as u32),
                     cstr(ctx, 0x80407784),
                 );
@@ -1120,9 +1120,9 @@ pub fn HSD_TExpColorInSub<'a>(
                             } else {
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x8040775c),
+                                    cstr(ctx, 0x804d5fc8),
                                     (0x207_i32 as u32),
-                                    cstr(ctx, 0x8040775c),
+                                    cstr(ctx, 0x804077ac),
                                 )
                             });
                             (if ((idx == 3_i32)
@@ -1133,9 +1133,9 @@ pub fn HSD_TExpColorInSub<'a>(
                             } else {
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x8040775c),
+                                    cstr(ctx, 0x804d5fc8),
                                     (0x209_i32 as u32),
-                                    cstr(ctx, 0x8040775c),
+                                    cstr(ctx, 0x804077d4),
                                 )
                             });
                             (if ((idx == 3_i32)
@@ -1146,9 +1146,9 @@ pub fn HSD_TExpColorInSub<'a>(
                             } else {
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x8040775c),
+                                    cstr(ctx, 0x804d5fc8),
                                     (0x20a_i32 as u32),
-                                    cstr(ctx, 0x8040775c),
+                                    cstr(ctx, 0x80407808),
                                 )
                             });
                             swap = (tev).c_in().get(idx).sel();
@@ -1300,9 +1300,9 @@ pub fn HSD_TExpColorInSub<'a>(
                                     } else {
                                         fns::__assert(
                                             ctx,
-                                            cstr(ctx, 0x8040775c),
+                                            cstr(ctx, 0x804d5fc8),
                                             (0x22d_i32 as u32),
-                                            cstr(ctx, 0x8040775c),
+                                            cstr(ctx, 0x804d5fd8),
                                         )
                                     });
                                     break 's6;
@@ -1318,9 +1318,9 @@ pub fn HSD_TExpColorInSub<'a>(
                                 } else {
                                     fns::__assert(
                                         ctx,
-                                        cstr(ctx, 0x8040775c),
+                                        cstr(ctx, 0x804d5fc8),
                                         (0x232_i32 as u32),
-                                        cstr(ctx, 0x8040775c),
+                                        cstr(ctx, 0x80407838),
                                     )
                                 });
                             }
@@ -1384,9 +1384,9 @@ pub fn HSD_TExpColorInSub<'a>(
                                     } else {
                                         fns::__assert(
                                             ctx,
-                                            cstr(ctx, 0x8040775c),
+                                            cstr(ctx, 0x804d5fc8),
                                             (0x25d_i32 as u32),
-                                            cstr(ctx, 0x8040775c),
+                                            cstr(ctx, 0x804d5fd8),
                                         )
                                     });
                                     break 's7;
@@ -1402,9 +1402,9 @@ pub fn HSD_TExpColorInSub<'a>(
                                 } else {
                                     fns::__assert(
                                         ctx,
-                                        cstr(ctx, 0x8040775c),
+                                        cstr(ctx, 0x804d5fc8),
                                         (0x262_i32 as u32),
-                                        cstr(ctx, 0x8040775c),
+                                        cstr(ctx, 0x80407868),
                                     )
                                 });
                             }
@@ -1417,9 +1417,9 @@ pub fn HSD_TExpColorInSub<'a>(
                         } else {
                             fns::__assert(
                                 ctx,
-                                cstr(ctx, 0x8040775c),
+                                cstr(ctx, 0x804d5fc8),
                                 (0x274_i32 as u32),
-                                cstr(ctx, 0x8040775c),
+                                cstr(ctx, 0x804d5fd8),
                             )
                         });
                         break 's3;
@@ -1459,9 +1459,9 @@ pub fn HSD_TExpColorIn<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fc8),
             (0x2b3_i32 as u32),
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fd0),
         )
     });
     (if inl_HSD_TExpGetType_unfused(ctx, texp) == (((enums::HSD_TE_TEV as i32) as u32) as i32) {
@@ -1469,9 +1469,9 @@ pub fn HSD_TExpColorIn<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fc8),
             (0x2b4_i32 as u32),
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x80407760),
         )
     });
     tev = (texp).tev();
@@ -1586,9 +1586,9 @@ pub fn HSD_TExpAlphaInSub<'a>(
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x8040775c),
+                        cstr(ctx, 0x804d5fc8),
                         (0x2ec_i32 as u32),
-                        cstr(ctx, 0x8040775c),
+                        cstr(ctx, 0x804078b4),
                     )
                 });
             }
@@ -1631,9 +1631,9 @@ pub fn HSD_TExpAlphaInSub<'a>(
                         } else {
                             fns::__assert(
                                 ctx,
-                                cstr(ctx, 0x8040775c),
+                                cstr(ctx, 0x804d5fc8),
                                 (0x303_i32 as u32),
-                                cstr(ctx, 0x8040775c),
+                                cstr(ctx, 0x804078c8),
                             )
                         });
                         (if (idx == 3_i32) || (((exp).tev().a_clamp() as i32) != 0) {
@@ -1641,9 +1641,9 @@ pub fn HSD_TExpAlphaInSub<'a>(
                         } else {
                             fns::__assert(
                                 ctx,
-                                cstr(ctx, 0x8040775c),
+                                cstr(ctx, 0x804d5fc8),
                                 (0x304_i32 as u32),
-                                cstr(ctx, 0x8040775c),
+                                cstr(ctx, 0x804078d8),
                             )
                         });
                         inl_HSD_TExpRef_unfused(
@@ -1661,9 +1661,9 @@ pub fn HSD_TExpAlphaInSub<'a>(
                         } else {
                             fns::__assert(
                                 ctx,
-                                cstr(ctx, 0x8040775c),
+                                cstr(ctx, 0x804d5fc8),
                                 (0x308_i32 as u32),
-                                cstr(ctx, 0x8040775c),
+                                cstr(ctx, 0x804078f8),
                             )
                         });
                         (if (exp).cnst().comp() == (((enums::HSD_TE_X as i32) as u32) as i32) {
@@ -1671,9 +1671,9 @@ pub fn HSD_TExpAlphaInSub<'a>(
                         } else {
                             fns::__assert(
                                 ctx,
-                                cstr(ctx, 0x8040775c),
+                                cstr(ctx, 0x804d5fc8),
                                 (0x309_i32 as u32),
-                                cstr(ctx, 0x8040775c),
+                                cstr(ctx, 0x8040791c),
                             )
                         });
                         (tev)
@@ -1693,9 +1693,9 @@ pub fn HSD_TExpAlphaInSub<'a>(
                         } else {
                             fns::__assert(
                                 ctx,
-                                cstr(ctx, 0x8040775c),
+                                cstr(ctx, 0x804d5fc8),
                                 (0x30e_i32 as u32),
-                                cstr(ctx, 0x8040775c),
+                                cstr(ctx, 0x804078c8),
                             )
                         });
                         (tev)
@@ -1710,9 +1710,9 @@ pub fn HSD_TExpAlphaInSub<'a>(
                         } else {
                             fns::__assert(
                                 ctx,
-                                cstr(ctx, 0x8040775c),
+                                cstr(ctx, 0x804d5fc8),
                                 (0x312_i32 as u32),
-                                cstr(ctx, 0x8040775c),
+                                cstr(ctx, 0x804078c8),
                             )
                         });
                         (tev)
@@ -1727,9 +1727,9 @@ pub fn HSD_TExpAlphaInSub<'a>(
                         } else {
                             fns::__assert(
                                 ctx,
-                                cstr(ctx, 0x8040775c),
+                                cstr(ctx, 0x804d5fc8),
                                 (0x316_i32 as u32),
-                                cstr(ctx, 0x8040775c),
+                                cstr(ctx, 0x804d5fd8),
                             )
                         });
                         break 's3;
@@ -1769,9 +1769,9 @@ pub fn HSD_TExpAlphaIn<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fc8),
             (0x335_i32 as u32),
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fd0),
         )
     });
     (if inl_HSD_TExpGetType_unfused(ctx, texp) == (((enums::HSD_TE_TEV as i32) as u32) as i32) {
@@ -1779,9 +1779,9 @@ pub fn HSD_TExpAlphaIn<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fc8),
             (0x336_i32 as u32),
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x80407760),
         )
     });
     tev = (texp).tev();
@@ -1801,9 +1801,9 @@ pub fn HSD_TExpOrder<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, tex: HSD_TObj<'a>, ch
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fc8),
             (0x345_i32 as u32),
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fd0),
         )
     });
     (if inl_HSD_TExpGetType_unfused(ctx, texp) == (((enums::HSD_TE_TEV as i32) as u32) as i32) {
@@ -1811,9 +1811,9 @@ pub fn HSD_TExpOrder<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, tex: HSD_TObj<'a>, ch
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fc8),
             (0x346_i32 as u32),
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x80407760),
         )
     });
     (texp).tev().set_tex(tex);
@@ -2245,9 +2245,9 @@ pub fn TExpAssignReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, res: HSD_TExpRes<'a>)
                                 } else {
                                     fns::__assert(
                                         ctx,
-                                        cstr(ctx, 0x8040775c),
+                                        cstr(ctx, 0x804d5fc8),
                                         (0x47b_i32 as u32),
-                                        cstr(ctx, 0x8040775c),
+                                        cstr(ctx, 0x80407a14),
                                     )
                                 });
                                 return val;
@@ -2268,9 +2268,9 @@ pub fn TExpAssignReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, res: HSD_TExpRes<'a>)
                     } else {
                         fns::__assert(
                             ctx,
-                            cstr(ctx, 0x8040775c),
+                            cstr(ctx, 0x804d5fc8),
                             (0x488_i32 as u32),
-                            cstr(ctx, 0x8040775c),
+                            cstr(ctx, 0x80407a14),
                         )
                     });
                     return val;
@@ -2295,9 +2295,9 @@ pub fn TExpAssignReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, res: HSD_TExpRes<'a>)
                                     } else {
                                         fns::__assert(
                                             ctx,
-                                            cstr(ctx, 0x8040775c),
+                                            cstr(ctx, 0x804d5fc8),
                                             (0x49d_i32 as u32),
-                                            cstr(ctx, 0x8040775c),
+                                            cstr(ctx, 0x80407a14),
                                         )
                                     });
                                     return val;
@@ -2321,9 +2321,9 @@ pub fn TExpAssignReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, res: HSD_TExpRes<'a>)
                                 } else {
                                     fns::__assert(
                                         ctx,
-                                        cstr(ctx, 0x8040775c),
+                                        cstr(ctx, 0x804d5fc8),
                                         (0x4a6_i32 as u32),
-                                        cstr(ctx, 0x8040775c),
+                                        cstr(ctx, 0x80407a14),
                                     )
                                 });
                                 return val;
@@ -2351,9 +2351,9 @@ pub fn TExpAssignReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, res: HSD_TExpRes<'a>)
                                 } else {
                                     fns::__assert(
                                         ctx,
-                                        cstr(ctx, 0x8040775c),
+                                        cstr(ctx, 0x804d5fc8),
                                         (0x4b6_i32 as u32),
-                                        cstr(ctx, 0x8040775c),
+                                        cstr(ctx, 0x80407a14),
                                     )
                                 });
                                 return val;
@@ -2377,9 +2377,9 @@ pub fn TExpAssignReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, res: HSD_TExpRes<'a>)
                         } else {
                             fns::__assert(
                                 ctx,
-                                cstr(ctx, 0x8040775c),
+                                cstr(ctx, 0x804d5fc8),
                                 (0x4c2_i32 as u32),
-                                cstr(ctx, 0x8040775c),
+                                cstr(ctx, 0x80407a14),
                             )
                         });
                         return val;
@@ -2405,9 +2405,9 @@ pub fn TExpAssignReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, res: HSD_TExpRes<'a>)
                                         } else {
                                             fns::__assert(
                                                 ctx,
-                                                cstr(ctx, 0x8040775c),
+                                                cstr(ctx, 0x804d5fc8),
                                                 (0x4cf_i32 as u32),
-                                                cstr(ctx, 0x8040775c),
+                                                cstr(ctx, 0x80407a14),
                                             )
                                         });
                                         return val;
@@ -2432,9 +2432,9 @@ pub fn TExpAssignReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>, res: HSD_TExpRes<'a>)
                                     } else {
                                         fns::__assert(
                                             ctx,
-                                            cstr(ctx, 0x8040775c),
+                                            cstr(ctx, 0x804d5fc8),
                                             (0x4d8_i32 as u32),
-                                            cstr(ctx, 0x8040775c),
+                                            cstr(ctx, 0x80407a14),
                                         )
                                     });
                                     return val;
@@ -2469,9 +2469,9 @@ pub fn TExp2TevDesc<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fc8),
             (0x510_i32 as u32),
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fd0),
         )
     });
     (if !Handle::is_null((desc)) {
@@ -2479,9 +2479,9 @@ pub fn TExp2TevDesc<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fc8),
             (0x511_i32 as u32),
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fdc),
         )
     });
     (if inl_HSD_TExpGetType_unfused(ctx, texp) == (((enums::HSD_TE_TEV as i32) as u32) as i32) {
@@ -2489,9 +2489,9 @@ pub fn TExp2TevDesc<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x804d5fc8),
             (0x512_i32 as u32),
-            cstr(ctx, 0x8040775c),
+            cstr(ctx, 0x80407760),
         )
     });
     tev = (texp).tev();
@@ -2634,9 +2634,9 @@ pub fn TExp2TevDesc<'a>(
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x8040775c),
+                cstr(ctx, 0x804d5fc8),
                 (0x551_i32 as u32),
-                cstr(ctx, 0x8040775c),
+                cstr(ctx, 0x80407a30),
             )
         });
         (tevdesc).u().tevconf().set_clr_out_reg(
@@ -2738,9 +2738,9 @@ pub fn TExp2TevDesc<'a>(
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x8040775c),
+                cstr(ctx, 0x804d5fc8),
                 (0x575_i32 as u32),
-                cstr(ctx, 0x8040775c),
+                cstr(ctx, 0x80407a4c),
             )
         });
         (tevdesc).u().tevconf().set_alpha_out_reg(
@@ -2778,9 +2778,9 @@ pub fn HSD_TExpSetReg<'a>(ctx: &'a Ctx, texp: HSD_TExp<'a>) {
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x8040775c),
+                    cstr(ctx, 0x804d5fc8),
                     (0x591_i32 as u32),
-                    cstr(ctx, 0x8040775c),
+                    cstr(ctx, 0x80407a84),
                 )
             });
             if ((clist).reg() as i32) < 8_i32 {

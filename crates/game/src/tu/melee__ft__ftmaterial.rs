@@ -207,9 +207,9 @@ pub fn ftMaterial_800BF534<'a>(
                         fns::OSReport(ctx, cstr(ctx, 0x803c6a74), &[]);
                         fns::__assert(
                             ctx,
-                            cstr(ctx, 0x803c6984),
+                            cstr(ctx, 0x803c6a98),
                             (240_i32 as u32),
-                            cstr(ctx, 0x803c6984),
+                            cstr(ctx, 0x804d3c08),
                         )
                     })
                 });
@@ -390,9 +390,9 @@ pub fn ftMaterial_800BF6BC<'a>(
                         fns::OSReport(ctx, cstr(ctx, 0x803c6a74), &[]);
                         fns::__assert(
                             ctx,
-                            cstr(ctx, 0x803c6984),
+                            cstr(ctx, 0x803c6a98),
                             (0x160_i32 as u32),
-                            cstr(ctx, 0x803c6984),
+                            cstr(ctx, 0x804d3c08),
                         )
                     })
                 });
@@ -425,9 +425,9 @@ pub fn ftMaterial_800BF6BC<'a>(
                         fns::OSReport(ctx, cstr(ctx, 0x803c6aa8), &[]);
                         fns::__assert(
                             ctx,
-                            cstr(ctx, 0x803c6984),
+                            cstr(ctx, 0x803c6a98),
                             (0x16e_i32 as u32),
-                            cstr(ctx, 0x803c6984),
+                            cstr(ctx, 0x804d3c08),
                         )
                     })
                 });

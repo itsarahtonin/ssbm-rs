@@ -3203,9 +3203,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d3ea4),
+            cstr(ctx, 0x804d3e98),
             (0x234_i32 as u32),
-            cstr(ctx, 0x804d3ea4),
+            cstr(ctx, 0x804d3ea0),
         )
     });
     result = 0_i32;
@@ -3225,9 +3225,9 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d3ea4),
+            cstr(ctx, 0x804d3e98),
             (0x2f8_i32 as u32),
-            cstr(ctx, 0x804d3ea4),
+            cstr(ctx, 0x804d3ea0),
         )
     });
     (if !Handle::is_null((scale)) {
@@ -3235,9 +3235,9 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d3ea4),
+            cstr(ctx, 0x804d3e98),
             (0x2f9_i32 as u32),
-            cstr(ctx, 0x804d3ea4),
+            cstr(ctx, 0x804d3ea8),
         )
     });
     Handle::copy_from((jobj).scale(), (scale));
@@ -3293,9 +3293,9 @@ fn inl_HSD_JObjGetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d3ea4),
+            cstr(ctx, 0x804d3e98),
             (0x337_i32 as u32),
-            cstr(ctx, 0x804d3ea4),
+            cstr(ctx, 0x804d3ea0),
         )
     });
     (if !Handle::is_null((scale)) {
@@ -3303,9 +3303,9 @@ fn inl_HSD_JObjGetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d3ea4),
+            cstr(ctx, 0x804d3e98),
             (0x338_i32 as u32),
-            cstr(ctx, 0x804d3ea4),
+            cstr(ctx, 0x804d3ea8),
         )
     });
     Handle::copy_from((scale), (jobj).scale());
@@ -3453,9 +3453,9 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d3ea4),
+            cstr(ctx, 0x804d3e98),
             (0x234_i32 as u32),
-            cstr(ctx, 0x804d3ea4),
+            cstr(ctx, 0x804d3ea0),
         )
     });
     result = 0_i32;
@@ -3475,9 +3475,9 @@ fn inl_HSD_JObjSetScale<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d3ea4),
+            cstr(ctx, 0x804d3e98),
             (0x2f8_i32 as u32),
-            cstr(ctx, 0x804d3ea4),
+            cstr(ctx, 0x804d3ea0),
         )
     });
     (if !Handle::is_null((scale)) {
@@ -3485,9 +3485,9 @@ fn inl_HSD_JObjSetScale<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d3ea4),
+            cstr(ctx, 0x804d3e98),
             (0x2f9_i32 as u32),
-            cstr(ctx, 0x804d3ea4),
+            cstr(ctx, 0x804d3ea8),
         )
     });
     Handle::copy_from((jobj).scale(), (scale));

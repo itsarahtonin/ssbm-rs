@@ -45,9 +45,9 @@ pub fn pl_80038824<'a>(ctx: &'a Ctx, player: i32, kind: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d7f20),
+            cstr(ctx, 0x803bcf20),
             (92_i32 as u32),
-            cstr(ctx, 0x804d7f20),
+            cstr(ctx, 0x803bcf74),
         )
     });
     (temp_r31).x0_staleMoveTable().x904().at(kind).set(
@@ -72,9 +72,9 @@ pub fn pl_80038898<'a>(ctx: &'a Ctx, player: i32, kind: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d7f20),
+            cstr(ctx, 0x803bcf20),
             (103_i32 as u32),
-            cstr(ctx, 0x804d7f20),
+            cstr(ctx, 0x803bcf74),
         )
     });
     currentValue = (temp_r31).x0_staleMoveTable().x904().at(kind).get();
@@ -1733,9 +1733,9 @@ fn inl_setPointValue_unfused<'a>(ctx: &'a Ctx, player: i32, kind: i32, val: u32)
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d7f20),
+            cstr(ctx, 0x803bcf20),
             (80_i32 as u32),
-            cstr(ctx, 0x804d7f20),
+            cstr(ctx, 0x803bcf2c),
         )
     });
     (if fns::gmDecisionGetType(ctx, kind) == (((enums::Gm_DecType_Point as i32) as u32) as i32) {
@@ -1743,9 +1743,9 @@ fn inl_setPointValue_unfused<'a>(ctx: &'a Ctx, player: i32, kind: i32, val: u32)
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d7f20),
+            cstr(ctx, 0x803bcf20),
             (81_i32 as u32),
-            cstr(ctx, 0x804d7f20),
+            cstr(ctx, 0x803bcf74),
         )
     });
     (table).x0_staleMoveTable().x904().at(kind).set(val);
@@ -1790,9 +1790,9 @@ fn inl_setFlag_unfused<'a>(ctx: &'a Ctx, player: i32, kind: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d7f20),
+            cstr(ctx, 0x803bcf20),
             (56_i32 as u32),
-            cstr(ctx, 0x804d7f20),
+            cstr(ctx, 0x803bcf2c),
         )
     });
     (if fns::gmDecisionGetType(ctx, kind) == (((enums::Gm_DecType_Flag as i32) as u32) as i32) {
@@ -1800,9 +1800,9 @@ fn inl_setFlag_unfused<'a>(ctx: &'a Ctx, player: i32, kind: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d7f20),
+            cstr(ctx, 0x803bcf20),
             (57_i32 as u32),
-            cstr(ctx, 0x804d7f20),
+            cstr(ctx, 0x803bcf48),
         )
     });
     (table)
@@ -1820,9 +1820,9 @@ fn inl_pl_CalculateAverage_unfused<'a>(ctx: &'a Ctx, val: f64, total: f64) -> f6
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d7f20),
+            cstr(ctx, 0x803bcfa0),
             (16_i32 as u32),
-            cstr(ctx, 0x804d7f20),
+            cstr(ctx, 0x803bcfb0),
         )
     });
     return fp::fdivs(val, total);

@@ -65,7 +65,7 @@ pub fn grTPurin_8022320C<'a>(ctx: &'a Ctx, id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e93c8),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b84b8))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e93ec))),
                 VarArg::Int(203_i32 as u32),
                 VarArg::Int(id as u32),
             ],

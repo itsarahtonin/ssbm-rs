@@ -64,9 +64,9 @@ pub fn grAnime_801C6620<'a>(ctx: &'a Ctx, arg0: HSD_PObj<'a>, arg1: HSD_ShapeAni
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803e09e8),
+                        cstr(ctx, 0x803e0958),
                         (38_i32 as u32),
-                        cstr(ctx, 0x803e09e8),
+                        cstr(ctx, 0x803e0964),
                     )
                 });
                 if !Handle::is_null(shape_anim) {
@@ -710,9 +710,9 @@ pub fn grAnime_801C752C<'a>(
                     fns::OSReport(ctx, cstr(ctx, 0x803e09cc), &[]);
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803e09e8),
+                        cstr(ctx, 0x803e0958),
                         (0x36f_i32 as u32),
-                        cstr(ctx, 0x803e09e8),
+                        cstr(ctx, 0x804d455c),
                     )
                 })
             });
@@ -1087,9 +1087,9 @@ pub fn grAnime_801C7C1C<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803e09e8),
+            cstr(ctx, 0x803e0958),
             (0x4de_i32 as u32),
-            cstr(ctx, 0x803e09e8),
+            cstr(ctx, 0x804d4550),
         )
     });
     if (((arg3 & 1_i32) != 0)
@@ -1171,9 +1171,9 @@ pub fn grAnime_801C7C1C<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803e09e8),
+            cstr(ctx, 0x803e0958),
             (0x148_i32 as u32),
-            cstr(ctx, 0x803e09e8),
+            cstr(ctx, 0x804d4550),
         )
     });
     eflags = Handle::cast::<Val<'a, u8>>((Handle::add(((archive).unk4()).unk8(), map_id)).x28());
@@ -1296,9 +1296,9 @@ pub fn grAnime_801C8138<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803e09e8),
+            cstr(ctx, 0x803e0958),
             (0x556_i32 as u32),
-            cstr(ctx, 0x803e09e8),
+            cstr(ctx, 0x804d4550),
         )
     });
     joint = (Handle::add(((archive).unk4()).unk8(), arg1)).unk0();
@@ -1336,9 +1336,9 @@ pub fn grAnime_801C8138<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2: i
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803e09e8),
+            cstr(ctx, 0x803e0958),
             (0x148_i32 as u32),
-            cstr(ctx, 0x803e09e8),
+            cstr(ctx, 0x804d4550),
         )
     });
     flags = Handle::cast::<Val<'a, u8>>((Handle::add(((archive).unk4()).unk8(), arg1)).x28());
@@ -1506,9 +1506,9 @@ pub fn grAnime_801C86D4<'a>(ctx: &'a Ctx, arg0: i32, arg1: HSD_GObj<'a>, arg2: i
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803e09e8),
+                cstr(ctx, 0x803e0958),
                 (0x602_i32 as u32),
-                cstr(ctx, 0x803e09e8),
+                cstr(ctx, 0x804d4550),
             )
         });
         {
@@ -1542,9 +1542,9 @@ pub fn grAnime_801C8780<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803e09e8),
+            cstr(ctx, 0x803e0958),
             (0x617_i32 as u32),
-            cstr(ctx, 0x803e09e8),
+            cstr(ctx, 0x804d4550),
         )
     });
 }
@@ -2010,9 +2010,9 @@ fn inl_grAnime_801C6F50_wrapped_unfused<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803e09e8),
+            cstr(ctx, 0x803e0958),
             (0x33a_i32 as u32),
-            cstr(ctx, 0x803e09e8),
+            cstr(ctx, 0x804d4558),
         )
     });
     if ((flags & 32_i32) != 0) {

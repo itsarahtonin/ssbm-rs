@@ -5605,9 +5605,9 @@ pub fn mnDiagram3_Create<'a>(ctx: &'a Ctx, arg0: i32) {
             fns::OSReport(ctx, cstr(ctx, 0x803eecac), &[]);
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803eec1c),
+                cstr(ctx, 0x803eecc4),
                 (0x3fc_i32 as u32),
-                cstr(ctx, 0x803eec1c),
+                cstr(ctx, 0x803eecd4),
             )
         })
     });

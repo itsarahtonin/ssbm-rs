@@ -37,9 +37,9 @@ pub fn lbFile_8001615C<'a>(ctx: &'a Ctx, dcreq: i32, args: u32, buf: Addr<'a>, c
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803ba510),
+            cstr(ctx, 0x803ba508),
             (71_i32 as u32),
-            cstr(ctx, 0x803ba510),
+            cstr(ctx, 0x803ba514),
         )
     });
     statics::melee__lb__lbfile::cancel(ctx).set(1_i32);
@@ -100,9 +100,9 @@ pub fn lbFileGetFullName<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> Val<'a, i8>
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803ba510),
+                        cstr(ctx, 0x803ba508),
                         (153_i32 as u32),
-                        cstr(ctx, 0x803ba510),
+                        cstr(ctx, 0x804d37a8),
                     )
                 });
             }
@@ -199,9 +199,9 @@ pub fn lbFile_8001634C<'a>(ctx: &'a Ctx, fileno: i32) -> u32 {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803ba510),
+                cstr(ctx, 0x803ba508),
                 (216_i32 as u32),
-                cstr(ctx, 0x803ba510),
+                cstr(ctx, 0x804d37b8),
             )
         });
     }
@@ -232,9 +232,9 @@ pub fn lbFileGetSize<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> u32 {
             );
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803ba510),
+                cstr(ctx, 0x803ba508),
                 (238_i32 as u32),
-                cstr(ctx, 0x803ba510),
+                cstr(ctx, 0x803ba574),
             )
         })
     });
@@ -318,9 +318,9 @@ pub fn lbFile_80016580<'a>(
             );
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803ba510),
+                cstr(ctx, 0x803ba508),
                 (0x11a_i32 as u32),
-                cstr(ctx, 0x803ba510),
+                cstr(ctx, 0x803ba574),
             )
         })
     });
@@ -418,9 +418,9 @@ fn inl_lbFile_8001634C_unfused<'a>(ctx: &'a Ctx, fileno: i32, __in_caller: u32) 
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803ba510),
+                cstr(ctx, 0x803ba508),
                 (216_i32 as u32),
-                cstr(ctx, 0x803ba510),
+                cstr(ctx, 0x804d37b8),
             )
         });
     }
@@ -543,9 +543,9 @@ fn inl_lbFile_80016580_unfused<'a>(
             );
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803ba510),
+                cstr(ctx, 0x803ba508),
                 (0x11a_i32 as u32),
-                cstr(ctx, 0x803ba510),
+                cstr(ctx, 0x803ba574),
             )
         })
     });
@@ -579,9 +579,9 @@ fn inl_lbFileGetSize_unfused<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> u32 {
             );
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803ba510),
+                cstr(ctx, 0x803ba508),
                 (238_i32 as u32),
-                cstr(ctx, 0x803ba510),
+                cstr(ctx, 0x803ba574),
             )
         })
     });

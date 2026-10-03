@@ -70,7 +70,7 @@ pub fn grYorster_8020203C<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e5200),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b82a8))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e5224))),
                 VarArg::Int(221_i32 as u32),
                 VarArg::Int(gobj_id as u32),
             ],
@@ -941,9 +941,9 @@ fn inl_HSD_JObjGetTranslation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: V
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b82a8),
+            cstr(ctx, 0x804d4798),
             (0x3d3_i32 as u32),
-            cstr(ctx, 0x803b82a8),
+            cstr(ctx, 0x804d47a0),
         )
     });
     (if !Handle::is_null((translate)) {
@@ -951,7 +951,7 @@ fn inl_HSD_JObjGetTranslation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: V
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b82a8),
+            cstr(ctx, 0x804d4798),
             (0x3d4_i32 as u32),
             cstr(ctx, 0x803b82a8),
         )

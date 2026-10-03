@@ -1353,9 +1353,9 @@ pub fn HSD_VecAlloc<'a>(ctx: &'a Ctx) -> Addr<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804de660),
+            cstr(ctx, 0x804d5e90),
             (0x335_i32 as u32),
-            cstr(ctx, 0x804de660),
+            cstr(ctx, 0x804d5e98),
         )
     });
     return vec;
@@ -1378,9 +1378,9 @@ pub fn HSD_MtxAlloc<'a>(ctx: &'a Ctx) -> Addr<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804de660),
+            cstr(ctx, 0x804d5e90),
             (0x354_i32 as u32),
-            cstr(ctx, 0x804de660),
+            cstr(ctx, 0x804d5e9c),
         )
     });
     return mtx;

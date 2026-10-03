@@ -17379,7 +17379,7 @@ pub fn efAsync_QueueProcessDeferred<'a>(
                             VarArg::Int(Handle::addr(jobj)),
                         ],
                     );
-                    fns::__assert(ctx, cstr(ctx, 0x803bfb24), 124_u32, cstr(ctx, 0x803bfb24))
+                    fns::__assert(ctx, cstr(ctx, 0x803c04dc), 124_u32, cstr(ctx, 0x804d39f8))
                 })
             });
             break 's1;
@@ -17582,7 +17582,7 @@ pub fn efAsync_Spawn<'a>(
                         cstr(ctx, 0x803c04c0),
                         &[VarArg::Int(spawn_kind as u32)],
                     );
-                    fns::__assert(ctx, cstr(ctx, 0x803bfb24), 246_u32, cstr(ctx, 0x803bfb24))
+                    fns::__assert(ctx, cstr(ctx, 0x803c04dc), 246_u32, cstr(ctx, 0x804d39f8))
                 })
             });
             break 's3;

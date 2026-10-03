@@ -69,9 +69,9 @@ pub fn grDisplay_801C5B90<'a>(
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803e074c),
+                        cstr(ctx, 0x803e0730),
                         (82_i32 as u32),
-                        cstr(ctx, 0x803e074c),
+                        cstr(ctx, 0x804d4540),
                     )
                 });
                 fns::PSMTXConcat(
@@ -255,9 +255,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803e074c),
+            cstr(ctx, 0x804d4530),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803e074c),
+            cstr(ctx, 0x804d4538),
         )
     });
     result = 0_i32;

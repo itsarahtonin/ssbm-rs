@@ -54,9 +54,9 @@ pub fn ftAnim_GetNextAnimJointInTree<'a>(
                     fns::OSReport(ctx, cstr(ctx, 0x803c0638), &[]);
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803c0660),
+                        cstr(ctx, 0x803c0658),
                         (46_i32 as u32),
-                        cstr(ctx, 0x803c0660),
+                        cstr(ctx, 0x804d3a18),
                     )
                 })
             });
@@ -125,9 +125,9 @@ pub fn ftAnim_GetNextMatAnimJointInTree<'a>(
                     fns::OSReport(ctx, cstr(ctx, 0x803c0638), &[]);
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803c0660),
+                        cstr(ctx, 0x803c0658),
                         (87_i32 as u32),
-                        cstr(ctx, 0x803c0660),
+                        cstr(ctx, 0x804d3a18),
                     )
                 })
             });
@@ -1995,9 +1995,9 @@ pub fn ftAnim_8006F4C8<'a>(ctx: &'a Ctx, fp: Fighter<'a>, do_blending: i32, tree
                         );
                         fns::__assert(
                             ctx,
-                            cstr(ctx, 0x803c0660),
+                            cstr(ctx, 0x803c0658),
                             (0x2ff_i32 as u32),
-                            cstr(ctx, 0x803c0660),
+                            cstr(ctx, 0x804d3a18),
                         )
                     })
                 });
@@ -2852,9 +2852,9 @@ pub fn ftAnim_80070200<'a>(
                 fns::OSReport(ctx, cstr(ctx, 0x803c0690), &[]);
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803c0660),
+                    cstr(ctx, 0x803c0658),
                     (0x4cc_i32 as u32),
-                    cstr(ctx, 0x803c0660),
+                    cstr(ctx, 0x804d3a18),
                 )
             })
         });
@@ -2885,9 +2885,9 @@ pub fn ftAnim_80070200<'a>(
                             fns::OSReport(ctx, cstr(ctx, 0x803c06a8), &[]);
                             fns::__assert(
                                 ctx,
-                                cstr(ctx, 0x803c0660),
+                                cstr(ctx, 0x803c0658),
                                 (0x4d4_i32 as u32),
-                                cstr(ctx, 0x803c0660),
+                                cstr(ctx, 0x804d3a18),
                             )
                         })
                     });
@@ -2956,9 +2956,9 @@ pub fn ftAnim_80070458<'a>(
                 );
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803c0660),
+                    cstr(ctx, 0x803c0658),
                     (0x4f0_i32 as u32),
-                    cstr(ctx, 0x803c0660),
+                    cstr(ctx, 0x804d3a18),
                 )
             })
         });
@@ -3918,9 +3918,9 @@ fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c0660),
+            cstr(ctx, 0x804d3a1c),
             (0x478_i32 as u32),
-            cstr(ctx, 0x803c0660),
+            cstr(ctx, 0x804d3a24),
         )
     });
     ctx.call::<_, ()>(0x80007d68, (jobj,));
@@ -3935,9 +3935,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c0660),
+            cstr(ctx, 0x804d3a1c),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803c0660),
+            cstr(ctx, 0x804d3a24),
         )
     });
     result = 0_i32;
@@ -3957,9 +3957,9 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c0660),
+            cstr(ctx, 0x804d3a1c),
             (0x394_i32 as u32),
-            cstr(ctx, 0x803c0660),
+            cstr(ctx, 0x804d3a24),
         )
     });
     (if !Handle::is_null((translate)) {
@@ -3967,9 +3967,9 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c0660),
+            cstr(ctx, 0x804d3a1c),
             (0x395_i32 as u32),
-            cstr(ctx, 0x803c0660),
+            cstr(ctx, 0x803c0664),
         )
     });
     Handle::copy_from((jobj).translate(), (translate));
@@ -3990,9 +3990,9 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c0660),
+            cstr(ctx, 0x804d3a1c),
             (0x3d3_i32 as u32),
-            cstr(ctx, 0x803c0660),
+            cstr(ctx, 0x804d3a24),
         )
     });
     (if !Handle::is_null((translate)) {
@@ -4000,9 +4000,9 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c0660),
+            cstr(ctx, 0x804d3a1c),
             (0x3d4_i32 as u32),
-            cstr(ctx, 0x803c0660),
+            cstr(ctx, 0x803c0664),
         )
     });
     Handle::copy_from((translate), (jobj).translate());
@@ -4125,9 +4125,9 @@ fn inl_ftAnim_80070200_unfused<'a>(
                 fns::OSReport(ctx, cstr(ctx, 0x803c0690), &[]);
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803c0660),
+                    cstr(ctx, 0x803c0658),
                     (0x4cc_i32 as u32),
-                    cstr(ctx, 0x803c0660),
+                    cstr(ctx, 0x804d3a18),
                 )
             })
         });
@@ -4158,9 +4158,9 @@ fn inl_ftAnim_80070200_unfused<'a>(
                             fns::OSReport(ctx, cstr(ctx, 0x803c06a8), &[]);
                             fns::__assert(
                                 ctx,
-                                cstr(ctx, 0x803c0660),
+                                cstr(ctx, 0x803c0658),
                                 (0x4d4_i32 as u32),
-                                cstr(ctx, 0x803c0660),
+                                cstr(ctx, 0x804d3a18),
                             )
                         })
                     });
@@ -4205,9 +4205,9 @@ fn inl_ftAnim_80070458_unfused<'a>(
                 );
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803c0660),
+                    cstr(ctx, 0x803c0658),
                     (0x4f0_i32 as u32),
-                    cstr(ctx, 0x803c0660),
+                    cstr(ctx, 0x804d3a18),
                 )
             })
         });

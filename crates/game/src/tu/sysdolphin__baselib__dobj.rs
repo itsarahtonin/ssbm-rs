@@ -220,7 +220,7 @@ pub fn DObjLoad<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>, desc: HSD_DObjDesc<'a>) ->
                 );
                 fns::HSD_Panic(
                     ctx,
-                    cstr(ctx, 0x80405454),
+                    cstr(ctx, 0x804d5c78),
                     (0x138_i32 as u32),
                     cstr(ctx, 0x80405454),
                 );
@@ -253,7 +253,7 @@ pub fn HSD_DObjLoadDesc<'a>(ctx: &'a Ctx, desc: HSD_DObjDesc<'a>) -> HSD_DObj<'a
         if Handle::is_null(dobj) {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x80405454),
+                cstr(ctx, 0x804d5c78),
                 (0x17a_i32 as u32),
                 cstr(ctx, 0x80405564),
             );
@@ -294,7 +294,7 @@ pub fn HSD_DObjAlloc<'a>(ctx: &'a Ctx) -> HSD_DObj<'a> {
     if Handle::is_null(dobj) {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80405454),
+            cstr(ctx, 0x804d5c78),
             (0x20d_i32 as u32),
             cstr(ctx, 0x80405564),
         );

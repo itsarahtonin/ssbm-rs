@@ -60,7 +60,7 @@ pub fn grTZelda_80223ED0<'a>(ctx: &'a Ctx, arg0: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e96c8),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e9648))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e96ec))),
                 VarArg::Int(195_i32 as u32),
                 VarArg::Int(arg0 as u32),
             ],

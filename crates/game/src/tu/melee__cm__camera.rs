@@ -2507,9 +2507,9 @@ pub fn Camera_80029CF8<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b73b8),
+            cstr(ctx, 0x803bcbd0),
             (0x4fa_i32 as u32),
-            cstr(ctx, 0x803b73b8),
+            cstr(ctx, 0x803bcbdc),
         )
     });
     fov_d = fp::fmsubs(
@@ -2522,9 +2522,9 @@ pub fn Camera_80029CF8<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b73b8),
+            cstr(ctx, 0x803bcbd0),
             (0x4fb_i32 as u32),
-            cstr(ctx, 0x803b73b8),
+            cstr(ctx, 0x803bcbf8),
         )
     });
     tan_u = fns::tanf(ctx, fov_u);
@@ -2567,9 +2567,9 @@ pub fn Camera_80029CF8<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b73b8),
+            cstr(ctx, 0x803bcbd0),
             (0x508_i32 as u32),
-            cstr(ctx, 0x803b73b8),
+            cstr(ctx, 0x803bcc14),
         )
     });
     fov_l = fp::fmadds(
@@ -2582,9 +2582,9 @@ pub fn Camera_80029CF8<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b73b8),
+            cstr(ctx, 0x803bcbd0),
             (0x509_i32 as u32),
-            cstr(ctx, 0x803b73b8),
+            cstr(ctx, 0x803bcc30),
         )
     });
     scaled_tan = {
@@ -18949,9 +18949,9 @@ pub fn Camera_SetUpPauseCamera<'a>(ctx: &'a Ctx, pauserSlot: i8, pauserId: i8, a
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803b73b8),
+                    cstr(ctx, 0x803bcbd0),
                     (0xedf_i32 as u32),
-                    cstr(ctx, 0x803b73b8),
+                    cstr(ctx, 0x804d3938),
                 )
             });
             break 's3;

@@ -63,7 +63,7 @@ pub fn grTMewtwo_80222284<'a>(ctx: &'a Ctx, index: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e9000),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e8f80))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e9024))),
                 VarArg::Int(201_i32 as u32),
                 VarArg::Int(index as u32),
             ],

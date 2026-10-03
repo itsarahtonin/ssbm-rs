@@ -90,7 +90,7 @@ pub fn grZebesRoute_8020B260<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e5e40),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b83a0))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e5e64))),
                 VarArg::Int(197_i32 as u32),
                 VarArg::Int(gobj_id as u32),
             ],
@@ -248,9 +248,9 @@ pub fn grZebesRoute_8020B548<'a>(ctx: &'a Ctx) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b83a0),
+            cstr(ctx, 0x803e5e64),
             (0x169_i32 as u32),
-            cstr(ctx, 0x803b83a0),
+            cstr(ctx, 0x804d4840),
         )
     });
     {
@@ -274,9 +274,9 @@ pub fn grZebesRoute_8020B548<'a>(ctx: &'a Ctx) {
                         } else {
                             fns::__assert(
                                 ctx,
-                                cstr(ctx, 0x803b83a0),
+                                cstr(ctx, 0x803e5e64),
                                 (0x174_i32 as u32),
-                                cstr(ctx, 0x803b83a0),
+                                cstr(ctx, 0x804d4848),
                             )
                         });
                     }

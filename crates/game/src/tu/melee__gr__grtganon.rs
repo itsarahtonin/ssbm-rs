@@ -65,7 +65,7 @@ pub fn grTGanon_80224784<'a>(ctx: &'a Ctx, id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e9910),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e9890))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e9934))),
                 VarArg::Int(201_i32 as u32),
                 VarArg::Int(id as u32),
             ],

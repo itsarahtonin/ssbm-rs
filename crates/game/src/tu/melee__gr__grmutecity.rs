@@ -89,7 +89,7 @@ pub fn grMuteCity_801EFD0C<'a>(ctx: &'a Ctx, gobj_id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e3410),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b81b8))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e3434))),
                 VarArg::Int(0x124_i32 as u32),
                 VarArg::Int(gobj_id as u32),
             ],
@@ -133,9 +133,9 @@ pub fn grMuteCity_801EFDF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b81b8),
+                cstr(ctx, 0x803e3434),
                 (0x15f_i32 as u32),
-                cstr(ctx, 0x803b81b8),
+                cstr(ctx, 0x804d46c0),
             )
         });
     }
@@ -146,9 +146,9 @@ pub fn grMuteCity_801EFDF8<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b81b8),
+                cstr(ctx, 0x803e3434),
                 (0x163_i32 as u32),
-                cstr(ctx, 0x803b81b8),
+                cstr(ctx, 0x804d46c0),
             )
         });
     }
@@ -6586,9 +6586,9 @@ pub fn grMuteCity_801F28A8<'a>(ctx: &'a Ctx) -> DynamicModelDesc<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x803e3434),
             (0x857_i32 as u32),
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46e0),
         )
     });
     dat = (archive).unk4();
@@ -7069,9 +7069,9 @@ fn inl_HSD_JObjGetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d0),
             (0x2e9_i32 as u32),
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d8),
         )
     });
     return (jobj).rotate().z();
@@ -7085,9 +7085,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d0),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d8),
         )
     });
     result = 0_i32;
@@ -7106,9 +7106,9 @@ fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z__a: 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d0),
             (0x2a9_i32 as u32),
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d8),
         )
     });
     (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
@@ -7116,9 +7116,9 @@ fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z__a: 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d0),
             (0x2aa_i32 as u32),
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x803e347c),
         )
     });
     (jobj).rotate().set_z(fp::fmuls(z__a, z__c));
@@ -7270,9 +7270,9 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d0),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d8),
         )
     });
     result = 0_i32;
@@ -7292,9 +7292,9 @@ fn inl_HSD_JObjSetTranslate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d0),
             (0x394_i32 as u32),
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d8),
         )
     });
     (if !Handle::is_null((translate)) {
@@ -7302,7 +7302,7 @@ fn inl_HSD_JObjSetTranslate<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: Vec
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d0),
             (0x395_i32 as u32),
             cstr(ctx, 0x803b81b8),
         )
@@ -7325,9 +7325,9 @@ fn inl_HSD_JObjSetRotationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d0),
             (0x27f_i32 as u32),
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d8),
         )
     });
     (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
@@ -7335,9 +7335,9 @@ fn inl_HSD_JObjSetRotationX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d0),
             (0x280_i32 as u32),
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x803e347c),
         )
     });
     (jobj).rotate().set_x(x);
@@ -7358,9 +7358,9 @@ fn inl_HSD_JObjSetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d0),
             (0x294_i32 as u32),
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d8),
         )
     });
     (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
@@ -7368,9 +7368,9 @@ fn inl_HSD_JObjSetRotationY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d0),
             (0x295_i32 as u32),
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x803e347c),
         )
     });
     (jobj).rotate().set_y(y);
@@ -7391,9 +7391,9 @@ fn inl_HSD_JObjSetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d0),
             (0x2a9_i32 as u32),
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d8),
         )
     });
     (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
@@ -7401,9 +7401,9 @@ fn inl_HSD_JObjSetRotationZ<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d0),
             (0x2aa_i32 as u32),
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x803e347c),
         )
     });
     (jobj).rotate().set_z(z);
@@ -7466,9 +7466,9 @@ fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d0),
             (0x3b3_i32 as u32),
-            cstr(ctx, 0x803b81b8),
+            cstr(ctx, 0x804d46d8),
         )
     });
     (jobj).translate().set_y(y);

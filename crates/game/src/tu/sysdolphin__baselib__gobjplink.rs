@@ -66,9 +66,9 @@ pub fn CreateGObj<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804084ec),
+            cstr(ctx, 0x804084b8),
             (168_i32 as u32),
-            cstr(ctx, 0x804084ec),
+            cstr(ctx, 0x804084c4),
         )
     });
     if Handle::is_null(
@@ -496,9 +496,9 @@ pub fn HSD_GObjPLink_ChangeGObjPri_Unk<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804084ec),
+            cstr(ctx, 0x804084b8),
             (0x1a3_i32 as u32),
-            cstr(ctx, 0x804084ec),
+            cstr(ctx, 0x804084c4),
         )
     });
     if (!(fns::HSD_GObj_DelayedProcInfo(ctx)

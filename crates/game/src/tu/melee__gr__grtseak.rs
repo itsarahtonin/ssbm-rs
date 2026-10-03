@@ -60,7 +60,7 @@ pub fn grTSeak_80223908<'a>(ctx: &'a Ctx, arg0: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e9548),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e94c8))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e956c))),
                 VarArg::Int(195_i32 as u32),
                 VarArg::Int(arg0 as u32),
             ],

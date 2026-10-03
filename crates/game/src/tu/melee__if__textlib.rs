@@ -62,9 +62,9 @@ pub fn DevText_Create<'a>(
                 fns::OSReport(ctx, cstr(ctx, 0x803fdc80), &[]);
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803fdca4),
+                    cstr(ctx, 0x803fdc98),
                     (0x135_i32 as u32),
-                    cstr(ctx, 0x803fdca4),
+                    cstr(ctx, 0x804d5a00),
                 )
             })
         });

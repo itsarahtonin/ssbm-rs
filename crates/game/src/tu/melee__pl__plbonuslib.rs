@@ -587,9 +587,9 @@ pub fn pl_8003E2CC<'a>(ctx: &'a Ctx, arg0: i32, pl_itemlog_kind: i32) -> u32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803bd138),
+            cstr(ctx, 0x803bd12c),
             (0x22b_i32 as u32),
-            cstr(ctx, 0x803bd138),
+            cstr(ctx, 0x803bd13c),
         )
     });
     return (fns::Player_GetStaleMoveTableIndexPtr2(ctx, arg0))
@@ -608,9 +608,9 @@ pub fn pl_8003E334<'a>(ctx: &'a Ctx, arg0: i32, pl_itemlog_kind: i32) -> u32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803bd138),
+            cstr(ctx, 0x803bd12c),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803bd138),
+            cstr(ctx, 0x803bd13c),
         )
     });
     return ((fns::Player_GetStaleMoveTableIndexPtr2(ctx, arg0))
@@ -634,9 +634,9 @@ pub fn pl_8003E39C<'a>(ctx: &'a Ctx, arg0: i32) -> i32 {
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803bd138),
+                        cstr(ctx, 0x803bd12c),
                         (0x22b_i32 as u32),
-                        cstr(ctx, 0x803bd138),
+                        cstr(ctx, 0x803bd13c),
                     )
                 });
                 sum = ((sum as u32).wrapping_add(
@@ -667,9 +667,9 @@ pub fn pl_8003E420<'a>(ctx: &'a Ctx, arg0: i32) -> u32 {
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803bd138),
+                        cstr(ctx, 0x803bd12c),
                         (0x234_i32 as u32),
-                        cstr(ctx, 0x803bd138),
+                        cstr(ctx, 0x803bd13c),
                     )
                 });
                 sum = sum.wrapping_add(
@@ -763,9 +763,9 @@ pub fn pl_8003E70C<'a>(ctx: &'a Ctx, igobj: HSD_GObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803bd138),
+            cstr(ctx, 0x803bd12c),
             (0x27a_i32 as u32),
-            cstr(ctx, 0x803bd138),
+            cstr(ctx, 0x803bd164),
         )
     });
     'l1: loop {
@@ -808,9 +808,9 @@ pub fn pl_8003E7D4<'a>(ctx: &'a Ctx, arg0: i32, kind: i32) -> u32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803bd138),
+            cstr(ctx, 0x803bd12c),
             (0x289_i32 as u32),
-            cstr(ctx, 0x803bd138),
+            cstr(ctx, 0x803bd1b0),
         )
     });
     return (fns::Player_GetStaleMoveTableIndexPtr2(ctx, arg0))
@@ -2254,9 +2254,9 @@ pub fn pl_8004049C<'a>(ctx: &'a Ctx, player: i32, arg1: i32) {
             fns::OSReport(ctx, cstr(ctx, 0x803bd204), &[VarArg::Int(player as u32)]);
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803bd138),
+                cstr(ctx, 0x803bd12c),
                 (0x617_i32 as u32),
-                cstr(ctx, 0x803bd138),
+                cstr(ctx, 0x803bd224),
             )
         })
     });
@@ -2809,9 +2809,9 @@ fn inl_pl_CalculateAverage<'a>(ctx: &'a Ctx, val: f64, total: f64) -> f64 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803bd138),
+            cstr(ctx, 0x803bd1e4),
             (16_i32 as u32),
-            cstr(ctx, 0x803bd138),
+            cstr(ctx, 0x803bd1f4),
         )
     });
     return fp::fdivs(val, total);
@@ -2883,9 +2883,9 @@ fn inl_pl_CalculateAverage_unfused<'a>(ctx: &'a Ctx, val: f64, total: f64) -> f6
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803bd138),
+            cstr(ctx, 0x803bd1e4),
             (16_i32 as u32),
-            cstr(ctx, 0x803bd138),
+            cstr(ctx, 0x803bd1f4),
         )
     });
     return fp::fdivs(val, total);

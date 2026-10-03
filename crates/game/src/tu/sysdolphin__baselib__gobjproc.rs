@@ -363,9 +363,9 @@ pub fn HSD_GObj_SetupProc<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804084b4),
+            cstr(ctx, 0x80408480),
             (216_i32 as u32),
-            cstr(ctx, 0x804084b4),
+            cstr(ctx, 0x8040848c),
         )
     });
     (gproc).set_s_link(pri);
@@ -425,9 +425,9 @@ fn inl_assertProc_unfused<'a>(ctx: &'a Ctx, gproc: HSD_GObjProc<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804084b4),
+            cstr(ctx, 0x80408480),
             (31_i32 as u32),
-            cstr(ctx, 0x804084b4),
+            cstr(ctx, 0x804d6060),
         )
     });
 }

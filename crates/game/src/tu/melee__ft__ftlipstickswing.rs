@@ -80,9 +80,9 @@ pub fn ft_800CDB9C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c6f38),
+            cstr(ctx, 0x803c6ef8),
             (99_i32 as u32),
-            cstr(ctx, 0x803c6f38),
+            cstr(ctx, 0x803c6f0c),
         )
     });
     if !Handle::is_null((fp).item_gobj()) {

@@ -95,9 +95,9 @@ pub fn HSD_DevComUnlink<'a>(ctx: &'a Ctx, dc: HSD_DevCom<'a>) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x804083c0),
+                cstr(ctx, 0x804083b8),
                 (110_i32 as u32),
-                cstr(ctx, 0x804083c0),
+                cstr(ctx, 0x8040844c),
             )
         });
     }
@@ -130,9 +130,9 @@ pub fn HSD_DevComStdCallback<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x804083c0),
+                cstr(ctx, 0x804083b8),
                 (165_i32 as u32),
-                cstr(ctx, 0x804083c0),
+                cstr(ctx, 0x8040844c),
             )
         });
     }
@@ -488,9 +488,9 @@ pub fn HSD_DevComDVDStdCallback<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x804083c0),
+                cstr(ctx, 0x804083b8),
                 (0x158_i32 as u32),
-                cstr(ctx, 0x804083c0),
+                cstr(ctx, 0x8040844c),
             )
         });
     }
@@ -632,9 +632,9 @@ pub fn HSD_DevComDVDCallback<'a>(ctx: &'a Ctx, result: i32, unused: DVDFileInfo<
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x804083c0),
+                cstr(ctx, 0x804083b8),
                 (0x18c_i32 as u32),
-                cstr(ctx, 0x804083c0),
+                cstr(ctx, 0x804083c4),
             )
         });
         (if !Handle::is_null(((statics::sysdolphin__baselib__devcom::dvdDC(ctx).get()).callback()))
@@ -643,9 +643,9 @@ pub fn HSD_DevComDVDCallback<'a>(ctx: &'a Ctx, result: i32, unused: DVDFileInfo<
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x804083c0),
+                cstr(ctx, 0x804083b8),
                 (0x18d_i32 as u32),
-                cstr(ctx, 0x804083c0),
+                cstr(ctx, 0x804083e4),
             )
         });
         if statics::sysdolphin__baselib__devcom::HSD_DevCom_804D7804(ctx).get() == 0_i32 {
@@ -922,9 +922,9 @@ pub fn HSD_DevComRequest<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804083c0),
+            cstr(ctx, 0x804083b8),
             (0x1ed_i32 as u32),
-            cstr(ctx, 0x804083c0),
+            cstr(ctx, 0x804d6058),
         )
     });
     (if !((inl_HSD_DevComGetDestType_unfused(ctx, r#type) == 2_i32) && (size > (0x4000_i32 as u32)))
@@ -933,9 +933,9 @@ pub fn HSD_DevComRequest<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804083c0),
+            cstr(ctx, 0x804083b8),
             (0x1ee_i32 as u32),
-            cstr(ctx, 0x804083c0),
+            cstr(ctx, 0x804083f4),
         )
     });
     (if rem_u32(src, (32_i32 as u32)) == (0_i32 as u32) {
@@ -943,9 +943,9 @@ pub fn HSD_DevComRequest<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804083c0),
+            cstr(ctx, 0x804083b8),
             (0x1ef_i32 as u32),
-            cstr(ctx, 0x804083c0),
+            cstr(ctx, 0x80408440),
         )
     });
     (if rem_u32(dest, (32_i32 as u32)) == (0_i32 as u32) {
@@ -953,9 +953,9 @@ pub fn HSD_DevComRequest<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804083c0),
+            cstr(ctx, 0x804083b8),
             (0x1f0_i32 as u32),
-            cstr(ctx, 0x804083c0),
+            cstr(ctx, 0x80408450),
         )
     });
     (if rem_u32(size, (32_i32 as u32)) == (0_i32 as u32) {
@@ -963,9 +963,9 @@ pub fn HSD_DevComRequest<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804083c0),
+            cstr(ctx, 0x804083b8),
             (0x1f1_i32 as u32),
-            cstr(ctx, 0x804083c0),
+            cstr(ctx, 0x80408460),
         )
     });
     (if size != (0_i32 as u32) {
@@ -973,9 +973,9 @@ pub fn HSD_DevComRequest<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804083c0),
+            cstr(ctx, 0x804083b8),
             (0x1f2_i32 as u32),
-            cstr(ctx, 0x804083c0),
+            cstr(ctx, 0x80408470),
         )
     });
     pri = (if (r#type & 56_i32) == 32_i32 {
@@ -1136,9 +1136,9 @@ fn inl_HSD_DevComStdCallback_unfused<'a>(ctx: &'a Ctx, request: ARQRequest<'a>) 
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x804083c0),
+                cstr(ctx, 0x804083b8),
                 (165_i32 as u32),
-                cstr(ctx, 0x804083c0),
+                cstr(ctx, 0x8040844c),
             )
         });
     }
@@ -1469,9 +1469,9 @@ fn inl_HSD_DevComDVDStdCallback_unfused<'a>(ctx: &'a Ctx, request: ARQRequest<'a
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x804083c0),
+                cstr(ctx, 0x804083b8),
                 (0x158_i32 as u32),
-                cstr(ctx, 0x804083c0),
+                cstr(ctx, 0x8040844c),
             )
         });
     }

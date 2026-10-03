@@ -1051,7 +1051,7 @@ pub fn fn_801803FC<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> i32 {
         fns::OSReport(ctx, cstr(ctx, 0x803d8c40), &[]);
         fns::OSPanic(
             ctx,
-            cstr(ctx, 0x803b7c20),
+            cstr(ctx, 0x803d8c70),
             0x42c_i32,
             cstr(ctx, 0x803b7c20),
             &[],
@@ -1062,7 +1062,7 @@ pub fn fn_801803FC<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> i32 {
         fns::OSReport(ctx, cstr(ctx, 0x803d8c80), &[]);
         fns::OSPanic(
             ctx,
-            cstr(ctx, 0x803b7c20),
+            cstr(ctx, 0x803d8c70),
             0x432_i32,
             cstr(ctx, 0x803b7c20),
             &[],
@@ -1392,9 +1392,9 @@ fn inl_HSD_JObjGetScaleX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7c20),
+            cstr(ctx, 0x804d4070),
             (0x36b_i32 as u32),
-            cstr(ctx, 0x803b7c20),
+            cstr(ctx, 0x804d4078),
         )
     });
     return (jobj).scale().x();
@@ -1407,9 +1407,9 @@ fn inl_HSD_JObjGetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7c20),
+            cstr(ctx, 0x804d4070),
             (0x378_i32 as u32),
-            cstr(ctx, 0x803b7c20),
+            cstr(ctx, 0x804d4078),
         )
     });
     return (jobj).scale().y();

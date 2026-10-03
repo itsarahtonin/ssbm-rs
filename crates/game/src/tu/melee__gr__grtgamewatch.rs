@@ -62,7 +62,7 @@ pub fn grTGameWatch_802241B4<'a>(ctx: &'a Ctx, id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e9788),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e9708))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e97ac))),
                 VarArg::Int(195_i32 as u32),
                 VarArg::Int(id as u32),
             ],

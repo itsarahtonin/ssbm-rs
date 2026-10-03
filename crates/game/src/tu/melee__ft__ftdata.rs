@@ -589,9 +589,9 @@ pub fn ftData_80085560<'a>(ctx: &'a Ctx, idx: i32, increment: i32) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803c0fc8),
+                cstr(ctx, 0x803c2744),
                 (0x798_i32 as u32),
-                cstr(ctx, 0x803c0fc8),
+                cstr(ctx, 0x804d3ab8),
             )
         });
     }
@@ -913,9 +913,9 @@ pub fn ftData_80085A14<'a>(ctx: &'a Ctx, kind: i32) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803c0fc8),
+                cstr(ctx, 0x803c2744),
                 (0x974_i32 as u32),
-                cstr(ctx, 0x803c0fc8),
+                cstr(ctx, 0x804d3abc),
             )
         });
         {
@@ -936,9 +936,9 @@ pub fn ftData_80085A14<'a>(ctx: &'a Ctx, kind: i32) {
                                     );
                                     fns::__assert(
                                         ctx,
-                                        cstr(ctx, 0x803c0fc8),
+                                        cstr(ctx, 0x803c2744),
                                         (0x9af_i32 as u32),
-                                        cstr(ctx, 0x803c0fc8),
+                                        cstr(ctx, 0x804d3ab8),
                                     )
                                 })
                             });
@@ -1005,9 +1005,9 @@ pub fn ftData_80085B98<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32, arg2: i32) 
                 fns::OSReport(ctx, cstr(ctx, 0x803c27a8), &[VarArg::Int(arg2 as u32)]);
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803c0fc8),
+                    cstr(ctx, 0x803c2744),
                     (0x9d2_i32 as u32),
-                    cstr(ctx, 0x803c0fc8),
+                    cstr(ctx, 0x804d3ab8),
                 )
             })
         });
@@ -1032,9 +1032,9 @@ pub fn ftData_80085B98<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: i32, arg2: i32) 
                                     );
                                     fns::__assert(
                                         ctx,
-                                        cstr(ctx, 0x803c0fc8),
+                                        cstr(ctx, 0x803c2744),
                                         (0x9dc_i32 as u32),
-                                        cstr(ctx, 0x803c0fc8),
+                                        cstr(ctx, 0x804d3ab8),
                                     )
                                 })
                             });
@@ -1099,9 +1099,9 @@ pub fn ftData_80085CD8<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Fighter<'a>, msi
                                 );
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x803c0fc8),
+                                    cstr(ctx, 0x803c2744),
                                     (0x9fa_i32 as u32),
-                                    cstr(ctx, 0x803c0fc8),
+                                    cstr(ctx, 0x804d3ab8),
                                 )
                             })
                         });
@@ -1146,9 +1146,9 @@ pub fn ftData_80085CD8<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Fighter<'a>, msi
                                 );
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x803c0fc8),
+                                    cstr(ctx, 0x803c2744),
                                     (0xa0f_i32 as u32),
-                                    cstr(ctx, 0x803c0fc8),
+                                    cstr(ctx, 0x804d3ab8),
                                 )
                             })
                         });
@@ -1211,9 +1211,9 @@ pub fn ftData_80085E50<'a>(ctx: &'a Ctx, arg0: Fighter<'a>, msid: i32) -> FigaTr
                                 );
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x803c0fc8),
+                                    cstr(ctx, 0x803c2744),
                                     (0xa30_i32 as u32),
-                                    cstr(ctx, 0x803c0fc8),
+                                    cstr(ctx, 0x804d3ab8),
                                 )
                             })
                         });
@@ -1258,9 +1258,9 @@ pub fn ftData_80085E50<'a>(ctx: &'a Ctx, arg0: Fighter<'a>, msid: i32) -> FigaTr
                                 );
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x803c0fc8),
+                                    cstr(ctx, 0x803c2744),
                                     (0xa45_i32 as u32),
-                                    cstr(ctx, 0x803c0fc8),
+                                    cstr(ctx, 0x804d3ab8),
                                 )
                             })
                         });
@@ -1332,9 +1332,9 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c0fc8),
+            cstr(ctx, 0x804d3aa8),
             (0x3d3_i32 as u32),
-            cstr(ctx, 0x803c0fc8),
+            cstr(ctx, 0x804d3ab0),
         )
     });
     (if !Handle::is_null((translate)) {
@@ -1342,7 +1342,7 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c0fc8),
+            cstr(ctx, 0x804d3aa8),
             (0x3d4_i32 as u32),
             cstr(ctx, 0x803c0fc8),
         )

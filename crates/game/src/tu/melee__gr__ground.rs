@@ -248,9 +248,9 @@ pub fn Ground_SetParamY<'a>(ctx: &'a Ctx, y: f64) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b7d80),
+                cstr(ctx, 0x803e00c0),
                 (0x209_i32 as u32),
-                cstr(ctx, 0x803b7d80),
+                cstr(ctx, 0x804d44e0),
             )
         });
     }
@@ -807,13 +807,13 @@ pub fn Ground_801C10B8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: FnPtr<'a>) {
             ctx,
             cstr(ctx, 0x803e00cc),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b7d80))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e00c0))),
                 VarArg::Int(0x45f_i32 as u32),
             ],
         );
         fns::OSPanic(
             ctx,
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x803e00c0),
             0x460_i32,
             cstr(ctx, 0x803b7d80),
             &[],
@@ -947,7 +947,7 @@ pub fn Ground_GetStageGObj<'a>(ctx: &'a Ctx, map_id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e00f8),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b7d80))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e00c0))),
                 VarArg::Int(0x522_i32 as u32),
             ],
         );
@@ -998,9 +998,9 @@ pub fn Ground_GetStageGObj<'a>(ctx: &'a Ctx, map_id: i32) -> HSD_GObj<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x803e00c0),
             (0x54e_i32 as u32),
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x804d44f8),
         )
     });
     if map_id < ((archive).unk4()).unkC() {
@@ -1021,7 +1021,7 @@ pub fn Ground_GetStageGObj<'a>(ctx: &'a Ctx, map_id: i32) -> HSD_GObj<'a> {
                 ctx,
                 cstr(ctx, 0x803e00dc),
                 &[
-                    VarArg::Int(Handle::addr(cstr(ctx, 0x803b7d80))),
+                    VarArg::Int(Handle::addr(cstr(ctx, 0x803e00c0))),
                     VarArg::Int(0x55d_i32 as u32),
                 ],
             );
@@ -1100,7 +1100,7 @@ pub fn Ground_GetStageGObj<'a>(ctx: &'a Ctx, map_id: i32) -> HSD_GObj<'a> {
                 ctx,
                 cstr(ctx, 0x803e00dc),
                 &[
-                    VarArg::Int(Handle::addr(cstr(ctx, 0x803b7d80))),
+                    VarArg::Int(Handle::addr(cstr(ctx, 0x803e00c0))),
                     VarArg::Int(0x598_i32 as u32),
                 ],
             );
@@ -1136,7 +1136,7 @@ pub fn Ground_801C1A20<'a>(ctx: &'a Ctx, arg0: HSD_Joint<'a>, arg1: i32) -> HSD_
             ctx,
             cstr(ctx, 0x803e00f8),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b7d80))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e00c0))),
                 VarArg::Int(0x5b8_i32 as u32),
             ],
         );
@@ -1186,7 +1186,7 @@ pub fn Ground_801C1A20<'a>(ctx: &'a Ctx, arg0: HSD_Joint<'a>, arg1: i32) -> HSD_
             ctx,
             cstr(ctx, 0x803e00dc),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b7d80))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e00c0))),
                 VarArg::Int(0x5e8_i32 as u32),
             ],
         );
@@ -1412,9 +1412,9 @@ pub fn Ground_801C20E0<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x803e00c0),
             (0x773_i32 as u32),
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x803e0114),
         )
     });
     (if !Handle::is_null(((lightset).get())) {
@@ -1422,9 +1422,9 @@ pub fn Ground_801C20E0<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x803e00c0),
             (0x774_i32 as u32),
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x803e0120),
         )
     });
     walker = lightset;
@@ -1564,9 +1564,9 @@ pub fn Ground_801C247C<'a>(ctx: &'a Ctx, arg0: i32, arg1: i32) -> HSD_Spline<'a>
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x803e00c0),
             (0x7e1_i32 as u32),
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x804d44f8),
         )
     });
     if (!Handle::is_null((archive).unk4())) && (arg1 < ((archive).unk4()).unk14()) {
@@ -1765,9 +1765,9 @@ pub fn Ground_801C24F8<'a>(ctx: &'a Ctx, stkind: i32, arg1: u32, arg2: Val<'a, i
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x803e00c0),
             (0x8c2_i32 as u32),
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x803e012c),
         )
     });
     if bgm == 2_i32.wrapping_neg() {
@@ -1872,7 +1872,7 @@ pub fn Ground_801C2AE8<'a>(ctx: &'a Ctx, stkind: i32) -> f64 {
         ctx,
         cstr(ctx, 0x803e01f8),
         &[
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803b7d80))),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803e00c0))),
             VarArg::Int(0x927_i32 as u32),
         ],
     );
@@ -1926,9 +1926,9 @@ pub fn Ground_801C2BD4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x803e00c0),
             (0x94d_i32 as u32),
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x803e0220),
         )
     });
 }
@@ -2374,8 +2374,8 @@ pub fn Ground_801C34AC<'a>(ctx: &'a Ctx, map_id: i32, root: HSD_JObj<'a>, joint:
             ctx,
             cstr(ctx, 0x803e0528),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b7d80))),
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b7d80))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e00c0))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e00c0))),
                 VarArg::Int(Handle::addr(root)),
                 VarArg::Int(Handle::addr(joint)),
             ],
@@ -2479,9 +2479,9 @@ pub fn Ground_801C36F4<'a>(ctx: &'a Ctx, map_id: i32, root: HSD_JObj<'a>, joint:
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x803e00c0),
             (0xb78_i32 as u32),
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x804d44f8),
         )
     });
     if (Handle::is_null(root)) || (Handle::is_null(joint)) {
@@ -2489,8 +2489,8 @@ pub fn Ground_801C36F4<'a>(ctx: &'a Ctx, map_id: i32, root: HSD_JObj<'a>, joint:
             ctx,
             cstr(ctx, 0x803e0528),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b7d80))),
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b7d80))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e00c0))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e00c0))),
                 VarArg::Int(Handle::addr(root)),
                 VarArg::Int(Handle::addr(joint)),
             ],
@@ -3161,9 +3161,9 @@ pub fn Ground_801C43C4<'a>(ctx: &'a Ctx, arg0: Addr<'a>) -> i32 {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b7d80),
+                cstr(ctx, 0x803e00c0),
                 (0xe44_i32 as u32),
-                cstr(ctx, 0x803b7d80),
+                cstr(ctx, 0x804d44e0),
             )
         });
     }
@@ -3309,7 +3309,7 @@ pub fn Ground_801C466C<'a>(ctx: &'a Ctx) {
             ctx,
             cstr(ctx, 0x803e06d4),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b7d80))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e00c0))),
                 VarArg::Int(0xeaf_i32 as u32),
             ],
         );
@@ -3323,7 +3323,7 @@ pub fn Ground_801C466C<'a>(ctx: &'a Ctx) {
             ctx,
             cstr(ctx, 0x803e06f0),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b7d80))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e00c0))),
                 VarArg::Int(0xeb1_i32 as u32),
             ],
         );
@@ -5440,9 +5440,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x804d44e8),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x804d44f0),
         )
     });
     result = 0_i32;
@@ -5462,9 +5462,9 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x804d44e8),
             (0x2f8_i32 as u32),
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x804d44f0),
         )
     });
     (if !Handle::is_null((scale)) {
@@ -5472,7 +5472,7 @@ fn inl_HSD_JObjSetScale_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, scale: Vec
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7d80),
+            cstr(ctx, 0x804d44e8),
             (0x2f9_i32 as u32),
             cstr(ctx, 0x803b7d80),
         )
@@ -5532,7 +5532,7 @@ fn inl_alloc_user_data_ground_unfused<'a>(ctx: &'a Ctx) -> Ground<'a> {
             ctx,
             cstr(ctx, 0x803e0098),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b7d80))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e00c0))),
                 VarArg::Int(0x1da_i32 as u32),
             ],
         );
@@ -5560,7 +5560,7 @@ fn inl_get_jobj_inline_unfused<'a>(ctx: &'a Ctx, phi_f0: f64, __in_caller: u32) 
             ctx,
             cstr(ctx, 0x803e00dc),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b7d80))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e00c0))),
                 VarArg::Int(0x4c4_i32 as u32),
             ],
         );
@@ -5697,7 +5697,7 @@ fn inl_panicMissingStageParam_unfused<'a>(ctx: &'a Ctx, stkind: i32, count: i32)
         ctx,
         cstr(ctx, 0x803e0164),
         &[
-            VarArg::Int(Handle::addr(cstr(ctx, 0x803b7d80))),
+            VarArg::Int(Handle::addr(cstr(ctx, 0x803e00c0))),
             VarArg::Int(0x906_i32 as u32),
             VarArg::Int(fns::stage_info(ctx).grkind() as u32),
             VarArg::Int(stkind as u32),

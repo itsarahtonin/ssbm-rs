@@ -178,9 +178,9 @@ fn inl_IDEntryAlloc_unfused<'a>(ctx: &'a Ctx) -> _IDEntry<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d5eec),
+            cstr(ctx, 0x804d5ee8),
             (67_i32 as u32),
-            cstr(ctx, 0x804d5eec),
+            cstr(ctx, 0x804d5ef0),
         )
     });
     let _ = fns::memset(ctx, Handle::cast::<Addr<'a>>(entry), 0_i32, 12_u32);

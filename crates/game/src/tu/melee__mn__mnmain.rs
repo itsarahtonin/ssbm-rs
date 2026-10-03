@@ -450,9 +450,9 @@ pub fn mn_80229DC0<'a>(ctx: &'a Ctx) -> HSD_GObj<'a> {
             fns::OSReport(ctx, cstr(ctx, 0x803eb958), &[]);
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b84e8),
+                cstr(ctx, 0x803eb970),
                 (0x427_i32 as u32),
-                cstr(ctx, 0x803b84e8),
+                cstr(ctx, 0x803eb97c),
             )
         })
     });
@@ -2606,9 +2606,9 @@ pub fn mn_8022B3A0<'a>(ctx: &'a Ctx, state: u8) -> HSD_GObj<'a> {
             fns::OSReport(ctx, cstr(ctx, 0x803eb958), &[]);
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b84e8),
+                cstr(ctx, 0x803eb970),
                 (0x65d_i32 as u32),
-                cstr(ctx, 0x803b84e8),
+                cstr(ctx, 0x803eb97c),
             )
         })
     });
@@ -8883,9 +8883,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b68),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b70),
         )
     });
     result = 0_i32;
@@ -8905,9 +8905,9 @@ fn inl_HSD_JObjSetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b68),
             (0x317_i32 as u32),
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b70),
         )
     });
     (jobj).scale().set_y(y);
@@ -8928,9 +8928,9 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b68),
             (0x3d3_i32 as u32),
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b70),
         )
     });
     (if !Handle::is_null((translate)) {
@@ -8938,7 +8938,7 @@ fn inl_HSD_JObjGetTranslation_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, tran
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b68),
             (0x3d4_i32 as u32),
             cstr(ctx, 0x803b84e8),
         )
@@ -8954,9 +8954,9 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b68),
             (0x394_i32 as u32),
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b70),
         )
     });
     (if !Handle::is_null((translate)) {
@@ -8964,7 +8964,7 @@ fn inl_HSD_JObjSetTranslate_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, transl
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b68),
             (0x395_i32 as u32),
             cstr(ctx, 0x803b84e8),
         )
@@ -8987,9 +8987,9 @@ fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b68),
             (0x2a9_i32 as u32),
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b70),
         )
     });
     (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
@@ -8997,9 +8997,9 @@ fn inl_HSD_JObjSetRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b68),
             (0x2aa_i32 as u32),
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x803eb988),
         )
     });
     (jobj).rotate().set_z(z);
@@ -9038,9 +9038,9 @@ fn inl_HSD_JObjGetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b68),
             (0x378_i32 as u32),
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b70),
         )
     });
     return (jobj).scale().y();
@@ -9054,9 +9054,9 @@ fn inl_HSD_JObjAddTranslationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b68),
             (0x44e_i32 as u32),
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b70),
         )
     });
     (jobj)
@@ -9079,9 +9079,9 @@ fn inl_HSD_JObjAddTranslationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b68),
             (0x45a_i32 as u32),
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b70),
         )
     });
     (jobj)
@@ -9104,9 +9104,9 @@ fn inl_HSD_JObjAddTranslationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b68),
             (0x466_i32 as u32),
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b70),
         )
     });
     (jobj)
@@ -9128,9 +9128,9 @@ fn inl_HSD_JObjGetTranslationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b68),
             (0x3e1_i32 as u32),
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b70),
         )
     });
     return (jobj).translate().x();
@@ -9144,9 +9144,9 @@ fn inl_HSD_JObjAddScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b68),
             (0x435_i32 as u32),
-            cstr(ctx, 0x803b84e8),
+            cstr(ctx, 0x804d4b70),
         )
     });
     (jobj).scale().set_y(fp::fadds((jobj).scale().y(), y));

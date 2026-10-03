@@ -122,9 +122,9 @@ pub fn gmMain_8015FDA4<'a>(ctx: &'a Ctx) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803d4ad4),
+                cstr(ctx, 0x803d4ad8),
                 (210_i32 as u32),
-                cstr(ctx, 0x803d4ad4),
+                cstr(ctx, 0x803d4ae4),
             )
         });
         fns::DbLevel(ctx).set((enums::DbLKind_Master as i32));

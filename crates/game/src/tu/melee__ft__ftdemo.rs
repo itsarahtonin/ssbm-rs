@@ -211,9 +211,9 @@ pub fn ftDemo_GetMotionFileString<'a>(ctx: &'a Ctx, cb_idx: i32, cb_arg: i32) ->
                 fns::OSReport(ctx, cstr(ctx, 0x803c695c), &[VarArg::Int(cb_arg as u32)]);
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803c6914),
+                    cstr(ctx, 0x803c6974),
                     (0x128_i32 as u32),
-                    cstr(ctx, 0x803c6914),
+                    cstr(ctx, 0x804d3bf8),
                 )
             })
         });

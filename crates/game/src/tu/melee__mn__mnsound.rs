@@ -324,7 +324,7 @@ pub fn mnSound_80249C08<'a>(ctx: &'a Ctx, unused: i32) {
     } else {
         ({
             fns::OSReport(ctx, cstr(ctx, 0x803eef2c), &[]);
-            fns::__assert(ctx, cstr(ctx, 0x803eeed8), 0x22c_u32, cstr(ctx, 0x803eeed8))
+            fns::__assert(ctx, cstr(ctx, 0x803eef44), 0x22c_u32, cstr(ctx, 0x803eef50))
         })
     });
     let _ = fns::gmMainLib_GetGameRules(ctx);
@@ -610,9 +610,9 @@ fn inl_HSD_JObjGetTranslation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: V
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803eeed8),
+            cstr(ctx, 0x804d5008),
             (0x3d3_i32 as u32),
-            cstr(ctx, 0x803eeed8),
+            cstr(ctx, 0x804d5010),
         )
     });
     (if !Handle::is_null((translate)) {
@@ -620,7 +620,7 @@ fn inl_HSD_JObjGetTranslation<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, translate: V
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803eeed8),
+            cstr(ctx, 0x804d5008),
             (0x3d4_i32 as u32),
             cstr(ctx, 0x803eeed8),
         )
@@ -655,9 +655,9 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803eeed8),
+            cstr(ctx, 0x804d5008),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803eeed8),
+            cstr(ctx, 0x804d5010),
         )
     });
     result = 0_i32;
@@ -677,9 +677,9 @@ fn inl_HSD_JObjSetTranslateX<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803eeed8),
+            cstr(ctx, 0x804d5008),
             (0x3a4_i32 as u32),
-            cstr(ctx, 0x803eeed8),
+            cstr(ctx, 0x804d5010),
         )
     });
     (jobj).translate().set_x(x);

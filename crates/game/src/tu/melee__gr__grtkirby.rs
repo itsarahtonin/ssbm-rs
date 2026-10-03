@@ -60,7 +60,7 @@ pub fn grTKirby_80221408<'a>(ctx: &'a Ctx, arg0: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e8c40),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e8bc0))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e8c64))),
                 VarArg::Int(195_i32 as u32),
                 VarArg::Int(arg0 as u32),
             ],

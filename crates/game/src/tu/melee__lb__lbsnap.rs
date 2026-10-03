@@ -807,9 +807,9 @@ fn inl_lbSnap_FormatTime_unfused<'a>(ctx: &'a Ctx, chan: i32, index: i32, text: 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803baccc),
+            cstr(ctx, 0x803bacf4),
             (0x19a_i32 as u32),
-            cstr(ctx, 0x803baccc),
+            cstr(ctx, 0x803bad00),
         )
     });
     inl_lbSnap_ClearText_unfused(ctx, text);

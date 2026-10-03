@@ -1095,9 +1095,9 @@ pub fn lbRefSetUnuse<'a>(ctx: &'a Ctx) {
                 fns::OSReport(ctx, cstr(ctx, 0x803bb2dc), &[]);
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803bb0b4),
+                    cstr(ctx, 0x803bb2f4),
                     (0x31c_i32 as u32),
-                    cstr(ctx, 0x803bb0b4),
+                    cstr(ctx, 0x804d3868),
                 )
             })
         });

@@ -192,9 +192,9 @@ pub fn lbDvd_80017740<'a>(
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b72c8),
+                cstr(ctx, 0x804d37d0),
                 (0x1c1_i32 as u32),
-                cstr(ctx, 0x803b72c8),
+                cstr(ctx, 0x803ba6a8),
             )
         });
         entry = statics::melee__lb__lbdvd::preloadCache(ctx)
@@ -215,9 +215,9 @@ pub fn lbDvd_80017740<'a>(
                     );
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803b72c8),
+                        cstr(ctx, 0x804d37d0),
                         (0x1cb_i32 as u32),
-                        cstr(ctx, 0x803b72c8),
+                        cstr(ctx, 0x804d37e0),
                     )
                 })
             });
@@ -516,9 +516,9 @@ pub fn lbDvd_80017E64<'a>(ctx: &'a Ctx, key: i32, index: u32, value: Addr<'a>, c
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b72c8),
+                cstr(ctx, 0x804d37d0),
                 (0x33b_i32 as u32),
-                cstr(ctx, 0x803b72c8),
+                cstr(ctx, 0x804d37e0),
             )
         });
     } else {
@@ -1498,9 +1498,9 @@ pub fn lbDvd_8001819C<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> HSD_Archive<'a
                 );
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803b72c8),
+                    cstr(ctx, 0x804d37d0),
                     (0x3b4_i32 as u32),
-                    cstr(ctx, 0x803b72c8),
+                    cstr(ctx, 0x804d37e0),
                 )
             })
         });

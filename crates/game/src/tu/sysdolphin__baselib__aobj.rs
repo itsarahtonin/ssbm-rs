@@ -403,9 +403,9 @@ pub fn HSD_AObjAlloc<'a>(ctx: &'a Ctx) -> HSD_AObj<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80405fc0),
+            cstr(ctx, 0x804d5d08),
             (0x1e9_i32 as u32),
-            cstr(ctx, 0x80405fc0),
+            cstr(ctx, 0x804d5d10),
         )
     });
     let _ = fns::memset(ctx, Handle::cast::<Addr<'a>>(new), 0_i32, 28_u32);
@@ -644,9 +644,9 @@ pub fn JObjForeachAnim<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80405fc0),
+            cstr(ctx, 0x804d5d08),
             (0x2cb_i32 as u32),
-            cstr(ctx, 0x80405fc0),
+            cstr(ctx, 0x804d5d14),
         )
     });
     if ((mask & (((enums::JOBJ_MASK as i32) as u32) as i32)) != 0)
@@ -767,7 +767,7 @@ pub fn HSD_ForeachAnim<'a>(
         if __case <= 4 {
             fns::HSD_Panic(
                 ctx,
-                cstr(ctx, 0x80405fc0),
+                cstr(ctx, 0x804d5d08),
                 (0x33a_i32 as u32),
                 cstr(ctx, 0x8040601c),
             );
@@ -901,7 +901,7 @@ pub fn HSD_ForeachAnim<'a>(
         if __case <= 10 {
             fns::HSD_Panic(
                 ctx,
-                cstr(ctx, 0x80405fc0),
+                cstr(ctx, 0x804d5d08),
                 (0x35e_i32 as u32),
                 cstr(ctx, 0x8040603c),
             );
@@ -1151,9 +1151,9 @@ fn inl_ref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x80405fc0),
+                cstr(ctx, 0x80405fb8),
                 (93_i32 as u32),
-                cstr(ctx, 0x80405fc0),
+                cstr(ctx, 0x80405fc4),
             )
         });
     }
@@ -1313,9 +1313,9 @@ fn inl_JObjForeachAnim_unfused<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80405fc0),
+            cstr(ctx, 0x804d5d08),
             (0x2cb_i32 as u32),
-            cstr(ctx, 0x80405fc0),
+            cstr(ctx, 0x804d5d14),
         )
     });
     if ((mask & (((enums::JOBJ_MASK as i32) as u32) as i32)) != 0)
@@ -1383,9 +1383,9 @@ fn inl_JObjForeachAnim_unfused_2<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80405fc0),
+            cstr(ctx, 0x804d5d08),
             (0x2cb_i32 as u32),
-            cstr(ctx, 0x80405fc0),
+            cstr(ctx, 0x804d5d14),
         )
     });
     if ((mask & (((enums::JOBJ_MASK as i32) as u32) as i32)) != 0)

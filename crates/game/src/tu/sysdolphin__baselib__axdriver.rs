@@ -47,9 +47,9 @@ pub fn AXDriverAlloc<'a>(ctx: &'a Ctx, size: u32) -> Addr<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x80408140),
             (78_i32 as u32),
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x8040814c),
         )
     });
     return ptr_;
@@ -84,9 +84,9 @@ pub fn AXDriverUnlink<'a>(ctx: &'a Ctx, v: HSD_SM<'a>, head: Ptr<'a, HSD_SM<'a>>
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b95f8),
+                cstr(ctx, 0x80408140),
                 (113_i32 as u32),
-                cstr(ctx, 0x803b95f8),
+                cstr(ctx, 0x80408168),
             )
         });
     }
@@ -275,9 +275,9 @@ pub fn AXDriverExec<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) {
                                     } else {
                                         fns::__assert(
                                             ctx,
-                                            cstr(ctx, 0x803b95f8),
+                                            cstr(ctx, 0x80408140),
                                             (0x13b_i32 as u32),
-                                            cstr(ctx, 0x803b95f8),
+                                            cstr(ctx, 0x804081cc),
                                         )
                                     });
                                     (v).set_flags(((v).flags() & (!0xc0000000_u32)));
@@ -874,9 +874,9 @@ pub fn AXDriverCallback<'a>(ctx: &'a Ctx) {
                     } else {
                         fns::__assert(
                             ctx,
-                            cstr(ctx, 0x803b95f8),
+                            cstr(ctx, 0x80408140),
                             (0x25f_i32 as u32),
-                            cstr(ctx, 0x803b95f8),
+                            cstr(ctx, 0x804d6040),
                         )
                     });
                     break 's5;
@@ -897,9 +897,9 @@ pub fn AXDriverKillCallback<'a>(ctx: &'a Ctx, vID: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x80408140),
             (0x26d_i32 as u32),
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x804d6044),
         )
     });
     v = statics::sysdolphin__baselib__axdriver::AXDriver_804C5920(ctx)
@@ -931,9 +931,9 @@ pub fn AXDriverPauseCallback<'a>(ctx: &'a Ctx, vID: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x80408140),
             (0x288_i32 as u32),
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x804d6044),
         )
     });
     v = statics::sysdolphin__baselib__axdriver::AXDriver_804C5920(ctx)
@@ -944,9 +944,9 @@ pub fn AXDriverPauseCallback<'a>(ctx: &'a Ctx, vID: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x80408140),
             (0x28a_i32 as u32),
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x80408300),
         )
     });
     (v).set_flags(((v).flags() | (0x20000000_i32 as u32)));
@@ -1055,9 +1055,9 @@ pub fn HSD_AudioSFXStartParam<'a>(
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b95f8),
+                cstr(ctx, 0x80408140),
                 (0x2ea_i32 as u32),
-                cstr(ctx, 0x803b95f8),
+                cstr(ctx, 0x804d6040),
             )
         });
     }
@@ -1130,9 +1130,9 @@ pub fn HSD_AudioSFXSetPan<'a>(ctx: &'a Ctx, vid: i32, pan: u8) -> i32 {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b95f8),
+                cstr(ctx, 0x80408140),
                 (0x30b_i32 as u32),
-                cstr(ctx, 0x803b95f8),
+                cstr(ctx, 0x804081cc),
             )
         });
         (v).set_pan(pan);
@@ -1186,9 +1186,9 @@ pub fn HSD_AudioSFXSetVolumeEx<'a>(ctx: &'a Ctx, vid: i32, volume: u8) -> i32 {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b95f8),
+                cstr(ctx, 0x80408140),
                 (0x34d_i32 as u32),
-                cstr(ctx, 0x803b95f8),
+                cstr(ctx, 0x804081cc),
             )
         });
         (v).set_volume(volume);
@@ -1317,9 +1317,9 @@ pub fn HSD_AudioSFXSetMix<'a>(ctx: &'a Ctx, vid: i32, aux_bus: i32, send_level: 
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b95f8),
+                cstr(ctx, 0x80408140),
                 (0x3ab_i32 as u32),
-                cstr(ctx, 0x803b95f8),
+                cstr(ctx, 0x804081cc),
             )
         });
         (v).x24().at(aux_bus).set((clamped as u8));
@@ -1685,9 +1685,9 @@ pub fn AXDriverSetupAux<'a>(ctx: &'a Ctx, channel: i32, r#type: i32, param: Addr
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x80408140),
             (0x49c_i32 as u32),
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x80408360),
         )
     });
     (if (((0_i32 as u32) as i32) <= r#type) && (r#type <= ((4_i32 as u32) as i32)) {
@@ -1695,9 +1695,9 @@ pub fn AXDriverSetupAux<'a>(ctx: &'a Ctx, channel: i32, r#type: i32, param: Addr
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x80408140),
             (0x49d_i32 as u32),
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x80408380),
         )
     });
     (if (r#type == ((0_i32 as u32) as i32)) || (!Handle::is_null(param)) {
@@ -1705,9 +1705,9 @@ pub fn AXDriverSetupAux<'a>(ctx: &'a Ctx, channel: i32, r#type: i32, param: Addr
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x80408140),
             (0x49e_i32 as u32),
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x80408398),
         )
     });
     if channel == 0_i32 {
@@ -2201,9 +2201,9 @@ pub fn PStreamPauseCh<'a>(ctx: &'a Ctx, vid: i32) -> i32 {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b95f8),
+                cstr(ctx, 0x80408140),
                 (0x5d6_i32 as u32),
-                cstr(ctx, 0x803b95f8),
+                cstr(ctx, 0x804081cc),
             )
         });
         (v).set_flags(((v).flags() | (0x20000000_i32 as u32)));
@@ -2261,9 +2261,9 @@ pub fn PStreamResumeCh<'a>(ctx: &'a Ctx, vid: i32) -> i32 {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b95f8),
+                cstr(ctx, 0x80408140),
                 (0x619_i32 as u32),
-                cstr(ctx, 0x803b95f8),
+                cstr(ctx, 0x804081cc),
             )
         });
     }
@@ -2390,7 +2390,7 @@ fn inl_AXDriverKeyOff_unfused<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x80408140),
             (146_i32 as u32),
             cstr(ctx, 0x80408174),
         )
@@ -2423,7 +2423,7 @@ fn inl_AXDriverKeyOff_unfused_discard<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x80408140),
             (146_i32 as u32),
             cstr(ctx, 0x80408174),
         )
@@ -2479,7 +2479,7 @@ fn inl_AXDriverKeyOff_discard<'a>(ctx: &'a Ctx, v: HSD_SM<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x80408140),
             (146_i32 as u32),
             cstr(ctx, 0x80408174),
         )
@@ -2575,9 +2575,9 @@ fn inl_AXDriverUnlink_unfused<'a>(ctx: &'a Ctx, v: HSD_SM<'a>, head: Ptr<'a, HSD
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b95f8),
+                cstr(ctx, 0x80408140),
                 (113_i32 as u32),
-                cstr(ctx, 0x803b95f8),
+                cstr(ctx, 0x80408168),
             )
         });
     }
@@ -2594,9 +2594,9 @@ fn inl_AXDriverLink_unfused<'a>(ctx: &'a Ctx, v: HSD_SM<'a>, head: Ptr<'a, HSD_S
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x80408140),
             (122_i32 as u32),
-            cstr(ctx, 0x803b95f8),
+            cstr(ctx, 0x80408168),
         )
     });
     (v).set_prev(null::<HSD_SM<'a>>(ctx));

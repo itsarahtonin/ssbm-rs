@@ -381,9 +381,9 @@ pub fn HSD_ShadowInit<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407310),
             (245_i32 as u32),
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x804d5f78),
         )
     });
     imagedesc = ((shadow).texture()).imagedesc();
@@ -415,9 +415,9 @@ pub fn HSD_ShadowSetSize<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>, width: u16, h
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407310),
             (0x115_i32 as u32),
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x804d5f78),
         )
     });
     (if (width as i32) > 0_i32 {
@@ -425,9 +425,9 @@ pub fn HSD_ShadowSetSize<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>, width: u16, h
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407310),
             (0x116_i32 as u32),
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x8040731c),
         )
     });
     (if (height as i32) > 0_i32 {
@@ -435,9 +435,9 @@ pub fn HSD_ShadowSetSize<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>, width: u16, h
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407310),
             (0x117_i32 as u32),
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407328),
         )
     });
     idesc = ((shadow).texture()).imagedesc();
@@ -460,9 +460,9 @@ pub fn HSD_ShadowSetSize<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>, width: u16, h
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x80407318),
+                cstr(ctx, 0x80407310),
                 (0x122_i32 as u32),
-                cstr(ctx, 0x80407318),
+                cstr(ctx, 0x80407334),
             )
         });
         (idesc).set_image_ptr(fns::HSD_MemAlloc(ctx, (size as i32)));
@@ -550,9 +550,9 @@ pub fn HSD_ShadowStartRender<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407310),
             (0x167_i32 as u32),
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x804d5f78),
         )
     });
     (if !Handle::is_null(((shadow).camera())) {
@@ -560,9 +560,9 @@ pub fn HSD_ShadowStartRender<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407310),
             (0x168_i32 as u32),
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x804073f0),
         )
     });
     (if !Handle::is_null(((shadow).texture())) {
@@ -570,9 +570,9 @@ pub fn HSD_ShadowStartRender<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407310),
             (0x169_i32 as u32),
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407400),
         )
     });
     (if !Handle::is_null((((shadow).texture()).imagedesc())) {
@@ -580,9 +580,9 @@ pub fn HSD_ShadowStartRender<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407310),
             (0x16a_i32 as u32),
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407410),
         )
     });
     list = (shadow).objects();
@@ -671,9 +671,9 @@ pub fn HSD_ShadowEndRender<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407310),
             (0x1f5_i32 as u32),
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x804d5f78),
         )
     });
     idesc = ((shadow).texture()).imagedesc();
@@ -696,9 +696,9 @@ pub fn HSD_ShadowSetActive<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>, active: i32
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407310),
             (0x244_i32 as u32),
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x804d5f78),
         )
     });
     if (((shadow).active() != 0) && (active != 0))
@@ -845,9 +845,9 @@ pub fn makeMatrix<'a>(ctx: &'a Ctx, shadow: HSD_Shadow<'a>) {
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x80407318),
+                    cstr(ctx, 0x80407310),
                     (0x2ba_i32 as u32),
-                    cstr(ctx, 0x80407318),
+                    cstr(ctx, 0x80407324),
                 )
             });
         }
@@ -887,9 +887,9 @@ pub fn HSD_ShadowSetViewingRect<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407310),
             (0x2d1_i32 as u32),
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x804d5f78),
         )
     });
     cobj = (shadow).camera();
@@ -899,7 +899,7 @@ pub fn HSD_ShadowSetViewingRect<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407310),
             (0x2d5_i32 as u32),
             statics::sysdolphin__baselib__shadow::distAssert(ctx).at(0),
         )
@@ -948,9 +948,9 @@ pub fn HSD_ShadowSetViewingRect<'a>(
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x80407318),
+                        cstr(ctx, 0x80407310),
                         (0x2f2_i32 as u32),
-                        cstr(ctx, 0x80407318),
+                        cstr(ctx, 0x80407470),
                     )
                 });
                 fns::HSD_CObjSetFrustum(
@@ -970,9 +970,9 @@ pub fn HSD_ShadowSetViewingRect<'a>(
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x80407318),
+                    cstr(ctx, 0x80407310),
                     (0x2fa_i32 as u32),
-                    cstr(ctx, 0x80407318),
+                    cstr(ctx, 0x80407324),
                 )
             });
         }
@@ -999,9 +999,9 @@ pub fn HSD_ViewingRectInit<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407310),
             (0x31b_i32 as u32),
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x804d5f84),
         )
     });
     Handle::copy_from((rect).origin(), (position));
@@ -1032,9 +1032,9 @@ pub fn HSD_ViewingRectCheck<'a>(ctx: &'a Ctx, rect: HSD_ViewingRect<'a>) -> i32 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407310),
             (0x332_i32 as u32),
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x804d5f84),
         )
     });
     return (((rect).top() > (rect).bottom()) && ((rect).right() > (rect).left())) as i32;
@@ -1068,9 +1068,9 @@ pub fn HSD_ViewingRectAddRect<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407310),
             (0x357_i32 as u32),
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x804d5f84),
         )
     });
     (if !Handle::is_null((position)) {
@@ -1078,9 +1078,9 @@ pub fn HSD_ViewingRectAddRect<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407310),
             (0x358_i32 as u32),
-            cstr(ctx, 0x80407318),
+            cstr(ctx, 0x80407480),
         )
     });
     fns::PSVECSubtract(ctx, position, (rect).origin(), o2p);
@@ -1185,9 +1185,9 @@ fn inl_ref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x80407318),
+                cstr(ctx, 0x8040743c),
                 (93_i32 as u32),
-                cstr(ctx, 0x80407318),
+                cstr(ctx, 0x80407448),
             )
         });
     }

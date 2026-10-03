@@ -61,9 +61,9 @@ pub fn ftCo_800B3E04<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                 fns::OSReport(ctx, cstr(ctx, 0x803c5db0), &[]);
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803c6104),
+                    cstr(ctx, 0x803c5dc4),
                     (33_i32 as u32),
-                    cstr(ctx, 0x803c6104),
+                    cstr(ctx, 0x804d3b68),
                 )
             })
         });
@@ -78,9 +78,9 @@ pub fn ftCo_800B3E04<'a>(ctx: &'a Ctx, fp: Fighter<'a>) {
                 fns::OSReport(ctx, cstr(ctx, 0x803c5db0), &[]);
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803c6104),
+                    cstr(ctx, 0x803c5dc4),
                     (36_i32 as u32),
-                    cstr(ctx, 0x803c6104),
+                    cstr(ctx, 0x804d3b68),
                 )
             })
         });
@@ -723,9 +723,9 @@ pub fn ftCo_800B463C<'a>(ctx: &'a Ctx, fp: Fighter<'a>, cmd: u8) {
                 fns::OSReport(ctx, cstr(ctx, 0x803c60e0), &[]);
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803c6104),
+                    cstr(ctx, 0x803c5dc4),
                     (0x1f5_i32 as u32),
-                    cstr(ctx, 0x803c6104),
+                    cstr(ctx, 0x804d3b68),
                 )
             })
         });
@@ -815,9 +815,9 @@ fn inl_ftCo_800B463C_unfused<'a>(ctx: &'a Ctx, fp: Fighter<'a>, cmd: u8) {
                 fns::OSReport(ctx, cstr(ctx, 0x803c60e0), &[]);
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803c6104),
+                    cstr(ctx, 0x803c5dc4),
                     (0x1f5_i32 as u32),
-                    cstr(ctx, 0x803c6104),
+                    cstr(ctx, 0x804d3b68),
                 )
             })
         });

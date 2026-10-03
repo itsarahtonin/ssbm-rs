@@ -1107,7 +1107,7 @@ pub fn DVDReadAsyncPrio<'a>(
     if !((0_i32 <= offset) && ((offset as u32) < (fileInfo).length())) {
         fns::OSPanic(
             ctx,
-            cstr(ctx, 0x80337937),
+            cstr(ctx, 0x804d5b88),
             0x2e3_i32,
             cstr(ctx, 0x80400e48),
             &[],
@@ -1119,7 +1119,7 @@ pub fn DVDReadAsyncPrio<'a>(
     {
         fns::OSPanic(
             ctx,
-            cstr(ctx, 0x80337937),
+            cstr(ctx, 0x804d5b88),
             0x2e9_i32,
             cstr(ctx, 0x80400e48),
             &[],

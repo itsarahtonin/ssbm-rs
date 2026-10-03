@@ -311,9 +311,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f67d0),
+            cstr(ctx, 0x804d5360),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803f67d0),
+            cstr(ctx, 0x804d5368),
         )
     });
     result = 0_i32;
@@ -333,9 +333,9 @@ fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f67d0),
+            cstr(ctx, 0x804d5360),
             (0x294_i32 as u32),
-            cstr(ctx, 0x803f67d0),
+            cstr(ctx, 0x804d5368),
         )
     });
     (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
@@ -343,9 +343,9 @@ fn inl_HSD_JObjSetRotationY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f67d0),
+            cstr(ctx, 0x804d5360),
             (0x295_i32 as u32),
-            cstr(ctx, 0x803f67d0),
+            cstr(ctx, 0x803f67f0),
         )
     });
     (jobj).rotate().set_y(y);
@@ -366,9 +366,9 @@ fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f67d0),
+            cstr(ctx, 0x804d5360),
             (0x27f_i32 as u32),
-            cstr(ctx, 0x803f67d0),
+            cstr(ctx, 0x804d5368),
         )
     });
     (if !(((jobj).flags() & ((shl_i32(1_i32, (17_i32 as u32))) as u32)) != 0) {
@@ -376,9 +376,9 @@ fn inl_HSD_JObjSetRotationX_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, x: f64
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f67d0),
+            cstr(ctx, 0x804d5360),
             (0x280_i32 as u32),
-            cstr(ctx, 0x803f67d0),
+            cstr(ctx, 0x803f67f0),
         )
     });
     (jobj).rotate().set_x(x);
@@ -399,9 +399,9 @@ fn inl_HSD_JObjSetScaleZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803f67d0),
+            cstr(ctx, 0x804d5360),
             (0x326_i32 as u32),
-            cstr(ctx, 0x803f67d0),
+            cstr(ctx, 0x804d5368),
         )
     });
     (jobj).scale().set_z(z);

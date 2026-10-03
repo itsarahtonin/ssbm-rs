@@ -2898,9 +2898,9 @@ fn inl_Player_CheckSlot_unfused<'a>(ctx: &'a Ctx, slot: i32) {
                 fns::OSReport(ctx, cstr(ctx, 0x803bce44), &[VarArg::Int(slot as u32)]);
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803bcdc8),
+                    cstr(ctx, 0x803bce60),
                     (102_i32 as u32),
-                    cstr(ctx, 0x803bcdc8),
+                    cstr(ctx, 0x804d3940),
                 )
             })
         });

@@ -3945,9 +3945,9 @@ pub fn HSD_CObjGetInterestWObj<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> HSD_WObj
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804d5d40),
             (0x295_i32 as u32),
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x80406344),
         )
     });
     return (cobj).interest();
@@ -3961,9 +3961,9 @@ pub fn HSD_CObjGetEyePositionWObj<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> HSD_W
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804d5d40),
             (0x2ad_i32 as u32),
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x80406344),
         )
     });
     return (cobj).eyepos();
@@ -3978,9 +3978,9 @@ pub fn HSD_CObjGetInterest<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, interest: Vec<'
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804d5d40),
             (0x2c5_i32 as u32),
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x80406344),
         )
     });
     fns::HSD_WObjGetPosition(
@@ -3999,9 +3999,9 @@ pub fn HSD_CObjSetInterest<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, interest: Vec<'
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804d5d40),
             (0x2d1_i32 as u32),
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x80406344),
         )
     });
     fns::HSD_WObjSetPosition(
@@ -4020,9 +4020,9 @@ pub fn HSD_CObjGetEyePosition<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, position: Ve
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804d5d40),
             (0x2dd_i32 as u32),
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x80406344),
         )
     });
     fns::HSD_WObjGetPosition(
@@ -4041,9 +4041,9 @@ pub fn HSD_CObjSetEyePosition<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, position: Ve
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804d5d40),
             (0x2e9_i32 as u32),
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x80406344),
         )
     });
     fns::HSD_WObjSetPosition(
@@ -4093,9 +4093,9 @@ pub fn HSD_CObjGetEyeDistance<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804d5d40),
             (0x327_i32 as u32),
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804062b4),
         )
     });
     (if !Handle::is_null(((cobj).interest())) {
@@ -4103,9 +4103,9 @@ pub fn HSD_CObjGetEyeDistance<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> f64 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804d5d40),
             (0x328_i32 as u32),
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804062c4),
         )
     });
     inl_HSD_CObjGetEyePosition_unfused(ctx, cobj, position);
@@ -4972,9 +4972,9 @@ pub fn HSD_CObjAlloc<'a>(ctx: &'a Ctx) -> HSD_CObj<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804d5d40),
             (0x7a2_i32 as u32),
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x80406344),
         )
     });
     return cobj;
@@ -5046,9 +5046,9 @@ pub fn CObjLoad<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, desc: HSD_CObjDesc<'a>) ->
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x80406224),
+                    cstr(ctx, 0x804d5d40),
                     (0x7d0_i32 as u32),
-                    cstr(ctx, 0x80406224),
+                    cstr(ctx, 0x804d5d50),
                 )
             });
             break 's1;
@@ -5090,9 +5090,9 @@ pub fn HSD_CObjLoadDesc<'a>(ctx: &'a Ctx, desc: HSD_CObjDesc<'a>) -> HSD_CObj<'a
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x80406224),
+                    cstr(ctx, 0x804d5d40),
                     (0x7f7_i32 as u32),
-                    cstr(ctx, 0x80406224),
+                    cstr(ctx, 0x80406344),
                 )
             });
         }
@@ -5504,9 +5504,9 @@ fn inl_HSD_CObjGetInterestWObj_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804d5d40),
             (0x295_i32 as u32),
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x80406344),
         )
     });
     return (cobj).interest();
@@ -5519,9 +5519,9 @@ fn inl_HSD_CObjGetEyePositionWObj_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804d5d40),
             (0x2ad_i32 as u32),
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x80406344),
         )
     });
     return (cobj).eyepos();
@@ -5535,9 +5535,9 @@ fn inl_HSD_CObjGetEyePosition_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, posi
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804d5d40),
             (0x2dd_i32 as u32),
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x80406344),
         )
     });
     fns::HSD_WObjGetPosition(
@@ -5555,9 +5555,9 @@ fn inl_HSD_CObjGetInterest_unfused<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, interes
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804d5d40),
             (0x2c5_i32 as u32),
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x80406344),
         )
     });
     fns::HSD_WObjGetPosition(
@@ -5609,9 +5609,9 @@ fn inl_HSD_CObjGetEyePositionWObj<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> HSD_W
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804d5d40),
             (0x2ad_i32 as u32),
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x80406344),
         )
     });
     return (cobj).eyepos();
@@ -5625,9 +5625,9 @@ fn inl_HSD_CObjGetEyePosition<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, position: Ve
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804d5d40),
             (0x2dd_i32 as u32),
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x80406344),
         )
     });
     fns::HSD_WObjGetPosition(ctx, inl_HSD_CObjGetEyePositionWObj(ctx, cobj), position);
@@ -5640,9 +5640,9 @@ fn inl_HSD_CObjGetInterestWObj<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>) -> HSD_WObj
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804d5d40),
             (0x295_i32 as u32),
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x80406344),
         )
     });
     return (cobj).interest();
@@ -5656,9 +5656,9 @@ fn inl_HSD_CObjGetInterest<'a>(ctx: &'a Ctx, cobj: HSD_CObj<'a>, interest: Vec<'
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804d5d40),
             (0x2c5_i32 as u32),
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x80406344),
         )
     });
     fns::HSD_WObjGetPosition(ctx, inl_HSD_CObjGetInterestWObj(ctx, cobj), interest);
@@ -6118,9 +6118,9 @@ fn inl_HSD_CObjAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_CObj<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x804d5d40),
             (0x7a2_i32 as u32),
-            cstr(ctx, 0x80406224),
+            cstr(ctx, 0x80406344),
         )
     });
     return cobj;

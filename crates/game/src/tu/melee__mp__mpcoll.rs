@@ -86,9 +86,9 @@ pub fn mpCollPrev<'a>(ctx: &'a Ctx, cd: CollData<'a>) {
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803bd2b0),
+                    cstr(ctx, 0x803bd2a8),
                     (228_i32 as u32),
-                    cstr(ctx, 0x803bd2b0),
+                    cstr(ctx, 0x804d3948),
                 )
             });
         }
@@ -1048,9 +1048,9 @@ pub fn mpCollInterpolateECB<'a>(ctx: &'a Ctx, coll: CollData<'a>, time: f64) {
                 fns::OSReport(ctx, cstr(ctx, 0x804d394c), &[]);
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803bd2b0),
+                    cstr(ctx, 0x803bd2a8),
                     (0x4a9_i32 as u32),
-                    cstr(ctx, 0x803bd2b0),
+                    cstr(ctx, 0x804d3948),
                 )
             })
         });
@@ -1147,7 +1147,7 @@ pub fn mpCollEnd<'a>(ctx: &'a Ctx, coll: CollData<'a>, arg1: i32, arg2: i32) {
                         ctx,
                         cstr(ctx, 0x803bd308),
                         &[
-                            VarArg::Int(Handle::addr(cstr(ctx, 0x803bd2b0))),
+                            VarArg::Int(Handle::addr(cstr(ctx, 0x803bd2a8))),
                             VarArg::Int(0x546_i32 as u32),
                             VarArg::Float((coll).last_pos().x()),
                             VarArg::Float((coll).last_pos().y()),
@@ -1164,7 +1164,7 @@ pub fn mpCollEnd<'a>(ctx: &'a Ctx, coll: CollData<'a>, arg1: i32, arg2: i32) {
                     ctx,
                     cstr(ctx, 0x803bd348),
                     &[
-                        VarArg::Int(Handle::addr(cstr(ctx, 0x803bd2b0))),
+                        VarArg::Int(Handle::addr(cstr(ctx, 0x803bd2a8))),
                         VarArg::Int(0x54e_i32 as u32),
                         VarArg::Float((coll).last_pos().x()),
                         VarArg::Float((coll).last_pos().y()),
@@ -1186,9 +1186,9 @@ pub fn mpCollEnd<'a>(ctx: &'a Ctx, coll: CollData<'a>, arg1: i32, arg2: i32) {
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x803bd2b0),
+                    cstr(ctx, 0x803bd2a8),
                     (0x55e_i32 as u32),
-                    cstr(ctx, 0x803bd2b0),
+                    cstr(ctx, 0x804d3948),
                 )
             });
         }
@@ -4303,7 +4303,7 @@ pub fn mpColl_80044948_Floor<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
                     ctx,
                     cstr(ctx, 0x803bd3ac),
                     &[
-                        VarArg::Int(Handle::addr(cstr(ctx, 0x803bd2b0))),
+                        VarArg::Int(Handle::addr(cstr(ctx, 0x803bd2a8))),
                         VarArg::Int(0x9b8_i32 as u32),
                         VarArg::Int((coll).floor().index() as u32),
                     ],
@@ -4462,7 +4462,7 @@ pub fn mpColl_80044C74_Ceiling<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
                     ctx,
                     cstr(ctx, 0x803bd3c8),
                     &[
-                        VarArg::Int(Handle::addr(cstr(ctx, 0x803bd2b0))),
+                        VarArg::Int(Handle::addr(cstr(ctx, 0x803bd2a8))),
                         VarArg::Int(0xa3c_i32 as u32),
                     ],
                 );
@@ -23808,7 +23808,7 @@ pub fn mpColl_8004AB80<'a>(ctx: &'a Ctx, coll: CollData<'a>) -> i32 {
                     ctx,
                     cstr(ctx, 0x803bd3c8),
                     &[
-                        VarArg::Int(Handle::addr(cstr(ctx, 0x803bd2b0))),
+                        VarArg::Int(Handle::addr(cstr(ctx, 0x803bd2a8))),
                         VarArg::Int(0x1671_i32 as u32),
                     ],
                 );
@@ -29576,9 +29576,9 @@ fn inl_mpColl_RightWall_inline_unfused<'a>(ctx: &'a Ctx, line_id: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803bd2b0),
+            cstr(ctx, 0x803bd2a8),
             (0x14a_i32 as u32),
-            cstr(ctx, 0x803bd2b0),
+            cstr(ctx, 0x803bd2f4),
         )
     });
     statics::melee__mp__mpcoll::mpColl_80458810(ctx)
@@ -29660,9 +29660,9 @@ fn inl_mpColl_LeftWall_inline3_unfused<'a>(ctx: &'a Ctx, line_id: i32, arr: Val<
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803bd2b0),
+            cstr(ctx, 0x803bd2a8),
             (0x159_i32 as u32),
-            cstr(ctx, 0x803bd2b0),
+            cstr(ctx, 0x803bd2f4),
         )
     });
     statics::melee__mp__mpcoll::mpColl_80458810(ctx)
@@ -29700,9 +29700,9 @@ fn inl_mpColl_LeftWall_inline_unfused<'a>(ctx: &'a Ctx, line_id: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803bd2b0),
+            cstr(ctx, 0x803bd2a8),
             (0x159_i32 as u32),
-            cstr(ctx, 0x803bd2b0),
+            cstr(ctx, 0x803bd2f4),
         )
     });
     statics::melee__mp__mpcoll::mpColl_80458810(ctx)

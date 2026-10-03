@@ -97,7 +97,7 @@ pub fn grStadium_801D10F8<'a>(ctx: &'a Ctx, id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e1368),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b7f68))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e138c))),
                 VarArg::Int(0x120_i32 as u32),
                 VarArg::Int(id as u32),
             ],
@@ -1003,9 +1003,9 @@ pub fn grStadium_801D2528<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, arg1: i32, arg2:
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803b7f68),
+                        cstr(ctx, 0x803e138c),
                         (0x536_i32 as u32),
-                        cstr(ctx, 0x803b7f68),
+                        cstr(ctx, 0x804d4600),
                     )
                 });
                 break 's3;
@@ -1518,9 +1518,9 @@ pub fn fn_801D2ED0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x6d2_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e1548),
         )
     });
     gp2 = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, vision_gobj)));
@@ -1529,9 +1529,9 @@ pub fn fn_801D2ED0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x6d3_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d4604),
         )
     });
     (gp2).u().display().set_xF8_0((1_i32 as u8));
@@ -1556,9 +1556,9 @@ pub fn grStadium_801D2FD0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b7f68),
+                cstr(ctx, 0x803e138c),
                 (0x6ea_i32 as u32),
-                cstr(ctx, 0x803b7f68),
+                cstr(ctx, 0x803e1548),
             )
         });
         gp2 = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, vision_gobj)));
@@ -1567,9 +1567,9 @@ pub fn grStadium_801D2FD0<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b7f68),
+                cstr(ctx, 0x803e138c),
                 (0x6eb_i32 as u32),
-                cstr(ctx, 0x803b7f68),
+                cstr(ctx, 0x804d4604),
             )
         });
         (gp2).u().display().set_xF8_0((1_i32 as u8));
@@ -1602,9 +1602,9 @@ pub fn grStadium_801D3084<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b7f68),
+                cstr(ctx, 0x803e138c),
                 (0x703_i32 as u32),
-                cstr(ctx, 0x803b7f68),
+                cstr(ctx, 0x803e1548),
             )
         });
         new_var2 = inl_HSD_GObjGetUserData_unfused(ctx, vision_gobj);
@@ -1614,9 +1614,9 @@ pub fn grStadium_801D3084<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, unused: i32) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803b7f68),
+                cstr(ctx, 0x803e138c),
                 (0x704_i32 as u32),
-                cstr(ctx, 0x803b7f68),
+                cstr(ctx, 0x804d4604),
             )
         });
         (gp2).u().display().set_xF8_0((1_i32 as u8));
@@ -1821,9 +1821,9 @@ pub fn grStadium_801D3460<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x780_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e1554),
         )
     });
     (if !Handle::is_null(((gp2).win_dynamic_p())) {
@@ -1831,9 +1831,9 @@ pub fn grStadium_801D3460<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x781_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e1568),
         )
     });
     fns::HSD_SisLib_803A7664(ctx, (gp2).win_dynamic_p());
@@ -2042,9 +2042,9 @@ pub fn grStadium_801D384C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x812_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e1554),
         )
     });
     (if !Handle::is_null(((gp2).win_dynamic_p())) {
@@ -2052,9 +2052,9 @@ pub fn grStadium_801D384C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x813_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e1568),
         )
     });
     fns::HSD_SisLib_803A7664(ctx, (gp2).win_dynamic_p());
@@ -2132,9 +2132,9 @@ pub fn grStadium_801D3A0C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x848_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e1554),
         )
     });
     (if !Handle::is_null(((gp2).win_dynamic_p())) {
@@ -2142,9 +2142,9 @@ pub fn grStadium_801D3A0C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x849_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e1568),
         )
     });
     fns::HSD_SisLib_803A7664(ctx, (gp2).win_dynamic_p());
@@ -2233,9 +2233,9 @@ pub fn grStadium_801D3BBC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x884_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e1554),
         )
     });
     (if !Handle::is_null(((gp2).win_dynamic_p())) {
@@ -2243,9 +2243,9 @@ pub fn grStadium_801D3BBC<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x885_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e1568),
         )
     });
     {
@@ -2379,9 +2379,9 @@ pub fn grStadium_801D3F40<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x8e8_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e1554),
         )
     });
     (if !Handle::is_null(((gp2).win_dynamic_p())) {
@@ -2389,9 +2389,9 @@ pub fn grStadium_801D3F40<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x8e9_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e1568),
         )
     });
     fns::HSD_SisLib_803A7664(ctx, (gp2).win_dynamic_p());
@@ -2504,9 +2504,9 @@ pub fn grStadium_801D4194<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x950_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e1554),
         )
     });
     (if !Handle::is_null(((gp2).win_dynamic_p())) {
@@ -2514,9 +2514,9 @@ pub fn grStadium_801D4194<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x951_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e1568),
         )
     });
     fns::HSD_SisLib_803A7664(ctx, (gp2).win_dynamic_p());
@@ -2536,9 +2536,9 @@ pub fn fn_801D4220<'a>(ctx: &'a Ctx, dcreq: i32, args: u32, buf: Addr<'a>, cance
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x969_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e15d8),
         )
     });
     map_gobj = fns::Ground_GetMapGObj(ctx, 2_i32);
@@ -2547,9 +2547,9 @@ pub fn fn_801D4220<'a>(ctx: &'a Ctx, dcreq: i32, args: u32, buf: Addr<'a>, cance
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x96a_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e15e4),
         )
     });
     gp = (Handle::cast::<Ground<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, map_gobj)));
@@ -2558,9 +2558,9 @@ pub fn fn_801D4220<'a>(ctx: &'a Ctx, dcreq: i32, args: u32, buf: Addr<'a>, cance
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x96b_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d4614),
         )
     });
     (gp).u().stadium().set_xC4_b1((0_i32 as u8));
@@ -2577,9 +2577,9 @@ pub fn grStadium_801D42B8<'a>(ctx: &'a Ctx) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x978_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e15e4),
         )
     });
     gp = fns::grStadium_801D4354(ctx, map_gobj);
@@ -2588,9 +2588,9 @@ pub fn grStadium_801D42B8<'a>(ctx: &'a Ctx) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x979_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d4614),
         )
     });
     if ((gp).u().stadium().xC4_b1() != 0) {
@@ -2828,9 +2828,9 @@ pub fn grStadium_801D4548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     } else {
                         fns::__assert(
                             ctx,
-                            cstr(ctx, 0x803b7f68),
+                            cstr(ctx, 0x803e138c),
                             (0xa44_i32 as u32),
-                            cstr(ctx, 0x803b7f68),
+                            cstr(ctx, 0x804d4600),
                         )
                     });
                 }
@@ -2869,9 +2869,9 @@ pub fn grStadium_801D4548<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                     } else {
                         fns::__assert(
                             ctx,
-                            cstr(ctx, 0x803b7f68),
+                            cstr(ctx, 0x803e138c),
                             (0xa67_i32 as u32),
-                            cstr(ctx, 0x803b7f68),
+                            cstr(ctx, 0x804d4600),
                         )
                     });
                 }
@@ -3227,9 +3227,9 @@ fn inl_HSD_JObjGetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d45f0),
             (0x378_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d45f8),
         )
     });
     return (jobj).scale().y();
@@ -3243,9 +3243,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d45f0),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d45f8),
         )
     });
     result = 0_i32;
@@ -3265,9 +3265,9 @@ fn inl_HSD_JObjSetScaleY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d45f0),
             (0x317_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d45f8),
         )
     });
     (jobj).scale().set_y(y);
@@ -3287,9 +3287,9 @@ fn inl_HSD_JObjAddRotationZ_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, z__a: 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d45f0),
             (0x41d_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d45f8),
         )
     });
     (jobj)
@@ -3404,9 +3404,9 @@ fn inl_startLoad<'a>(ctx: &'a Ctx, i: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x99a_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e15e4),
         )
     });
     gp = inl_grStadium_801D4354(ctx, map_gobj);
@@ -3415,9 +3415,9 @@ fn inl_startLoad<'a>(ctx: &'a Ctx, i: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x803e138c),
             (0x99b_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d4614),
         )
     });
     (gp).u().stadium().set_xC4_b1((1_i32 as u8));
@@ -3450,9 +3450,9 @@ fn inl_HSD_JObjGetScaleY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> f64 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d45f0),
             (0x378_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d45f8),
         )
     });
     return (jobj).scale().y();
@@ -3466,9 +3466,9 @@ fn inl_HSD_JObjMtxIsDirty<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d45f0),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d45f8),
         )
     });
     result = 0_i32;
@@ -3488,9 +3488,9 @@ fn inl_HSD_JObjSetScaleY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d45f0),
             (0x317_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d45f8),
         )
     });
     (jobj).scale().set_y(y);
@@ -3511,9 +3511,9 @@ fn inl_HSD_JObjSetTranslateY<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f64) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d45f0),
             (0x3b3_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d45f8),
         )
     });
     (jobj).translate().set_y(y);
@@ -3533,9 +3533,9 @@ fn inl_HSD_JObjSetScaleY_2<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y__a: f64, y__c
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d45f0),
             (0x317_i32 as u32),
-            cstr(ctx, 0x803b7f68),
+            cstr(ctx, 0x804d45f8),
         )
     });
     (jobj).scale().set_y(fp::fmuls(y__a, y__c));

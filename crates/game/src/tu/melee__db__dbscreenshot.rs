@@ -99,9 +99,9 @@ pub fn db_TakeScreenshotIfPending<'a>(ctx: &'a Ctx) {
                     fns::OSReport(ctx, cstr(ctx, 0x803eadc8), &[]);
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803eae04),
+                        cstr(ctx, 0x803eadd8),
                         (61_i32 as u32),
-                        cstr(ctx, 0x803eae04),
+                        cstr(ctx, 0x804d4b00),
                     )
                 })
             });

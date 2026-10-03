@@ -102,9 +102,9 @@ pub fn HSD_HashSearch<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80382a46),
+            cstr(ctx, 0x804d5fc0),
             (113_i32 as u32),
-            cstr(ctx, 0x80382a46),
+            cstr(ctx, 0x80407720),
         )
     });
     entry = fns::HashSearchEntry(

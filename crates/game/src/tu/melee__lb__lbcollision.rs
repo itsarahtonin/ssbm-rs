@@ -3830,9 +3830,9 @@ fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b9880),
+            cstr(ctx, 0x804d3700),
             (0x478_i32 as u32),
-            cstr(ctx, 0x803b9880),
+            cstr(ctx, 0x804d3708),
         )
     });
     ctx.call::<_, ()>(0x80007d68, (jobj,));

@@ -72,9 +72,9 @@ pub fn grDynamicAttr_801CA0F8<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803e0ba4),
+            cstr(ctx, 0x803e0b80),
             (55_i32 as u32),
-            cstr(ctx, 0x803e0ba4),
+            cstr(ctx, 0x803e0b90),
         )
     });
     if !Handle::is_null(

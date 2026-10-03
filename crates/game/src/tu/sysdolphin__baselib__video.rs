@@ -114,9 +114,9 @@ pub fn HSD_VIPreRetraceCB<'a>(ctx: &'a Ctx, retraceCount: u32) {
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x80406d0c),
+                    cstr(ctx, 0x804d5e88),
                     (252_i32 as u32),
-                    cstr(ctx, 0x80406d0c),
+                    cstr(ctx, 0x80406ce0),
                 )
             });
             fns::VISetNextFrameBuffer(ctx, (fns::HSD_VIData(ctx)).xfb().get(idx).buffer());
@@ -408,7 +408,7 @@ pub fn HSD_VICopyEFB2XFBPtr<'a>(ctx: &'a Ctx, vi: _HSD_VIStatus<'a>, buffer: Add
         if __case <= 3 {
             fns::HSD_Panic(
                 ctx,
-                cstr(ctx, 0x80406d0c),
+                cstr(ctx, 0x804d5e88),
                 (0x207_i32 as u32),
                 cstr(ctx, 0x80406cec),
             );
@@ -446,9 +446,9 @@ pub fn HSD_VIDrawDoneXFB<'a>(ctx: &'a Ctx, idx: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406d0c),
+            cstr(ctx, 0x804d5e88),
             (0x2d2_i32 as u32),
-            cstr(ctx, 0x80406d0c),
+            cstr(ctx, 0x80406d3c),
         )
     });
     (fns::HSD_VIData(ctx)).xfb().get(idx).set_status(
@@ -1158,9 +1158,9 @@ fn inl_HSD_VISetXFBWaitDone_unfused<'a>(ctx: &'a Ctx, idx: i32) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406d0c),
+            cstr(ctx, 0x804d5e88),
             (0x24e_i32 as u32),
-            cstr(ctx, 0x80406d0c),
+            cstr(ctx, 0x80406d10),
         )
     });
     (fns::HSD_VIData(ctx))

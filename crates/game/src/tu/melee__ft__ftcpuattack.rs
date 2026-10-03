@@ -297,9 +297,9 @@ pub fn ftCo_800B4AB0<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c61f4),
+            cstr(ctx, 0x803c6108),
             (250_i32 as u32),
-            cstr(ctx, 0x803c61f4),
+            cstr(ctx, 0x804d3b70),
         )
     });
     #[allow(unreachable_code)]
@@ -590,9 +590,9 @@ pub fn ftCo_800B52AC<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c61f4),
+            cstr(ctx, 0x803c6108),
             (0x1c5_i32 as u32),
-            cstr(ctx, 0x803c61f4),
+            cstr(ctx, 0x804d3b70),
         )
     });
     #[allow(unreachable_code)]
@@ -858,9 +858,9 @@ pub fn ftCo_800B5AB0<'a>(ctx: &'a Ctx, fp: Fighter<'a>, arg1: Addr<'a>, arg2: Ad
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c61f4),
+            cstr(ctx, 0x803c6108),
             (0x26a_i32 as u32),
-            cstr(ctx, 0x803c61f4),
+            cstr(ctx, 0x804d3b70),
         )
     });
     #[allow(unreachable_code)]
@@ -921,9 +921,9 @@ pub fn ftCo_800B6208<'a>(ctx: &'a Ctx, arr: ftCo_AttackEntry<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c61f4),
+            cstr(ctx, 0x803c6108),
             (0x28a_i32 as u32),
-            cstr(ctx, 0x803c61f4),
+            cstr(ctx, 0x804d3b70),
         )
     });
     #[allow(unreachable_code)]

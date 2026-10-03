@@ -63,7 +63,7 @@ pub fn grTNess_80222674<'a>(ctx: &'a Ctx, id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e90c0),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e9040))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e90e4))),
                 VarArg::Int(195_i32 as u32),
                 VarArg::Int(id as u32),
             ],

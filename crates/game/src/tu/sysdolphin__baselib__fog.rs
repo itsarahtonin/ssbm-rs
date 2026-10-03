@@ -48,7 +48,7 @@ pub fn HSD_FogSet<'a>(ctx: &'a Ctx, fog: HSD_Fog<'a>) {
     if Handle::is_null(cobj) {
         fns::HSD_Panic(
             ctx,
-            cstr(ctx, 0x803b95a8),
+            cstr(ctx, 0x804d5f20),
             (77_i32 as u32),
             cstr(ctx, 0x804070f0),
         );
@@ -147,9 +147,9 @@ pub fn HSD_FogLoadDesc<'a>(ctx: &'a Ctx, desc: HSD_FogDesc<'a>) -> HSD_Fog<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b95a8),
+            cstr(ctx, 0x804d5f20),
             (153_i32 as u32),
-            cstr(ctx, 0x803b95a8),
+            cstr(ctx, 0x804d5f28),
         )
     });
     fns::HSD_FogInit(ctx, fog, desc);
@@ -192,9 +192,9 @@ pub fn HSD_FogAdjLoadDesc<'a>(ctx: &'a Ctx, desc: HSD_FogAdjDesc<'a>) -> HSD_Fog
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b95a8),
+            cstr(ctx, 0x804d5f20),
             (230_i32 as u32),
-            cstr(ctx, 0x803b95a8),
+            cstr(ctx, 0x804d5f2c),
         )
     });
     fns::HSD_FogAdjInit(ctx, adj, desc);
@@ -386,9 +386,9 @@ fn inl_HSD_FogAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_Fog<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b95a8),
+            cstr(ctx, 0x804d5f20),
             (140_i32 as u32),
-            cstr(ctx, 0x803b95a8),
+            cstr(ctx, 0x804d5f28),
         )
     });
     return fog;
@@ -402,9 +402,9 @@ fn inl_HSD_FogAdjAlloc_unfused<'a>(ctx: &'a Ctx) -> HSD_FogAdj<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b95a8),
+            cstr(ctx, 0x804d5f20),
             (214_i32 as u32),
-            cstr(ctx, 0x803b95a8),
+            cstr(ctx, 0x804d5f2c),
         )
     });
     return adj;

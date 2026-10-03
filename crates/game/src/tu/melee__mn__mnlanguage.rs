@@ -281,9 +281,9 @@ pub fn mnLanguage_8024C3C4<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>) {
             fns::OSReport(ctx, cstr(ctx, 0x803ef5b8), &[]);
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803ef5a0),
+                cstr(ctx, 0x803ef5d0),
                 (0x163_i32 as u32),
-                cstr(ctx, 0x803ef5a0),
+                cstr(ctx, 0x803ef5e0),
             )
         })
     });

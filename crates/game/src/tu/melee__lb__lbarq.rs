@@ -126,9 +126,9 @@ pub fn lbArq_80014BD0<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d3784),
+            cstr(ctx, 0x804d3778),
             (103_i32 as u32),
-            cstr(ctx, 0x804d3784),
+            cstr(ctx, 0x804d3780),
         )
     });
     (free_head).set((rp).next());

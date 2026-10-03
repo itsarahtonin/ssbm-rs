@@ -1010,9 +1010,9 @@ pub fn HSD_PObjLoadDesc<'a>(ctx: &'a Ctx, pobjdesc: HSD_PObjDesc<'a>) -> HSD_POb
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x8040639c),
+                    cstr(ctx, 0x804d5d68),
                     (0x25d_i32 as u32),
-                    cstr(ctx, 0x8040639c),
+                    cstr(ctx, 0x80406700),
                 )
             });
         }
@@ -1056,9 +1056,9 @@ pub fn HSD_PObjSetDefaultClass<'a>(ctx: &'a Ctx, info: HSD_PObjInfo<'a>) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x8040639c),
+                cstr(ctx, 0x804d5d68),
                 (0x2a1_i32 as u32),
-                cstr(ctx, 0x8040639c),
+                cstr(ctx, 0x80406448),
             )
         });
     }
@@ -1076,9 +1076,9 @@ pub fn HSD_PObjAlloc<'a>(ctx: &'a Ctx) -> HSD_PObj<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x804d5d68),
             (0x2bf_i32 as u32),
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x80406700),
         )
     });
     return pobj;
@@ -1113,9 +1113,9 @@ pub fn resolveEnvelope<'a>(
                         } else {
                             fns::__assert(
                                 ctx,
-                                cstr(ctx, 0x8040639c),
+                                cstr(ctx, 0x804d5d68),
                                 (0x2e0_i32 as u32),
-                                cstr(ctx, 0x8040639c),
+                                cstr(ctx, 0x8040646c),
                             )
                         });
                         inl_HSD_JObjRefThis_unfused(ctx, (env).jobj());
@@ -1357,9 +1357,9 @@ pub fn get_shape_vertex_xyz<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x804d5d68),
             (0x44e_i32 as u32),
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x804064bc),
         )
     });
     src_base = Handle::cast::<Addr<'a>>(Handle::add(
@@ -1398,7 +1398,7 @@ pub fn get_shape_vertex_xyz<'a>(
             if __case <= 4 {
                 fns::HSD_Panic(
                     ctx,
-                    cstr(ctx, 0x8040639c),
+                    cstr(ctx, 0x804d5d68),
                     (0x479_i32 as u32),
                     cstr(ctx, 0x804064ec),
                 );
@@ -1439,9 +1439,9 @@ pub fn get_shape_normal_xyz<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x804d5d68),
             (0x48d_i32 as u32),
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x80406508),
         )
     });
     src_base = Handle::cast::<Addr<'a>>(Handle::add(
@@ -1480,7 +1480,7 @@ pub fn get_shape_normal_xyz<'a>(
             if __case <= 4 {
                 fns::HSD_Panic(
                     ctx,
-                    cstr(ctx, 0x8040639c),
+                    cstr(ctx, 0x804d5d68),
                     (0x4b8_i32 as u32),
                     cstr(ctx, 0x80406538),
                 );
@@ -1510,9 +1510,9 @@ pub fn get_shape_nbt_xyz<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x804d5d68),
             (0x4c5_i32 as u32),
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x80406550),
         )
     });
     if ((shape_set).normal_desc()).attr_type() == (((enums::GX_INDEX16 as i32) as u32) as i32) {
@@ -1532,9 +1532,9 @@ pub fn get_shape_nbt_xyz<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x804d5d68),
             (0x4ce_i32 as u32),
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x80406508),
         )
     });
     src_base = Handle::cast::<Addr<'a>>(Handle::add(
@@ -1629,7 +1629,7 @@ pub fn get_shape_nbt_xyz<'a>(
             if __case <= 4 {
                 fns::HSD_Panic(
                     ctx,
-                    cstr(ctx, 0x8040639c),
+                    cstr(ctx, 0x804d5d68),
                     (0x4ed_i32 as u32),
                     cstr(ctx, 0x80406538),
                 );
@@ -4594,9 +4594,9 @@ pub fn HSD_PObjGetMtxMark<'a>(ctx: &'a Ctx, idx: i32, obj: Ptr<'a, Addr<'a>>, ma
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x804d5d68),
             (0x677_i32 as u32),
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x804d5d78),
         )
     });
     (if !Handle::is_null((mark)) {
@@ -4604,9 +4604,9 @@ pub fn HSD_PObjGetMtxMark<'a>(ctx: &'a Ctx, idx: i32, obj: Ptr<'a, Addr<'a>>, ma
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x804d5d68),
             (0x678_i32 as u32),
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x804d5d7c),
         )
     });
     if (idx < 0_i32) || (2_i32 <= idx) {
@@ -4797,9 +4797,9 @@ pub fn SetupEnvelopeModelMtx<'a>(
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x8040639c),
+                        cstr(ctx, 0x804d5d68),
                         (0x750_i32 as u32),
-                        cstr(ctx, 0x8040639c),
+                        cstr(ctx, 0x80406418),
                     )
                 });
                 if (envelope).weight() >= (fp::fsubs(1.0, 1.000000013351432e-10_f64)) {
@@ -4872,9 +4872,9 @@ pub fn SetupEnvelopeModelMtx<'a>(
                             } else {
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x8040639c),
+                                    cstr(ctx, 0x804d5d68),
                                     (0x764_i32 as u32),
-                                    cstr(ctx, 0x8040639c),
+                                    cstr(ctx, 0x804066b0),
                                 )
                             });
                             jp = (envelope).jobj();
@@ -4884,9 +4884,9 @@ pub fn SetupEnvelopeModelMtx<'a>(
                             } else {
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x8040639c),
+                                    cstr(ctx, 0x804d5d68),
                                     (0x767_i32 as u32),
-                                    cstr(ctx, 0x8040639c),
+                                    cstr(ctx, 0x804d5d94),
                                 )
                             });
                             (if !Handle::is_null(((jp).envelopemtx())) {
@@ -4894,9 +4894,9 @@ pub fn SetupEnvelopeModelMtx<'a>(
                             } else {
                                 fns::__assert(
                                     ctx,
-                                    cstr(ctx, 0x8040639c),
+                                    cstr(ctx, 0x804d5d68),
                                     (0x768_i32 as u32),
-                                    cstr(ctx, 0x8040639c),
+                                    cstr(ctx, 0x804066c0),
                                 )
                             });
                             fns::PSMTXConcat(
@@ -5506,9 +5506,9 @@ fn inl_HSD_PObjAddAnim_unfused<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>, shapeanim: 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x804d5d68),
             (247_i32 as u32),
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x804063e0),
         )
     });
     if Handle::is_null(shapeanim) {
@@ -5618,9 +5618,9 @@ fn inl_iref_INC_unfused<'a>(ctx: &'a Ctx, o: Addr<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x80406478),
             (158_i32 as u32),
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x80406484),
         )
     });
 }
@@ -5668,9 +5668,9 @@ fn inl_HSD_PObjResolveRefs_unfused<'a>(ctx: &'a Ctx, pobj: HSD_PObj<'a>, pdesc: 
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x8040639c),
+                        cstr(ctx, 0x804d5d68),
                         (0x2fb_i32 as u32),
-                        cstr(ctx, 0x8040639c),
+                        cstr(ctx, 0x804064ac),
                     )
                 });
                 inl_HSD_JObjRefThis_unfused(ctx, (pobj).u().jobj());
@@ -5843,9 +5843,9 @@ fn inl_HSD_PObjGetMtxMark_unfused<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x804d5d68),
             (0x677_i32 as u32),
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x804d5d78),
         )
     });
     (if !Handle::is_null((mark)) {
@@ -5853,9 +5853,9 @@ fn inl_HSD_PObjGetMtxMark_unfused<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x804d5d68),
             (0x678_i32 as u32),
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x804d5d7c),
         )
     });
     if (idx < 0_i32) || (2_i32 <= idx) {
@@ -5939,9 +5939,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x804d5d84),
             (0x234_i32 as u32),
-            cstr(ctx, 0x8040639c),
+            cstr(ctx, 0x804064b4),
         )
     });
     result = 0_i32;

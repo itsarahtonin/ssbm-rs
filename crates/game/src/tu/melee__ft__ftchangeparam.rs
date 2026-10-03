@@ -36,9 +36,9 @@ pub fn ftCo_CalcYScaledKnockback<'a>(ctx: &'a Ctx, arg0: f64, scale: f64, arg2: 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c6fec),
+            cstr(ctx, 0x803c6f78),
             (30_i32 as u32),
-            cstr(ctx, 0x803c6fec),
+            cstr(ctx, 0x803c6f88),
         )
     });
     if arg2 == 0.0 {
@@ -551,9 +551,9 @@ pub fn ftCo_800D105C<'a>(ctx: &'a Ctx, fgp: HSD_GObj<'a>) {
             fns::OSReport(ctx, cstr(ctx, 0x803c6f98), &[]);
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803c6fec),
+                cstr(ctx, 0x803c6f78),
                 (0x10d_i32 as u32),
-                cstr(ctx, 0x803c6fec),
+                cstr(ctx, 0x803c6fc0),
             )
         })
     });
@@ -585,9 +585,9 @@ fn inl_ftCo_CalcYScaledKnockback<'a>(ctx: &'a Ctx, arg0: f64, scale: f64, arg2: 
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c6fec),
+            cstr(ctx, 0x803c6f78),
             (30_i32 as u32),
-            cstr(ctx, 0x803c6fec),
+            cstr(ctx, 0x803c6f88),
         )
     });
     if fp::fneg(arg2) == 0.0 {
@@ -618,9 +618,9 @@ fn inl_ftCo_CalcYScaledKnockback_2<'a>(ctx: &'a Ctx, arg0: f64, scale: f64, arg2
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803c6fec),
+            cstr(ctx, 0x803c6f78),
             (30_i32 as u32),
-            cstr(ctx, 0x803c6fec),
+            cstr(ctx, 0x803c6f88),
         )
     });
     if arg2 == 0.0 {

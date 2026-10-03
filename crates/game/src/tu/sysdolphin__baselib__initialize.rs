@@ -141,7 +141,7 @@ pub fn HSD_AllocateXFB<'a>(
         if arena_lo > arena_hi {
             fns::HSD_Panic(
                 ctx,
-                cstr(ctx, 0x803b94f8),
+                cstr(ctx, 0x80406bc0),
                 (0x109_i32 as u32),
                 cstr(ctx, 0x80406bd0),
             );
@@ -183,7 +183,7 @@ pub fn HSD_AllocateFifo<'a>(ctx: &'a Ctx, size: u32) -> GXFifoObj<'a> {
         if Handle::is_null(fifo) {
             fns::HSD_Panic(
                 ctx,
-                cstr(ctx, 0x803b94f8),
+                cstr(ctx, 0x80406bc0),
                 (0x127_i32 as u32),
                 cstr(ctx, 0x80406bf4),
             );
@@ -194,7 +194,7 @@ pub fn HSD_AllocateFifo<'a>(ctx: &'a Ctx, size: u32) -> GXFifoObj<'a> {
         if arena_lo > Handle::addr(fns::OSGetArenaHi(ctx)) {
             fns::HSD_Panic(
                 ctx,
-                cstr(ctx, 0x803b94f8),
+                cstr(ctx, 0x80406bc0),
                 (0x12e_i32 as u32),
                 cstr(ctx, 0x80406c1c),
             );
@@ -616,9 +616,9 @@ fn inl_HSD_ObjAllocGetUsing_unfused<'a>(ctx: &'a Ctx, data: _HSD_ObjAllocData<'a
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b94f8),
+            cstr(ctx, 0x80406c70),
             (205_i32 as u32),
-            cstr(ctx, 0x803b94f8),
+            cstr(ctx, 0x804d5e7c),
         )
     });
     return (data).used();
@@ -631,9 +631,9 @@ fn inl_HSD_ObjAllocGetFreed_unfused<'a>(ctx: &'a Ctx, data: _HSD_ObjAllocData<'a
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b94f8),
+            cstr(ctx, 0x80406c70),
             (221_i32 as u32),
-            cstr(ctx, 0x803b94f8),
+            cstr(ctx, 0x804d5e7c),
         )
     });
     return (data).free();
@@ -646,9 +646,9 @@ fn inl_HSD_ObjAllocGetPeak_unfused<'a>(ctx: &'a Ctx, data: _HSD_ObjAllocData<'a>
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b94f8),
+            cstr(ctx, 0x80406c70),
             (237_i32 as u32),
-            cstr(ctx, 0x803b94f8),
+            cstr(ctx, 0x804d5e7c),
         )
     });
     return (data).peak();

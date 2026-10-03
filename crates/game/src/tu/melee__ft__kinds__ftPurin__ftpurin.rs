@@ -547,9 +547,9 @@ fn inl_HSD_JObjGetMtxPtr_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> ArrV<'
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803cfef0),
+            cstr(ctx, 0x804d3e80),
             (0x478_i32 as u32),
-            cstr(ctx, 0x803cfef0),
+            cstr(ctx, 0x804d3e88),
         )
     });
     ctx.call::<_, ()>(0x80007d68, (jobj,));
@@ -564,9 +564,9 @@ fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803cfef0),
+            cstr(ctx, 0x804d3e80),
             (0x492_i32 as u32),
-            cstr(ctx, 0x803cfef0),
+            cstr(ctx, 0x804d3e88),
         )
     });
     (if !Handle::is_null((mtx)) {
@@ -574,9 +574,9 @@ fn inl_HSD_JObjCopyMtx_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, mtx: ArrV<'
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803cfef0),
+            cstr(ctx, 0x804d3e80),
             (0x493_i32 as u32),
-            cstr(ctx, 0x803cfef0),
+            cstr(ctx, 0x804d3e90),
         )
     });
     fns::PSMTXCopy(ctx, mtx, (jobj).mtx().get(0));
@@ -590,9 +590,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803cfef0),
+            cstr(ctx, 0x804d3e80),
             (0x234_i32 as u32),
-            cstr(ctx, 0x803cfef0),
+            cstr(ctx, 0x804d3e88),
         )
     });
     result = 0_i32;

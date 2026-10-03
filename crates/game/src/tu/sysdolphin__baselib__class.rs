@@ -74,9 +74,9 @@ pub fn hsdInitClassInfo<'a>(
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x80407594),
+                cstr(ctx, 0x804d5fa8),
                 (94_i32 as u32),
-                cstr(ctx, 0x80407594),
+                cstr(ctx, 0x804075cc),
             )
         });
         (if ((class_info).head().info_size() as i32) >= ((parent_info).head().info_size() as i32) {
@@ -84,9 +84,9 @@ pub fn hsdInitClassInfo<'a>(
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x80407594),
+                cstr(ctx, 0x804d5fa8),
                 (95_i32 as u32),
-                cstr(ctx, 0x80407594),
+                cstr(ctx, 0x80407604),
             )
         });
         let _ = fns::memcpy(
@@ -123,9 +123,9 @@ pub fn GetMemoryEntry<'a>(ctx: &'a Ctx, idx: i32) -> _HSD_MemoryEntry<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407594),
+            cstr(ctx, 0x804d5fa8),
             (171_i32 as u32),
-            cstr(ctx, 0x80407594),
+            cstr(ctx, 0x80407698),
         )
     });
     if idx >= statics::sysdolphin__baselib__class::nb_memory_list(ctx).get() {
@@ -1358,9 +1358,9 @@ fn inl_hsdChangeClass_inline_unfused<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407594),
+            cstr(ctx, 0x804d5fa8),
             (0x249_i32 as u32),
-            cstr(ctx, 0x80407594),
+            cstr(ctx, 0x804d5fb4),
         )
     });
     (if !Handle::is_null((class_info)) {
@@ -1368,9 +1368,9 @@ fn inl_hsdChangeClass_inline_unfused<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80407594),
+            cstr(ctx, 0x804d5fa8),
             (0x24a_i32 as u32),
-            cstr(ctx, 0x80407594),
+            cstr(ctx, 0x804076c8),
         )
     });
     var_r29 = inl_HSD_GetClassInfo_unfused(ctx, object);

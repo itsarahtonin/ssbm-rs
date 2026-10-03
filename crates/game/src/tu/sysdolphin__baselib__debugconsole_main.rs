@@ -4886,7 +4886,7 @@ pub fn fn_80397814<'a>(ctx: &'a Ctx, arg: Addr<'a>) -> Addr<'a> {
             178 => {
                 fns::OSPanic(
                     ctx,
-                    cstr(ctx, 0x8040abcc),
+                    cstr(ctx, 0x8040bee0),
                     0x8b4_i32,
                     cstr(ctx, 0x8040bef4),
                     &[],

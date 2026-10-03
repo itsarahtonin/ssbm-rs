@@ -47,9 +47,9 @@ pub fn lbArchive_InitializeDAT<'a>(
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803ba5a0),
+                cstr(ctx, 0x803ba5a4),
                 (73_i32 as u32),
-                cstr(ctx, 0x803ba5a0),
+                cstr(ctx, 0x804d37c0),
             )
         });
     }
@@ -146,9 +146,9 @@ pub fn lbArchive_80016EFC<'a>(ctx: &'a Ctx, archive: HSD_Archive<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803ba5a0),
+            cstr(ctx, 0x803ba5a4),
             (252_i32 as u32),
-            cstr(ctx, 0x803ba5a0),
+            cstr(ctx, 0x804d37c4),
         )
     });
     (if (((archive).flags() & (1_i32 as u32)) != 0) {
@@ -156,9 +156,9 @@ pub fn lbArchive_80016EFC<'a>(ctx: &'a Ctx, archive: HSD_Archive<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803ba5a0),
+            cstr(ctx, 0x803ba5a4),
             (253_i32 as u32),
-            cstr(ctx, 0x803ba5a0),
+            cstr(ctx, 0x803ba5c8),
         )
     });
     fns::lbHeap_80015CA8(
@@ -438,9 +438,9 @@ fn inl_vLoadSectionsFatal_unfused<'a>(
                     } else {
                         fns::__assert(
                             ctx,
-                            cstr(ctx, 0x803ba5a0),
+                            cstr(ctx, 0x803ba5a4),
                             (112_i32 as u32),
-                            cstr(ctx, 0x803ba5a0),
+                            cstr(ctx, 0x804d37c0),
                         )
                     });
                 }

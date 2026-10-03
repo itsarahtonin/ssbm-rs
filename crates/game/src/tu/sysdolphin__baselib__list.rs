@@ -52,9 +52,9 @@ pub fn HSD_SListAlloc<'a>(ctx: &'a Ctx) -> _HSD_SList<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d5f54),
+            cstr(ctx, 0x804d5f48),
             (76_i32 as u32),
-            cstr(ctx, 0x804d5f54),
+            cstr(ctx, 0x804d5f50),
         )
     });
     let _ = fns::memset(ctx, Handle::cast::<Addr<'a>>(list), 0_i32, 8_u32);
@@ -102,9 +102,9 @@ pub fn HSD_SListAppendList<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d5f54),
+            cstr(ctx, 0x804d5f48),
             (179_i32 as u32),
-            cstr(ctx, 0x804d5f54),
+            cstr(ctx, 0x804d5f58),
         )
     });
     if !Handle::is_null(list) {
@@ -132,9 +132,9 @@ pub fn HSD_SListPrependList<'a>(
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d5f54),
+            cstr(ctx, 0x804d5f48),
             (202_i32 as u32),
-            cstr(ctx, 0x804d5f54),
+            cstr(ctx, 0x804d5f60),
         )
     });
     (prev).set_next(list);
@@ -172,9 +172,9 @@ fn inl_HSD_SListAlloc_unfused<'a>(ctx: &'a Ctx) -> _HSD_SList<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d5f54),
+            cstr(ctx, 0x804d5f48),
             (76_i32 as u32),
-            cstr(ctx, 0x804d5f54),
+            cstr(ctx, 0x804d5f50),
         )
     });
     let _ = fns::memset(ctx, Handle::cast::<Addr<'a>>(list), 0_i32, 8_u32);

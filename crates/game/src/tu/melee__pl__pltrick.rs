@@ -658,9 +658,9 @@ pub fn pl_80038144<'a>(
                 } else {
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803bce74),
+                        cstr(ctx, 0x803bceb0),
                         (126_i32 as u32),
-                        cstr(ctx, 0x803bce74),
+                        cstr(ctx, 0x803bcebc),
                     )
                 });
                 if x18d4_x3 < 100_i32 {
@@ -814,9 +814,9 @@ pub fn pl_80038628<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, kind: i32) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803bce74),
+            cstr(ctx, 0x803bceb0),
             (0x1a1_i32 as u32),
-            cstr(ctx, 0x803bce74),
+            cstr(ctx, 0x803bcedc),
         )
     });
     fp = (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));

@@ -1149,9 +1149,9 @@ pub fn lbShadow_8000ED54<'a>(ctx: &'a Ctx, lbshadow: LbShadow<'a>, jobj: HSD_JOb
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803ba0ec),
+            cstr(ctx, 0x803ba0d8),
             (54_i32 as u32),
-            cstr(ctx, 0x803ba0ec),
+            cstr(ctx, 0x803ba0e4),
         )
     });
     shadow = fns::HSD_ShadowAlloc(ctx);
@@ -1189,7 +1189,7 @@ pub fn lbShadow_8000EE8C<'a>(ctx: &'a Ctx, lbshadow: LbShadow<'a>) {
     (if !Handle::is_null((lbshadow)) {
         ({ () })
     } else {
-        fns::__assert(ctx, cstr(ctx, 0x803ba0ec), 98_u32, cstr(ctx, 0x803ba0ec))
+        fns::__assert(ctx, cstr(ctx, 0x803ba0d8), 98_u32, cstr(ctx, 0x803ba0e4))
     });
     if !Handle::is_null((lbshadow).shadow()) {
         fns::HSD_ShadowRemove(ctx, (lbshadow).shadow());
@@ -1418,9 +1418,9 @@ pub fn lbShadow_8000F38C<'a>(ctx: &'a Ctx, arg0: i32) {
         } else {
             fns::__assert(
                 ctx,
-                cstr(ctx, 0x803ba0ec),
+                cstr(ctx, 0x803ba0d8),
                 (0x181_i32 as u32),
-                cstr(ctx, 0x803ba0ec),
+                cstr(ctx, 0x804d3730),
             )
         });
         if !(fns::HSD_LObjGetPosition(ctx, lobj, lightPos) != 0) {
@@ -1431,9 +1431,9 @@ pub fn lbShadow_8000F38C<'a>(ctx: &'a Ctx, arg0: i32) {
                     fns::OSReport(ctx, cstr(ctx, 0x803ba12c), &[]);
                     fns::__assert(
                         ctx,
-                        cstr(ctx, 0x803ba0ec),
+                        cstr(ctx, 0x803ba0d8),
                         (0x184_i32 as u32),
-                        cstr(ctx, 0x803ba0ec),
+                        cstr(ctx, 0x804d3738),
                     )
                 })
             });

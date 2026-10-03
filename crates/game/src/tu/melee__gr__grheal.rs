@@ -91,7 +91,7 @@ pub fn grHeal_8021EFEC<'a>(ctx: &'a Ctx, gobj_id: u32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e84f8),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803b84a8))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e851c))),
                 VarArg::Int(0x111_i32 as u32),
                 VarArg::Int(gobj_id as u32),
             ],
@@ -337,9 +337,9 @@ pub fn grHeal_8021F4E8<'a>(ctx: &'a Ctx, arg0: i32, parent_jobj: HSD_JObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b84a8),
+            cstr(ctx, 0x803e851c),
             (0x1b8_i32 as u32),
-            cstr(ctx, 0x803b84a8),
+            cstr(ctx, 0x804d49e0),
         )
     });
     fns::grAnime_801C8138(ctx, gobj, 4_i32, 0_i32);
@@ -403,9 +403,9 @@ pub fn grHeal_8021F628<'a>(ctx: &'a Ctx, arg0: i32, jobj_parent: HSD_JObj<'a>) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803b84a8),
+            cstr(ctx, 0x803e851c),
             (0x201_i32 as u32),
-            cstr(ctx, 0x803b84a8),
+            cstr(ctx, 0x804d49e0),
         )
     });
     fns::grAnime_801C8138(ctx, gobj, 2_i32, 0_i32);

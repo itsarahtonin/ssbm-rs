@@ -44,7 +44,7 @@ pub fn HSD_SisLib_Alloc<'a>(ctx: &'a Ctx, size: i32) -> Addr<'a> {
         fns::OSReport(ctx, cstr(ctx, 0x8040c4f0), &[]);
         fns::OSPanic(
             ctx,
-            cstr(ctx, 0x8040c490),
+            cstr(ctx, 0x8040c504),
             60_i32,
             cstr(ctx, 0x8040c490),
             &[],
@@ -87,7 +87,7 @@ pub fn HSD_SisLib_Alloc<'a>(ctx: &'a Ctx, size: i32) -> Addr<'a> {
         fns::OSReport(ctx, cstr(ctx, 0x8040c510), &[]);
         fns::OSPanic(
             ctx,
-            cstr(ctx, 0x8040c490),
+            cstr(ctx, 0x8040c504),
             86_i32,
             cstr(ctx, 0x8040c490),
             &[],
@@ -106,7 +106,7 @@ pub fn HSD_SisLib_Alloc<'a>(ctx: &'a Ctx, size: i32) -> Addr<'a> {
             fns::OSReport(ctx, cstr(ctx, 0x8040c510), &[]);
             fns::OSPanic(
                 ctx,
-                cstr(ctx, 0x8040c490),
+                cstr(ctx, 0x8040c504),
                 95_i32,
                 cstr(ctx, 0x8040c490),
                 &[],
@@ -957,7 +957,7 @@ pub fn HSD_SisLib_803A62A0<'a>(
         );
         fns::OSPanic(
             ctx,
-            cstr(ctx, 0x8040c490),
+            cstr(ctx, 0x8040c504),
             0x24a_i32,
             cstr(ctx, 0x8040c490),
             &[],
@@ -981,7 +981,7 @@ pub fn HSD_SisLib_803A62A0<'a>(
             );
             fns::OSPanic(
                 ctx,
-                cstr(ctx, 0x8040c490),
+                cstr(ctx, 0x8040c504),
                 0x24f_i32,
                 cstr(ctx, 0x8040c490),
                 &[],

@@ -552,9 +552,9 @@ pub fn HSD_WObjLoadDesc<'a>(ctx: &'a Ctx, desc: HSD_WObjDesc<'a>) -> HSD_WObj<'a
             } else {
                 fns::__assert(
                     ctx,
-                    cstr(ctx, 0x80406fd4),
+                    cstr(ctx, 0x804d5ef8),
                     (252_i32 as u32),
-                    cstr(ctx, 0x80406fd4),
+                    cstr(ctx, 0x8040706c),
                 )
             });
         }
@@ -680,9 +680,9 @@ pub fn HSD_WObjAlloc<'a>(ctx: &'a Ctx) -> HSD_WObj<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406fd4),
+            cstr(ctx, 0x804d5ef8),
             (0x24f_i32 as u32),
-            cstr(ctx, 0x80406fd4),
+            cstr(ctx, 0x8040706c),
         )
     });
     return wobj;
@@ -736,9 +736,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x80406fd4),
+            cstr(ctx, 0x804d5f0c),
             (0x234_i32 as u32),
-            cstr(ctx, 0x80406fd4),
+            cstr(ctx, 0x804d5f14),
         )
     });
     result = 0_i32;

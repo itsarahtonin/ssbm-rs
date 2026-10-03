@@ -62,7 +62,7 @@ pub fn grTPikachu_80222F20<'a>(ctx: &'a Ctx, id: i32) -> HSD_GObj<'a> {
             ctx,
             cstr(ctx, 0x803e9300),
             &[
-                VarArg::Int(Handle::addr(cstr(ctx, 0x803e9280))),
+                VarArg::Int(Handle::addr(cstr(ctx, 0x803e9324))),
                 VarArg::Int(195_i32 as u32),
                 VarArg::Int(id as u32),
             ],

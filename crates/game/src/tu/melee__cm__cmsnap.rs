@@ -35,9 +35,9 @@ pub fn cmSnap_800315C8<'a>(ctx: &'a Ctx) {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x803bcd98),
+            cstr(ctx, 0x803bcd90),
             (85_i32 as u32),
-            cstr(ctx, 0x803bcd98),
+            cstr(ctx, 0x803bcd9c),
         )
     });
     statics::melee__cm__cmsnap::cmsnap_data(ctx).set_status((enums::CmSnapStatus_Unk1 as i32));

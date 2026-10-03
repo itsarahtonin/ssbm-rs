@@ -329,9 +329,9 @@ fn inl_HSD_JObjMtxIsDirty_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>) -> i32 {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d42f4),
+            cstr(ctx, 0x804d42e8),
             (0x234_i32 as u32),
-            cstr(ctx, 0x804d42f4),
+            cstr(ctx, 0x804d42f0),
         )
     });
     result = 0_i32;
@@ -351,9 +351,9 @@ fn inl_HSD_JObjSetTranslateY_unfused<'a>(ctx: &'a Ctx, jobj: HSD_JObj<'a>, y: f6
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804d42f4),
+            cstr(ctx, 0x804d42e8),
             (0x3b3_i32 as u32),
-            cstr(ctx, 0x804d42f4),
+            cstr(ctx, 0x804d42f0),
         )
     });
     (jobj).translate().set_y(y);

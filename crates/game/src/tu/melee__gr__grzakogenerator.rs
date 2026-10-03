@@ -172,9 +172,9 @@ pub fn grZakoGenerator_801CA67C<'a>(ctx: &'a Ctx) -> grZakoGenerator_Data<'a> {
     } else {
         fns::__assert(
             ctx,
-            cstr(ctx, 0x804dada8),
+            cstr(ctx, 0x803e0ba8),
             (82_i32 as u32),
-            cstr(ctx, 0x804dada8),
+            cstr(ctx, 0x804d4590),
         )
     });
     {
