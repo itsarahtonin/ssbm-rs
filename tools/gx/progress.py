@@ -55,8 +55,8 @@ FEATURES = [
 WINDOW = (
     "done",
     "--window (feature window) holds 59.94 fields/s, redrawing once a frame; a gamepad plays (tried by "
-    "hand) and the keyboard passes the unattended controls test. GameCube controllers on a Wii U adapter "
-    "read at rest with their origins applied; a try with real input and rumble is still to come",
+    "hand), GameCube controllers on a Wii U adapter play (tried by hand, with their origins applied as "
+    "the PAD library does), and the keyboard passes the unattended controls test",
 )
 
 
