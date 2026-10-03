@@ -65,6 +65,8 @@ if [[ ! -x $MELEE/.venv/bin/python ]]; then
     python3 -m venv "$MELEE/.venv"
     "$MELEE/.venv/bin/pip" install -q libclang==18.1.1 pyelftools ninja
 fi
+# c2rs reads the units from objdiff.json and their flags from build.ninja.
+[[ -f $MELEE/objdiff.json ]] || (cd "$MELEE" && .venv/bin/python configure.py)
 
 cat > local/env.sh <<EOF
 # This cloud VM's paths for tools/lockstep/campaign/env.sh (written by tools/cloud/setup.sh).
