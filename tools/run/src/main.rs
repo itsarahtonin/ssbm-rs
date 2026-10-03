@@ -874,6 +874,9 @@ fn run() -> ExitCode {
                             ssbm_rt::lockstep::Target::Load { pc, size, value, test: test(op) }
                         })
                     }
+                    [_, "cmp", pc, op, k] => hex(pc).zip(hex(k)).map(|(pc, value)| {
+                        ssbm_rt::lockstep::Target::Cmp { pc, value, test: test(op) }
+                    }),
                     _ => None,
                 };
                 if let (Some(f), Some(t)) = (w.first().and_then(|f| hex(f)), target) {

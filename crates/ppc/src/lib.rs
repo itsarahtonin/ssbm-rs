@@ -71,11 +71,15 @@ impl Interpreter {
             }
             self.pc.set(pc);
             let w = ctx.fetch_u32(pc);
-            if ctx.lockstep.watching() {
+            let watching = ctx.lockstep.watching();
+            if watching {
                 ctx.lockstep.note_load(ctx, pc, w);
             }
             let from = pc;
             pc = step(ctx, pc, w);
+            if watching {
+                ctx.lockstep.after_insn(ctx);
+            }
             if pc != from.wrapping_add(4) {
                 let i = self.next_jump.get();
                 self.jumps.borrow_mut()[i] = (from, pc);
