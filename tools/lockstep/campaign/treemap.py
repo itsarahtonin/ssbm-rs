@@ -36,7 +36,9 @@ for r in latest:
     rows.append([r["name"], unit_index[u], int(r["countable"] or 0), int(r["verified_blocks"] or 0),
                  int(r["calls"] or 0), int(r["mismatches"] or 0), int(r["mutated"] or 0),
                  1 if r["name"] in reviewed else 0, int(r.get("explained") or 0)])
-order = {r[0]: i for i, r in enumerate(rows)}
+# Static functions of different units can share a name (stage files' callbacks, mostly), so a
+# function is its name and unit.
+order = {(r[0], units[r[1]]): i for i, r in enumerate(rows)}
 
 
 def snapshot(name, report):
@@ -45,7 +47,7 @@ def snapshot(name, report):
     reviewed)."""
     v = [0] * (3 * len(rows))
     for r in report:
-        i = order.get(r["name"])
+        i = order.get((r["name"], r["unit"]))
         if i is None:
             continue
         flags = (1 if int(r["calls"] or 0) > 0 else 0) | (2 if int(r["mismatches"] or 0) > 0 else 0) \
