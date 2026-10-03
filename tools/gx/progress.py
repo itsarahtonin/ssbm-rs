@@ -53,8 +53,8 @@ FEATURES = [
 # The rungs not measured by this page's data yet: (status, detail).
 WINDOW = (
     "in progress",
-    "--window plays at 59.9 fields/s on a replay (headroom to ~65); controllers and keyboard mapped, "
-    "to be tried with a real controller",
+    "--window (feature window) holds 59.9 fields/s on a replay, redrawing once a frame; gamepad and "
+    "keyboard mapped, waiting on a try with a real controller",
 )
 
 
