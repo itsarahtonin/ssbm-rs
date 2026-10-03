@@ -7,9 +7,15 @@ use std::path::PathBuf;
 
 fn main() {
     let root = PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap());
+    // Dolphin's code needs C++23, which MSVC calls c++latest.
+    let standard = if std::env::var("CARGO_CFG_TARGET_ENV").as_deref() == Ok("msvc") {
+        "c++latest"
+    } else {
+        "c++23"
+    };
     cc::Build::new()
         .cpp(true)
-        .std("c++latest")
+        .std(standard)
         .file(root.join("cpp/unity.cpp"))
         .include(root.join("cpp/stubs"))
         .include(root.join("cpp"))
@@ -24,7 +30,7 @@ fn main() {
         .compile("dolphin_fp_master");
     cc::Build::new()
         .cpp(true)
-        .std("c++latest")
+        .std(standard)
         .file(root.join("cpp/ishiiruka.cpp"))
         .include(root.join("dolphin/ishiiruka"))
         .flag_if_supported("/arch:AVX2")
