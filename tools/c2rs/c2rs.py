@@ -1951,6 +1951,14 @@ class Translator:
         op = BINOPS[_lib.clang_getCursorBinaryOperatorKind(c)][:-1]
         a, b = children(c)
         lt = self.u.ctype(a.type)
+        if is_float(lt) and op in ("+", "-", "*", "/"):
+            same = self.identity(op, a, b)
+            if same is not None and same[0] == "same" and same[1] == a:
+                # MWCC drops `x += 0` and `x *= 1` as it does `x + 0`: nothing is stored, so a
+                # signaling NaN stays one and -0 stays -0.
+                self.u.identities += 1
+                lv = self.lvalue(a)
+                return [] if lv.pure else [f"let _ = {lv.read()};"]
         if op in ("+", "-") and is_float(lt) and self.negation(b, params=True) is not None and not (
                 op == "+" and self.fuse and self.product(b, lt, True) is not None):
             # MWCC makes `x += -b` x -= b, and `x -= -b` x += b, as it does `x + -b`; a negated

@@ -575,14 +575,6 @@ pub fn mn_80229F60<'a>(ctx: &'a Ctx, gp: HSD_GObj<'a>, root: HSD_JObj<'a>, selec
         ((shl_i32(1_i32, (4_i32 as u32))) as u32),
     );
     inl_HSD_JObjSetScaleY_unfused(ctx, sp54.at(5_i32).get(), 2.0);
-    fns::mn_803EB6B0(ctx)
-        .get(((flow).cur_menu() as i32))
-        .set_start_frame(fp::fadds(
-            fns::mn_803EB6B0(ctx)
-                .get(((flow).cur_menu() as i32))
-                .start_frame(),
-            fp::frsp(0_i32 as f64),
-        ));
     inl_HSD_JObjSetScaleY_unfused(ctx, sp54.at(6_i32).get(), 2.0);
     inl_HSD_JObjGetTranslation_unfused(ctx, sp54.at(5_i32).get(), sp20);
     inl_HSD_JObjSetTranslate_unfused(ctx, sp54.at(6_i32).get(), sp20);

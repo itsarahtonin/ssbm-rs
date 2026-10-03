@@ -2658,8 +2658,6 @@ pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
         (fp).cur_pos()
             .set_x(fp::fadds((fp).cur_pos().x(), (fp).xF8_playerNudgeVel().x()));
         (fp).cur_pos()
-            .set_y(fp::fadds((fp).cur_pos().y(), fp::frsp(0_i32 as f64)));
-        (fp).cur_pos()
             .set_z(fp::fadds((fp).cur_pos().z(), (fp).xF8_playerNudgeVel().y()));
         if (((fp).x2222_b6() as i32) != 0) && (!((fp).x2222_b7() != 0)) {
             let mut bit: i32 = 0;
@@ -2668,8 +2666,6 @@ pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 .set_x(fp::fadds((fp).xD4_unk_vel().x(), (p_kb_vel).x()));
             (fp).xD4_unk_vel()
                 .set_y(fp::fadds((fp).xD4_unk_vel().y(), (p_kb_vel).y()));
-            (fp).xD4_unk_vel()
-                .set_z(fp::fadds((fp).xD4_unk_vel().z(), 0.0));
             if ((fp).x2210().x0().throw_flags_b2() != 0) {
                 (fp).x2210().x0().set_throw_flags_b2((0_i32 as u8));
                 bit = 1_i32;
@@ -2707,8 +2703,6 @@ pub fn Fighter_procUpdate<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
                 .set_x(fp::fadds((fp).cur_pos().x(), (p_kb_vel).x()));
             (fp).cur_pos()
                 .set_y(fp::fadds((fp).cur_pos().y(), (p_kb_vel).y()));
-            (fp).cur_pos()
-                .set_z(fp::fadds((fp).cur_pos().z(), fp::frsp(0_i32 as f64)));
             fns::PSVECAdd(ctx, (fp).cur_pos(), pAtkShieldKB, (fp).cur_pos());
         }
         fns::ftColl_GetWindOffsetVec(ctx, gobj, windOffset);
