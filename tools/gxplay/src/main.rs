@@ -6,6 +6,10 @@
 //!
 //!   gxplay LOG.dff OUT
 //!   gxplay diff OURS REF [DIFFS]   compares OURS/frame_N.png with REF/framedump_N.png
+//!
+//! For debugging: GXPLAY_TRACE prints the first frame's draws and their state,
+//! GXPLAY_SILHOUETTES draws every draw flat and additive, GXPLAY_OPAQUE draws without
+//! blending, and GXPLAY_DRAWS=N draws only a frame's first N draws.
 
 use std::cell::RefCell;
 use std::path::{Path, PathBuf};
@@ -138,6 +142,12 @@ fn main() {
         ram: RefCell::new(vec![0; MEM_SIZE]),
         renderer: RefCell::new(Renderer::new().expect("a GPU")),
     };
+    player.renderer.borrow_mut().trace = std::env::var_os("GXPLAY_TRACE").is_some();
+    player.renderer.borrow_mut().silhouettes = std::env::var_os("GXPLAY_SILHOUETTES").is_some();
+    player.renderer.borrow_mut().opaque = std::env::var_os("GXPLAY_OPAQUE").is_some();
+    player.renderer.borrow_mut().draw_limit = std::env::var("GXPLAY_DRAWS")
+        .ok()
+        .map(|n| n.parse().expect("GXPLAY_DRAWS=N"));
     let mut state = State::load(&log.bp, &log.cp, &log.xf, &log.tmem);
     player.renderer.borrow_mut().clear_efb(&state);
     let mut produced: Vec<Produced> = Vec::new();

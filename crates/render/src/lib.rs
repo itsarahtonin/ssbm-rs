@@ -151,6 +151,15 @@ pub struct Renderer {
     frames: Vec<Frame>,
     on_frame: Option<Box<dyn FnMut(Frame)>>,
     pub unsupported: Unsupported,
+    /// Prints each draw of the first frame, for debugging.
+    pub trace: bool,
+    /// Draws everything flat white, unblended and without depth, for debugging.
+    pub silhouettes: bool,
+    /// Draws without blending, for debugging.
+    pub opaque: bool,
+    /// Draws only this many draws of each frame, for debugging.
+    pub draw_limit: Option<u64>,
+    draws_this_frame: u64,
 }
 
 /// A fast hash of bytes, for telling textures apart.
@@ -230,6 +239,10 @@ impl Renderer {
             ..Default::default()
         }))
         .map_err(|e| format!("no GPU adapter: {e}"))?;
+        if std::env::var_os("GX_ADAPTER").is_some() {
+            let info = adapter.get_info();
+            eprintln!("GPU: {} ({:?}, {})", info.name, info.backend, info.driver);
+        }
         Self::with_adapter(&adapter)
     }
 
@@ -272,10 +285,21 @@ impl Renderer {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT | wgpu::TextureUsages::COPY_SRC,
             view_formats: &[],
         });
-        let module = device.create_shader_module(wgpu::ShaderModuleDescriptor {
-            label: Some("gx"),
-            source: wgpu::ShaderSource::Wgsl(include_str!("gx.wgsl").into()),
-        });
+        // Without wgpu's guards against endless loops, which keep FXC (D3D12) from unrolling the
+        // loops that write arrays by index.
+        let mut checks = wgpu::ShaderRuntimeChecks::checked();
+        checks.force_loop_bounding = false;
+        // SAFETY: every loop in gx.wgsl ends: each is bounded by a constant or by a register's
+        // count of at most 16.
+        let module = unsafe {
+            device.create_shader_module_trusted(
+                wgpu::ShaderModuleDescriptor {
+                    label: Some("gx"),
+                    source: wgpu::ShaderSource::Wgsl(include_str!("gx.wgsl").into()),
+                },
+                checks,
+            )
+        };
         let uniform_layout = device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
             label: Some("state"),
             entries: &[wgpu::BindGroupLayoutEntry {
@@ -335,6 +359,11 @@ impl Renderer {
             frame: 0,
             frames: Vec::new(),
             on_frame: None,
+            trace: false,
+            silhouettes: false,
+            opaque: false,
+            draw_limit: None,
+            draws_this_frame: 0,
             unsupported: HashMap::new(),
         };
         // Texture 0: a 1x1 black texture for maps nothing samples.
@@ -985,6 +1014,10 @@ impl Renderer {
 
 impl Sink for Renderer {
     fn draw(&mut self, state: &State, draw: &Draw<'_>, mem: &dyn Memory) {
+        self.draws_this_frame += 1;
+        if self.draw_limit.is_some_and(|n| self.draws_this_frame > n) {
+            return;
+        }
         let count = usize::from(draw.count);
         let xf_index = [state.xf[xform::MATINDEX_A], state.xf[xform::MATINDEX_A + 1]];
         let inputs = vertex::decode(
@@ -1071,6 +1104,9 @@ impl Sink for Renderer {
             }
         }
         let count = self.vertices.len() as u32 - first;
+        if self.trace && self.frame == 0 {
+            trace_draw(state, draw, count, scissor, &outs[0], screens[0], mem);
+        }
         if count == 0 {
             return;
         }
@@ -1102,7 +1138,32 @@ impl Sink for Renderer {
         }
         self.bind_group(ids);
 
-        let key = Self::pipeline_key(state);
+        let mut key = Self::pipeline_key(state);
+        if self.opaque {
+            key.blend = None;
+        }
+        if self.silhouettes {
+            key = PipelineKey {
+                blend: Some((1, 1, false)),
+                const_alpha: false,
+                write_color: true,
+                write_alpha: true,
+                depth_compare: None,
+                depth_write: false,
+            };
+            let u = Self::uniforms_of(state, levels, [3, 0, 0, 0]);
+            let uniform = self.push_uniforms(&u);
+            self.pipeline(key);
+            self.commands.push(Command {
+                pipeline: key,
+                uniform,
+                textures: ids,
+                first,
+                count,
+                scissor,
+            });
+            return;
+        }
         let blend = state.bp[0x41];
         if bits(blend, 0, 1) == 0 && bits(blend, 1, 1) != 0 && bits(blend, 12, 4) != 3 {
             self.note("logic op");
@@ -1180,6 +1241,7 @@ impl Sink for Renderer {
                 None => self.frames.push(frame),
             }
             self.frame += 1;
+            self.draws_this_frame = 0;
             self.hashes.clear();
             self.evict();
         } else {
@@ -1281,4 +1343,51 @@ impl Renderer {
         let (ll, lr, ur, ul) = (at(-1.0, -1.0), at(1.0, -1.0), at(1.0, 1.0), at(-1.0, 1.0));
         self.vertices.extend_from_slice(&[ll, ul, lr, ur, lr, ul]);
     }
+}
+
+/// Prints a draw and the state it's drawn with, for debugging (`trace`).
+fn trace_draw(
+    state: &State,
+    draw: &Draw<'_>,
+    emitted: u32,
+    scissor: [u32; 4],
+    first: &Output,
+    screen: [f32; 3],
+    mem: &dyn Memory,
+) {
+    let bp = &state.bp;
+    let stages = bits(bp[0], 10, 4) as usize + 1;
+    eprintln!(
+        "draw {:02X} vertices {} emitted {emitted} scissor {scissor:?} clip {:?} screen {screen:?} color {:?}",
+        draw.primitive, draw.count, first.clip, first.color
+    );
+    eprintln!(
+        "  genmode {:06x} zmode {:06x} blend {:06x} pe {:06x} alpha {:06x} ztex {:06x} {:06x} fog {:06x?}",
+        bp[0x00],
+        bp[0x40],
+        bp[0x41],
+        bp[0x43],
+        bp[0xF3],
+        bp[0xF4],
+        bp[0xF5],
+        &bp[0xEE..0xF3]
+    );
+    eprintln!(
+        "  env {:06x?} orders {:06x?} ksel {:06x?} ind {:06x?}",
+        &bp[0xC0..0xC0 + 2 * stages],
+        &bp[0x28..0x28 + stages.div_ceil(2)],
+        &bp[0xF6..0xFE],
+        &bp[0x10..0x10 + stages]
+    );
+    eprintln!(
+        "  colors {:06x?} {:06x?} konsts {:06x?} {:06x?}",
+        state.color_ra, state.color_bg, state.konst_ra, state.konst_bg
+    );
+    let img = Image::of(bp, 0);
+    let mut head = [0u8; 16];
+    mem.read(img.address, &mut head);
+    eprintln!(
+        "  map 0: format {} {}x{} levels {} at {:08x} {:02x?}, tex 0 {:?}",
+        img.format, img.width, img.height, img.levels, img.address, head, first.tex[0]
+    );
 }

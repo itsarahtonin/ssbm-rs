@@ -308,6 +308,13 @@ fn compare_value(v: vec4<i32>, mode: u32, i: u32) -> u32 {
     }
 }
 
+/// A compare stage's component `i`: d, plus c where a's value passes against b's.
+fn compared(a: vec4<i32>, b: vec4<i32>, c: i32, d: i32, mode: u32, gt: bool, i: u32) -> i32 {
+    let x = compare_value(a, mode, i);
+    let y = compare_value(b, mode, i);
+    return d + select(0, c, select(x == y, x > y, gt));
+}
+
 fn color_arg(arg: u32, regs: array<vec4<i32>, 4>, tex: vec4<i32>, ras: vec4<i32>, k: vec4<i32>) -> vec3<i32> {
     switch arg {
         case 0u: { return regs[0].rgb; }
@@ -358,6 +365,34 @@ fn sext(v: u32, width: u32) -> i32 {
     return i32(v << (32u - width)) >> (32u - width);
 }
 
+/// A texture coordinate divided by its q, when there is one.
+fn project(t: vec3<f32>) -> vec2<f32> {
+    if t.z != 0.0 {
+        return t.xy / t.z;
+    }
+    return t.xy;
+}
+
+/// A texture coordinate in 1/128 texels.
+fn fixed(uv: vec2<f32>) -> vec2<i32> {
+    return vec2<i32>(uv * 128.0);
+}
+
+/// Indirect stage `i`'s lookup of its texture.
+fn indirect_lookup(i: u32, iref: u32, ntex: u32, dx: array<vec2<f32>, 8>, dy: array<vec2<f32>, 8>, fixed_uv: array<vec2<i32>, 8>) -> vec4<i32> {
+    var coord = bits(iref, 6u * i + 3u, 3u);
+    let map = bits(iref, 6u * i, 3u);
+    let lod = lod_of(map, dx[coord], dy[coord]);
+    if coord >= ntex {
+        coord = 0u;
+    }
+    let scale = bp(0x25u + (i >> 1u));
+    let odd = (i & 1u) * 8u;
+    let ss = bits(scale, odd, 4u);
+    let tsc = bits(scale, odd + 4u, 4u);
+    return sample(map, fixed_uv[coord].x >> ss, fixed_uv[coord].y >> tsc, lod.lod, lod.linear);
+}
+
 @fragment
 fn fs_main(in: Varyings) -> Out {
     var out: Out;
@@ -366,6 +401,13 @@ fn fs_main(in: Varyings) -> Out {
     // Screen z from the GPU's, then as the EFB holds it.
     let screen_z = st.depth.y + st.depth.x * (in.pos.z - 1.0);
     var z = i32(clamp(screen_z, 0.0, 16777215.0));
+    let raster_z = z;
+    if st.mode.x == 3u {
+        out.color = vec4<f32>(0.1, 0.1, 0.1, 1.0);
+        out.alpha = vec4<f32>(1.0);
+        out.depth = f32(z) / 16777216.0;
+        return out;
+    }
     if st.mode.x == 1u {
         let c = st.mode.y;
         out.color = vec4<f32>(f32(c >> 24u), f32((c >> 16u) & 255u), f32((c >> 8u) & 255u), f32(c & 255u)) / 255.0;
@@ -380,44 +422,30 @@ fn fs_main(in: Varyings) -> Out {
     let nind = bits(genmode, 16u, 3u);
 
     // Texture coordinates in texels, and their changes across the 2x2 block, in uniform control
-    // flow.
-    let ts = array<vec3<f32>, 8>(in.t0, in.t1, in.t2, in.t3, in.t4, in.t5, in.t6, in.t7);
-    var uv: array<vec2<f32>, 8>;
-    var dx: array<vec2<f32>, 8>;
-    var dy: array<vec2<f32>, 8>;
-    for (var i = 0u; i < 8u; i++) {
-        let t = ts[i];
-        var p = t.xy;
-        if t.z != 0.0 {
-            p = t.xy / t.z;
-        }
-        uv[i] = p;
-        dx[i] = dpdxCoarse(p);
-        dy[i] = dpdyCoarse(p);
-    }
-    var fixed_uv: array<vec2<i32>, 8>;
-    for (var i = 0u; i < 8u; i++) {
-        fixed_uv[i] = vec2<i32>(uv[i] * 128.0);
-    }
+    // flow. Written out rather than looped: FXC can't unroll naga's loops, and arrays written by
+    // a variable index need it.
+    let uv = array<vec2<f32>, 8>(project(in.t0), project(in.t1), project(in.t2), project(in.t3), project(in.t4), project(in.t5), project(in.t6), project(in.t7));
+    let dx = array<vec2<f32>, 8>(dpdxCoarse(uv[0]), dpdxCoarse(uv[1]), dpdxCoarse(uv[2]), dpdxCoarse(uv[3]), dpdxCoarse(uv[4]), dpdxCoarse(uv[5]), dpdxCoarse(uv[6]), dpdxCoarse(uv[7]));
+    let dy = array<vec2<f32>, 8>(dpdyCoarse(uv[0]), dpdyCoarse(uv[1]), dpdyCoarse(uv[2]), dpdyCoarse(uv[3]), dpdyCoarse(uv[4]), dpdyCoarse(uv[5]), dpdyCoarse(uv[6]), dpdyCoarse(uv[7]));
+    let fixed_uv = array<vec2<i32>, 8>(fixed(uv[0]), fixed(uv[1]), fixed(uv[2]), fixed(uv[3]), fixed(uv[4]), fixed(uv[5]), fixed(uv[6]), fixed(uv[7]));
 
     let ras0 = vec4<i32>(clamp(in.c0, vec4<f32>(0.0), vec4<f32>(255.0)));
     let ras1 = vec4<i32>(clamp(in.c1, vec4<f32>(0.0), vec4<f32>(255.0)));
 
-    // Indirect stages' lookups.
+    // Indirect stages' lookups, by constant index (see the TEV registers below).
     var ind: array<vec4<i32>, 4>;
     let iref = bp(0x27u);
-    for (var i = 0u; i < nind; i++) {
-        var coord = bits(iref, 6u * i + 3u, 3u);
-        let map = bits(iref, 6u * i, 3u);
-        let lod = lod_of(map, dx[coord], dy[coord]);
-        if coord >= ntex {
-            coord = 0u;
-        }
-        let scale = bp(0x25u + (i >> 1u));
-        let odd = (i & 1u) * 8u;
-        let ss = bits(scale, odd, 4u);
-        let tsc = bits(scale, odd + 4u, 4u);
-        ind[i] = sample(map, fixed_uv[coord].x >> ss, fixed_uv[coord].y >> tsc, lod.lod, lod.linear);
+    if nind > 0u {
+        ind[0] = indirect_lookup(0u, iref, ntex, dx, dy, fixed_uv);
+    }
+    if nind > 1u {
+        ind[1] = indirect_lookup(1u, iref, ntex, dx, dy, fixed_uv);
+    }
+    if nind > 2u {
+        ind[2] = indirect_lookup(2u, iref, ntex, dx, dy, fixed_uv);
+    }
+    if nind > 3u {
+        ind[3] = indirect_lookup(3u, iref, ntex, dx, dy, fixed_uv);
     }
 
     var regs = st.colors;
@@ -533,12 +561,7 @@ fn fs_main(in: Varyings) -> Out {
             let gt = bits(cenv, 18u, 1u) != 0u;
             let a4 = vec4<i32>(ca, aa);
             let b4 = vec4<i32>(cb, ab);
-            for (var i = 0u; i < 3u; i++) {
-                let x = compare_value(a4, mode, i);
-                let y = compare_value(b4, mode, i);
-                let ok = select(x == y, x > y, gt);
-                color[i] = cd[i] + select(0, cc[i], ok);
-            }
+            color = vec3<i32>(compared(a4, b4, cc.r, cd.r, mode, gt, 0u), compared(a4, b4, cc.g, cd.g, mode, gt, 1u), compared(a4, b4, cc.b, cd.b, mode, gt, 2u));
         }
         var alpha: i32;
         if bits(aenv, 16u, 2u) != 3u {
@@ -561,10 +584,22 @@ fn fs_main(in: Varyings) -> Out {
         } else {
             alpha = clamp(alpha, -1024, 1023);
         }
+        // Registers written by constant index: FXC can't write arrays by a variable one in a
+        // loop it can't unroll.
         let cdest = bits(cenv, 22u, 2u);
         let adest = bits(aenv, 22u, 2u);
-        regs[cdest] = vec4<i32>(color, regs[cdest].a);
-        regs[adest].a = alpha;
+        switch cdest {
+            case 0u: { regs[0] = vec4<i32>(color, regs[0].a); }
+            case 1u: { regs[1] = vec4<i32>(color, regs[1].a); }
+            case 2u: { regs[2] = vec4<i32>(color, regs[2].a); }
+            default: { regs[3] = vec4<i32>(color, regs[3].a); }
+        }
+        switch adest {
+            case 0u: { regs[0].a = alpha; }
+            case 1u: { regs[1].a = alpha; }
+            case 2u: { regs[2].a = alpha; }
+            default: { regs[3].a = alpha; }
+        }
     }
 
     let last = nstages - 1u;
@@ -655,7 +690,10 @@ fn fs_main(in: Varyings) -> Out {
     }
     out.color = vec4<f32>(vec3<f32>(final_c.rgb), f32(written_a)) / 255.0;
     out.alpha = vec4<f32>(f32(output.a) / 255.0);
-    out.depth = f32(z) / 16777216.0;
+    // A z test before texturing (early z) tests the rasterized depth: a z texture then only
+    // feeds fog.
+    let early = bits(pe, 6u, 1u) != 0u;
+    out.depth = f32(select(z, raster_z, early)) / 16777216.0;
     return out;
 }
 
