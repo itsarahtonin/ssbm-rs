@@ -1,0 +1,231 @@
+<title>Coverage Levers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: the coverage map's companion. A summary strip, then one column of sections, each a
+   chart or a table that answers which levers move the Phase 3 gate and by how much. */
+:root {
+  --bg: #f6f5f1; --panel: #ffffff; --fg: #1d1f24; --muted: #646a74; --line: #dcdad3;
+  --job: #9a958a; --fuzz: #1f6fd6; --ok: #3f9a5c; --open: #c4663a;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15171b; --panel: #1d2026; --fg: #e7e8ea; --muted: #9aa0a9; --line: #30343b;
+  --job: #7d7a72; --fuzz: #5aa2ff; --ok: #4fae6c; --open: #d27a4f; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #15171b; --panel: #1d2026; --fg: #e7e8ea; --muted: #9aa0a9; --line: #30343b;
+  --job: #7d7a72; --fuzz: #5aa2ff; --ok: #4fae6c; --open: #d27a4f; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 14px/1.5 var(--sans); }
+.wrap { max-width: 1100px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 40px; display: grid; gap: 22px; }
+.num, .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+header { display: grid; gap: 4px; }
+h1 { font-size: 22px; font-weight: 600; margin: 0; text-wrap: balance; }
+.sub { color: var(--muted); font-size: 13px; max-width: 75ch; }
+h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0; }
+section { display: grid; gap: 10px; min-width: 0; }
+.section-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+.hint { color: var(--muted); font-size: 12px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.stat { background: var(--panel); padding: 12px 14px; display: grid; gap: 2px; min-width: 0; }
+.stat .k { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.stat .v { font: 500 22px var(--mono); font-variant-numeric: tabular-nums; }
+.stat .d { font-size: 12px; color: var(--muted); }
+.stat .d b { font-weight: 500; color: var(--fg); }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; min-width: 0; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.seg button { font: 12px var(--sans); background: var(--panel); color: var(--muted); border: 0; padding: 5px 10px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.seg button:focus-visible, .lever:focus-visible { outline: 2px solid var(--fuzz); outline-offset: 2px; }
+svg { display: block; width: 100%; height: auto; }
+svg text { fill: var(--muted); font: 11px var(--mono); }
+svg .grid { stroke: var(--line); stroke-width: 1; }
+svg .line { fill: none; stroke: var(--open); stroke-width: 2; }
+svg .area { fill: var(--open); opacity: .12; }
+svg .pt { fill: var(--panel); stroke: var(--open); stroke-width: 2; }
+svg .pt.last { fill: var(--open); }
+svg .val { fill: var(--fg); font-weight: 500; }
+.levers { display: grid; gap: 6px; }
+.lever { display: grid; grid-template-columns: minmax(0, 240px) minmax(0, 1fr) 150px; gap: 12px; align-items: center; font-size: 13px; }
+.lever .name { overflow-wrap: anywhere; }
+.lever .track { height: 12px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.lever .fill { height: 100%; border-radius: 3px; background: var(--job); }
+.lever.fuzz .fill { background: var(--fuzz); }
+.lever .n { text-align: right; color: var(--muted); font: 12px var(--mono); font-variant-numeric: tabular-nums; }
+.lever .n b { color: var(--fg); font-weight: 500; }
+@media (max-width: 640px) { .lever { grid-template-columns: minmax(0, 1fr) 110px; } .lever .track { grid-column: 1 / -1; grid-row: 2; } }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--muted); }
+.legend i { display: inline-block; width: 11px; height: 11px; border-radius: 2px; vertical-align: -1px; margin-right: 5px; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th { text-align: left; font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+td.r, th.r { text-align: right; }
+td.num { white-space: nowrap; }
+tr.group td { font-weight: 600; padding-top: 12px; border-bottom: 0; }
+tr.group td span { font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 8px; }
+.mini { display: inline-block; height: 8px; border-radius: 2px; background: var(--job); vertical-align: middle; margin-right: 8px; }
+.fuzz .mini { background: var(--fuzz); }
+td .note { color: var(--muted); font-size: 12px; }
+.gains { display: grid; gap: 3px; }
+.gain { display: grid; grid-template-columns: minmax(0, 1fr) 70px 90px; gap: 12px; font-size: 13px; padding: 2px 0; border-bottom: 1px solid var(--line); }
+.gain .fn { font-family: var(--mono); font-size: 12px; overflow-wrap: anywhere; }
+.gain .unit { color: var(--muted); font-size: 12px; }
+.gain .plus { color: var(--ok); text-align: right; font: 500 12px var(--mono); }
+.gain .left { color: var(--muted); text-align: right; font: 12px var(--mono); }
+.notes { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.notes li { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 12px; font-size: 13px; }
+.notes time { color: var(--muted); font: 12px var(--mono); padding-top: 1px; }
+.notes p { margin: 0; max-width: 80ch; }
+@media (max-width: 520px) { .notes li { grid-template-columns: minmax(0, 1fr); gap: 2px; } }
+.foot { color: var(--muted); font-size: 12px; max-width: 90ch; margin: 0; }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Coverage Levers</h1>
+    <div class="sub">What each way of verifying more blocks has yielded toward the Phase 3 gate (every countable block verified or explained). Gains count from round <span id="base-label"></span>. Updated <span class="mono" id="updated"></span>.</div>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <section>
+    <div class="section-head">
+      <h2>Open blocks</h2>
+      <div class="seg" role="group" aria-label="Range"><button id="r-recent" aria-pressed="true">Recent</button><button id="r-all" aria-pressed="false">All rounds</button></div>
+    </div>
+    <div class="panel"><svg id="timeline" viewBox="0 0 800 250" role="img" aria-label="Open blocks over the rounds"></svg></div>
+    <div class="hint">Countable blocks neither verified by lockstep nor explained in the gap ledger, after each round and each snapshot taken during one.</div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Levers compared</h2>
+      <div class="legend"><span><i style="background:var(--job)"></i>jobs in a round</span><span><i style="background:var(--fuzz)"></i>corpus fuzzing between rounds</span></div>
+    </div>
+    <div class="panel levers" id="levers"></div>
+    <div class="hint">Bar: the median run's new instructions per billion original instructions run (the cost). Runs overlap, so a lever's runs don't add up to what it verified together.</div>
+  </section>
+
+  <section>
+    <h2>Runs</h2>
+    <div class="panel scroll"><table id="runs"><thead><tr><th>Run</th><th class="r">New instructions</th><th class="r">Cost (G instr.)</th><th>Per billion</th></tr></thead><tbody></tbody></table></div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2 id="gains-h">Where the gains landed</h2><span class="hint" id="gains-n"></span></div>
+    <div class="panel gains" id="gains"></div>
+  </section>
+
+  <section>
+    <h2>Findings</h2>
+    <div class="panel"><ul class="notes" id="notes"></ul></div>
+  </section>
+
+  <p class="foot">New instructions are those a run verified that no earlier result held when the round began (its known bitmap): lockstep ran them in the original and the port, and their results agreed. A block is a run of instructions with one way in, so a few instructions often close one block. Cost is the original instructions the run interpreted, which tracks CPU time; for corpus fuzzing it includes collecting the corpus.</p>
+</div>
+
+<script>
+const DATA = /*DATA*/null;
+const $ = id => document.getElementById(id);
+const fmt = n => n.toLocaleString("en-US");
+const signed = n => (n > 0 ? "+" : n < 0 ? "−" : "") + fmt(Math.abs(n));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const isFuzz = lever => lever.startsWith("Corpus fuzz");
+const perG = r => r.cost > 0 ? r.new / r.cost : 0;
+
+$("updated").textContent = DATA.updated;
+$("base-label").textContent = DATA.base;
+
+// Summary strip.
+const b = DATA.baseTotals, n = DATA.now;
+const byLever = new Map();
+for (const r of DATA.runs) {
+  if (!byLever.has(r.lever)) byLever.set(r.lever, []);
+  byLever.get(r.lever).push(r);
+}
+const median = xs => { const s = [...xs].sort((a, c) => a - c); const m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+const levers = [...byLever].map(([lever, rs]) => ({ lever, runs: rs, med: median(rs.map(perG)), best: rs.reduce((a, c) => perG(c) > perG(a) ? c : a) }));
+const leading = levers.reduce((a, c) => c.med > a.med ? c : a, levers[0]);
+$("stats").innerHTML = [
+  ["Open blocks", fmt(n.open), `<b>${signed(n.open - b.open)}</b> since ${esc(DATA.base)}`],
+  ["Verified", fmt(n.verified), `<b>${signed(n.verified - b.verified)}</b> blocks since ${esc(DATA.base)}`],
+  ["Explained", fmt(n.explained), `<b>${signed(n.explained - b.explained)}</b> in the gap ledger since ${esc(DATA.base)}`],
+  ["Best lever", leading ? Math.round(leading.med).toString() : "–", leading ? `new per billion: ${esc(leading.lever)}` : ""],
+].map(([k, v, d]) => `<div class="stat"><span class="k">${k}</span><span class="v">${v}</span><span class="d">${d}</span></div>`).join("");
+
+// Open blocks over the timeline.
+let range = "recent";
+function niceTicks(lo, hi, count) {
+  const step0 = (hi - lo) / count, mag = 10 ** Math.floor(Math.log10(step0));
+  const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => s >= step0);
+  const ticks = [];
+  for (let t = Math.floor(lo / step) * step; t <= hi + 1e-9; t += step) ticks.push(t);
+  return ticks;
+}
+function drawTimeline() {
+  const all = DATA.timeline;
+  const at = all.findIndex(t => t.label === DATA.base);
+  const pts = range === "all" ? all : all.slice(Math.max(0, at - 2));
+  const W = 800, H = 250, L = 64, R = 24, T = 18, B = 34;
+  const vals = pts.map(p => p.open);
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  const pad = Math.max((hi - lo) * 0.15, 50); lo = Math.max(0, lo - pad); hi += pad;
+  const ticks = niceTicks(lo, hi, 4); lo = ticks[0]; hi = ticks[ticks.length - 1];
+  const x = i => pts.length > 1 ? L + (W - L - R) * i / (pts.length - 1) : (L + W - R) / 2;
+  const y = v => T + (H - T - B) * (1 - (v - lo) / (hi - lo));
+  let s = "";
+  for (const t of ticks) s += `<line class="grid" x1="${L}" x2="${W - R}" y1="${y(t)}" y2="${y(t)}"/><text x="${L - 8}" y="${y(t) + 4}" text-anchor="end">${fmt(Math.round(t))}</text>`;
+  const every = Math.ceil(pts.length / 8);
+  pts.forEach((p, i) => { if (i % every === 0 || i === pts.length - 1) s += `<text x="${x(i)}" y="${H - 12}" text-anchor="middle">${esc(p.label)}</text>`; });
+  const path = pts.map((p, i) => `${i ? "L" : "M"}${x(i)},${y(p.open)}`).join("");
+  s += `<path class="area" d="${path}L${x(pts.length - 1)},${y(lo)}L${x(0)},${y(lo)}Z"/><path class="line" d="${path}"/>`;
+  pts.forEach((p, i) => { s += `<circle class="pt${i === pts.length - 1 ? " last" : ""}" cx="${x(i)}" cy="${y(p.open)}" r="${i === pts.length - 1 ? 4.5 : 3}"><title>${esc(p.label)}: ${fmt(p.open)} open</title></circle>`; });
+  const last = pts[pts.length - 1];
+  s += `<text class="val" x="${x(pts.length - 1) - 8}" y="${y(last.open) - 10}" text-anchor="end">${fmt(last.open)}</text>`;
+  $("timeline").innerHTML = s;
+}
+for (const [id, r] of [["r-recent", "recent"], ["r-all", "all"]]) {
+  $(id).addEventListener("click", () => {
+    range = r;
+    $("r-recent").setAttribute("aria-pressed", r === "recent");
+    $("r-all").setAttribute("aria-pressed", r === "all");
+    drawTimeline();
+  });
+}
+drawTimeline();
+
+// Levers compared.
+const maxMed = Math.max(...levers.map(l => l.med), 1);
+$("levers").innerHTML = [...levers].sort((a, c) => c.med - a.med).map(l => `
+  <div class="lever${isFuzz(l.lever) ? " fuzz" : ""}">
+    <span class="name">${esc(l.lever)}</span>
+    <span class="track"><span class="fill" style="width:${(100 * l.med / maxMed).toFixed(1)}%;display:block"></span></span>
+    <span class="n"><b>${l.med.toFixed(l.med < 10 ? 1 : 0)}</b>/G · ${l.runs.length} run${l.runs.length > 1 ? "s" : ""}</span>
+  </div>`).join("");
+
+// Runs, grouped by lever in the order they were first tried.
+const maxPer = Math.max(...DATA.runs.map(perG), 1);
+let rows = "";
+for (const l of levers) {
+  const total = l.runs.reduce((a, r) => a + r.new, 0);
+  rows += `<tr class="group${isFuzz(l.lever) ? " fuzz" : ""}"><td colspan="4">${esc(l.lever)}<span>best ${esc(l.best.run)}, ${fmt(l.best.new)} new</span></td></tr>`;
+  for (const r of l.runs) {
+    const p = perG(r);
+    rows += `<tr class="${isFuzz(r.lever) ? "fuzz" : ""}"><td>${esc(r.run)}${r.note ? `<div class="note">${esc(r.note)}</div>` : ""}</td>
+      <td class="r num">${fmt(r.new)}</td><td class="r num">${r.cost.toFixed(1)}</td>
+      <td class="num"><span class="mini" style="width:${Math.max(2, 120 * p / maxPer).toFixed(0)}px"></span>${p.toFixed(p < 10 ? 1 : 0)}</td></tr>`;
+  }
+}
+document.querySelector("#runs tbody").innerHTML = rows;
+
+// Gains since the base round.
+$("gains-h").textContent = `Where the gains landed since ${DATA.base}`;
+$("gains-n").textContent = `${fmt(DATA.gainedFunctions)} functions gained blocks; the top ${DATA.gains.length}`;
+$("gains").innerHTML = `<div class="gain"><span class="unit">Function</span><span class="unit" style="text-align:right">Gained</span><span class="unit" style="text-align:right">Still open</span></div>` +
+  DATA.gains.map(g => `<div class="gain"><span><span class="fn">${esc(g.name)}</span> <span class="unit">${esc(g.unit)}</span></span><span class="plus">+${fmt(g.gained)}</span><span class="left">${fmt(g.open)}</span></div>`).join("");
+
+// Findings, newest first.
+$("notes").innerHTML = [...DATA.notes].reverse().map(x => `<li><time>${esc(x.date)}</time><p>${esc(x.text)}</p></li>`).join("");
+</script>

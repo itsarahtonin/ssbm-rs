@@ -30,7 +30,7 @@ bash tools/lockstep/campaign/history.sh cov-f6 f6
 python tools/lockstep/campaign/treemap.py f6 local/lockstep/coverage-map.html
 ```
 
-During a round, `bash tools/lockstep/campaign/snapshot.sh f6.1` (then f6.2, ...) saves the map's state so far as a new history entry and writes the page, to republish every few hours; the round's own entry comes at its end, as above.
+During a round, `bash tools/lockstep/campaign/snapshot.sh f6.1 f5` (then f6.2, ...; f5 the last finished round) saves the map's state so far as a new history entry and writes the coverage map and the levers page, to republish every few hours; the round's own entry comes at its end, as above. The levers page (https://claude.ai/artifact/SANQTUxB7JV4kjD7kVP5ER, from `levers.py`) compares what each lever yields per cost, from the runs listed in `local/lockstep/levers.tsv` and the findings in `levers-notes.tsv`.
 
 ## Job options
 
