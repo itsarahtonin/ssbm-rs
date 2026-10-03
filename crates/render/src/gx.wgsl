@@ -427,10 +427,15 @@ fn fs_main(in: Varyings) -> Out {
     let uv = array<vec2<f32>, 8>(project(in.t0), project(in.t1), project(in.t2), project(in.t3), project(in.t4), project(in.t5), project(in.t6), project(in.t7));
     let dx = array<vec2<f32>, 8>(dpdxCoarse(uv[0]), dpdxCoarse(uv[1]), dpdxCoarse(uv[2]), dpdxCoarse(uv[3]), dpdxCoarse(uv[4]), dpdxCoarse(uv[5]), dpdxCoarse(uv[6]), dpdxCoarse(uv[7]));
     let dy = array<vec2<f32>, 8>(dpdyCoarse(uv[0]), dpdyCoarse(uv[1]), dpdyCoarse(uv[2]), dpdyCoarse(uv[3]), dpdyCoarse(uv[4]), dpdyCoarse(uv[5]), dpdyCoarse(uv[6]), dpdyCoarse(uv[7]));
-    let fixed_uv = array<vec2<i32>, 8>(fixed(uv[0]), fixed(uv[1]), fixed(uv[2]), fixed(uv[3]), fixed(uv[4]), fixed(uv[5]), fixed(uv[6]), fixed(uv[7]));
+    // The GPU interpolates where coverage is sampled, 9/16 into the pixel; GX's rasterizer
+    // evaluates attributes at 0.495 into it. Back by the difference, along the attributes' slopes.
+    let back = 0.5625 - 0.495;
+    let fixed_uv = array<vec2<i32>, 8>(fixed(uv[0] - back * (dx[0] + dy[0])), fixed(uv[1] - back * (dx[1] + dy[1])), fixed(uv[2] - back * (dx[2] + dy[2])), fixed(uv[3] - back * (dx[3] + dy[3])), fixed(uv[4] - back * (dx[4] + dy[4])), fixed(uv[5] - back * (dx[5] + dy[5])), fixed(uv[6] - back * (dx[6] + dy[6])), fixed(uv[7] - back * (dx[7] + dy[7])));
+    let c0 = in.c0 - back * (dpdxCoarse(in.c0) + dpdyCoarse(in.c0));
+    let c1 = in.c1 - back * (dpdxCoarse(in.c1) + dpdyCoarse(in.c1));
 
-    let ras0 = vec4<i32>(clamp(in.c0, vec4<f32>(0.0), vec4<f32>(255.0)));
-    let ras1 = vec4<i32>(clamp(in.c1, vec4<f32>(0.0), vec4<f32>(255.0)));
+    let ras0 = vec4<i32>(clamp(c0, vec4<f32>(0.0), vec4<f32>(255.0)));
+    let ras1 = vec4<i32>(clamp(c1, vec4<f32>(0.0), vec4<f32>(255.0)));
 
     // Indirect stages' lookups, by constant index (see the TEV registers below).
     var ind: array<vec4<i32>, 4>;
