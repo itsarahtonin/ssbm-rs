@@ -734,7 +734,7 @@ impl Renderer {
 
     /// The scissor rectangle in the EFB, cut to the viewport (which the GameCube clips to), and
     /// the scissor's offset.
-    fn scissor(state: &State, vp: &Viewport) -> ([u32; 4], (f32, f32)) {
+    pub(crate) fn scissor(state: &State, vp: &Viewport) -> ([u32; 4], (f32, f32)) {
         let tl = state.bp[0x20];
         let br = state.bp[0x21];
         let off = state.bp[0x59];
@@ -1227,44 +1227,86 @@ impl Sink for Renderer {
     }
 }
 
+/// Decodes a draw's vertices into `inputs` and, unless its scissor leaves nothing to draw,
+/// transforms them into `outs`; returns whether it did. `normals` carries over between draws,
+/// so every draw decodes, in order.
+pub(crate) fn prepare(
+    state: &State,
+    draw: &Draw<'_>,
+    normals: &mut vertex::NormalCache,
+    inputs: &mut Vec<vertex::Input>,
+    outs: &mut Vec<Output>,
+) -> bool {
+    let xf_index = [state.xf[xform::MATINDEX_A], state.xf[xform::MATINDEX_A + 1]];
+    inputs.clear();
+    vertex::decode(
+        &state.cp,
+        xf_index,
+        usize::from(draw.vat),
+        draw.data,
+        usize::from(draw.count),
+        normals,
+        inputs,
+    );
+    let (scissor, _) = Renderer::scissor(state, &Viewport::of(&state.xf));
+    if scissor[2] == 0 || scissor[3] == 0 {
+        return false;
+    }
+    outs.clear();
+    outs.extend(
+        inputs
+            .iter()
+            .map(|v| xform::transform(&state.xf, &state.bp, v)),
+    );
+    true
+}
+
 impl Renderer {
+    /// Draws `draw`, its vertices already transformed into `outs` (by `prepare`), or nothing
+    /// if its scissor leaves nothing.
+    pub(crate) fn draw_prepared(
+        &mut self,
+        state: &State,
+        draw: &Draw<'_>,
+        outs: Option<&[Output]>,
+        mem: &dyn Memory,
+    ) {
+        let t = std::time::Instant::now();
+        self.draws_this_frame += 1;
+        if let Some(outs) = outs {
+            self.draw_outs(state, draw, outs, mem);
+        }
+        if let Some(p) = &mut self.profile {
+            p.draw += t.elapsed();
+        }
+    }
+
     fn draw_timed(&mut self, state: &State, draw: &Draw<'_>, mem: &dyn Memory) {
         self.draws_this_frame += 1;
         if self.draw_limit.is_some_and(|n| self.draws_this_frame > n) {
             return;
         }
-        let count = usize::from(draw.count);
-        let xf_index = [state.xf[xform::MATINDEX_A], state.xf[xform::MATINDEX_A + 1]];
-        // The draw's vertices, transformed and on screen, in buffers kept from draw to draw.
-        let mut inputs = std::mem::take(&mut self.inputs);
-        inputs.clear();
-        vertex::decode(
-            &state.cp,
-            xf_index,
-            usize::from(draw.vat),
-            draw.data,
-            count,
-            &mut self.normals,
-            &mut inputs,
-        );
-        let vp = Viewport::of(&state.xf);
-        let (scissor, off) = Self::scissor(state, &vp);
-        if scissor[2] == 0 || scissor[3] == 0 {
-            self.inputs = inputs;
-            return;
-        }
+        // The draw's vertices, decoded and transformed, in buffers kept from draw to draw.
         let t = std::time::Instant::now();
-        let mut outs = std::mem::take(&mut self.outs);
-        outs.clear();
-        outs.extend(
-            inputs
-                .iter()
-                .map(|v| xform::transform(&state.xf, &state.bp, v)),
+        let (mut inputs, mut outs) = (
+            std::mem::take(&mut self.inputs),
+            std::mem::take(&mut self.outs),
         );
-        self.inputs = inputs;
+        let drawn = prepare(state, draw, &mut self.normals, &mut inputs, &mut outs);
         if let Some(p) = &mut self.profile {
             p.xform += t.elapsed();
         }
+        if drawn {
+            self.draw_outs(state, draw, &outs, mem);
+        }
+        (self.inputs, self.outs) = (inputs, outs);
+    }
+
+    /// The rest of a draw, from its transformed vertices.
+    fn draw_outs(&mut self, state: &State, draw: &Draw<'_>, outs: &[Output], mem: &dyn Memory) {
+        let count = usize::from(draw.count);
+        let vp = Viewport::of(&state.xf);
+        let (scissor, off) = Self::scissor(state, &vp);
         let mut screens = std::mem::take(&mut self.screens);
         screens.clear();
         screens.extend(outs.iter().map(|o| vp.screen(o.clip)));
@@ -1337,7 +1379,6 @@ impl Renderer {
         if self.trace && self.frame == 0 {
             trace_draw(state, draw, count, scissor, &outs[0], screens[0], mem);
         }
-        self.outs = outs;
         self.screens = screens;
         if count == 0 {
             return;

@@ -1,16 +1,19 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-//! The renderer on a thread of its own. The game thread keeps the GX state and sends what each
+//! The renderer on threads of its own. The game thread keeps the GX state and sends what each
 //! draw and copy needs: the state's changes since the last, the vertices, and the memory the
-//! textures read. A renderer on another thread draws from a copy of the state kept by those
-//! changes, so the game runs on while it draws, at most `AHEAD` frames behind.
+//! textures read. A thread with a copy of the state kept by those changes decodes and transforms
+//! each draw's vertices, and a renderer on another thread, with a copy of its own, draws them,
+//! so the game runs on while it draws, at most `AHEAD` frames behind.
 
 use std::collections::HashMap;
 use std::sync::{Arc, Condvar, Mutex, mpsc};
 
 use ssbm_gx::{Delta, Draw, Memory, Sink, State, vertex};
 
-use crate::{Renderer, bits, hash_bytes, sampled_image, texture_maps};
+use ssbm_gx::xform::Output;
+
+use crate::{Renderer, bits, hash_bytes, prepare, sampled_image, texture_maps};
 
 /// How many frames the game may run ahead of the renderer.
 const AHEAD: u64 = 2;
@@ -28,6 +31,14 @@ enum Packet {
         count: u16,
         data: Vec<u8>,
     },
+    /// A draw with its vertices transformed (`prepare`), unless its scissor leaves nothing.
+    Prepared {
+        primitive: u8,
+        vat: u8,
+        count: u16,
+        data: Vec<u8>,
+        outs: Option<Vec<Output>>,
+    },
     Copy(u32),
 }
 
@@ -41,7 +52,7 @@ struct Done {
 /// A `Renderer` on its own thread, as a sink for the game thread's GX stream.
 pub struct Threaded {
     tx: Option<mpsc::Sender<Vec<Packet>>>,
-    thread: Option<std::thread::JoinHandle<()>>,
+    threads: Vec<std::thread::JoinHandle<()>>,
     batch: Vec<Packet>,
     /// Hashes of the memory textures read this frame, so each range hashes once a frame.
     hashes: HashMap<(u32, u32), u64>,
@@ -54,15 +65,22 @@ pub struct Threaded {
 impl Threaded {
     pub fn spawn(renderer: Renderer) -> Self {
         let (tx, rx) = mpsc::channel();
+        let (prepared_tx, prepared_rx) = mpsc::channel();
         let done = Arc::new(Done::default());
         let finished = done.clone();
-        let thread = std::thread::Builder::new()
-            .name("render".to_owned())
-            .spawn(move || run(renderer, &rx, &finished))
-            .expect("the render thread");
+        let threads = vec![
+            std::thread::Builder::new()
+                .name("transform".to_owned())
+                .spawn(move || prepare_all(&rx, &prepared_tx))
+                .expect("the transform thread"),
+            std::thread::Builder::new()
+                .name("render".to_owned())
+                .spawn(move || run(renderer, &prepared_rx, &finished))
+                .expect("the render thread"),
+        ];
         Self {
             tx: Some(tx),
-            thread: Some(thread),
+            threads,
             batch: Vec::new(),
             hashes: HashMap::new(),
             held: HashMap::new(),
@@ -95,8 +113,8 @@ impl Sink for Threaded {
     fn finish(&mut self) {
         self.send();
         self.tx = None;
-        if let Some(thread) = self.thread.take() {
-            thread.join().expect("the render thread");
+        for thread in self.threads.drain(..) {
+            thread.join().expect("a render thread");
         }
     }
 
@@ -155,6 +173,53 @@ impl Memory for Held {
     }
 }
 
+/// Decodes and transforms each draw's vertices ahead of the render thread, with a copy of the
+/// state of its own.
+fn prepare_all(rx: &mpsc::Receiver<Vec<Packet>>, tx: &mpsc::Sender<Vec<Packet>>) {
+    let mut state = State::new();
+    let mut normals = [[0.0; 3]; 3];
+    let mut inputs = Vec::new();
+    while let Ok(batch) = rx.recv() {
+        let mut out = Vec::with_capacity(batch.len());
+        for packet in batch {
+            match packet {
+                Packet::Changes(delta) => {
+                    state.apply(&delta);
+                    out.push(Packet::Changes(delta));
+                }
+                Packet::Draw {
+                    primitive,
+                    vat,
+                    count,
+                    data,
+                } => {
+                    let layout = vertex::layout(&state.cp, usize::from(vat));
+                    let draw = Draw {
+                        primitive,
+                        vat,
+                        count,
+                        layout: &layout,
+                        data: &data,
+                    };
+                    let mut outs = Vec::new();
+                    let drawn = prepare(&state, &draw, &mut normals, &mut inputs, &mut outs);
+                    out.push(Packet::Prepared {
+                        primitive,
+                        vat,
+                        count,
+                        data,
+                        outs: drawn.then_some(outs),
+                    });
+                }
+                other => out.push(other),
+            }
+        }
+        if tx.send(out).is_err() {
+            return;
+        }
+    }
+}
+
 fn run(mut renderer: Renderer, rx: &mpsc::Receiver<Vec<Packet>>, done: &Done) {
     let mut state = State::new();
     let mut memory = Held(HashMap::new());
@@ -180,6 +245,23 @@ fn run(mut renderer: Renderer, rx: &mpsc::Receiver<Vec<Packet>>, done: &Done) {
                         data: &data,
                     };
                     renderer.draw(&state, &draw, &memory);
+                }
+                Packet::Prepared {
+                    primitive,
+                    vat,
+                    count,
+                    data,
+                    outs,
+                } => {
+                    let layout = vertex::layout(&state.cp, usize::from(vat));
+                    let draw = Draw {
+                        primitive,
+                        vat,
+                        count,
+                        layout: &layout,
+                        data: &data,
+                    };
+                    renderer.draw_prepared(&state, &draw, outs.as_deref(), &memory);
                 }
                 Packet::Copy(value) => {
                     renderer.copy(&state, value, &memory);
