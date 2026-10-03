@@ -21,7 +21,7 @@ set MODES=1
 set SSBM_TRACE_PADS=1
 $([[ ${ADAPTER:-0} == 1 ]] || echo "set SSBM_NO_ADAPTER=1")
 cd /d "$(cygpath -wa .)"
-"$(cygpath -wa "$BIN")" "$(cygpath -w "$SSBM_DISC")" --window --card "$w\\card.raw" --fields 1200 --port all 2> "$w\\game.log"
+"$(cygpath -wa "$BIN")" "$(cygpath -w "$SSBM_DISC")" --window --card "$w\\card.raw" --fields 1200 2>"$w\\game.log"
 EOF
 cat > "$out/keys.cmd" <<EOF
 @echo off
@@ -41,6 +41,7 @@ ok=1
 check() {
     if grep -q "$2" "$log"; then echo "ok: $1"; else echo "FAILED: $1"; ok=0; fi
 }
+check "the ports ran the game" "window: the Rust ports run the game"
 check "A pressed" "pad 1: buttons 0100"
 check "the movie skipped to the title" "game mode 0x00"
 check "Start pressed" "pad 1: buttons 1000"

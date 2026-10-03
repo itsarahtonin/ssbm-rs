@@ -349,6 +349,13 @@ fn run() -> ExitCode {
             _ => disc_path = Some(a),
         }
     }
+    // A window is for playing, so the ports run the game unless --port says otherwise
+    // (--port -all keeps the original code).
+    #[cfg(feature = "window")]
+    if window::requested() && ports.is_empty() {
+        eprintln!("window: the Rust ports run the game (--port -all for the original code)");
+        ports.push("all".to_owned());
+    }
     let Some(disc_path) = disc_path else {
         eprintln!(
             "usage: ssbm-run [disc] [--fields N] [--replay FILE] [--fp hardware|slippi] [--known FILE] [--write-known FILE]  (or set SSBM_DISC)"
