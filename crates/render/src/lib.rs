@@ -120,6 +120,38 @@ impl Frame {
     }
 }
 
+/// Time spent by part, over the frames since the last report.
+#[derive(Default)]
+struct Profile {
+    draw: std::time::Duration,
+    xform: std::time::Duration,
+    texture: std::time::Duration,
+    flush: std::time::Duration,
+    readback: std::time::Duration,
+    xfb: std::time::Duration,
+    frames: u32,
+}
+
+impl Profile {
+    fn report(&mut self) {
+        self.frames += 1;
+        if self.frames < 300 {
+            return;
+        }
+        let ms = |d: std::time::Duration| d.as_secs_f64() * 1000.0 / f64::from(self.frames);
+        eprintln!(
+            "render per frame: draws {:.2} ms (transform {:.2}, textures {:.2}), flush {:.2}, readback {:.2}, xfb {:.2}",
+            ms(self.draw),
+            ms(self.xform),
+            ms(self.texture),
+            ms(self.flush),
+            ms(self.readback),
+            ms(self.xfb)
+        );
+        *self = Profile::default();
+    }
+}
+
 /// Counts of what the renderer met and doesn't draw yet (or draws approximately), by name.
 pub type Unsupported = HashMap<&'static str, u64>;
 
@@ -159,6 +191,8 @@ pub struct Renderer {
     pub opaque: bool,
     /// Draws only this many draws of each frame, for debugging.
     pub draw_limit: Option<u64>,
+    /// Where the time goes, when profiling (GX_PROFILE).
+    profile: Option<Profile>,
     draws_this_frame: u64,
 }
 
@@ -363,6 +397,7 @@ impl Renderer {
             silhouettes: false,
             opaque: false,
             draw_limit: None,
+            profile: std::env::var_os("GX_PROFILE").map(|_| Profile::default()),
             draws_this_frame: 0,
             unsupported: HashMap::new(),
         };
@@ -491,6 +526,15 @@ impl Renderer {
 
     /// The texture texture map `map` samples, made if new.
     fn texture(&mut self, state: &State, map: usize, mem: &dyn Memory) -> (u32, u32) {
+        let t = std::time::Instant::now();
+        let r = self.texture_uncached(state, map, mem);
+        if let Some(p) = &mut self.profile {
+            p.texture += t.elapsed();
+        }
+        r
+    }
+
+    fn texture_uncached(&mut self, state: &State, map: usize, mem: &dyn Memory) -> (u32, u32) {
         let image = Image::of(&state.bp, map);
         let tlut_reg = state.bp[texture::reg(texture::SETTLUT, map)];
         let tlut_offset = ((tlut_reg & 0x3FF) << 9) as usize;
@@ -1014,6 +1058,20 @@ impl Renderer {
 
 impl Sink for Renderer {
     fn draw(&mut self, state: &State, draw: &Draw<'_>, mem: &dyn Memory) {
+        let t = std::time::Instant::now();
+        self.draw_timed(state, draw, mem);
+        if let Some(p) = &mut self.profile {
+            p.draw += t.elapsed();
+        }
+    }
+
+    fn copy(&mut self, state: &State, value: u32, mem: &dyn Memory) {
+        self.copy_timed(state, value, mem);
+    }
+}
+
+impl Renderer {
+    fn draw_timed(&mut self, state: &State, draw: &Draw<'_>, mem: &dyn Memory) {
         self.draws_this_frame += 1;
         if self.draw_limit.is_some_and(|n| self.draws_this_frame > n) {
             return;
@@ -1033,10 +1091,14 @@ impl Sink for Renderer {
         if scissor[2] == 0 || scissor[3] == 0 {
             return;
         }
+        let t = std::time::Instant::now();
         let outs: Vec<Output> = inputs
             .iter()
             .map(|v| xform::transform(&state.xf, &state.bp, v))
             .collect();
+        if let Some(p) = &mut self.profile {
+            p.xform += t.elapsed();
+        }
         let screens: Vec<[f32; 3]> = outs.iter().map(|o| vp.screen(o.clip)).collect();
         let first = self.vertices.len() as u32;
         let cull = bits(state.bp[0x00], 14, 2);
@@ -1225,17 +1287,26 @@ impl Sink for Renderer {
         }
     }
 
-    fn copy(&mut self, state: &State, value: u32, _mem: &dyn Memory) {
+    fn copy_timed(&mut self, state: &State, value: u32, _mem: &dyn Memory) {
         let tl = state.bp[0x49];
         let wh = state.bp[0x4A];
         let left = bits(tl, 0, 10);
         let top = bits(tl, 10, 10);
         let right = (left + bits(wh, 0, 10) + 1).min(EFB_WIDTH);
         let bottom = (top + bits(wh, 10, 10) + 1).min(EFB_HEIGHT);
+        let t = std::time::Instant::now();
         self.flush();
+        let t1 = std::time::Instant::now();
         if bits(value, 14, 1) != 0 {
             let efb = self.read_efb();
+            let t2 = std::time::Instant::now();
             let frame = xfb::copy(state, value, &efb, [left, top, right, bottom]);
+            if let Some(p) = &mut self.profile {
+                p.flush += t1 - t;
+                p.readback += t2 - t1;
+                p.xfb += t2.elapsed();
+                p.report();
+            }
             match &mut self.on_frame {
                 Some(f) => f(frame),
                 None => self.frames.push(frame),

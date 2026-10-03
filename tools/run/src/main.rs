@@ -37,6 +37,8 @@ mod calls;
 mod monkey;
 mod probe;
 mod wav;
+#[cfg(feature = "window")]
+mod window;
 
 /// Ports lockstep does not check (see where they are set).
 const LOCKSTEP_EXEMPT: &[&str] = &[
@@ -234,6 +236,21 @@ const READ_ONLY: [(u32, u32); 2] = [(0x803B_7240, 0x803B_9840), (0x804D_79E0, 0x
 const STACK_SIZE: usize = 1 << 30;
 
 fn main() -> ExitCode {
+    // --window: the window and the GPU on this thread, the game on its own.
+    #[cfg(feature = "window")]
+    if window::requested() {
+        let gpu = window::start();
+        std::thread::Builder::new()
+            .name("game".to_owned())
+            .stack_size(STACK_SIZE)
+            .spawn(|| {
+                let code = run();
+                std::process::exit(if code == ExitCode::SUCCESS { 0 } else { 1 });
+            })
+            .expect("start the game thread");
+        window::run(gpu);
+        return ExitCode::SUCCESS;
+    }
     std::thread::Builder::new()
         .name("game".to_owned())
         .stack_size(STACK_SIZE)
@@ -245,7 +262,8 @@ fn main() -> ExitCode {
 
 fn run() -> ExitCode {
     let mut disc_path = std::env::var("SSBM_DISC").ok();
-    let mut fields = 600;
+    // A window plays until it's closed.
+    let mut fields = if std::env::args().any(|a| a == "--window") { u64::MAX / 4 } else { 600 };
     let mut replay_path = None;
     let mut fp_mode = None;
     let mut known_path = None;
@@ -325,6 +343,7 @@ fn run() -> ExitCode {
                     _ => panic!("--fp hardware|slippi"),
                 }
             }
+            "--window" => {}
             _ => disc_path = Some(a),
         }
     }
@@ -501,8 +520,17 @@ fn run() -> ExitCode {
         let mut out = wav::Wav::create(path.as_ref()).unwrap_or_else(|e| panic!("{path}: {e}"));
         sdk.hw.set_audio_out(Box::new(move |block| out.push(block).expect("writing AUDIO_OUT")));
     }
+    // --window (with the window feature) plays in a window, with controllers and sound.
+    #[cfg(feature = "window")]
+    if window::requested() {
+        window::install(&sdk, replay_path.is_none());
+    }
     // GX_RENDER=DIR draws the GPU's command stream (ssbm-render) and saves each frame there.
-    if let Ok(dir) = std::env::var("GX_RENDER") {
+    // GX_RENDER=- draws them and keeps none, to time the renderer.
+    if std::env::var("GX_RENDER").is_ok_and(|d| d == "-") {
+        let renderer = ssbm_render::Renderer::new().expect("GX_RENDER needs a GPU");
+        sdk.hw.set_renderer(Box::new(renderer));
+    } else if let Ok(dir) = std::env::var("GX_RENDER") {
         let dir = std::path::PathBuf::from(dir);
         std::fs::create_dir_all(&dir).unwrap_or_else(|e| panic!("{}: {e}", dir.display()));
         let mut renderer = ssbm_render::Renderer::new().expect("GX_RENDER needs a GPU");

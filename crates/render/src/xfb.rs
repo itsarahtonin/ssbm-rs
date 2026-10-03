@@ -4,6 +4,7 @@
 //! Copies to the XFB: the EFB through the copy filter (anti-aliasing and deflicker), gamma, and
 //! YUV 4:2:2, then back to RGB as the video interface shows it.
 
+use rayon::prelude::*;
 use ssbm_gx::State;
 
 use crate::{EFB_WIDTH, Frame, bits};
@@ -60,10 +61,8 @@ pub(crate) fn copy(state: &State, value: u32, efb: &[u8], rect: [u32; 4]) -> Fra
     };
     let width = right - left;
     let height = bottom - top;
-    // YUYV pairs: (Y, U or V) per pixel.
-    let mut yuyv = vec![(0u8, 0u8); (width * height) as usize];
-    let mut scanline = vec![Yuv::default(); (EFB_WIDTH + 2) as usize];
-    for y in top..bottom {
+    // A row of YUYV pairs (Y, U or V) per pixel, from the EFB's rows about it.
+    let encode = |y: u32, out: &mut [(u8, u8)], scanline: &mut [Yuv]| {
         let y_prev = (y as i32 - 1).max(if clamp_top { top as i32 } else { 0 }) as u32;
         let y_next = (y + 1).min(
             if clamp_bottom {
@@ -74,16 +73,15 @@ pub(crate) fn copy(state: &State, value: u32, efb: &[u8], rect: [u32; 4]) -> Fra
         );
         for (i, x) in (left..right).enumerate() {
             let (p, c, n) = (color(x, y_prev), color(x, y), color(x, y_next));
-            let mut out = [0u8; 3];
+            let mut rgb = [0u8; 3];
             for k in 0..3 {
                 let sum = p[k] * w_prev + c[k] * w_mid + n[k] * w_next;
-                out[k] = lut[(sum >> 6).min(255) as usize];
+                rgb[k] = lut[(sum >> 6).min(255) as usize];
             }
-            scanline[i + 1] = to_yuv(out[0], out[1], out[2]);
+            scanline[i + 1] = to_yuv(rgb[0], rgb[1], rgb[2]);
         }
         scanline[0] = scanline[1];
         scanline[(right + 1) as usize] = scanline[right as usize];
-        let row = ((y - top) * width) as usize;
         let mut i = 1usize;
         let mut x = 0usize;
         while x + 1 < width as usize + 1 && i + 1 < scanline.len() {
@@ -91,23 +89,31 @@ pub(crate) fn copy(state: &State, value: u32, efb: &[u8], rect: [u32; 4]) -> Fra
             let u = 128i32 + ((i32::from(a.u) + (i32::from(b.u) << 1) + i32::from(c.u)) >> 2);
             let v = 128i32 + ((i32::from(a.v) + (i32::from(b.v) << 1) + i32::from(c.v)) >> 2);
             if x < width as usize {
-                yuyv[row + x] = (b.y.wrapping_add(16), u as u8);
+                out[x] = (b.y.wrapping_add(16), u as u8);
             }
             if x + 1 < width as usize {
-                yuyv[row + x + 1] = (c.y.wrapping_add(16), v as u8);
+                out[x + 1] = (c.y.wrapping_add(16), v as u8);
             }
             i += 2;
             x += 2;
         }
-    }
+    };
+    // Rows are independent: rayon's threads share them.
+    let mut yuyv = vec![(0u8, 0u8); (width * height) as usize];
+    yuyv.par_chunks_mut(width as usize)
+        .enumerate()
+        .for_each_init(
+            || vec![Yuv::default(); (EFB_WIDTH + 2) as usize],
+            |scanline, (r, out)| encode(top + r as u32, out, scanline),
+        );
     let y_scale = if bits(value, 10, 1) != 0 {
         256.0 / bits(state.bp[0x4E], 0, 9) as f32
     } else {
         bits(state.bp[0x4E], 0, 9) as f32 / 256.0
     };
     let out_height = ((height as f32) * y_scale) as u32;
-    let mut rgba = Vec::with_capacity((width * out_height * 4) as usize);
-    for oy in 0..out_height {
+    // Back to RGB as the video interface shows it.
+    let decode = |oy: u32, out: &mut [u8]| {
         let sy = ((oy as f32 / y_scale) as u32).min(height - 1);
         let row = (sy * width) as usize;
         let mut x = 0;
@@ -120,16 +126,25 @@ pub(crate) fn copy(state: &State, value: u32, efb: &[u8], rect: [u32; 4]) -> Fra
             };
             let (y1, y2) = (i32::from(y1) - 16, i32::from(y2) - 16);
             let (u, v) = (i32::from(u) - 128, i32::from(v) - 128);
-            for yy in [y1, y2].iter().take((width as usize - x).min(2)) {
+            for (k, yy) in [y1, y2]
+                .iter()
+                .take((width as usize - x).min(2))
+                .enumerate()
+            {
                 let y = *yy as f32;
                 let r = ((1.164 * y + 1.596 * v as f32) as i32).clamp(0, 255);
                 let g = ((1.164 * y - 0.392 * u as f32 - 0.813 * v as f32) as i32).clamp(0, 255);
                 let b = ((1.164 * y + 2.017 * u as f32) as i32).clamp(0, 255);
-                rgba.extend_from_slice(&[r as u8, g as u8, b as u8, 255]);
+                out[(x + k) * 4..(x + k) * 4 + 4]
+                    .copy_from_slice(&[r as u8, g as u8, b as u8, 255]);
             }
             x += 2;
         }
-    }
+    };
+    let mut rgba = vec![0u8; (width * out_height * 4) as usize];
+    rgba.par_chunks_mut(width as usize * 4)
+        .enumerate()
+        .for_each(|(r, out)| decode(r as u32, out));
     Frame {
         width,
         height: out_height,

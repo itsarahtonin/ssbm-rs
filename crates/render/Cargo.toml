@@ -13,3 +13,4 @@ wgpu = "30"
 pollster = "1"
 bytemuck = { version = "1", features = ["derive"] }
 png = "0.18"
+rayon = "1"
