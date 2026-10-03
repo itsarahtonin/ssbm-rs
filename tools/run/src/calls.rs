@@ -32,10 +32,30 @@ pub fn past_deadline(executed: u64) -> bool {
     DEADLINE.with(|d| d.get() != 0 && executed > d.get())
 }
 
+thread_local! {
+    /// CALL_POKE=ADDR=BYTE,...: bytes to change in every call checked again, which then checks
+    /// as a mutated check, to replay exactly the changed inputs a run's mismatch reported.
+    static POKES: Vec<(u32, u8)> = std::env::var("CALL_POKE").map_or_else(|_| Vec::new(), |v| {
+        v.split(',')
+            .map(|p| {
+                let (a, b) = p.split_once('=').expect("CALL_POKE=ADDR=BYTE,...");
+                let num = |s: &str| u32::from_str_radix(s.trim().trim_start_matches("0x"), 16);
+                (num(a).expect("ADDR"), num(b).expect("BYTE") as u8)
+            })
+            .collect()
+    });
+}
+
 /// Checks `call` again from the state it was saved in.
 fn check(ctx: &Ctx, call: &Call) {
     call.load(ctx);
-    ctx.lockstep.resume(call.mutated, call.stub);
+    let poked = POKES.with(|pokes| {
+        for &(addr, byte) in pokes {
+            ctx.write_u8(addr, byte);
+        }
+        !pokes.is_empty()
+    });
+    ctx.lockstep.resume(call.mutated || poked, call.stub);
     DEADLINE.with(|d| d.set(ctx.executed() + REPLAY_MAX));
     ctx.invoke(call.addr);
     DEADLINE.with(|d| d.set(0));
@@ -62,6 +82,9 @@ const SAVED_CALLS: [u64; 5] = [1, 10, 100, 1000, 10000];
 /// code: their states are the ones mutated checks reach further from.
 const NOVEL_CALLS: u32 = 20;
 
+/// The most real calls CAPTURE_EVERY saves per function.
+const EVERY_CALLS: u64 = 400;
+
 pub fn read(path: &Path) -> Call {
     let packed = std::fs::read(path).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
     let bytes = zstd::decode_all(&packed[..]).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
@@ -85,6 +108,10 @@ pub fn install_capture(
 ) {
     std::fs::create_dir_all(&dir).unwrap_or_else(|e| panic!("{}: {e}", dir.display()));
     let corpus = corpus.map(|p| RefCell::new(CorpusWriter::create(&p)));
+    // CAPTURE_EVERY=N saves every Nth real call as well, up to EVERY_CALLS per function, for a
+    // corpus of one function's many states.
+    let every: u64 =
+        std::env::var("CAPTURE_EVERY").map_or(0, |v| v.parse().expect("CAPTURE_EVERY=N"));
     // Per function: mismatches saved, real calls seen, mutated checks seen, real calls saved
     // for running new code.
     let counts: RefCell<BTreeMap<u32, (u32, u64, u64, u32)>> = RefCell::default();
@@ -105,7 +132,8 @@ pub fn install_capture(
             && ctx.ext::<ssbm_sdk::Sdk>().hw.fields.get() >= from
         {
             *calls += 1;
-            if SAVED_CALLS.contains(calls) {
+            let spaced = every > 0 && *calls % every == 0 && *calls / every <= EVERY_CALLS;
+            if SAVED_CALLS.contains(calls) || spaced {
                 true
             } else if novel > 0 && *novels < NOVEL_CALLS {
                 *novels += 1;
@@ -297,7 +325,11 @@ impl Corpus {
     }
 }
 
-/// Checks every call in the corpus at `path` again, `repeat` times each.
+/// Checks every call in the corpus at `path` again, `repeat` times each. With CORPUS_FEEDBACK=N,
+/// up to N states a call's mutated checks started from are kept when they reached code no check
+/// had verified and met no hardware, and are checked again in turn, mutated further: blocks
+/// behind several conditions are reached a condition at a time, as a coverage-guided fuzzer
+/// reaches them from the inputs it keeps.
 pub fn replay_corpus(ctx: &Ctx, dol: Option<&ssbm_disc::Dol>, path: &Path, repeat: u32) {
     let corpus = Corpus::read(path);
     // A corpus comes from one run, so its first call has the code all of them run.
@@ -310,13 +342,101 @@ pub fn replay_corpus(ctx: &Ctx, dol: Option<&ssbm_disc::Dol>, path: &Path, repea
         path.display()
     );
     let verbose = std::env::var_os("CORPUS_VERBOSE").is_some();
+    let feedback: usize =
+        std::env::var("CORPUS_FEEDBACK").map_or(0, |v| v.parse().expect("CORPUS_FEEDBACK=N"));
+    let base: Rc<RefCell<Option<Rc<Call>>>> = Rc::default();
+    let kept: Rc<RefCell<Vec<Derived>>> = Rc::default();
+    if feedback > 0 {
+        let (base, kept) = (base.clone(), kept.clone());
+        // CAPTURE's own saving goes on.
+        let saving = ctx.lockstep.capture.borrow().clone();
+        *ctx.lockstep.capture.borrow_mut() = Some(Rc::new(move |ctx, ended: Ended, take| {
+            if let Some(save) = &saving {
+                save(ctx, ended, take);
+            }
+            let wanted = ended.mutated && !ended.mismatched && !ended.interacted && ended.novel > 0;
+            let base = base.borrow();
+            let Some(base) = base.as_ref().filter(|_| wanted) else { return };
+            if kept.borrow().len() < feedback {
+                kept.borrow_mut().push(Derived::from(base, &take()));
+            }
+        }));
+    }
+    let mut derived = 0;
     for i in 0..corpus.len() {
-        let call = corpus.call(i);
+        let call = Rc::new(corpus.call(i));
         if verbose {
             eprintln!("call {i}: {}", ctx.name_of(call.addr));
         }
+        *base.borrow_mut() = Some(call.clone());
         for _ in 0..repeat {
             check(ctx, &call);
+        }
+        // The kept states, oldest first; checking them may keep more, up to the limit. Each is
+        // a mutated state, checked as mutated checks are (against null hardware, dropped where
+        // its original fails), and mutated further.
+        let mut next = 0;
+        loop {
+            // Once the function's checks have ended, as they do when its needed blocks are
+            // verified, its calls run unchecked, and a mutated state must not.
+            let checked = ctx.entry(call.addr).is_some_and(|e| e.mode == ssbm_rt::Mode::Lockstep);
+            let state = kept.borrow().get(next).filter(|_| checked).map(|d| d.apply(&call));
+            let Some(state) = state else { break };
+            next += 1;
+            ctx.lockstep.reseeding.set(true);
+            check(ctx, &state);
+            ctx.lockstep.reseeding.set(false);
+        }
+        derived += next;
+        kept.borrow_mut().clear();
+    }
+    *base.borrow_mut() = None;
+    if feedback > 0 {
+        eprintln!("checked {derived} states mutated checks reached new code from");
+    }
+}
+
+/// A state a mutated check started from, as what it changed in the call it mutated: a few
+/// bytes, where the call holds all of memory.
+struct Derived {
+    regs: ssbm_rt::RegsSnapshot,
+    changed: Vec<(usize, Vec<u8>)>,
+}
+
+impl Derived {
+    fn from(base: &Call, state: &Call) -> Self {
+        let mut changed: Vec<(usize, Vec<u8>)> = Vec::new();
+        for (page, (a, b)) in base.mem1.chunks(4096).zip(state.mem1.chunks(4096)).enumerate() {
+            if a == b {
+                continue;
+            }
+            for (i, (&x, &y)) in a.iter().zip(b).enumerate() {
+                if x == y {
+                    continue;
+                }
+                let at = page * 4096 + i;
+                match changed.last_mut() {
+                    Some((start, bytes)) if *start + bytes.len() == at => bytes.push(y),
+                    _ => changed.push((at, vec![y])),
+                }
+            }
+        }
+        Self { regs: state.regs.clone(), changed }
+    }
+
+    /// The state, rebuilt from the call it came from, to check as a call of its own.
+    fn apply(&self, base: &Call) -> Call {
+        let mut mem1 = base.mem1.clone();
+        for (at, bytes) in &self.changed {
+            mem1[*at..*at + bytes.len()].copy_from_slice(bytes);
+        }
+        Call {
+            addr: base.addr,
+            mutated: true,
+            stub: None,
+            regs: self.regs.clone(),
+            mem1,
+            locked: base.locked.clone(),
         }
     }
 }

@@ -23,6 +23,8 @@ pub struct Coverage {
     hits: RefCell<Vec<u64>>,
     /// The instructions verified so far, a bit per instruction from `LO`.
     covered: RefCell<Vec<u64>>,
+    /// What earlier runs verified, which `novel` does not count as new.
+    baseline: RefCell<Vec<u64>>,
     bounds: RefCell<Option<Bounds>>,
 }
 
@@ -98,16 +100,24 @@ impl Coverage {
         }
     }
 
-    /// How many of the instructions in `hits` no check has verified yet.
+    /// Sets what earlier runs verified (a bit per instruction from `LO`), for `novel`.
+    pub fn set_baseline(&self, words: Vec<u64>) {
+        *self.baseline.borrow_mut() = words;
+    }
+
+    /// How many of the instructions in `hits` no check has verified yet, here or in the
+    /// baseline.
     pub(crate) fn novel(&self, hits: &Hits) -> u32 {
         let Hits(lo, bits) = hits;
         let covered = self.covered.borrow();
+        let baseline = self.baseline.borrow();
+        let set = |v: &Vec<u64>, at: usize| v.get(at / 64).is_some_and(|c| c >> (at % 64) & 1 != 0);
         let mut n = 0;
         for (i, &w) in bits.iter().enumerate() {
             for b in 0..64 {
                 if w & (1 << b) != 0 {
                     let at = ((lo - LO) / 4) as usize + i * 64 + b;
-                    n += u32::from(covered.get(at / 64).is_none_or(|c| c >> (at % 64) & 1 == 0));
+                    n += u32::from(!set(&covered, at) && !set(&baseline, at));
                 }
             }
         }
