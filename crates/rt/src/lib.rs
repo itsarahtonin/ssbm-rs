@@ -871,7 +871,15 @@ impl Ctx {
 
     /// `memmove` within emulated memory.
     pub fn copy(&self, dst: u32, src: u32, n: u32) {
-        let mut buf = vec![0; n as usize];
+        // Most copies are of small structs, which needn't allocate.
+        let mut small = [0; 256];
+        let mut large = Vec::new();
+        let buf = if n as usize <= small.len() {
+            &mut small[..n as usize]
+        } else {
+            large.resize(n as usize, 0);
+            &mut large[..]
+        };
         for (i, b) in buf.iter_mut().enumerate() {
             *b = self.read_u8(src.wrapping_add(i as u32));
         }

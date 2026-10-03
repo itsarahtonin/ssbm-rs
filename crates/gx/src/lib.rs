@@ -334,9 +334,10 @@ impl State {
     /// produce to `out`, digested if `digests`.
     pub fn feed(&mut self, mem: &dyn Memory, data: &[u8], out: &mut Vec<Produced>, digests: bool) {
         self.buf.extend_from_slice(data);
-        let buf = std::mem::take(&mut self.buf);
+        let mut buf = std::mem::take(&mut self.buf);
         let used = self.run(mem, &buf, out, digests);
-        self.buf = buf[used..].to_vec();
+        buf.drain(..used);
+        self.buf = buf;
     }
 
     /// Runs the complete commands at the start of `data`; returns the bytes they used.

@@ -11,7 +11,7 @@
 //! back in.
 
 use std::cell::{Cell, RefCell};
-use std::rc::Rc;
+use std::rc::{Rc, Weak};
 
 use ssbm_rt::Ctx;
 
@@ -103,15 +103,23 @@ pub fn field_start(n: u64) -> u64 {
     (u128::from(n) * u128::from(TB_HZ) * 1001 / 60_000) as u64
 }
 
-pub(crate) struct Mmio;
+/// The device registers, with the SDK layer they belong to: every GX command the game sends
+/// is a write here, so it doesn't look the layer up in the context each time.
+pub(crate) struct Mmio(pub(crate) Weak<Sdk>);
+
+impl Mmio {
+    fn sdk(&self) -> Rc<Sdk> {
+        self.0.upgrade().expect("the SDK layer outlives its context's MMIO")
+    }
+}
 
 impl ssbm_rt::Mmio for Mmio {
     fn read(&self, ctx: &Ctx, addr: u32, size: u32) -> u32 {
-        ctx.ext::<Sdk>().hw.read(ctx, addr, size)
+        self.sdk().hw.read(ctx, addr, size)
     }
 
     fn write(&self, ctx: &Ctx, addr: u32, size: u32, value: u32) {
-        let sdk = ctx.ext::<Sdk>();
+        let sdk = self.sdk();
         sdk.hw.write(ctx, &sdk, addr, size, value);
     }
 }
@@ -477,7 +485,9 @@ impl Hw {
         let mut pipe = self.pipe.borrow_mut();
         pipe.extend_from_slice(&value.to_be_bytes()[(4 - size) as usize..]);
         while pipe.len() >= 32 {
-            let burst: Vec<u8> = pipe.drain(..32).collect();
+            let mut burst = [0; 32];
+            burst.copy_from_slice(&pipe[..32]);
+            pipe.drain(..32);
             self.burst(ctx, sdk, &burst);
         }
     }
