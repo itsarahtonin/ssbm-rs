@@ -1155,6 +1155,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "ssbm-gx"
+version = "0.1.0"
+
+[[package]]
 name = "ssbm-mem"
 version = "0.1.0"
 dependencies = [
@@ -1199,6 +1203,7 @@ version = "0.1.0"
 dependencies = [
  "gekko-fp",
  "ssbm-disc",
+ "ssbm-gx",
  "ssbm-ppc",
  "ssbm-rt",
  "ssbm-types",

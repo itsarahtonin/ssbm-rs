@@ -458,6 +458,11 @@ fn run() -> ExitCode {
             .map(|n| (n, open(&format!("{path}.{n}"))));
         sdk.hw.record_gx(open(&path), detail);
     }
+    // GX_TRACE_BP=E0,64 prints each write of those BP registers with the ports making it.
+    if let Ok(regs) = std::env::var("GX_TRACE_BP") {
+        let regs = regs.split(',').map(|r| u8::from_str_radix(r.trim(), 16).expect("GX_TRACE_BP=E0,64"));
+        sdk.hw.trace_bp(regs.collect());
+    }
     // UNLOCK_ALL=1 unlocks every character, stage and trophy once the main menu comes up, and
     // MENU=KIND,SELECTION opens it on that menu (MenuKind) with that item under the cursor.
     let unlock = std::env::var_os("UNLOCK_ALL").is_some();

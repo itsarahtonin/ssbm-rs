@@ -10,6 +10,7 @@ publish.workspace = true
 [dependencies]
 gekko-fp.workspace = true
 ssbm-disc.workspace = true
+ssbm-gx.workspace = true
 ssbm-rt.workspace = true
 ssbm-types.workspace = true
 

@@ -120,6 +120,10 @@ pub struct Hw {
     regs: RefCell<Vec<u16>>,
     /// Bytes written to the gather pipe since the last 32-byte burst.
     pipe: RefCell<Vec<u8>>,
+    /// BP registers whose writes print who made them (GX_TRACE_BP), and whether the last byte
+    /// written to the pipe began a BP command.
+    trace_bp: RefCell<Vec<u8>>,
+    bp_next: Cell<bool>,
     gp: RefCell<Gp>,
     aram: RefCell<Vec<u8>>,
     /// Bumped to cancel scheduled audio DMA interrupts.
@@ -150,6 +154,8 @@ impl Default for Hw {
         let hw = Self {
             regs: RefCell::new(vec![0; (SIZE / 2) as usize]),
             pipe: RefCell::default(),
+            trace_bp: RefCell::default(),
+            bp_next: Cell::new(false),
             gp: RefCell::default(),
             aram: RefCell::new(vec![0; ARAM_SIZE]),
             ai_generation: Cell::new(0),
@@ -200,6 +206,11 @@ impl Hw {
     fn set_cp_ptr(&self, off: u32, v: u32) {
         self.set16(off, v as u16);
         self.set16(off + 2, (v >> 16) as u16);
+    }
+
+    /// Prints who writes the BP registers `regs` to the pipe, and the frame (diagnostics).
+    pub fn trace_bp(&self, regs: Vec<u8>) {
+        *self.trace_bp.borrow_mut() = regs;
     }
 
     /// Commands the GP has run, for diagnostics.
@@ -437,6 +448,19 @@ impl Hw {
     // Write-gather pipe and GX FIFO.
 
     fn pipe_write(&self, ctx: &Ctx, sdk: &Rc<Sdk>, size: u32, value: u32) {
+        if !self.trace_bp.borrow().is_empty() {
+            if size == 4 && self.bp_next.get() && self.trace_bp.borrow().contains(&((value >> 24) as u8)) {
+                let callers: Vec<String> =
+                    ctx.native_stack().iter().rev().take(4).map(|&a| ctx.name_of(a)).collect();
+                eprintln!(
+                    "gx bp frame {} {:08X} from {}",
+                    self.gp.borrow().frame(),
+                    value,
+                    callers.join(" < ")
+                );
+            }
+            self.bp_next.set(size == 1 && value == 0x61);
+        }
         let mut pipe = self.pipe.borrow_mut();
         pipe.extend_from_slice(&value.to_be_bytes()[(4 - size) as usize..]);
         while pipe.len() >= 32 {
