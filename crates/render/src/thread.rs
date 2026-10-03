@@ -13,7 +13,7 @@ use ssbm_gx::{Delta, Draw, Memory, Sink, State, vertex};
 
 use ssbm_gx::xform::Output;
 
-use crate::{Renderer, bits, hash_bytes, prepare, sampled_image, texture_maps};
+use crate::{Renderer, bits, copy, hash_bytes, prepare, sampled_image, texture_maps};
 
 /// How many frames the game may run ahead of the renderer.
 const AHEAD: u64 = 2;
@@ -40,6 +40,8 @@ enum Packet {
         outs: Option<Vec<Output>>,
     },
     Copy(u32),
+    /// Memory copies went to that the game has written over since (copy::Footprints).
+    Forget(u32, u32),
 }
 
 /// Frames the render thread has finished.
@@ -60,10 +62,13 @@ pub struct Threaded {
     held: HashMap<(u32, u32), u64>,
     done: Arc<Done>,
     frames: u64,
+    /// Where copies went: this thread reads the game's memory, the renderer can't.
+    footprints: copy::Footprints,
 }
 
 impl Threaded {
-    pub fn spawn(renderer: Renderer) -> Self {
+    pub fn spawn(mut renderer: Renderer) -> Self {
+        renderer.track_copies = false;
         let (tx, rx) = mpsc::channel();
         let (prepared_tx, prepared_rx) = mpsc::channel();
         let done = Arc::new(Done::default());
@@ -86,6 +91,7 @@ impl Threaded {
             held: HashMap::new(),
             done,
             frames: 0,
+            footprints: copy::Footprints::default(),
         }
     }
 
@@ -145,10 +151,18 @@ impl Sink for Threaded {
         }
     }
 
-    fn copy(&mut self, state: &State, value: u32, _mem: &dyn Memory) {
+    fn copy(&mut self, state: &State, value: u32, mem: &dyn Memory) {
         self.changes(state);
+        let frame_end = bits(value, 14, 1) != 0;
+        if frame_end {
+            for (start, end) in self.footprints.take_overwritten(mem) {
+                self.batch.push(Packet::Forget(start, end));
+            }
+        } else if let Some(f) = copy::footprint(state, value) {
+            self.footprints.record(f, mem);
+        }
         self.batch.push(Packet::Copy(value));
-        if bits(value, 14, 1) != 0 {
+        if frame_end {
             // A frame: hand it over, and wait while the renderer is too far behind.
             self.send();
             self.hashes.clear();
@@ -263,6 +277,7 @@ fn run(mut renderer: Renderer, rx: &mpsc::Receiver<Vec<Packet>>, done: &Done) {
                     };
                     renderer.draw_prepared(&state, &draw, outs.as_deref(), &memory);
                 }
+                Packet::Forget(start, end) => renderer.forget(start, end),
                 Packet::Copy(value) => {
                     renderer.copy(&state, value, &memory);
                     if bits(value, 14, 1) != 0 {

@@ -188,6 +188,10 @@ pub struct Renderer {
     /// Copies from the EFB kept on the GPU instead, by the address they copied to.
     copier: copy::Copier,
     gpu_copies: HashMap<u32, copy::Copied>,
+    /// Where copies went, to forget those the game writes over (copy::Footprints), when this
+    /// renderer reads the game's memory itself (`track_copies`); a threaded one is told.
+    footprints: copy::Footprints,
+    pub(crate) track_copies: bool,
     normals: vertex::NormalCache,
     inputs: Vec<vertex::Input>,
     outs: Vec<Output>,
@@ -434,6 +438,8 @@ impl Renderer {
             copies: Vec::new(),
             copier,
             gpu_copies: HashMap::new(),
+            footprints: copy::Footprints::default(),
+            track_copies: true,
             normals: [[0.0; 3]; 3],
             inputs: Vec::new(),
             outs: Vec::new(),
@@ -604,7 +610,10 @@ impl Renderer {
                 entry.last_used = self.frame;
                 return (c.id, 1);
             }
-            self.note("EFB copy sampled in another format or size");
+            // Sampled some other way: from now on, its bytes as the encoder would have
+            // written them.
+            self.note("EFB copy read back to sample it another way");
+            self.materialize(image.address);
         }
         let mut hash = self.hash_memory(mem, image.address, size);
         let tlut = state.tmem.get(tlut_offset..).unwrap_or(&[]);
@@ -1094,7 +1103,8 @@ impl Renderer {
 
     /// Makes a copy from the EFB into a texture of its own, on the GPU.
     fn gpu_copy(&mut self, r: &copy::Request) {
-        let reuse = self.gpu_copies.get(&r.address).and_then(|c| {
+        let address = r.footprint.address;
+        let reuse = self.gpu_copies.get(&address).and_then(|c| {
             ((c.format, c.width, c.height) == (r.format, r.width, r.height)
                 && matches!(self.textures.get(c.id as usize), Some(Some(_))))
             .then_some(c.id)
@@ -1119,12 +1129,13 @@ impl Renderer {
                 });
                 let id = self.insert_texture(texture, 1);
                 self.gpu_copies.insert(
-                    r.address,
+                    address,
                     copy::Copied {
                         id,
                         format: r.format,
                         width: r.width,
                         height: r.height,
+                        footprint: r.footprint,
                     },
                 );
                 id
@@ -1135,16 +1146,45 @@ impl Renderer {
         self.copier
             .copy(&self.device, &self.queue, &entry.view, r);
         // What earlier copies read back left in memory there is gone.
+        let f = r.footprint;
         let before = self.copies.len();
-        for row in 0..r.rows {
-            let at = (r.address + row * r.stride) & 0x01FF_FFFF;
-            let end = u64::from(at) + u64::from(r.row_bytes);
+        for row in 0..f.rows {
+            let at = (f.address + row * f.stride) & 0x01FF_FFFF;
+            let end = u64::from(at) + u64::from(f.row_bytes);
             self.copies
                 .retain(|(a, b)| !(*a >= at && *a as u64 + b.len() as u64 <= end));
         }
         if self.copies.len() != before {
             self.hashes.clear();
         }
+    }
+
+    /// Reads a copy kept on the GPU back and keeps its bytes as the encoder would have written
+    /// them to memory, for a texture that samples it in another format or size.
+    fn materialize(&mut self, address: u32) {
+        let Some(c) = self.gpu_copies.remove(&address) else {
+            return;
+        };
+        let Some(Some(entry)) = self.textures.get(c.id as usize) else {
+            return;
+        };
+        let texels = self.read_texture(&entry._texture, c.width, c.height);
+        for (at, row) in copy::encode_texels(&c, &texels) {
+            let end = u64::from(at) + row.len() as u64;
+            self.copies
+                .retain(|(a, b)| !(*a >= at && *a as u64 + b.len() as u64 <= end));
+            self.copies.push((at, row));
+        }
+        self.hashes.clear();
+    }
+
+    /// Forgets what copies left in `start..end`, which the game has written over since.
+    pub(crate) fn forget(&mut self, start: u32, end: u32) {
+        self.gpu_copies.retain(|&a, _| !(start..end).contains(&a));
+        let (start, end) = (start & 0x01FF_FFFF, end & 0x01FF_FFFF);
+        self.copies
+            .retain(|(a, b)| *a as usize + b.len() <= start as usize || *a >= end);
+        self.hashes.clear();
     }
 
     /// An RGBA8 texture's pixels, read back.
@@ -1485,7 +1525,7 @@ impl Renderer {
         }
     }
 
-    fn copy_timed(&mut self, state: &State, value: u32, _mem: &dyn Memory) {
+    fn copy_timed(&mut self, state: &State, value: u32, mem: &dyn Memory) {
         let tl = state.bp[0x49];
         let wh = state.bp[0x4A];
         let left = bits(tl, 0, 10);
@@ -1496,6 +1536,12 @@ impl Renderer {
         self.flush();
         let t1 = std::time::Instant::now();
         if bits(value, 14, 1) != 0 {
+            // A frame's end: copies the game has since written over are gone.
+            if self.track_copies {
+                for (start, end) in self.footprints.take_overwritten(mem) {
+                    self.forget(start, end);
+                }
+            }
             let rect = [left, top, right, bottom];
             let (frame, t2) = if self.xfb_on_gpu {
                 let gpu = self
@@ -1537,6 +1583,9 @@ impl Renderer {
             self.evict();
         } else if let Some(request) = copy::request(state, value) {
             self.gpu_copy(&request);
+            if self.track_copies {
+                self.footprints.record(request.footprint, mem);
+            }
         } else {
             let efb = self.read_efb();
             match encode::encode(state, value, &efb) {
@@ -1555,6 +1604,11 @@ impl Renderer {
                     self.hashes.clear();
                 }
                 None => self.note("EFB copy to a texture in a format not encoded"),
+            }
+            if self.track_copies
+                && let Some(f) = copy::footprint(state, value)
+            {
+                self.footprints.record(f, mem);
             }
         }
         if bits(value, 11, 1) != 0 {

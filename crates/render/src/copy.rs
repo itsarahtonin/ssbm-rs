@@ -5,10 +5,12 @@
 //! what the texture decoder would make of what the copy encoder writes, so frames come out as
 //! from a copy read back and encoded into memory, without waiting on the GPU for it.
 
-use bytemuck::{Pod, Zeroable};
-use ssbm_gx::State;
+use std::collections::HashMap;
 
-use crate::bits;
+use bytemuck::{Pod, Zeroable};
+use ssbm_gx::{Memory, State};
+
+use crate::{bits, hash_bytes};
 
 #[repr(C)]
 #[derive(Clone, Copy, Pod, Zeroable)]
@@ -25,31 +27,80 @@ struct Params {
 /// A copy to make on the GPU: where it goes and the texture it makes there.
 pub(crate) struct Request {
     params: Params,
-    pub address: u32,
     pub format: u32,
-    /// The texture's size: the copied rectangle, rounded up to whole blocks as encoded.
+    /// The texture's size: the copied rectangle, in texels, as the game samples it.
     pub width: u32,
     pub height: u32,
-    /// The memory the encoder would write: rows of blocks, `stride` apart.
+    pub footprint: Footprint,
+}
+
+/// The memory a copy from the EFB writes: rows of whole blocks, `stride` apart.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) struct Footprint {
+    pub address: u32,
     pub stride: u32,
     pub row_bytes: u32,
     pub rows: u32,
 }
 
+impl Footprint {
+    /// Each row's address and length.
+    fn rows(&self) -> impl Iterator<Item = (u32, u32)> + '_ {
+        (0..self.rows).map(|r| (self.address + r * self.stride, self.row_bytes))
+    }
+
+    /// The memory from its first byte to past its last.
+    pub fn span(&self) -> (u32, u32) {
+        let end = self.address + self.rows.saturating_sub(1) * self.stride + self.row_bytes;
+        (self.address, end)
+    }
+}
+
+/// Block width and height (log 2) and bytes per block of a copy's texture format, as the
+/// encoder lays it out; None for a format copies don't make.
+fn blocks(format: u32) -> Option<(u32, u32, u32)> {
+    match format {
+        0 => Some((3, 3, 32)),
+        1 | 2 | 7 | 8 | 9 | 10 => Some((3, 2, 32)),
+        3 | 4 | 5 | 11 | 12 => Some((2, 2, 32)),
+        6 => Some((2, 2, 64)),
+        _ => None,
+    }
+}
+
+/// The copy's texture format (BP 0x52's), and whether it halves the rectangle.
+fn copy_format(value: u32) -> (u32, u32) {
+    let tp = bits(value, 3, 4);
+    (tp / 2 + (tp & 1) * 8, bits(value, 9, 1))
+}
+
+/// The memory a copy to a texture (BP 0x52 value `value`) writes, as encode.rs lays it out;
+/// None for one it doesn't encode.
+pub(crate) fn footprint(state: &State, value: u32) -> Option<Footprint> {
+    let (format, half) = copy_format(value);
+    if bits(state.bp[0x43], 0, 3) > 1 {
+        return None;
+    }
+    let (lw, lh, block) = blocks(format)?;
+    let wh = state.bp[0x4A];
+    let (width, height) = (bits(wh, 0, 10) >> half, bits(wh, 10, 10) >> half);
+    Some(Footprint {
+        address: (state.bp[0x4B] & 0x00FF_FFFF) << 5,
+        stride: bits(state.bp[0x4D], 0, 10) << 5,
+        row_bytes: ((width >> lw) + 1) * block,
+        rows: (height >> lh) + 1,
+    })
+}
+
 /// The copy BP 0x52 value `value` asks for, if it is one kept on the GPU.
 pub(crate) fn request(state: &State, value: u32) -> Option<Request> {
     let pixel_format = bits(state.bp[0x43], 0, 3);
-    let tp = bits(value, 3, 4);
-    let format = tp / 2 + (tp & 1) * 8;
-    if pixel_format > 1 || !matches!(format, 0 | 5) {
+    let (format, half) = copy_format(value);
+    if !matches!(format, 0 | 5) {
         return None;
     }
-    let half = bits(value, 9, 1);
+    let footprint = footprint(state, value)?;
     let (tl, wh) = (state.bp[0x49], state.bp[0x4A]);
-    let (width, height) = (bits(wh, 0, 10) >> half, bits(wh, 10, 10) >> half);
-    // Blocks of 8x8 texels for I4, 4x4 for RGB5A3; 32 bytes either way.
-    let (lw, lh) = if format == 0 { (3, 3) } else { (2, 2) };
-    let (s_blocks, t_blocks) = ((width >> lw) + 1, (height >> lh) + 1);
     Some(Request {
         params: Params {
             left: bits(tl, 0, 10),
@@ -60,14 +111,93 @@ pub(crate) fn request(state: &State, value: u32) -> Option<Request> {
             six: u32::from(pixel_format == 1),
             pad: [0; 2],
         },
-        address: (state.bp[0x4B] & 0x00FF_FFFF) << 5,
         format,
-        width: s_blocks << lw,
-        height: t_blocks << lh,
-        stride: bits(state.bp[0x4D], 0, 10) << 5,
-        row_bytes: s_blocks * 32,
-        rows: t_blocks,
+        width: (bits(wh, 0, 10) >> half) + 1,
+        height: (bits(wh, 10, 10) >> half) + 1,
+        footprint,
     })
+}
+
+/// The bytes the encoder would have written for a copy kept on the GPU, from its texels read
+/// back (RGBA, `width` by `height`): the texture decoder makes the same texels of them. Texels
+/// of its last blocks past the copied rectangle, which the GPU copy doesn't keep, are zero.
+pub(crate) fn encode_texels(c: &Copied, texels: &[u8]) -> Vec<(u32, Vec<u8>)> {
+    let (lw, lh, block) = blocks(c.format).expect("a format copies make");
+    let (bw, bh) = (1u32 << lw, 1u32 << lh);
+    let texel = |s: u32, t: u32| -> [u32; 4] {
+        if s >= c.width || t >= c.height {
+            return [0; 4];
+        }
+        let i = ((t * c.width + s) * 4) as usize;
+        let p = &texels[i..i + 4];
+        [p[0], p[1], p[2], p[3]].map(u32::from)
+    };
+    c.footprint
+        .rows()
+        .enumerate()
+        .map(|(tb, (at, len))| {
+            let mut row = vec![0u8; len as usize];
+            for (sb, dst) in row.chunks_mut(block as usize).enumerate() {
+                for t in 0..bh {
+                    for s in 0..bw {
+                        let [r, g, b, a] = texel(sb as u32 * bw + s, tb as u32 * bh + t);
+                        let i = (t * bw + s) as usize;
+                        if c.format == 0 {
+                            // I4: what decoded as c4(n) holds n in its top four bits.
+                            dst[i / 2] |= if i % 2 == 0 { (r & 0xF0) as u8 } else { (r >> 4) as u8 };
+                        } else {
+                            // RGB5A3: opaque texels decoded with alpha 255, the rest below it.
+                            let v = if a == 255 {
+                                0x8000 | (r >> 3) << 10 | (g >> 3) << 5 | b >> 3
+                            } else {
+                                (a >> 5) << 12 | (r >> 4) << 8 | (g >> 4) << 4 | b >> 4
+                            };
+                            dst[2 * i..2 * i + 2].copy_from_slice(&(v as u16).to_be_bytes());
+                        }
+                    }
+                }
+            }
+            (at & 0x01FF_FFFF, row)
+        })
+        .collect()
+}
+
+/// Where copies from the EFB went, with a hash of the memory under each as the copy was made.
+/// The game never sees what a copy writes (the renderer keeps it), so memory that later hashes
+/// differently was written over by the game, and on hardware the copy would be gone.
+#[derive(Default)]
+pub(crate) struct Footprints(HashMap<u32, (Footprint, u64)>);
+
+fn hash_footprint(f: &Footprint, mem: &dyn Memory) -> u64 {
+    let mut h = 0;
+    let mut bytes = Vec::new();
+    for (at, len) in f.rows() {
+        bytes.resize(len as usize, 0);
+        mem.read(at & 0x01FF_FFFF, &mut bytes);
+        h = (h ^ hash_bytes(&bytes)).rotate_left(7);
+    }
+    h
+}
+
+impl Footprints {
+    /// Notes a copy to `f`, with the memory under it as it stands.
+    pub fn record(&mut self, f: Footprint, mem: &dyn Memory) {
+        let hash = hash_footprint(&f, mem);
+        self.0.insert(f.address, (f, hash));
+    }
+
+    /// Forgets the copies whose memory the game has written since, returning their spans.
+    pub fn take_overwritten(&mut self, mem: &dyn Memory) -> Vec<(u32, u32)> {
+        let mut gone = Vec::new();
+        self.0.retain(|_, (f, hash)| {
+            let same = hash_footprint(f, mem) == *hash;
+            if !same {
+                gone.push(f.span());
+            }
+            same
+        });
+        gone
+    }
 }
 
 /// A texture a copy made, by the address it copied to.
@@ -76,6 +206,7 @@ pub(crate) struct Copied {
     pub format: u32,
     pub width: u32,
     pub height: u32,
+    pub footprint: Footprint,
 }
 
 pub(crate) struct Copier {
