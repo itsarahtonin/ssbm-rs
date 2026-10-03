@@ -1751,6 +1751,7 @@ name = "ssbm-render"
 version = "0.1.0"
 dependencies = [
  "bytemuck",
+ "png",
  "pollster",
  "ssbm-gx",
  "wgpu",
@@ -1772,6 +1773,7 @@ dependencies = [
  "ssbm-disc",
  "ssbm-game",
  "ssbm-ppc",
+ "ssbm-render",
  "ssbm-rt",
  "ssbm-sdk",
  "ssbm-slippi",

@@ -2,7 +2,9 @@
 # Draws a FIFO log (GX_DFF) with Dolphin's software renderer, the graphics reference, and
 # saves its frames as images in OUT: runs DOLPHIN (a portable Dolphin build) unattended, with
 # its panic dialogs and stop confirmation off, until FRAMES images are saved or TIMEOUT
-# seconds pass, and stops it.
+# seconds pass, and stops it. The copy filter (deflicker) is on, as on hardware: Dolphin turns
+# it off by default, and only User/Config/GFX.ini's [Enhancements] DisableCopyFilter = False
+# turns it on (the command line's GFX settings don't take).
 #
 #   DOLPHIN=/c/Projects/dolphin-dev/Dolphin-x64 bash tools/gx/dolphin-render.sh LOG.dff OUT [FRAMES]
 set -u
@@ -20,7 +22,7 @@ mkdir -p "$OUT"
     -C Dolphin.Interface.ConfirmStop=False \
     -C Dolphin.Movie.DumpFrames=True \
     -C Dolphin.Movie.DumpFramesSilent=True \
-    -C GFX.Settings.DumpFramesAsImages=True > /dev/null 2>&1 &
+    -C GFX.Settings.DumpFramesAsImages=True     -C GFX.Enhancements.DisableCopyFilter=False > /dev/null 2>&1 &
 pid=$!
 winpid=$(cat /proc/$pid/winpid 2>/dev/null)
 for _ in $(seq $((TIMEOUT * 2))); do

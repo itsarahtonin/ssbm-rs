@@ -44,19 +44,8 @@ impl Memory for Player {
     }
 }
 
-pub fn save_png(path: &Path, frame: &Frame) -> std::io::Result<()> {
-    let file = std::io::BufWriter::new(std::fs::File::create(path)?);
-    let mut encoder = png::Encoder::new(file, frame.width, frame.height);
-    encoder.set_color(png::ColorType::Rgb);
-    encoder.set_depth(png::BitDepth::Eight);
-    let mut writer = encoder.write_header()?;
-    let rgb: Vec<u8> = frame
-        .rgba
-        .chunks_exact(4)
-        .flat_map(|p| [p[0], p[1], p[2]])
-        .collect();
-    writer.write_image_data(&rgb)?;
-    Ok(())
+fn save_png(path: &Path, frame: &Frame) -> std::io::Result<()> {
+    frame.save_png(path)
 }
 
 fn load_png(path: &Path) -> Option<(u32, u32, Vec<u8>)> {

@@ -103,6 +103,23 @@ pub struct Frame {
     pub rgba: Vec<u8>,
 }
 
+impl Frame {
+    pub fn save_png(&self, path: &std::path::Path) -> std::io::Result<()> {
+        let file = std::io::BufWriter::new(std::fs::File::create(path)?);
+        let mut encoder = png::Encoder::new(file, self.width, self.height);
+        encoder.set_color(png::ColorType::Rgb);
+        encoder.set_depth(png::BitDepth::Eight);
+        let mut writer = encoder.write_header()?;
+        let rgb: Vec<u8> = self
+            .rgba
+            .chunks_exact(4)
+            .flat_map(|p| [p[0], p[1], p[2]])
+            .collect();
+        writer.write_image_data(&rgb)?;
+        Ok(())
+    }
+}
+
 /// Counts of what the renderer met and doesn't draw yet (or draws approximately), by name.
 pub type Unsupported = HashMap<&'static str, u64>;
 
@@ -132,6 +149,7 @@ pub struct Renderer {
     normals: vertex::NormalCache,
     frame: u64,
     frames: Vec<Frame>,
+    on_frame: Option<Box<dyn FnMut(Frame)>>,
     pub unsupported: Unsupported,
 }
 
@@ -316,6 +334,7 @@ impl Renderer {
             normals: [[0.0; 3]; 3],
             frame: 0,
             frames: Vec::new(),
+            on_frame: None,
             unsupported: HashMap::new(),
         };
         // Texture 0: a 1x1 black texture for maps nothing samples.
@@ -329,6 +348,11 @@ impl Renderer {
 
     pub fn queue(&self) -> &wgpu::Queue {
         &self.queue
+    }
+
+    /// Hands each frame to `f` as it's finished, instead of keeping it for `take_frames`.
+    pub fn on_frame(&mut self, f: impl FnMut(Frame) + 'static) {
+        self.on_frame = Some(Box::new(f));
     }
 
     /// The frames finished since last asked.
@@ -791,6 +815,7 @@ impl Renderer {
         let u = Self::uniforms_of(state, [1; 8], mode);
         let uniform = self.push_uniforms(&u);
         self.pipeline(key);
+        self.bind_group([0; 8]);
         self.commands.push(Command {
             pipeline: key,
             uniform,
@@ -942,11 +967,10 @@ impl Renderer {
     fn evict(&mut self) {
         let frame = self.frame;
         let mut dropped = false;
-        for (i, slot) in self.textures.iter_mut().enumerate().skip(1) {
+        for slot in self.textures.iter_mut().skip(1) {
             if slot.as_ref().is_some_and(|e| e.last_used + 120 < frame) {
                 *slot = None;
                 dropped = true;
-                let _ = i;
             }
         }
         if dropped {
@@ -1151,7 +1175,10 @@ impl Sink for Renderer {
         if bits(value, 14, 1) != 0 {
             let efb = self.read_efb();
             let frame = xfb::copy(state, value, &efb, [left, top, right, bottom]);
-            self.frames.push(frame);
+            match &mut self.on_frame {
+                Some(f) => f(frame),
+                None => self.frames.push(frame),
+            }
             self.frame += 1;
             self.hashes.clear();
             self.evict();

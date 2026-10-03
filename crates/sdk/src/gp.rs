@@ -8,7 +8,7 @@ use std::cell::RefCell;
 use std::io::Write;
 use std::path::PathBuf;
 
-use ssbm_gx::{Event, Produced, State};
+use ssbm_gx::{Draw, Event, Produced, Sink, State};
 
 use ssbm_gx::dff::{self, Log};
 use ssbm_rt::Ctx;
@@ -28,6 +28,7 @@ pub(crate) enum Effect {
 struct GpuMemory<'a> {
     ctx: &'a Ctx,
     log: Option<&'a RefCell<Log>>,
+    sink: Option<&'a RefCell<Box<dyn Sink>>>,
     /// The game's FIFO ring.
     fifo: (u32, u32),
 }
@@ -42,6 +43,22 @@ impl ssbm_gx::Memory for GpuMemory<'_> {
             let mut log = log.borrow_mut();
             let position = log.position();
             log.read(phys, out, dff::VERTEX_STREAM, position);
+        }
+    }
+
+    fn draws(&self) -> bool {
+        self.sink.is_some()
+    }
+
+    fn draw(&self, state: &State, draw: &Draw<'_>) {
+        if let Some(sink) = self.sink {
+            sink.borrow_mut().draw(state, draw, self);
+        }
+    }
+
+    fn copy(&self, state: &State, value: u32) {
+        if let Some(sink) = self.sink {
+            sink.borrow_mut().copy(state, value, self);
         }
     }
 
@@ -78,6 +95,8 @@ pub(crate) struct Gp {
     xfb_copies: u64,
     /// The game's FIFO ring, which the FIFO player writes a frame's commands through.
     fifo: (u32, u32),
+    /// What draws the stream.
+    sink: Option<RefCell<Box<dyn Sink>>>,
 }
 
 impl Default for Gp {
@@ -91,6 +110,7 @@ impl Default for Gp {
             dff_log: None,
             xfb_copies: 0,
             fifo: (0, 0),
+            sink: None,
         }
     }
 }
@@ -181,6 +201,11 @@ impl Gp {
         self.dff_log = Some(RefCell::new(Log::new(&s.bp, &s.cp, &s.xf, &s.tmem)));
     }
 
+    /// Draws the stream with `sink` from now on.
+    pub fn set_sink(&mut self, sink: Box<dyn Sink>) {
+        self.sink = Some(RefCell::new(sink));
+    }
+
     /// The game's FIFO ring, as the CP's registers set it.
     pub fn set_fifo(&mut self, start: u32, end: u32) {
         self.fifo = (start, end);
@@ -192,6 +217,7 @@ impl Gp {
         let mem = GpuMemory {
             ctx,
             log: self.dff_log.as_ref(),
+            sink: self.sink.as_ref(),
             fifo: self.fifo,
         };
         // A FIFO log needs what draws read, which digesting them reads.

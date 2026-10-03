@@ -209,6 +209,11 @@ impl Hw {
     }
 
     /// Records a Dolphin FIFO log of `count` frames from frame `start` to `path`.
+    /// Draws the GPU's command stream with `sink` (a renderer).
+    pub fn set_renderer(&self, sink: Box<dyn ssbm_gx::Sink>) {
+        self.gp.borrow_mut().set_sink(sink);
+    }
+
     pub fn record_dff(&self, path: std::path::PathBuf, start: u64, count: usize) {
         self.gp.borrow_mut().record_dff(path, start, count);
     }

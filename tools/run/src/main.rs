@@ -469,6 +469,19 @@ fn run() -> ExitCode {
             count.trim().parse().expect("COUNT"),
         );
     }
+    // GX_RENDER=DIR draws the GPU's command stream (ssbm-render) and saves each frame there.
+    if let Ok(dir) = std::env::var("GX_RENDER") {
+        let dir = std::path::PathBuf::from(dir);
+        std::fs::create_dir_all(&dir).unwrap_or_else(|e| panic!("{}: {e}", dir.display()));
+        let mut renderer = ssbm_render::Renderer::new().expect("GX_RENDER needs a GPU");
+        let mut n = 0u64;
+        renderer.on_frame(move |frame| {
+            n += 1;
+            let path = dir.join(format!("frame_{n}.png"));
+            frame.save_png(&path).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
+        });
+        sdk.hw.set_renderer(Box::new(renderer));
+    }
     // GX_TRACE_BP=E0,64 prints each write of those BP registers with the ports making it.
     if let Ok(regs) = std::env::var("GX_TRACE_BP") {
         let regs = regs.split(',').map(|r| u8::from_str_radix(r.trim(), 16).expect("GX_TRACE_BP=E0,64"));
