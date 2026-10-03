@@ -537,7 +537,9 @@ fn run() -> ExitCode {
     // GX_RENDER=DIR draws the GPU's command stream (ssbm-render) and saves each frame there.
     // GX_RENDER=- draws them and keeps none, to time the renderer.
     if std::env::var("GX_RENDER").is_ok_and(|d| d == "-") {
-        let renderer = ssbm_render::Renderer::new().expect("GX_RENDER needs a GPU");
+        let mut renderer = ssbm_render::Renderer::new().expect("GX_RENDER needs a GPU");
+        // Without a taker, the renderer would keep every frame.
+        renderer.on_frame(drop);
         sdk.hw.set_renderer(Box::new(renderer));
     } else if let Ok(dir) = std::env::var("GX_RENDER") {
         let dir = std::path::PathBuf::from(dir);
