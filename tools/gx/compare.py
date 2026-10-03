@@ -16,6 +16,9 @@ def frames(path):
     out = []
     for line in open(path, encoding="utf-8"):
         w = line.split()
+        # A run stopped mid-write leaves its last line short.
+        if len(w) < 8:
+            break
         out.append((int(w[1]), int(w[3]), int(w[5]), w[7]))
     return out
 
