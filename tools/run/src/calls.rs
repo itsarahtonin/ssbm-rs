@@ -32,6 +32,11 @@ pub fn past_deadline(executed: u64) -> bool {
     DEADLINE.with(|d| d.get() != 0 && executed > d.get())
 }
 
+/// Whether a call is being checked again, apart from any run.
+pub fn replaying() -> bool {
+    DEADLINE.with(|d| d.get() != 0)
+}
+
 thread_local! {
     /// CALL_POKE=ADDR=BYTE,...: bytes to change in every call checked again, which then checks
     /// as a mutated check, to replay exactly the changed inputs a run's mismatch reported.

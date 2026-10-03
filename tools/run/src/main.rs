@@ -1253,6 +1253,15 @@ fn run() -> ExitCode {
         if ctx.lockstep.in_original() && calls::past_deadline(ctx.executed()) {
             panic::panic_any(ssbm_rt::lockstep::Runaway("ran past its deadline"));
         }
+        // A call checked again has no video fields and makes no interactions for the log, so
+        // nothing marks progress between calls: its deadline stands in for the stall check,
+        // which would otherwise add up the calls' instructions and end the replay in whichever
+        // call reached the total.
+        if calls::replaying() {
+            stuck.set(0);
+            pcs.borrow_mut().clear();
+            return;
+        }
         let sdk = ctx.ext::<Sdk>();
         let f = sdk.hw.fields.get();
         // A port under lockstep replays the original's interrupts, so fields stand still
