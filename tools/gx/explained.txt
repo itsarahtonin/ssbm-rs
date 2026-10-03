@@ -1,0 +1,18 @@
+# GX stream differences between original-code and all-ports runs (smoke.sh) that are explained
+# rather than port bugs. A line per replay: name | first differing frame | explanation.
+#
+# The digests already leave out what no draw uses, which explains away the TEV register
+# components HSD_TExpSetReg leaves uninitialized and bit 21 of GXLoadTlut's TLUT address (outside
+# the hardware's field), so those make no difference at all.
+#
+# Final Destination's background change at the timer's 5:30: HSD_TExpSetReg's GXColor reg[8] is
+# uninitialized stack, and on the original's leftovers it sets TEV registers (GXSetTevColor) that
+# the port, on its own stack, doesn't, so the material setups and draws that follow differ: 81 more
+# draws a frame on the port's side for 1,920 frames. Lockstep over fields 9050-9160 of the first
+# replay finds no function mismatching; HSD_JObjDispDObj's 770 differing calls all differ only by
+# reads of stack the original never wrote, and a deep trace (LOCKSTEP_FIRST=1
+# LOCKSTEP_TRACE_DEEP=HSD_JObjDispDObj) shows them part at that GXSetTevColor. The frames drawn are
+# pixel-identical.
+Game_20260129T133652 | 9105 | Final Destination's background change: HSD_TExpSetReg reads stale stack
+Game_20260129T213207 | 9105 | Final Destination's background change: HSD_TExpSetReg reads stale stack
+Game_20260129T215738 | 9105 | Final Destination's background change: HSD_TExpSetReg reads stale stack

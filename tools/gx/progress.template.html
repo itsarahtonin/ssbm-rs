@@ -135,7 +135,8 @@ const statusColor = { done: "var(--ok)", approximate: "var(--warn)", missing: "v
 $("sub").innerHTML = `<span class="mono">${esc(D.branch)} · ${esc(D.commit)}</span> · ${esc(D.subject)} · updated ${esc(D.generated)}`;
 
 const streams = D.streams.filter((s) => s.done);
-const zero = streams.filter((s) => s.differ === 0).length;
+const zero = streams.filter((s) => s.differ === 0 || s.explained).length;
+const explainedCount = streams.filter((s) => s.differ !== 0 && s.explained).length;
 const runs = D.frames.filter((f) => f.frames.length);
 const ok = runs.filter((f) => f.ok).length;
 const worst = runs.length ? Math.min(...runs.map((f) => f.worst.psnr)) : null;
@@ -150,7 +151,7 @@ const median = (() => {
 })();
 const stat = (k, v, d) => `<div class="stat"><span class="k">${k}</span><span class="v num">${v}</span><span class="d">${d}</span></div>`;
 $("stats").innerHTML = [
-  stat("GX streams", `${zero}/${streams.length}`, `smoke replays at zero diff (${D.streams.length} in the set)`),
+  stat("GX streams", `${zero}/${streams.length}`, `smoke replays at zero diff or explained (${explainedCount} explained)`),
   stat("Frames", `${ok}/${runs.length}`, "runs within tolerance of Dolphin"),
   stat("Median PSNR", median === null ? "–" : `${median.toFixed(1)} dB`, worst === null ? "" : `worst ${worst.toFixed(1)} dB`),
   stat("Audio", `${audioZero}/${D.audio.length || 41}`, "runs whose AX matches Dolphin's"),
@@ -168,7 +169,7 @@ const framesDone = runs.length > 0 && ok === runs.length;
 $("ladder").innerHTML = [
   rung(1, "GX streams match", "Original code and all ports send the GPU the same draws, on the 40 smoke replays; each difference fixed or explained.",
     streamDone ? "done" : "in progress", D.streams.length ? zero / D.streams.length : 0,
-    `${zero} of ${D.streams.length} replays at zero diff${streams.length < D.streams.length ? `, ${D.streams.length - streams.length} still running` : ""}`),
+    `${zero - explainedCount} of ${D.streams.length} replays at zero diff, ${explainedCount} explained${streams.length < D.streams.length ? `, ${D.streams.length - streams.length} still running` : ""}`),
   rung(2, "Frames match Dolphin", "The wgpu renderer draws what Dolphin's software renderer draws from the same FIFO logs, within tolerance, on the smoke replays and a menu run.",
     framesDone ? "done" : "in progress", runs.length ? ok / Math.max(runs.length, 41) : 0,
     `${ok} of ${runs.length} runs within tolerance`),
@@ -243,7 +244,7 @@ $("runs").addEventListener("click", (e) => {
 renderRuns();
 
 $("streams").innerHTML = D.streams.map((s) => s.done
-  ? `<tr><td><i class="dot" style="background:${s.differ ? "var(--bad)" : "var(--ok)"}"></i><span class="mono">${esc(short(s.name))}</span></td><td class="r num">${s.frames}</td><td class="r num">${s.differ}</td><td class="r num">${s.first ?? "–"}</td></tr>`
+  ? `<tr title="${esc(s.explained || "")}"><td><i class="dot" style="background:${!s.differ ? "var(--ok)" : s.explained ? "var(--warn)" : "var(--bad)"}"></i><span class="mono">${esc(short(s.name))}</span>${s.explained ? `<div class="g" style="font-size:11px">${esc(s.explained)}</div>` : ""}</td><td class="r num">${s.frames}</td><td class="r num">${s.differ}</td><td class="r num">${s.first ?? "–"}</td></tr>`
   : `<tr><td colspan="4"><i class="dot" style="background:var(--idle)"></i><span class="mono">${esc(short(s.name))}</span> <span class="g">running</span></td></tr>`).join("");
 
 $("audio").innerHTML = D.audio.length ? D.audio.map((a) => `<tr><td><i class="dot" style="background:${a.differ === 0 && a.synced ? "var(--ok)" : a.differ ? "var(--bad)" : "var(--warn)"}"></i><span class="mono">${esc(short(a.name))}</span></td><td class="r num">${a.lists.toLocaleString()}</td><td class="r num">${a.differ ?? "–"}</td><td class="g">${a.synced ? "synced" : esc(a.sync)}</td></tr>`).join("") : `<tr><td colspan="4" class="g">Not checked yet.</td></tr>`;
@@ -256,7 +257,7 @@ $("feats").innerHTML = D.features.map((f) => `<div class="feat"><span class="n">
   const x = (i) => L + (h.length === 1 ? (W - L - R) / 2 : (i * (W - L - R)) / (h.length - 1));
   const y = (v) => T + (1 - v) * (H - T - B);
   const series = [
-    { name: "GX streams at zero diff", color: "var(--ok)", v: (e) => e.streams_done ? e.streams_zero / 40 : 0 },
+    { name: "GX streams at zero diff or explained", color: "var(--ok)", v: (e) => e.streams_done ? e.streams_zero / 40 : 0 },
     { name: "Runs within tolerance", color: "var(--hl)", v: (e) => e.frames_done ? e.frames_ok / Math.max(e.frames_done, 41) : 0 },
   ];
   let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Progress over time">`;

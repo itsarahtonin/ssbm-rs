@@ -65,9 +65,22 @@ def git(*args):
         return ""
 
 
+def explained():
+    """Explained stream differences (explained.txt): replay -> (first frame, explanation)."""
+    out = {}
+    for line in open(os.path.join(HERE, "explained.txt"), encoding="utf-8"):
+        if line.startswith("#") or "|" not in line:
+            continue
+        name, first, why = (p.strip() for p in line.split("|", 2))
+        out[name] = (int(first), why)
+    return out
+
+
 def stream_results():
-    """Per smoke replay: frames compared, frames differing, and in shape."""
+    """Per smoke replay: frames compared, frames differing, and in shape, and an explanation of
+    the difference when there is one (its first differing frame must match)."""
     out = []
+    known = explained()
     d = os.path.join(GX, "smoke")
     if not os.path.isdir(d):
         return out
@@ -87,8 +100,10 @@ def stream_results():
         n = min(len(fa), len(fb))
         differ = [i for i in range(n) if fa[i] != fb[i]]
         shape = [i for i in differ if fa[i][1:3] != fb[i][1:3]]
+        first = differ[0] if differ else None
+        why = known.get(name)
         out.append({"name": name, "done": True, "frames": n, "differ": len(differ), "shape": len(shape),
-                    "first": differ[0] if differ else None})
+                    "first": first, "explained": why[1] if why and why[0] == first else None})
     return out
 
 
@@ -164,7 +179,7 @@ def main():
     entry = {
         "at": now,
         "commit": git("rev-parse", "--short", "HEAD"),
-        "streams_zero": sum(1 for s in done_streams if s["differ"] == 0),
+        "streams_zero": sum(1 for s in done_streams if s["differ"] == 0 or s.get("explained")),
         "streams_done": len(done_streams),
         "frames_ok": sum(1 for f in measured if f["ok"]),
         "frames_done": len(measured),
