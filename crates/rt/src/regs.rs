@@ -25,6 +25,8 @@ pub mod spr {
     pub const TBU_W: u32 = 285;
     pub const GQR0: u32 = 912;
     pub const HID2: u32 = 920;
+    pub const DMA_U: u32 = 922;
+    pub const DMA_L: u32 = 923;
 }
 
 #[derive(Default)]

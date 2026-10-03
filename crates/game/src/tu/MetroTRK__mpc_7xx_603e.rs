@@ -428,7 +428,7 @@ fn asm_TRKRestoreExtended1Block(ctx: &Ctx) {
                 // mtspr DMA_U, r30
                 ctx.regs.set_spr(922, g[30].get());
                 // mtspr DMA_L, r31
-                ctx.regs.set_spr(923, g[31].get());
+                ctx.set_spr(923, g[31].get());
                 // b .L_8032AAA8
                 pc = 0x8032aaa8_u32;
                 continue;
