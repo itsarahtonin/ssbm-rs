@@ -189,6 +189,9 @@ pub struct Renderer {
     copier: copy::Copier,
     gpu_copies: HashMap<u32, copy::Copied>,
     normals: vertex::NormalCache,
+    inputs: Vec<vertex::Input>,
+    outs: Vec<Output>,
+    screens: Vec<[f32; 3]>,
     frame: u64,
     frames: Vec<Frame>,
     on_frame: Option<Box<dyn FnMut(Frame) + Send>>,
@@ -213,20 +216,15 @@ pub struct Renderer {
 }
 
 /// The texture maps a draw's TEV and indirect stages read.
-fn texture_maps(state: &State) -> Vec<usize> {
+fn texture_maps(state: &State) -> impl Iterator<Item = usize> + '_ {
     let genmode = state.bp[0x00];
-    let mut maps = Vec::new();
-    for n in 0..=bits(genmode, 10, 4) {
+    let tev = (0..=bits(genmode, 10, 4)).filter_map(move |n| {
         let order = state.bp[0x28 + (n as usize >> 1)];
         let shift = (n & 1) * 12;
-        if bits(order, shift + 6, 1) != 0 {
-            maps.push(bits(order, shift, 3) as usize);
-        }
-    }
-    for i in 0..bits(genmode, 16, 3) {
-        maps.push(bits(state.bp[0x27], 6 * i, 3) as usize);
-    }
-    maps
+        (bits(order, shift + 6, 1) != 0).then(|| bits(order, shift, 3) as usize)
+    });
+    let indirect = (0..bits(genmode, 16, 3)).map(move |i| bits(state.bp[0x27], 6 * i, 3) as usize);
+    tev.chain(indirect)
 }
 
 /// The image texture map `map` samples, with no more levels than its size has.
@@ -437,6 +435,9 @@ impl Renderer {
             copier,
             gpu_copies: HashMap::new(),
             normals: [[0.0; 3]; 3],
+            inputs: Vec::new(),
+            outs: Vec::new(),
+            screens: Vec::new(),
             frame: 0,
             frames: Vec::new(),
             on_frame: None,
@@ -1234,28 +1235,39 @@ impl Renderer {
         }
         let count = usize::from(draw.count);
         let xf_index = [state.xf[xform::MATINDEX_A], state.xf[xform::MATINDEX_A + 1]];
-        let inputs = vertex::decode(
+        // The draw's vertices, transformed and on screen, in buffers kept from draw to draw.
+        let mut inputs = std::mem::take(&mut self.inputs);
+        inputs.clear();
+        vertex::decode(
             &state.cp,
             xf_index,
             usize::from(draw.vat),
             draw.data,
             count,
             &mut self.normals,
+            &mut inputs,
         );
         let vp = Viewport::of(&state.xf);
         let (scissor, off) = Self::scissor(state, &vp);
         if scissor[2] == 0 || scissor[3] == 0 {
+            self.inputs = inputs;
             return;
         }
         let t = std::time::Instant::now();
-        let outs: Vec<Output> = inputs
-            .iter()
-            .map(|v| xform::transform(&state.xf, &state.bp, v))
-            .collect();
+        let mut outs = std::mem::take(&mut self.outs);
+        outs.clear();
+        outs.extend(
+            inputs
+                .iter()
+                .map(|v| xform::transform(&state.xf, &state.bp, v)),
+        );
+        self.inputs = inputs;
         if let Some(p) = &mut self.profile {
             p.xform += t.elapsed();
         }
-        let screens: Vec<[f32; 3]> = outs.iter().map(|o| vp.screen(o.clip)).collect();
+        let mut screens = std::mem::take(&mut self.screens);
+        screens.clear();
+        screens.extend(outs.iter().map(|o| vp.screen(o.clip)));
         let first = self.vertices.len() as u32;
         let cull = bits(state.bp[0x00], 14, 2);
         let tri = |r: &mut Self, a: usize, b: usize, c: usize| {
@@ -1325,6 +1337,8 @@ impl Renderer {
         if self.trace && self.frame == 0 {
             trace_draw(state, draw, count, scissor, &outs[0], screens[0], mem);
         }
+        self.outs = outs;
+        self.screens = screens;
         if count == 0 {
             return;
         }
