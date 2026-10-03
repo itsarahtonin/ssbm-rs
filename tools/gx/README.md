@@ -12,7 +12,7 @@ The Graphics and Audio rungs of the verification ladder, the windowed build, and
 
 A frame is within tolerance when its PSNR is at least 38 dB and no more than 0.25% of its pixels are off by more than 32 levels. Dolphin's copy filter must be on (`User/Config/GFX.ini`, `[Enhancements] DisableCopyFilter = False`): Dolphin turns it off by default, hardware doesn't.
 
-`GX_RENDER=DIR` renders a run's frames live into DIR. gxplay's `GXPLAY_TRACE`, `GXPLAY_SILHOUETTES`, `GXPLAY_OPAQUE` and `GXPLAY_DRAWS=N` help find what a frame draws wrong.
+`GX_RENDER=DIR` renders a run's frames live into DIR. Copies from the EFB to I4 and RGB5A3 textures (Melee's shadows and a few effects) stay on the GPU, holding what the texture decoder would read back from the encoder's bytes; other formats are read back and encoded into memory. The window copies frames to the XFB on the GPU too, with the same results as the CPU's copy (xfb.rs), and `GX_GPU_XFB=1` makes `GX_RENDER` do the same, reading each frame back to save it. gxplay's `GXPLAY_TRACE`, `GXPLAY_SILHOUETTES`, `GXPLAY_OPAQUE` and `GXPLAY_DRAWS=N` help find what a frame draws wrong.
 
 ## Audio: ssbm-ax against Dolphin's AX
 

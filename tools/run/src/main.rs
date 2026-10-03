@@ -535,9 +535,12 @@ fn run() -> ExitCode {
         window::install(&sdk, replay_path.is_none());
     }
     // GX_RENDER=DIR draws the GPU's command stream (ssbm-render) and saves each frame there.
-    // GX_RENDER=- draws them and keeps none, to time the renderer.
+    // GX_RENDER=- draws them and keeps none, to time the renderer. GX_GPU_XFB=1 copies frames
+    // to the XFB on the GPU, as a window does, rather than as Dolphin's software renderer does.
+    let gpu_xfb = std::env::var_os("GX_GPU_XFB").is_some();
     if std::env::var("GX_RENDER").is_ok_and(|d| d == "-") {
         let mut renderer = ssbm_render::Renderer::new().expect("GX_RENDER needs a GPU");
+        renderer.xfb_on_gpu = gpu_xfb;
         // Without a taker, the renderer would keep every frame.
         renderer.on_frame(drop);
         sdk.hw.set_renderer(Box::new(renderer));
@@ -545,6 +548,8 @@ fn run() -> ExitCode {
         let dir = std::path::PathBuf::from(dir);
         std::fs::create_dir_all(&dir).unwrap_or_else(|e| panic!("{}: {e}", dir.display()));
         let mut renderer = ssbm_render::Renderer::new().expect("GX_RENDER needs a GPU");
+        renderer.xfb_on_gpu = gpu_xfb;
+        renderer.xfb_readback = gpu_xfb;
         let mut n = 0u64;
         renderer.on_frame(move |frame| {
             n += 1;

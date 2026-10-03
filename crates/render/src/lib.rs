@@ -101,7 +101,10 @@ struct TexKey {
 pub struct Frame {
     pub width: u32,
     pub height: u32,
+    /// The pixels, unless the frame stayed on the GPU (`xfb_on_gpu` without `xfb_readback`).
     pub rgba: Vec<u8>,
+    /// The frame on the GPU, with `xfb_on_gpu`.
+    pub texture: Option<wgpu::Texture>,
 }
 
 impl Frame {
@@ -197,6 +200,12 @@ pub struct Renderer {
     pub draw_limit: Option<u64>,
     /// Where the time goes, when profiling (GX_PROFILE).
     profile: Option<Profile>,
+    /// Copies to the XFB on the GPU, leaving each frame there, rather than reading the EFB back
+    /// and copying on the CPU as Dolphin's software renderer does; `xfb_readback` reads each
+    /// frame back too.
+    pub xfb_on_gpu: bool,
+    pub xfb_readback: bool,
+    gpu_xfb: Option<xfb::GpuXfb>,
     draws_this_frame: u64,
 }
 
@@ -406,6 +415,9 @@ impl Renderer {
             opaque: false,
             draw_limit: None,
             profile: std::env::var_os("GX_PROFILE").map(|_| Profile::default()),
+            xfb_on_gpu: false,
+            xfb_readback: false,
+            gpu_xfb: None,
             draws_this_frame: 0,
             unsupported: HashMap::new(),
         };
@@ -1109,6 +1121,45 @@ impl Renderer {
         }
     }
 
+    /// An RGBA8 texture's pixels, read back.
+    fn read_texture(&self, texture: &wgpu::Texture, width: u32, height: u32) -> Vec<u8> {
+        let row = width * 4;
+        let padded = row.next_multiple_of(wgpu::COPY_BYTES_PER_ROW_ALIGNMENT);
+        let buffer = self.device.create_buffer(&wgpu::BufferDescriptor {
+            label: Some("frame readback"),
+            size: u64::from(padded * height),
+            usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::MAP_READ,
+            mapped_at_creation: false,
+        });
+        let mut encoder = self.device.create_command_encoder(&Default::default());
+        encoder.copy_texture_to_buffer(
+            texture.as_image_copy(),
+            wgpu::TexelCopyBufferInfo {
+                buffer: &buffer,
+                layout: wgpu::TexelCopyBufferLayout {
+                    offset: 0,
+                    bytes_per_row: Some(padded),
+                    rows_per_image: Some(height),
+                },
+            },
+            texture.size(),
+        );
+        self.queue.submit([encoder.finish()]);
+        let slice = buffer.slice(..);
+        slice.map_async(wgpu::MapMode::Read, |_| {});
+        self.device
+            .poll(wgpu::PollType::wait_indefinitely())
+            .expect("GPU readback");
+        let data = slice.get_mapped_range().expect("mapped readback");
+        let mut rgba = Vec::with_capacity((row * height) as usize);
+        for r in data.chunks(padded as usize) {
+            rgba.extend_from_slice(&r[..row as usize]);
+        }
+        drop(data);
+        buffer.unmap();
+        rgba
+    }
+
     /// The FIFO player's clear before a log's first frame: all of the EFB.
     pub fn clear_efb(&mut self, state: &State) {
         self.clear(state, [0, 0, EFB_WIDTH, EFB_HEIGHT]);
@@ -1378,9 +1429,31 @@ impl Renderer {
         self.flush();
         let t1 = std::time::Instant::now();
         if bits(value, 14, 1) != 0 {
-            let efb = self.read_efb();
-            let t2 = std::time::Instant::now();
-            let frame = xfb::copy(state, value, &efb, [left, top, right, bottom]);
+            let rect = [left, top, right, bottom];
+            let (frame, t2) = if self.xfb_on_gpu {
+                let gpu = self
+                    .gpu_xfb
+                    .get_or_insert_with(|| xfb::GpuXfb::new(&self.device, &self.queue, &self.efb_view));
+                let (texture, width, height) =
+                    gpu.copy(&self.device, &self.queue, state, value, rect);
+                let t2 = std::time::Instant::now();
+                let rgba = if self.xfb_readback {
+                    self.read_texture(&texture, width, height)
+                } else {
+                    Vec::new()
+                };
+                let frame = Frame {
+                    width,
+                    height,
+                    rgba,
+                    texture: Some(texture),
+                };
+                (frame, t2)
+            } else {
+                let efb = self.read_efb();
+                let t2 = std::time::Instant::now();
+                (xfb::copy(state, value, &efb, rect), t2)
+            };
             if let Some(p) = &mut self.profile {
                 p.flush += t1 - t;
                 p.readback += t2 - t1;

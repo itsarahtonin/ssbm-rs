@@ -95,6 +95,8 @@ pub fn start() -> Gpu {
 pub fn install(sdk: &Rc<Sdk>, live_input: bool) {
     let link = LINK.get().expect("window::start first").clone();
     let mut renderer = ssbm_render::Renderer::with_device(link.device.clone(), link.queue.clone());
+    // Frames stay on the GPU, which shows them.
+    renderer.xfb_on_gpu = true;
     let frames = link.clone();
     renderer.on_frame(move |f| {
         frames.frames.fetch_add(1, Ordering::Relaxed);
@@ -277,6 +279,10 @@ struct Shown {
     texture: wgpu::Texture,
     bind_group: wgpu::BindGroup,
     pipeline: wgpu::RenderPipeline,
+    layout: wgpu::BindGroupLayout,
+    sampler: wgpu::Sampler,
+    /// The frame shown, when the renderer left it on the GPU.
+    frame_group: Option<wgpu::BindGroup>,
 }
 
 struct App {
@@ -441,6 +447,9 @@ impl App {
             texture,
             bind_group,
             pipeline,
+            layout,
+            sampler,
+            frame_group: None,
         }
     }
 
@@ -465,7 +474,25 @@ impl App {
         };
         let device = &self.link.device;
         let queue = &self.link.queue;
-        if let Some(f) = self.link.frame.lock().unwrap().take() {
+        let next = self.link.frame.lock().unwrap().take();
+        if let Some(texture) = next.as_ref().and_then(|f| f.texture.as_ref()) {
+            let view = texture.create_view(&Default::default());
+            shown.frame_group = Some(device.create_bind_group(&wgpu::BindGroupDescriptor {
+                label: None,
+                layout: &shown.layout,
+                entries: &[
+                    wgpu::BindGroupEntry {
+                        binding: 0,
+                        resource: wgpu::BindingResource::TextureView(&view),
+                    },
+                    wgpu::BindGroupEntry {
+                        binding: 1,
+                        resource: wgpu::BindingResource::Sampler(&shown.sampler),
+                    },
+                ],
+            }));
+        } else if let Some(f) = next {
+            shown.frame_group = None;
             let (w, h) = (f.width.min(640), f.height.min(480));
             queue.write_texture(
                 wgpu::TexelCopyTextureInfo {
@@ -516,7 +543,7 @@ impl App {
             let (w, h) = (4.0 * scale, 3.0 * scale);
             pass.set_viewport((sw - w) / 2.0, (sh - h) / 2.0, w, h, 0.0, 1.0);
             pass.set_pipeline(&shown.pipeline);
-            pass.set_bind_group(0, &shown.bind_group, &[]);
+            pass.set_bind_group(0, shown.frame_group.as_ref().unwrap_or(&shown.bind_group), &[]);
             pass.draw(0..3, 0..1);
         }
         queue.submit([encoder.finish()]);
