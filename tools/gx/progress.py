@@ -3,15 +3,16 @@ comparison of original-code and all-ports runs (smoke.sh), the renderer's frames
 Dolphin's software renderer (frames.sh), and the status of the rungs not measured yet. Each run
 adds an entry to local/gx/progress-history.json, which the page charts.
 
-    python3 tools/gx/progress.py [OUT.html]
+    python3 tools/gx/progress.py [OUT_DIR]
 
-Needs Pillow for the frame thumbnails (without it the page has none).
+OUT_DIR (local/gx/progress by default) gets index.html, and img/ with each run's worst frame,
+ours, Dolphin's and their difference, as PNGs at full size; files.txt lists them, to publish
+beside the page.
 """
-import base64
 import datetime
-import io
 import json
 import os
+import shutil
 import subprocess
 import sys
 
@@ -88,20 +89,15 @@ def stream_results():
     return out
 
 
-def thumb(path, size=(320, 240)):
-    try:
-        from PIL import Image
-    except ImportError:
-        return None
+def image(path, img_dir, name):
+    """Copies a frame image beside the page; its path relative to the page, or None."""
     if not os.path.exists(path):
         return None
-    im = Image.open(path).convert("RGB").resize(size, Image.BILINEAR)
-    buf = io.BytesIO()
-    im.save(buf, "JPEG", quality=78)
-    return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
+    shutil.copyfile(path, os.path.join(img_dir, name))
+    return "img/" + name
 
 
-def frame_results():
+def frame_results(img_dir):
     out = []
     d = os.path.join(GX, "frames")
     if not os.path.isdir(d):
@@ -125,17 +121,20 @@ def frame_results():
         n = worst["n"]
         out.append({
             "name": name, "frames": frames, "ok": ok, "worst": worst,
-            "ours": thumb(os.path.join(run, "ours", f"frame_{n}.png")),
-            "ref": thumb(os.path.join(run, "ref", f"framedump_{n}.png")),
-            "diff": thumb(os.path.join(run, "diffs", f"diff_{n}.png")),
+            "ours": image(os.path.join(run, "ours", f"frame_{n}.png"), img_dir, f"{name}-ours.png"),
+            "ref": image(os.path.join(run, "ref", f"framedump_{n}.png"), img_dir, f"{name}-dolphin.png"),
+            "diff": image(os.path.join(run, "diffs", f"diff_{n}.png"), img_dir, f"{name}-diff.png"),
         })
     return out
 
 
 def main():
-    out = sys.argv[1] if len(sys.argv) > 1 else os.path.join(GX, "progress.html")
+    out_dir = sys.argv[1] if len(sys.argv) > 1 else os.path.join(GX, "progress")
+    img_dir = os.path.join(out_dir, "img")
+    shutil.rmtree(img_dir, ignore_errors=True)
+    os.makedirs(img_dir)
     streams = stream_results()
-    frames = frame_results()
+    frames = frame_results(img_dir)
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     done_streams = [s for s in streams if s["done"]]
     measured = [f for f in frames if f["frames"]]
@@ -168,8 +167,11 @@ def main():
     }
     template = open(os.path.join(HERE, "progress.template.html"), encoding="utf-8").read()
     html = template.replace("/*DATA*/null", json.dumps(data, separators=(",", ":")))
+    out = os.path.join(out_dir, "index.html")
     open(out, "w", encoding="utf-8", newline="\n").write(html)
-    print(f"{out}: {len(html) // 1024} KB; streams {entry['streams_zero']}/{entry['streams_done']} at zero diff, "
+    images = sorted("img/" + f for f in os.listdir(img_dir))
+    open(os.path.join(out_dir, "files.txt"), "w", encoding="utf-8", newline="\n").write("\n".join(images) + "\n")
+    print(f"{out}: {len(html) // 1024} KB and {len(images)} images; streams {entry['streams_zero']}/{entry['streams_done']} at zero diff, "
           f"frames {entry['frames_ok']}/{entry['frames_done']} within tolerance")
 
 

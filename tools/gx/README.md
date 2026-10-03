@@ -16,4 +16,4 @@ A frame is within tolerance when its PSNR is at least 38 dB and no more than 0.2
 
 ## The progress page
 
-`python3 tools/gx/progress.py` writes `local/gx/progress.html` from the results above (with Pillow, thumbnails of each run's worst frame) and adds an entry to its history; republish it to the page above after each change worth seeing. The renderer's feature list and the audio and window rungs' status are at the top of `progress.py`.
+`python3 tools/gx/progress.py` writes `local/gx/progress/index.html` from the results above, with each run's worst frame (ours, Dolphin's and their difference) as full-size PNGs in `img/` beside it (listed in `files.txt`), and adds an entry to its history. Republish the page with its images (the Artifact `files`, rooted at `local/gx/progress`) to the page above after each change worth seeing. The renderer's feature list and the audio and window rungs' status are at the top of `progress.py`.

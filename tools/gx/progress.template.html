@@ -51,7 +51,20 @@ tbody tr { cursor: pointer; }
 .trip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 @media (max-width: 560px) { .trip { grid-template-columns: minmax(0, 1fr); } }
 figure { margin: 0; display: grid; gap: 4px; }
-figure img { width: 100%; aspect-ratio: 4 / 3; max-width: 100%; border-radius: 4px; background: var(--idle); image-rendering: auto; }
+figure button { all: unset; cursor: zoom-in; display: block; border-radius: 4px; }
+figure button:focus-visible { outline: 2px solid var(--hl); outline-offset: 2px; }
+figure img { display: block; width: 100%; aspect-ratio: 4 / 3; max-width: 100%; border-radius: 4px; background: var(--idle); }
+.zoom { position: fixed; inset: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 94%, transparent); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; padding: calc(12px + env(safe-area-inset-top, 0px)) 16px calc(12px + env(safe-area-inset-bottom, 0px)); gap: 10px; }
+.zoom .bar2 { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; }
+.zoom .name { font: 500 13px "IBM Plex Mono", monospace; min-width: 0; overflow-wrap: anywhere; }
+.zoom .stage { overflow: auto; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+.zoom .stage img { display: block; image-rendering: pixelated; max-width: none; }
+.zoom .hint { font-size: 12px; color: var(--muted); }
+.btns { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.btns button { font: 12px "IBM Plex Sans", sans-serif; background: var(--panel); color: var(--muted); border: 0; padding: 6px 10px; cursor: pointer; }
+.btns button + button { border-left: 1px solid var(--line); }
+.btns button[aria-pressed=true] { background: var(--fg); color: var(--bg); }
+.close { font: 13px "IBM Plex Sans", sans-serif; background: var(--panel); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 12px; cursor: pointer; }
 figcaption { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
 .feats { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
 .feat { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: grid; gap: 2px; }
@@ -97,6 +110,16 @@ figcaption { font-size: 11px; color: var(--muted); text-transform: uppercase; le
     <h2>Renderer features</h2>
     <div class="feats" id="feats"></div>
   </section>
+</div>
+<div class="zoom" id="zoom" hidden role="dialog" aria-modal="true" aria-label="Frame at full size">
+  <div class="bar2">
+    <span class="name" id="zname"></span>
+    <span class="btns" id="zviews"></span>
+    <span class="btns" id="zscale"></span>
+    <button class="close" id="zclose">Close</button>
+  </div>
+  <div class="stage"><img id="zimg" alt=""></div>
+  <div class="hint">1, 2, 3 pick the image; space flips between ours and Dolphin's; z changes the zoom; Esc closes.</div>
 </div>
 <script>
 const D = /*DATA*/null;
@@ -156,11 +179,50 @@ function renderRuns() {
   }).join("");
   const f = selected;
   if (!f) { $("viewer").innerHTML = `<div class="g">No runs compared yet.</div>`; return; }
-  const img = (src, cap) => `<figure>${src ? `<img alt="${cap}" src="${src}">` : `<div style="aspect-ratio:4/3;background:var(--idle);border-radius:4px"></div>`}<figcaption>${cap}</figcaption></figure>`;
+  const img = (src, cap, view) => `<figure>${src ? `<button data-view="${view}" aria-label="Open ${cap} at full size"><img alt="${cap}" src="${src}"></button>` : `<div style="aspect-ratio:4/3;background:var(--idle);border-radius:4px"></div>`}<figcaption>${cap}</figcaption></figure>`;
   $("viewer").innerHTML = `<div class="head"><span class="mono">${esc(f.name)}</span><span class="num">worst frame ${f.worst.n}: ${f.worst.psnr.toFixed(2)} dB</span></div>
-    <div class="trip">${img(f.ours, "Ours")}${img(f.ref, "Dolphin")}${img(f.diff, "Difference ×4")}</div>
+    <div class="trip">${img(f.ours, "Ours", "ours")}${img(f.ref, "Dolphin", "ref")}${img(f.diff, "Difference ×4", "diff")}</div>
     <div class="g">${f.frames.map((x) => `frame ${x.n}: ${x.psnr.toFixed(2)} dB`).join(" · ")}</div>`;
 }
+// Full size: flip between ours, Dolphin's and the difference, at 1x or 2x.
+const VIEWS = [["ours", "Ours"], ["ref", "Dolphin"], ["diff", "Difference ×4"]];
+let zoomView = null, zoomScale = 1;
+function renderZoom() {
+  const f = selected;
+  if (!zoomView || !f) { $("zoom").hidden = true; return; }
+  $("zoom").hidden = false;
+  $("zname").textContent = `${f.name} · frame ${f.worst.n} · ${f.worst.psnr.toFixed(2)} dB`;
+  $("zviews").innerHTML = VIEWS.map(([k, label], i) => `<button data-view="${k}" aria-pressed="${k === zoomView}">${i + 1} · ${label}</button>`).join("");
+  $("zscale").innerHTML = [1, 2, 3].map((z) => `<button data-scale="${z}" aria-pressed="${z === zoomScale}">${z}×</button>`).join("");
+  const img = $("zimg");
+  img.src = f[zoomView];
+  img.alt = VIEWS.find(([k]) => k === zoomView)[1];
+  img.style.width = `${640 * zoomScale}px`;
+}
+$("viewer").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-view]");
+  if (!b) return;
+  zoomView = b.dataset.view;
+  renderZoom();
+});
+$("zviews").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-view]");
+  if (b) { zoomView = b.dataset.view; renderZoom(); }
+});
+$("zscale").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-scale]");
+  if (b) { zoomScale = +b.dataset.scale; renderZoom(); }
+});
+$("zclose").addEventListener("click", () => { zoomView = null; renderZoom(); });
+document.addEventListener("keydown", (e) => {
+  if (!zoomView) return;
+  if (e.key === "Escape") zoomView = null;
+  else if (e.key >= "1" && e.key <= "3") zoomView = VIEWS[+e.key - 1][0];
+  else if (e.key === " ") { zoomView = zoomView === "ours" ? "ref" : "ours"; e.preventDefault(); }
+  else if (e.key === "z") zoomScale = zoomScale % 3 + 1;
+  else return;
+  renderZoom();
+});
 $("runs").addEventListener("click", (e) => {
   const tr = e.target.closest("tr[data-i]");
   if (!tr) return;
