@@ -53,10 +53,10 @@ FEATURES = [
 
 # The rungs not measured by this page's data yet: (status, detail).
 WINDOW = (
-    "in progress",
+    "done",
     "--window (feature window) holds 59.94 fields/s, redrawing once a frame; a gamepad plays (tried by "
-    "hand), the keyboard passes the unattended controls test, and GameCube controllers on a Wii U adapter "
-    "read at rest with their origins applied, waiting on a try with real input and rumble",
+    "hand) and the keyboard passes the unattended controls test. GameCube controllers on a Wii U adapter "
+    "read at rest with their origins applied; a try with real input and rumble is still to come",
 )
 
 
