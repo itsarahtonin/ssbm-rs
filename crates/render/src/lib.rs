@@ -7,6 +7,7 @@
 //! textures decoded on the CPU by hand. Copies to the XFB come back as frames, through the
 //! XFB's YUV encoding as Dolphin's software renderer makes it.
 
+mod copy;
 mod encode;
 mod xfb;
 
@@ -178,6 +179,9 @@ pub struct Renderer {
     hashes: HashMap<(u32, u32), u64>,
     /// What copies from the EFB to textures wrote, by address: memory as the GPU then reads it.
     copies: Vec<(u32, Vec<u8>)>,
+    /// Copies from the EFB kept on the GPU instead, by the address they copied to.
+    copier: copy::Copier,
+    gpu_copies: HashMap<u32, copy::Copied>,
     normals: vertex::NormalCache,
     frame: u64,
     frames: Vec<Frame>,
@@ -368,8 +372,10 @@ impl Renderer {
             bind_group_layouts: &[Some(&uniform_layout), Some(&texture_layout)],
             immediate_size: 0,
         });
+        let efb_view = efb.create_view(&Default::default());
+        let copier = copy::Copier::new(&device, &efb_view);
         let mut r = Renderer {
-            efb_view: efb.create_view(&Default::default()),
+            efb_view,
             depth_view: depth.create_view(&Default::default()),
             efb,
             device,
@@ -389,6 +395,8 @@ impl Renderer {
             bind_groups: HashMap::new(),
             hashes: HashMap::new(),
             copies: Vec::new(),
+            copier,
+            gpu_copies: HashMap::new(),
             normals: [[0.0; 3]; 3],
             frame: 0,
             frames: Vec::new(),
@@ -474,10 +482,15 @@ impl Renderer {
                 },
             );
         }
+        self.insert_texture(texture, mip_count)
+    }
+
+    /// Gives `texture` an id, reusing a free one.
+    fn insert_texture(&mut self, texture: wgpu::Texture, levels: u32) -> u32 {
         let entry = TexEntry {
             view: texture.create_view(&Default::default()),
             _texture: texture,
-            levels: mip_count,
+            levels,
             last_used: self.frame,
         };
         let free = self
@@ -545,6 +558,16 @@ impl Renderer {
             ..image
         };
         let size = image.size();
+        if let Some(c) = self.gpu_copies.get(&image.address) {
+            if (c.format, c.width, c.height, image.levels)
+                == (image.format, image.width, image.height, 1)
+                && let Some(Some(entry)) = self.textures.get_mut(c.id as usize)
+            {
+                entry.last_used = self.frame;
+                return (c.id, 1);
+            }
+            self.note("EFB copy sampled in another format or size");
+        }
         let mut hash = self.hash_memory(mem, image.address, size);
         let tlut = state.tmem.get(tlut_offset..).unwrap_or(&[]);
         if let Some(entries) = texture::palette_entries(image.format) {
@@ -1031,6 +1054,61 @@ impl Renderer {
         data
     }
 
+    /// Makes a copy from the EFB into a texture of its own, on the GPU.
+    fn gpu_copy(&mut self, r: &copy::Request) {
+        let reuse = self.gpu_copies.get(&r.address).and_then(|c| {
+            ((c.format, c.width, c.height) == (r.format, r.width, r.height)
+                && matches!(self.textures.get(c.id as usize), Some(Some(_))))
+            .then_some(c.id)
+        });
+        let id = match reuse {
+            Some(id) => id,
+            None => {
+                let texture = self.device.create_texture(&wgpu::TextureDescriptor {
+                    label: Some("efb copy"),
+                    size: wgpu::Extent3d {
+                        width: r.width,
+                        height: r.height,
+                        depth_or_array_layers: 1,
+                    },
+                    mip_level_count: 1,
+                    sample_count: 1,
+                    dimension: wgpu::TextureDimension::D2,
+                    format: wgpu::TextureFormat::Rgba8Uint,
+                    usage: wgpu::TextureUsages::TEXTURE_BINDING
+                        | wgpu::TextureUsages::RENDER_ATTACHMENT,
+                    view_formats: &[],
+                });
+                let id = self.insert_texture(texture, 1);
+                self.gpu_copies.insert(
+                    r.address,
+                    copy::Copied {
+                        id,
+                        format: r.format,
+                        width: r.width,
+                        height: r.height,
+                    },
+                );
+                id
+            }
+        };
+        let entry = self.textures[id as usize].as_mut().expect("copy texture");
+        entry.last_used = self.frame;
+        self.copier
+            .copy(&self.device, &self.queue, &entry.view, r);
+        // What earlier copies read back left in memory there is gone.
+        let before = self.copies.len();
+        for row in 0..r.rows {
+            let at = (r.address + row * r.stride) & 0x01FF_FFFF;
+            let end = u64::from(at) + u64::from(r.row_bytes);
+            self.copies
+                .retain(|(a, b)| !(*a >= at && *a as u64 + b.len() as u64 <= end));
+        }
+        if self.copies.len() != before {
+            self.hashes.clear();
+        }
+    }
+
     /// The FIFO player's clear before a log's first frame: all of the EFB.
     pub fn clear_efb(&mut self, state: &State) {
         self.clear(state, [0, 0, EFB_WIDTH, EFB_HEIGHT]);
@@ -1048,6 +1126,8 @@ impl Renderer {
         }
         if dropped {
             let textures = &self.textures;
+            self.gpu_copies
+                .retain(|_, c| textures[c.id as usize].is_some());
             self.texture_ids
                 .retain(|_, id| textures[*id as usize].is_some());
             self.bind_groups
@@ -1315,10 +1395,15 @@ impl Renderer {
             self.draws_this_frame = 0;
             self.hashes.clear();
             self.evict();
+        } else if let Some(request) = copy::request(state, value) {
+            self.gpu_copy(&request);
         } else {
             let efb = self.read_efb();
             match encode::encode(state, value, &efb) {
                 Some(e) => {
+                    let end = e.address + e.rows.len() as u32 * e.stride;
+                    self.gpu_copies
+                        .retain(|&a, _| !(e.address..end).contains(&a));
                     for (i, row) in e.rows.into_iter().enumerate() {
                         let at = (e.address + i as u32 * e.stride) & 0x01FF_FFFF;
                         let end = at as u64 + row.len() as u64;
