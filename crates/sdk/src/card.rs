@@ -19,6 +19,61 @@ pub const SIZE: usize = (4 << 20) / 8;
 const SECTOR: usize = 0x2000;
 const PAGE: usize = 0x80;
 
+/// An empty card, formatted as the SDK's CARDFormat formats one in this console's slot A (its
+/// SRAM flash ID is os::default_sram's), at time 0: what a new card holds. Blank flash instead
+/// reads as a broken card, which the game offers to format.
+pub fn formatted() -> Vec<u8> {
+    const BLOCK: usize = SECTOR;
+    // __CARDCheckSum: sums of the big-endian words and of their complements, 0xFFFF as 0.
+    let checksum = |bytes: &[u8]| {
+        let (mut sum, mut inv) = (0u16, 0u16);
+        for w in bytes.chunks_exact(2) {
+            let v = u16::from_be_bytes([w[0], w[1]]);
+            sum = sum.wrapping_add(v);
+            inv = inv.wrapping_add(!v);
+        }
+        let fix = |v: u16| if v == 0xFFFF { 0 } else { v };
+        (fix(sum), fix(inv))
+    };
+    let mut card = vec![0xFF; SIZE];
+    // The ID: a serial from the flash ID, keyed by the format's time (0); counter bias,
+    // language and the VI's DTV status (all 0 here); device 0; size in Mbit; ANSI encoding.
+    let sram = crate::os::default_sram();
+    let id = &mut card[..BLOCK];
+    let mut rand: i64 = 0;
+    for i in 0..12 {
+        rand = rand.wrapping_mul(1_103_515_245).wrapping_add(12345) >> 16;
+        id[i] = sram[20 + i].wrapping_add(rand as u8);
+        rand = (rand.wrapping_mul(1_103_515_245).wrapping_add(12345) >> 16) & 0x7FFF;
+    }
+    id[12..32].fill(0);
+    id[0x20..0x22].copy_from_slice(&0u16.to_be_bytes());
+    id[0x22..0x24].copy_from_slice(&((SIZE * 8 >> 20) as u16).to_be_bytes());
+    id[0x24..0x26].copy_from_slice(&0u16.to_be_bytes());
+    let (sum, inv) = checksum(&id[..0x1FC]);
+    id[0x1FC..0x1FE].copy_from_slice(&sum.to_be_bytes());
+    id[0x1FE..0x200].copy_from_slice(&inv.to_be_bytes());
+    // Two directories, empty, and two allocation tables, all blocks free.
+    for i in 0..2 {
+        let dir = &mut card[(1 + i) * BLOCK..(2 + i) * BLOCK];
+        dir[0x1FFA..0x1FFC].copy_from_slice(&(i as u16).to_be_bytes());
+        let (sum, inv) = checksum(&dir[..BLOCK - 4]);
+        dir[0x1FFC..0x1FFE].copy_from_slice(&sum.to_be_bytes());
+        dir[0x1FFE..].copy_from_slice(&inv.to_be_bytes());
+    }
+    for i in 0..2 {
+        let fat = &mut card[(3 + i) * BLOCK..(4 + i) * BLOCK];
+        fat.fill(0);
+        fat[4..6].copy_from_slice(&(i as u16).to_be_bytes());
+        fat[6..8].copy_from_slice(&((SIZE / BLOCK - 5) as u16).to_be_bytes());
+        fat[8..10].copy_from_slice(&4u16.to_be_bytes());
+        let (sum, inv) = checksum(&fat[4..]);
+        fat[0..2].copy_from_slice(&sum.to_be_bytes());
+        fat[2..4].copy_from_slice(&inv.to_be_bytes());
+    }
+    card
+}
+
 // Commands.
 const CMD_ID: u8 = 0x00;
 const CMD_READ_ARRAY: u8 = 0x52;
@@ -167,4 +222,50 @@ fn address(b: &[u8]) -> usize {
         | usize::from(b[1]) << 9
         | usize::from(b[2] & 0x03) << 7
         | usize::from(b[3] & 0x7F)
+}
+
+#[cfg(test)]
+mod format_tests {
+    use super::*;
+
+    /// __CARDCheckSum over `bytes`.
+    fn checksum(bytes: &[u8]) -> (u16, u16) {
+        let (mut sum, mut inv) = (0u16, 0u16);
+        for w in bytes.chunks_exact(2) {
+            let v = u16::from_be_bytes([w[0], w[1]]);
+            sum = sum.wrapping_add(v);
+            inv = inv.wrapping_add(!v);
+        }
+        let fix = |v: u16| if v == 0xFFFF { 0 } else { v };
+        (fix(sum), fix(inv))
+    }
+
+    fn word(b: &[u8], at: usize) -> u16 {
+        u16::from_be_bytes([b[at], b[at + 1]])
+    }
+
+    /// What the SDK's mount checks (CARDCheck.c's VerifyID, VerifyDir, VerifyFAT) accept.
+    #[test]
+    fn formatted_card_passes_the_sdks_checks() {
+        let card = formatted();
+        let id = &card[..0x200];
+        assert_eq!(checksum(&id[..0x1FC]), (word(id, 0x1FC), word(id, 0x1FE)));
+        assert_eq!((word(id, 0x20), word(id, 0x22), word(id, 0x24)), (0, 4, 0));
+        // The serial, from slot A's flash ID and the time in serial[12..20].
+        let flash = &crate::os::default_sram()[20..32];
+        let mut rand = i64::from_be_bytes(id[12..20].try_into().unwrap());
+        for i in 0..12 {
+            rand = rand.wrapping_mul(1_103_515_245).wrapping_add(12345) >> 16;
+            assert_eq!(id[i], flash[i].wrapping_add(rand as u8));
+            rand = (rand.wrapping_mul(1_103_515_245).wrapping_add(12345) >> 16) & 0x7FFF;
+        }
+        for i in 0..2 {
+            let dir = &card[(1 + i) * SECTOR..(2 + i) * SECTOR];
+            assert_eq!(word(dir, 0x1FFA), i as u16);
+            assert_eq!(checksum(&dir[..SECTOR - 4]), (word(dir, 0x1FFC), word(dir, 0x1FFE)));
+            let fat = &card[(3 + i) * SECTOR..(4 + i) * SECTOR];
+            assert_eq!((word(fat, 4), word(fat, 6), word(fat, 8)), (i as u16, 59, 4));
+            assert_eq!(checksum(&fat[4..]), (word(fat, 0), word(fat, 2)));
+        }
+    }
 }

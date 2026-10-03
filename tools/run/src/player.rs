@@ -60,7 +60,14 @@ pub fn args() -> Option<Vec<String>> {
         }
     }
     let disc = disc.unwrap();
+    // A new card comes formatted.
     let card = folder.join("card.raw");
+    if !card.exists() {
+        let _ = std::fs::create_dir_all(&folder);
+        if let Err(e) = std::fs::write(&card, ssbm_sdk::formatted_card()) {
+            error(&format!("Couldn't make a memory card at {}: {e}", card.display()));
+        }
+    }
     if let Err(e) = std::fs::create_dir_all(&folder)
         .and_then(|()| std::fs::write(&remembered, disc.to_string_lossy().as_bytes()))
     {
