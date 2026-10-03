@@ -401,6 +401,8 @@ class Emitter:
             return [f"g[{d}].set(ctx.regs.get_spr({n}));"]
         if xo == 467:
             n = ((w >> 16) & 31) | (((w >> 11) & 31) << 5)
+            if n == 923:  # DMA_L, whose trigger bit starts a locked cache DMA
+                return [f"ctx.set_spr({n}, {g(d)});"]
             return [f"ctx.regs.set_spr({n}, {g(d)});"]
         if xo == 595:
             return [f"g[{d}].set(ctx.regs.get_spr({0x10000 + ((w >> 16) & 15):#x}));"]

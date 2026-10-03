@@ -241,6 +241,10 @@ pub type WatchHook = Rc<dyn Fn(&Ctx, u32, u32)>;
 /// `MSR[EE]`: external interrupts enabled.
 pub const MSR_EE: u32 = 1 << 15;
 
+/// DMA_L's trigger bit, which starts a locked cache DMA, and its load bit (memory to cache).
+const DMA_T: u32 = 2;
+const DMA_LD: u32 = 0x10;
+
 /// Instructions between heartbeats.
 pub const HEARTBEAT: u64 = 1 << 24;
 
@@ -597,6 +601,32 @@ impl Ctx {
         let old = self.regs.msr.replace(v);
         if old & MSR_EE == 0 && v & MSR_EE != 0 {
             self.check_interrupts();
+        }
+    }
+
+    /// Writes an SPR, as `mtspr` does. Setting DMA_L's trigger bit moves blocks between the
+    /// locked cache and memory at once, as Dolphin does: the game waits on the queue (HID2),
+    /// which then stays empty.
+    pub fn set_spr(&self, n: u32, v: u32) {
+        self.regs.set_spr(n, v);
+        if n == spr::DMA_L && v & DMA_T != 0 {
+            self.locked_cache_dma(self.regs.get_spr(spr::DMA_U), v);
+            self.regs.set_spr(n, v & !DMA_T);
+        }
+    }
+
+    /// The DMA that DMA_U and DMA_L describe: up to 128 32-byte blocks (0 is 128), from the
+    /// locked cache to memory, or the other way with DMA_L's load bit.
+    fn locked_cache_dma(&self, upper: u32, lower: u32) {
+        let blocks = match ((upper & 0x1F) << 2) | ((lower >> 2) & 3) {
+            0 => 128,
+            n => n,
+        };
+        let (mem, cache) = (0x8000_0000 | (upper & !0x1F), lower & !0x1F);
+        let (from, to) = if lower & DMA_LD != 0 { (mem, cache) } else { (cache, mem) };
+        let mut data = vec![0; 32 * blocks as usize];
+        if self.mem.read_bytes(from, &mut data).is_ok() {
+            let _ = self.dma_write(to, &data);
         }
     }
 
