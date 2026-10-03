@@ -30,6 +30,8 @@ bash tools/lockstep/campaign/history.sh cov-f6 f6
 python tools/lockstep/campaign/treemap.py f6 local/lockstep/coverage-map.html
 ```
 
+During a round, `bash tools/lockstep/campaign/snapshot.sh f6.1` (then f6.2, ...) saves the map's state so far as a new history entry and writes the page, to republish every few hours; the round's own entry comes at its end, as above.
+
 ## Job options
 
 A job line is `name|[VAR=V ...] ssbm-run args`; its own variables override the round's. Useful ones: `DBLEVEL=N` (debug level 1-4; levels 3-4 verify several times what a retail run does), `MENU=KIND,SELECTION` with `--mode 01`, `--mode HEX`, `UNLOCK_ALL=1`, `RECORDS=SEED`, `MATCH_STAGES`/`MATCH_FIGHTERS`/`MATCH_TIME` with `--matches SEED --mode e`, `EVENT=N`, `GAME_LANGUAGE=jp`, `CARD_REMOVE`, `DVD_*`, `--card FILE`, `--monkey SEED`, `LOCKSTEP_SEED`, `LOCKSTEP_MUTATE`. Seeds are decimal. Card files a job names are copied from `$L/cards/template-saved.raw` by `focus.sh`; never pass a template itself to `--card`, since the SDK writes the card back. Stage kinds 33-90 (1P stages) load in debug VS too.
