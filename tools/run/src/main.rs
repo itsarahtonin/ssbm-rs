@@ -1528,6 +1528,7 @@ fn run() -> ExitCode {
         }
     }
     sdk.hw.finish_renderer();
+    ssbm_sdk::flush_cards();
     eprintln!(
         "{} fields, {} M instructions, {} draws",
         sdk.hw.fields.get(),

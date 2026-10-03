@@ -25,7 +25,7 @@ use ssbm_rt::{Ctx, MSR_EE};
 
 pub mod boot;
 mod card;
-pub use card::{Card, formatted as formatted_card};
+pub use card::{Card, flush_cards, formatted as formatted_card};
 mod devices;
 pub use devices::PadStatus;
 mod gp;

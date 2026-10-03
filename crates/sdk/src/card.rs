@@ -11,6 +11,8 @@
 
 use std::cell::{Cell, RefCell};
 use std::path::PathBuf;
+use std::sync::{Arc, Condvar, Mutex};
+use std::time::{Duration, Instant};
 
 /// The card's EXI ID: 4 Mbit, 8 KiB sectors, 4 bytes of read latency.
 pub const ID: u32 = 0x0000_0004;
@@ -97,9 +99,9 @@ pub(crate) enum Done {
 }
 
 pub struct Card {
-    data: RefCell<Vec<u8>>,
-    /// Where the contents live between runs, if anywhere.
-    path: Option<PathBuf>,
+    data: Arc<Mutex<Vec<u8>>>,
+    /// What keeps the contents in a file between runs, if anything does.
+    saver: Option<Arc<Saver>>,
     status: Cell<u8>,
     interrupts: Cell<bool>,
     /// Bytes the host has sent since it selected the card.
@@ -119,9 +121,10 @@ impl Card {
             }
             _ => vec![0xFF; SIZE],
         };
+        let data = Arc::new(Mutex::new(data));
         Ok(Self {
-            data: RefCell::new(data),
-            path,
+            saver: path.map(|path| Saver::start(data.clone(), path)),
+            data,
             status: Cell::new(STATUS_READY | STATUS_UNLOCKED),
             interrupts: Cell::new(false),
             sent: RefCell::default(),
@@ -160,7 +163,7 @@ impl Card {
             CMD_READ_STATUS => vec![self.status.get(); n],
             CMD_READ_ARRAY if sent.len() >= 5 => {
                 let start = address(&sent[1..5]) + at;
-                let data = self.data.borrow();
+                let data = self.data.lock().unwrap();
                 (start..start + n).map(|i| data[i % SIZE]).collect()
             }
             _ => vec![0; n],
@@ -181,18 +184,18 @@ impl Card {
             CMD_SECTOR_ERASE if sent.len() >= 3 => {
                 let start =
                     (usize::from(sent[1]) << 17 | usize::from(sent[2]) << 9) & !(SECTOR - 1);
-                self.data.borrow_mut()[start % SIZE..][..SECTOR].fill(0xFF);
+                self.data.lock().unwrap()[start % SIZE..][..SECTOR].fill(0xFF);
                 return self.busy();
             }
             CMD_CHIP_ERASE if sent.len() >= 3 => {
-                self.data.borrow_mut().fill(0xFF);
+                self.data.lock().unwrap().fill(0xFF);
                 return self.busy();
             }
             CMD_PAGE_PROGRAM if sent.len() >= 5 => {
                 let start = address(&sent[1..5]) % SIZE;
                 let page = &sent[5..];
                 let n = page.len().min(PAGE).min(SIZE - start);
-                self.data.borrow_mut()[start..start + n].copy_from_slice(&page[..n]);
+                self.data.lock().unwrap()[start..start + n].copy_from_slice(&page[..n]);
                 return self.busy();
             }
             _ => {}
@@ -208,11 +211,115 @@ impl Card {
     /// An erase or a program finishes.
     pub(crate) fn finish(&self) {
         self.status.set(self.status.get() & !STATUS_BUSY);
-        if let Some(path) = &self.path {
-            let data = self.data.borrow();
-            std::fs::write(path, &*data)
-                .unwrap_or_else(|e| panic!("memory card {}: {e}", path.display()));
+        if let Some(saver) = &self.saver {
+            saver.changed();
         }
+    }
+}
+
+/// Keeps a card's file up to date from a thread of its own. A save programs hundreds of pages
+/// within a frame, and writing the whole file after each one stopped the game, its sound and
+/// its picture for a fifth of a second; now the card notes the change, and the thread writes
+/// the file once the changes stop for a moment, through a temporary file so it's never left
+/// half written. `flush_cards` writes what's pending at once, as a run ends.
+struct Saver {
+    data: Arc<Mutex<Vec<u8>>>,
+    path: PathBuf,
+    state: Mutex<SaveState>,
+    cond: Condvar,
+}
+
+#[derive(Default)]
+struct SaveState {
+    /// Changes made, and how many the file has.
+    changes: u64,
+    written: u64,
+    writing: bool,
+}
+
+static SAVERS: Mutex<Vec<Arc<Saver>>> = Mutex::new(Vec::new());
+
+/// How long the card's contents stay unchanged before they're written, and the longest a
+/// steady stream of changes waits.
+const SETTLE: Duration = Duration::from_millis(100);
+const SETTLE_MAX: Duration = Duration::from_secs(1);
+
+impl Saver {
+    fn start(data: Arc<Mutex<Vec<u8>>>, path: PathBuf) -> Arc<Self> {
+        let saver = Arc::new(Self {
+            data,
+            path,
+            state: Mutex::default(),
+            cond: Condvar::new(),
+        });
+        let s = saver.clone();
+        std::thread::Builder::new()
+            .name("memory card".to_owned())
+            .spawn(move || s.run())
+            .expect("the memory card's thread");
+        SAVERS.lock().unwrap().push(saver.clone());
+        saver
+    }
+
+    fn changed(&self) {
+        self.state.lock().unwrap().changes += 1;
+        self.cond.notify_all();
+    }
+
+    fn run(&self) {
+        loop {
+            let mut st = self.state.lock().unwrap();
+            while st.changes == st.written || st.writing {
+                st = self.cond.wait(st).unwrap();
+            }
+            // Let a save's run of programs finish first.
+            let first = Instant::now();
+            loop {
+                let seen = st.changes;
+                st = self.cond.wait_timeout(st, SETTLE).unwrap().0;
+                if st.changes == seen || first.elapsed() >= SETTLE_MAX {
+                    break;
+                }
+            }
+            if st.writing || st.changes == st.written {
+                continue;
+            }
+            self.write(st);
+        }
+    }
+
+    /// Writes the contents as they stand, marking the changes so far written.
+    fn write(&self, mut st: std::sync::MutexGuard<'_, SaveState>) {
+        st.writing = true;
+        let changes = st.changes;
+        drop(st);
+        let data = self.data.lock().unwrap().clone();
+        let tmp = self.path.with_extension("tmp");
+        if let Err(e) = std::fs::write(&tmp, &data).and_then(|()| std::fs::rename(&tmp, &self.path)) {
+            eprintln!("memory card {}: {e}", self.path.display());
+        }
+        let mut st = self.state.lock().unwrap();
+        st.writing = false;
+        st.written = st.written.max(changes);
+        self.cond.notify_all();
+    }
+
+    /// Writes what isn't written yet, after any write under way.
+    fn flush(&self) {
+        let mut st = self.state.lock().unwrap();
+        while st.writing {
+            st = self.cond.wait(st).unwrap();
+        }
+        if st.changes != st.written {
+            self.write(st);
+        }
+    }
+}
+
+/// Writes every memory card's pending changes to its file, as a run ends.
+pub fn flush_cards() {
+    for saver in SAVERS.lock().unwrap().iter() {
+        saver.flush();
     }
 }
 
@@ -267,5 +374,50 @@ mod format_tests {
             assert_eq!((word(fat, 4), word(fat, 6), word(fat, 8)), (i as u16, 59, 4));
             assert_eq!(checksum(&fat[4..]), (word(fat, 0), word(fat, 2)));
         }
+    }
+}
+
+#[cfg(test)]
+mod saver_tests {
+    use super::*;
+
+    /// Programs `page` at byte `at` as the CARD library does: the command, its address, data.
+    fn program(card: &Card, at: usize, page: &[u8]) {
+        card.select();
+        let a = [
+            (at >> 17) as u8 & 0x7F,
+            (at >> 9) as u8,
+            (at >> 7) as u8 & 0x03,
+            at as u8 & 0x7F,
+        ];
+        card.write(&[CMD_PAGE_PROGRAM]);
+        card.write(&a);
+        card.write(page);
+        assert!(matches!(card.deselect(), Done::Busy));
+        card.finish();
+    }
+
+    /// A save's many programs reach the file together, after they stop, and at once on a flush.
+    #[test]
+    fn programs_reach_the_file_after_they_settle() {
+        let dir = std::env::temp_dir().join(format!("ssbm-card-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("card.raw");
+        std::fs::write(&path, formatted()).unwrap();
+        let card = Card::new(Some(path.clone())).unwrap();
+        for i in 0..400 {
+            program(&card, 0xA000 + i * PAGE, &[i as u8; PAGE]);
+        }
+        // Not yet: the programs come faster than they settle.
+        assert_eq!(std::fs::read(&path).unwrap(), formatted());
+        std::thread::sleep(SETTLE * 4);
+        let file = std::fs::read(&path).unwrap();
+        assert_eq!(&file[0xA000..0xA000 + PAGE], &[0u8; PAGE]);
+        assert_eq!(&file[0xA000 + 399 * PAGE..0xA000 + 400 * PAGE], &[143u8; PAGE]);
+        // A flush writes what's pending without waiting.
+        program(&card, 0x9000, &[7; PAGE]);
+        flush_cards();
+        assert_eq!(&std::fs::read(&path).unwrap()[0x9000..0x9000 + PAGE], &[7u8; PAGE]);
+        std::fs::remove_dir_all(&dir).unwrap();
     }
 }

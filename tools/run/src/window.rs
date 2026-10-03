@@ -141,8 +141,9 @@ pub fn install(sdk: &Rc<Sdk>, live_input: bool) {
     pace(sdk, link, input, Instant::now(), 0);
 }
 
-/// Stops any rumble, then exits.
+/// Stops any rumble and writes the memory card, then exits.
 pub fn exit(code: i32) -> ! {
+    ssbm_sdk::flush_cards();
     if let Some(a) = LINK.get().and_then(|l| l.adapter.get()) {
         a.stop();
     }
