@@ -445,6 +445,19 @@ fn run() -> ExitCode {
             ctx.ext::<Sdk>().hw.fail_next_dvd_read(0x0002_0400);
         });
     }
+    // GX_STREAM=FILE logs the GX command stream, a line per frame drawn, to compare two runs
+    // (tools/gx/compare.py); GX_DETAIL=N also writes frame N's commands, decoded, to FILE.N.
+    if let Ok(path) = std::env::var("GX_STREAM") {
+        let open = |p: &str| -> Box<dyn std::io::Write> {
+            let file = std::fs::File::create(p).unwrap_or_else(|e| panic!("{p}: {e}"));
+            Box::new(std::io::BufWriter::new(file))
+        };
+        let detail = std::env::var("GX_DETAIL")
+            .ok()
+            .map(|n| n.parse::<u64>().expect("GX_DETAIL=FRAME"))
+            .map(|n| (n, open(&format!("{path}.{n}"))));
+        sdk.hw.record_gx(open(&path), detail);
+    }
     // UNLOCK_ALL=1 unlocks every character, stage and trophy once the main menu comes up, and
     // MENU=KIND,SELECTION opens it on that menu (MenuKind) with that item under the cursor.
     let unlock = std::env::var_os("UNLOCK_ALL").is_some();

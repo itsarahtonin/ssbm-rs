@@ -207,6 +207,16 @@ impl Hw {
         self.gp.borrow().draws
     }
 
+    /// Logs the GX command stream frame by frame to `frames`, and frame `detail`'s commands,
+    /// decoded, to its writer (gp.rs).
+    pub fn record_gx(
+        &self,
+        frames: Box<dyn std::io::Write>,
+        detail: Option<(u64, Box<dyn std::io::Write>)>,
+    ) {
+        self.gp.borrow_mut().record(frames, detail);
+    }
+
     /// The top-field framebuffer VI scans out.
     pub fn xfb(&self) -> u32 {
         let v = self.get32(0x201C);
