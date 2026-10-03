@@ -31,8 +31,9 @@ const AUDIO_MAX: usize = AUDIO_RATE as usize / 5;
 pub struct Link {
     device: wgpu::Device,
     queue: wgpu::Queue,
-    /// The gamepad and the keyboard, as one controller.
-    host: Mutex<PadStatus>,
+    /// The gamepad and the keyboard, as one controller, and the buttons tapped on them since the
+    /// game last read it, which it reads as pressed: several polls can come between two reads.
+    host: Mutex<(PadStatus, u16)>,
     adapter: OnceLock<Arc<Adapter>>,
     frame: Mutex<Option<ssbm_render::Frame>>,
     /// Stereo samples at 32 kHz, left then right.
@@ -74,10 +75,13 @@ pub fn start() -> Gpu {
     let link = Arc::new(Link {
         device,
         queue,
-        host: Mutex::new(PadStatus {
-            connected: true,
-            ..PadStatus::default()
-        }),
+        host: Mutex::new((
+            PadStatus {
+                connected: true,
+                ..PadStatus::default()
+            },
+            0,
+        )),
         adapter: OnceLock::new(),
         frame: Mutex::new(None),
         audio: Mutex::new(VecDeque::new()),
@@ -180,7 +184,11 @@ impl Input {
         let mut ports = adapter.map_or([None; 4], |a| a.ports());
         let mut layout = ports.map(|p| if p.is_some() { 2 } else { 0 });
         if let Some(i) = ports.iter().position(Option::is_none) {
-            ports[i] = Some(*link.host.lock().unwrap());
+            let mut host = link.host.lock().unwrap();
+            let (mut pad, taps) = *host;
+            host.1 = 0;
+            pad.button |= taps;
+            ports[i] = Some(pad);
             layout[i] = 1;
         }
         if layout != self.layout {
@@ -266,6 +274,7 @@ pub fn run(gpu: Gpu) {
             g
         },
         keys: Default::default(),
+        tapped: Default::default(),
         presented: 0,
         since: Instant::now(),
     };
@@ -293,6 +302,8 @@ struct App {
     window: Option<Shown>,
     gilrs: Option<gilrs::Gilrs>,
     keys: std::collections::HashSet<KeyCode>,
+    /// Keys pressed since the last poll, held or not, so a tap between polls still counts.
+    tapped: std::collections::HashSet<KeyCode>,
     presented: u64,
     since: Instant,
 }
@@ -555,12 +566,19 @@ impl App {
 
     /// The gamepad and the keyboard, as one controller.
     fn poll_input(&mut self) {
+        let mut taps = 0;
         let mut pad = PadStatus {
             connected: true,
             ..PadStatus::default()
         };
         if let Some(g) = &mut self.gilrs {
-            while g.next_event().is_some() {}
+            // Buttons pressed since the last poll count as held for it, so a tap isn't lost.
+            let mut tapped = Vec::new();
+            while let Some(e) = g.next_event() {
+                if let gilrs::EventType::ButtonPressed(b, _) = e.event {
+                    tapped.push(b);
+                }
+            }
             if let Some((_, gp)) = g.gamepads().next() {
                 use gilrs::{Axis, Button};
                 let bits = [
@@ -576,8 +594,11 @@ impl App {
                     (Button::DPadUp, 0x0008),
                 ];
                 for (b, bit) in bits {
-                    if gp.is_pressed(b) {
+                    if gp.is_pressed(b) || tapped.contains(&b) {
                         pad.button |= bit;
+                    }
+                    if tapped.contains(&b) {
+                        taps |= bit;
                     }
                 }
                 let axis = |a: Axis| (gp.value(a).clamp(-1.0, 1.0) * 127.0) as i8;
@@ -602,7 +623,7 @@ impl App {
         }
         // The keyboard adds to the gamepad: its buttons, and its directions where it has any.
         {
-            let k = |c: KeyCode| self.keys.contains(&c);
+            let k = |c: KeyCode| self.keys.contains(&c) || self.tapped.contains(&c);
             let bits = [
                 (KeyCode::KeyX, 0x0100),
                 (KeyCode::KeyZ, 0x0200),
@@ -616,6 +637,9 @@ impl App {
             for (c, bit) in bits {
                 if k(c) {
                     pad.button |= bit;
+                }
+                if self.tapped.contains(&c) {
+                    taps |= bit;
                 }
             }
             let dir = |neg: KeyCode, pos: KeyCode| -> i8 {
@@ -644,7 +668,10 @@ impl App {
                 pad.trigger_r = 255;
             }
         }
-        *self.link.host.lock().unwrap() = pad;
+        self.tapped.clear();
+        let mut host = self.link.host.lock().unwrap();
+        host.0 = pad;
+        host.1 |= taps;
     }
 }
 
@@ -686,6 +713,7 @@ impl ApplicationHandler<()> for App {
             } => {
                 if state == ElementState::Pressed {
                     self.keys.insert(code);
+                    self.tapped.insert(code);
                 } else {
                     self.keys.remove(&code);
                 }
