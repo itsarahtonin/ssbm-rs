@@ -7,9 +7,11 @@ use std::path::PathBuf;
 
 fn main() {
     let root = PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap());
+    // Dolphin's code needs C++23 (std::to_underlying), which MSVC calls c++latest.
+    let msvc = std::env::var("CARGO_CFG_TARGET_ENV").as_deref() == Ok("msvc");
     cc::Build::new()
         .cpp(true)
-        .std("c++latest")
+        .std(if msvc { "c++latest" } else { "c++23" })
         .file(root.join("cpp/shim.cpp"))
         .include(root.join("cpp/stubs"))
         .include(root.join("dolphin/Source/Core"))
