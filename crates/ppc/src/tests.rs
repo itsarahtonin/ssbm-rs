@@ -393,6 +393,30 @@ fn checks_roll_back_the_locked_cache() {
 }
 
 #[test]
+fn moves_blocks_between_the_locked_cache_and_memory() {
+    // Two blocks stored from the locked cache to memory (LCStoreBlocks), then loaded back to
+    // another place in it (LCLoadBlocks): mtspr DMA_U, r3; mtspr DMA_L, r4; and r5, r6 alike.
+    let mtspr = |s: u32, n: u32| {
+        (31 << 26) | (s << 21) | ((n & 31) << 16) | ((n >> 5) << 11) | (467 << 1)
+    };
+    let ctx = machine(&[mtspr(3, 922), mtspr(4, 923), mtspr(5, 922), mtspr(6, 923), BLR]);
+    for i in 0..64 {
+        ctx.write_u8(0xE000_0020 + i, i as u8 + 1);
+    }
+    ctx.regs.set_r(3, 0x0000_1000);
+    ctx.regs.set_r(4, 0xE000_0020 | (2 << 2) | 2);
+    ctx.regs.set_r(5, 0x0000_1000);
+    ctx.regs.set_r(6, 0xE000_0100 | 0x10 | (2 << 2) | 2);
+    ctx.run_original(CODE);
+    for i in 0..64 {
+        assert_eq!(ctx.read_u8(0x8000_1000 + i), i as u8 + 1);
+        assert_eq!(ctx.read_u8(0xE000_0100 + i), i as u8 + 1);
+    }
+    assert_eq!(ctx.read_u8(0x8000_1040), 0, "two blocks and no more");
+    assert_eq!(ctx.regs.get_spr(spr::DMA_L) & 2, 0, "the trigger bit clears");
+}
+
+#[test]
 fn mutated_checks_drop_calls_whose_port_reads_an_unset_register() {
     // f(n): return n == 1 ? 7 : r5, where r5 holds what code far up left. The port reads it
     // through c::unset_read, as c2rs's ports from machine code do, which ends a mutated check.

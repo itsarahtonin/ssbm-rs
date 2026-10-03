@@ -544,7 +544,7 @@ fn op31(ctx: &Ctx, pc: u32, w: u32) {
         }
         467 => {
             let n = ((w >> 16) & 31) | (((w >> 11) & 31) << 5);
-            ctx.regs.set_spr(n, r(ctx, d));
+            ctx.set_spr(n, r(ctx, d));
         }
         595 => set_r(ctx, d, ctx.regs.get_spr(0x1_0000 + ((w >> 16) & 15))),
         210 => ctx.regs.set_spr(0x1_0000 + ((w >> 16) & 15), r(ctx, d)),

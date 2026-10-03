@@ -8,8 +8,6 @@ use ssbm_rt::{Addr, Ctx, Handle, spr};
 const HID0: u32 = 1008;
 const DBAT3U: u32 = 542;
 const DBAT3L: u32 = 543;
-const DMA_U: u32 = 922;
-const DMA_L: u32 = 923;
 const LOCKED_CACHE: u32 = 0xE000_0000;
 
 fn set_hid0_bits(ctx: &Ctx, bits: u32) {
@@ -69,11 +67,11 @@ pub fn LCDisable(ctx: &Ctx) {
     ctx.regs.set_spr(spr::HID2, ctx.regs.get_spr(spr::HID2) & !0x1000_0000);
 }
 
-/// Queues a DMA of `num_blocks` 32-byte blocks between the locked cache and memory.
+/// Queues a DMA of `num_blocks` 32-byte blocks from the locked cache to memory.
 pub fn LCStoreBlocks<'a>(ctx: &'a Ctx, dest_addr: Addr<'a>, src_tag: Addr<'a>, num_blocks: u32) {
     let (dest, src) = (Handle::addr(dest_addr), Handle::addr(src_tag));
-    ctx.regs.set_spr(DMA_U, ((num_blocks >> 2) & 0x1F) | (dest & 0x0FFF_FFFF));
-    ctx.regs.set_spr(DMA_L, ((num_blocks & 3) << 2) | src | 2);
+    ctx.regs.set_spr(spr::DMA_U, ((num_blocks >> 2) & 0x1F) | (dest & 0x0FFF_FFFF));
+    ctx.set_spr(spr::DMA_L, ((num_blocks & 3) << 2) | src | 2);
 }
 
 /// Waits until at most `len` DMAs are queued, as HID2 counts them.
