@@ -549,7 +549,11 @@ fn run() -> ExitCode {
     }
     // DISC_RATE=N reads the disc at N bytes a second, as a drive does (a window reads at a
     // drive's rate), rather than at Slippi's fast disc speed (Hw::set_disc_rate).
-    if let Some(rate) = std::env::var("DISC_RATE").ok().and_then(|r| r.parse().ok()) {
+    if let Some(rate) = std::env::var("DISC_RATE")
+        .ok()
+        .and_then(|r| r.parse().ok())
+        .filter(|&r: &u64| r > 0)
+    {
         sdk.hw.set_disc_rate(Some(rate));
     }
     // --window (with the window feature) plays in a window, with controllers and sound.

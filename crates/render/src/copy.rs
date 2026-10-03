@@ -186,6 +186,18 @@ impl Footprints {
         self.0.insert(f.address, (f, hash));
     }
 
+    /// Forgets the copy at `address` if the game has written its memory since, returning its
+    /// span.
+    pub fn take_if_overwritten(&mut self, address: u32, mem: &dyn Memory) -> Option<(u32, u32)> {
+        let (f, hash) = self.0.get(&address)?;
+        if hash_footprint(f, mem) == *hash {
+            return None;
+        }
+        let span = f.span();
+        self.0.remove(&address);
+        Some(span)
+    }
+
     /// Forgets the copies whose memory the game has written since, returning their spans.
     pub fn take_overwritten(&mut self, mem: &dyn Memory) -> Vec<(u32, u32)> {
         let mut gone = Vec::new();

@@ -129,6 +129,10 @@ impl Sink for Threaded {
         for map in texture_maps(state) {
             let image = sampled_image(state, map);
             let range = (image.address, image.size());
+            // A copy there that the game has written over since is gone, even within the frame.
+            if let Some((start, end)) = self.footprints.take_if_overwritten(image.address, mem) {
+                self.batch.push(Packet::Forget(start, end));
+            }
             if self.hashes.contains_key(&range) {
                 continue;
             }

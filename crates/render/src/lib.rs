@@ -8,6 +8,8 @@
 //! XFB's YUV encoding as Dolphin's software renderer makes it.
 
 mod copy;
+#[cfg(test)]
+mod copy_tests;
 mod encode;
 mod thread;
 mod xfb;
@@ -192,6 +194,8 @@ pub struct Renderer {
     /// renderer reads the game's memory itself (`track_copies`); a threaded one is told.
     footprints: copy::Footprints,
     pub(crate) track_copies: bool,
+    /// Copy addresses sampled another way than copied, whose copies are encoded into memory.
+    on_cpu: std::collections::HashSet<u32>,
     normals: vertex::NormalCache,
     inputs: Vec<vertex::Input>,
     outs: Vec<Output>,
@@ -440,6 +444,7 @@ impl Renderer {
             gpu_copies: HashMap::new(),
             footprints: copy::Footprints::default(),
             track_copies: true,
+            on_cpu: Default::default(),
             normals: [[0.0; 3]; 3],
             inputs: Vec::new(),
             outs: Vec::new(),
@@ -602,6 +607,12 @@ impl Renderer {
         let tlut_offset = ((tlut_reg & 0x3FF) << 9) as usize;
         let tlut_format = bits(tlut_reg, 10, 2);
         let size = image.size();
+        // A copy the game has written over since is gone, even within the frame.
+        if self.track_copies
+            && let Some((start, end)) = self.footprints.take_if_overwritten(image.address, mem)
+        {
+            self.forget(start, end);
+        }
         if let Some(c) = self.gpu_copies.get(&image.address) {
             if (c.format, c.width, c.height, image.levels)
                 == (image.format, image.width, image.height, 1)
@@ -1110,7 +1121,12 @@ impl Renderer {
             .then_some(c.id)
         });
         let id = match reuse {
-            Some(id) => id,
+            Some(id) => {
+                if let Some(c) = self.gpu_copies.get_mut(&address) {
+                    c.footprint = r.footprint;
+                }
+                id
+            }
             None => {
                 let texture = self.device.create_texture(&wgpu::TextureDescriptor {
                     label: Some("efb copy"),
@@ -1124,7 +1140,8 @@ impl Renderer {
                     dimension: wgpu::TextureDimension::D2,
                     format: wgpu::TextureFormat::Rgba8Uint,
                     usage: wgpu::TextureUsages::TEXTURE_BINDING
-                        | wgpu::TextureUsages::RENDER_ATTACHMENT,
+                        | wgpu::TextureUsages::RENDER_ATTACHMENT
+                        | wgpu::TextureUsages::COPY_SRC,
                     view_formats: &[],
                 });
                 let id = self.insert_texture(texture, 1);
@@ -1165,6 +1182,8 @@ impl Renderer {
         let Some(c) = self.gpu_copies.remove(&address) else {
             return;
         };
+        // Its later copies go to memory too, rather than back and forth.
+        self.on_cpu.insert(address);
         let Some(Some(entry)) = self.textures.get(c.id as usize) else {
             return;
         };
@@ -1181,6 +1200,7 @@ impl Renderer {
     /// Forgets what copies left in `start..end`, which the game has written over since.
     pub(crate) fn forget(&mut self, start: u32, end: u32) {
         self.gpu_copies.retain(|&a, _| !(start..end).contains(&a));
+        self.on_cpu.retain(|a| !(start..end).contains(a));
         let (start, end) = (start & 0x01FF_FFFF, end & 0x01FF_FFFF);
         self.copies
             .retain(|(a, b)| *a as usize + b.len() <= start as usize || *a >= end);
@@ -1581,7 +1601,9 @@ impl Renderer {
             self.draws_this_frame = 0;
             self.hashes.clear();
             self.evict();
-        } else if let Some(request) = copy::request(state, value) {
+        } else if let Some(request) = copy::request(state, value)
+            && !self.on_cpu.contains(&request.footprint.address)
+        {
             self.gpu_copy(&request);
             if self.track_copies {
                 self.footprints.record(request.footprint, mem);
