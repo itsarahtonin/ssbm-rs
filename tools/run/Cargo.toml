@@ -14,7 +14,12 @@ ssbm-ppc.workspace = true
 ssbm-rt.workspace = true
 ssbm-sdk.workspace = true
 ssbm-render.workspace = true
+ax-dolphin = { path = "../ax-dolphin", optional = true }
 ssbm-slippi.workspace = true
 ssbm-game.workspace = true
 ssbm-types.workspace = true
 zstd = "0.12"
+
+[features]
+# AX_CHECK: Dolphin's AX microcode, built from its source, to check ssbm-ax against.
+ax-check = ["dep:ax-dolphin"]

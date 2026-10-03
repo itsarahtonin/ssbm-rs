@@ -11,6 +11,7 @@ publish.workspace = true
 gekko-fp.workspace = true
 ssbm-disc.workspace = true
 ssbm-gx.workspace = true
+ssbm-ax.workspace = true
 ssbm-rt.workspace = true
 ssbm-types.workspace = true
 

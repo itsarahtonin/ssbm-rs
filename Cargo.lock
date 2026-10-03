@@ -113,6 +113,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f2032f911046de80f0a198e0901378627c33f59ea0ac00e363d481118bd70a53"
 
 [[package]]
+name = "ax-dolphin"
+version = "0.1.0"
+dependencies = [
+ "cc",
+ "ssbm-ax",
+]
+
+[[package]]
 name = "base16ct"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1696,6 +1704,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "ssbm-ax"
+version = "0.1.0"
+
+[[package]]
 name = "ssbm-data"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1769,6 +1781,7 @@ dependencies = [
 name = "ssbm-run"
 version = "0.1.0"
 dependencies = [
+ "ax-dolphin",
  "gekko-fp",
  "ssbm-disc",
  "ssbm-game",
@@ -1786,6 +1799,7 @@ name = "ssbm-sdk"
 version = "0.1.0"
 dependencies = [
  "gekko-fp",
+ "ssbm-ax",
  "ssbm-disc",
  "ssbm-gx",
  "ssbm-ppc",

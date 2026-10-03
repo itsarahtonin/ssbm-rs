@@ -1,0 +1,10 @@
+[package]
+name = "ssbm-ax"
+description = "The DSP's AX microcode, mixing the game's sound as Dolphin's DSP HLE does"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]

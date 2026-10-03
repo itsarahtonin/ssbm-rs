@@ -36,6 +36,7 @@ mod matches;
 mod calls;
 mod monkey;
 mod probe;
+mod wav;
 
 /// Ports lockstep does not check (see where they are set).
 const LOCKSTEP_EXEMPT: &[&str] = &[
@@ -468,6 +469,37 @@ fn run() -> ExitCode {
             start.trim().parse().expect("START"),
             count.trim().parse().expect("COUNT"),
         );
+    }
+    // AX=1 has the DSP mix the game's sound (ssbm-ax) rather than only answer the CPU, and
+    // AUDIO_OUT=FILE.wav records what the audio interface plays.
+    if std::env::var_os("AX").is_some_and(|v| v != "0") {
+        sdk.dev.mix_audio.set(true);
+    }
+    // AX_CHECK=1 (with the ax-check feature) also runs each command list through Dolphin's AX
+    // microcode, built from its source (tools/ax-dolphin), and reports where what it writes
+    // differs from ssbm-ax's.
+    #[cfg(feature = "ax-check")]
+    if std::env::var_os("AX_CHECK").is_some_and(|v| v != "0") {
+        sdk.dev.mix_audio.set(true);
+        let mut checker: Option<ax_dolphin::Checker> = None;
+        sdk.dev.observe_ax(Box::new(move |mem, crc, addr, size| {
+            let c = checker.get_or_insert_with(|| {
+                eprintln!("AX check: microcode {crc:08x}");
+                ax_dolphin::Checker::new(crc)
+            });
+            if let Some(diff) = c.check(mem, addr, size)
+                && c.mismatches <= 10
+            {
+                eprintln!("AX check: {diff}");
+            }
+            if c.lists % 1000 == 0 {
+                eprintln!("AX check: {} command lists, {} differ", c.lists, c.mismatches);
+            }
+        }));
+    }
+    if let Ok(path) = std::env::var("AUDIO_OUT") {
+        let mut out = wav::Wav::create(path.as_ref()).unwrap_or_else(|e| panic!("{path}: {e}"));
+        sdk.hw.set_audio_out(Box::new(move |block| out.push(block).expect("writing AUDIO_OUT")));
     }
     // GX_RENDER=DIR draws the GPU's command stream (ssbm-render) and saves each frame there.
     if let Ok(dir) = std::env::var("GX_RENDER") {

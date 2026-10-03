@@ -126,6 +126,7 @@ pub struct Hw {
     bp_next: Cell<bool>,
     gp: RefCell<Gp>,
     aram: RefCell<Vec<u8>>,
+    audio_out: RefCell<Option<Box<dyn FnMut(&[u8])>>>,
     /// Bumped to cancel scheduled audio DMA interrupts.
     ai_generation: Cell<u64>,
     /// Video fields shown so far, and when the current frame started.
@@ -158,6 +159,7 @@ impl Default for Hw {
             bp_next: Cell::new(false),
             gp: RefCell::default(),
             aram: RefCell::new(vec![0; ARAM_SIZE]),
+            audio_out: RefCell::default(),
             ai_generation: Cell::new(0),
             fields: Cell::new(0),
             frame_start: Cell::new(0),
@@ -330,6 +332,7 @@ impl Hw {
                 let was = old & 0x8000 != 0;
                 let now = v & 0x8000 != 0;
                 if now && !was {
+                    self.ai_play(ctx);
                     self.ai_schedule(ctx, sdk);
                 } else if !now {
                     self.ai_generation.set(self.ai_generation.get() + 1);
@@ -689,6 +692,8 @@ impl Hw {
             if hw.ai_generation.get() != generation {
                 return;
             }
+            // The next block starts from the registers as they stand.
+            hw.ai_play(ctx);
             let csr = hw.get16(DSP_CSR) | CSR_AIDINT;
             hw.set16(DSP_CSR, csr);
             if csr & CSR_AIDINTMSK != 0 {
@@ -709,6 +714,29 @@ impl Hw {
         self.ais_base
             .get()
             .wrapping_add((elapsed * rate / TB_HZ) as u32)
+    }
+
+    /// A byte of ARAM, as the DSP's accelerator reads it.
+    pub fn aram_byte(&self, addr: u32) -> u8 {
+        self.aram.borrow().get(addr as usize).copied().unwrap_or(0)
+    }
+
+    /// Hands each audio DMA block to `sink` as it starts playing: 16-bit big-endian pairs at
+    /// 32 kHz, as the audio interface reads them.
+    pub fn set_audio_out(&self, sink: Box<dyn FnMut(&[u8])>) {
+        *self.audio_out.borrow_mut() = Some(sink);
+    }
+
+    /// The block the audio DMA starts playing, to the audio sink.
+    fn ai_play(&self, ctx: &Ctx) {
+        let mut sink = self.audio_out.borrow_mut();
+        let Some(sink) = sink.as_mut() else { return };
+        let blocks = usize::from(self.get16(AI_DMA_CONTROL) & 0x7FFF).max(1);
+        let mut data = vec![0; blocks * 32];
+        if ctx.mem.read_bytes(self.ai_dma_start(), &mut data).is_err() {
+            data.fill(0);
+        }
+        sink(&data);
     }
 
     /// The audio DMA block most recently started.
