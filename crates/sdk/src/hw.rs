@@ -120,8 +120,13 @@ pub struct Hw {
     regs: RefCell<Vec<u16>>,
     /// Bytes written to the gather pipe since the last 32-byte burst.
     pipe: RefCell<Vec<u8>>,
+    /// BP registers whose writes print who made them (GX_TRACE_BP), and whether the last byte
+    /// written to the pipe began a BP command.
+    trace_bp: RefCell<Vec<u8>>,
+    bp_next: Cell<bool>,
     gp: RefCell<Gp>,
     aram: RefCell<Vec<u8>>,
+    audio_out: RefCell<Option<Box<dyn FnMut(&[u8])>>>,
     /// Bumped to cancel scheduled audio DMA interrupts.
     ai_generation: Cell<u64>,
     /// Video fields shown so far, and when the current frame started.
@@ -150,8 +155,11 @@ impl Default for Hw {
         let hw = Self {
             regs: RefCell::new(vec![0; (SIZE / 2) as usize]),
             pipe: RefCell::default(),
+            trace_bp: RefCell::default(),
+            bp_next: Cell::new(false),
             gp: RefCell::default(),
             aram: RefCell::new(vec![0; ARAM_SIZE]),
+            audio_out: RefCell::default(),
             ai_generation: Cell::new(0),
             fields: Cell::new(0),
             frame_start: Cell::new(0),
@@ -202,9 +210,34 @@ impl Hw {
         self.set16(off + 2, (v >> 16) as u16);
     }
 
+    /// Records a Dolphin FIFO log of `count` frames from frame `start` to `path`.
+    /// Draws the GPU's command stream with `sink` (a renderer).
+    pub fn set_renderer(&self, sink: Box<dyn ssbm_gx::Sink>) {
+        self.gp.borrow_mut().set_sink(sink);
+    }
+
+    pub fn record_dff(&self, path: std::path::PathBuf, start: u64, count: usize) {
+        self.gp.borrow_mut().record_dff(path, start, count);
+    }
+
+    /// Prints who writes the BP registers `regs` to the pipe, and the frame (diagnostics).
+    pub fn trace_bp(&self, regs: Vec<u8>) {
+        *self.trace_bp.borrow_mut() = regs;
+    }
+
     /// Commands the GP has run, for diagnostics.
     pub fn draws(&self) -> u64 {
         self.gp.borrow().draws
+    }
+
+    /// Logs the GX command stream frame by frame to `frames`, and frame `detail`'s commands,
+    /// decoded, to its writer (gp.rs).
+    pub fn record_gx(
+        &self,
+        frames: Box<dyn std::io::Write>,
+        detail: Option<(u64, Box<dyn std::io::Write>)>,
+    ) {
+        self.gp.borrow_mut().record(frames, detail);
     }
 
     /// The top-field framebuffer VI scans out.
@@ -299,6 +332,7 @@ impl Hw {
                 let was = old & 0x8000 != 0;
                 let now = v & 0x8000 != 0;
                 if now && !was {
+                    self.ai_play(ctx);
                     self.ai_schedule(ctx, sdk);
                 } else if !now {
                     self.ai_generation.set(self.ai_generation.get() + 1);
@@ -427,6 +461,19 @@ impl Hw {
     // Write-gather pipe and GX FIFO.
 
     fn pipe_write(&self, ctx: &Ctx, sdk: &Rc<Sdk>, size: u32, value: u32) {
+        if !self.trace_bp.borrow().is_empty() {
+            if size == 4 && self.bp_next.get() && self.trace_bp.borrow().contains(&((value >> 24) as u8)) {
+                let callers: Vec<String> =
+                    ctx.native_stack().iter().rev().take(4).map(|&a| ctx.name_of(a)).collect();
+                eprintln!(
+                    "gx bp frame {} {:08X} from {}",
+                    self.gp.borrow().frame(),
+                    value,
+                    callers.join(" < ")
+                );
+            }
+            self.bp_next.set(size == 1 && value == 0x61);
+        }
         let mut pipe = self.pipe.borrow_mut();
         pipe.extend_from_slice(&value.to_be_bytes()[(4 - size) as usize..]);
         while pipe.len() >= 32 {
@@ -464,6 +511,7 @@ impl Hw {
             self.cp_ptr(CP_FIFO_END) & 0x03FF_FFE0,
         );
         let mut rptr = self.cp_ptr(CP_FIFO_RPTR) & 0x03FF_FFE0;
+        self.gp.borrow_mut().set_fifo(base, end);
         let mut chunk = [0u8; 32];
         for _ in 0..(1 << 20) {
             if rptr == next {
@@ -644,6 +692,8 @@ impl Hw {
             if hw.ai_generation.get() != generation {
                 return;
             }
+            // The next block starts from the registers as they stand.
+            hw.ai_play(ctx);
             let csr = hw.get16(DSP_CSR) | CSR_AIDINT;
             hw.set16(DSP_CSR, csr);
             if csr & CSR_AIDINTMSK != 0 {
@@ -664,6 +714,29 @@ impl Hw {
         self.ais_base
             .get()
             .wrapping_add((elapsed * rate / TB_HZ) as u32)
+    }
+
+    /// A byte of ARAM, as the DSP's accelerator reads it.
+    pub fn aram_byte(&self, addr: u32) -> u8 {
+        self.aram.borrow().get(addr as usize).copied().unwrap_or(0)
+    }
+
+    /// Hands each audio DMA block to `sink` as it starts playing: 16-bit big-endian pairs at
+    /// 32 kHz, as the audio interface reads them.
+    pub fn set_audio_out(&self, sink: Box<dyn FnMut(&[u8])>) {
+        *self.audio_out.borrow_mut() = Some(sink);
+    }
+
+    /// The block the audio DMA starts playing, to the audio sink.
+    fn ai_play(&self, ctx: &Ctx) {
+        let mut sink = self.audio_out.borrow_mut();
+        let Some(sink) = sink.as_mut() else { return };
+        let blocks = usize::from(self.get16(AI_DMA_CONTROL) & 0x7FFF).max(1);
+        let mut data = vec![0; blocks * 32];
+        if ctx.mem.read_bytes(self.ai_dma_start(), &mut data).is_err() {
+            data.fill(0);
+        }
+        sink(&data);
     }
 
     /// The audio DMA block most recently started.

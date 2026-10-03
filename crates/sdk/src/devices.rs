@@ -33,10 +33,28 @@ const DSP_FRAME_TICKS: u64 = TB_HZ / 2000;
 
 pub struct Devices {
     pub pads: RefCell<[PadStatus; 4]>,
+    /// What `PADControlMotor` last asked of each controller's rumble motor (`PAD_MOTOR_*`).
+    pub motors: Cell<[u32; 4]>,
     /// The DSP task (the AX microcode), and mail it is waiting on.
     dsp_task: Cell<u32>,
     dsp_init: Cell<bool>,
     mail: RefCell<Vec<u32>>,
+    /// Whether the DSP mixes sound (AX) rather than only answering the CPU, and the microcode
+    /// doing it once its task is added.
+    pub mix_audio: Cell<bool>,
+    ax: RefCell<Option<ssbm_ax::Ax>>,
+    ax_observer: RefCell<Option<AxObserver>>,
+}
+
+/// Sees each AX command list before the DSP runs it: memory as it stands, the microcode's hash,
+/// and the list's address and size.
+pub type AxObserver = Box<dyn FnMut(&dyn ssbm_ax::Bus, u32, u32, u16)>;
+
+impl Devices {
+    /// Shows `f` each command list the DSP mixes (with `mix_audio`).
+    pub fn observe_ax(&self, f: AxObserver) {
+        *self.ax_observer.borrow_mut() = Some(f);
+    }
 }
 
 impl Default for Devices {
@@ -47,9 +65,13 @@ impl Default for Devices {
         };
         Self {
             pads: RefCell::new([pad; 4]),
+            motors: Cell::new([0; 4]),
             dsp_task: Cell::new(0),
             dsp_init: Cell::new(false),
             mail: RefCell::default(),
+            mix_audio: Cell::new(false),
+            ax: RefCell::default(),
+            ax_observer: RefCell::default(),
         }
     }
 }
@@ -62,7 +84,14 @@ pub(crate) fn install(ctx: &Ctx, card: bool) {
     reg("PADReset", |ctx| ret(ctx, 1));
     reg("PADRecalibrate", |ctx| ret(ctx, 1));
     reg("PADRead", pad_read);
-    reg("PADControlMotor", |_| {});
+    reg("PADControlMotor", |ctx| {
+        let motors = &ctx.ext::<Sdk>().dev.motors;
+        let mut m = motors.get();
+        if let Some(chan) = m.get_mut(ctx.regs.r(3) as usize) {
+            *chan = ctx.regs.r(4);
+        }
+        motors.set(m);
+    });
     reg("PADSetSpec", |_| {});
     reg("PADSetSamplingRate", |_| {});
     reg("SIRefreshSamplingRate", |_| {});
@@ -114,6 +143,28 @@ fn install_dsp(ctx: &Ctx) {
     reg("DSPReadMailFromDSP", |ctx| ret(ctx, 0));
 }
 
+/// Main memory and ARAM as the DSP reads and writes them.
+struct DspBus<'a> {
+    ctx: &'a Ctx,
+    aram: &'a crate::hw::Hw,
+}
+
+impl ssbm_ax::Bus for DspBus<'_> {
+    fn read(&self, addr: u32, out: &mut [u8]) {
+        if self.ctx.mem.read_bytes((addr & 0x01FF_FFFF) | 0x8000_0000, out).is_err() {
+            out.fill(0);
+        }
+    }
+
+    fn write(&mut self, addr: u32, data: &[u8]) {
+        let _ = self.ctx.mem.write_bytes((addr & 0x01FF_FFFF) | 0x8000_0000, data);
+    }
+
+    fn aram(&self, addr: u32) -> u8 {
+        self.aram.aram_byte(addr)
+    }
+}
+
 fn ret(ctx: &Ctx, v: u32) {
     ctx.regs.set_r(3, v);
 }
@@ -151,6 +202,8 @@ fn pad_read(ctx: &Ctx) {
 
 // DSPTaskInfo offsets.
 const TASK_STATE: u32 = 0x00;
+const TASK_IRAM_MMEM_ADDR: u32 = 0x0C;
+const TASK_IRAM_LENGTH: u32 = 0x10;
 const TASK_INIT_CB: u32 = 0x28;
 const TASK_RES_CB: u32 = 0x2C;
 
@@ -158,6 +211,14 @@ fn dsp_add_task(ctx: &Ctx) {
     let task = ctx.regs.r(3);
     let sdk = ctx.ext::<Sdk>();
     sdk.dev.dsp_task.set(task);
+    if sdk.dev.mix_audio.get() {
+        // The microcode, by Dolphin's hash of it, which tells the AX versions apart.
+        let len = ctx.read_u32(task + TASK_IRAM_LENGTH) as usize;
+        let mut ucode = vec![0; len.min(0x2000)];
+        let _ = ctx.mem.read_bytes(ctx.read_u32(task + TASK_IRAM_MMEM_ADDR) | 0x8000_0000, &mut ucode);
+        let crc = ssbm_ax::ucode_crc(&ucode);
+        *sdk.dev.ax.borrow_mut() = Some(ssbm_ax::Ax::new(crc, Some(ssbm_ax::coefs::table())));
+    }
     // The microcode boots and reports in: the SDK's handler would call the init callback.
     ctx.write_u32(task + TASK_STATE, 1);
     let init = ctx.read_u32(task + TASK_INIT_CB);
@@ -184,8 +245,16 @@ fn dsp_send_mail(ctx: &Ctx) {
         }
         return;
     }
+    let (size, list) = (pending[0] as u16, pending[1]);
     pending.clear();
     drop(pending);
+    if let Some(ax) = sdk.dev.ax.borrow_mut().as_mut() {
+        let mut bus = DspBus { ctx, aram: &sdk.hw };
+        if let Some(observe) = sdk.dev.ax_observer.borrow_mut().as_mut() {
+            observe(&bus, ax.crc(), list & 0x01FF_FFFF, size);
+        }
+        ax.run(&mut bus, list & 0x01FF_FFFF, size);
+    }
     let task = sdk.dev.dsp_task.get();
     sdk.after(ctx, DSP_FRAME_TICKS, move |ctx| {
         ctx.write_u32(task + TASK_STATE, 1);

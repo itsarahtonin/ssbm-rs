@@ -1,0 +1,16 @@
+[package]
+name = "ssbm-render"
+description = "Draws the GameCube GPU's command stream with wgpu"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+ssbm-gx.workspace = true
+wgpu = "30"
+pollster = "1"
+bytemuck = { version = "1", features = ["derive"] }
+png = "0.18"
+rayon = "1"

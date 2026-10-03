@@ -1,0 +1,13 @@
+[package]
+name = "gxplay"
+description = "Plays a Dolphin FIFO log through ssbm-render and saves its frames"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+ssbm-gx.workspace = true
+ssbm-render.workspace = true
+png = "0.18"

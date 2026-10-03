@@ -1,0 +1,274 @@
+<meta charset="utf-8">
+<title>Graphics and Audio Ladder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #f6f5f1; --panel: #ffffff; --fg: #1d1f24; --muted: #646a74; --line: #dcdad3;
+  --ok: #3f9a5c; --warn: #d9a23a; --bad: #d62f2f; --idle: #c9c7c0; --hl: #1f6fd6; --wip: #1f6fd6;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15171b; --panel: #1d2026; --fg: #e7e8ea; --muted: #9aa0a9; --line: #30343b;
+  --ok: #4fae6c; --warn: #d6a443; --bad: #ef4b4b; --idle: #3a3e45; --hl: #5aa2ff; --wip: #5aa2ff; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #15171b; --panel: #1d2026; --fg: #e7e8ea; --muted: #9aa0a9; --line: #30343b;
+  --ok: #4fae6c; --warn: #d6a443; --bad: #ef4b4b; --idle: #3a3e45; --hl: #5aa2ff; --wip: #5aa2ff; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 14px/1.45 "IBM Plex Sans", system-ui, sans-serif; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 20px 16px 40px; display: grid; gap: 22px; }
+.mono, .num { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+header { display: grid; gap: 4px; }
+h1 { font-size: 22px; font-weight: 600; margin: 0; text-wrap: balance; }
+.sub { color: var(--muted); font-size: 13px; }
+section h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 10px; }
+.stats { display: flex; flex-wrap: wrap; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.stat { flex: 1 1 170px; background: var(--panel); padding: 12px 14px; display: grid; gap: 2px; }
+.stat .k { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.stat .v { font-size: 22px; font-weight: 500; }
+.stat .d { font-size: 12px; color: var(--muted); }
+.ladder { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.rung { background: var(--panel); display: grid; grid-template-columns: 34px minmax(0, 1fr) minmax(140px, 260px); gap: 6px 16px; padding: 14px; align-items: center; }
+.rung .idx { font: 500 18px "IBM Plex Mono", monospace; color: var(--muted); }
+.rung .t { font-weight: 600; }
+.rung .g { color: var(--muted); font-size: 13px; }
+.rung .right { display: grid; gap: 6px; }
+.pill { justify-self: start; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; padding: 2px 8px; border-radius: 999px; border: 1px solid currentColor; }
+.pill.done { color: var(--ok); } .pill.wip { color: var(--wip); } .pill.idle { color: var(--muted); }
+@media (max-width: 640px) { .rung { grid-template-columns: 28px minmax(0, 1fr); } .rung .right { grid-column: 2; } }
+.bar { height: 8px; border-radius: 4px; background: var(--idle); overflow: hidden; display: flex; }
+.bar span { display: block; height: 100%; }
+.frames { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 18px; align-items: start; }
+@media (max-width: 900px) { .frames { grid-template-columns: minmax(0, 1fr); } }
+.list { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; max-height: 560px; overflow: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 12px; }
+th { text-align: left; font-weight: 500; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; padding: 8px 10px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--panel); }
+td { padding: 6px 10px; border-bottom: 1px solid var(--line); }
+td.r, th.r { text-align: right; }
+tr.sel td { background: color-mix(in srgb, var(--hl) 12%, transparent); }
+tbody tr { cursor: pointer; }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; }
+.viewer { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px; display: grid; gap: 10px; }
+.viewer .head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; font-size: 13px; }
+.trip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 560px) { .trip { grid-template-columns: minmax(0, 1fr); } }
+figure { margin: 0; display: grid; gap: 4px; }
+figure button { all: unset; cursor: zoom-in; display: block; border-radius: 4px; }
+figure button:focus-visible { outline: 2px solid var(--hl); outline-offset: 2px; }
+figure img { display: block; width: 100%; aspect-ratio: 4 / 3; max-width: 100%; border-radius: 4px; background: var(--idle); }
+.zoom { position: fixed; inset: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 94%, transparent); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; padding: calc(12px + env(safe-area-inset-top, 0px)) 16px calc(12px + env(safe-area-inset-bottom, 0px)); gap: 10px; }
+.zoom .bar2 { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; }
+.zoom .name { font: 500 13px "IBM Plex Mono", monospace; min-width: 0; overflow-wrap: anywhere; }
+.zoom .stage { overflow: auto; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+.zoom .stage img { display: block; image-rendering: pixelated; max-width: none; }
+.zoom .hint { font-size: 12px; color: var(--muted); }
+.btns { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.btns button { font: 12px "IBM Plex Sans", sans-serif; background: var(--panel); color: var(--muted); border: 0; padding: 6px 10px; cursor: pointer; }
+.btns button + button { border-left: 1px solid var(--line); }
+.btns button[aria-pressed=true] { background: var(--fg); color: var(--bg); }
+.close { font: 13px "IBM Plex Sans", sans-serif; background: var(--panel); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+figcaption { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.feats { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
+.feat { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: grid; gap: 2px; }
+.feat .n { font-weight: 500; }
+.feat .s { font-size: 12px; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--muted); }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 900px) { .two { grid-template-columns: minmax(0, 1fr); } }
+.chart { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+.chart svg { display: block; width: 100%; height: auto; }
+.note { font-size: 12px; color: var(--muted); max-width: 70ch; }
+</style>
+<div class="wrap">
+  <header>
+    <h1>Graphics and Audio Ladder</h1>
+    <div class="sub" id="sub"></div>
+    <div class="note">The renderer and audio track of ssbm-rs, rung by rung: the GPU command streams of original-code and all-ports runs must match, our wgpu renderer must draw the frames Dolphin's software renderer draws, AX audio must match Dolphin's DSP, and a windowed build must play at 60 Hz.</div>
+  </header>
+  <div class="stats" id="stats"></div>
+  <section>
+    <h2>Rungs</h2>
+    <div class="ladder" id="ladder"></div>
+  </section>
+  <section>
+    <h2>Frames against Dolphin's software renderer</h2>
+    <div class="legend" id="tol" style="margin-bottom:10px"></div>
+    <div class="frames">
+      <div class="list"><table><thead><tr><th>Run</th><th class="r">PSNR</th><th class="r">&gt;8</th><th class="r">&gt;32</th></tr></thead><tbody id="runs"></tbody></table></div>
+      <div class="viewer" id="viewer"></div>
+    </div>
+  </section>
+  <div class="two">
+    <section>
+      <h2>GX streams: original code against all ports</h2>
+      <div class="list"><table><thead><tr><th>Replay</th><th class="r">Frames</th><th class="r">Differ</th><th class="r">First</th></tr></thead><tbody id="streams"></tbody></table></div>
+    </section>
+    <section>
+      <h2>Audio: ssbm-ax against Dolphin's AX</h2>
+      <div class="list"><table><thead><tr><th>Run</th><th class="r">Lists</th><th class="r">Differ</th><th>Replay</th></tr></thead><tbody id="audio"></tbody></table></div>
+    </section>
+    <section>
+      <h2>History</h2>
+      <div class="chart" id="chart"></div>
+    </section>
+  </div>
+  <section>
+    <h2>Renderer features</h2>
+    <div class="feats" id="feats"></div>
+  </section>
+</div>
+<div class="zoom" id="zoom" hidden role="dialog" aria-modal="true" aria-label="Frame at full size">
+  <div class="bar2">
+    <span class="name" id="zname"></span>
+    <span class="btns" id="zviews"></span>
+    <span class="btns" id="zscale"></span>
+    <button class="close" id="zclose">Close</button>
+  </div>
+  <div class="stage"><img id="zimg" alt=""></div>
+  <div class="hint">1, 2, 3 pick the image; space flips between ours and Dolphin's; z changes the zoom; Esc closes.</div>
+</div>
+<script>
+const D = /*DATA*/null;
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const short = (n) => n.replace(/^Game_/, "").replace(/\.slp$/, "");
+const statusColor = { done: "var(--ok)", approximate: "var(--warn)", missing: "var(--bad)" };
+
+$("sub").innerHTML = `<span class="mono">${esc(D.branch)} · ${esc(D.commit)}</span> · ${esc(D.subject)} · updated ${esc(D.generated)}`;
+
+const streams = D.streams.filter((s) => s.done);
+const zero = streams.filter((s) => s.differ === 0 || s.explained).length;
+const explainedCount = streams.filter((s) => s.differ !== 0 && s.explained).length;
+const runs = D.frames.filter((f) => f.frames.length);
+const ok = runs.filter((f) => f.ok).length;
+const worst = runs.length ? Math.min(...runs.map((f) => f.worst.psnr)) : null;
+const audioRuns = D.audio.filter((a) => a.lists > 0);
+const audioZero = audioRuns.filter((a) => a.differ === 0).length;
+const audioLists = audioRuns.reduce((s, a) => s + a.lists, 0);
+const audioUnsynced = D.audio.filter((a) => !a.synced).length;
+const audioDone = audioZero >= 41;
+const median = (() => {
+  const v = runs.map((f) => f.worst.psnr).sort((a, b) => a - b);
+  return v.length ? v[Math.floor(v.length / 2)] : null;
+})();
+const stat = (k, v, d) => `<div class="stat"><span class="k">${k}</span><span class="v num">${v}</span><span class="d">${d}</span></div>`;
+$("stats").innerHTML = [
+  stat("GX streams", `${zero}/${streams.length}`, `smoke replays at zero diff or explained (${explainedCount} explained)`),
+  stat("Frames", `${ok}/${runs.length}`, "runs within tolerance of Dolphin"),
+  stat("Median PSNR", median === null ? "–" : `${median.toFixed(1)} dB`, worst === null ? "" : `worst ${worst.toFixed(1)} dB`),
+  stat("Audio", `${audioZero}/${D.audio.length || 41}`, "runs whose AX matches Dolphin's"),
+  stat("Window", D.window.status, "60 Hz with controllers"),
+].join("");
+
+const rung = (i, title, goal, status, frac, detail) => {
+  const cls = status === "done" ? "done" : status === "not started" ? "idle" : "wip";
+  const bar = frac === null ? "" : `<div class="bar" role="img" aria-label="${Math.round(frac * 100)}%"><span style="width:${(frac * 100).toFixed(1)}%;background:var(--${cls === "idle" ? "idle" : cls === "done" ? "ok" : "wip"})"></span></div>`;
+  return `<div class="rung"><span class="idx">${i}</span><div><div class="t">${title}</div><div class="g">${goal}</div></div>
+    <div class="right"><span class="pill ${cls}">${status}</span>${bar}<span class="g">${detail}</span></div></div>`;
+};
+const streamDone = streams.length === D.streams.length && zero === streams.length && streams.length > 0;
+const framesDone = runs.length > 0 && ok === runs.length;
+$("ladder").innerHTML = [
+  rung(1, "GX streams match", "Original code and all ports send the GPU the same draws, on the 40 smoke replays; each difference fixed or explained.",
+    streamDone ? "done" : "in progress", D.streams.length ? zero / D.streams.length : 0,
+    `${zero - explainedCount} of ${D.streams.length} replays at zero diff, ${explainedCount} explained${streams.length < D.streams.length ? `, ${D.streams.length - streams.length} still running` : ""}`),
+  rung(2, "Frames match Dolphin", "The wgpu renderer draws what Dolphin's software renderer draws from the same FIFO logs, within tolerance, on the smoke replays and a menu run.",
+    framesDone ? "done" : "in progress", runs.length ? ok / Math.max(runs.length, 41) : 0,
+    `${ok} of ${runs.length} runs within tolerance`),
+  rung(3, "Audio matches", "AX mixing matches Dolphin's DSP output: every command list of the smoke replays and a menu run, byte for byte against Dolphin's AX code built from its source.",
+    audioDone ? "done" : "in progress", audioZero / 41,
+    `${audioZero} of ${D.audio.length} runs checked with no list differing (${audioLists.toLocaleString()} command lists)${audioUnsynced ? `; ${audioUnsynced} replays desync with mixing on` : ""}`),
+  rung(4, "Windowed build", "Plays in a window with controllers at 60 Hz.", D.window.status, null, esc(D.window.detail)),
+].join("");
+
+$("tol").innerHTML = `<span>Tolerance: every frame at least <b class="num">${D.tolerance.psnr} dB</b> PSNR, and at most <b class="num">${D.tolerance.off32}%</b> of pixels off by more than 32 levels.</span><span><i class="dot" style="background:var(--ok)"></i>within</span><span><i class="dot" style="background:var(--bad)"></i>outside</span>`;
+const order = [...D.frames].sort((a, b) => (a.frames.length ? a.worst.psnr : 1e9) - (b.frames.length ? b.worst.psnr : 1e9));
+let selected = order.find((f) => f.frames.length) || null;
+function renderRuns() {
+  $("runs").innerHTML = order.map((f, i) => {
+    if (!f.frames.length) return `<tr><td colspan="4"><i class="dot" style="background:var(--idle)"></i><span class="mono">${esc(short(f.name))}</span> <span class="g">not compared yet</span></td></tr>`;
+    const sel = f === selected ? " sel" : "";
+    return `<tr class="${sel}" data-i="${i}"><td><i class="dot" style="background:${f.ok ? "var(--ok)" : "var(--bad)"}"></i><span class="mono">${esc(short(f.name))}</span></td>
+      <td class="r num">${f.worst.psnr.toFixed(2)}</td><td class="r num">${f.worst.off8.toFixed(2)}%</td><td class="r num">${f.worst.off32.toFixed(3)}%</td></tr>`;
+  }).join("");
+  const f = selected;
+  if (!f) { $("viewer").innerHTML = `<div class="g">No runs compared yet.</div>`; return; }
+  const img = (src, cap, view) => `<figure>${src ? `<button data-view="${view}" aria-label="Open ${cap} at full size"><img alt="${cap}" src="${src}"></button>` : `<div style="aspect-ratio:4/3;background:var(--idle);border-radius:4px"></div>`}<figcaption>${cap}</figcaption></figure>`;
+  $("viewer").innerHTML = `<div class="head"><span class="mono">${esc(f.name)}</span><span class="num">worst frame ${f.worst.n}: ${f.worst.psnr.toFixed(2)} dB</span></div>
+    <div class="trip">${img(f.ours, "Ours", "ours")}${img(f.ref, "Dolphin", "ref")}${img(f.diff, "Difference ×4", "diff")}</div>
+    <div class="g">${f.frames.map((x) => `frame ${x.n}: ${x.psnr.toFixed(2)} dB`).join(" · ")}</div>`;
+}
+// Full size: flip between ours, Dolphin's and the difference, at 1x or 2x.
+const VIEWS = [["ours", "Ours"], ["ref", "Dolphin"], ["diff", "Difference ×4"]];
+let zoomView = null, zoomScale = 1;
+function renderZoom() {
+  const f = selected;
+  if (!zoomView || !f) { $("zoom").hidden = true; return; }
+  $("zoom").hidden = false;
+  $("zname").textContent = `${f.name} · frame ${f.worst.n} · ${f.worst.psnr.toFixed(2)} dB`;
+  $("zviews").innerHTML = VIEWS.map(([k, label], i) => `<button data-view="${k}" aria-pressed="${k === zoomView}">${i + 1} · ${label}</button>`).join("");
+  $("zscale").innerHTML = [1, 2, 3].map((z) => `<button data-scale="${z}" aria-pressed="${z === zoomScale}">${z}×</button>`).join("");
+  const img = $("zimg");
+  img.src = f[zoomView];
+  img.alt = VIEWS.find(([k]) => k === zoomView)[1];
+  img.style.width = `${640 * zoomScale}px`;
+}
+$("viewer").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-view]");
+  if (!b) return;
+  zoomView = b.dataset.view;
+  renderZoom();
+});
+$("zviews").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-view]");
+  if (b) { zoomView = b.dataset.view; renderZoom(); }
+});
+$("zscale").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-scale]");
+  if (b) { zoomScale = +b.dataset.scale; renderZoom(); }
+});
+$("zclose").addEventListener("click", () => { zoomView = null; renderZoom(); });
+document.addEventListener("keydown", (e) => {
+  if (!zoomView) return;
+  if (e.key === "Escape") zoomView = null;
+  else if (e.key >= "1" && e.key <= "3") zoomView = VIEWS[+e.key - 1][0];
+  else if (e.key === " ") { zoomView = zoomView === "ours" ? "ref" : "ours"; e.preventDefault(); }
+  else if (e.key === "z") zoomScale = zoomScale % 3 + 1;
+  else return;
+  renderZoom();
+});
+$("runs").addEventListener("click", (e) => {
+  const tr = e.target.closest("tr[data-i]");
+  if (!tr) return;
+  selected = order[+tr.dataset.i];
+  renderRuns();
+});
+renderRuns();
+
+$("streams").innerHTML = D.streams.map((s) => s.done
+  ? `<tr title="${esc(s.explained || "")}"><td><i class="dot" style="background:${!s.differ ? "var(--ok)" : s.explained ? "var(--warn)" : "var(--bad)"}"></i><span class="mono">${esc(short(s.name))}</span>${s.explained ? `<div class="g" style="font-size:11px">${esc(s.explained)}</div>` : ""}</td><td class="r num">${s.frames}</td><td class="r num">${s.differ}</td><td class="r num">${s.first ?? "–"}</td></tr>`
+  : `<tr><td colspan="4"><i class="dot" style="background:var(--idle)"></i><span class="mono">${esc(short(s.name))}</span> <span class="g">running</span></td></tr>`).join("");
+
+$("audio").innerHTML = D.audio.length ? D.audio.map((a) => `<tr><td><i class="dot" style="background:${a.differ === 0 && a.synced ? "var(--ok)" : a.differ ? "var(--bad)" : "var(--warn)"}"></i><span class="mono">${esc(short(a.name))}</span></td><td class="r num">${a.lists.toLocaleString()}</td><td class="r num">${a.differ ?? "–"}</td><td class="g">${a.synced ? "synced" : esc(a.sync)}</td></tr>`).join("") : `<tr><td colspan="4" class="g">Not checked yet.</td></tr>`;
+$("feats").innerHTML = D.features.map((f) => `<div class="feat"><span class="n"><i class="dot" style="background:${statusColor[f.status]}"></i>${esc(f.name)}</span><span class="s">${esc(f.status)} · ${esc(f.note)}</span></div>`).join("");
+
+(function chart() {
+  const h = D.history;
+  if (!h.length) { $("chart").innerHTML = `<div class="g">No history yet.</div>`; return; }
+  const W = 560, H = 200, L = 34, R = 10, T = 14, B = 26;
+  const x = (i) => L + (h.length === 1 ? (W - L - R) / 2 : (i * (W - L - R)) / (h.length - 1));
+  const y = (v) => T + (1 - v) * (H - T - B);
+  const series = [
+    { name: "GX streams at zero diff or explained", color: "var(--ok)", v: (e) => e.streams_done ? e.streams_zero / 40 : 0 },
+    { name: "Runs within tolerance", color: "var(--hl)", v: (e) => e.frames_done ? e.frames_ok / Math.max(e.frames_done, 41) : 0 },
+  ];
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Progress over time">`;
+  for (const g of [0, 0.5, 1]) s += `<line x1="${L}" x2="${W - R}" y1="${y(g)}" y2="${y(g)}" stroke="var(--line)"/><text x="${L - 6}" y="${y(g) + 4}" text-anchor="end" font-size="10" fill="var(--muted)">${g * 100}%</text>`;
+  for (const se of series) {
+    const pts = h.map((e, i) => `${x(i)},${y(se.v(e))}`).join(" ");
+    s += `<polyline points="${pts}" fill="none" stroke="${se.color}" stroke-width="2"/>`;
+    h.forEach((e, i) => { s += `<circle cx="${x(i)}" cy="${y(se.v(e))}" r="3" fill="${se.color}"><title>${esc(e.at)}: ${(se.v(e) * 100).toFixed(0)}%</title></circle>`; });
+  }
+  s += `<text x="${L}" y="${H - 6}" font-size="10" fill="var(--muted)">${esc(h[0].at)}</text><text x="${W - R}" y="${H - 6}" font-size="10" text-anchor="end" fill="var(--muted)">${esc(h[h.length - 1].at)}</text></svg>`;
+  s += `<div class="legend">${series.map((se) => `<span><i class="dot" style="background:${se.color}"></i>${se.name}</span>`).join("")}</div>`;
+  $("chart").innerHTML = s;
+})();
+</script>

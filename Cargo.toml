@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["crates/*", "tools/fp-fuzz", "tools/replay-sort", "tools/run"]
+members = ["crates/*", "tools/ax-dolphin", "tools/fp-fuzz", "tools/gxplay", "tools/replay-sort", "tools/run"]
 exclude = ["tools/typegen", "tools/c2rs", "tools/lockstep"]
 
 [workspace.package]
@@ -20,6 +20,9 @@ ssbm-ppc = { path = "crates/ppc" }
 ssbm-sdk = { path = "crates/sdk" }
 ssbm-slippi = { path = "crates/slippi" }
 ssbm-game = { path = "crates/game" }
+ssbm-gx = { path = "crates/gx" }
+ssbm-render = { path = "crates/render" }
+ssbm-ax = { path = "crates/ax" }
 nod = "2.0.0-alpha.9"
 peppi = "2.1.2"
 ssbm-data = "0.1"

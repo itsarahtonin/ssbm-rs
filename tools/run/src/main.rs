@@ -36,6 +36,11 @@ mod matches;
 mod calls;
 mod monkey;
 mod probe;
+mod wav;
+#[cfg(feature = "window")]
+mod adapter;
+#[cfg(feature = "window")]
+mod window;
 
 /// Ports lockstep does not check (see where they are set).
 const LOCKSTEP_EXEMPT: &[&str] = &[
@@ -233,6 +238,21 @@ const READ_ONLY: [(u32, u32); 2] = [(0x803B_7240, 0x803B_9840), (0x804D_79E0, 0x
 const STACK_SIZE: usize = 1 << 30;
 
 fn main() -> ExitCode {
+    // --window: the window and the GPU on this thread, the game on its own.
+    #[cfg(feature = "window")]
+    if window::requested() {
+        let gpu = window::start();
+        std::thread::Builder::new()
+            .name("game".to_owned())
+            .stack_size(STACK_SIZE)
+            .spawn(|| {
+                let code = run();
+                window::exit(if code == ExitCode::SUCCESS { 0 } else { 1 });
+            })
+            .expect("start the game thread");
+        window::run(gpu);
+        return ExitCode::SUCCESS;
+    }
     std::thread::Builder::new()
         .name("game".to_owned())
         .stack_size(STACK_SIZE)
@@ -244,7 +264,8 @@ fn main() -> ExitCode {
 
 fn run() -> ExitCode {
     let mut disc_path = std::env::var("SSBM_DISC").ok();
-    let mut fields = 600;
+    // A window plays until it's closed.
+    let mut fields = if std::env::args().any(|a| a == "--window") { u64::MAX / 4 } else { 600 };
     let mut replay_path = None;
     let mut fp_mode = None;
     let mut known_path = None;
@@ -324,6 +345,7 @@ fn run() -> ExitCode {
                     _ => panic!("--fp hardware|slippi"),
                 }
             }
+            "--window" => {}
             _ => disc_path = Some(a),
         }
     }
@@ -444,6 +466,88 @@ fn run() -> ExitCode {
         sdk.schedule(hw::field_start(field), |ctx| {
             ctx.ext::<Sdk>().hw.fail_next_dvd_read(0x0002_0400);
         });
+    }
+    // GX_STREAM=FILE logs the GX command stream, a line per frame drawn, to compare two runs
+    // (tools/gx/compare.py); GX_DETAIL=N also writes frame N's commands, decoded, to FILE.N.
+    if let Ok(path) = std::env::var("GX_STREAM") {
+        let open = |p: &str| -> Box<dyn std::io::Write> {
+            let file = std::fs::File::create(p).unwrap_or_else(|e| panic!("{p}: {e}"));
+            Box::new(std::io::BufWriter::new(file))
+        };
+        let detail = std::env::var("GX_DETAIL")
+            .ok()
+            .map(|n| n.parse::<u64>().expect("GX_DETAIL=FRAME"))
+            .map(|n| (n, open(&format!("{path}.{n}"))));
+        sdk.hw.record_gx(open(&path), detail);
+    }
+    // GX_DFF=FILE records a Dolphin FIFO log for its FIFO player, of GX_DFF_FRAMES=START,COUNT
+    // frames (default 0,1).
+    if let Ok(path) = std::env::var("GX_DFF") {
+        let frames = std::env::var("GX_DFF_FRAMES").unwrap_or_else(|_| "0,1".into());
+        let (start, count) = frames.split_once(',').expect("GX_DFF_FRAMES=START,COUNT");
+        sdk.hw.record_dff(
+            path.into(),
+            start.trim().parse().expect("START"),
+            count.trim().parse().expect("COUNT"),
+        );
+    }
+    // AX=1 has the DSP mix the game's sound (ssbm-ax) rather than only answer the CPU, and
+    // AUDIO_OUT=FILE.wav records what the audio interface plays.
+    if std::env::var_os("AX").is_some_and(|v| v != "0") {
+        sdk.dev.mix_audio.set(true);
+    }
+    // AX_CHECK=1 (with the ax-check feature) also runs each command list through Dolphin's AX
+    // microcode, built from its source (tools/ax-dolphin), and reports where what it writes
+    // differs from ssbm-ax's.
+    #[cfg(feature = "ax-check")]
+    if std::env::var_os("AX_CHECK").is_some_and(|v| v != "0") {
+        sdk.dev.mix_audio.set(true);
+        let mut checker: Option<ax_dolphin::Checker> = None;
+        sdk.dev.observe_ax(Box::new(move |mem, crc, addr, size| {
+            let c = checker.get_or_insert_with(|| {
+                eprintln!("AX check: microcode {crc:08x}");
+                ax_dolphin::Checker::new(crc)
+            });
+            if let Some(diff) = c.check(mem, addr, size)
+                && c.mismatches <= 10
+            {
+                eprintln!("AX check: {diff}");
+            }
+            if c.lists % 1000 == 0 {
+                eprintln!("AX check: {} command lists, {} differ", c.lists, c.mismatches);
+            }
+        }));
+    }
+    if let Ok(path) = std::env::var("AUDIO_OUT") {
+        let mut out = wav::Wav::create(path.as_ref()).unwrap_or_else(|e| panic!("{path}: {e}"));
+        sdk.hw.set_audio_out(Box::new(move |block| out.push(block).expect("writing AUDIO_OUT")));
+    }
+    // --window (with the window feature) plays in a window, with controllers and sound.
+    #[cfg(feature = "window")]
+    if window::requested() {
+        window::install(&sdk, replay_path.is_none());
+    }
+    // GX_RENDER=DIR draws the GPU's command stream (ssbm-render) and saves each frame there.
+    // GX_RENDER=- draws them and keeps none, to time the renderer.
+    if std::env::var("GX_RENDER").is_ok_and(|d| d == "-") {
+        let renderer = ssbm_render::Renderer::new().expect("GX_RENDER needs a GPU");
+        sdk.hw.set_renderer(Box::new(renderer));
+    } else if let Ok(dir) = std::env::var("GX_RENDER") {
+        let dir = std::path::PathBuf::from(dir);
+        std::fs::create_dir_all(&dir).unwrap_or_else(|e| panic!("{}: {e}", dir.display()));
+        let mut renderer = ssbm_render::Renderer::new().expect("GX_RENDER needs a GPU");
+        let mut n = 0u64;
+        renderer.on_frame(move |frame| {
+            n += 1;
+            let path = dir.join(format!("frame_{n}.png"));
+            frame.save_png(&path).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
+        });
+        sdk.hw.set_renderer(Box::new(renderer));
+    }
+    // GX_TRACE_BP=E0,64 prints each write of those BP registers with the ports making it.
+    if let Ok(regs) = std::env::var("GX_TRACE_BP") {
+        let regs = regs.split(',').map(|r| u8::from_str_radix(r.trim(), 16).expect("GX_TRACE_BP=E0,64"));
+        sdk.hw.trace_bp(regs.collect());
     }
     // UNLOCK_ALL=1 unlocks every character, stage and trophy once the main menu comes up, and
     // MENU=KIND,SELECTION opens it on that menu (MenuKind) with that item under the cursor.

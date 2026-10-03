@@ -1,6 +1,6 @@
 # ssbm-rs
 
-Super Smash Bros. Melee (NTSC 1.02, GALE01 rev 2) ported to Rust, function by function from the melee decomp, and checked against the original game in lockstep. The plan, with its phases and milestones, is the Claude Docs artifact https://claude.ai/code/artifact/341d5fed-6bcb-4070-89e3-c0e1276f0816; Phase 3's progress is on the coverage map https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb. The current work is the Phase 3 gate (milestone 3b): see `tools/lockstep/campaign/README.md`.
+Super Smash Bros. Melee (NTSC 1.02, GALE01 rev 2) ported to Rust, function by function from the melee decomp, and checked against the original game in lockstep. The plan, with its phases and milestones, is the Claude Docs artifact https://claude.ai/code/artifact/341d5fed-6bcb-4070-89e3-c0e1276f0816; Phase 3's progress is on the coverage map https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb. The current work is the Phase 3 gate (milestone 3b): see `tools/lockstep/campaign/README.md`. The renderer and audio track (the ladder's Graphics and Audio levels) goes on in parallel on its own branch; its progress is on https://claude.ai/artifact/Ppx3oVXq7qbkRck8tvcrZ4, and its tools in `tools/gx/README.md`.
 
 ## Rules
 

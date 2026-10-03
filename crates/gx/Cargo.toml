@@ -1,0 +1,10 @@
+[package]
+name = "ssbm-gx"
+description = "The GameCube GPU's command stream and register state, for the SDK layer and the renderer"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
