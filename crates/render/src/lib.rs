@@ -7,8 +7,14 @@
 //! textures decoded on the CPU by hand. Copies to the XFB come back as frames, through the
 //! XFB's YUV encoding as Dolphin's software renderer makes it.
 
+mod copy;
+#[cfg(test)]
+mod copy_tests;
 mod encode;
+mod thread;
 mod xfb;
+
+pub use thread::Threaded;
 
 use std::collections::HashMap;
 
@@ -100,7 +106,10 @@ struct TexKey {
 pub struct Frame {
     pub width: u32,
     pub height: u32,
+    /// The pixels, unless the frame stayed on the GPU (`xfb_on_gpu` without `xfb_readback`).
     pub rgba: Vec<u8>,
+    /// The frame on the GPU, with `xfb_on_gpu`.
+    pub texture: Option<wgpu::Texture>,
 }
 
 impl Frame {
@@ -178,10 +187,22 @@ pub struct Renderer {
     hashes: HashMap<(u32, u32), u64>,
     /// What copies from the EFB to textures wrote, by address: memory as the GPU then reads it.
     copies: Vec<(u32, Vec<u8>)>,
+    /// Copies from the EFB kept on the GPU instead, by the address they copied to.
+    copier: copy::Copier,
+    gpu_copies: HashMap<u32, copy::Copied>,
+    /// Where copies went, to forget those the game writes over (copy::Footprints), when this
+    /// renderer reads the game's memory itself (`track_copies`); a threaded one is told.
+    footprints: copy::Footprints,
+    pub(crate) track_copies: bool,
+    /// Copy addresses sampled another way than copied, whose copies are encoded into memory.
+    on_cpu: std::collections::HashSet<u32>,
     normals: vertex::NormalCache,
+    inputs: Vec<vertex::Input>,
+    outs: Vec<Output>,
+    screens: Vec<[f32; 3]>,
     frame: u64,
     frames: Vec<Frame>,
-    on_frame: Option<Box<dyn FnMut(Frame)>>,
+    on_frame: Option<Box<dyn FnMut(Frame) + Send>>,
     pub unsupported: Unsupported,
     /// Prints each draw of the first frame, for debugging.
     pub trace: bool,
@@ -193,7 +214,35 @@ pub struct Renderer {
     pub draw_limit: Option<u64>,
     /// Where the time goes, when profiling (GX_PROFILE).
     profile: Option<Profile>,
+    /// Copies to the XFB on the GPU, leaving each frame there, rather than reading the EFB back
+    /// and copying on the CPU as Dolphin's software renderer does; `xfb_readback` reads each
+    /// frame back too.
+    pub xfb_on_gpu: bool,
+    pub xfb_readback: bool,
+    gpu_xfb: Option<xfb::GpuXfb>,
     draws_this_frame: u64,
+}
+
+/// The texture maps a draw's TEV and indirect stages read.
+fn texture_maps(state: &State) -> impl Iterator<Item = usize> + '_ {
+    let genmode = state.bp[0x00];
+    let tev = (0..=bits(genmode, 10, 4)).filter_map(move |n| {
+        let order = state.bp[0x28 + (n as usize >> 1)];
+        let shift = (n & 1) * 12;
+        (bits(order, shift + 6, 1) != 0).then(|| bits(order, shift, 3) as usize)
+    });
+    let indirect = (0..bits(genmode, 16, 3)).map(move |i| bits(state.bp[0x27], 6 * i, 3) as usize);
+    tev.chain(indirect)
+}
+
+/// The image texture map `map` samples, with no more levels than its size has.
+fn sampled_image(state: &State, map: usize) -> Image {
+    let image = Image::of(&state.bp, map);
+    let max_levels = 32 - image.width.max(image.height).leading_zeros();
+    Image {
+        levels: image.levels.clamp(1, max_levels),
+        ..image
+    }
 }
 
 /// A fast hash of bytes, for telling textures apart.
@@ -368,8 +417,10 @@ impl Renderer {
             bind_group_layouts: &[Some(&uniform_layout), Some(&texture_layout)],
             immediate_size: 0,
         });
+        let efb_view = efb.create_view(&Default::default());
+        let copier = copy::Copier::new(&device, &efb_view);
         let mut r = Renderer {
-            efb_view: efb.create_view(&Default::default()),
+            efb_view,
             depth_view: depth.create_view(&Default::default()),
             efb,
             device,
@@ -389,7 +440,15 @@ impl Renderer {
             bind_groups: HashMap::new(),
             hashes: HashMap::new(),
             copies: Vec::new(),
+            copier,
+            gpu_copies: HashMap::new(),
+            footprints: copy::Footprints::default(),
+            track_copies: true,
+            on_cpu: Default::default(),
             normals: [[0.0; 3]; 3],
+            inputs: Vec::new(),
+            outs: Vec::new(),
+            screens: Vec::new(),
             frame: 0,
             frames: Vec::new(),
             on_frame: None,
@@ -398,6 +457,9 @@ impl Renderer {
             opaque: false,
             draw_limit: None,
             profile: std::env::var_os("GX_PROFILE").map(|_| Profile::default()),
+            xfb_on_gpu: false,
+            xfb_readback: false,
+            gpu_xfb: None,
             draws_this_frame: 0,
             unsupported: HashMap::new(),
         };
@@ -415,7 +477,7 @@ impl Renderer {
     }
 
     /// Hands each frame to `f` as it's finished, instead of keeping it for `take_frames`.
-    pub fn on_frame(&mut self, f: impl FnMut(Frame) + 'static) {
+    pub fn on_frame(&mut self, f: impl FnMut(Frame) + Send + 'static) {
         self.on_frame = Some(Box::new(f));
     }
 
@@ -474,10 +536,15 @@ impl Renderer {
                 },
             );
         }
+        self.insert_texture(texture, mip_count)
+    }
+
+    /// Gives `texture` an id, reusing a free one.
+    fn insert_texture(&mut self, texture: wgpu::Texture, levels: u32) -> u32 {
         let entry = TexEntry {
             view: texture.create_view(&Default::default()),
             _texture: texture,
-            levels: mip_count,
+            levels,
             last_used: self.frame,
         };
         let free = self
@@ -535,16 +602,30 @@ impl Renderer {
     }
 
     fn texture_uncached(&mut self, state: &State, map: usize, mem: &dyn Memory) -> (u32, u32) {
-        let image = Image::of(&state.bp, map);
+        let image = sampled_image(state, map);
         let tlut_reg = state.bp[texture::reg(texture::SETTLUT, map)];
         let tlut_offset = ((tlut_reg & 0x3FF) << 9) as usize;
         let tlut_format = bits(tlut_reg, 10, 2);
-        let max_levels = 32 - image.width.max(image.height).leading_zeros();
-        let image = Image {
-            levels: image.levels.clamp(1, max_levels),
-            ..image
-        };
         let size = image.size();
+        // A copy the game has written over since is gone, even within the frame.
+        if self.track_copies
+            && let Some((start, end)) = self.footprints.take_if_overwritten(image.address, mem)
+        {
+            self.forget(start, end);
+        }
+        if let Some(c) = self.gpu_copies.get(&image.address) {
+            if (c.format, c.width, c.height, image.levels)
+                == (image.format, image.width, image.height, 1)
+                && let Some(Some(entry)) = self.textures.get_mut(c.id as usize)
+            {
+                entry.last_used = self.frame;
+                return (c.id, 1);
+            }
+            // Sampled some other way: from now on, its bytes as the encoder would have
+            // written them.
+            self.note("EFB copy read back to sample it another way");
+            self.materialize(image.address);
+        }
         let mut hash = self.hash_memory(mem, image.address, size);
         let tlut = state.tmem.get(tlut_offset..).unwrap_or(&[]);
         if let Some(entries) = texture::palette_entries(image.format) {
@@ -673,7 +754,7 @@ impl Renderer {
 
     /// The scissor rectangle in the EFB, cut to the viewport (which the GameCube clips to), and
     /// the scissor's offset.
-    fn scissor(state: &State, vp: &Viewport) -> ([u32; 4], (f32, f32)) {
+    pub(crate) fn scissor(state: &State, vp: &Viewport) -> ([u32; 4], (f32, f32)) {
         let tl = state.bp[0x20];
         let br = state.bp[0x21];
         let off = state.bp[0x59];
@@ -1031,6 +1112,140 @@ impl Renderer {
         data
     }
 
+    /// Makes a copy from the EFB into a texture of its own, on the GPU.
+    fn gpu_copy(&mut self, r: &copy::Request) {
+        let address = r.footprint.address;
+        let reuse = self.gpu_copies.get(&address).and_then(|c| {
+            ((c.format, c.width, c.height) == (r.format, r.width, r.height)
+                && matches!(self.textures.get(c.id as usize), Some(Some(_))))
+            .then_some(c.id)
+        });
+        let id = match reuse {
+            Some(id) => {
+                if let Some(c) = self.gpu_copies.get_mut(&address) {
+                    c.footprint = r.footprint;
+                }
+                id
+            }
+            None => {
+                let texture = self.device.create_texture(&wgpu::TextureDescriptor {
+                    label: Some("efb copy"),
+                    size: wgpu::Extent3d {
+                        width: r.width,
+                        height: r.height,
+                        depth_or_array_layers: 1,
+                    },
+                    mip_level_count: 1,
+                    sample_count: 1,
+                    dimension: wgpu::TextureDimension::D2,
+                    format: wgpu::TextureFormat::Rgba8Uint,
+                    usage: wgpu::TextureUsages::TEXTURE_BINDING
+                        | wgpu::TextureUsages::RENDER_ATTACHMENT
+                        | wgpu::TextureUsages::COPY_SRC,
+                    view_formats: &[],
+                });
+                let id = self.insert_texture(texture, 1);
+                self.gpu_copies.insert(
+                    address,
+                    copy::Copied {
+                        id,
+                        format: r.format,
+                        width: r.width,
+                        height: r.height,
+                        footprint: r.footprint,
+                    },
+                );
+                id
+            }
+        };
+        let entry = self.textures[id as usize].as_mut().expect("copy texture");
+        entry.last_used = self.frame;
+        self.copier
+            .copy(&self.device, &self.queue, &entry.view, r);
+        // What earlier copies read back left in memory there is gone.
+        let f = r.footprint;
+        let before = self.copies.len();
+        for row in 0..f.rows {
+            let at = (f.address + row * f.stride) & 0x01FF_FFFF;
+            let end = u64::from(at) + u64::from(f.row_bytes);
+            self.copies
+                .retain(|(a, b)| !(*a >= at && *a as u64 + b.len() as u64 <= end));
+        }
+        if self.copies.len() != before {
+            self.hashes.clear();
+        }
+    }
+
+    /// Reads a copy kept on the GPU back and keeps its bytes as the encoder would have written
+    /// them to memory, for a texture that samples it in another format or size.
+    fn materialize(&mut self, address: u32) {
+        let Some(c) = self.gpu_copies.remove(&address) else {
+            return;
+        };
+        // Its later copies go to memory too, rather than back and forth.
+        self.on_cpu.insert(address);
+        let Some(Some(entry)) = self.textures.get(c.id as usize) else {
+            return;
+        };
+        let texels = self.read_texture(&entry._texture, c.width, c.height);
+        for (at, row) in copy::encode_texels(&c, &texels) {
+            let end = u64::from(at) + row.len() as u64;
+            self.copies
+                .retain(|(a, b)| !(*a >= at && *a as u64 + b.len() as u64 <= end));
+            self.copies.push((at, row));
+        }
+        self.hashes.clear();
+    }
+
+    /// Forgets what copies left in `start..end`, which the game has written over since.
+    pub(crate) fn forget(&mut self, start: u32, end: u32) {
+        self.gpu_copies.retain(|&a, _| !(start..end).contains(&a));
+        self.on_cpu.retain(|a| !(start..end).contains(a));
+        let (start, end) = (start & 0x01FF_FFFF, end & 0x01FF_FFFF);
+        self.copies
+            .retain(|(a, b)| *a as usize + b.len() <= start as usize || *a >= end);
+        self.hashes.clear();
+    }
+
+    /// An RGBA8 texture's pixels, read back.
+    fn read_texture(&self, texture: &wgpu::Texture, width: u32, height: u32) -> Vec<u8> {
+        let row = width * 4;
+        let padded = row.next_multiple_of(wgpu::COPY_BYTES_PER_ROW_ALIGNMENT);
+        let buffer = self.device.create_buffer(&wgpu::BufferDescriptor {
+            label: Some("frame readback"),
+            size: u64::from(padded * height),
+            usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::MAP_READ,
+            mapped_at_creation: false,
+        });
+        let mut encoder = self.device.create_command_encoder(&Default::default());
+        encoder.copy_texture_to_buffer(
+            texture.as_image_copy(),
+            wgpu::TexelCopyBufferInfo {
+                buffer: &buffer,
+                layout: wgpu::TexelCopyBufferLayout {
+                    offset: 0,
+                    bytes_per_row: Some(padded),
+                    rows_per_image: Some(height),
+                },
+            },
+            texture.size(),
+        );
+        self.queue.submit([encoder.finish()]);
+        let slice = buffer.slice(..);
+        slice.map_async(wgpu::MapMode::Read, |_| {});
+        self.device
+            .poll(wgpu::PollType::wait_indefinitely())
+            .expect("GPU readback");
+        let data = slice.get_mapped_range().expect("mapped readback");
+        let mut rgba = Vec::with_capacity((row * height) as usize);
+        for r in data.chunks(padded as usize) {
+            rgba.extend_from_slice(&r[..row as usize]);
+        }
+        drop(data);
+        buffer.unmap();
+        rgba
+    }
+
     /// The FIFO player's clear before a log's first frame: all of the EFB.
     pub fn clear_efb(&mut self, state: &State) {
         self.clear(state, [0, 0, EFB_WIDTH, EFB_HEIGHT]);
@@ -1048,6 +1263,8 @@ impl Renderer {
         }
         if dropped {
             let textures = &self.textures;
+            self.gpu_copies
+                .retain(|_, c| textures[c.id as usize].is_some());
             self.texture_ids
                 .retain(|_, id| textures[*id as usize].is_some());
             self.bind_groups
@@ -1070,36 +1287,89 @@ impl Sink for Renderer {
     }
 }
 
+/// Decodes a draw's vertices into `inputs` and, unless its scissor leaves nothing to draw,
+/// transforms them into `outs`; returns whether it did. `normals` carries over between draws,
+/// so every draw decodes, in order.
+pub(crate) fn prepare(
+    state: &State,
+    draw: &Draw<'_>,
+    normals: &mut vertex::NormalCache,
+    inputs: &mut Vec<vertex::Input>,
+    outs: &mut Vec<Output>,
+) -> bool {
+    let xf_index = [state.xf[xform::MATINDEX_A], state.xf[xform::MATINDEX_A + 1]];
+    inputs.clear();
+    vertex::decode(
+        &state.cp,
+        xf_index,
+        usize::from(draw.vat),
+        draw.data,
+        usize::from(draw.count),
+        normals,
+        inputs,
+    );
+    let (scissor, _) = Renderer::scissor(state, &Viewport::of(&state.xf));
+    if scissor[2] == 0 || scissor[3] == 0 {
+        return false;
+    }
+    outs.clear();
+    outs.extend(
+        inputs
+            .iter()
+            .map(|v| xform::transform(&state.xf, &state.bp, v)),
+    );
+    true
+}
+
 impl Renderer {
+    /// Draws `draw`, its vertices already transformed into `outs` (by `prepare`), or nothing
+    /// if its scissor leaves nothing.
+    pub(crate) fn draw_prepared(
+        &mut self,
+        state: &State,
+        draw: &Draw<'_>,
+        outs: Option<&[Output]>,
+        mem: &dyn Memory,
+    ) {
+        let t = std::time::Instant::now();
+        self.draws_this_frame += 1;
+        if let Some(outs) = outs {
+            self.draw_outs(state, draw, outs, mem);
+        }
+        if let Some(p) = &mut self.profile {
+            p.draw += t.elapsed();
+        }
+    }
+
     fn draw_timed(&mut self, state: &State, draw: &Draw<'_>, mem: &dyn Memory) {
         self.draws_this_frame += 1;
         if self.draw_limit.is_some_and(|n| self.draws_this_frame > n) {
             return;
         }
-        let count = usize::from(draw.count);
-        let xf_index = [state.xf[xform::MATINDEX_A], state.xf[xform::MATINDEX_A + 1]];
-        let inputs = vertex::decode(
-            &state.cp,
-            xf_index,
-            usize::from(draw.vat),
-            draw.data,
-            count,
-            &mut self.normals,
-        );
-        let vp = Viewport::of(&state.xf);
-        let (scissor, off) = Self::scissor(state, &vp);
-        if scissor[2] == 0 || scissor[3] == 0 {
-            return;
-        }
+        // The draw's vertices, decoded and transformed, in buffers kept from draw to draw.
         let t = std::time::Instant::now();
-        let outs: Vec<Output> = inputs
-            .iter()
-            .map(|v| xform::transform(&state.xf, &state.bp, v))
-            .collect();
+        let (mut inputs, mut outs) = (
+            std::mem::take(&mut self.inputs),
+            std::mem::take(&mut self.outs),
+        );
+        let drawn = prepare(state, draw, &mut self.normals, &mut inputs, &mut outs);
         if let Some(p) = &mut self.profile {
             p.xform += t.elapsed();
         }
-        let screens: Vec<[f32; 3]> = outs.iter().map(|o| vp.screen(o.clip)).collect();
+        if drawn {
+            self.draw_outs(state, draw, &outs, mem);
+        }
+        (self.inputs, self.outs) = (inputs, outs);
+    }
+
+    /// The rest of a draw, from its transformed vertices.
+    fn draw_outs(&mut self, state: &State, draw: &Draw<'_>, outs: &[Output], mem: &dyn Memory) {
+        let count = usize::from(draw.count);
+        let vp = Viewport::of(&state.xf);
+        let (scissor, off) = Self::scissor(state, &vp);
+        let mut screens = std::mem::take(&mut self.screens);
+        screens.clear();
+        screens.extend(outs.iter().map(|o| vp.screen(o.clip)));
         let first = self.vertices.len() as u32;
         let cull = bits(state.bp[0x00], 14, 2);
         let tri = |r: &mut Self, a: usize, b: usize, c: usize| {
@@ -1169,29 +1439,17 @@ impl Renderer {
         if self.trace && self.frame == 0 {
             trace_draw(state, draw, count, scissor, &outs[0], screens[0], mem);
         }
+        self.screens = screens;
         if count == 0 {
             return;
         }
 
-        // The texture maps the TEV and indirect stages read.
-        let genmode = state.bp[0x00];
         let mut ids = [0u32; 8];
         let mut levels = [1u32; 8];
-        let mut maps = Vec::new();
-        for n in 0..=bits(genmode, 10, 4) {
-            let order = state.bp[0x28 + (n as usize >> 1)];
-            let shift = (n & 1) * 12;
-            if bits(order, shift + 6, 1) != 0 {
-                maps.push(bits(order, shift, 3) as usize);
-            }
-        }
-        for i in 0..bits(genmode, 16, 3) {
-            maps.push(bits(state.bp[0x27], 6 * i, 3) as usize);
-        }
-        if bits(genmode, 16, 3) != 0 {
+        if bits(state.bp[0x00], 16, 3) != 0 {
             self.note("indirect texturing");
         }
-        for map in maps {
+        for map in texture_maps(state) {
             if ids[map] == 0 {
                 let (id, l) = self.texture(state, map, mem);
                 ids[map] = id;
@@ -1287,7 +1545,7 @@ impl Renderer {
         }
     }
 
-    fn copy_timed(&mut self, state: &State, value: u32, _mem: &dyn Memory) {
+    fn copy_timed(&mut self, state: &State, value: u32, mem: &dyn Memory) {
         let tl = state.bp[0x49];
         let wh = state.bp[0x4A];
         let left = bits(tl, 0, 10);
@@ -1298,9 +1556,37 @@ impl Renderer {
         self.flush();
         let t1 = std::time::Instant::now();
         if bits(value, 14, 1) != 0 {
-            let efb = self.read_efb();
-            let t2 = std::time::Instant::now();
-            let frame = xfb::copy(state, value, &efb, [left, top, right, bottom]);
+            // A frame's end: copies the game has since written over are gone.
+            if self.track_copies {
+                for (start, end) in self.footprints.take_overwritten(mem) {
+                    self.forget(start, end);
+                }
+            }
+            let rect = [left, top, right, bottom];
+            let (frame, t2) = if self.xfb_on_gpu {
+                let gpu = self
+                    .gpu_xfb
+                    .get_or_insert_with(|| xfb::GpuXfb::new(&self.device, &self.queue, &self.efb_view));
+                let (texture, width, height) =
+                    gpu.copy(&self.device, &self.queue, state, value, rect);
+                let t2 = std::time::Instant::now();
+                let rgba = if self.xfb_readback {
+                    self.read_texture(&texture, width, height)
+                } else {
+                    Vec::new()
+                };
+                let frame = Frame {
+                    width,
+                    height,
+                    rgba,
+                    texture: Some(texture),
+                };
+                (frame, t2)
+            } else {
+                let efb = self.read_efb();
+                let t2 = std::time::Instant::now();
+                (xfb::copy(state, value, &efb, rect), t2)
+            };
             if let Some(p) = &mut self.profile {
                 p.flush += t1 - t;
                 p.readback += t2 - t1;
@@ -1315,10 +1601,20 @@ impl Renderer {
             self.draws_this_frame = 0;
             self.hashes.clear();
             self.evict();
+        } else if let Some(request) = copy::request(state, value)
+            && !self.on_cpu.contains(&request.footprint.address)
+        {
+            self.gpu_copy(&request);
+            if self.track_copies {
+                self.footprints.record(request.footprint, mem);
+            }
         } else {
             let efb = self.read_efb();
             match encode::encode(state, value, &efb) {
                 Some(e) => {
+                    let end = e.address + e.rows.len() as u32 * e.stride;
+                    self.gpu_copies
+                        .retain(|&a, _| !(e.address..end).contains(&a));
                     for (i, row) in e.rows.into_iter().enumerate() {
                         let at = (e.address + i as u32 * e.stride) & 0x01FF_FFFF;
                         let end = at as u64 + row.len() as u64;
@@ -1330,6 +1626,11 @@ impl Renderer {
                     self.hashes.clear();
                 }
                 None => self.note("EFB copy to a texture in a format not encoded"),
+            }
+            if self.track_copies
+                && let Some(f) = copy::footprint(state, value)
+            {
+                self.footprints.record(f, mem);
             }
         }
         if bits(value, 11, 1) != 0 {

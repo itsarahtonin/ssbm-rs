@@ -20,6 +20,11 @@
 //!
 //! For debugging, `LOCKSTEP_TRACE` shows the jumps original code made before a panic inside a
 //! lockstep check, and `STUCK_TRACE` the ports running at each heartbeat of a stall.
+//!
+//! The `player` feature builds it for players (player.rs): double-clicked, it plays in a window.
+
+// The player's build is a Windows app, without a console.
+#![cfg_attr(feature = "player", windows_subsystem = "windows")]
 
 use std::cell::{Cell, RefCell};
 use std::collections::HashMap;
@@ -39,6 +44,8 @@ mod probe;
 mod wav;
 #[cfg(feature = "window")]
 mod adapter;
+#[cfg(feature = "player")]
+mod player;
 #[cfg(feature = "window")]
 mod window;
 
@@ -237,7 +244,18 @@ const READ_ONLY: [(u32, u32); 2] = [(0x803B_7240, 0x803B_9840), (0x804D_79E0, 0x
 /// lockstep checks make them deep.
 const STACK_SIZE: usize = 1 << 30;
 
+static ARGS: std::sync::OnceLock<Vec<String>> = std::sync::OnceLock::new();
+
+/// The command line, or in the player's build what a double-click means.
+fn args() -> &'static [String] {
+    ARGS.get_or_init(|| std::env::args().collect())
+}
+
 fn main() -> ExitCode {
+    #[cfg(feature = "player")]
+    if let Some(args) = player::args() {
+        let _ = ARGS.set(args);
+    }
     // --window: the window and the GPU on this thread, the game on its own.
     #[cfg(feature = "window")]
     if window::requested() {
@@ -265,7 +283,7 @@ fn main() -> ExitCode {
 fn run() -> ExitCode {
     let mut disc_path = std::env::var("SSBM_DISC").ok();
     // A window plays until it's closed.
-    let mut fields = if std::env::args().any(|a| a == "--window") { u64::MAX / 4 } else { 600 };
+    let mut fields = if args().iter().any(|a| a == "--window") { u64::MAX / 4 } else { 600 };
     let mut replay_path = None;
     let mut fp_mode = None;
     let mut known_path = None;
@@ -280,7 +298,7 @@ fn run() -> ExitCode {
     let mut call_path: Option<std::path::PathBuf> = None;
     let mut corpus_path: Option<std::path::PathBuf> = None;
     let mut repeat = 1u32;
-    let mut args = std::env::args().skip(1);
+    let mut args = crate::args().iter().cloned().skip(1);
     while let Some(a) = args.next() {
         match a.as_str() {
             "--fields" => {
@@ -348,6 +366,13 @@ fn run() -> ExitCode {
             "--window" => {}
             _ => disc_path = Some(a),
         }
+    }
+    // A window is for playing, so the ports run the game unless --port says otherwise
+    // (--port -all keeps the original code).
+    #[cfg(feature = "window")]
+    if window::requested() && ports.is_empty() {
+        eprintln!("window: the Rust ports run the game (--port -all for the original code)");
+        ports.push("all".to_owned());
     }
     let Some(disc_path) = disc_path else {
         eprintln!(
@@ -522,27 +547,52 @@ fn run() -> ExitCode {
         let mut out = wav::Wav::create(path.as_ref()).unwrap_or_else(|e| panic!("{path}: {e}"));
         sdk.hw.set_audio_out(Box::new(move |block| out.push(block).expect("writing AUDIO_OUT")));
     }
+    // DISC_RATE=N reads the disc at N bytes a second, as a drive does (a window reads at a
+    // drive's rate), rather than at Slippi's fast disc speed (Hw::set_disc_rate).
+    if let Some(rate) = std::env::var("DISC_RATE")
+        .ok()
+        .and_then(|r| r.parse().ok())
+        .filter(|&r: &u64| r > 0)
+    {
+        sdk.hw.set_disc_rate(Some(rate));
+    }
     // --window (with the window feature) plays in a window, with controllers and sound.
     #[cfg(feature = "window")]
     if window::requested() {
         window::install(&sdk, replay_path.is_none());
     }
     // GX_RENDER=DIR draws the GPU's command stream (ssbm-render) and saves each frame there.
-    // GX_RENDER=- draws them and keeps none, to time the renderer.
+    // GX_RENDER=- draws them and keeps none, to time the renderer. GX_GPU_XFB=1 copies frames
+    // to the XFB on the GPU, as a window does, rather than as Dolphin's software renderer does;
+    // GX_THREADED=1 draws on a thread of its own, as a window does.
+    let gpu_xfb = std::env::var_os("GX_GPU_XFB").is_some();
+    let set_renderer = |renderer: ssbm_render::Renderer| {
+        if std::env::var_os("GX_THREADED").is_some() {
+            sdk.hw
+                .set_renderer(Box::new(ssbm_render::Threaded::spawn(renderer)));
+        } else {
+            sdk.hw.set_renderer(Box::new(renderer));
+        }
+    };
     if std::env::var("GX_RENDER").is_ok_and(|d| d == "-") {
-        let renderer = ssbm_render::Renderer::new().expect("GX_RENDER needs a GPU");
-        sdk.hw.set_renderer(Box::new(renderer));
+        let mut renderer = ssbm_render::Renderer::new().expect("GX_RENDER needs a GPU");
+        renderer.xfb_on_gpu = gpu_xfb;
+        // Without a taker, the renderer would keep every frame.
+        renderer.on_frame(drop);
+        set_renderer(renderer);
     } else if let Ok(dir) = std::env::var("GX_RENDER") {
         let dir = std::path::PathBuf::from(dir);
         std::fs::create_dir_all(&dir).unwrap_or_else(|e| panic!("{}: {e}", dir.display()));
         let mut renderer = ssbm_render::Renderer::new().expect("GX_RENDER needs a GPU");
+        renderer.xfb_on_gpu = gpu_xfb;
+        renderer.xfb_readback = gpu_xfb;
         let mut n = 0u64;
         renderer.on_frame(move |frame| {
             n += 1;
             let path = dir.join(format!("frame_{n}.png"));
             frame.save_png(&path).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
         });
-        sdk.hw.set_renderer(Box::new(renderer));
+        set_renderer(renderer);
     }
     // GX_TRACE_BP=E0,64 prints each write of those BP registers with the ports making it.
     if let Ok(regs) = std::env::var("GX_TRACE_BP") {
@@ -1477,6 +1527,8 @@ fn run() -> ExitCode {
             eprintln!("{line}");
         }
     }
+    sdk.hw.finish_renderer();
+    ssbm_sdk::flush_cards();
     eprintln!(
         "{} fields, {} M instructions, {} draws",
         sdk.hw.fields.get(),

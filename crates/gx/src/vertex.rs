@@ -306,7 +306,8 @@ pub fn decode(
     data: &[u8],
     count: usize,
     normals: &mut NormalCache,
-) -> Vec<Input> {
+    out: &mut Vec<Input>,
+) {
     let lo = cp[VCD_LO as usize];
     let hi = cp[VCD_HI as usize];
     let a = cp[VAT_A as usize + vat];
@@ -327,7 +328,7 @@ pub fn decode(
     let nbt = bits(a, 9, 1) != 0;
     let has_nrm = bits(lo, 11, 2) != 0;
     let (has_col0, has_col1) = (bits(lo, 13, 2) != 0, bits(lo, 15, 2) != 0);
-    let mut out = Vec::with_capacity(count);
+    out.reserve(count);
     let mut at = 0;
     for _ in 0..count {
         let mut v = Input {
@@ -391,5 +392,4 @@ pub fn decode(
         }
         out.push(v);
     }
-    out
 }

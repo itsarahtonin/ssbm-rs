@@ -12,6 +12,7 @@ use std::collections::HashMap;
 use std::fmt;
 use std::rc::Rc;
 
+use rustc_hash::FxHashMap;
 pub use ssbm_mem::{MEM1_SIZE, Mem, PAGE_SIZE, Pages};
 
 mod call;
@@ -153,18 +154,18 @@ pub const RETURN_SENTINEL: u32 = 0xFFFF_FFF0;
 pub struct Ctx {
     pub mem: Mem,
     pub regs: Regs,
-    dispatch: RefCell<HashMap<u32, Entry>>,
+    dispatch: RefCell<FxHashMap<u32, Entry>>,
     backend: OnceCell<Box<dyn Backend>>,
     mmio: OnceCell<Box<dyn Mmio>>,
     names: OnceCell<Box<dyn Fn(u32) -> Option<String>>>,
-    hooks: RefCell<HashMap<u32, Hook>>,
+    hooks: RefCell<FxHashMap<u32, Hook>>,
     /// When the hooks set with `set_hook_unless` do nothing.
-    hook_skips: RefCell<HashMap<u32, HookSkip>>,
+    hook_skips: RefCell<FxHashMap<u32, HookSkip>>,
     /// Per MEM1 word: `FLAG_NATIVE` and `FLAG_HOOK`, so the interpreter checks cheaply.
     flags: Box<[Cell<u8>]>,
     pub lockstep: lockstep::State,
     /// Per-machine state of layers above the runtime, such as the SDK layer, by type.
-    ext: RefCell<HashMap<TypeId, Rc<dyn Any>>>,
+    ext: RefCell<FxHashMap<TypeId, Rc<dyn Any>>>,
     /// Called by the interpreter every `HEARTBEAT` instructions with the current PC.
     heartbeat: RefCell<Option<Heartbeat>>,
     /// Called when interrupts are enabled or time passes, so pending ones can be taken.
@@ -870,7 +871,15 @@ impl Ctx {
 
     /// `memmove` within emulated memory.
     pub fn copy(&self, dst: u32, src: u32, n: u32) {
-        let mut buf = vec![0; n as usize];
+        // Most copies are of small structs, which needn't allocate.
+        let mut small = [0; 256];
+        let mut large = Vec::new();
+        let buf = if n as usize <= small.len() {
+            &mut small[..n as usize]
+        } else {
+            large.resize(n as usize, 0);
+            &mut large[..]
+        };
         for (i, b) in buf.iter_mut().enumerate() {
             *b = self.read_u8(src.wrapping_add(i as u32));
         }

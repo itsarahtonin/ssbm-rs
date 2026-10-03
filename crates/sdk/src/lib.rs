@@ -25,7 +25,7 @@ use ssbm_rt::{Ctx, MSR_EE};
 
 pub mod boot;
 mod card;
-pub use card::Card;
+pub use card::{Card, flush_cards, formatted as formatted_card};
 mod devices;
 pub use devices::PadStatus;
 mod gp;
@@ -305,7 +305,7 @@ pub fn install(ctx: &Ctx, disc: Disc, card: Option<Card>) -> Rc<Sdk> {
     let mut sdk = Sdk::new(disc);
     sdk.hw.card = card;
     let sdk = ctx.set_ext(sdk);
-    ctx.set_mmio(Box::new(hw::Mmio));
+    ctx.set_mmio(Box::new(hw::Mmio(Rc::downgrade(&sdk))));
     os::install(ctx, sdk.hw.card.is_some());
     devices::install(ctx, sdk.hw.card.is_some());
     hw::install(ctx);

@@ -11,7 +11,7 @@
 //! back in.
 
 use std::cell::{Cell, RefCell};
-use std::rc::Rc;
+use std::rc::{Rc, Weak};
 
 use ssbm_rt::Ctx;
 
@@ -92,7 +92,8 @@ const PE_FINISH_INT: u16 = 8;
 
 /// Time base ticks that pass per register read.
 const MMIO_READ_STEP: u64 = 8;
-/// Time from starting a DVD command to its interrupt. Slippi runs with fast disc speed.
+/// Time from starting a DVD command to its interrupt, plus a read's transfer time at the disc
+/// rate if one is set (`set_disc_rate`). Slippi runs with fast disc speed.
 const DVD_LATENCY: u64 = TB_HZ / 2000;
 /// NTSC lines per frame, and the half-line width VCT/HCT count in.
 const VI_LINES: u64 = 525;
@@ -103,15 +104,23 @@ pub fn field_start(n: u64) -> u64 {
     (u128::from(n) * u128::from(TB_HZ) * 1001 / 60_000) as u64
 }
 
-pub(crate) struct Mmio;
+/// The device registers, with the SDK layer they belong to: every GX command the game sends
+/// is a write here, so it doesn't look the layer up in the context each time.
+pub(crate) struct Mmio(pub(crate) Weak<Sdk>);
+
+impl Mmio {
+    fn sdk(&self) -> Rc<Sdk> {
+        self.0.upgrade().expect("the SDK layer outlives its context's MMIO")
+    }
+}
 
 impl ssbm_rt::Mmio for Mmio {
     fn read(&self, ctx: &Ctx, addr: u32, size: u32) -> u32 {
-        ctx.ext::<Sdk>().hw.read(ctx, addr, size)
+        self.sdk().hw.read(ctx, addr, size)
     }
 
     fn write(&self, ctx: &Ctx, addr: u32, size: u32, value: u32) {
-        let sdk = ctx.ext::<Sdk>();
+        let sdk = self.sdk();
         sdk.hw.write(ctx, &sdk, addr, size, value);
     }
 }
@@ -148,6 +157,8 @@ pub struct Hw {
     dvd_fail_next: Cell<Option<u32>>,
     /// Whether the disc cover is open: DICVR's low bit, which writes don't change.
     dvd_cover_open: Cell<bool>,
+    /// Bytes a second disc reads transfer at, if not at once (`set_disc_rate`).
+    disc_rate: Cell<Option<u64>>,
 }
 
 impl Default for Hw {
@@ -176,6 +187,7 @@ impl Default for Hw {
             dvd_error: Cell::new(0),
             dvd_fail_next: Cell::new(None),
             dvd_cover_open: Cell::new(false),
+            disc_rate: Cell::new(None),
         };
         hw.set32(PI_FLIPPER_REV, 0x2465_00B1);
         hw
@@ -223,6 +235,11 @@ impl Hw {
     /// Prints who writes the BP registers `regs` to the pipe, and the frame (diagnostics).
     pub fn trace_bp(&self, regs: Vec<u8>) {
         *self.trace_bp.borrow_mut() = regs;
+    }
+
+    /// Lets the renderer finish what it was given, at the end of a run.
+    pub fn finish_renderer(&self) {
+        self.gp.borrow_mut().finish();
     }
 
     /// Commands the GP has run, for diagnostics.
@@ -477,7 +494,9 @@ impl Hw {
         let mut pipe = self.pipe.borrow_mut();
         pipe.extend_from_slice(&value.to_be_bytes()[(4 - size) as usize..]);
         while pipe.len() >= 32 {
-            let burst: Vec<u8> = pipe.drain(..32).collect();
+            let mut burst = [0; 32];
+            burst.copy_from_slice(&pipe[..32]);
+            pipe.drain(..32);
             self.burst(ctx, sdk, &burst);
         }
     }
@@ -557,7 +576,11 @@ impl Hw {
         ];
         let mar = self.get32(DI_MAR) & 0x03FF_FFE0;
         let len = self.get32(DI_LENGTH);
-        sdk.after(ctx, DVD_LATENCY, move |ctx| {
+        let transfer = match self.disc_rate.get() {
+            Some(rate) if cmd[0] >> 24 == 0xA8 => u64::from(len) * TB_HZ / rate,
+            _ => 0,
+        };
+        sdk.after(ctx, DVD_LATENCY + transfer, move |ctx| {
             let sdk = ctx.ext::<Sdk>();
             let hw = &sdk.hw;
             let dma = |data: &[u8]| {
@@ -634,6 +657,18 @@ impl Hw {
         if cvr & 2 != 0 {
             ctx.ext::<Sdk>().raise(ctx, irq::PI_DI);
         }
+    }
+
+    /// Gives disc reads a transfer time at `rate` bytes a second, on top of each command's
+    /// latency, as a drive takes; `None` (the default) finishes each command in that latency,
+    /// as Slippi's fast disc nearly does. The game's music needs a drive's pace: HSD starts a
+    /// stream with AXSetVoiceAddr, which carries its loop flag, and sets the stream's addresses
+    /// after five more reads (0x20 bytes, then four of 0x4000). If both land within one 5 ms AX
+    /// frame, the SDK's __AXSyncPBs copies only the addresses to the DSP, the stale loop flag
+    /// stops the voice at the end of its first buffer, and the song cuts out 1.8 s in. Those
+    /// reads must take longer than a frame: any rate under about 13 MB/s does it.
+    pub fn set_disc_rate(&self, rate: Option<u64>) {
+        self.disc_rate.set(rate);
     }
 
     /// Fails the next data read with `error`, as a drive that can't go on reports: 0x00020400
