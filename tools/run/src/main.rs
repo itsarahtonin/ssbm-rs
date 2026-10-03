@@ -1063,6 +1063,8 @@ fn run() -> ExitCode {
             .chunks_exact(8)
             .map(|b| u64::from_le_bytes(b.try_into().unwrap()))
             .collect();
+        // Calls are saved, and kept as fuzzing goes, for code beyond it.
+        ctx.coverage.set_baseline(known.clone());
         let stale = std::env::var("LOCKSTEP_STALE")
             .ok()
             .map(|n| n.parse::<u64>().expect("LOCKSTEP_STALE=N"));

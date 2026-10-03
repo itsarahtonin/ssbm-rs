@@ -228,6 +228,10 @@ pub struct State {
     pub directed: Cell<bool>,
     /// In a directed check, which of its target's places and values it takes.
     exact: Cell<Option<u64>>,
+    /// Whether the next outermost check, though itself mutated (its call a state a mutated
+    /// check started from), gets mutated checks of its own, as fuzzing that keeps the inputs
+    /// reaching new code mutates them further.
+    pub reseeding: Cell<bool>,
     /// The blocks, as `[lo, hi)` address ranges, that each function still needs verified: once
     /// none are left, its checks end.
     pub needed: RefCell<BTreeMap<u32, Vec<(u32, u32)>>>,
@@ -591,7 +595,8 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     }
     // What an outermost check's original reads, its mutated checks may change. Their own
     // originals note where targets' loads read too, for later ones.
-    let log_reads = outermost && !mutating && state.mutations.get() > 0;
+    let log_reads =
+        outermost && (!mutating || state.reseeding.get()) && state.mutations.get() > 0;
     let watch = outermost && state.mutations.get() > 0;
     if log_reads {
         ctx.begin_read_log();
@@ -995,7 +1000,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     let (code_lo, code_hi) = state.code.get();
     if outermost
         && original_panic.is_none()
-        && !state.mutating.get()
+        && (!state.mutating.get() || state.reseeding.get())
         && state.mutations.get() > 0
         && (code_lo == code_hi || (code_lo..code_hi).contains(&addr))
     {
@@ -1122,6 +1127,7 @@ fn mutated_checks(
 ) {
     let state = &ctx.lockstep;
     state.mutating.set(true);
+    state.reseeding.set(false);
     // The pages the call wrote, as it left them; `before` has them as it found them.
     let after = ctx.mem.capture(before.keys());
     let _ = ctx.take_resume_at();
