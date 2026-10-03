@@ -10,3 +10,4 @@ publish.workspace = true
 [dependencies]
 gekko-fp.workspace = true
 ssbm-mem.workspace = true
+rustc-hash = "2"
