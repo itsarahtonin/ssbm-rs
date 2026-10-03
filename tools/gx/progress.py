@@ -12,6 +12,7 @@ beside the page.
 import datetime
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -118,7 +119,7 @@ def image(path, img_dir, name):
 
 def audio_results():
     """Per run of audio.sh: command lists checked against Dolphin's AX, those that differ, and
-    whether the replay synced with mixing."""
+    whether the replay synced with mixing: diverged exactly where its known list says."""
     out = []
     path = os.path.join(GX, "audio", "summary.txt")
     if not os.path.exists(path):
@@ -131,7 +132,8 @@ def audio_results():
         w = lists.split()
         checked = int(w[0]) if w and w[0].isdigit() else 0
         differ = int(w[3]) if len(w) > 3 and w[3].isdigit() else None
-        synced = sync == "no replay" or " 0 diverge" in sync
+        m = re.search(r" 0 not reached, (\d+) diverge \((\d+) known\), 0 known no longer", sync)
+        synced = sync == "no replay" or bool(m and m[1] == m[2])
         out.append({"name": name, "lists": checked, "differ": differ, "sync": sync, "synced": synced})
     return out
 

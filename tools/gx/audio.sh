@@ -4,7 +4,8 @@
 # compares every command list's writes with Dolphin's AX code built from its source. Each run's
 # log goes to local/gx/OUT/NAME.log, and a line per run to local/gx/OUT/summary.txt: command lists
 # checked (in thousands, as the check counts them), those that differ, and whether the replay
-# still synced with the DSP mixing. A run already checked is skipped.
+# still synced with the DSP mixing: diverged only where its local/replays/known list says the
+# original code does without mixing. A run already checked is skipped.
 #
 #   cargo build --release -p ssbm-run --features ax-check --target-dir target/t2
 #   OUT=audio bash tools/gx/audio.sh
@@ -25,7 +26,7 @@ mkdir -p "$OUT"
         cp "$L/cards/template-saved.raw" "$OUT/menu-card.raw"
         input=(--monkey 101 --mode 01 --card "$OUT/menu-card.raw" --fields 7200)
     else
-        input=(--replay "$f" --fields 100000)
+        input=(--replay "$f" --fields 100000 --known "local/replays/known/$name.txt")
     fi
     AX_CHECK=1 timeout 7200 $BIN "$SSBM_DISC" "${input[@]}" --port all > "$log" 2>&1
     echo "checked $name"'
