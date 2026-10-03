@@ -320,7 +320,12 @@ pub fn replay_corpus(ctx: &Ctx, dol: Option<&ssbm_disc::Dol>, path: &Path, repea
     let kept: Rc<RefCell<Vec<Derived>>> = Rc::default();
     if feedback > 0 {
         let (base, kept) = (base.clone(), kept.clone());
-        *ctx.lockstep.capture.borrow_mut() = Some(Rc::new(move |_, ended: Ended, take| {
+        // CAPTURE's own saving goes on.
+        let saving = ctx.lockstep.capture.borrow().clone();
+        *ctx.lockstep.capture.borrow_mut() = Some(Rc::new(move |ctx, ended: Ended, take| {
+            if let Some(save) = &saving {
+                save(ctx, ended, take);
+            }
             let wanted = ended.mutated && !ended.mismatched && !ended.interacted && ended.novel > 0;
             let base = base.borrow();
             let Some(base) = base.as_ref().filter(|_| wanted) else { return };

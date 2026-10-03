@@ -733,7 +733,10 @@ fn run() -> ExitCode {
         } else {
             sdk.schedule(hw::field_start(lockstep_from), enable);
         }
-        ctx.lockstep.keep_per_function.set(2);
+        // LOCKSTEP_KEEP=N reports each function's first N mismatches in full (2).
+        ctx.lockstep
+            .keep_per_function
+            .set(std::env::var("LOCKSTEP_KEEP").map_or(2, |v| v.parse().expect("LOCKSTEP_KEEP=N")));
         // LOCKSTEP_CALLS=N checks each port's first N calls, then lets it run unchecked.
         // LOCKSTEP_TRACE_CALLS=1 names, in a mismatch, the first of the function's own calls
         // that differs between the sides.
