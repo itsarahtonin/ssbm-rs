@@ -202,7 +202,17 @@ impl Gp {
     }
 
     /// Draws the stream with `sink` from now on.
+    /// Lets the sink finish what it was given.
+    pub fn finish(&mut self) {
+        if let Some(sink) = &self.sink {
+            sink.borrow_mut().finish();
+        }
+    }
+
     pub fn set_sink(&mut self, sink: Box<dyn Sink>) {
+        if sink.tracks_changes() {
+            self.state.track_changes();
+        }
         self.sink = Some(RefCell::new(sink));
     }
 

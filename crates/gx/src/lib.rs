@@ -48,6 +48,72 @@ pub struct Draw<'a> {
 pub trait Sink {
     fn draw(&mut self, state: &State, draw: &Draw<'_>, mem: &dyn Memory);
     fn copy(&mut self, state: &State, value: u32, mem: &dyn Memory);
+    /// Whether it follows the state by its changes (`State::take_delta`), which the state then
+    /// tracks.
+    fn tracks_changes(&self) -> bool {
+        false
+    }
+    /// Finishes what was sent, at the end of a run.
+    fn finish(&mut self) {}
+}
+
+/// Registers and texture memory changed since the last `State::take_delta`: what a copy of the
+/// state needs (`State::apply`) to stay the same.
+#[derive(Default)]
+pub struct Delta {
+    pub bp: Vec<(u8, u32)>,
+    pub cp: Vec<(u8, u32)>,
+    pub xf: Vec<(u16, u32)>,
+    /// The TEV color and konst registers (color RA, color BG, konst RA, konst BG), if any changed.
+    pub tev: Option<[[u32; 4]; 4]>,
+    pub tmem: Vec<(u32, Vec<u8>)>,
+}
+
+impl Delta {
+    pub fn is_empty(&self) -> bool {
+        self.bp.is_empty()
+            && self.cp.is_empty()
+            && self.xf.is_empty()
+            && self.tev.is_none()
+            && self.tmem.is_empty()
+    }
+}
+
+/// What changed since the last delta, each register listed once.
+#[derive(Default)]
+struct Tracking {
+    on: bool,
+    bp: [u64; 4],
+    bp_list: Vec<u8>,
+    cp: [u64; 4],
+    cp_list: Vec<u8>,
+    xf: Vec<u64>,
+    xf_list: Vec<u16>,
+    tev: bool,
+    tmem: Vec<(u32, u32)>,
+}
+
+impl Tracking {
+    fn bp(&mut self, reg: usize) {
+        if self.on && self.bp[reg / 64] & 1 << (reg % 64) == 0 {
+            self.bp[reg / 64] |= 1 << (reg % 64);
+            self.bp_list.push(reg as u8);
+        }
+    }
+
+    fn cp(&mut self, reg: usize) {
+        if self.on && self.cp[reg / 64] & 1 << (reg % 64) == 0 {
+            self.cp[reg / 64] |= 1 << (reg % 64);
+            self.cp_list.push(reg as u8);
+        }
+    }
+
+    fn xf(&mut self, addr: usize) {
+        if self.on && self.xf[addr / 64] & 1 << (addr % 64) == 0 {
+            self.xf[addr / 64] |= 1 << (addr % 64);
+            self.xf_list.push(addr as u16);
+        }
+    }
 }
 
 /// Whether the BP write `value` (register and value) triggers an EFB copy to the XFB, the
@@ -154,6 +220,7 @@ pub struct State {
     buf: Vec<u8>,
     /// Display lists being run.
     depth: u32,
+    tracking: std::cell::RefCell<Tracking>,
 }
 
 impl Default for State {
@@ -212,6 +279,7 @@ impl State {
             xf_hash: SetHash::default(),
             buf: Vec::new(),
             depth: 0,
+            tracking: Default::default(),
         };
         // The hashes start as those of all-zero registers.
         for reg in 0..256 {
@@ -251,7 +319,70 @@ impl State {
         s
     }
 
+    /// Starts tracking changes for `take_delta`, the first delta holding all of the state.
+    pub fn track_changes(&mut self) {
+        let t = self.tracking.get_mut();
+        t.on = true;
+        t.xf = vec![0; XF_SIZE.div_ceil(64)];
+        for reg in 0..256 {
+            t.bp(reg);
+            t.cp(reg);
+        }
+        for addr in 0..XF_SIZE {
+            t.xf(addr);
+        }
+        t.tev = true;
+        t.tmem.push((0, TMEM_SIZE as u32));
+    }
+
+    /// What changed since the last call, with `track_changes`.
+    pub fn take_delta(&self) -> Delta {
+        let mut t = self.tracking.borrow_mut();
+        let t = &mut *t;
+        for &r in &t.bp_list {
+            t.bp[r as usize / 64] = 0;
+        }
+        for &r in &t.cp_list {
+            t.cp[r as usize / 64] = 0;
+        }
+        for &a in &t.xf_list {
+            t.xf[a as usize / 64] = 0;
+        }
+        Delta {
+            bp: t.bp_list.drain(..).map(|r| (r, self.bp[r as usize])).collect(),
+            cp: t.cp_list.drain(..).map(|r| (r, self.cp[r as usize])).collect(),
+            xf: t.xf_list.drain(..).map(|a| (a, self.xf[a as usize])).collect(),
+            tev: std::mem::take(&mut t.tev)
+                .then_some([self.color_ra, self.color_bg, self.konst_ra, self.konst_bg]),
+            tmem: t
+                .tmem
+                .drain(..)
+                .map(|(at, len)| (at, self.tmem[at as usize..(at + len) as usize].to_vec()))
+                .collect(),
+        }
+    }
+
+    /// Makes the changes in `delta`, as another state took them.
+    pub fn apply(&mut self, delta: &Delta) {
+        for &(reg, v) in &delta.bp {
+            self.bp[reg as usize] = v;
+        }
+        for &(reg, v) in &delta.cp {
+            self.cp[reg as usize] = v;
+        }
+        for &(addr, v) in &delta.xf {
+            self.xf[addr as usize] = v;
+        }
+        if let Some([cra, cbg, kra, kbg]) = delta.tev {
+            (self.color_ra, self.color_bg, self.konst_ra, self.konst_bg) = (cra, cbg, kra, kbg);
+        }
+        for (at, bytes) in &delta.tmem {
+            self.tmem[*at as usize..*at as usize + bytes.len()].copy_from_slice(bytes);
+        }
+    }
+
     fn set_tev_color(&mut self, reg: usize, new: u32) {
+        self.tracking.get_mut().tev = true;
         let i = (reg - TEV_COLOR) / 2;
         let konst = new & (1 << 23) != 0;
         let field = new & 0x7F_F7FF;
@@ -278,6 +409,7 @@ impl State {
             self.bp_mask = value;
         }
         self.bp[reg] = new;
+        self.tracking.get_mut().bp(reg);
         if !trigger(reg) {
             self.bp_hash.update(1, reg, old, new);
         }
@@ -315,17 +447,23 @@ impl State {
         let end = (dest + len).min(TMEM_SIZE);
         if dest < end {
             mem.read(src, &mut self.tmem[dest..end]);
+            let t = self.tracking.get_mut();
+            if t.on {
+                t.tmem.push((dest as u32, (end - dest) as u32));
+            }
         }
     }
 
     fn write_cp(&mut self, reg: u8, value: u32) {
         let old = std::mem::replace(&mut self.cp[reg as usize], value);
+        self.tracking.get_mut().cp(reg as usize);
         self.cp_hash.update(2, reg as usize, old, value);
     }
 
     fn write_xf(&mut self, addr: usize, value: u32) {
         if addr < XF_SIZE {
             let old = std::mem::replace(&mut self.xf[addr], value);
+            self.tracking.get_mut().xf(addr);
             self.xf_hash.update(3, addr, old, value);
         }
     }

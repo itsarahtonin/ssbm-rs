@@ -233,6 +233,11 @@ impl Hw {
         *self.trace_bp.borrow_mut() = regs;
     }
 
+    /// Lets the renderer finish what it was given, at the end of a run.
+    pub fn finish_renderer(&self) {
+        self.gp.borrow_mut().finish();
+    }
+
     /// Commands the GP has run, for diagnostics.
     pub fn draws(&self) -> u64 {
         self.gp.borrow().draws

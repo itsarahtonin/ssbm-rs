@@ -105,7 +105,9 @@ pub fn install(sdk: &Rc<Sdk>, live_input: bool) {
             let _ = proxy.send_event(());
         }
     });
-    sdk.hw.set_renderer(Box::new(renderer));
+    // On a thread of its own, so the game runs on while it draws.
+    sdk.hw
+        .set_renderer(Box::new(ssbm_render::Threaded::spawn(renderer)));
     if live_input && std::env::var_os("SSBM_NO_ADAPTER").is_none() {
         let _ = link.adapter.set(adapter::start());
     }

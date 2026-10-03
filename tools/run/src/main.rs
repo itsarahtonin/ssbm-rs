@@ -536,14 +536,23 @@ fn run() -> ExitCode {
     }
     // GX_RENDER=DIR draws the GPU's command stream (ssbm-render) and saves each frame there.
     // GX_RENDER=- draws them and keeps none, to time the renderer. GX_GPU_XFB=1 copies frames
-    // to the XFB on the GPU, as a window does, rather than as Dolphin's software renderer does.
+    // to the XFB on the GPU, as a window does, rather than as Dolphin's software renderer does;
+    // GX_THREADED=1 draws on a thread of its own, as a window does.
     let gpu_xfb = std::env::var_os("GX_GPU_XFB").is_some();
+    let set_renderer = |renderer: ssbm_render::Renderer| {
+        if std::env::var_os("GX_THREADED").is_some() {
+            sdk.hw
+                .set_renderer(Box::new(ssbm_render::Threaded::spawn(renderer)));
+        } else {
+            sdk.hw.set_renderer(Box::new(renderer));
+        }
+    };
     if std::env::var("GX_RENDER").is_ok_and(|d| d == "-") {
         let mut renderer = ssbm_render::Renderer::new().expect("GX_RENDER needs a GPU");
         renderer.xfb_on_gpu = gpu_xfb;
         // Without a taker, the renderer would keep every frame.
         renderer.on_frame(drop);
-        sdk.hw.set_renderer(Box::new(renderer));
+        set_renderer(renderer);
     } else if let Ok(dir) = std::env::var("GX_RENDER") {
         let dir = std::path::PathBuf::from(dir);
         std::fs::create_dir_all(&dir).unwrap_or_else(|e| panic!("{}: {e}", dir.display()));
@@ -556,7 +565,7 @@ fn run() -> ExitCode {
             let path = dir.join(format!("frame_{n}.png"));
             frame.save_png(&path).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
         });
-        sdk.hw.set_renderer(Box::new(renderer));
+        set_renderer(renderer);
     }
     // GX_TRACE_BP=E0,64 prints each write of those BP registers with the ports making it.
     if let Ok(regs) = std::env::var("GX_TRACE_BP") {
@@ -1491,6 +1500,7 @@ fn run() -> ExitCode {
             eprintln!("{line}");
         }
     }
+    sdk.hw.finish_renderer();
     eprintln!(
         "{} fields, {} M instructions, {} draws",
         sdk.hw.fields.get(),

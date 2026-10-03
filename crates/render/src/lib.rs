@@ -9,7 +9,10 @@
 
 mod copy;
 mod encode;
+mod thread;
 mod xfb;
+
+pub use thread::Threaded;
 
 use std::collections::HashMap;
 
@@ -188,7 +191,7 @@ pub struct Renderer {
     normals: vertex::NormalCache,
     frame: u64,
     frames: Vec<Frame>,
-    on_frame: Option<Box<dyn FnMut(Frame)>>,
+    on_frame: Option<Box<dyn FnMut(Frame) + Send>>,
     pub unsupported: Unsupported,
     /// Prints each draw of the first frame, for debugging.
     pub trace: bool,
@@ -207,6 +210,33 @@ pub struct Renderer {
     pub xfb_readback: bool,
     gpu_xfb: Option<xfb::GpuXfb>,
     draws_this_frame: u64,
+}
+
+/// The texture maps a draw's TEV and indirect stages read.
+fn texture_maps(state: &State) -> Vec<usize> {
+    let genmode = state.bp[0x00];
+    let mut maps = Vec::new();
+    for n in 0..=bits(genmode, 10, 4) {
+        let order = state.bp[0x28 + (n as usize >> 1)];
+        let shift = (n & 1) * 12;
+        if bits(order, shift + 6, 1) != 0 {
+            maps.push(bits(order, shift, 3) as usize);
+        }
+    }
+    for i in 0..bits(genmode, 16, 3) {
+        maps.push(bits(state.bp[0x27], 6 * i, 3) as usize);
+    }
+    maps
+}
+
+/// The image texture map `map` samples, with no more levels than its size has.
+fn sampled_image(state: &State, map: usize) -> Image {
+    let image = Image::of(&state.bp, map);
+    let max_levels = 32 - image.width.max(image.height).leading_zeros();
+    Image {
+        levels: image.levels.clamp(1, max_levels),
+        ..image
+    }
 }
 
 /// A fast hash of bytes, for telling textures apart.
@@ -435,7 +465,7 @@ impl Renderer {
     }
 
     /// Hands each frame to `f` as it's finished, instead of keeping it for `take_frames`.
-    pub fn on_frame(&mut self, f: impl FnMut(Frame) + 'static) {
+    pub fn on_frame(&mut self, f: impl FnMut(Frame) + Send + 'static) {
         self.on_frame = Some(Box::new(f));
     }
 
@@ -560,15 +590,10 @@ impl Renderer {
     }
 
     fn texture_uncached(&mut self, state: &State, map: usize, mem: &dyn Memory) -> (u32, u32) {
-        let image = Image::of(&state.bp, map);
+        let image = sampled_image(state, map);
         let tlut_reg = state.bp[texture::reg(texture::SETTLUT, map)];
         let tlut_offset = ((tlut_reg & 0x3FF) << 9) as usize;
         let tlut_format = bits(tlut_reg, 10, 2);
-        let max_levels = 32 - image.width.max(image.height).leading_zeros();
-        let image = Image {
-            levels: image.levels.clamp(1, max_levels),
-            ..image
-        };
         let size = image.size();
         if let Some(c) = self.gpu_copies.get(&image.address) {
             if (c.format, c.width, c.height, image.levels)
@@ -1304,25 +1329,12 @@ impl Renderer {
             return;
         }
 
-        // The texture maps the TEV and indirect stages read.
-        let genmode = state.bp[0x00];
         let mut ids = [0u32; 8];
         let mut levels = [1u32; 8];
-        let mut maps = Vec::new();
-        for n in 0..=bits(genmode, 10, 4) {
-            let order = state.bp[0x28 + (n as usize >> 1)];
-            let shift = (n & 1) * 12;
-            if bits(order, shift + 6, 1) != 0 {
-                maps.push(bits(order, shift, 3) as usize);
-            }
-        }
-        for i in 0..bits(genmode, 16, 3) {
-            maps.push(bits(state.bp[0x27], 6 * i, 3) as usize);
-        }
-        if bits(genmode, 16, 3) != 0 {
+        if bits(state.bp[0x00], 16, 3) != 0 {
             self.note("indirect texturing");
         }
-        for map in maps {
+        for map in texture_maps(state) {
             if ids[map] == 0 {
                 let (id, l) = self.texture(state, map, mem);
                 ids[map] = id;
