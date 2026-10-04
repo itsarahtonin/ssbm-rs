@@ -3,11 +3,11 @@
 
 //! Hardware registers at `0xCC000000` for the devices whose SDK drivers run as original code:
 //! VI, the DVD interface, ARAM and audio DMA, the GX FIFO (CP, PE, PI and the write-gather
-//! pipe), and EXI with the memory card in slot A when there is one. Other EXI transfers finish
-//! as they start, with no device answering: Slippi's device, and the memory cards when there
-//! are none, are stood in for above the registers. Registers without a model keep the last
+//! pipe), and EXI with the memory cards in slots A and B when there are any. Other EXI transfers
+//! finish as they start, with no device answering: Slippi's device, and the memory cards when
+//! there are none, are stood in for above the registers. Registers without a model keep the last
 //! value written. `DVD_RETRY=N` makes one data read in N fail once, as on a scratched disc; a
-//! read can fail for good, the disc cover open and close, and the memory card come out and go
+//! read can fail for good, the disc cover open and close, and a memory card come out and go
 //! back in.
 
 use std::cell::{Cell, RefCell};
@@ -63,9 +63,11 @@ const DI_CR: u32 = 0x601C;
 const EXI_CR: [u32; 3] = [0x680C, 0x6820, 0x6834];
 /// Each EXI channel's status register, the slot A channel's first.
 const EXI_CSR: [u32; 3] = [0x6800, 0x6814, 0x6828];
-const EXI0_MAR: u32 = 0x6804;
-const EXI0_LENGTH: u32 = 0x6808;
-const EXI0_DATA: u32 = 0x6810;
+/// Offsets from a channel's status register of its DMA address, DMA length and immediate data
+/// registers.
+const EXI_MAR: u32 = 0x4;
+const EXI_LENGTH: u32 = 0x8;
+const EXI_DATA: u32 = 0x10;
 // EXI status register bits.
 const EXI_INT: u32 = 0x0002;
 const EXI_TCINT: u32 = 0x0008;
@@ -102,6 +104,11 @@ const VI_HCT_PER_LINE: u64 = 858;
 /// Start of video field `n`: NTSC runs at 60000/1001 fields per second.
 pub fn field_start(n: u64) -> u64 {
     (u128::from(n) * u128::from(TB_HZ) * 1001 / 60_000) as u64
+}
+
+/// The EXI channel an EXI register at `off` belongs to.
+fn exi_chan(off: u32) -> u32 {
+    (off - 0x6800) / 0x14
 }
 
 /// The device registers, with the SDK layer they belong to: every GX command the game sends
@@ -144,9 +151,10 @@ pub struct Hw {
     /// Streaming audio sample counter: its value when the rate or state last changed, and when.
     ais_base: Cell<u32>,
     ais_since: Cell<u64>,
-    /// The memory card in slot A, if any, and whether it is in the slot (`set_card_present`).
-    pub card: Option<Card>,
-    card_present: Cell<bool>,
+    /// The memory cards in slots A and B (EXI channels 0 and 1), if any, and whether each is in
+    /// its slot (`set_card_present`).
+    pub cards: [Option<Card>; 2],
+    card_present: [Cell<bool>; 2],
     /// One data read in this many fails, as on a scratched disc, with an error the DVD driver
     /// retries (`DVD_RETRY`); the read again works. Zero for none.
     dvd_retry: u32,
@@ -176,8 +184,8 @@ impl Default for Hw {
             frame_start: Cell::new(0),
             ais_base: Cell::new(0),
             ais_since: Cell::new(0),
-            card: None,
-            card_present: Cell::new(true),
+            cards: [None, None],
+            card_present: [Cell::new(true), Cell::new(true)],
             dvd_retry: std::env::var("DVD_RETRY")
                 .ok()
                 .and_then(|v| v.parse().ok())
@@ -275,9 +283,9 @@ impl Hw {
             (AI_DMA_LEFT, 2) => 0,
             (AR_MODE, 2) => u32::from(self.get16(off)) | 1, // ARAM ready
             (AI_SCNT, 4) => self.ais_count(ctx),
-            // A card in slot A is attached.
             (DI_CVR, 4) => (self.get32(off) & !1) | u32::from(self.dvd_cover_open.get()),
-            (0x6800, 4) if self.card.is_some() && self.card_present.get() => {
+            // A card in slot A or B is attached.
+            (0x6800 | 0x6814, 4) if self.card_in(exi_chan(off)).is_some() => {
                 self.get32(off) | EXI_EXT
             }
             (_, 4) => self.get32(off),
@@ -383,45 +391,56 @@ impl Hw {
             }
             PI_FIFO_WPTR => self.set32(off, v & 0x03FF_FFE0),
             _ if EXI_CSR.contains(&off) => self.exi_status(ctx, sdk, off, old, v),
-            0x680C if v & 1 != 0 && self.selected_card() => self.card_transfer(ctx, sdk, v),
+            0x680C | 0x6820 if v & 1 != 0 && self.selected_card(exi_chan(off)) => {
+                self.card_transfer(ctx, sdk, exi_chan(off), v)
+            }
             _ if EXI_CR.contains(&off) => self.set32(off, v & !1),
             _ => {}
         }
     }
 
-    // EXI and the memory card in slot A.
+    // EXI and the memory cards in slots A and B, on channels 0 and 1.
 
-    fn selected_card(&self) -> bool {
-        self.card.is_some() && self.card_present.get() && self.get32(0x6800) & EXI_CS0 != 0
+    /// The card in channel `chan`'s slot, if there is one and it is in.
+    fn card_in(&self, chan: u32) -> Option<&Card> {
+        let chan = chan as usize;
+        let present = self.card_present.get(chan)?.get();
+        self.cards.get(chan)?.as_ref().filter(|_| present)
     }
 
-    /// Pulls the card out of slot A, or puts it back. Its EXT line changes, which raises the
-    /// channel's external interrupt when the driver has unmasked it.
-    pub fn set_card_present(&self, ctx: &Ctx, present: bool) {
-        if self.card.is_none() || self.card_present.replace(present) == present {
+    fn selected_card(&self, chan: u32) -> bool {
+        self.card_in(chan).is_some() && self.get32(EXI_CSR[chan as usize]) & EXI_CS0 != 0
+    }
+
+    /// Pulls the card out of slot A (`slot` 0) or B (1), or puts it back. Its EXT line changes,
+    /// which raises the channel's external interrupt when the driver has unmasked it.
+    pub fn set_card_present(&self, ctx: &Ctx, slot: usize, present: bool) {
+        if self.cards[slot].is_none() || self.card_present[slot].replace(present) == present {
             return;
         }
-        let csr = self.get32(0x6800) | EXI_EXTINT;
-        self.set32(0x6800, csr);
+        let csr = self.get32(EXI_CSR[slot]) | EXI_EXTINT;
+        self.set32(EXI_CSR[slot], csr);
         if csr & EXI_EXTINTMASK != 0 {
-            ctx.ext::<Sdk>().raise(ctx, irq::EXI0_EXT);
+            ctx.ext::<Sdk>().raise(ctx, irq::EXI0_EXT + 3 * slot as u32);
         }
     }
 
     /// A write to an EXI status register: its interrupt flags clear when written as 1, and
-    /// selecting or deselecting the card in slot A starts or ends a command.
+    /// selecting or deselecting the card in slot A or B starts or ends a command.
     fn exi_status(&self, ctx: &Ctx, sdk: &Rc<Sdk>, off: u32, old: u32, v: u32) {
         let flags = EXI_INT | EXI_TCINT | EXI_EXTINT;
         self.set32(off, (v & !flags) | (old & flags & !v));
         // A flag cleared before its interrupt was taken takes the interrupt back.
-        let chan = (off - 0x6800) / 0x14;
+        let chan = exi_chan(off);
         for (flag, n) in [(EXI_INT, 9), (EXI_TCINT, 10), (EXI_EXTINT, 11)] {
             if v & flag != 0 {
                 sdk.withdraw(n + 3 * chan);
             }
         }
-        let Some(card) = &self.card else { return };
-        if off != 0x6800 || (old ^ v) & EXI_CS0 == 0 || !self.card_present.get() {
+        let Some(card) = self.card_in(chan) else {
+            return;
+        };
+        if (old ^ v) & EXI_CS0 == 0 {
             return;
         }
         if v & EXI_CS0 != 0 {
@@ -431,32 +450,36 @@ impl Hw {
             // without letting time pass.
             card.finish();
             if card.interrupts() {
-                self.set32(0x6800, self.get32(0x6800) | EXI_INT);
-                sdk.raise(ctx, irq::EXI0_EXI);
+                self.set32(off, self.get32(off) | EXI_INT);
+                sdk.raise(ctx, irq::EXI0_EXI + 3 * chan);
             }
         }
     }
 
-    /// A transfer with the card in slot A, done at once, with its transfer interrupt raised.
-    fn card_transfer(&self, ctx: &Ctx, sdk: &Rc<Sdk>, cr: u32) {
-        let Some(card) = &self.card else { return };
+    /// A transfer with the card in channel `chan`'s slot, done at once, with its transfer
+    /// interrupt raised.
+    fn card_transfer(&self, ctx: &Ctx, sdk: &Rc<Sdk>, chan: u32, cr: u32) {
+        let Some(card) = self.card_in(chan) else {
+            return;
+        };
+        let csr = EXI_CSR[chan as usize];
         let write = (cr >> 2) & 3;
         if cr & 2 == 0 {
             let n = ((cr >> 4) & 3) as usize + 1;
-            let data = self.get32(EXI0_DATA).to_be_bytes();
+            let data = self.get32(csr + EXI_DATA).to_be_bytes();
             if write != 0 {
                 card.write(&data[..n]);
             }
             if write != 1 {
                 let mut out = [0u8; 4];
                 out[..n].copy_from_slice(&card.read(n));
-                self.set32(EXI0_DATA, u32::from_be_bytes(out));
+                self.set32(csr + EXI_DATA, u32::from_be_bytes(out));
             }
-            self.exi_done(ctx, sdk);
+            self.exi_done(ctx, sdk, chan);
             return;
         }
-        let mar = self.get32(EXI0_MAR) & 0x03FF_FFE0;
-        let len = self.get32(EXI0_LENGTH) as usize;
+        let mar = self.get32(csr + EXI_MAR) & 0x03FF_FFE0;
+        let len = self.get32(csr + EXI_LENGTH) as usize;
         if write == 1 {
             let mut data = vec![0; len];
             let _ = ctx.mem.read_bytes(0x8000_0000 | mar, &mut data);
@@ -464,15 +487,16 @@ impl Hw {
         } else {
             let _ = ctx.dma_write(0x8000_0000 | mar, &card.read(len));
         }
-        self.exi_done(ctx, sdk);
+        self.exi_done(ctx, sdk, chan);
     }
 
-    /// The slot A channel's transfer is done: its control register reads idle and its transfer
+    /// Channel `chan`'s transfer is done: its control register reads idle and its transfer
     /// interrupt is raised.
-    fn exi_done(&self, ctx: &Ctx, sdk: &Rc<Sdk>) {
-        self.set32(0x680C, self.get32(0x680C) & !1);
-        self.set32(0x6800, self.get32(0x6800) | EXI_TCINT);
-        sdk.raise(ctx, irq::EXI0_TC);
+    fn exi_done(&self, ctx: &Ctx, sdk: &Rc<Sdk>, chan: u32) {
+        let (csr, cr) = (EXI_CSR[chan as usize], EXI_CR[chan as usize]);
+        self.set32(cr, self.get32(cr) & !1);
+        self.set32(csr, self.get32(csr) | EXI_TCINT);
+        sdk.raise(ctx, irq::EXI0_TC + 3 * chan);
     }
 
     // Write-gather pipe and GX FIFO.

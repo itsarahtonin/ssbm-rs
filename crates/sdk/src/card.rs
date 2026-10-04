@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Behavior follows Dolphin's EXI memory card device (GPL-2.0-or-later).
 
-//! A memory card in slot A, answering at the EXI level so the SDK's CARD library runs on it
-//! as on a console: a 59-block flash card that takes the library's commands, raises its
+//! A memory card in slot A or B, answering at the EXI level so the SDK's CARD library runs on
+//! it as on a console: a 59-block flash card that takes the library's commands, raises its
 //! interrupt when an erase or a program is done, and keeps its contents in a file.
 //!
 //! Like Dolphin's, the card reports itself unlocked from the start, so the library never runs
-//! the DSP's unlock exchange; the SRAM's flash ID for slot A is Dolphin's, which the card's
-//! format then carries.
+//! the DSP's unlock exchange, and takes the card's flash ID from the SRAM. Slot A's is
+//! Dolphin's, which the card's format then carries; slot B's is the one a formatted card there
+//! carries (`flash_id`, as Dolphin sets it), or Dolphin's for a blank one.
 
 use std::cell::{Cell, RefCell};
 use std::path::PathBuf;
@@ -26,17 +27,6 @@ const PAGE: usize = 0x80;
 /// reads as a broken card, which the game offers to format.
 pub fn formatted() -> Vec<u8> {
     const BLOCK: usize = SECTOR;
-    // __CARDCheckSum: sums of the big-endian words and of their complements, 0xFFFF as 0.
-    let checksum = |bytes: &[u8]| {
-        let (mut sum, mut inv) = (0u16, 0u16);
-        for w in bytes.chunks_exact(2) {
-            let v = u16::from_be_bytes([w[0], w[1]]);
-            sum = sum.wrapping_add(v);
-            inv = inv.wrapping_add(!v);
-        }
-        let fix = |v: u16| if v == 0xFFFF { 0 } else { v };
-        (fix(sum), fix(inv))
-    };
     let mut card = vec![0xFF; SIZE];
     // The ID: a serial from the flash ID, keyed by the format's time (0); counter bias,
     // language and the VI's DTV status (all 0 here); device 0; size in Mbit; ANSI encoding.
@@ -74,6 +64,18 @@ pub fn formatted() -> Vec<u8> {
         fat[2..4].copy_from_slice(&inv.to_be_bytes());
     }
     card
+}
+
+/// __CARDCheckSum: sums of the big-endian words and of their complements, 0xFFFF as 0.
+fn checksum(bytes: &[u8]) -> (u16, u16) {
+    let (mut sum, mut inv) = (0u16, 0u16);
+    for w in bytes.chunks_exact(2) {
+        let v = u16::from_be_bytes([w[0], w[1]]);
+        sum = sum.wrapping_add(v);
+        inv = inv.wrapping_add(!v);
+    }
+    let fix = |v: u16| if v == 0xFFFF { 0 } else { v };
+    (fix(sum), fix(inv))
 }
 
 // Commands.
@@ -130,6 +132,27 @@ impl Card {
             sent: RefCell::default(),
             answered: Cell::new(0),
         })
+    }
+
+    /// The flash ID of the console slot that formatted the card, from the serial its ID block
+    /// carries (CARDFormat's, undone as Dolphin's SetCardFlashID does): what the CARD library
+    /// checks the serial against on a mount. None for a card whose ID block fails its checksum,
+    /// such as a blank one.
+    pub(crate) fn flash_id(&self) -> Option<[u8; 12]> {
+        let data = self.data.lock().unwrap();
+        let id = &data[..0x200];
+        let word = |at: usize| u16::from_be_bytes([id[at], id[at + 1]]);
+        if checksum(&id[..0x1FC]) != (word(0x1FC), word(0x1FE)) {
+            return None;
+        }
+        let mut flash = [0u8; 12];
+        let mut rand = i64::from_be_bytes(id[12..20].try_into().unwrap());
+        for (i, f) in flash.iter_mut().enumerate() {
+            rand = rand.wrapping_mul(1_103_515_245).wrapping_add(12345) >> 16;
+            *f = id[i].wrapping_sub(rand as u8);
+            rand = (rand.wrapping_mul(1_103_515_245).wrapping_add(12345) >> 16) & 0x7FFF;
+        }
+        Some(flash)
     }
 
     /// Whether the card raises its interrupt when an erase or a program finishes.
@@ -335,18 +358,6 @@ fn address(b: &[u8]) -> usize {
 mod format_tests {
     use super::*;
 
-    /// __CARDCheckSum over `bytes`.
-    fn checksum(bytes: &[u8]) -> (u16, u16) {
-        let (mut sum, mut inv) = (0u16, 0u16);
-        for w in bytes.chunks_exact(2) {
-            let v = u16::from_be_bytes([w[0], w[1]]);
-            sum = sum.wrapping_add(v);
-            inv = inv.wrapping_add(!v);
-        }
-        let fix = |v: u16| if v == 0xFFFF { 0 } else { v };
-        (fix(sum), fix(inv))
-    }
-
     fn word(b: &[u8], at: usize) -> u16 {
         u16::from_be_bytes([b[at], b[at + 1]])
     }
@@ -374,6 +385,20 @@ mod format_tests {
             assert_eq!((word(fat, 4), word(fat, 6), word(fat, 8)), (i as u16, 59, 4));
             assert_eq!(checksum(&fat[4..]), (word(fat, 0), word(fat, 2)));
         }
+    }
+
+    /// A formatted card gives back the flash ID it was formatted with; a blank one, none.
+    #[test]
+    fn flash_id_comes_back_from_the_serial() {
+        let dir = std::env::temp_dir().join(format!("ssbm-card-id-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("card.raw");
+        std::fs::write(&path, formatted()).unwrap();
+        let card = Card::new(Some(path)).unwrap();
+        let slot_a = &crate::os::default_sram()[20..32];
+        assert_eq!(&card.flash_id().unwrap()[..], slot_a);
+        assert_eq!(Card::new(None).unwrap().flash_id(), None);
+        std::fs::remove_dir_all(&dir).unwrap();
     }
 }
 

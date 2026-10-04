@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-//! API-level stand-ins for controllers (PAD), memory cards (CARD) when slot A has none, and the
-//! DSP.
+//! API-level stand-ins for controllers (PAD), memory cards (CARD) when neither slot has one, and
+//! the DSP.
 
 use std::cell::{Cell, RefCell};
 
@@ -96,7 +96,7 @@ pub(crate) fn install(ctx: &Ctx, card: bool) {
     reg("PADSetSamplingRate", |_| {});
     reg("SIRefreshSamplingRate", |_| {});
 
-    // Memory cards: none inserted, unless slot A has one, which the CARD library drives.
+    // Memory cards: none inserted, unless slot A or B has one, which the CARD library drives.
     if card {
         return install_dsp(ctx);
     }

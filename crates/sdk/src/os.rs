@@ -58,7 +58,7 @@ pub(crate) fn install(ctx: &Ctx, card: bool) {
     // Hardware setup inside OSInit, done by the device models instead.
     reg("__OSInitAudioSystem", |_| {});
     reg("__OSInitMemoryProtection", |_| {});
-    // With a memory card, EXI runs as the original code, which installs its interrupt
+    // With a memory card in either slot, EXI runs as the original code, which installs its interrupt
     // handlers.
     if !card {
         reg("EXIInit", |_| {});
@@ -211,7 +211,18 @@ pub fn default_sram() -> [u8; 64] {
 
 fn os_init_sram(ctx: &Ctx) {
     let scb = sym("Scb");
-    let _ = ctx.dma_write(scb, &default_sram());
+    let mut sram = default_sram();
+    // A formatted card in slot B gets its flash ID there, as Dolphin sets it from the card
+    // (SetCardFlashID), so it mounts whichever console formatted it. On a console the card's
+    // unlock reads the flash ID from the card itself, and CARDMount puts it in the SRAM; the
+    // card here comes unlocked, so the library takes slot B's flash ID from the SRAM as it is.
+    // Slot A keeps Dolphin's default.
+    let card_b = &ctx.ext::<Sdk>().hw.cards[1];
+    if let Some(id) = card_b.as_ref().and_then(|c| c.flash_id()) {
+        sram[32..44].copy_from_slice(&id);
+        sram[59] = !id.iter().fold(0u8, |sum, &b| sum.wrapping_add(b));
+    }
+    let _ = ctx.dma_write(scb, &sram);
     ctx.write_u32(scb + 0x40, 0x40); // offset
     ctx.write_u32(scb + 0x44, 0); // enabled
     ctx.write_u32(scb + 0x48, 0); // locked
@@ -224,5 +235,9 @@ mod tests {
     fn default_sram_checksums_match_dolphin() {
         let s = super::default_sram();
         assert_eq!(&s[..4], &[0x00, 0x2C, 0xFF, 0xD0]);
+        // flashIDCheckSum: the complement of each flash ID's byte sum.
+        for (id, sum) in [(&s[20..32], s[58]), (&s[32..44], s[59])] {
+            assert_eq!(!id.iter().fold(0u8, |a, &b| a.wrapping_add(b)), sum);
+        }
     }
 }

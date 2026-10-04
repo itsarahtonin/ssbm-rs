@@ -5,8 +5,8 @@
 //!
 //! Most of the SDK runs as ordinary game code. Devices whose SDK drivers are simple register
 //! pokes (VI, DVD, the GX FIFO, ARAM and audio DMA) are emulated at the register level, and
-//! their interrupts reach the SDK's own handlers, as does a memory card in slot A when there is
-//! one. The rest (alarms, thread sleeps, controllers, the DSP, SRAM, and the memory cards when
+//! their interrupts reach the SDK's own handlers, as do memory cards in slots A and B when there
+//! are any. The rest (alarms, thread sleeps, controllers, the DSP, SRAM, and the memory cards when
 //! there are none) is replaced at the API level.
 //!
 //! Time is virtual. It only moves at wait points, such as a thread going to sleep or the game
@@ -54,6 +54,7 @@ pub mod irq {
     pub const EXI0_EXI: u32 = 9;
     pub const EXI0_TC: u32 = 10;
     pub const EXI0_EXT: u32 = 11;
+    // EXI channel 1's (slot B's) are these plus 3.
     pub const PI_CP: u32 = 17;
     pub const PI_PE_TOKEN: u32 = 18;
     pub const PI_PE_FINISH: u32 = 19;
@@ -300,14 +301,15 @@ pub fn sym(name: &str) -> u32 {
 }
 
 /// Puts the SDK layer into `ctx`: device registers, stand-in functions and wait points, and a
-/// memory card in slot A if `card` gives one.
-pub fn install(ctx: &Ctx, disc: Disc, card: Option<Card>) -> Rc<Sdk> {
+/// memory cards in slots A and B that `card` and `card_b` give.
+pub fn install(ctx: &Ctx, disc: Disc, card: Option<Card>, card_b: Option<Card>) -> Rc<Sdk> {
     let mut sdk = Sdk::new(disc);
-    sdk.hw.card = card;
+    sdk.hw.cards = [card, card_b];
+    let any_card = sdk.hw.cards.iter().any(Option::is_some);
     let sdk = ctx.set_ext(sdk);
     ctx.set_mmio(Box::new(hw::Mmio(Rc::downgrade(&sdk))));
-    os::install(ctx, sdk.hw.card.is_some());
-    devices::install(ctx, sdk.hw.card.is_some());
+    os::install(ctx, any_card);
+    devices::install(ctx, any_card);
     hw::install(ctx);
     // The game's own wait loops (for loads, and for the next controller poll) all call
     // lb_800195D0 on each spin.
@@ -318,7 +320,7 @@ pub fn install(ctx: &Ctx, disc: Disc, card: Option<Card>) -> Rc<Sdk> {
     // So do its waits for the memory card, which spin on hsd_803AAA48 (through
     // lbCardNew_CompleteNextTask, inlined in some) until the card's interrupts and the CARD
     // library's alarms have moved its tasks on.
-    if sdk.hw.card.is_some() {
+    if any_card {
         ctx.set_hook(
             sym("hsd_803AAA48"),
             Rc::new(|ctx| Sdk::wait(ctx, GAME_WAIT_STEP)),

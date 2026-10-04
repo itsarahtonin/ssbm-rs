@@ -2,10 +2,12 @@
 
 //! Boots the game headless on original code and reports progress.
 //!
-//! `ssbm-run [disc] [--fields N] [--replay FILE] [--fp hardware|slippi] [--card FILE]` runs for
+//! `ssbm-run [disc] [--fields N] [--replay FILE] [--fp hardware|slippi] [--card FILE]
+//! [--card-b FILE]` runs for
 //! N video fields (default 600, ten seconds), playing back a Slippi replay if given. Floating
 //! point follows Slippi's Dolphin for replays and the hardware otherwise, unless `--fp` says.
-//! `--card` puts a memory card in slot A, kept in that file. The disc path defaults to
+//! `--card` puts a memory card in slot A, kept in that file, and `--card-b` one in slot B. The
+//! disc path defaults to
 //! `SSBM_DISC`.
 //!
 //! A replay run checks the replay it records against the original, and fails on any divergence
@@ -295,6 +297,7 @@ fn run() -> ExitCode {
     let mut match_seed: Option<u64> = None;
     let mut start_mode: Option<u32> = None;
     let mut card_path: Option<std::path::PathBuf> = None;
+    let mut card_b_path: Option<std::path::PathBuf> = None;
     let mut call_path: Option<std::path::PathBuf> = None;
     let mut corpus_path: Option<std::path::PathBuf> = None;
     let mut repeat = 1u32;
@@ -346,6 +349,7 @@ fn run() -> ExitCode {
                 )
             }
             "--card" => card_path = Some(args.next().expect("--card FILE").into()),
+            "--card-b" => card_b_path = Some(args.next().expect("--card-b FILE").into()),
             // --call FILE checks a saved call (calls.rs) again instead of booting, --repeat
             // times.
             "--call" => call_path = Some(args.next().expect("--call FILE").into()),
@@ -437,12 +441,14 @@ fn run() -> ExitCode {
     ctx.set_names(Box::new(ssbm_types::describe));
     let dol = disc.main_dol().ok();
     // --card FILE puts a memory card in slot A with that file's contents, blank if there is
-    // none, and keeps what the game writes there.
-    let card = card_path.map(|p| {
+    // none, and keeps what the game writes there; --card-b FILE puts one in slot B.
+    let open_card = |p: std::path::PathBuf| {
         ssbm_sdk::Card::new(Some(p.clone()))
             .unwrap_or_else(|e| panic!("memory card {}: {e}", p.display()))
-    });
-    let sdk = ssbm_sdk::install(&ctx, disc, card);
+    };
+    let card = card_path.map(open_card);
+    let card_b = card_b_path.map(open_card);
+    let sdk = ssbm_sdk::install(&ctx, disc, card, card_b);
     // STAND_INS=FILE lists the functions the SDK layer stands in for, which neither a port
     // nor the original code runs.
     if let Ok(path) = std::env::var("STAND_INS") {
@@ -468,12 +474,14 @@ fn run() -> ExitCode {
     if std::env::var_os("CPU_PLAYERS").is_some() {
         matches::install_cpu_players(&ctx);
     }
-    // CARD_REMOVE=F[,G] pulls the memory card out of slot A at field F, and puts it back at G.
-    if let Ok(when) = std::env::var("CARD_REMOVE") {
+    // CARD_REMOVE=F[,G] pulls the memory card out of slot A at field F, and puts it back at G;
+    // CARD_REMOVE_B=F[,G] does the same in slot B.
+    for (slot, var) in ["CARD_REMOVE", "CARD_REMOVE_B"].into_iter().enumerate() {
+        let Ok(when) = std::env::var(var) else { continue };
         let fields = when.split(',').filter_map(|f| f.trim().parse::<u64>().ok());
         for (field, present) in fields.zip([false, true]) {
             sdk.schedule(hw::field_start(field), move |ctx| {
-                ctx.ext::<Sdk>().hw.set_card_present(ctx, present);
+                ctx.ext::<Sdk>().hw.set_card_present(ctx, slot, present);
             });
         }
     }
