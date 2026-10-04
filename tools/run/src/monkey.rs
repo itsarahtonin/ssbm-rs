@@ -104,26 +104,40 @@ fn press(rng: &Rng, b: u64) -> PadStatus {
     }
 }
 
-/// Buttons port 1 holds, alone and with its sticks centered, over a range of fields.
+/// What one port holds over a range of fields, the others nothing: buttons and the sticks.
 #[derive(Clone, Copy)]
 struct Hold {
+    port: usize,
     button: u16,
+    sticks: [i8; 4],
     from: u64,
     to: u64,
 }
 
-/// MONKEY_HOLD=BUTTONS@FROM-TO[,...], buttons named as a+b+x+y+z+l+r+start+up+down+left+right,
-/// or none.
+/// MONKEY_HOLD=HOLD@FROM-TO[,...], HOLD a +-joined list of buttons (a b x y z l r start up down
+/// left right, or none), sx=N, sy=N, cx=N and cy=N for the main and C sticks (-128 to 127,
+/// centered otherwise) and p2, p3 or p4 for a port other than the first.
 fn holds() -> Vec<Hold> {
     let Ok(v) = std::env::var("MONKEY_HOLD") else { return Vec::new() };
     v.split(',').map(parse_hold).collect()
 }
 
 fn parse_hold(v: &str) -> Hold {
-    let (names, range) = v.split_once('@').expect("MONKEY_HOLD=BUTTONS@FROM-TO");
-    let (from, to) = range.split_once('-').expect("MONKEY_HOLD=BUTTONS@FROM-TO");
-    let mut button = 0;
+    let (names, range) = v.split_once('@').expect("MONKEY_HOLD=HOLD@FROM-TO");
+    let (from, to) = range.split_once('-').expect("MONKEY_HOLD=HOLD@FROM-TO");
+    let (mut button, mut sticks, mut port) = (0, [0i8; 4], 0);
     for name in names.split('+') {
+        if let Some((stick, n)) = name.split_once('=') {
+            let i = ["sx", "sy", "cx", "cy"].iter().position(|s| *s == stick);
+            sticks[i.unwrap_or_else(|| panic!("MONKEY_HOLD: no stick {stick}"))] =
+                n.parse().expect("MONKEY_HOLD: a stick value is -128 to 127");
+            continue;
+        }
+        if let Some(p) = name.strip_prefix('p').and_then(|p| p.parse::<usize>().ok()) {
+            assert!((1..=4).contains(&p), "MONKEY_HOLD: no port {p}");
+            port = p - 1;
+            continue;
+        }
         button |= match name {
             "none" => 0,
             "a" => A,
@@ -141,14 +155,15 @@ fn parse_hold(v: &str) -> Hold {
             _ => panic!("MONKEY_HOLD: no button {name}"),
         };
     }
-    Hold { button, from: from.parse().expect("FROM"), to: to.parse().expect("TO") }
+    Hold { port, button, sticks, from: from.parse().expect("FROM"), to: to.parse().expect("TO") }
 }
 
 /// Changes each controller's input every few fields, from field `from` on. MONKEY_B=N presses B
 /// with probability N percent (20) instead: lower, input stays longer in the screens B backs out
-/// of, such as a trophy being viewed or a character select screen. MONKEY_HOLD=BUTTONS@FROM-TO
-/// has port 1 hold just those buttons over those fields, as a scene that reads a held button
-/// as it starts needs (the trophy gallery's debug viewer: Z, at debug level 3 or more).
+/// of, such as a trophy being viewed or a character select screen. MONKEY_HOLD=HOLD@FROM-TO[,...]
+/// has a port (the first unless named) hold just those buttons and stick positions over those
+/// fields and the other ports nothing, as a scene that reads a held button as it starts needs
+/// (the trophy gallery's debug viewer: Z, at debug level 3 or more), or a script of menu inputs.
 pub fn install(sdk: &Rc<Sdk>, seed: u64, from: u64) {
     let rng = Rc::new(Rng::new(seed));
     let b = std::env::var("MONKEY_B").map_or(20, |v| v.parse().expect("MONKEY_B=PERCENT"));
@@ -166,18 +181,19 @@ fn schedule(sdk: &Rc<Sdk>, rng: Rc<Rng>, b: u64, holds: Rc<Vec<Hold>>, field: u6
                 }
             }
             if let Some(h) = holds.iter().find(|h| (h.from..=h.to).contains(&field)) {
-                for pad in &mut pads[1..] {
+                for pad in pads.iter_mut() {
                     pad.button = 0;
                     (pad.stick_x, pad.stick_y, pad.substick_x, pad.substick_y) = (0, 0, 0, 0);
                     (pad.trigger_l, pad.trigger_r, pad.analog_a, pad.analog_b) = (0, 0, 0, 0);
                 }
-                pads[0] = PadStatus {
+                let [stick_x, stick_y, substick_x, substick_y] = h.sticks;
+                pads[h.port] = PadStatus {
                     connected: true,
                     button: h.button,
-                    stick_x: 0,
-                    stick_y: 0,
-                    substick_x: 0,
-                    substick_y: 0,
+                    stick_x,
+                    stick_y,
+                    substick_x,
+                    substick_y,
                     trigger_l: if h.button & L != 0 { 255 } else { 0 },
                     trigger_r: if h.button & R != 0 { 255 } else { 0 },
                     analog_a: 0,
