@@ -52,4 +52,4 @@ Finished this session, all with no mismatch: cov-scripted, cov-slotb, cov-menus,
 
 ## State outside the repository
 
-`local/lockstep` (results, reports, ledgers of runs, cards, notes) lives on the VM and in the private release's `ssbm-state.tar.gz` (`tools/cloud/pack.sh`). The static analyses' scratch files (per-unit annotated asm, notes, helper scripts) were in the session's scratch directory; `local/lockstep/notes-gr3/` keeps one batch's notes.
+`local/lockstep` (results, reports, ledgers of runs, cards, notes) lives on the VM and in the private release's `ssbm-state.tar.gz` (`tools/cloud/pack.sh`). The album jobs' 24-snapshot card is kept as `local/lockstep/templates/template-snaps.raw` (copy it to `$L/cards/snap/` before `mkjobs-album.py`). The static analyses' scratch files (per-unit annotated asm, notes, helper scripts) were in the session's scratch directory; `local/lockstep/notes-gr3/` keeps one batch's notes.
