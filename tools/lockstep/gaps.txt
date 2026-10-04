@@ -1329,3 +1329,168 @@ Ground_801C28CC+0x1d8 fail # the searched entry is not in the stage's table: OSR
 Ground_801C28CC+0x1e0 fail # the searched entry is not in the stage's table: OSReport of the table and a branch-to-self
 Ground_801C2AE8+0x8c fail # the searched entry is not in the stage's table: OSReport and a branch-to-self
 Ground_801C2AE8+0xa8 fail # the searched entry is not in the stage's table: OSReport and a branch-to-self
+fn_80161C90+0x68 dead # SAT_ADD(x, y, U32_MAX) (gm_1601.c:1328-1366): the sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this saturating arm never runs
+fn_80161C90+0x8c dead # SAT_ADD(x, y, U32_MAX) (gm_1601.c:1328-1366): the sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this saturating arm never runs
+fn_80161C90+0xb0 dead # SAT_ADD(x, y, U32_MAX) (gm_1601.c:1328-1366): the sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this saturating arm never runs
+fn_80161C90+0xd4 dead # SAT_ADD(x, y, U32_MAX) (gm_1601.c:1328-1366): the sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this saturating arm never runs
+fn_80161C90+0xf8 dead # SAT_ADD(x, y, U32_MAX) (gm_1601.c:1328-1366): the sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this saturating arm never runs
+fn_80161C90+0x210 dead # SAT_ADD(x, y, U32_MAX) (gm_1601.c:1328-1366): the sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this saturating arm never runs
+fn_80161C90+0x29c dead # SAT_ADD(x, y, U32_MAX) (gm_1601.c:1328-1366): the sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this saturating arm never runs
+fn_80161C90+0x2c4 dead # SAT_ADD(x, y, U32_MAX) (gm_1601.c:1328-1366): the sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this saturating arm never runs
+fn_80161C90+0x2f8 dead # SAT_ADD(x, y, U32_MAX) (gm_1601.c:1328-1366): the sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this saturating arm never runs
+fn_80161C90+0x31c dead # SAT_ADD(x, y, U32_MAX) (gm_1601.c:1328-1366): the sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this saturating arm never runs
+fn_80161C90+0x340 dead # SAT_ADD(x, y, U32_MAX) (gm_1601.c:1328-1366): the sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this saturating arm never runs
+fn_80161C90+0x370 dead # SAT_ADD(x, y, U32_MAX) (gm_1601.c:1328-1366): the sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this saturating arm never runs
+fn_80161C90+0x394 dead # SAT_ADD(x, y, U32_MAX) (gm_1601.c:1328-1366): the sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this saturating arm never runs
+fn_80161C90+0x3b8 dead # SAT_ADD(x, y, U32_MAX) (gm_1601.c:1328-1366): the sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this saturating arm never runs
+fn_80162170+0x1c4 dead # play_time saturation (gm_1601.c:1436-1441): u32 sum compared unsigned (cmplw) against li -1, always <=, so this arm never runs
+gm_8016247C+0x4c dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_8016247C+0x6c dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_SetupHumanResultsScreen+0x44 dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_SetupHumanResultsScreen+0xd4 dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_SetupHumanResultsScreen+0x100 dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_SetupHumanResultsScreen+0x124 dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_SetupHumanResultsScreen+0x148 dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_SetupHumanResultsScreen+0x16c dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_80162800+0xa0 dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_SetupResultsScreenPlayTime+0x34 dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_SetupResultsScreenPlayTime+0x5c dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_SetupResultsScreenPlayTime+0x80 dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_80162968+0x2c dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_801629B4+0x2c dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_GetPlayTime+0x30 dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_80162A4C+0x2c dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_80162A98+0x30 dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_80162A98+0x54 dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_80162A98+0x84 dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_RecordSelfDestructs+0x2c dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_IncrementPowerCount+0x24 dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_80162C48+0x3c dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_80162E44+0x3c dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_80163040+0x3c dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_801631F0+0x3c dead # SAT_ADD/'> (u32) -1' saturation: the u32 sum is compared unsigned (cmplw) against li -1 = 0xFFFFFFFF, so the ble is always taken and this arm never runs
+gm_801BC4F4+0xf8 dead # gmevent.c:1236-1238 'if (var_r27 > -1)' on a u32: cmplw against li -1 is always <=, so the clamp never runs
+gm_80160854+0x24 dead # switch on 'team' after clrlwi r0,r4,24 (0..255): this is the arm for team < 0 (fall-through of cmpwi 0 / bge), which no byte reaches
+gm_80160854+0xdc dead # switch on 'slot' after clrlwi r0,r3,24 (0..255): the arm for slot < 0, which no byte reaches
+gm_SetupHumanResultsScreen+0x8c dead # switch (MatchKind) arg0 after clrlwi r0,r30,24 (0..255): the arm for arg0 < 0 (fall-through of cmpwi 0 / bge), which no byte reaches
+gm_80167BC8+0x5c dead # switch (rules->mode) on lbz 0x2(r30) (0..255): the arm for mode < 0, which no byte reaches
+gm_80167FC4+0x54 dead # switch (rules->stage_sel): lbz 0x7(r3) is 0..255, ==1 already returned at +0x20 (r3 still the GameRules pointer, nothing between writes it), ==0/2/>=2 branch away, so the remaining fall-through (stage_sel 1 or negative) never runs
+gm_801639F4+0x30 dead # returns -1 only when gmMainLib_8015D710(arg0) is set; both callers (mnCharSel_8025C020 at 8025CCE8 and 8025CD0C) call it only after gm_801639C0(r31) != 0, i.e. !gmMainLib_8015D710(r31), with the same r31 and only lbLang_IsSavedLanguageJP between
+gm_80164504+0xb8 dead # unlock_idx is lbl_803B790C[i][0] for the first i whose [i][1] matches (loop at +0x4c over the 11 entries); the second loop (+0x90) searches the same column of the same 11 entries for it, so it always finds it and the 0x42 fallback never runs
+gm_UnlockCKind+0xb8 dead # unlock_idx comes from lbl_803B78C8[i].idx (gm_SelKindToUnlockIndex, loop at +0x4c); the second loop (+0x90) searches the same .idx column of the same 11 entries, so it always finds it and the 0x42 fallback never runs
+fn_80164B48+0x68 dead # gm_SelKindToUnlockIndex(ckind_to_selkind_map[DrMario]) on constant data: SELKIND_DRMARIO is in lbl_803B78C8 (gm_1601.c:152-230), so the not-found arm never runs
+fn_80164B48+0x100 dead # as +0x68, for Ganon (SELKIND_GANON is in lbl_803B78C8)
+fn_80164B48+0x198 dead # as +0x68, for CLink (SELKIND_CLINK is in lbl_803B78C8)
+fn_80164B48+0x230 dead # as +0x68, for Falco (SELKIND_FALCO is in lbl_803B78C8)
+fn_80164B48+0x2c8 dead # as +0x68, for Pichu (SELKIND_PICHU is in lbl_803B78C8)
+fn_80164B48+0x35c dead # as +0x68, for Emblem (SELKIND_EMBLEM is in lbl_803B78C8)
+fn_8016588C+0x70 dead # fn_8016588C_clamp: lim is the constant 0xFFFFFF (subic. of lis 0x100), never negative, so 'lim = -lim' never runs
+fn_8016588C+0xc0 dead # as +0x70 (coin arm's inlined clamp)
+fn_8016588C+0x138 dead # as +0x70 (stock arm's inlined clamp)
+fn_8016588C+0x190 dead # as +0x70 (bonus arm's inlined clamp)
+fn_8016588C+0x1f4 dead # as +0x70 (time arm's inlined clamp)
+fn_8016588C+0x94 dead # stamina arm: v is x28/60 - 0xFFFFFF (mulhwu, unsigned, so >= -0xFFFFFF) or the u8 x9, never < -0xFFFFFF, so the lower clamp never runs
+fn_8016588C+0x15c dead # stock arm: v is the s8 stocks (>= -128) or x28/60 - 0xFFFFFF (unsigned division, >= -0xFFFFFF), never < -0xFFFFFF
+gm_80168638+0x5c dead # gmMainLib_8015CE44(i, tag) returns NULL only for tag == 120 with i >= 4 (gmmain_lib.c:317-328); this loop passes i = 0..3, and the other arm is &banks[...]->x1A2, never NULL
+gm_801692E8+0x58 dead # tm.sec comes from OSTicksToCalendarTime (via lbTime_8000B028), which sets sec = seconds % 60 after normalising negatives, so it is never > 59
+fn_8018A514+0x74 dead # count < 9 arm (cmpwi r3,9 / bge at +0x28): the 8-way unrolled loop runs only for count - 8 > 0, i.e. count > 8 (cmpwi r3,8 / ble at +0x68), never here
+fn_8018A514+0x8c dead # as +0x74 (body of that unrolled loop)
+fn_8018A514+0xf8 dead # as +0x74 (exit of that unrolled loop)
+fn_8018A514+0x148 dead # 9 <= count < 14 arm: the unrolled loop needs count - 9 > 8 (cmpwi r8,8 / ble at +0x13c), i.e. count > 17, never here
+fn_8018A514+0x160 dead # as +0x148 (body of that unrolled loop)
+fn_8018A514+0x1cc dead # as +0x148 (exit of that unrolled loop)
+fn_8018AA74+0x94 dead # switch (entry->x4): lbz at +0x74, 0 already excluded (beq at +0x7c), so x4 < 1 (the fall-through of cmpwi 1 / bge) never runs
+fn_8018AA74+0x10c dead # case 2 switch (slot_idx): slot_idx is inner_idx 0..3 from its only caller fn_8018E85C (8018EBB8, gmtoulib.c:1841-1893), so slot_idx < 0 never runs
+fn_8018AA74+0x210 dead # case 3 switch (slot_idx): as +0x10c, slot_idx is 0..3, so the < 0 arm never runs
+fn_8018C8D4+0x58 dead # switch (data->x4) on lbz 0x4(r3) (0..255): the arm for x4 < 0, which no byte reaches
+fn_8018E46C+0x78 dead # switch on lbz 0x3(r31) (0..255): the arm for a negative value, which no byte reaches
+gm_801905F0+0x1cc dead # switch on lbz 0x6(r31) (0..255): the arm for a negative value, which no byte reaches
+mnCharSel_8025BD30+0xf0 dead # JP switch (rules->mode) on lbz 0x2 (0..255): the arm for mode < 0, which no byte reaches
+mnCharSel_8025BD30+0x170 dead # US switch (rules->mode) on lbz 0x2 (0..255): the arm for mode < 0, which no byte reaches
+mnCharSel_8025DB34+0x63c dead # switch on lbz 0x0(r28) (0..255): the arm for a negative value, which no byte reaches
+mnCharSel_802640A0+0xac dead # switch on lbz 0x2(r3) (match_type, 0..255): the arm for a negative value, which no byte reaches
+mnCharSel_802640A0+0x1d4 dead # r19 is 1, 4 or 2 (li at +0x140, +0x150, +0x160, nothing else writes it before +0x1c8); the 8-way unrolled loop needs r19 > 8 (cmpwi r19,8 / ble), never true
+mnCharSel_802640A0+0x1e8 dead # as +0x1d4 (body of that unrolled loop)
+mnCharSel_802640A0+0x258 dead # as +0x1d4 (exit of that unrolled loop)
+mnCount_GetRowValue_Character+0x94 dead # SHORTEST_TIME needs fewer than 3 unlocked characters, but the loop counts gm_IsCKindUnlocked over all 25 selkinds and the 14 not in lbl_803B78C8 (the 11 unlockables) always count, so c >= 14
+melee/gm/gmevent:onEnterVs+0x8f4 dead # switch (ev->x44) on extsb: x44 is -1 only from gm_Mode_Event_OnInit (gmevent.c:782); gm_Mode_Event_OnLoad calls gm_801BBB64, which writes 0 or 1 first (gmevent.c:797-799) and otherwise 2/3/4, before any onEnterVs; no other writer (grep x44 = in src/melee/gm)
+gm_801BC754+0x48 dead # switch (match_kind) on extrwi r0,r0,3,24 (0..7): the arm for a negative value, which no 3-bit field reaches
+lbCardNew_ProbeEx+0x38 dead # inlined convertSdkResult on CARDProbeEx's result, which is only FATAL_ERROR, NOCARD, BUSY, READY or WRONGDEVICE (CARDMount.c:34-90); this arm is for r3 < -14 other than -128
+lbCardNew_ProbeEx+0x3c dead # as +0x38: arm for -13..-7, which CARDProbeEx never returns
+lbCardNew_ProbeEx+0x44 dead # as +0x38: arm for -13 (ENCODING), which CARDProbeEx never returns
+lbCardNew_ProbeEx+0x60 dead # as +0x38: arm for -5 (IOERROR), which CARDProbeEx never returns
+lbCardNew_ProbeEx+0x70 dead # as +0x38: arm for -4 (NOFILE), which CARDProbeEx never returns
+lbCardNew_ProbeEx+0x88 dead # as +0x38: arm for -6/-13 (BROKEN/ENCODING), which CARDProbeEx never returns
+taskMount+0x5c dead # inlined convertSdkResult on CARDProbeEx (+0x38), which returns only FATAL_ERROR, NOCARD, BUSY, READY, WRONGDEVICE (CARDMount.c:34-90); arm for r3 < -14 other than -128
+taskMount+0x60 dead # as +0x5c: arm for -13..-7
+taskMount+0x68 dead # as +0x5c: arm for -13
+taskMount+0x84 dead # as +0x5c: arm for -5
+taskMount+0x94 dead # as +0x5c: arm for -4
+taskMount+0xa8 dead # as +0x5c: arm for -6/-13
+taskMount+0x148 dead # inlined convertSdkResult on CARDMountAsync's synchronous result: FATAL_ERROR, NOCARD, BUSY, WRONGDEVICE (CARDMount.c:258-313) or DoMount's (READY, NOCARD, WRONGDEVICE, IOERROR, -2, and __CARDClearStatus/__CARDReadStatus/__CARDUnlock/__CARDEnableInterrupt/__CARDRead, which return only READY/NOCARD); arm for r3 < -14 other than -128
+taskMount+0x14c dead # as +0x148: arm for -13..-7
+taskMount+0x154 dead # as +0x148: arm for -13 (ENCODING comes only asynchronously, from __CARDVerify through the callback)
+taskMount+0x180 dead # as +0x148: arm for -4 (NOFILE)
+taskMount+0x198 dead # as +0x148: arm for -6/-13 (BROKEN/ENCODING only asynchronously)
+taskMount+0x1a0 dead # as +0x148: default arm (positive, -7..-12, -14 or < -14), none of which the synchronous result takes
+taskCheck+0x6c dead # inlined convertSdkResult on CARDCheckAsync, whose synchronous results are FATAL_ERROR/NOCARD/BUSY (__CARDGetControlBlock, CARDBios.c:630-655), BROKEN/ENCODING (VerifyID and CARDCheck.c:243-337) and READY/NOCARD/BUSY (__CARDUpdateDir/__CARDUpdateFatBlock -> __CARDEraseSector, CARDBios.c:564-598); arm for r3 < -14 other than -128
+taskCheck+0x94 dead # as +0x6c: arm for -5 (IOERROR)
+taskCheck+0xa4 dead # as +0x6c: arm for -4 (NOFILE)
+taskFormat+0x60 dead # inlined convertSdkResult on CARDFormatAsync = __CARDFormatRegionAsync (CARDFormat.c:59-141): __CARDGetControlBlock (FATAL_ERROR only for chan not 0/1 or diskID NULL, which CARDInit never leaves: CARDBios.c:626-627; NOCARD; BUSY) or __CARDEraseSector (READY/NOCARD/BUSY); arm for r3 < -6
+taskFormat+0x68 dead # as +0x60
+taskFormat+0x6c dead # as +0x60: r3 < -14
+taskFormat+0x74 dead # as +0x60: r3 < -14 other than -128
+taskFormat+0x78 dead # as +0x60: -13..-7
+taskFormat+0x80 dead # as +0x60: -13
+taskFormat+0x9c dead # as +0x60: -5
+taskFormat+0xac dead # as +0x60: -4
+taskFormat+0xb8 dead # as +0x60: -5 or -128 (FATAL_ERROR needs chan not 0/1 or a NULL diskID)
+taskFormat+0xc0 dead # as +0x60: -6/-13
+taskFormat+0xc8 dead # as +0x60: default (positive, -7..-12, -14, < -14)
+taskDelete+0x54 dead # inlined convertSdkResult on CARDDeleteAsync (CARDDelete.c:83-113): FATAL_ERROR/NOCARD/BUSY (__CARDGetControlBlock), NOFILE/NOCARD (__CARDGetFileNo, CARDOpen.c:56-79, skips entries __CARDAccess refuses), BUSY (open file), READY/NOCARD/BUSY (__CARDUpdateDir); arm for r3 < -6
+taskDelete+0x5c dead # as +0x54
+taskDelete+0x60 dead # as +0x54: r3 < -14
+taskDelete+0x68 dead # as +0x54: r3 < -14 other than -128
+taskDelete+0x6c dead # as +0x54: -13..-7
+taskDelete+0x74 dead # as +0x54: -13
+taskDelete+0x90 dead # as +0x54: -5
+taskDelete+0xac dead # as +0x54: -5 or -128 (FATAL_ERROR needs chan not 0/1 or NULL diskID)
+taskDelete+0xb4 dead # as +0x54: -6/-13
+taskRename+0x70 dead # inlined convertSdkResult on CARDRenameAsync (CARDRename.c:7-80): FATAL_ERROR, NAMETOOLONG, NOCARD, BUSY, NOFILE, EXIST, NOPERM, READY; arm for r3 < -14 other than -128
+taskRename+0x7c dead # as +0x70: -13
+taskRename+0x98 dead # as +0x70: -5
+taskRename+0xbc dead # as +0x70: -6/-13
+taskOpen+0x80 dead # inlined convertSdkResult on CARDFreeBlocks (CARDBios.c:688-722): FATAL_ERROR, NOCARD, BUSY, BROKEN, READY; arm for r3 < -14 other than -128
+taskOpen+0x84 dead # as +0x80: -13..-7
+taskOpen+0x8c dead # as +0x80: -13
+taskOpen+0xa8 dead # as +0x80: -5
+taskOpen+0xb8 dead # as +0x80: -4
+taskOpen+0x198 dead # inlined convertHsdResult on hsd_803B2550, which returns retryCardOpen's CARDOpen result (>= -128), -265 or 0 (card.c, hsd_803B2550); this arm is for r3 < -267
+taskOpen+0x19c dead # as +0x198: -263..-258
+taskOpen+0x1a4 dead # as +0x198: -263/-262
+taskOpen+0x1c4 dead # as +0x198: -261..-258
+taskOpen+0x1cc dead # as +0x198: -257/-262/-263
+taskCreate+0x54 dead # inlined convertHsdResult on hsd_803B286C, which returns only 0 or -265 (card.c); arm for r3 < -267
+taskCreate+0x58 dead # as +0x54: -263..-258
+taskCreate+0x60 dead # as +0x54: -263/-262
+taskCreate+0x80 dead # as +0x54: -261..-258
+taskCreate+0x88 dead # as +0x54: -257/-262/-263
+taskSetStatus+0x50 dead # inlined convertHsdResult on hsd_803B2928, which returns only 0 or -265 (card.c); arm for r3 < -267
+taskSetStatus+0x54 dead # as +0x50: -263..-258
+taskSetStatus+0x5c dead # as +0x50: -263/-262
+taskSetStatus+0x7c dead # as +0x50: -261..-258
+taskSetStatus+0x84 dead # as +0x50: -257/-262/-263
+taskReadHeader+0x50 dead # inlined convertHsdResult on hsd_803B27F4, which returns only 0 or -265 (card.c); arm for r3 < -267
+taskReadHeader+0x54 dead # as +0x50: -263..-258
+taskReadHeader+0x5c dead # as +0x50: -263/-262
+taskReadHeader+0x7c dead # as +0x50: -261..-258
+taskReadHeader+0x84 dead # as +0x50: -257/-262/-263
+taskRead+0x94 dead # inlined convertHsdResult on hsd_803B29D8, which returns only 0 or -265 (card.c); arm for r3 < -267
+taskRead+0x98 dead # as +0x94: -263..-258
+taskRead+0xa0 dead # as +0x94: -263/-262
+taskRead+0xc0 dead # as +0x94: -261..-258
+taskRead+0xc8 dead # as +0x94: -257/-262/-263
+taskWrite+0x94 dead # inlined convertHsdResult on hsd_803B2A4C, which returns only 0, -257 or -265 (card.c); arm for r3 < -267
+taskWrite+0x98 dead # as +0x94: -263..-258
+taskWrite+0xa0 dead # as +0x94: -263/-262
+taskWrite+0xc0 dead # as +0x94: -261..-258
