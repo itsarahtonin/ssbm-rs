@@ -9,7 +9,9 @@
 //! varies the rules too. `MATCH_CPU_KIND=K[,K...]` gives the CPUs CPU kinds (the AI's routine,
 //! `CpuKind`) drawn from that list, `MATCH_STAMINA=HP` makes the matches stamina matches with
 //! that HP, `MATCH_TEAMS=1` makes them team matches and `MATCH_PLAYERS=N` leaves all but the
-//! first N ports empty. `MATCH_VS=1` gives the VS mode's matches (`--mode 2`) the same, as each
+//! first N ports empty. `MATCH_ITEMS=K[,K...]` spawns only those item kinds (ItemKind) and
+//! `MATCH_HUMAN_HANDS=1` has Master Hand and Crazy Hand join as humans, played from ports 3 and
+//! 4 as their code reads them. `MATCH_VS=1` gives the VS mode's matches (`--mode 2`) the same, as each
 //! starts past its character and stage select, so that their results go through the VS mode's
 //! records: all but the fighters and stage, which stay those selects' choices. Deterministic for
 //! a seed.
@@ -57,6 +59,8 @@ struct Rules {
     stamina: Option<u16>,
     teams: bool,
     players: Option<usize>,
+    items: Option<u64>,
+    human_hands: bool,
 }
 
 /// A comma-separated list of numbers in `var`, if it is set.
@@ -85,6 +89,12 @@ pub fn install(ctx: &Ctx, seed: u64) {
         teams: std::env::var_os("MATCH_TEAMS").is_some(),
         // MATCH_PLAYERS=N: the debug VS mode's matches with only the first N ports playing.
         players: list("MATCH_PLAYERS").map(|n| n[0] as usize),
+        // MATCH_ITEMS=K[,K...]: only these item kinds (ItemKind) spawn, as the VS item switch
+        // leaves the rules' mask (x20, which the item spawner reads through gm_8016AEA4).
+        items: list("MATCH_ITEMS").map(|l| l.iter().fold(0u64, |m, &k| m | 1 << k)),
+        // MATCH_HUMAN_HANDS=1: Master Hand and Crazy Hand as humans, not CPUs. Their code reads
+        // their inputs from ports 3 and 4 (the monkey's there).
+        human_hands: std::env::var_os("MATCH_HUMAN_HANDS").is_some(),
     });
     // The debug VS mode sets its defaults, then loads the announcer's voice clips: its
     // defaults are set by then.
@@ -651,6 +661,12 @@ fn choose(ctx: &Ctx, rng: &Rng, data: StartMeleeData, chosen_rules: &Rules, keep
     } else {
         rng.below(5) as i8
     });
+    if let Some(mask) = chosen_rules.items {
+        rules.set_x20(mask);
+        if rules.item_freq() < 0 {
+            rules.set_item_freq(3);
+        }
+    }
     // MATCH_RULES=1 varies the rules as the VS rules and Special Melee do: stock and coin
     // matches, teams with and without friendly fire, damage ratios, Slo-Mo and Lightning
     // speeds and single-button play; and for each player, metal, invisible, Giant and Tiny.
@@ -708,8 +724,14 @@ fn choose(ctx: &Ctx, rng: &Rng, data: StartMeleeData, chosen_rules: &Rules, keep
             fighters[rng.below(fighters.len() as u64) as usize] as usize
         };
         // Bosses and the other special fighters only play as CPUs, as in the modes that have
-        // them: the game crashes with some of them under a player's control.
-        let cpu = fighter >= PLAYABLE || rng.chance(50);
+        // them: the game crashes with some of them under a player's control. MATCH_HUMAN_HANDS
+        // makes an exception of the hands.
+        let hand = [CKind_MasterH, CKind_CrezyH].contains(&(fighter as i32));
+        let cpu = if hand && chosen_rules.human_hands {
+            false
+        } else {
+            fighter >= PLAYABLE || rng.chance(50)
+        };
         if !keep {
             p.set_ckind(fighter as i8);
         }
@@ -723,7 +745,7 @@ fn choose(ctx: &Ctx, rng: &Rng, data: StartMeleeData, chosen_rules: &Rules, keep
         if fighter >= PLAYABLE {
             p.set_xD_b2(1);
         }
-        if [CKind_MasterH, CKind_CrezyH].contains(&(fighter as i32)) {
+        if hand {
             p.set_xC_b7(1);
             p.set_hp(300);
             p.set_xD_b0(1);
