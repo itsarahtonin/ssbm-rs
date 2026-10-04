@@ -46,6 +46,40 @@ JOBS = [
     ("damagedonly", "snap1damaged", ["a", "wait", "a", "wait", "wait", "wait"]),
     ("damagedpull", "snapdamaged", ["a", "wait", "a", "wait", "wait"],
      {"CARD_REMOVE": f"{START + 2 * STEP},{START + 5 * STEP}"}),
+    # Slot B (--card-b): template-saved has room and no snapshots, template-snaps no room.
+    ("bcopy", "template-snaps", COPY + ["a", "wait", "wait", "wait", "wait", "b"],
+     {"card_b": "template-saved"}),
+    ("bcopyfull", "template-snaps", COPY + ["a", "wait", "wait", "a", "wait", "b"],
+     {"card_b": "template-snaps"}),
+    ("bcopysame", "snap5", COPY + ["a", "wait", "wait", "a", "wait", "b"], {"card_b": "snap5"}),
+    ("bcopyblank", "template-snaps", COPY + ["a", "wait", "wait", "a", "wait", "b"],
+     {"card_b": "blank"}),
+    ("bcopydamaged", "snapdamaged", ["right"] + COPY + ["a", "wait", "wait", "wait", "b"],
+     {"card_b": "template-saved"}),
+    ("bcopypull", "template-snaps", COPY + ["a", "wait", "wait", "wait", "wait", "a"],
+     {"card_b": "template-saved", "CARD_REMOVE_B": f"{START + 7 * STEP},{START + 10 * STEP}"}),
+    ("binsert", "template-snaps", COPY + ["a", "wait", "wait", "wait", "a", "wait", "wait"],
+     {"card_b": "template-saved", "CARD_REMOVE_B": f"1,{START + 8 * STEP}"}),
+    ("binsertother", "template-snaps", OTHER + ["a", "wait", "wait", "wait", "wait", "b"],
+     {"card_b": "snap5", "CARD_REMOVE_B": f"1,{START + 8 * STEP}"}),
+    ("bother", "template-snaps", OTHER + ["a", "wait", "wait", "wait", "right", "down", "b",
+                                          "b"], {"card_b": "snap5"}),
+    ("botherblank", "template-snaps", OTHER + ["a", "wait", "wait", "wait", "b", "b"],
+     {"card_b": "blank"}),
+    ("botherempty", "template-snaps", OTHER + ["a", "wait", "wait", "wait", "b", "b"],
+     {"card_b": "template-saved"}),
+    ("bselect", "template-snaps", MOVE + ["right", "a", "wait"] + DELETE + ["left", "a", "wait",
+                                                                            "wait", "b", "b"],
+     {"card_b": "snap5", "slot_b": True}),
+    ("bselectcopy", "template-snaps", COPY + ["a", "wait", "wait", "a", "wait", "wait", "b"],
+     {"card_b": "snap5", "slot_b": True}),
+    ("bselectother", "snap5", OTHER + ["a", "wait", "wait", "wait", "right", "b", "b"],
+     {"card_b": "template-snaps", "slot_b": True}),
+    ("bselectpull", "template-snaps", ["right", "wait", "wait", "wait", "wait"],
+     {"card_b": "snap5", "slot_b": True, "CARD_REMOVE_B": f"{START + 2 * STEP},{START + 4 * STEP}"}),
+    ("bonly", None, ["wait", "right", "a", "b", "b"], {"card_b": "snap5"}),
+    ("bonlyswitch", "template-snaps", ["wait", "b", "wait", "wait", "a", "right", "b"],
+     {"card_b": "snap5", "CARD_REMOVE": f"{START + 2 * STEP},{START + 8 * STEP}"}),
     ("pull4", "template-snaps", ["right", "wait", "wait", "wait", "wait", "wait"],
      {"CARD_REMOVE": f"{START + 2 * STEP},{START + 4 * STEP}"}),
     ("pull2", "template-snaps", ["wait"], {"CARD_REMOVE": "560,700"}),
@@ -56,9 +90,9 @@ JOBS = [
 ]
 
 
-def hold(presses):
+def hold(presses, slot_b=False):
     holds, field = [], 0
-    for button, at in OPEN:
+    for button, at in OPEN[:2] + [("right", 560)] * slot_b + OPEN[2:]:
         holds += [f"none@{field}-{at - 1}", f"{button}@{at}-{at + PRESS - 1}"]
         field = at + PRESS
     at = START
@@ -77,15 +111,28 @@ def hold(presses):
 def main():
     prefix, cards = sys.argv[1], sys.argv[2]
     for i, (name, card, presses, *more) in enumerate(JOBS):
-        script, end = hold(presses)
+        more = dict(more[0]) if more else {}
+        card_b, slot_b = more.pop("card_b", None), more.pop("slot_b", False)
+        script, end = hold(presses, slot_b)
         job = f"{prefix}{name}"
-        copy = os.path.join(cards, f"{job}.raw")
-        shutil.copy(os.path.join(cards, f"{card}.raw"), copy)
+        args = ""
+        # Each slot's card a copy of its own; "blank" is a card file that doesn't exist yet,
+        # blank flash the game reads as a broken card.
+        for flag, src, suffix in (("--card", card, ""), ("--card-b", card_b, "-b")):
+            if src is None:
+                continue
+            copy = os.path.join(cards, f"{job}{suffix}.raw")
+            if src == "blank":
+                if os.path.exists(copy):
+                    os.remove(copy)
+            else:
+                shutil.copy(os.path.join(cards, f"{src}.raw"), copy)
+            args += f" {flag} {copy}"
         env = {"LOCKSTEP_SEED": 700 + i, "DBLEVEL": 4, "UNLOCK_ALL": 1, "MONKEY_B": 2,
                "STALL_BEATS": 200, "LOCKSTEP_MUTATE": 2, "LOCKSTEP_UNLIMITED": "fn_802545C4",
-               "MENU": "5,0", "MONKEY_HOLD": script, **(more[0] if more else {})}
+               "MENU": "5,0", "MONKEY_HOLD": script, **more}
         envs = " ".join(f"{k}={v}" for k, v in env.items())
-        print(f"{job}|{envs} --card {copy} --monkey {3700 + i} --mode 01 --fields {end + 1500}")
+        print(f"{job}|{envs}{args} --monkey {3700 + i} --mode 01 --fields {end + 1500}")
 
 
 if __name__ == "__main__":
