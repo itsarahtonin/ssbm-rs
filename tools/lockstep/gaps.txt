@@ -2978,3 +2978,328 @@ TimeoutHandler+0x58 hw # an erase or program that outlasts its alarm (SetupTimeo
 TimeoutHandler+0x74 hw # as +0x58
 dolphin/card/CARDBios:OnReset+0x34 hw # CARDBios's reset function, registered with OSRegisterResetFunction and called only by OSResetSystem's reset sequence, which the SDK layer stands in for (gaps.txt OSResetSystem+*)
 psInitDataBankLoad+0xa8 fail # switch (version) default for a bank version 1..0x3F: its only way on is OSPanic("psInitDataBanks: unknown version", particle.c:207; li r4,0xcf at +0x104)
+grGreens_8021360C+0x154 dead # as +0xbc, x280[1]
+grGreens_8021360C+0x1ec dead # as +0xbc, x280[2]
+grGreens_8021360C+0x284 dead # as +0xbc, x280[3]
+grGreens_802139C4+0x6c dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this mr/li r3,0 is never taken
+grGreens_802139C4+0x8c dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this mr/li r3,0 is never taken
+grGreens_80213C10+0xc4 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this mr/li r3,0 is never taken
+grGreens_80213C10+0xe4 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this mr/li r3,0 is never taken
+grGreens_80213C10+0x880 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this mr/li r3,0 is never taken
+grGreens_80213C10+0x8a0 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this mr/li r3,0 is never taken
+grGreens_80213C10+0x88c dead # the min<max arm of randrange(x60, x5C-1) in Whispy's state 2: GrGr.dat yakumono_param +0x60 is 5 and +0x5c is 2, so min (5) > max (1) every time and the cmpw/ble at +0x868/+0x86c always falls into the min>max arm
+grGreens_80213C10+0x890 dead # as +0x88c
+grGreens_80213C10+0x898 dead # as +0x88c
+grGreens_80213C10+0x8a4 dead # as +0x88c
+grGreens_80213C10+0x6a4 dead # get_whispy_dir's li 0 arm in case 4's 'xC > x54 || (xC > x58 && x14 != get_whispy_dir())': the call runs only when xC <= x54 and xC > x58, but GrGr.dat yakumono_param x54 is 35.0 and x58 is 70.0
+grGreens_80214674+0xc0 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this mr/li r3,0 is never taken
+grGreens_80214674+0xe0 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this mr/li r3,0 is never taken
+grGreens_80215ED8+0xb0 dead # switch(status) default arm (status < 1): status == 0 already returned at +0x40 from the same byte, with no store between, and extrwi gives 0..15
+grGreens_802166C4+0x98 dead # switch(row) default arm: row comes from for (row = 4; row >= 0; row--), always 0..4
+grGreens_802166C4+0x1b4 dead # 'total != 0 ? HSD_Randi(total) : 0' zero arm: total sums weights[0..5], which the has_zero scan just found all nonzero (u8 weights, no wrap)
+grGreens_802166C4+0x25c dead # as +0x1b4, the sum of weights[0..2] (left_has_zero == 0)
+grGreens_802166C4+0x2e0 dead # as +0x1b4, the sum of weights[3..5] (right_has_zero == 0)
+grGreens_802166C4+0x21c dead # ix = 6 needs pick >= the sum of all six weights, but pick = HSD_Randi(total) < total
+grGreens_802166C4+0x294 dead # as +0x21c, ix = 3 past weights[0..2]
+grGreens_802166C4+0x318 dead # as +0x21c, ix = 6 past weights[3..5]
+grGreens_802166C4+0x420 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this mr/li r3,0 is never taken
+grGreens_802166C4+0x440 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this mr/li r3,0 is never taken
+grKinokoRoute_8020754C+0xac fail # OSReport "couldn t get gobj" arm: Ground_GetStageGObj returns NULL only after GObj_Create or alloc_user_data_ground fails or a joint fails to load (ground.c Ground_GetStageGObj), as grVenom_80203EAC+0xb0
+grMaterial_801C87D0+0x3c dead # inlined 'p == NULL ? NULL : p->mobj' null arm (grmaterial.c the dobj loop): p (r31) was tested non-NULL by the loop head +0x68/+0x6c before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C87D0+0x60 dead # inlined 'p == NULL ? NULL : p->next' null arm (grmaterial.c the dobj loop): p (r31) was tested non-NULL by the loop head +0x68/+0x6c before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C8858+0x48 dead # inlined 'p == NULL ? NULL : p->mobj' null arm (grmaterial.c inlined grMaterial_801C87D0's dobj loop): p (r31) was tested non-NULL by the loop head +0x70/+0x74 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C8858+0x6c dead # inlined 'p == NULL ? NULL : p->next' null arm (grmaterial.c inlined grMaterial_801C87D0's dobj loop): p (r31) was tested non-NULL by the loop head +0x70/+0x74 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C8858+0x80 dead # inlined 'p == NULL ? NULL : p->child' null arm (grmaterial.c grMaterial_801C8858): p (r29) was tested non-NULL by the jobj == NULL return at +0x1c/+0x20 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C8858+0xb0 dead # inlined 'p == NULL ? NULL : p->child' null arm (grmaterial.c the inlined child walk): p (r29) was tested non-NULL by the loop head +0x100/+0x104 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C8858+0xd4 dead # inlined 'p == NULL ? NULL : p->next' null arm (grmaterial.c the recursion over children): p (r31) was tested non-NULL by the loop head +0xe0/+0xe4 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C8858+0xf0 dead # inlined 'p == NULL ? NULL : p->next' null arm (grmaterial.c the sibling walk): p (r29) was tested non-NULL by the loop head +0x100/+0x104 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C897C+0x3c dead # inlined 'p == NULL ? NULL : p->mobj' null arm (grmaterial.c the dobj loop): p (r31) was tested non-NULL by the loop head +0x68/+0x6c before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C897C+0x60 dead # inlined 'p == NULL ? NULL : p->next' null arm (grmaterial.c the dobj loop): p (r31) was tested non-NULL by the loop head +0x68/+0x6c before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C8A04+0x48 dead # inlined 'p == NULL ? NULL : p->mobj' null arm (grmaterial.c inlined grMaterial_801C897C's dobj loop): p (r31) was tested non-NULL by the loop head +0x70/+0x74 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C8A04+0x6c dead # inlined 'p == NULL ? NULL : p->next' null arm (grmaterial.c inlined grMaterial_801C897C's dobj loop): p (r31) was tested non-NULL by the loop head +0x70/+0x74 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C8A04+0x80 dead # inlined 'p == NULL ? NULL : p->child' null arm (grmaterial.c grMaterial_801C8A04): p (r29) was tested non-NULL by the jobj == NULL return at +0x1c/+0x20 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C8A04+0xb0 dead # inlined 'p == NULL ? NULL : p->child' null arm (grmaterial.c the inlined child walk): p (r29) was tested non-NULL by the loop head +0x100/+0x104 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C8A04+0xd4 dead # inlined 'p == NULL ? NULL : p->next' null arm (grmaterial.c the recursion over children): p (r31) was tested non-NULL by the loop head +0xe0/+0xe4 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C8A04+0xf0 dead # inlined 'p == NULL ? NULL : p->next' null arm (grmaterial.c the sibling walk): p (r29) was tested non-NULL by the loop head +0x100/+0x104 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C8B28+0x14 dead # inlined 'p == NULL ? NULL : p->parent' null arm (grmaterial.c HSD_JObjGetParent in the root walk): p (r3) was tested non-NULL by the +0x20/+0x24 test whose non-NULL arm alone loads the parent the loop condition (+0x34/+0x38) needs before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C8B28+0x28 dead # inlined 'p == NULL ? NULL : p->parent' null arm (grmaterial.c HSD_JObjGetParent in the loop condition): p (r3) was tested non-NULL by the beqlr at +0x4 on entry or the +0x34/+0x38 test of the parent it now holds before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C8B68+0x84 dead # inlined 'p == NULL ? NULL : p->child' null arm (grmaterial.c HSD_JObjGetChild): p (r29) was tested non-NULL by the mr./beq at +0x1c/+0x24 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C8B68+0x100 dead # inlined 'p == NULL ? NULL : p->child' null arm (grmaterial.c HSD_JObjGetChild in the child loop): p (r29) was tested non-NULL by the loop head +0x150/+0x154 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C8B68+0x124 dead # inlined 'p == NULL ? NULL : p->next' null arm (grmaterial.c HSD_JObjGetNext in the recursion): p (r30) was tested non-NULL by the loop head +0x130/+0x134 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C8B68+0x140 dead # inlined 'p == NULL ? NULL : p->next' null arm (grmaterial.c HSD_JObjGetNext in the child loop): p (r29) was tested non-NULL by the loop head +0x150/+0x154 (the beq at +0xa4 on the same r29 is never taken) before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C92C0+0x68 dead # inlined 'p == NULL ? NULL : p->mobj' null arm (grmaterial.c the dobj loop): p (r29) was tested non-NULL by the loop head +0x94/+0x98 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C92C0+0x8c dead # inlined 'p == NULL ? NULL : p->next' null arm (grmaterial.c the dobj loop): p (r29) was tested non-NULL by the loop head +0x94/+0x98 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C92C0+0xa4 dead # inlined 'p == NULL ? NULL : p->child' null arm (grmaterial.c grMaterial_801C92C0): p (r31) was tested non-NULL by the jobj == NULL return at +0x10/+0x1c before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C92C0+0x108 dead # inlined 'p == NULL ? NULL : p->mobj' null arm (grmaterial.c the child's dobj loop): p (r29) was tested non-NULL by the loop head +0x130/+0x134 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C92C0+0x12c dead # inlined 'p == NULL ? NULL : p->next' null arm (grmaterial.c the child's dobj loop): p (r29) was tested non-NULL by the loop head +0x130/+0x134 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C92C0+0x140 dead # inlined 'p == NULL ? NULL : p->child' null arm (grmaterial.c the child walk): p (r31) was tested non-NULL by the loop head +0x18c/+0x190 (the beq at +0xc8 on the same r31 is never taken) before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C92C0+0x160 dead # inlined 'p == NULL ? NULL : p->next' null arm (grmaterial.c the recursion over grandchildren): p (r29) was tested non-NULL by the loop head +0x16c/+0x170 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C92C0+0x17c dead # inlined 'p == NULL ? NULL : p->next' null arm (grmaterial.c the child walk): p (r31) was tested non-NULL by the loop head +0x18c/+0x190 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C94D8+0x64 dead # inlined 'p == NULL ? NULL : p->mobj' null arm (grmaterial.c the dobj loop): p (r30) was tested non-NULL by the loop head +0x8c/+0x90 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C94D8+0x88 dead # inlined 'p == NULL ? NULL : p->next' null arm (grmaterial.c the dobj loop): p (r30) was tested non-NULL by the loop head +0x8c/+0x90 before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C94D8+0x9c dead # inlined 'p == NULL ? NULL : p->child' null arm (grmaterial.c grMaterial_801C94D8): p (r29) was tested non-NULL by the jobj == NULL return at +0x18/+0x1c before this, and nothing between writes it (only callee-saved across the calls between)
+grMaterial_801C94D8+0xbc dead # inlined 'p == NULL ? NULL : p->next' null arm (grmaterial.c the recursion over children): p (r30) was tested non-NULL by the loop head +0xc8/+0xcc before this, and nothing between writes it (only callee-saved across the calls between)
+fn_801C8EF8+0x2ec dead # reg2 < 4 with reg1 >= 4 (fn_801C8EF8_inline, grmaterial.c): reg1 = lbGetFreeColorRegister(0, mobj, NULL) >= 4 means registers 0..3 are used by mobj->texp/tevdesc; reg2 = lbGetFreeColorRegister(0, mobj, &cnst with reg1) searches the same texp/tevdesc plus reg1 (lb_00B0.c:649-681), so it returns > reg1 or -1 (assert at +0x248)
+fn_801C8EF8+0x300 dead # as +0x2ec (the lb_8000CCA4(reg2) call it guards)
+grKongo_801D55D8+0xcc dead # rand_range zero arm on fctiwz values: the cmpw operands and the subf. operands are the low words of the same two fctiwz results (stored twice to the stack), which differ in the a>b arm
+grKongo_801D55D8+0xd8 dead # the a<=b arm of rand_range((s32)unk30, (s32)unk2C) in the barrel's on_init: GrKg.dat yakumono_param +0x30 is 360.0 and +0x2c is 180.0, so a > b every time
+grKongo_801D55D8+0xe0 dead # as +0xd8
+grKongo_801D55D8+0xe8 dead # as +0xd8
+grKongo_801D55D8+0xf0 dead # as +0xd8 (and its zero arm)
+grKongo_801D55D8+0xf4 dead # as +0xd8
+grKongo_801D55D8+0x124 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two values, which differ there, so the beq to this li/mr r3,0 is never taken
+grKongo_801D55D8+0x144 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two values, which differ there, so the beq to this li/mr r3,0 is never taken
+grKongo_801D577C+0x248 dead # rand_range zero arm on fctiwz values: the cmpw operands and the subf. operands are the low words of the same two fctiwz results (stored twice to the stack), which differ in the a>b arm
+grKongo_801D577C+0x26c dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two values, which differ there, so the beq to this li/mr r3,0 is never taken
+grKongo_801D577C+0x32c dead # rand_range zero arm on fctiwz values: the cmpw operands and the subf. operands are the low words of the same two fctiwz results (stored twice to the stack), which differ in the a>b arm
+grKongo_801D577C+0x350 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two values, which differ there, so the beq to this li/mr r3,0 is never taken
+grKongo_801D577C+0x500 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two values, which differ there, so the beq to this li/mr r3,0 is never taken
+grKongo_801D577C+0x520 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two values, which differ there, so the beq to this li/mr r3,0 is never taken
+grKongo_801D577C+0x5a8 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two values, which differ there, so the beq to this li/mr r3,0 is never taken
+grKongo_801D577C+0x5c8 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two values, which differ there, so the beq to this li/mr r3,0 is never taken
+grKongo_801D7BBC+0x214 dead # switch(event_kind) default arm (event_kind < 1): every path to the switch (+0x1d8) sets r31 to 1, 2 or 3 (+0xf0, +0x144, +0x184, +0x1cc)
+grKongo_801D8314+0x5c dead # 'sum != 0 ? HSD_Randi(sum) : 0' zero arm: sum is the eight s16 weights at GrKg.dat yakumono_param +0x44..+0x52 (1,1,10,50,10,1,1,1 = 75)
+grHomeRun_8021C914+0x148 dead # SetScaleY after SetScaleX on gobj->hsd_obj: a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (it was dirty, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and nothing between clears it, so the sub is skipped
+grHomeRun_8021C914+0x1dc dead # SetScaleZ: a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (it was dirty, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and nothing between clears it, so the sub is skipped
+grHomeRun_8021CB20+0x1b8 dead # SetScaleY after SetScaleX on the same jobj (r29/r27): a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (it was dirty, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and nothing between clears it, so the sub is skipped
+grHomeRun_8021CB20+0x24c dead # SetScaleZ: a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (it was dirty, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and nothing between clears it, so the sub is skipped
+grHomeRun_8021CB20+0x460 dead # the remainder loop of 'for (; i < 64; i++) parts[i] = NULL': i leaves the first loop at INIT_ADD_PARTS_RANGE = 1 + 2400/(160*Ground_801C0498()) = 16 (GrHr.dat grGroundParam y = 1.0), so 64 - i = 48 is a multiple of 8 and the unrolled loop alone runs
+grHomeRun_8021CB20+0x464 dead # as +0x460
+grHomeRun_8021CB20+0x604 dead # SetScaleY on back[i]: a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (it was dirty, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and nothing between clears it, so the sub is skipped
+grHomeRun_8021CB20+0x698 dead # SetScaleZ on back[i]: a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (it was dirty, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and nothing between clears it, so the sub is skipped
+grHomeRun_8021CB20+0x6a8 dead # HSD_JObjGetChild(jobj) NULL arm: jobj is back[i]->hsd_obj, which Ground_GetStageGObj builds the same way every time from GrHr.dat (map gobj 4 root has a child) and the verified runs find its child non-NULL
+grHomeRun_8021CB20+0x7bc dead # SetTranslateX on back[i] after its SetScale*: a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (it was dirty, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and nothing between clears it, so the sub is skipped
+grHomeRun_8021CB20+0x96c dead # as +0x89c, bg_gobj[1]
+grHomeRun_8021CB20+0xa38 dead # as +0x89c, bg_gobj[2]
+grHomeRun_8021CB20+0xb04 dead # as +0x89c, bg_gobj[3]
+grHomeRun_8021E500+0x26c dead # SetScaleY: a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (it was dirty, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and nothing between clears it, so the sub is skipped
+grHomeRun_8021E500+0x300 dead # SetScaleZ: a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (it was dirty, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and nothing between clears it, so the sub is skipped
+grHomeRun_8021E500+0x310 dead # HSD_JObjGetChild(jobj) NULL arm on the part's hsd_obj, built the same way every time from GrHr.dat (every map gobj root of GrHr.dat has a child) and found non-NULL by the verified runs
+grHomeRun_8021E500+0x448 dead # SetTranslateX on the part's hsd_obj after its SetScale*: a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (it was dirty, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and nothing between clears it, so the sub is skipped
+grFlatzone_8021707C+0xf0 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grFlatzone_8021707C+0x110 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grFlatzone_802171D4+0xa8 dead # switch(xC5) arms for xC5 < 3: xC5 was just stored from vals[HSD_Randi(2)] with vals = {3, 4} (the do/while at +0x70..+0x98), so only cases 3 and 4 run
+grFlatzone_802171D4+0xb0 dead # switch(xC5) arms for xC5 < 3: xC5 was just stored from vals[HSD_Randi(2)] with vals = {3, 4} (the do/while at +0x70..+0x98), so only cases 3 and 4 run
+grFlatzone_802171D4+0xb4 dead # switch(xC5) arms for xC5 < 3: xC5 was just stored from vals[HSD_Randi(2)] with vals = {3, 4} (the do/while at +0x70..+0x98), so only cases 3 and 4 run
+grFlatzone_802171D4+0xc4 dead # case 1 of switch(xC5): xC5 is 3 or 4 (as +0xa8)
+grFlatzone_802171D4+0xd4 dead # case 1 of switch(xC5): xC5 is 3 or 4 (as +0xa8)
+grFlatzone_802171D4+0xe0 dead # case 1 of switch(xC5): xC5 is 3 or 4 (as +0xa8)
+grFlatzone_802171D4+0xe8 dead # case 1 of switch(xC5): xC5 is 3 or 4 (as +0xa8)
+grFlatzone_802171D4+0xf0 dead # case 2 of switch(xC5): xC5 is 3 or 4 (as +0xa8)
+grFlatzone_802171D4+0x100 dead # case 2 of switch(xC5): xC5 is 3 or 4 (as +0xa8)
+grFlatzone_802171D4+0x10c dead # case 2 of switch(xC5): xC5 is 3 or 4 (as +0xa8)
+grFlatzone_802171D4+0x114 dead # case 2 of switch(xC5): xC5 is 3 or 4 (as +0xa8)
+grFlatzone_802171D4+0x1a0 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grFlatzone_802171D4+0x1ac dead # the min<max arm of rand_int(unk4, unk0): GrFz.dat yakumono_param +0x4 is 3000 and +0x0 is 1800, so the cmpw/ble at +0x188/+0x18c always takes the min>max arm
+grFlatzone_802171D4+0x1b0 dead # the min<max arm of rand_int(unk4, unk0): GrFz.dat yakumono_param +0x4 is 3000 and +0x0 is 1800, so the cmpw/ble at +0x188/+0x18c always takes the min>max arm
+grFlatzone_802171D4+0x1b8 dead # the min<max arm of rand_int(unk4, unk0): GrFz.dat yakumono_param +0x4 is 3000 and +0x0 is 1800, so the cmpw/ble at +0x188/+0x18c always takes the min>max arm
+grFlatzone_802171D4+0x1c0 dead # the min<max arm of rand_int(unk4, unk0): GrFz.dat yakumono_param +0x4 is 3000 and +0x0 is 1800, so the cmpw/ble at +0x188/+0x18c always takes the min>max arm
+grFlatzone_802171D4+0x1c4 dead # the min<max arm of rand_int(unk4, unk0): GrFz.dat yakumono_param +0x4 is 3000 and +0x0 is 1800, so the cmpw/ble at +0x188/+0x18c always takes the min>max arm
+grFlatzone_802174EC+0xe8 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grFlatzone_802174EC+0x108 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grFlatzone_802176BC+0x294 dead # 'unk34 - unk30 != 0 ? HSD_Randi(...) : 0' zero arm (rand_int_inner): GrFz.dat yakumono_param +0x34 is 8 and +0x30 is 2
+grFlatzone_80218060+0xe0 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grFlatzone_80218060+0x100 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grCastle_801CD4D0+0xb0 fail # OSReport "couldn t get gobj" arm: Ground_GetStageGObj returns NULL only after GObj_Create or alloc_user_data_ground fails or a joint fails to load, as grVenom_80203EAC+0xb0
+grCastle_801CD658+0x174 dead # entries_s.e[i].type == 3 arm: entries_s is a copy of the const grCs_803B7EA8 = {{66,6},{76,6},{85,6},{94,6}} (grcastle.c:269-274), every type 6
+grCastle_801CD658+0x18c dead # type == 4 arm, as +0x174
+grCastle_801CD658+0x1b4 dead # the else (type not 3/4/6) arm, as +0x174
+grCastle_801CDA0C+0x6c dead # 'yakumono_param->x18 != 0.0 ? x14 : x10' x10 arm: GrCs.dat yakumono_param +0x18 is 1.0
+grCastle_801CDA0C+0x148 dead # as +0x6c, for plat[1]
+grCastle_801CE054+0xf0 dead # 'count != 0 ? HSD_Randi(count) : 0' zero arm: count is how many of 0..8 differ from xD8/xDA/xDC, at least 6
+grCastle_801CE3AC+0x1ac dead # HSD_JObjSetRotation's HSD_JObjSetMtxDirtySub right after HSD_JObjSetTranslate on the same jobj (r31) with no call between: the first left JOBJ_MTX_DIRTY set (jobj.c:1447) and no GrCs.dat joint has JOBJ_USER_DEF_MTX
+grCastle_801CE578+0x218 dead # 'x != 0 ? HSD_Randi(x) : 0' zero arm on yakumono_param +0xe (lha at +0x204): GrCs.dat has 2400 there
+grCastle_801CEF04+0x74 dead # the hi>lo arm of the range in case 1 (hi = x42, lo = x40): GrCs.dat yakumono_param +0x40 and +0x42 are both 1200, so neither arm runs
+grCastle_801CEF04+0x7c dead # as +0x74
+grCastle_801CEF04+0x84 dead # as +0x74 (its zero arm)
+grCastle_801CEF04+0x88 dead # as +0x74
+grCastle_801CEF04+0xa4 dead # the zero arm of the hi<lo arm: x42 == x40 (1200, GrCs.dat), and subf. of the two compared values is nonzero whenever that arm runs anyway
+grCastle_801CF7B0+0x6c dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grCastle_801CF7B0+0x8c dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grCastle_801CF868+0xb4 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grCastle_801CF868+0xd4 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grCastle_801CF868+0x150 dead # grCastle_PickSatellite's 'total != 0 ? HSD_Randi(total) : 0' zero arm: the weights are grCs_803B7EF0 {100,100,100} with at most one divided by yakumono_param x6 (6 in GrCs.dat), so total >= 216
+grCastle_801CF868+0x188 dead # slot = 3 after the pick loop needs rand >= total, but rand = HSD_Randi(total) < total
+grCastle_801CF868+0x194 dead # 'if (slot == 3) slot = 0': slot is never 3 (as +0x188)
+grCastle_801D0D84+0x22c dead # the dirty arm of HSD_JObjSetRotation's test: the function starts with HSD_JObjSetupMatrix(jobj), which leaves JOBJ_MTX_DIRTY clear, and only lb_800103B8, lbVector_* and trig run before the set
+grStadium_801D10F8+0xb0 fail # OSReport "couldn t get gobj" arm: Ground_GetStageGObj returns NULL only after GObj_Create or alloc_user_data_ground fails or a joint fails to load, as grVenom_80203EAC+0xb0
+grStadium_801D13E0+0xbc dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grStadium_801D13E0+0xdc dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grStadium_801D2528+0x2a4 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grStadium_801D2528+0x2c4 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grStadium_801D2528+0x330 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grStadium_801D2528+0x350 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grStadium_801D3138+0x80 dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grpstadium.c grStadium_801D3138: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grStadium_801D3138+0x9c dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grpstadium.c grStadium_801D3138: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grStadium_801D3138+0xb8 dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grpstadium.c grStadium_801D3138: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grStadium_801D3138+0xd4 dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grpstadium.c grStadium_801D3138: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grStadium_801D3138+0xf0 dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grpstadium.c grStadium_801D3138: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grStadium_801D3138+0x114 dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grpstadium.c grStadium_801D3138: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grStadium_801D3138+0x128 dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grpstadium.c grStadium_801D3138: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grStadium_801D3138+0x144 dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grpstadium.c grStadium_801D3138: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grStadium_801D3138+0x158 dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grpstadium.c grStadium_801D3138: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grStadium_801D3138+0x174 dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grpstadium.c grStadium_801D3138: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grStadium_801D3BBC+0x280 dead # grStadium_ScaleColor's clamp (1.25 * c > 255): c is a component of lbl_803B7864[gm_80160854(...)] (gm_1601.c:98-104; gm_80160854 returns 0..8), whose largest component is 0x99 (1.25 * 153 = 191)
+grStadium_801D3BBC+0x2b4 dead # grStadium_ScaleColor's clamp (1.25 * c > 255): c is a component of lbl_803B7864[gm_80160854(...)] (gm_1601.c:98-104; gm_80160854 returns 0..8), whose largest component is 0x99 (1.25 * 153 = 191)
+grStadium_801D3BBC+0x2e8 dead # grStadium_ScaleColor's clamp (1.25 * c > 255): c is a component of lbl_803B7864[gm_80160854(...)] (gm_1601.c:98-104; gm_80160854 returns 0..8), whose largest component is 0x99 (1.25 * 153 = 191)
+grStadium_801D4548+0x590 dead # HSD_JObjSetMtxDirtySub of a second HSD_JObjSet* on the same jobj (r27) right after another (only an lfs/stfs between): the first left JOBJ_MTX_DIRTY set (jobj.c:1447) and no GrPs.dat joint has JOBJ_USER_DEF_MTX
+grStadium_801D4548+0x964 dead # HSD_JObjSetMtxDirtySub of a second HSD_JObjSet* on the same jobj (r27) right after another (only an lfs/stfs between): the first left JOBJ_MTX_DIRTY set (jobj.c:1447) and no GrPs.dat joint has JOBJ_USER_DEF_MTX
+grStadium_801D4548+0x9f0 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grStadium_801D4548+0xa10 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grStadium_801D4548+0xa5c dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grStadium_801D4548+0xa7c dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+gm_Scene_ToyFall_OnEnter+0x390 dead # SetScaleY right after SetScaleX on the same jobj (r29), no call between: the first left JOBJ_MTX_DIRTY set (jobj.c:1447)
+gm_Scene_ToyFall_OnEnter+0x400 dead # SetScaleZ, as +0x390
+gm_Scene_ToyFall_OnEnter+0x548 dead # inlined gm_801A7070_SetupTrophy's 'jobj == NULL ? NULL : jobj->child' NULL arm: jobj = HSD_JObjLoadJoint(gm_804D67AC->models[0]->joint), GmRgStnd.dat's standScene model 0, whose root (0x4528) has a child (0x4568)
+gm_Scene_ToyFall_OnEnter+0x814 dead # SetScaleY right after SetScaleX on the same jobj (r28): the first left JOBJ_MTX_DIRTY set
+gm_Scene_ToyFall_OnEnter+0x884 dead # SetScaleZ, as +0x814
+gm_Scene_Vs_OnFrame+0x48 dead # switch(controller.state.unk_0) arm for values < 0: unk_0 is loaded with lbz (+0x2c), 0..255, and cases 0..3 are dispatched before this
+fn_8016DCC0+0x1a4 dead # switch(controller.state.is_singleplayer) arm for values >= 2: this function has just stored it as 1 (rules.x54 != NULL) or 0, and only Player_InitAllPlayers runs between
+fn_8016A4C8+0x254 dead # roll_cpu_type's switch(HSD_Randi(4)) arm for a negative result: HSD_Randi(4) is 0..3
+fn_8016A4C8+0x264 dead # the cpu type 0x17 arm for HSD_Randi(4) > 3 or < 0 (reached only from the bge at +0x248 after cmpwi 3 and from +0x254): HSD_Randi(4) is 0..3
+fn_801937C4+0x1a8 dead # the 8-at-a-time body of the unrolled 'for (; idx < 6; idx++)' fill: fn_801937C4 is the handler of option row 0 (lbl_803D9FD8[0], called as lbl_803D9FD8[cur_option](tm, ...) at gmtou_0.c:2878 with arg0[0] = cur_option = 0) and sets idx = arg0[0] + 1 = 1 first, so at most 5 iterations run and srwi.(count, 3) is 0
+fn_801937C4+0x2ac dead # the remainder test after that unrolled body, reached only from it (as +0x1a8)
+gm_801A8114+0x1b4 dead # a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (dirty already, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and no call between sets up a matrix (only Toy_803060BC table reads or trig)
+gm_801A8114+0x254 dead # a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (dirty already, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and no call between sets up a matrix (only Toy_803060BC table reads or trig)
+gm_801A8114+0x300 dead # a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (dirty already, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and no call between sets up a matrix (only Toy_803060BC table reads or trig)
+gm_801A8114+0x370 dead # a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (dirty already, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and no call between sets up a matrix (only Toy_803060BC table reads or trig)
+gm_801A8114+0x3e0 dead # a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (dirty already, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and no call between sets up a matrix (only Toy_803060BC table reads or trig)
+gm_801A85E4+0x18c dead # its only call is gm_801A9094 (gmregenddisp.c:321) on root = HSD_JObjAlloc(), already set by HSD_JObjSetScaleX/Y/Z there: a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (dirty already, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and no call between sets up a matrix (only Toy_803060BC table reads or trig)
+gm_801A85E4+0x304 dead # as +0x18c
+gm_801A85E4+0x474 dead # as +0x18c
+gm_801A85E4+0x568 dead # a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (dirty already, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and no call between sets up a matrix (only Toy_803060BC table reads or trig)
+gm_801A85E4+0x65c dead # a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (dirty already, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and no call between sets up a matrix (only Toy_803060BC table reads or trig)
+gm_801A85E4+0x748 dead # a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (dirty already, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and no call between sets up a matrix (only Toy_803060BC table reads or trig)
+gm_801A9094+0x1d8 dead # SetScaleY on root: a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (dirty already, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and no call between sets up a matrix (only Toy_803060BC table reads or trig)
+gm_801A9094+0x248 dead # SetScaleZ on root: a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (dirty already, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and no call between sets up a matrix (only Toy_803060BC table reads or trig)
+gm_801A9094+0x3ac dead # SetTranslateZ on that jobj: a later HSD_JObjSet* on the same jobj in this call: the earlier set left JOBJ_MTX_DIRTY set (dirty already, or HSD_JObjSetMtxDirtySub set it, jobj.c:1447) and no call between sets up a matrix (only Toy_803060BC table reads or trig)
+gm_801A9630+0x474 dead # GET_JOBJ(gm_804D67BC) NULL arm: gm_804D67BC was created a few lines before with HSD_JObjLoadJoint(gm_804D67AC->models[0]->joint) as its object (GmRgStnd.dat standScene, whose model 0 root has a three-deep child chain)
+gm_801A9630+0x484 dead # HSD_JObjGetChild NULL arm on that root's child (GmRgStnd.dat standScene model 0: root 0x4528 -> 0x4568 -> 0x45a8 -> 0x45e8)
+gm_801A9630+0x498 dead # 'target == NULL ? NULL : target->child' NULL arm, as +0x484 (target is the root's grandchild, 0x45a8)
+mnDiagram2_CreateStatRow+0x318 dead # HSD_JObjSetMtxDirtySub of a second HSD_JObjSet* on the same jobj with no call between: the first left JOBJ_MTX_DIRTY set (jobj.c:1447)
+mnDiagram2_CreateStatRow+0x38c dead # HSD_JObjSetMtxDirtySub of a second HSD_JObjSet* on the same jobj with no call between: the first left JOBJ_MTX_DIRTY set (jobj.c:1447)
+mnDiagram3_HandleInput+0x50c dead # HSD_JObjSetMtxDirtySub of a second HSD_JObjSet* on the same jobj with no call between: the first left JOBJ_MTX_DIRTY set (jobj.c:1447)
+mnDiagram3_HandleInput+0x59c dead # HSD_JObjSetMtxDirtySub of a second HSD_JObjSet* on the same jobj with no call between: the first left JOBJ_MTX_DIRTY set (jobj.c:1447)
+mnDiagram3_HandleInput+0x904 dead # HSD_JObjSetMtxDirtySub of a second HSD_JObjSet* on the same jobj with no call between: the first left JOBJ_MTX_DIRTY set (jobj.c:1447)
+mnDiagram3_HandleInput+0x994 dead # HSD_JObjSetMtxDirtySub of a second HSD_JObjSet* on the same jobj with no call between: the first left JOBJ_MTX_DIRTY set (jobj.c:1447)
+grOnett_801E3A34+0x14c dead # rand_range zero arm on fctiwz values: the cmpw operands and the subf. operands are the low words of the same two fctiwz results (stored twice to the stack), which differ in the a>b arm
+grOnett_801E3A34+0x158 dead # the a<=b arm of rand_range on (s32)yakumono_param x28 vs x24 (lfs at +0x104/+0x108): GrOt.dat has x24 = 600.0 and x28 = 1200.0, so the cmpw at +0x128 always finds a > b
+grOnett_801E3A34+0x160 dead # the a<=b arm of rand_range on (s32)yakumono_param x28 vs x24 (lfs at +0x104/+0x108): GrOt.dat has x24 = 600.0 and x28 = 1200.0, so the cmpw at +0x128 always finds a > b
+grOnett_801E3A34+0x168 dead # the a<=b arm of rand_range on (s32)yakumono_param x28 vs x24 (lfs at +0x104/+0x108): GrOt.dat has x24 = 600.0 and x28 = 1200.0, so the cmpw at +0x128 always finds a > b
+grOnett_801E3A34+0x170 dead # the a<=b arm of rand_range on (s32)yakumono_param x28 vs x24 (lfs at +0x104/+0x108): GrOt.dat has x24 = 600.0 and x28 = 1200.0, so the cmpw at +0x128 always finds a > b
+grOnett_801E3A34+0x174 dead # the a<=b arm of rand_range on (s32)yakumono_param x28 vs x24 (lfs at +0x104/+0x108): GrOt.dat has x24 = 600.0 and x28 = 1200.0, so the cmpw at +0x128 always finds a > b
+grOnett_801E5538+0x90 dead # rand_range zero arm on fctiwz values: the cmpw operands and the subf. operands are the low words of the same two fctiwz results (stored twice to the stack), which differ in the a>b arm
+grOnett_801E5538+0x9c dead # the a<=b arm of rand_range on (s32) x28 vs x24 (lfs at +0x48/+0x4c): GrOt.dat x24 = 600.0, x28 = 1200.0
+grOnett_801E5538+0xa4 dead # the a<=b arm of rand_range on (s32) x28 vs x24 (lfs at +0x48/+0x4c): GrOt.dat x24 = 600.0, x28 = 1200.0
+grOnett_801E5538+0xac dead # the a<=b arm of rand_range on (s32) x28 vs x24 (lfs at +0x48/+0x4c): GrOt.dat x24 = 600.0, x28 = 1200.0
+grOnett_801E5538+0xb4 dead # the a<=b arm of rand_range on (s32) x28 vs x24 (lfs at +0x48/+0x4c): GrOt.dat x24 = 600.0, x28 = 1200.0
+grOnett_801E5538+0xb8 dead # the a<=b arm of rand_range on (s32) x28 vs x24 (lfs at +0x48/+0x4c): GrOt.dat x24 = 600.0, x28 = 1200.0
+grOnett_801E5538+0x120 dead # rand_range zero arm on fctiwz values: the cmpw operands and the subf. operands are the low words of the same two fctiwz results (stored twice to the stack), which differ in the a>b arm
+grOnett_801E5538+0x12c dead # the a<=b arm of rand_range on (s32) x30 vs x2c (lfs at +0xd8/+0xdc): GrOt.dat x2c = 300.0, x30 = 600.0
+grOnett_801E5538+0x134 dead # the a<=b arm of rand_range on (s32) x30 vs x2c (lfs at +0xd8/+0xdc): GrOt.dat x2c = 300.0, x30 = 600.0
+grOnett_801E5538+0x13c dead # the a<=b arm of rand_range on (s32) x30 vs x2c (lfs at +0xd8/+0xdc): GrOt.dat x2c = 300.0, x30 = 600.0
+grOnett_801E5538+0x144 dead # the a<=b arm of rand_range on (s32) x30 vs x2c (lfs at +0xd8/+0xdc): GrOt.dat x2c = 300.0, x30 = 600.0
+grOnett_801E5538+0x148 dead # the a<=b arm of rand_range on (s32) x30 vs x2c (lfs at +0xd8/+0xdc): GrOt.dat x2c = 300.0, x30 = 600.0
+grOnett_801E37F4+0xac fail # OSReport "couldn t get gobj" arm: Ground_GetStageGObj returns NULL only after GObj_Create or alloc_user_data_ground fails or a joint fails to load, as grVenom_80203EAC+0xb0
+grOnett_801E56FC+0x4c dead # archive->unk4 == NULL arm: grDatFiles sets unk4 of every stage archive at load, to the DAT's map_head or to &grDatFiles_803E0924 (grdatfiles.c:45-48, 81), never NULL for GrOt
+grBigBlueRoute_8020DE48+0x4c dead # as grOnett_801E56FC+0x4c (archive->unk4 is set at load, never NULL)
+grBigBlueRoute_8020DAB4+0x98 dead # 'countdown != 0 ? HSD_Randi(countdown) : 0' zero arm: countdown starts at 30 and drops by one per pass, and the only caller (vi0801.c:158, bl at 8031F24C) passes count 0x17, so it stays >= 8
+grBigBlueRoute_8020DAB4+0xc4 dead # HSD_JObjGetChild(jobj) NULL arm right after HSD_ASSERT(jobj) on the same r27 (+0x9c..+0xb8), whose failing arm never returns
+grBigBlueRoute_8020DAB4+0xfc dead # HSD_JObjGetNext(jobj) NULL arm right after HSD_ASSERT(1437, jobj) on the same r27 (+0xd8..+0xec)
+grBigBlueRoute_8020DAB4+0x1f8 dead # SetScaleY right after SetScaleX on the same jobj: the first left JOBJ_MTX_DIRTY set (jobj.c:1447)
+grBigBlueRoute_8020DAB4+0x268 dead # SetScaleZ, as +0x1f8
+grBigBlueRoute_8020C85C+0x120 dead # rand_range zero arm on fctiwz values: the cmpw operands and the subf. operands are the low words of the same two fctiwz results (stored twice to the stack), which differ in the a>b arm
+grBigBlueRoute_8020C85C+0x144 dead # randrange zero arm: cmpw a,b / bge then subf. of those same two registers, which differ there
+grBigBlueRoute_8020C85C+0x248 dead # the 'jobj == NULL ? NULL : child' NULL arm after 'beq' on the same cmplwi r3,0 at +0x23c/+0x240: reached only through the bne at +0x244 on that same condition register, which is never taken there
+grBigBlueRoute_8020C85C+0x26c dead # 'p == NULL ? NULL : p->next' NULL arm inside the walk loop: the body (+0x260) is entered only from the bne at +0x284 after cmplwi r26,0 at +0x280, and r26 is not written in between
+grBigBlueRoute_8020C85C+0x3c4 dead # SetTranslate*'s HSD_JObjSetMtxDirtySub on r26 right after another set on it with no call between: JOBJ_MTX_DIRTY already set (jobj.c:1447)
+grBigBlueRoute_8020C85C+0x454 dead # as +0x3c4
+grBigBlueRoute_8020C530+0x15c dead # 'count != 0 ? HSD_Randi(count) : 0' zero arm right after 'if (count == 0) return -1' (grbigblueroute.c)
+grBigBlueRoute_8020CD20+0x90 dead # the NULL arm after 'beq' on the same cmplwi r25,0 at +0x84/+0x88: reached only through the bne at +0x8c on that condition, never taken there
+grBigBlueRoute_8020CD20+0x180 dead # switch default for a negative value of a 4-bit field (extrwi r0,r0,4,26 at +0x164 gives 0..15); cases 0..3 are dispatched and >= 4 goes to +0x184
+grBigBlueRoute_8020C238+0x2c dead # the NULL arm after 'beq' on the same cmplwi r4,0 at +0x20/+0x24: reached only through the bne at +0x28 on that condition, never taken there
+grBigBlueRoute_8020C238+0x1b8 dead # 'jobj == NULL ? NULL : jobj->next' NULL arm on r31 after HSD_ASSERT(jobj) on it at the start of the inlined HSD_JObjSet* (+0x140..+0x154) and no write since
+grFourside_801F3274+0x198 dead # 'crane_iron_wait_add != 0 ? HSD_Randi(...) : 0' zero arm: GrFs.dat yakumono_param +0x18 (crane_iron_wait_add) is 300
+grFourside_801F3274+0x220 dead # 'rand_max != 0 ? HSD_Randi : 0' zero arm of the down move: rand_max = (s32)|crane_iron_down_max - crane_iron_down_min| = |-8 - -5| = 3 (GrFs.dat +0x28/+0x24)
+grFourside_801F3274+0x2b8 dead # fneg of crane_iron_up_max - crane_iron_up_min < 0: GrFs.dat +0x20/+0x1c give 10 - 5 = 5
+grFourside_801F3274+0x2e0 dead # zero arm of the up move: rand_max = 5 (as +0x2b8)
+grFourside_801F3274+0x314 dead # fneg of crane_iron_up_min < 0: GrFs.dat +0x1c is 5.0
+grFourside_801F3274+0x454 dead # 'x != 0 ? HSD_Randi(x) : 0' zero arm on yakumono_param +0x10 (lwz at +0x440): GrFs.dat has 600 there
+grFourside_801F3CC8+0x48 dead # switch on a byte loaded with lbz (0..255): the arm for values below 0 after cases 0..n are dispatched (lbz 0xc4 at +0x2c)
+grFourside_801F3CC8+0x208 dead # 'x != 0 ? HSD_Randi(x) : 0' zero arm on yakumono_param +0x4 (lwz at +0x1f4): GrFs.dat has 900 there
+grFourside_801F3894+0x3c dead # switch on a byte loaded with lbz (0..255): the arm for values below 0 after cases 0..n are dispatched (lbz 0xc4 at +0x1c)
+grFourside_801F3894+0x180 dead # 'x != 0 ? HSD_Randi(x) : 0' zero arm on yakumono_param +0x40 (lwz at +0x168): GrFs.dat has 1200 there
+grIzumi_801CC358+0xa8 dead # rand_range zero arm on fctiwz values: the cmpw operands and the subf. operands are the low words of the same two fctiwz results (stored twice to the stack), which differ in the a>b arm
+grIzumi_801CC358+0xb4 dead # the a<=b arm of rand_range on (s32) yakumono_param x3c vs x38 (lfs at +0x60/+0x64): GrIz.dat x38 = 600.0, x3c = 1080.0, so the cmpw at +0x84 always finds a > b
+grIzumi_801CC358+0xbc dead # the a<=b arm of rand_range on (s32) yakumono_param x3c vs x38 (lfs at +0x60/+0x64): GrIz.dat x38 = 600.0, x3c = 1080.0, so the cmpw at +0x84 always finds a > b
+grIzumi_801CC358+0xc4 dead # the a<=b arm of rand_range on (s32) yakumono_param x3c vs x38 (lfs at +0x60/+0x64): GrIz.dat x38 = 600.0, x3c = 1080.0, so the cmpw at +0x84 always finds a > b
+grIzumi_801CC358+0xcc dead # the a<=b arm of rand_range on (s32) yakumono_param x3c vs x38 (lfs at +0x60/+0x64): GrIz.dat x38 = 600.0, x3c = 1080.0, so the cmpw at +0x84 always finds a > b
+grIzumi_801CC358+0xd0 dead # the a<=b arm of rand_range on (s32) yakumono_param x3c vs x38 (lfs at +0x60/+0x64): GrIz.dat x38 = 600.0, x3c = 1080.0, so the cmpw at +0x84 always finds a > b
+grIzumi_801CC358+0x288 dead # rand_range zero arm on fctiwz values: the cmpw operands and the subf. operands are the low words of the same two fctiwz results (stored twice to the stack), which differ in the a>b arm
+grIzumi_801CC358+0x2ac dead # randrange zero arm: cmpw a,b / bge then subf. of those same two registers, which differ there
+grIzumi_801CC358+0x3bc dead # rand_range zero arm on fctiwz values: the cmpw operands and the subf. operands are the low words of the same two fctiwz results (stored twice to the stack), which differ in the a>b arm
+grIzumi_801CC358+0x3e0 dead # randrange zero arm: cmpw a,b / bge then subf. of those same two registers, which differ there
+grIzumi_801CD090+0x78 dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grizumi.c grIzumi_801CD090: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grIzumi_801CD090+0x94 dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grizumi.c grIzumi_801CD090: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grIzumi_801CD090+0xb0 dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grizumi.c grIzumi_801CD090: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grIzumi_801CD090+0xcc dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grizumi.c grIzumi_801CD090: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grIzumi_801CD090+0xe8 dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grizumi.c grIzumi_801CD090: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grIzumi_801CD090+0x10c dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grizumi.c grIzumi_801CD090: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grIzumi_801CD090+0x120 dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grizumi.c grIzumi_801CD090: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grIzumi_801CD090+0x13c dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grizumi.c grIzumi_801CD090: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grIzumi_801CD090+0x150 dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grizumi.c grIzumi_801CD090: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grIzumi_801CD090+0x16c dead # inlined HSD_JObjGetChild/GetNext/GetParent NULL arms on a jobj the walk has just proven non-NULL (grizumi.c grIzumi_801CD090: the while (jobj != NULL) guard, and each GetParent result tested before GetNext(GetParent())), as Ground_801C3FA4+0x18
+grIzumi_OnLoad+0x6c dead # 'p == NULL ? NULL : p->next' NULL arm inside the loop: its body (+0x44) is entered only from the bne at +0x80 after cmplwi r29,0, and r29 is callee-saved across HSD_ForeachAnim
+grIzumi_801CCBDC+0x180 fail # OSReport "oioi..." when grIzumi_801CBCE8(4) returns no gobj/user data/jobj: only after GObj_Create or alloc fails (Ground_GetStageGObj)
+grIzumi_801CCBDC+0x19c fail # the while (true) {} after that OSReport
+grOldPupupu_8021119C+0x6c dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grOldPupupu_8021119C+0x8c dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grOldPupupu_80210C7C+0x40 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grOldPupupu_80210C7C+0x60 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grOldPupupu_80210D10+0x2ac dead # SetScaleY/Z right after another SetScale* on the same jobj (r28) with no call between: the first left JOBJ_MTX_DIRTY set (jobj.c:1447)
+grOldPupupu_80210D10+0x31c dead # SetScaleY/Z right after another SetScale* on the same jobj (r28) with no call between: the first left JOBJ_MTX_DIRTY set (jobj.c:1447)
+grOldPupupu_80210D10+0x39c dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grOldPupupu_80210D10+0x3bc dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grOldPupupu_802113E0+0xa0 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grOldPupupu_802113E0+0xc0 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grOldPupupu_802113E0+0x19c dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grOldPupupu_802113E0+0x290 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grOldPupupu_802113E0+0x178 dead # rand_range zero arm on fctiwz values: the cmpw operands and the subf. operands are the low words of the same two fctiwz results (stored twice to the stack), which differ in the a>b arm
+grOldPupupu_802113E0+0x26c dead # rand_range zero arm on fctiwz values: the cmpw operands and the subf. operands are the low words of the same two fctiwz results (stored twice to the stack), which differ in the a>b arm
+grOldPupupu_802113E0+0x184 dead # the a<=b arm of rand_range on (s32) yakumono_param x30 vs x2c (lfs at +0x130/+0x134): GrOp.dat x2c = 180.0, x30 = 360.0, so the cmpw at +0x154 always finds a > b
+grOldPupupu_802113E0+0x18c dead # the a<=b arm of rand_range on (s32) yakumono_param x30 vs x2c (lfs at +0x130/+0x134): GrOp.dat x2c = 180.0, x30 = 360.0, so the cmpw at +0x154 always finds a > b
+grOldPupupu_802113E0+0x194 dead # the a<=b arm of rand_range on (s32) yakumono_param x30 vs x2c (lfs at +0x130/+0x134): GrOp.dat x2c = 180.0, x30 = 360.0, so the cmpw at +0x154 always finds a > b
+grOldPupupu_802113E0+0x1a0 dead # the a<=b arm of rand_range on (s32) yakumono_param x30 vs x2c (lfs at +0x130/+0x134): GrOp.dat x2c = 180.0, x30 = 360.0, so the cmpw at +0x154 always finds a > b
+grOldPupupu_802113E0+0x278 dead # the a<=b arm of the second rand_range on x30 vs x2c (cmpw at +0x248): GrOp.dat x2c = 180.0, x30 = 360.0
+grOldPupupu_802113E0+0x280 dead # the a<=b arm of the second rand_range on x30 vs x2c (cmpw at +0x248): GrOp.dat x2c = 180.0, x30 = 360.0
+grOldPupupu_802113E0+0x288 dead # the a<=b arm of the second rand_range on x30 vs x2c (cmpw at +0x248): GrOp.dat x2c = 180.0, x30 = 360.0
+grOldPupupu_802113E0+0x294 dead # the a<=b arm of the second rand_range on x30 vs x2c (cmpw at +0x248): GrOp.dat x2c = 180.0, x30 = 360.0
+grMuteCity_801F28A8+0x4c dead # as grOnett_801E56FC+0x4c (archive->unk4 is set at load, never NULL)
+grMuteCity_801EFD0C+0xb0 fail # OSReport "couldn t get gobj" arm: Ground_GetStageGObj returns NULL only after GObj_Create or alloc_user_data_ground fails or a joint fails to load, as grVenom_80203EAC+0xb0
+grMuteCity_801F1A34+0x900 dead # switch(HSD_Randi(3)) arm for a negative result (cmpwi 0 / bge at +0x8f8/+0x8fc): HSD_Randi(3) is 0..2
+grMuteCity_801F1A34+0xc5c dead # as +0x900, the second switch(HSD_Randi(3)) (+0xc54/+0xc58)
+grMuteCity_801F1A34+0xaf4 dead # HSD_JObjSetMtxDirtySub of a second set on the same jobj (r20) right after another with no call between: JOBJ_MTX_DIRTY already set (jobj.c:1447)
+grFigureGet_80219898+0xb4 dead # fneg of yakumono_param x10 - xC when negative: GrNFg.dat has xC = -84.0 and x10 = 84.0 (168)
+grFigureGet_80219898+0xec dead # '(s32)t != 0 ? HSD_Randi((s32)t) : 0' zero arm: t = |x10 - xC| * 0.5 - 20 = 64 (GrNFg.dat)
+grFigureGet_80219898+0x198 dead # 'x4 != 0 ? HSD_Randi(x4) : 0' zero arm: GrNFg.dat yakumono_param +0x4 is 80
+grFigureGet_802196F0+0x128 dead # 'x4 != 0 ? HSD_Randi(x4) : 0' zero arm: GrNFg.dat yakumono_param +0x4 is 80
+grOldYoshi_8020EFCC+0x50 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grOldYoshi_8020EFCC+0x70 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grOldYoshi_8020F088+0x1c4 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two registers, which differ there, so the beq to this li/mr r3,0 is never taken
+grOldYoshi_8020F088+0x1d0 dead # the min<max arm of rand_range(x16, x14): GrOy.dat yakumono_param +0x14 is 3000 and +0x16 is 4000, so the cmpw/ble at +0x1ac/+0x1b0 always takes the a>b arm
+grOldYoshi_8020F088+0x1d4 dead # the min<max arm of rand_range(x16, x14): GrOy.dat yakumono_param +0x14 is 3000 and +0x16 is 4000, so the cmpw/ble at +0x1ac/+0x1b0 always takes the a>b arm
+grOldYoshi_8020F088+0x1dc dead # the min<max arm of rand_range(x16, x14): GrOy.dat yakumono_param +0x14 is 3000 and +0x16 is 4000, so the cmpw/ble at +0x1ac/+0x1b0 always takes the a>b arm
+grOldYoshi_8020F088+0x1e4 dead # the min<max arm of rand_range(x16, x14): GrOy.dat yakumono_param +0x14 is 3000 and +0x16 is 4000, so the cmpw/ble at +0x1ac/+0x1b0 always takes the a>b arm
+grOldYoshi_8020F088+0x1e8 dead # the min<max arm of rand_range(x16, x14): GrOy.dat yakumono_param +0x14 is 3000 and +0x16 is 4000, so the cmpw/ble at +0x1ac/+0x1b0 always takes the a>b arm
+grOldYoshi_8020EC10+0x58 dead # switch on a 4-bit field (extrwi r0,r3,4,24 at +0x3c gives 0..15): the arm for values below 0 after cases 0..3
+grPura_802125F0+0x1c0 dead # a later HSD_JObjSet* on the same jobj in this pass with no matrix setup between (only HSD_JObjGetFlags/SetFlagsAll and HSD_JObjSetMtxDirtySub on other jobjs): JOBJ_MTX_DIRTY is still set (jobj.c:1447)
+grPura_802125F0+0x250 dead # a later HSD_JObjSet* on the same jobj in this pass with no matrix setup between (only HSD_JObjGetFlags/SetFlagsAll and HSD_JObjSetMtxDirtySub on other jobjs): JOBJ_MTX_DIRTY is still set (jobj.c:1447)
+grPura_802125F0+0x5cc dead # a later HSD_JObjSet* on the same jobj in this pass with no matrix setup between (only HSD_JObjGetFlags/SetFlagsAll and HSD_JObjSetMtxDirtySub on other jobjs): JOBJ_MTX_DIRTY is still set (jobj.c:1447)
+grPura_802125F0+0x63c dead # a later HSD_JObjSet* on the same jobj in this pass with no matrix setup between (only HSD_JObjGetFlags/SetFlagsAll and HSD_JObjSetMtxDirtySub on other jobjs): JOBJ_MTX_DIRTY is still set (jobj.c:1447)
+grPura_802125F0+0x6ac dead # a later HSD_JObjSet* on the same jobj in this pass with no matrix setup between (only HSD_JObjGetFlags/SetFlagsAll and HSD_JObjSetMtxDirtySub on other jobjs): JOBJ_MTX_DIRTY is still set (jobj.c:1447)
+grPura_802125F0+0x280 dead # 'jobj == NULL ? NULL : jobj->child' NULL arm: jobj = gobj->hsd_obj passed the HSD_ASSERT(jobj) of the inlined HSD_JObjSetTranslateX at +0xc4..+0xdc in this pass, and gobj->hsd_obj is not changed since
+grPura_802125F0+0x364 dead # a later HSD_JObjSet* on the same jobj in this pass with no matrix setup between (only HSD_JObjGetFlags/SetFlagsAll and HSD_JObjSetMtxDirtySub on other jobjs): JOBJ_MTX_DIRTY is still set (jobj.c:1447) (the root's child)
+grPura_802125F0+0x3d4 dead # a later HSD_JObjSet* on the same jobj in this pass with no matrix setup between (only HSD_JObjGetFlags/SetFlagsAll and HSD_JObjSetMtxDirtySub on other jobjs): JOBJ_MTX_DIRTY is still set (jobj.c:1447) (the root's child)
+grPura_802125F0+0x4e8 dead # SetScaleY/Z on gp->xC8 right after SetScaleX on it (+0x478 calls HSD_JObjSetMtxDirtySub or finds it dirty) with no call between: JOBJ_MTX_DIRTY set (jobj.c:1447)
+grPura_802125F0+0x558 dead # SetScaleY/Z on gp->xC8 right after SetScaleX on it (+0x478 calls HSD_JObjSetMtxDirtySub or finds it dirty) with no call between: JOBJ_MTX_DIRTY set (jobj.c:1447)
+grPura_80212CD4+0xd0 dead # the NULL arm after 'beq' on the same cmplwi r3,0 at +0xc4/+0xc8: reached only through the bne at +0xcc on that condition, never taken there
