@@ -2,12 +2,22 @@
 formatted 59-block card holding Melee's save), for jobs' --card:
 
     python tools/lockstep/cards.py TEMPLATE OUT_DIR
+    python tools/lockstep/cards.py --snaps SNAPSHOTS OUT_DIR
 
   full.raw     Melee's save under another game's code and a 40-block file of that game, so the
                save is missing and the 8 free blocks can't hold a new one (lbCardResult 5,
                lbcardnew.c:493-496)
   badicon.raw  Melee's save with its directory entry's icon address moved off 0x40, which the
                game's load rejects (lbCardResult 3, card.c:1470-1472)
+
+and, from a card holding Melee's save and snapshots (one Camera Mode filled), for the snapshot
+album's (mnsnap.c):
+
+  snap5.raw         the first 5 snapshots, so the album has two pages
+  snap1.raw         the first snapshot alone, whose delete leaves the album empty
+  snapdamaged.raw   all of them, the album's first (the newest) with its data damaged so its read
+                    fails its check and the album marks it bad (mnsnap.c:248-252)
+  snap1damaged.raw  the damaged one alone
 
 Both copies of the directory and of the block allocation table are rewritten alike, with their
 checksums, so CARDCheck finds nothing to repair. The images are game data and stay in local/.
@@ -112,12 +122,66 @@ def badicon(template):
     return card
 
 
+def snapshots(card, d):
+    """The directory entries of Melee's snapshots, in the album's order (by name, a number)."""
+    found = []
+    for i in range(127):
+        o = d * BLOCK + i * ENTRY
+        name = bytes(card[o + 8:o + 0x28]).split(b"\0")[0]
+        if card[o:o + 4] == b"GALE" and name.isdigit():
+            found.append(o)
+    return found
+
+
+def keep(template, n, damage):
+    """Keeps the first n snapshots (all, for None), the album's first of them damaged if asked."""
+    card = bytearray(template)
+    d = copy_active(card, DIR, seal_dir)
+    b = copy_active(card, BAT, seal_bat)
+    bo = b * BLOCK
+    snaps = snapshots(card, d)
+    kept, dropped = (snaps, []) if n is None else (snaps[:n], snaps[n:])
+    for o in dropped:
+        blk, = struct.unpack_from(">H", card, o + 0x36)
+        while blk != 0xFFFF:
+            nxt, = struct.unpack_from(">H", card, bo + 0xA + 2 * (blk - 5))
+            struct.pack_into(">H", card, bo + 0xA + 2 * (blk - 5), 0)
+            free, = struct.unpack_from(">H", card, bo + 6)
+            struct.pack_into(">H", card, bo + 6, free + 1)
+            blk = nxt
+        card[o:o + ENTRY] = b"\xff" * ENTRY
+    if damage:
+        # The album lists the newest (highest number) first, so the damaged one is under its cursor
+        # at the start. The bytes are in the file's second block, past the 0x20 header whose first
+        # 16 bytes are the checksum of the rest (HSD_Decrypt, crypt.c:197-203), so its read fails
+        # with -0x105 (card.c:205-208), lbCardResult 2 (lbcardnew.c:311-315).
+        first = max(kept, key=lambda o: int(bytes(card[o + 8:o + 0x28]).split(b"\0")[0]))
+        start, = struct.unpack_from(">H", card, first + 0x36)
+        second, = struct.unpack_from(">H", card, bo + 0xA + 2 * (start - 5))
+        o = second * BLOCK + 0x100
+        card[o:o + 16] = bytes(x ^ 0x5A for x in card[o:o + 16])
+    for blk in DIR:
+        card[blk * BLOCK:(blk + 1) * BLOCK] = card[d * BLOCK:(d + 1) * BLOCK]
+        seal_dir(card, blk)
+    for blk in BAT:
+        card[blk * BLOCK:(blk + 1) * BLOCK] = card[b * BLOCK:(b + 1) * BLOCK]
+        seal_bat(card, blk)
+    return card
+
+
 def main():
-    template = open(sys.argv[1], "rb").read()
-    os.makedirs(sys.argv[2], exist_ok=True)
-    for name, make in (("full", full), ("badicon", badicon)):
-        open(os.path.join(sys.argv[2], name + ".raw"), "wb").write(make(template))
-        print(os.path.join(sys.argv[2], name + ".raw"))
+    snaps = sys.argv[1] == "--snaps"
+    args = sys.argv[2:] if snaps else sys.argv[1:]
+    template = open(args[0], "rb").read()
+    os.makedirs(args[1], exist_ok=True)
+    makes = (("full", full), ("badicon", badicon))
+    if snaps:
+        makes = (("snap5", lambda t: keep(t, 5, False)), ("snap1", lambda t: keep(t, 1, False)),
+                 ("snapdamaged", lambda t: keep(t, None, True)),
+                 ("snap1damaged", lambda t: keep(t, 1, True)))
+    for name, make in makes:
+        open(os.path.join(args[1], name + ".raw"), "wb").write(make(template))
+        print(os.path.join(args[1], name + ".raw"))
 
 
 if __name__ == "__main__":
