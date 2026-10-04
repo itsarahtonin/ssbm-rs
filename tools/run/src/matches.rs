@@ -104,8 +104,9 @@ pub fn install_main_menu(
     unlock: bool,
     menu: Option<(u8, u8)>,
     records: Option<u64>,
+    names: usize,
 ) -> Rc<SaveSetup> {
-    let setup = Rc::new(SaveSetup { unlock, records: records.map(Rng::new) });
+    let setup = Rc::new(SaveSetup { unlock, records: records.map(Rng::new), names });
     let on_menu = setup.clone();
     ctx.set_hook(
         ssbm_sdk::sym("mnMain_Scene_OnEnter"),
@@ -121,16 +122,20 @@ pub fn install_main_menu(
     setup
 }
 
-/// What UNLOCK_ALL and RECORDS change in the save data.
+/// What UNLOCK_ALL, RECORDS and NAMES change in the save data.
 pub struct SaveSetup {
     unlock: bool,
     records: Option<Rng>,
+    names: usize,
 }
 
 impl SaveSetup {
     pub fn apply(&self, ctx: &Ctx) {
         if let Some(rng) = &self.records {
             fill_records(ctx, rng);
+        }
+        if self.names > 0 {
+            fill_names(ctx, self.names);
         }
         if self.unlock {
             let game = gmm_x0(At::new(ctx, ctx.read_u32(ssbm_sdk::sym("gmMainLib_804D3EE0"))));
@@ -150,6 +155,21 @@ impl SaveSetup {
                 owned.set(i, (1 + i as u16 % 3) | if i % 4 == 0 { 0x8000 } else { 0 });
             }
             save.set_trophy_count(293);
+        }
+    }
+}
+
+/// Enters names in the first `n` of the save's 120 name slots (19 to a bank, as
+/// GetPersistentNameData finds them), for the screens that list names: two full-width letters
+/// each in Shift-JIS, AA, BA, CA, ..., as the name entry screen writes them.
+fn fill_names(ctx: &Ctx, n: usize) {
+    let game = gmm_x0(At::new(ctx, ctx.read_u32(ssbm_sdk::sym("gmMainLib_804D3EE0"))));
+    let banks = game.thing().nametag_banks();
+    for i in 0..n.min(120) as i32 {
+        let name = banks.get(i / 19).inner().get(i % 19).namedata();
+        let bytes = [0x82, 0x60 + (i % 26) as u8, 0x82, 0x60 + (i / 26) as u8, 0, 0, 0, 0];
+        for (j, b) in bytes.into_iter().enumerate() {
+            name.set(j as i32, b as i8);
         }
     }
 }

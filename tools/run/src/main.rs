@@ -617,8 +617,10 @@ fn run() -> ExitCode {
     // RECORDS=SEED fills each fighter's records with random KOs and stats there, for the Data
     // screens.
     let records = std::env::var("RECORDS").ok().map(|v| v.parse().expect("RECORDS=SEED"));
-    let save_setup = (unlock || menu.is_some() || records.is_some())
-        .then(|| matches::install_main_menu(&ctx, unlock, menu, records));
+    // NAMES=N enters N names (up to 120) for the screens that list them.
+    let names = std::env::var("NAMES").map_or(0, |v| v.parse().expect("NAMES=N"));
+    let save_setup = (unlock || menu.is_some() || records.is_some() || names > 0)
+        .then(|| matches::install_main_menu(&ctx, unlock, menu, records, names));
     // GAME_LANGUAGE=jp runs the game in Japanese.
     if std::env::var("GAME_LANGUAGE").is_ok_and(|v| v == "jp") {
         matches::install_japanese(&ctx);
