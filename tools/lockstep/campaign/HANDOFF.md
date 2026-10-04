@@ -4,9 +4,9 @@ Where the campaign stood when the cloud session stopped, and what to do next. Th
 
 ## Numbers
 
-At snapshot f8.8 (the last entry on the coverage map, https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb; full report `local/lockstep/report-f8.8.txt`): 152,079 of 163,387 countable blocks verified (93.1%), 5,093 explained by the ledger, about 6,200 neither. Mismatches: 0 unmutated; 1 function to review (below); 9 reviewed as coming from the inputs.
+At snapshot f8.8 (the last entry on the coverage map, https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb; full report `local/lockstep/report-f8.8.txt`): 152,079 of 163,387 countable blocks verified (93.1%), 5,093 explained by the ledger, about 6,200 neither. Mismatches: 0 unmutated; 0 to review after the review below; 10 reviewed as coming from the inputs.
 
-**First thing to do: review `fn_80196FFC`** (tournament bracket code). Under mutated inputs, in jobs `lvtou6time` and `lvtou48stocksd` (cov-levers), the original writes `00 00 30 00` at 0x80479A18 where the port writes zeros (call 2: inputs changed at 0x80CC316F, 0x80CC3146, 0x80CBE47C, 0x80CBE7E7). Rerun with `repro.sh levers lvtou6time fn_80196FFC` (its jobs file is jobs-levers.txt; check repro.sh picks it up) and decide: a port bug to fix, or an input the game can't produce, for `tools/lockstep/reviewed.txt` with the reason.
+`fn_80196FFC`, the one mutated mismatch f8.8 left to review, is now in `tools/lockstep/reviewed.txt`: it needs a mutated gobj user data (a player index of 4 or more) and then reads past a stack copy, as the reason there says.
 
 ## Campaigns stopped mid-way
 
@@ -37,7 +37,7 @@ Finished this session, all with no mismatch: cov-scripted, cov-slotb, cov-menus,
 
 ## Next steps
 
-1. Restart the four campaigns above; snapshot every few hours (`snapshot.sh f8.N f7`) and republish both pages.
+1. Restart the four campaigns above (a report first confirms 0 to review); snapshot every few hours (`snapshot.sh f8.N f7`) and republish both pages.
 2. Recipes not yet turned into jobs: `tools/lockstep/campaign/recipes.md`. Runner changes still wanted: a human-controlled Master/Crazy Hand (they read ports 3 and 4; `choose()` forces bosses to CPU), forcing item kinds, `NAMES` with raw bytes, and `DVD_COVER` with a third toggle.
 3. Analyse the long tail: ~4,400 open blocks sit in about a thousand units no analysis has covered (mostly under 30 blocks each). `local/lockstep/needed.txt` after a report lists them; group by unit as the analyses did.
 4. When jobs stop gaining, the rest of the unverified blocks in analysed units are mostly odd state (null arms on loaded data, matrix-dirty tests, data-fixed random ranges): directed mutated checks (`LOCKSTEP_DIRECTED`, targets on those loads) or the ledger if the evidence is strong.
