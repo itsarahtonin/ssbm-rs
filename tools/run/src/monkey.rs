@@ -162,7 +162,7 @@ fn parse_hold(v: &str) -> Hold {
 /// with probability N percent (20) instead: lower, input stays longer in the screens B backs out
 /// of, such as a trophy being viewed or a character select screen. MONKEY_HOLD=HOLD@FROM-TO[,...]
 /// has a port (the first unless named) hold just those buttons and stick positions over those
-/// fields and the other ports nothing, as a scene that reads a held button as it starts needs
+/// fields, holds that overlap each on its port, and the ports no hold names nothing, as a scene that reads a held button as it starts needs
 /// (the trophy gallery's debug viewer: Z, at debug level 3 or more), or a script of menu inputs.
 pub fn install(sdk: &Rc<Sdk>, seed: u64, from: u64) {
     let rng = Rc::new(Rng::new(seed));
@@ -180,12 +180,16 @@ fn schedule(sdk: &Rc<Sdk>, rng: Rc<Rng>, b: u64, holds: Rc<Vec<Hold>>, field: u6
                     *pad = press(&rng, b);
                 }
             }
-            if let Some(h) = holds.iter().find(|h| (h.from..=h.to).contains(&field)) {
+            // Every hold over this field, each on its port; the ports none names hold nothing.
+            let mut active = holds.iter().filter(|h| (h.from..=h.to).contains(&field)).peekable();
+            if active.peek().is_some() {
                 for pad in pads.iter_mut() {
                     pad.button = 0;
                     (pad.stick_x, pad.stick_y, pad.substick_x, pad.substick_y) = (0, 0, 0, 0);
                     (pad.trigger_l, pad.trigger_r, pad.analog_a, pad.analog_b) = (0, 0, 0, 0);
                 }
+            }
+            for h in active {
                 let [stick_x, stick_y, substick_x, substick_y] = h.sticks;
                 pads[h.port] = PadStatus {
                     connected: true,
