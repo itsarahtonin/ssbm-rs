@@ -127,8 +127,7 @@ thread_local! {
     static RUNNING: Cell<Option<u8>> = const { Cell::new(None) };
 }
 
-/// Notes the mode runGameMode starts: --mode changes its argument, not the state machine's
-/// record of it, which keeps the title screen's until the next mode.
+/// Notes the mode runGameMode starts (its argument, which --mode changes).
 pub fn mode_started(mode: u8) {
     RUNNING.with(|m| m.set(Some(mode)));
 }

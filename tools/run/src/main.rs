@@ -767,6 +767,9 @@ fn run() -> ExitCode {
                 {
                     first.set(false);
                     ctx.regs.set_r(3, mode);
+                    // The routing's current mode too (state_machine.routing.curr_mode), which
+                    // gm_GetCurrentGameMode reads: it would stay the title's.
+                    ctx.write_u8(ssbm_sdk::sym("state_machine"), mode as u8);
                     // A run that starts past the main menu gets its save data changes here.
                     if let Some(setup) = &save_setup {
                         setup.apply(ctx);
