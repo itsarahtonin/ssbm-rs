@@ -18,11 +18,19 @@ envs=(); rest=()
 for a in $args; do
     if [[ ${#rest[@]} -eq 0 && $a =~ ^[A-Z_]+= ]]; then envs+=("$a"); else rest+=("$a"); fi
 done
-# Fresh copies of any card the job uses.
+# Fresh copies of any card the job uses, as the round started it: focus.sh's mode, event and
+# removal cards from the saved template and its fault cards from their fault, since the run
+# itself has since written to the job's card and would take another path.
 for i in "${!rest[@]}"; do
     if [[ ${rest[$i]} == --card ]]; then
         src=${rest[$((i + 1))]}
         copy=$L/repro/$ROUND-$JOB.raw
+        card=$(basename "$src" .raw)
+        if [[ $card =~ ^$ROUND(w[0-9]|pm)(mode|event|remove)[0-9a-f]*$ ]]; then
+            src=$L/cards/template-saved.raw
+        elif [[ $card =~ ^$ROUND(w[0-9]|pm)cf([a-z0-9]*[a-z])[0-9]*$ ]]; then
+            src=$L/cards/faults/${BASH_REMATCH[2]}.raw
+        fi
         if [[ -f $src ]]; then cp "$src" "$copy"; else rm -f "$copy"; fi
         rest[$((i + 1))]=$copy
     fi
