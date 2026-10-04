@@ -10,7 +10,7 @@ At snapshot f8.8 (the last entry on the coverage map, https://claude.ai/artifact
 
 ## Campaigns stopped mid-way
 
-All were stopped on purpose; `campaign.sh` reruns a job with no result line, so restarting each with the same command finishes them. Each runs a frozen binary copy in `target/alt/release` (rebuild it from the commit in `local/lockstep/binaries.txt` on a new VM, then copy it to that name).
+All were stopped on purpose, and restarted on 2026-10-04 on Sarah's desktop (14 jobs at a time between them, cov-recipes-more 2 more); `campaign.sh` reruns a job with no result line, so restarting each with the same command finishes them. Each runs a frozen binary copy in `target/alt/release` (rebuild it from the commit in `local/lockstep/binaries.txt` on a new VM, then copy it to that name).
 
 | Results dir | Jobs file | Done | Binary (commit) |
 |---|---|---|---|
@@ -18,6 +18,7 @@ All were stopped on purpose; `campaign.sh` reruns a job with no result line, so 
 | cov-levers | jobs-levers.txt | 21/74 | ssbm-run-lv (b8f3c6a) |
 | cov-recipes-menus | jobs-recipes-menus.txt | 12/99 | ssbm-run-lv (b8f3c6a) |
 | cov-recipes-matches | jobs-recipes-matches.txt | 0/74 | ssbm-run-rx (70b4c01) |
+| cov-recipes-more | jobs-recipes-more.txt | 0/51 | ssbm-run-rq (41497dd) |
 
 Command shape (from the repository root):
 
@@ -25,20 +26,22 @@ Command shape (from the repository root):
 L=local/lockstep; BIN=target/alt/release/ssbm-run-lv OUT=$L/cov-levers DONE=$L/done-f8.txt EXTRA="LOCKSTEP_NEEDED=$L/needed-f8.txt" JOBS=2 TIMEOUT=10800 nohup bash tools/lockstep/campaign/campaign.sh $L/jobs-levers.txt > $L/campaign-levers.log 2>&1 &
 ```
 
-Round f8 resumes with `RESUME=1 NAME=f8 ... bash tools/lockstep/campaign/focus.sh` (its other settings are in `local/lockstep/levers.tsv` and the round's log). The jobs files and generators: `mkjobs-levers.py`, `mkjobs-recipes-menus.py`, `mkjobs-recipes-matches.py` regenerate them (each copies its cards).
+Round f8 resumes with `RESUME=1 NAME=f8 ... bash tools/lockstep/campaign/focus.sh` (its other settings are in `local/lockstep/levers.tsv` and the round's log). The jobs files and generators: `mkjobs-levers.py`, `mkjobs-recipes-menus.py`, `mkjobs-recipes-matches.py`, `mkjobs-recipes-more.py` regenerate them (each copies its cards). The bundle leaves the cards out: copy `template-saved.raw` and `faults/` into `local/lockstep/cards` (from the game data bundle) and rerun the generators to a scratch file, which recreates the cards; keep the jobs files as they are (jobs-recipes-menus.txt's seeds predate its dropped job). focus.sh makes f8's own cards on resuming, and copies BIN onto target/alt/release/ssbm-run-f8, so give it a copy from elsewhere.
+
+`repro.sh ROUND` reads a round's done list, probes, targets and needed list (`done-ROUND.txt`, ...), which the side campaigns don't have: they ran with f8's done and needed lists, no probes or targets, BUDGET 20000000 and CALLS 5000, so rerun one of their jobs by hand with those settings.
 
 Finished this session, all with no mismatch: cov-scripted, cov-slotb, cov-menus, cov-cardlayer, cov-scripted3 (album, slot B, menus, card layer, trophy debug procs, follow-ups).
 
 ## What worked
 
 1. Static analysis by agents, one cluster of units at a time, writing ledger candidates (`FUNCTION+0xOFF KIND # evidence`, `UNIT:FUNCTION` for shared names) and run recipes. Before a batch goes in: every line a block start of the needed list, no duplicate, unique names, and its strongest claims checked in the asm by hand. About 3,300 lines went in this session. Lines resting on weaker arguments stayed out: a joint's first matrix set right after it was loaded, a hanging mutated check, anything the analysis itself called inferred.
-2. Runner levers that build the state a branch needs, then scripted jobs with `LOCKSTEP_UNLIMITED` on the target functions (per-function check caps had hidden slow screens and stage hazards). Levers added this session: `MONKEY_HOLD` (scripted holds on any port with sticks, overlapping per port), `LOCKSTEP_UNLIMITED` (names or hex addresses), `NAMES`, `--card-b`/`CARD_REMOVE_B` (slot B), `CARD_REMOVE_STEP` (pulls between card layer steps), `cards.py --snaps/--saves` (crafted cards), `SAVE_POKE`, `PAD_UNPLUG`, `MATCH_CPU_KIND`, `MATCH_STAMINA`, `MATCH_VS`/`MATCH_TEAMS`, `MATCH_PLAYERS`, `EVENT_FIGHTER`, `CLASSIC_STAGE`/`ADVENTURE_STAGE`, `RECORDS_1P`, `TOU_ENTRANTS`, `MATCH_LOG`. Comments where each is read (tools/run/src) document them.
+2. Runner levers that build the state a branch needs, then scripted jobs with `LOCKSTEP_UNLIMITED` on the target functions (per-function check caps had hidden slow screens and stage hazards). Levers added this session: `MONKEY_HOLD` (scripted holds on any port with sticks; holds on different ports overlap, a later one on the same port replaces an earlier one), `LOCKSTEP_UNLIMITED` (names or hex addresses), `NAMES`, `--card-b`/`CARD_REMOVE_B` (slot B), `CARD_REMOVE_STEP` (pulls between card layer steps), `cards.py --snaps/--saves` (crafted cards), `SAVE_POKE`, `PAD_UNPLUG`, `MATCH_CPU_KIND`, `MATCH_STAMINA`, `MATCH_VS`/`MATCH_TEAMS`, `MATCH_PLAYERS`, `EVENT_FIGHTER`, `CLASSIC_STAGE`/`ADVENTURE_STAGE`, `RECORDS_1P`, `TOU_ENTRANTS`, `MATCH_LOG`. Comments where each is read (tools/run/src) document them.
 3. `coverage.py` now lists ledger lines whose blocks runs verified ("gap ledger lines whose blocks runs verified"): remove any it lists, since the ledger claimed no run could.
 
 ## Next steps
 
-1. Restart the four campaigns above (a report first confirms 0 to review); snapshot every few hours (`snapshot.sh f8.N f7`) and republish both pages.
-2. Recipes not yet turned into jobs: `tools/lockstep/campaign/recipes.md`. Runner changes still wanted: a human-controlled Master/Crazy Hand (they read ports 3 and 4; `choose()` forces bosses to CPU), forcing item kinds, `NAMES` with raw bytes, and `DVD_COVER` with a third toggle.
+1. The campaigns above run; snapshot every few hours (`snapshot.sh f8.N f7`) and republish both pages.
+2. Recipes not yet turned into jobs (`recipes.md` and `local/lockstep/notes-gr3/`, once the four recipe generators' jobs are subtracted): gmMainLib's D508/D5DC/D640 probes after SAVE_POKE, Kirby-team and KO-burst sounds and an SFX bank load at a scene exit (lbaudio_ax), the hammer and third-player grabs beyond grabthird (ftCo_Damage), challengers near unlock thresholds (gm_16F1) and trophy unlock thresholds (gm_1736), the staff roll's name shooting (gmstaffroll), the stage select's locked icons (mnstagesel), Adventure's trophy stage (grfigureget) and the Mushroom Kingdom Luigi arms of fn_8017E8A4. Runner changes still wanted: a human-controlled Master/Crazy Hand (they read ports 3 and 4; `choose()` forces bosses to CPU), forcing item kinds, `NAMES` with raw bytes, and `DVD_COVER` with a third toggle.
 3. Analyse the long tail: ~4,400 open blocks sit in about a thousand units no analysis has covered (mostly under 30 blocks each). `local/lockstep/needed.txt` after a report lists them; group by unit as the analyses did.
 4. When jobs stop gaining, the rest of the unverified blocks in analysed units are mostly odd state (null arms on loaded data, matrix-dirty tests, data-fixed random ranges): directed mutated checks (`LOCKSTEP_DIRECTED`, targets on those loads) or the ledger if the evidence is strong.
 
