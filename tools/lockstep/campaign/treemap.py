@@ -57,7 +57,10 @@ def snapshot(name, report):
 
 
 snaps = []
-for path in sorted(glob.glob(os.path.join(L, "history", "*.csv"))):
+# In the order they were saved: by how many results directories they cover, then by when, since
+# their labels sort out of order past ten (f7.10 before f7.2).
+for path in sorted(glob.glob(os.path.join(L, "history", "*.csv")),
+                   key=lambda p: (int(os.path.basename(p).split("-", 1)[0]), os.path.getmtime(p))):
     name = os.path.basename(path)[:-4].split("-", 1)[1].replace("_", " ")
     if name != label:
         snaps.append(snapshot(name, csv.DictReader(open(path, encoding="utf-8"))))
