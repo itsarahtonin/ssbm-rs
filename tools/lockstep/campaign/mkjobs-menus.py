@@ -41,10 +41,10 @@ JOBS = [
     ("vib120", {**VIB, "NAMES": 120}, "template-saved", "01", VIB_OPEN + steps(
         600, 30, ["right"] + ["down"] * 40 + ["a"] + ["up"] * 40 + ["left", "b"])),
     ("diag12", {**DIAG, "NAMES": 12}, "template-saved", "01", DIAG_OPEN + steps(
-        650, 30, ["x", "right", "a", "b", "left"] + ["right"] * 12 + ["left"] * 11
+        800, 30, ["x", "right", "a", "b", "left"] + ["right"] * 12 + ["left"] * 11
         + ["down"] * 12 + ["up"] * 11 + ["x"] + ["down"] * 25 + ["b"])),
     ("diag40", {**DIAG, "NAMES": 40, "RECORDS": 7}, "template-saved", "01", DIAG_OPEN + steps(
-        650, 30, ["x", "right", "a", "b"] + ["right"] * 14 + ["down"] * 40 + ["up"] * 40
+        800, 30, ["x", "right", "a", "b"] + ["right"] * 14 + ["down"] * 40 + ["up"] * 40
         + ["left"] * 14 + ["x", "b"])),
     # The memory card screen at boot, and again in its own mode (0x29) past the boot's prompt.
     ("mcreinsert", {**MC, "CARD_REMOVE": "1,250"}, "template-saved", None, [("a", 360)]),
