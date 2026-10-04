@@ -8,10 +8,11 @@
 //! can't show the bosses, so a run with them needs a match that outlasts it. `MATCH_RULES=1`
 //! varies the rules too. `MATCH_CPU_KIND=K[,K...]` gives the CPUs CPU kinds (the AI's routine,
 //! `CpuKind`) drawn from that list, `MATCH_STAMINA=HP` makes the matches stamina matches with
-//! that HP, and `MATCH_TEAMS=1` makes them team matches. `MATCH_VS=1` gives the VS mode's matches
-//! (`--mode 2`) the same, as each starts past its character and stage select, so that their
-//! results go through the VS mode's records: all but the fighters and stage, which stay those
-//! selects' choices. Deterministic for a seed.
+//! that HP, `MATCH_TEAMS=1` makes them team matches and `MATCH_PLAYERS=N` leaves all but the
+//! first N ports empty. `MATCH_VS=1` gives the VS mode's matches (`--mode 2`) the same, as each
+//! starts past its character and stage select, so that their results go through the VS mode's
+//! records: all but the fighters and stage, which stay those selects' choices. Deterministic for
+//! a seed.
 
 use std::cell::Cell;
 use std::rc::Rc;
@@ -55,6 +56,7 @@ struct Rules {
     cpu_kinds: Option<Vec<u8>>,
     stamina: Option<u16>,
     teams: bool,
+    players: Option<usize>,
 }
 
 /// A comma-separated list of numbers in `var`, if it is set.
@@ -81,6 +83,8 @@ pub fn install(ctx: &Ctx, seed: u64) {
         stamina: list("MATCH_STAMINA").map(|h| h[0] as u16),
         // MATCH_TEAMS=1: team matches.
         teams: std::env::var_os("MATCH_TEAMS").is_some(),
+        // MATCH_PLAYERS=N: the debug VS mode's matches with only the first N ports playing.
+        players: list("MATCH_PLAYERS").map(|n| n[0] as usize),
     });
     // The debug VS mode sets its defaults, then loads the announcer's voice clips: its
     // defaults are set by then.
@@ -681,6 +685,10 @@ fn choose(ctx: &Ctx, rng: &Rng, data: StartMeleeData, chosen_rules: &Rules, keep
     for i in 0..4 {
         let p = data.players().get(i);
         if keep && p.slot_type() == Gm_PKind_NA as u8 {
+            continue;
+        }
+        if !keep && chosen_rules.players.is_some_and(|n| i as usize >= n) {
+            p.set_slot_type(Gm_PKind_NA as u8);
             continue;
         }
         playing.push(p);
