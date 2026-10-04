@@ -1,0 +1,87 @@
+"""Writes jobs that script the snapshot album's (fn_802545C4, mnsnap.c) menus: each opens the
+album from the Data menu on a card of snapshots and presses one sequence of buttons, then leaves
+the rest of its fields to the monkey. The album costs about a million instructions a frame, so the
+jobs check it on every call (LOCKSTEP_UNLIMITED). Each job gets its own copy of its card.
+
+    python tools/lockstep/campaign/mkjobs-album.py PREFIX CARDS_DIR > jobs.txt
+
+CARDS_DIR holds the cards `tools/lockstep/cards.py --snaps` makes (template-snaps.raw beside
+them); the copies go there too, as PREFIX-NAME.raw.
+"""
+import os
+import shutil
+import sys
+
+# From boot with MENU=5,0: A on Data, A on the album, A on slot A; the album takes input from
+# about field 900, once its first page of thumbnails has loaded.
+OPEN = [("a", 400), ("a", 500), ("a", 600)]
+START, STEP, PRESS = 900, 60, 4
+
+MENU = ["a"]  # opens the snapshot's menu on View
+MOVE = MENU + ["down", "a"]
+COPY = MENU + ["down"] * 2 + ["a"]
+DELETE = MENU + ["down"] * 3 + ["a"]
+OTHER = MENU + ["down"] * 4 + ["a"]
+
+# name, card, presses (a button, button+button, or "wait"), extra environment
+JOBS = [
+    ("move", "template-snaps", MOVE + ["right", "right", "a", "wait"] + MOVE + ["b", "b"]),
+    ("movepage", "template-snaps", MOVE + ["right"] * 5 + ["down", "a"]),
+    ("moveback", "template-snaps", ["right"] * 5 + MOVE + ["left"] * 5 + ["up", "a", "b"]),
+    ("menu1", "template-snaps", MENU + ["down", "a", "b", "b", "b"]),
+    ("menu5", "template-snaps", MENU + ["down"] * 5 + ["up", "a", "b", "b"]),
+    ("copy", "template-snaps", COPY + ["a", "wait", "wait", "a", "wait", "b", "b"]),
+    ("copyb", "template-snaps", COPY + ["a", "wait", "wait", "b", "b", "b"]),
+    ("other", "template-snaps", OTHER + ["a", "wait", "wait", "wait", "b", "b"]),
+    ("delete", "template-snaps", DELETE + ["left", "a", "wait", "wait", "b"]),
+    ("deleteno", "template-snaps", DELETE + ["a", "b", "b"]),
+    ("deletelast", "snap5", ["right"] * 4 + DELETE + ["left", "a", "wait", "wait"]),
+    ("deleteonly", "snap1", DELETE + ["left", "a", "wait", "wait", "wait"]),
+    ("cursor", "snap5", ["right", "right", "down", "up", "left", "r", "l", "right", "down",
+                         "right", "right", "right", "left", "up", "l", "r", "b"]),
+    ("cursor24", "template-snaps", ["down"] * 7 + ["r"] * 4 + ["up"] * 3 + ["l"] * 6
+                                   + ["left", "left", "right"] * 3),
+    ("pull4", "template-snaps", ["right", "wait", "wait", "wait", "wait", "wait"],
+     {"CARD_REMOVE": f"{START + 2 * STEP},{START + 4 * STEP}"}),
+    ("pull2", "template-snaps", ["wait"], {"CARD_REMOVE": "560,700"}),
+    ("pulldelete", "template-snaps", DELETE + ["left", "wait", "a", "wait", "wait", "wait"],
+     {"CARD_REMOVE": f"{START + 6 * STEP},{START + 10 * STEP}"}),
+    ("pullmove", "template-snaps", MOVE + ["right", "wait", "a", "wait", "wait"],
+     {"CARD_REMOVE": f"{START + 4 * STEP},{START + 8 * STEP}"}),
+]
+
+
+def hold(presses):
+    holds, field = [], 0
+    for button, at in OPEN:
+        holds += [f"none@{field}-{at - 1}", f"{button}@{at}-{at + PRESS - 1}"]
+        field = at + PRESS
+    at = START
+    for button in presses:
+        holds.append(f"none@{field}-{at - 1}")
+        if button != "wait":
+            holds.append(f"{button}@{at}-{at + PRESS - 1}")
+            field = at + PRESS
+        else:
+            field = at
+        at += STEP
+    holds.append(f"none@{field}-{at + STEP}")
+    return ",".join(holds), at + STEP
+
+
+def main():
+    prefix, cards = sys.argv[1], sys.argv[2]
+    for i, (name, card, presses, *more) in enumerate(JOBS):
+        script, end = hold(presses)
+        job = f"{prefix}{name}"
+        copy = os.path.join(cards, f"{job}.raw")
+        shutil.copy(os.path.join(cards, f"{card}.raw"), copy)
+        env = {"LOCKSTEP_SEED": 700 + i, "DBLEVEL": 4, "UNLOCK_ALL": 1, "MONKEY_B": 2,
+               "STALL_BEATS": 200, "LOCKSTEP_MUTATE": 2, "LOCKSTEP_UNLIMITED": "fn_802545C4",
+               "MENU": "5,0", "MONKEY_HOLD": script, **(more[0] if more else {})}
+        envs = " ".join(f"{k}={v}" for k, v in env.items())
+        print(f"{job}|{envs} --card {copy} --monkey {3700 + i} --mode 01 --fields {end + 1500}")
+
+
+if __name__ == "__main__":
+    main()

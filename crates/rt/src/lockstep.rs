@@ -225,6 +225,10 @@ pub struct State {
     pub calls_per_function: Cell<Option<u64>>,
     /// Checks each port gets until its checks' originals have run this many instructions.
     pub budget_per_function: Cell<Option<u64>>,
+    /// Functions neither limit applies to, checked on every call until their needed blocks are
+    /// verified: a screen's frame function that costs a million instructions a call, such as
+    /// the snapshot album's, that a job scripts its input for.
+    pub unlimited: RefCell<std::collections::BTreeSet<u32>>,
     /// Further checks of each outermost check's function from the same call, with its
     /// arguments and what they point to changed at random, to reach more of its code.
     pub mutations: Cell<u32>,
@@ -1059,11 +1063,12 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     entry.calls += 1;
     let spent = entry.cost;
     entry.cost += cost;
-    if state.calls_per_function.get().is_some_and(|n| entry.calls == n)
-        || state
-            .budget_per_function
-            .get()
-            .is_some_and(|b| spent < b && entry.cost >= b)
+    if !state.unlimited.borrow().contains(&addr)
+        && (state.calls_per_function.get().is_some_and(|n| entry.calls == n)
+            || state
+                .budget_per_function
+                .get()
+                .is_some_and(|b| spent < b && entry.cost >= b))
     {
         state.checked_enough.borrow_mut().push(addr);
     }

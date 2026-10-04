@@ -949,6 +949,11 @@ fn run() -> ExitCode {
         if let Some(n) = std::env::var("LOCKSTEP_BUDGET").ok().and_then(|v| v.parse().ok()) {
             ctx.lockstep.budget_per_function.set(Some(n));
         }
+        // LOCKSTEP_UNLIMITED=SYM[,SYM...] exempts those functions from both limits.
+        if let Ok(names) = std::env::var("LOCKSTEP_UNLIMITED") {
+            let mut unlimited = ctx.lockstep.unlimited.borrow_mut();
+            unlimited.extend(names.split(',').map(|n| ssbm_sdk::sym(n.trim())));
+        }
         // LOCKSTEP_MUTATE=K checks each outermost check's function K times more from the same
         // call, its arguments and what they point to changed at random, from LOCKSTEP_SEED.
         if let Some(k) = std::env::var("LOCKSTEP_MUTATE").ok().and_then(|v| v.parse().ok()) {
