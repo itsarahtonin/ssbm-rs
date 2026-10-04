@@ -271,13 +271,9 @@ JOBS = [
      MENU_A + steps(600, 20, DELETE_FIRST + ["b", "b"]), 2000),
     ("nametag1", {**NAME, "NAMES": 3, "SAVE_POKE": nametags(1)}, "template-saved", None,
      MENU_A + steps(600, 20, DELETE_FIRST + ["a", "right", "a", "b", "b"]), 2000),
-    # Printf formats as names (MSL's integer, string and float conversions). %n faults the game
-    # itself (an unmapped write at 0 from __pformatter as Name Entry opens), and %.500f overruns
-    # the text's buffer (a jump to 0x30303030): neither is a job.
-    ("nameprintf", {**NAME, "LOCKSTEP_UNLIMITED": NAME_FNS + "," + MSL_FNS, "NAMES": 6,
-                    "SAVE_POKE": pokes(*(f"{NAMEDATA[i]:#x}:8:{v:#x}"
-                                         for i, v in enumerate(FORMATS)))},
-     "template-saved", None, NAME_SHOW, 2000),
+    # No printf formats as names: the name list formats each name with no arguments after it
+    # (mnname.c:1328), so a conversion reads whatever the caller left in r5-r10 and f3-f8,
+    # which the original and the port leave differently (a job of them mismatched on that alone).
     # The new-name keyboard.
     ("namerandom", {**NEW, "NAMES": 3}, "template-saved", None, NEW_RANDOM, 3500),
     ("namerandomfull", {**NEW, "NAMES": 119}, "template-saved", None, NEW_RANDOM, 3500),
