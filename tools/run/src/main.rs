@@ -485,6 +485,68 @@ fn run() -> ExitCode {
             });
         }
     }
+    // CARD_REMOVE_STEP=N[,G] pulls the card out of slot A at the HSD card layer's N-th step
+    // (from 1), and puts it back at field G. A step is an entry of hsd_803AAA48 that goes on to
+    // run a command once its wait point has delivered what was due: a CARD transfer done
+    // (hsd_804D799C 0), or a request waiting while the layer is idle (2). The pull lands there,
+    // between the last command's end and the next one's CARDFastOpen or CARDGetStatus, which
+    // then see no card; a load or save is over within a field, too soon for CARD_REMOVE's fields.
+    // CARD_STEPS=1 logs each step, with or without a pull.
+    let log = std::env::var_os("CARD_STEPS").is_some();
+    if let Some(when) = std::env::var("CARD_REMOVE_STEP")
+        .ok()
+        .or(log.then(String::new))
+    {
+        let mut parts = when
+            .split(',')
+            .filter(|f| !f.is_empty())
+            .map(|f| f.trim().parse::<u64>().expect("CARD_REMOVE_STEP=N[,G]"));
+        let pull_at = parts.next().unwrap_or(0);
+        let back = parts.next();
+        let entry = ssbm_sdk::sym("hsd_803AAA48");
+        let (wait, _) = ctx
+            .hook(entry)
+            .expect("CARD_REMOVE_STEP needs a card in slot A");
+        let (busy, read_idx, write_idx, requests, commands, head) = (
+            ssbm_sdk::sym("hsd_804D799C"),
+            ssbm_sdk::sym("hsd_804D7990"),
+            ssbm_sdk::sym("hsd_804D7994"),
+            ssbm_sdk::sym("requests"),
+            ssbm_sdk::sym("commands"),
+            ssbm_sdk::sym("curr_head"),
+        );
+        let steps = Cell::new(0u64);
+        ctx.set_hook(
+            entry,
+            Rc::new(move |ctx| {
+                wait(ctx);
+                let state = ctx.read_u32(busy);
+                let read = ctx.read_u32(read_idx);
+                let pending =
+                    read != ctx.read_u32(write_idx) || ctx.read_u32(requests + 0x18 * read) != 0;
+                if !(state == 0 || state == 2 && pending) {
+                    return;
+                }
+                let n = steps.get() + 1;
+                steps.set(n);
+                let field = ctx.ext::<Sdk>().hw.fields.get();
+                if log {
+                    let cmd = ctx.read_u32(commands + 0x24 * ctx.read_u32(head));
+                    eprintln!("card step {n}: field {field}, layer {state}, next command {cmd}");
+                }
+                if n == pull_at {
+                    eprintln!("CARD_REMOVE_STEP: card pulled at step {n} (field {field})");
+                    ctx.ext::<Sdk>().hw.set_card_present(ctx, 0, false);
+                    if let Some(g) = back {
+                        let at = hw::field_start(g).max(Sdk::now(ctx));
+                        ctx.ext::<Sdk>().schedule(at, |ctx| {
+                            ctx.ext::<Sdk>().hw.set_card_present(ctx, 0, true);
+                        });
+                    }
+                }
+            }),
+        );
+    }
     // DVD_COVER=F,G opens the disc cover at field F and closes it at G; DVD_FATAL=F fails the
     // first data read after field F with an error the DVD driver can't recover from.
     if let Ok(when) = std::env::var("DVD_COVER") {
