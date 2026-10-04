@@ -4,7 +4,9 @@ Where the campaign stood when the cloud session stopped, and what to do next. Th
 
 ## Numbers
 
-At snapshot f8.8 (the last entry on the coverage map, https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb): see `local/lockstep/report-f8.8.txt` for the full report. f8.7 had 151,833 of 163,387 countable blocks verified (92.9%), 5,104 explained by the ledger, about 6,450 neither, and 0 mismatches (0 to review; 9 reviewed as coming from the inputs). f8.8 adds the ledger lines and job results since.
+At snapshot f8.8 (the last entry on the coverage map, https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb; full report `local/lockstep/report-f8.8.txt`): 152,079 of 163,387 countable blocks verified (93.1%), 5,093 explained by the ledger, about 6,200 neither. Mismatches: 0 unmutated; 1 function to review (below); 9 reviewed as coming from the inputs.
+
+**First thing to do: review `fn_80196FFC`** (tournament bracket code). Under mutated inputs, in jobs `lvtou6time` and `lvtou48stocksd` (cov-levers), the original writes `00 00 30 00` at 0x80479A18 where the port writes zeros (call 2: inputs changed at 0x80CC316F, 0x80CC3146, 0x80CBE47C, 0x80CBE7E7). Rerun with `repro.sh levers lvtou6time fn_80196FFC` (its jobs file is jobs-levers.txt; check repro.sh picks it up) and decide: a port bug to fix, or an input the game can't produce, for `tools/lockstep/reviewed.txt` with the reason.
 
 ## Campaigns stopped mid-way
 

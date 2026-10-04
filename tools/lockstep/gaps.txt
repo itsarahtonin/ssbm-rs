@@ -2026,14 +2026,6 @@ mnName_80238AE0+0xe4 dead # the second `index < 0x18` test and the switch's belo
 fn_80239574+0x15c dead # switch (state) inside `if (state != 0)` (mnname.c:1083-1119): state is lbz p_link (0..255) and nonzero, cases 3 (beq), >3 (bge), 1 (beq), >1 (bge) leave nothing below 1 for this arm; the third switch reloads p_link after mn_8022F298, which only reads the joint's animation frame (mn_22EC.c:227)
 fn_80239574+0x1c0 dead # switch (state) inside `if (state != 0)` (mnname.c:1083-1119): state is lbz p_link (0..255) and nonzero, cases 3 (beq), >3 (bge), 1 (beq), >1 (bge) leave nothing below 1 for this arm; the third switch reloads p_link after mn_8022F298, which only reads the joint's animation frame (mn_22EC.c:227)
 mnName_80239878+0x74 dead # the arg0 != 1 path (mnname.c:1171-1196): the only call, mnname.s:1053 (mnName_MainInput, mnname.c:648), passes li r3,1
-mnName_80239878+0xd0 dead # the arg0 != 1 path (mnname.c:1171-1196): the only call, mnname.s:1053 (mnName_MainInput, mnname.c:648), passes li r3,1
-mnName_80239878+0x124 dead # the arg0 != 1 path (mnname.c:1171-1196): the only call, mnname.s:1053 (mnName_MainInput, mnname.c:648), passes li r3,1
-mnName_80239878+0x134 dead # the arg0 != 1 path (mnname.c:1171-1196): the only call, mnname.s:1053 (mnName_MainInput, mnname.c:648), passes li r3,1
-mnName_80239878+0x13c dead # the arg0 != 1 path (mnname.c:1171-1196): the only call, mnname.s:1053 (mnName_MainInput, mnname.c:648), passes li r3,1
-mnName_80239878+0x150 dead # the arg0 != 1 path (mnname.c:1171-1196): the only call, mnname.s:1053 (mnName_MainInput, mnname.c:648), passes li r3,1
-mnName_80239878+0x160 dead # the arg0 != 1 path (mnname.c:1171-1196): the only call, mnname.s:1053 (mnName_MainInput, mnname.c:648), passes li r3,1
-mnName_80239878+0x168 dead # the arg0 != 1 path (mnname.c:1171-1196): the only call, mnname.s:1053 (mnName_MainInput, mnname.c:648), passes li r3,1
-mnName_80239878+0x16c dead # the arg0 != 1 path (mnname.c:1171-1196): the only call, mnname.s:1053 (mnName_MainInput, mnname.c:648), passes li r3,1
 mnName_80239878+0x174 dead # the arg0 != 1 path (mnname.c:1171-1196): the only call, mnname.s:1053 (mnName_MainInput, mnname.c:648), passes li r3,1
 mnName_80239A24+0x398 dead # is_valid2 (mnname.c:1313-1319) re-reads the namedata[0] byte is_valid just found nonzero, with nothing written in between, so it is never 0
 mnName_80239A24+0x3ac dead # is_valid2 (mnname.c:1313-1319) re-reads the namedata[0] byte is_valid just found nonzero, with nothing written in between, so it is never 0
