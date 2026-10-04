@@ -2,6 +2,8 @@
 
 Phase 3's evidence comes from lockstep coverage campaigns: many runs of `ssbm-run --lockstep`, each checking every port against its original under real and mutated inputs, merged into one report. The Phase 3 gate (milestone 3b) is every countable block verified by lockstep or explained in the reviewed gap ledger (`tools/lockstep/gaps.txt`), with no unexplained mismatches, mutated ones included.
 
+Where the last session stopped, and what to pick up: `HANDOFF.md`. Recipes for blocks still open: `recipes.md`.
+
 ## Setup
 
 The scripts read the machine's paths from `local/env.sh` (ignored; see `env.sh` for the variables). On a cloud VM, `bash tools/cloud/setup.sh` downloads the private release (disc, replays, card templates, the decomp's disc-made files, campaign state) and writes it. Never commit anything from `local/`: it holds game data and captured memory.
