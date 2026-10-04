@@ -28,7 +28,7 @@ def steps(start, step, presses):
 VIB = {"MENU": "4,0", "LOCKSTEP_UNLIMITED": "mnVibration_HandleInput"}
 VIB_OPEN = [("a", 400)]
 DIAG = {"MENU": "5,3", "LOCKSTEP_UNLIMITED": "mnDiagram_InputProc"}
-DIAG_OPEN = [("a", 400), ("a", 500)]
+DIAG_OPEN = [("a", 400), ("a", 500), ("a", 600)]  # Data, Records, VS records: up at 601
 MC = {"LOCKSTEP_UNLIMITED": "gm_Scene_MemCard_OnFrame,gm_801AF250"}
 JP = {"GAME_LANGUAGE": "jp"}
 
