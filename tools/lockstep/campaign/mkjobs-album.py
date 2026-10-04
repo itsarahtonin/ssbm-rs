@@ -41,6 +41,11 @@ JOBS = [
                          "right", "right", "right", "left", "up", "l", "r", "b"]),
     ("cursor24", "template-snaps", ["down"] * 7 + ["r"] * 4 + ["up"] * 3 + ["l"] * 6
                                    + ["left", "left", "right"] * 3),
+    ("damaged", "snapdamaged", ["a", "wait", "a", "wait", "wait", "right", "left"]),
+    ("damagedno", "snapdamaged", ["a", "wait", "right", "a", "wait", "b"]),
+    ("damagedonly", "snap1damaged", ["a", "wait", "a", "wait", "wait", "wait"]),
+    ("damagedpull", "snapdamaged", ["a", "wait", "a", "wait", "wait"],
+     {"CARD_REMOVE": f"{START + 2 * STEP},{START + 5 * STEP}"}),
     ("pull4", "template-snaps", ["right", "wait", "wait", "wait", "wait", "wait"],
      {"CARD_REMOVE": f"{START + 2 * STEP},{START + 4 * STEP}"}),
     ("pull2", "template-snaps", ["wait"], {"CARD_REMOVE": "560,700"}),

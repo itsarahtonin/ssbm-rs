@@ -123,7 +123,8 @@ def badicon(template):
 
 
 def snapshots(card, d):
-    """The directory entries of Melee's snapshots, in the album's order (by name, a number)."""
+    """The directory entries of Melee's snapshots, in directory order (the album sorts them by name, a
+    number, the highest first: taskListSnapshots, lbcardnew.c:729)."""
     found = []
     for i in range(127):
         o = d * BLOCK + i * ENTRY
