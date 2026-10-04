@@ -6,14 +6,19 @@
 //! plays the humans. `MATCH_STAGES` and `MATCH_FIGHTERS` list other stages and fighters to pick
 //! from, by StKind and CKind, and `MATCH_TIME` sets the time limit in seconds: the results screen
 //! can't show the bosses, so a run with them needs a match that outlasts it. `MATCH_RULES=1`
-//! varies the rules too. Deterministic for a seed.
+//! varies the rules too. `MATCH_CPU_KIND=K[,K...]` gives the CPUs CPU kinds (the AI's routine,
+//! `CpuKind`) drawn from that list, `MATCH_STAMINA=HP` makes the matches stamina matches with
+//! that HP, and `MATCH_TEAMS=1` makes them team matches. `MATCH_VS=1` gives the VS mode's matches
+//! (`--mode 2`) the same, as each starts past its character and stage select, so that their
+//! results go through the VS mode's records: all but the fighters and stage, which stay those
+//! selects' choices. Deterministic for a seed.
 
 use std::cell::Cell;
 use std::rc::Rc;
 
-use ssbm_rt::{At, Ctx};
+use ssbm_rt::{At, Ctx, Hook};
 use ssbm_types::enums::*;
-use ssbm_types::records::{MenuEnterData, StartMeleeData, gmm_x0};
+use ssbm_types::records::{GmStats, MenuEnterData, StartMeleeData, gmm_x0};
 
 use crate::monkey::Rng;
 
@@ -41,16 +46,42 @@ const FIGHTERS: [&str; 32] = [
 ];
 const PLAYABLE: usize = 26;
 
+/// What `choose` gives a match: the stages and fighters to draw from, the time limit and the
+/// MATCH_* rules.
+struct Rules {
+    stages: Vec<i32>,
+    fighters: Vec<i32>,
+    time: u32,
+    cpu_kinds: Option<Vec<u8>>,
+    stamina: Option<u16>,
+    teams: bool,
+}
+
+/// A comma-separated list of numbers in `var`, if it is set.
+fn list(var: &str) -> Option<Vec<i32>> {
+    let list = std::env::var(var).ok()?;
+    let parse = |s: &str| s.trim().parse().unwrap_or_else(|_| panic!("{var}: {list}"));
+    Some(list.split(',').map(parse).collect())
+}
+
+/// MATCH_CPU_KIND=K[,K...]: the CPU kinds (CpuKind, 0 to 29) CPUs get, each drawn from these.
+fn cpu_kinds() -> Option<Vec<u8>> {
+    list("MATCH_CPU_KIND").map(|l| l.into_iter().map(|k| k as u8).collect())
+}
+
 pub fn install(ctx: &Ctx, seed: u64) {
-    let rng = Rng::new(seed);
-    let list = |var: &str| -> Option<Vec<i32>> {
-        let list = std::env::var(var).ok()?;
-        let parse = |s: &str| s.trim().parse().unwrap_or_else(|_| panic!("{var}: {list}"));
-        Some(list.split(',').map(parse).collect())
-    };
-    let stages = list("MATCH_STAGES").unwrap_or_else(|| STAGES.to_vec());
-    let fighters = list("MATCH_FIGHTERS").unwrap_or_else(|| (0..PLAYABLE as i32).collect());
-    let time = list("MATCH_TIME").map_or(TIME_LIMIT, |t| t[0] as u32);
+    let rng = Rc::new(Rng::new(seed));
+    let rules = Rc::new(Rules {
+        stages: list("MATCH_STAGES").unwrap_or_else(|| STAGES.to_vec()),
+        fighters: list("MATCH_FIGHTERS").unwrap_or_else(|| (0..PLAYABLE as i32).collect()),
+        time: list("MATCH_TIME").map_or(TIME_LIMIT, |t| t[0] as u32),
+        cpu_kinds: cpu_kinds(),
+        // MATCH_STAMINA=HP: stamina matches, each fighter with HP hit points and one life, as
+        // the Special Melee's Stamina mode starts them (gm_801B931C).
+        stamina: list("MATCH_STAMINA").map(|h| h[0] as u16),
+        // MATCH_TEAMS=1: team matches.
+        teams: std::env::var_os("MATCH_TEAMS").is_some(),
+    });
     // The debug VS mode sets its defaults, then loads the announcer's voice clips: its
     // defaults are set by then.
     let entered = Rc::new(Cell::new(false));
@@ -59,24 +90,164 @@ pub fn install(ctx: &Ctx, seed: u64) {
         ssbm_sdk::sym("onEnterDebugVs"),
         Rc::new(move |_| armed.set(true)),
     );
+    let (debug_rng, debug_rules) = (rng.clone(), rules.clone());
     ctx.set_hook(
         ssbm_sdk::sym("gm_LoadAnnouncer"),
         Rc::new(move |ctx| {
             if entered.replace(false) {
-                choose(ctx, &rng, &stages, &fighters, time);
+                let data = StartMeleeData(At::new(ctx, ssbm_sdk::sym("gmVsMelee_StartData")));
+                choose(ctx, &debug_rng, data, &debug_rules, false);
             }
+        }),
+    );
+    // MATCH_VS=1: the VS mode's matches too, as the match scene takes them (fn_8016E730), past
+    // the stage select's choice: the debug VS mode has no results to go on to, the VS mode's
+    // results screen and records (gm_801623A4) take them from there.
+    if std::env::var_os("MATCH_VS").is_some() {
+        add_hook(
+            ctx,
+            "fn_8016E730",
+            Rc::new(move |ctx| {
+                // Its match state (gmVsMode_State_Vs), not the sudden death that follows a tie.
+                let state = ctx.read_u8(ssbm_sdk::sym("state_machine") + 3);
+                if i32::from(current_mode(ctx)) == GM_VS && state == 2 {
+                    choose(ctx, &rng, StartMeleeData(At::new(ctx, ctx.regs.r(3))), &rules, true);
+                }
+            }),
+        );
+    }
+}
+
+thread_local! {
+    /// The game mode runGameMode last started, when the runner watches it (--mode, MODES).
+    static RUNNING: Cell<Option<u8>> = const { Cell::new(None) };
+}
+
+/// Notes the mode runGameMode starts: --mode changes its argument, not the state machine's
+/// record of it, which keeps the title screen's until the next mode.
+pub fn mode_started(mode: u8) {
+    RUNNING.with(|m| m.set(Some(mode)));
+}
+
+/// The game mode running (GameModeKind): the one runGameMode started, else the state machine's
+/// routing's (it starts with it).
+fn current_mode(ctx: &Ctx) -> u8 {
+    RUNNING.with(Cell::get).unwrap_or_else(|| ctx.read_u8(ssbm_sdk::sym("state_machine")))
+}
+
+/// Runs `hook` on reaching the function `name`, after the hook already there if there is one.
+fn add_hook(ctx: &Ctx, name: &str, hook: Hook) {
+    let addr = ssbm_sdk::sym(name);
+    let before = ctx.hook(addr).map(|(h, _)| h);
+    ctx.set_hook(
+        addr,
+        Rc::new(move |ctx| {
+            if let Some(before) = &before {
+                before(ctx);
+            }
+            hook(ctx);
+        }),
+    );
+}
+
+/// MATCH_LOG=1 logs each match as it starts (fn_8016E730): the mode, the stage and each
+/// player's fighter, costume, kind (0 human, 1 CPU), CPU kind and level, team and stamina.
+pub fn install_match_log(ctx: &Ctx) {
+    add_hook(
+        ctx,
+        "fn_8016E730",
+        Rc::new(|ctx| {
+            let data = StartMeleeData(At::new(ctx, ctx.regs.r(3)));
+            let rules = data.rules();
+            let mut players = Vec::new();
+            for i in 0..6 {
+                let p = data.players().get(i);
+                if p.slot_type() == Gm_PKind_NA as u8 {
+                    continue;
+                }
+                players.push(format!(
+                    "p{} ckind {} color {} kind {} cpu {}/{} team {} hp {}",
+                    i + 1,
+                    p.ckind(),
+                    p.color(),
+                    p.slot_type(),
+                    p.cpu_kind(),
+                    p.cpu_level(),
+                    p.team(),
+                    if p.xC_b7() != 0 { p.hp() } else { 0 },
+                ));
+            }
+            let field = ctx.ext::<ssbm_sdk::Sdk>().hw.fields.get();
+            eprintln!(
+                "field {field}: match in mode {:#04x} on stage {:#x}, kind {}{}: {}",
+                current_mode(ctx),
+                rules.stkind(),
+                rules.match_kind(),
+                if rules.is_teams() != 0 { ", teams" } else { "" },
+                players.join("; ")
+            );
         }),
     );
 }
 
 /// Makes the Event mode start at event match `n` (from 0), as if its event select had chosen
-/// it: entering the mode loads that event's files, and its character select if it has one.
-pub fn install_event(ctx: &Ctx, n: u8) {
+/// it: entering the mode loads that event's files, and its character select if it has one. With
+/// `fighter` (CKind, costume), the player plays that fighter in that costume, as if the
+/// character select had chosen it, and the mode skips the character select (gm_Mode_Event_OnLoad
+/// does for the events that set the player's fighter): onEnterVs takes the event data's choice
+/// (x2, x3) for a player the event leaves free.
+pub fn install_event(ctx: &Ctx, n: u8, fighter: Option<(i8, u8)>) {
     ctx.set_hook(
         ssbm_sdk::sym("gm_Mode_Event_OnLoad"),
         Rc::new(move |ctx| {
             let game = gmm_x0(At::new(ctx, ctx.read_u32(ssbm_sdk::sym("gmMainLib_804D3EE0"))));
-            game.vs().unk_530().set_unk_535(n);
+            let event = game.vs().unk_530();
+            event.set_unk_535(n);
+            if let Some((ckind, color)) = fighter {
+                event.set_x2(ckind);
+                event.set_x3(color);
+                // gm_SetGameModeStateId(1): the mode's match, its state 1. runGameMode has just
+                // started the mode at its state 0, the character select.
+                let routing = ssbm_sdk::sym("state_machine");
+                ctx.write_u8(routing + 3, 1);
+                ctx.write_u8(routing + 4, 1);
+            }
+        }),
+    );
+}
+
+/// Makes Classic (`gm_Mode_Classic_OnLoad`, `slot` 0) or Adventure (`gm_Mode_Adventure_OnLoad`,
+/// `slot` 1) start at stage `n` (from 0) once its character select is done, as continuing from
+/// a game over does: the character select's exit goes on to the mode's state `n` << 3, from the
+/// stage the mode's VS data keeps (x5 of gmMainLib_8015CDC8's and gmMainLib_8015CDD4's).
+pub fn install_stage_start(ctx: &Ctx, on_load: &str, slot: u8, n: u8) {
+    ctx.set_hook(
+        ssbm_sdk::sym(on_load),
+        Rc::new(move |ctx| {
+            let game = gmm_x0(At::new(ctx, ctx.read_u32(ssbm_sdk::sym("gmMainLib_804D3EE0"))));
+            let vs = game.vs();
+            if slot == 0 { vs.unk_51C() } else { vs.unk_522() }.set_x5(n);
+        }),
+    );
+}
+
+/// Makes the tournament's bracket one of `entrants` (4, 6, 8, 12, 16, 24, 32, 48 or 64), an
+/// elimination tournament, whatever its settings screen was left at, as the bracket is drawn up
+/// from them (fn_80192938): TmData's entrants is an index into the counts the screen offers
+/// (lbl_803D9D20.x0).
+pub fn install_tournament(ctx: &Ctx, entrants: u32) {
+    const COUNTS: [u32; 9] = [4, 6, 8, 12, 16, 24, 32, 48, 64];
+    let index = COUNTS
+        .iter()
+        .position(|&c| c == entrants)
+        .unwrap_or_else(|| panic!("TOU_ENTRANTS: one of {COUNTS:?}"));
+    ctx.set_hook(
+        ssbm_sdk::sym("fn_80192938"),
+        Rc::new(move |ctx| {
+            let tm = ssbm_sdk::sym("gm_804771C4");
+            // match_type 0, and entrants.
+            ctx.write_u32(tm + 4, 0);
+            ctx.write_u32(tm + 0xC, index as u32);
         }),
     );
 }
@@ -105,8 +276,16 @@ pub fn install_main_menu(
     menu: Option<(u8, u8)>,
     records: Option<u64>,
     names: usize,
+    records_1p: Option<u64>,
+    pokes: Vec<Poke>,
 ) -> Rc<SaveSetup> {
-    let setup = Rc::new(SaveSetup { unlock, records: records.map(Rng::new), names });
+    let setup = Rc::new(SaveSetup {
+        unlock,
+        records: records.map(Rng::new),
+        names,
+        records_1p: records_1p.map(Rng::new),
+        pokes,
+    });
     let on_menu = setup.clone();
     ctx.set_hook(
         ssbm_sdk::sym("mnMain_Scene_OnEnter"),
@@ -122,11 +301,13 @@ pub fn install_main_menu(
     setup
 }
 
-/// What UNLOCK_ALL, RECORDS and NAMES change in the save data.
+/// What UNLOCK_ALL, RECORDS, NAMES, RECORDS_1P and SAVE_POKE change in the save data.
 pub struct SaveSetup {
     unlock: bool,
     records: Option<Rng>,
     names: usize,
+    records_1p: Option<Rng>,
+    pokes: Vec<Poke>,
 }
 
 impl SaveSetup {
@@ -155,6 +336,154 @@ impl SaveSetup {
                 owned.set(i, (1 + i as u16 % 3) | if i % 4 == 0 { 0x8000 } else { 0 });
             }
             save.set_trophy_count(293);
+        }
+        if let Some(rng) = &self.records_1p {
+            fill_records_1p(ctx, rng);
+        }
+        // Last, so that they have the last word over the others.
+        for poke in &self.pokes {
+            poke.apply(ctx);
+        }
+    }
+}
+
+/// A write to the game's data at *gmMainLib_804D3EE0 (gmm_x0): the VS rules (x1850, GameRules),
+/// then the save data (from 0x1868, GmCardData).
+pub enum Poke {
+    /// `size` bytes (1, 2, 4 or 8) at `offset`, big-endian.
+    At { offset: u32, size: u32, value: u64 },
+    /// Every fighter's and name's KO counts and stats (FighterData, NameTagData), the fighter's
+    /// play count (x78) and the save's match counts (time_matches to match_resets), each to
+    /// `value` or the most its width holds, as the results' saturating adds (fn_80161C90,
+    /// gm_80162574) leave them.
+    Stats(u64),
+}
+
+/// The named fields SAVE_POKE knows: offset in gmm_x0 and size.
+const POKE_NAMES: [(&str, u32, u32); 18] = [
+    // GameRules at 0x1850, the VS rules screen's.
+    ("mode", 0x1852, 1),             // 0 time, 1 stock, 2 coin, 3 bonus
+    ("time_limit", 0x1853, 1),       // minutes, 0 none
+    ("stock_count", 0x1854, 1),
+    ("handicap", 0x1855, 1),         // 0 off, 1 auto, 2 on
+    ("damage_ratio", 0x1856, 1),     // tenths
+    ("stage_sel", 0x1857, 1),        // StageSelectMode: 0 any, 1 random, 2 ordered, 3, 4
+    ("stock_time_limit", 0x1858, 1), // minutes, 0 none
+    ("friendly_fire", 0x1859, 1),
+    ("pause", 0x185A, 1),
+    ("score_display", 0x185B, 1),
+    ("sd_penalty", 0x185C, 1), // unk_xc (gmMainLib_8015ED30): 0 is -1, 1 is 0, 2 is -2
+    // The save data, GmSaveData at 0x1868.
+    ("characters", 0x1868, 2), // unlocked_characters
+    ("stages", 0x186A, 2),     // x186A, the unlocked stages
+    ("features", 0x186C, 1),   // x186C
+    ("coins", 0x1A48, 4),      // x1A48 (gmMainLib_8015CCF0), at most 9999 as the game keeps it
+    // GamePrefs x1CB0.
+    ("item_freq", 0x1CB0, 1),
+    ("item_mask", 0x1CB8, 8),
+    ("stage_mask", 0x1CC8, 4), // the random stage select's stages
+];
+
+impl Poke {
+    /// OFF:SIZE:VALUE (OFF and VALUE in hex with 0x, else decimal; VALUE may be negative) or
+    /// NAME=VALUE, NAME one of POKE_NAMES or stats (stats=max for the most each field holds).
+    pub fn parse(spec: &str) -> Self {
+        let num = |v: &str| -> u64 {
+            let v = v.trim();
+            let (neg, v) = v.strip_prefix('-').map_or((false, v), |v| (true, v));
+            let n = match v.strip_prefix("0x") {
+                Some(h) => u64::from_str_radix(h, 16),
+                None => v.parse(),
+            }
+            .unwrap_or_else(|_| panic!("SAVE_POKE: {spec}"));
+            if neg { n.wrapping_neg() } else { n }
+        };
+        if let Some((name, value)) = spec.split_once('=') {
+            let name = name.trim();
+            if name == "stats" {
+                return Poke::Stats(if value.trim() == "max" { u64::MAX } else { num(value) });
+            }
+            let &(_, offset, size) = POKE_NAMES
+                .iter()
+                .find(|(n, ..)| *n == name)
+                .unwrap_or_else(|| panic!("SAVE_POKE: no field {name}"));
+            return Poke::At { offset, size, value: num(value) };
+        }
+        let parts: Vec<&str> = spec.split(':').collect();
+        let [offset, size, value] = parts[..] else {
+            panic!("SAVE_POKE=OFF:SIZE:VALUE or NAME=VALUE: {spec}")
+        };
+        let size = num(size) as u32;
+        assert!([1, 2, 4, 8].contains(&size), "SAVE_POKE: size 1, 2, 4 or 8: {spec}");
+        Poke::At { offset: num(offset) as u32, size, value: num(value) }
+    }
+
+    fn apply(&self, ctx: &Ctx) {
+        let base = ctx.read_u32(ssbm_sdk::sym("gmMainLib_804D3EE0"));
+        match *self {
+            Poke::At { offset, size, value } => {
+                let at = base + offset;
+                match size {
+                    1 => ctx.write_u8(at, value as u8),
+                    2 => ctx.write_u16(at, value as u16),
+                    4 => ctx.write_u32(at, value as u32),
+                    _ => {
+                        ctx.write_u32(at, (value >> 32) as u32);
+                        ctx.write_u32(at + 4, value as u32);
+                    }
+                }
+            }
+            Poke::Stats(value) => {
+                let (w16, w32) = (value.min(0xFFFF) as u16, value.min(0xFFFF_FFFF) as u32);
+                let stats = |st: GmStats| {
+                    st.set_sd_count(w16);
+                    st.set_attacks_hit(w32);
+                    st.set_attacks_total(w32);
+                    st.set_damage_dealt(w32 as i32);
+                    st.set_damage_taken(w32 as i32);
+                    st.set_damage_recovered(w32 as i32);
+                    st.set_peak_damage(w16);
+                    st.set_match_count(w16);
+                    st.set_victories(w16);
+                    st.set_losses(w16);
+                    st.set_play_time(w32);
+                    st.set_total_player_count(w32);
+                    st.set_walk_distance(w32 as i32);
+                    st.set_run_distance(w32 as i32);
+                    st.set_fall_distance(w32 as i32);
+                    st.set_peak_height(w32 as i32);
+                    st.set_coins_collected(w32 as i32);
+                    st.set_coins_swiped(w32 as i32);
+                    st.set_coins_lost(w32 as i32);
+                };
+                let game = gmm_x0(At::new(ctx, base));
+                let save = game.thing().save_data();
+                for i in 0..25 {
+                    let fd = save.x1F2C().get(i);
+                    for j in 0..25 {
+                        fd.fighter_kos().set(j, w16);
+                    }
+                    stats(fd.stats());
+                    // x78 and x79 are a u16 count of the fighter's VS matches.
+                    ctx.write_u16(fd.0.addr + 0x78, w16);
+                }
+                let banks = game.thing().nametag_banks();
+                for i in 0..120 {
+                    let name = banks.get(i / 19).inner().get(i % 19);
+                    for j in 0..120 {
+                        name.vs_kos().set(j, w16);
+                    }
+                    stats(name.stats());
+                    for j in 0..25 {
+                        name.play_time_by_fighter().set(j, w32);
+                    }
+                }
+                // time_matches, stock_matches, coin_matches, bonus_matches, stamina_matches and
+                // match_resets.
+                for k in 0..6 {
+                    ctx.write_u32(save.0.addr + 0x1B0 + 4 * k, w32);
+                }
+            }
         }
     }
 }
@@ -213,29 +542,101 @@ fn fill_records(ctx: &Ctx, rng: &Rng) {
     }
 }
 
+/// Gives each fighter's 1P records (FighterData x7C) random values, a third of them none: the
+/// cleared flags (b0 to b6: Target Test, 10-Man and 100-Man Melee, the 3-Minute Melee, then
+/// Classic, Adventure and All-Star), the difficulties and stocks they were cleared on, the
+/// Home-Run Contest distance (x7E), the Classic, Adventure and All-Star scores (x88 to x90),
+/// the Target Test and Multi-Man times (x94 to x9C) and KO counts (xA0 to xA8); and the save's
+/// masks of the fighters that cleared them (gmMainLib_8015ED98's), which go with the flags.
+fn fill_records_1p(ctx: &Ctx, rng: &Rng) {
+    let game = gmm_x0(At::new(ctx, ctx.read_u32(ssbm_sdk::sym("gmMainLib_804D3EE0"))));
+    let save = game.thing().save_data();
+    let masks = save.unk_8();
+    let mut cleared = [0i32; 7];
+    for i in 0..25 {
+        if rng.chance(33) {
+            continue;
+        }
+        let r = save.x1F2C().get(i).x7C();
+        for k in 0..7 {
+            let on = u16::from(rng.chance(60));
+            match k {
+                0 => r.set_b0(on),
+                1 => r.set_b1(on),
+                2 => r.set_b2(on),
+                3 => r.set_b3(on),
+                4 => r.set_b4(on),
+                5 => r.set_b5(on),
+                _ => r.set_b6(on),
+            }
+            cleared[k] |= i32::from(on) << i;
+        }
+        r.set_b789(rng.below(8) as u16);
+        r.set_b10_to_12(rng.below(8) as u16);
+        r.set_b13_to_15(rng.below(8) as u16);
+        r.set_x7E(rng.below(0x10000) as u16);
+        r.set_x80(rng.below(5) as u8);
+        r.set_x81(rng.below(5) as u8);
+        r.set_x82(rng.below(5) as u8);
+        r.set_x84(rng.below(1_000_000) as i32);
+        r.set_x88(rng.below(10_000_000) as i32);
+        r.set_x8C(rng.below(10_000_000) as i32);
+        r.set_x90(rng.below(10_000_000) as i32);
+        // Times in frames, up to an hour.
+        r.set_x94(rng.below(216_000) as u32);
+        r.set_x98(rng.below(216_000) as i32);
+        r.set_x9C(rng.below(216_000) as i32);
+        r.set_xA0(rng.below(1000) as u16);
+        r.set_xA2(rng.below(1000) as u16);
+        r.set_xA4(rng.below(10_000) as i32);
+        r.set_xA8(rng.below(1000) as i32);
+    }
+    // gmm_retval_ED98: xC to x1C, the masks gmMainLib_8015D00C, 8015D134, 8015D25C, 8015D384
+    // and the 8015D4A8 test keep.
+    masks.set_x10(masks.x10() | cleared[4]);
+    masks.set_x14(masks.x14() | cleared[5]);
+    masks.set_x18(masks.x18() | cleared[6]);
+    masks.set_x1C(masks.x1C() | cleared[0]);
+}
+
 /// Makes every match's human players level 9 CPUs, so the modes that end when the player
-/// loses go on further than random play takes them.
-pub fn install_cpu_players(ctx: &Ctx) {
-    ctx.set_hook(
-        ssbm_sdk::sym("fn_8016E730"),
-        Rc::new(|ctx| {
+/// loses go on further than random play takes them. With MATCH_CPU_KIND, each gets a CPU kind
+/// drawn from its list (from `seed`) rather than the one the mode gave its player.
+pub fn install_cpu_players(ctx: &Ctx, seed: u64) {
+    let kinds = cpu_kinds().map(|k| (k, Rng::new(seed)));
+    add_hook(
+        ctx,
+        "fn_8016E730",
+        Rc::new(move |ctx| {
             let data = StartMeleeData(At::new(ctx, ctx.regs.r(3)));
             for i in 0..4 {
                 let p = data.players().get(i);
                 if p.slot_type() == Gm_PKind_Human as u8 {
                     p.set_slot_type(Gm_PKind_Cpu as u8);
                     p.set_cpu_level(9);
+                    if let Some((kinds, rng)) = &kinds {
+                        p.set_cpu_kind(kinds[rng.below(kinds.len() as u64) as usize]);
+                    }
                 }
             }
         }),
     );
 }
 
-fn choose(ctx: &Ctx, rng: &Rng, stages: &[i32], fighters: &[i32], time: u32) {
-    let data = StartMeleeData(At::new(ctx, ssbm_sdk::sym("gmVsMelee_StartData")));
+/// Sets up a match: with `keep`, of the VS mode, its players' fighters and its stage stay the
+/// character and stage selects' (the files the VS mode preloads for them are all the match has
+/// room for: other fighters run the heap out), and the players it has stay its only ones.
+fn choose(ctx: &Ctx, rng: &Rng, data: StartMeleeData, chosen_rules: &Rules, keep: bool) {
+    let Rules { stages, fighters, time, .. } = chosen_rules;
+    let time = *time;
     let rules = data.rules();
-    let stage = stages[rng.below(stages.len() as u64) as usize];
-    rules.set_stkind(stage as u16);
+    let stage = if keep {
+        i32::from(rules.stkind())
+    } else {
+        let stage = stages[rng.below(stages.len() as u64) as usize];
+        rules.set_stkind(stage as u16);
+        stage
+    };
     rules.set_match_kind(MatchKind_Time as u32);
     rules.set_timer_enabled(1);
     rules.set_time_limit(time);
@@ -276,8 +677,13 @@ fn choose(ctx: &Ctx, rng: &Rng, stages: &[i32], fighters: &[i32], time: u32) {
         });
     }
     let mut chosen = Vec::new();
+    let mut playing = Vec::new();
     for i in 0..4 {
         let p = data.players().get(i);
+        if keep && p.slot_type() == Gm_PKind_NA as u8 {
+            continue;
+        }
+        playing.push(p);
         if varied {
             p.set_stocks(1 + rng.below(4) as i8);
             p.set_team(rng.below(3) as u8);
@@ -289,14 +695,22 @@ fn choose(ctx: &Ctx, rng: &Rng, stages: &[i32], fighters: &[i32], time: u32) {
                 _ => 1.0,
             });
         }
-        let fighter = fighters[rng.below(fighters.len() as u64) as usize] as usize;
+        let fighter = if keep {
+            p.ckind() as usize
+        } else {
+            fighters[rng.below(fighters.len() as u64) as usize] as usize
+        };
         // Bosses and the other special fighters only play as CPUs, as in the modes that have
         // them: the game crashes with some of them under a player's control.
         let cpu = fighter >= PLAYABLE || rng.chance(50);
-        p.set_ckind(fighter as i8);
+        if !keep {
+            p.set_ckind(fighter as i8);
+        }
         p.set_slot_type(if cpu { Gm_PKind_Cpu } else { Gm_PKind_Human } as u8);
         p.set_cpu_level(if cpu { 1 + rng.below(9) as u8 } else { 0 });
-        p.set_color(0);
+        if !keep {
+            p.set_color(0);
+        }
         // The special fighters start standing, as the modes that have them start them (the
         // entry animation they lack faults), and the hands with the stamina Classic gives them.
         if fighter >= PLAYABLE {
@@ -311,7 +725,31 @@ fn choose(ctx: &Ctx, rng: &Rng, stages: &[i32], fighters: &[i32], time: u32) {
         if fighter as i32 == CKind_GKoops {
             p.set_xC_b1(0);
         }
+        if cpu && let Some(kinds) = &chosen_rules.cpu_kinds {
+            p.set_cpu_kind(kinds[rng.below(kinds.len() as u64) as usize]);
+        }
+        if let Some(hp) = chosen_rules.stamina {
+            p.set_xC_b7(1);
+            p.set_hp(hp);
+            p.set_stocks(1);
+        }
+        if chosen_rules.teams && !varied {
+            p.set_team(rng.below(3) as u8);
+        }
         chosen.push(format!("{}{}", FIGHTERS[fighter], if cpu { " (CPU)" } else { "" }));
+    }
+    if chosen_rules.stamina.is_some() {
+        // A stock match, as the Stamina mode's (gm_801B931C), on the time limit still.
+        rules.set_match_kind(MatchKind_Stock as u32);
+    }
+    if chosen_rules.teams {
+        rules.set_is_teams(1);
+        // Not all on one team, or the match is over as it starts.
+        if let [first, .., last] = playing[..]
+            && playing.iter().all(|p| p.team() == first.team())
+        {
+            last.set_team((last.team() + 1) % 3);
+        }
     }
     let field = ctx.ext::<ssbm_sdk::Sdk>().hw.fields.get();
     eprintln!("field {field}: match on stage {stage}: {}", chosen.join(", "));

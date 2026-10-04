@@ -465,14 +465,24 @@ fn run() -> ExitCode {
     if let Some(seed) = monkey_seed {
         monkey::install(&sdk, seed, 0);
     }
+    // PAD_UNPLUG=PORT[,...] (1 to 4) has no controller in those ports: PADRead reports them
+    // missing, and the monkey and MONKEY_HOLD leave them so.
+    if std::env::var_os("PAD_UNPLUG").is_some() {
+        monkey::unplug(&sdk);
+    }
     // --matches SEED gives each match of the debug VS mode (--mode e) random fighters, stage
     // and items.
     if let Some(seed) = match_seed {
         matches::install(&ctx, seed);
     }
-    // CPU_PLAYERS=1 makes every match's human players CPUs.
+    // CPU_PLAYERS=1 makes every match's human players CPUs; with MATCH_CPU_KIND=K[,K...] (CpuKind)
+    // each gets a CPU kind drawn from that list, from the --matches seed (else --monkey's).
     if std::env::var_os("CPU_PLAYERS").is_some() {
-        matches::install_cpu_players(&ctx);
+        matches::install_cpu_players(&ctx, match_seed.or(monkey_seed).unwrap_or(1));
+    }
+    // MATCH_LOG=1 logs each match's stage and players as it starts.
+    if std::env::var_os("MATCH_LOG").is_some() {
+        matches::install_match_log(&ctx);
     }
     // CARD_REMOVE=F[,G] pulls the memory card out of slot A at field F, and puts it back at G;
     // CARD_REMOVE_B=F[,G] does the same in slot B.
@@ -681,8 +691,23 @@ fn run() -> ExitCode {
     let records = std::env::var("RECORDS").ok().map(|v| v.parse().expect("RECORDS=SEED"));
     // NAMES=N enters N names (up to 120) for the screens that list them.
     let names = std::env::var("NAMES").map_or(0, |v| v.parse().expect("NAMES=N"));
-    let save_setup = (unlock || menu.is_some() || records.is_some() || names > 0)
-        .then(|| matches::install_main_menu(&ctx, unlock, menu, records, names));
+    // RECORDS_1P=SEED fills each fighter's 1P records (cleared flags, scores, times, KO counts)
+    // with random values there, for the screens and modes that show or beat them.
+    let records_1p = std::env::var("RECORDS_1P").ok().map(|v| v.parse().expect("RECORDS_1P=SEED"));
+    // SAVE_POKE=OFF:SIZE:VALUE[,...] writes SIZE bytes (1, 2, 4 or 8) of VALUE at OFF from
+    // *gmMainLib_804D3EE0 there, after the others' changes; NAME=VALUE writes one of the fields
+    // matches::POKE_NAMES names (the VS rules, unlocks, coins, item and random stage settings),
+    // stats=V (or max) every KO count and stat. OFF and VALUE are hex with 0x.
+    let pokes: Vec<matches::Poke> = std::env::var("SAVE_POKE")
+        .map(|v| v.split(',').map(matches::Poke::parse).collect())
+        .unwrap_or_default();
+    let save_setup = (unlock
+        || menu.is_some()
+        || records.is_some()
+        || names > 0
+        || records_1p.is_some()
+        || !pokes.is_empty())
+    .then(|| matches::install_main_menu(&ctx, unlock, menu, records, names, records_1p, pokes));
     // GAME_LANGUAGE=jp runs the game in Japanese.
     if std::env::var("GAME_LANGUAGE").is_ok_and(|v| v == "jp") {
         matches::install_japanese(&ctx);
@@ -695,9 +720,32 @@ fn run() -> ExitCode {
             Rc::new(move |ctx| ctx.write_u32(ssbm_sdk::sym("DbLevel"), level)),
         );
     }
-    // EVENT=N makes the Event mode start at event match N (from 0).
+    // EVENT=N makes the Event mode start at event match N (from 0); EVENT_FIGHTER=CKIND,COLOR
+    // has the player play that fighter in that costume there, past the character select.
     if let Some(n) = std::env::var("EVENT").ok().and_then(|v| v.parse().ok()) {
-        matches::install_event(&ctx, n);
+        let fighter = std::env::var("EVENT_FIGHTER").ok().map(|f| {
+            let (ckind, color) = f.split_once(',').expect("EVENT_FIGHTER=CKIND,COLOR");
+            (
+                ckind.trim().parse().expect("EVENT_FIGHTER=CKIND,COLOR"),
+                color.trim().parse().expect("EVENT_FIGHTER=CKIND,COLOR"),
+            )
+        });
+        matches::install_event(&ctx, n, fighter);
+    }
+    // CLASSIC_STAGE=N and ADVENTURE_STAGE=N make Classic and Adventure go on to their stage N
+    // (from 0) from the character select.
+    for (var, on_load, slot) in [
+        ("CLASSIC_STAGE", "gm_Mode_Classic_OnLoad", 0),
+        ("ADVENTURE_STAGE", "gm_Mode_Adventure_OnLoad", 1),
+    ] {
+        if let Ok(v) = std::env::var(var) {
+            let n = v.parse().unwrap_or_else(|_| panic!("{var}=N"));
+            matches::install_stage_start(&ctx, on_load, slot, n);
+        }
+    }
+    // TOU_ENTRANTS=N (4 to 64) makes the tournament's bracket one of N entrants.
+    if let Ok(v) = std::env::var("TOU_ENTRANTS") {
+        matches::install_tournament(&ctx, v.parse().expect("TOU_ENTRANTS=N"));
     }
     // PROBES=FILE checks the functions it lists by calling them on live objects (see probe.rs);
     // empty, it probes nothing.
@@ -724,6 +772,7 @@ fn run() -> ExitCode {
                         setup.apply(ctx);
                     }
                 }
+                matches::mode_started(ctx.regs.r(3) as u8);
                 if log_modes {
                     let fields = ctx.ext::<Sdk>().hw.fields.get();
                     eprintln!("field {fields}: game mode {:#04x}", ctx.regs.r(3));

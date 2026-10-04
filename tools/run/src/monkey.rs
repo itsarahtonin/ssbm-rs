@@ -167,15 +167,39 @@ fn parse_hold(v: &str) -> Hold {
 pub fn install(sdk: &Rc<Sdk>, seed: u64, from: u64) {
     let rng = Rc::new(Rng::new(seed));
     let b = std::env::var("MONKEY_B").map_or(20, |v| v.parse().expect("MONKEY_B=PERCENT"));
-    schedule(sdk, rng, b, Rc::new(holds()), from);
+    schedule(sdk, rng, b, Rc::new(holds()), unplugged(), from);
 }
 
-fn schedule(sdk: &Rc<Sdk>, rng: Rc<Rng>, b: u64, holds: Rc<Vec<Hold>>, field: u64) {
+/// PAD_UNPLUG=PORT[,...] (1 to 4): the ports with no controller in them, which PADRead reports
+/// as PAD_ERR_NO_CONTROLLER, the monkey and MONKEY_HOLD leave alone.
+fn unplugged() -> [bool; 4] {
+    let mut out = [false; 4];
+    if let Ok(v) = std::env::var("PAD_UNPLUG") {
+        for p in v.split(',') {
+            let p: usize = p.trim().parse().expect("PAD_UNPLUG=PORT[,...]");
+            assert!((1..=4).contains(&p), "PAD_UNPLUG: no port {p}");
+            out[p - 1] = true;
+        }
+    }
+    out
+}
+
+/// Takes the controllers out of the ports PAD_UNPLUG names, from the start.
+pub fn unplug(sdk: &Sdk) {
+    let off = unplugged();
+    for (pad, off) in sdk.dev.pads.borrow_mut().iter_mut().zip(off) {
+        if off {
+            pad.connected = false;
+        }
+    }
+}
+
+fn schedule(sdk: &Rc<Sdk>, rng: Rc<Rng>, b: u64, holds: Rc<Vec<Hold>>, off: [bool; 4], field: u64) {
     sdk.schedule(hw::field_start(field), move |ctx| {
         let sdk = ctx.ext::<Sdk>();
         {
             let mut pads = sdk.dev.pads.borrow_mut();
-            for pad in pads.iter_mut() {
+            for (pad, _) in pads.iter_mut().zip(off).filter(|(_, off)| !off) {
                 if !pad.connected || rng.chance(15) {
                     *pad = press(&rng, b);
                 }
@@ -189,7 +213,7 @@ fn schedule(sdk: &Rc<Sdk>, rng: Rc<Rng>, b: u64, holds: Rc<Vec<Hold>>, field: u6
                     (pad.trigger_l, pad.trigger_r, pad.analog_a, pad.analog_b) = (0, 0, 0, 0);
                 }
             }
-            for h in active {
+            for h in active.filter(|h| !off[h.port]) {
                 let [stick_x, stick_y, substick_x, substick_y] = h.sticks;
                 pads[h.port] = PadStatus {
                     connected: true,
@@ -205,6 +229,6 @@ fn schedule(sdk: &Rc<Sdk>, rng: Rc<Rng>, b: u64, holds: Rc<Vec<Hold>>, field: u6
                 };
             }
         }
-        schedule(&sdk, rng, b, holds, field + 1);
+        schedule(&sdk, rng, b, holds, off, field + 1);
     });
 }
