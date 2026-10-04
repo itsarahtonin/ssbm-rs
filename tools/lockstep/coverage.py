@@ -111,7 +111,8 @@ def covered(bits, addr):
 
 
 def load_gaps(path):
-    """function -> offsets of the blocks the gap ledger explains, or "*" for all of them"""
+    """function -> offsets of the blocks the gap ledger explains, or "*" for all of them; a
+    function is named alone, or as UNIT:NAME where other units have a function of that name"""
     gaps = collections.defaultdict(set)
     for line in open(path, encoding="utf-8") if path else ():
         w = line.split("#")[0].split()
@@ -196,7 +197,7 @@ def main():
                              for _, m, ops in b)]
         done = sum(1 for b in countable if any(covered(bits, a) for a, _, _ in b))
         start = insns[0][0]
-        gap = gaps.get(name, ())
+        gap = set(gaps.get(name, ())) | gaps.get(f"{unit}:{name}", set())
         explained = sum(1 for b in countable if ("*" in gap or b[0][0] - start in gap)
                         and not any(covered(bits, a) for a, _, _ in b))
         calls, bad, uninit, mutated = ledger.get(start, (0, 0, 0, 0))

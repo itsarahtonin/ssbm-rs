@@ -12,6 +12,9 @@
 # comparison with Dolphin covers what it does). A block that odd state can reach, such as a null
 # check the game never trips, belongs to probes and mutated checks instead, not here.
 #
+# A function whose name other units also use is named UNIT:FUNCTION (its unit as the decomp's
+# asm tree names it, such as dolphin/axfx/reverb_hi:HandleReverb).
+#
 # FUNCTION+* covers every block of a function that nothing verified, for the functions no run can
 # reach that are not verified by probes, and for those whose every block the evidence covers,
 # such as the crash screen's.
@@ -790,3 +793,94 @@ hsd_803AAA48+0x12e8 hw # a CARD call failing right after the CARDFastOpen/CARDGe
 hsd_803AAA48+0x15b8 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
 hsd_803AAA48+0x15cc hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
 hsd_803AAA48+0x15e8 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+baselib_mfspr+* fail # only callers hsd_80396E40 (debugconsole_main.c:2113-2114, DBAT 0x218-0x21F) and hsd_80397110 (:2302, SPR numbers from the crash screen's SPR table lbl_8040ADD8, :139), both crash-screen pages already in the ledger as fail; probes (small ints, -1, powers of two) verified the low arms
+OSCheckActiveThreads+0x4C dead # RunQueueBits bit set: needs a ready thread queued while the checker runs; the game's only thread is DefaultThread (only OSCreateThread caller is the crash screen, hsd_80397DA4), running when gmscene.c:358 calls this
+OSCheckActiveThreads+0x58 dead # RunQueueBits bit set: needs a ready thread queued while the checker runs; the game's only thread is DefaultThread (only OSCreateThread caller is the crash screen, hsd_80397DA4), running when gmscene.c:358 calls this
+OSCheckActiveThreads+0x1AC dead # a second thread in __OSActiveThreadQueue: only OSCreateThread caller is the crash screen (hsd_80397DA4); OSSetIdleFunction has no callers
+OSCheckActiveThreads+0x1E8 dead # a second thread in __OSActiveThreadQueue: only OSCreateThread caller is the crash screen (hsd_80397DA4); OSSetIdleFunction has no callers
+OSCheckActiveThreads+0x310 fail # thread state 0 in the active queue: falls to the 'unkown thread state' OSPanic
+OSCheckActiveThreads+0x31C fail # thread state 3/5/6/7/>8: falls to the 'unkown thread state' OSPanic
+OSCheckActiveThreads+0x32C dead # case READY with suspend<=0: the only thread is running (state 2) when checked; GX overflow (GXFifo.c:52, the only OSSuspendThread caller) isn't modelled by the SDK and on hardware the thread is RUNNING again before it can run this
+OSCheckActiveThreads+0x368 dead # case READY with suspend<=0: the only thread is running (state 2) when checked; GX overflow (GXFifo.c:52, the only OSSuspendThread caller) isn't modelled by the SDK and on hardware the thread is RUNNING again before it can run this
+OSCheckActiveThreads+0x378 dead # case READY with suspend<=0: the only thread is running (state 2) when checked; GX overflow (GXFifo.c:52, the only OSSuspendThread caller) isn't modelled by the SDK and on hardware the thread is RUNNING again before it can run this
+OSCheckActiveThreads+0x380 dead # case READY with suspend<=0: the only thread is running (state 2) when checked; GX overflow (GXFifo.c:52, the only OSSuspendThread caller) isn't modelled by the SDK and on hardware the thread is RUNNING again before it can run this
+OSCheckActiveThreads+0x388 dead # case READY with suspend<=0: the only thread is running (state 2) when checked; GX overflow (GXFifo.c:52, the only OSSuspendThread caller) isn't modelled by the SDK and on hardware the thread is RUNNING again before it can run this
+OSCheckActiveThreads+0x38C dead # case READY with suspend<=0: the only thread is running (state 2) when checked; GX overflow (GXFifo.c:52, the only OSSuspendThread caller) isn't modelled by the SDK and on hardware the thread is RUNNING again before it can run this
+OSCheckActiveThreads+0x394 dead # case READY with suspend<=0: the only thread is running (state 2) when checked; GX overflow (GXFifo.c:52, the only OSSuspendThread caller) isn't modelled by the SDK and on hardware the thread is RUNNING again before it can run this
+OSCheckActiveThreads+0x398 dead # case READY with suspend<=0: the only thread is running (state 2) when checked; GX overflow (GXFifo.c:52, the only OSSuspendThread caller) isn't modelled by the SDK and on hardware the thread is RUNNING again before it can run this
+OSCheckActiveThreads+0x3C4 dead # case READY with suspend<=0: the only thread is running (state 2) when checked; GX overflow (GXFifo.c:52, the only OSSuspendThread caller) isn't modelled by the SDK and on hardware the thread is RUNNING again before it can run this
+OSCheckActiveThreads+0x3D0 dead # case READY with suspend<=0: the only thread is running (state 2) when checked; GX overflow (GXFifo.c:52, the only OSSuspendThread caller) isn't modelled by the SDK and on hardware the thread is RUNNING again before it can run this
+OSCheckActiveThreads+0x3DC dead # case READY with suspend<=0: the only thread is running (state 2) when checked; GX overflow (GXFifo.c:52, the only OSSuspendThread caller) isn't modelled by the SDK and on hardware the thread is RUNNING again before it can run this
+OSCheckActiveThreads+0x3E8 dead # case READY with suspend<=0: the only thread is running (state 2) when checked; GX overflow (GXFifo.c:52, the only OSSuspendThread caller) isn't modelled by the SDK and on hardware the thread is RUNNING again before it can run this
+OSCheckActiveThreads+0x3EC dead # case READY with suspend<=0: the only thread is running (state 2) when checked; GX overflow (GXFifo.c:52, the only OSSuspendThread caller) isn't modelled by the SDK and on hardware the thread is RUNNING again before it can run this
+OSCheckActiveThreads+0x3F0 dead # case READY with suspend<=0: the only thread is running (state 2) when checked; GX overflow (GXFifo.c:52, the only OSSuspendThread caller) isn't modelled by the SDK and on hardware the thread is RUNNING again before it can run this
+OSCheckActiveThreads+0x3F8 dead # case READY with suspend<=0: the only thread is running (state 2) when checked; GX overflow (GXFifo.c:52, the only OSSuspendThread caller) isn't modelled by the SDK and on hardware the thread is RUNNING again before it can run this
+OSCheckActiveThreads+0x498 dead # __OSGetEffectivePriority's loop over held mutexes: nothing in the game calls OSLockMutex/OSTryLockMutex/OSWaitCond (no bl to them in the asm)
+OSCheckActiveThreads+0x4A4 dead # __OSGetEffectivePriority's loop over held mutexes: nothing in the game calls OSLockMutex/OSTryLockMutex/OSWaitCond (no bl to them in the asm)
+OSCheckActiveThreads+0x4B0 dead # __OSGetEffectivePriority's loop over held mutexes: nothing in the game calls OSLockMutex/OSTryLockMutex/OSWaitCond (no bl to them in the asm)
+OSCheckActiveThreads+0x4B4 dead # __OSGetEffectivePriority's loop over held mutexes: nothing in the game calls OSLockMutex/OSTryLockMutex/OSWaitCond (no bl to them in the asm)
+OSCheckActiveThreads+0x4F4 dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+OSCheckActiveThreads+0x524 dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+OSCheckActiveThreads+0x558 dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+OSCheckActiveThreads+0x564 dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+OSCheckActiveThreads+0x56C dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+OSCheckActiveThreads+0x574 dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+OSCheckActiveThreads+0x578 dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+OSCheckActiveThreads+0x580 dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+OSCheckActiveThreads+0x584 dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+OSCheckActiveThreads+0x5B0 dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+OSCheckActiveThreads+0x5BC dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+OSCheckActiveThreads+0x5C8 dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+OSCheckActiveThreads+0x5D4 dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+OSCheckActiveThreads+0x5E0 dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+OSCheckActiveThreads+0x5E4 dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+OSCheckActiveThreads+0x5E8 dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+OSCheckActiveThreads+0x5F0 dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+OSCheckActiveThreads+0x624 dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+OSCheckActiveThreads+0x654 dead # case WAITING: the only thread is the one running the check; the SDK's OSSleepThread stand-in never sets state 4
+dolphin/axfx/reverb_hi:HandleReverb+* dead # reverb_hi: called only from AXFXReverbHiCallback, which AXDriverSetupAux registers only for aux type 1; its only non-OFF caller HSD_AudioSFXSetupAux is called with types 2 and 4 only (lbaudio_ax.c:2454/2462, asm 8002853C li r4,2 / 8002858C li r4,4). NOTE: name shared with reverb_std's HandleReverb
+resolveIKJoint1+* dead # called only by HSD_JObjSetupMatrixSub (jobj.c:1398) for (flags & 0x600000)==JOBJ_JOINT1; no code sets the JOINT bits and no joint desc on the disc has them (scan of every .dat/.usd: 46k joints, none with JOINT1/JOINT2/EFFECTOR, none with an IKHINT robj)
+drawShapeAnim+0xDC dead # NBT normals (normal_desc->attr != GX_VA_NRM): every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x100 dead # NBT normals (normal_desc->attr != GX_VA_NRM): every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x288 dead # NBT normals (normal_desc->attr != GX_VA_NRM): every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x29C dead # NBT normals (normal_desc->attr != GX_VA_NRM): every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x2C0 dead # NBT normals (normal_desc->attr != GX_VA_NRM): every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x2C4 dead # NBT normals (normal_desc->attr != GX_VA_NRM): every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x2E0 dead # NBT normals (normal_desc->attr != GX_VA_NRM): every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x3A8 dead # NBT normals (normal_desc->attr != GX_VA_NRM): every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x3BC dead # NBT normals (normal_desc->attr != GX_VA_NRM): every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x3E4 dead # NBT normals (normal_desc->attr != GX_VA_NRM): every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x3EC dead # NBT normals (normal_desc->attr != GX_VA_NRM): every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x3F8 dead # NBT normals (normal_desc->attr != GX_VA_NRM): every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x4C0 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x4E4 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x4F0 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x4F4 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x558 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x564 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x584 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x58C dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x5A4 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x5C8 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x5D4 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x5D8 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x5FC dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x61C dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x6CC dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x6D0 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x6E4 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x704 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x70C dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x718 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x720 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x72C dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x730 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x740 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x764 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x770 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x774 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x7D8 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x7E4 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x7EC dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x80C dead # NBT normals (normal_desc->attr != GX_VA_NRM): every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
+drawShapeAnim+0x824 dead # non-AVERAGE (additive, blend.bp) shape set: every ShapeSetDesc on the disc (GmRegClr, GmTou1p, GrNSr, MnSlMap, NtAppro .dat/.usd) has flags 5 (AVERAGE) and NRM or no normals
