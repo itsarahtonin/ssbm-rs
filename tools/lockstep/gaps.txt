@@ -558,7 +558,6 @@ fn_803AE7F8+0x9b4 dead # the phys==0 case (card.c:3331/3389): block_map entries 
 fn_803AE7F8+0x9bc dead # the phys==0 case (card.c:3331/3389): block_map entries come from scan indices i>=1 or the free list of them (card.c:3100-3150), never 0
 fn_803AE7F8+0x9c4 dead # the phys==0 case (card.c:3331/3389): block_map entries come from scan indices i>=1 or the free list of them (card.c:3100-3150), never 0
 fn_803AF3F0+0x708 dead # the phys==0 case of fn_803AF3F0_queue_write_first/final: block_map[1] holds scan indices i>=1 (secondary, free or moved primaries, card.c:3747-3762, 3873, 3880), never 0
-fn_803AF3F0+0x710 dead # the phys==0 case of fn_803AF3F0_queue_write_first/final: block_map[1] holds scan indices i>=1 (secondary, free or moved primaries, card.c:3747-3762, 3873, 3880), never 0
 fn_803AF3F0+0x948 dead # the phys==0 case of fn_803AF3F0_queue_write_first/final: block_map[1] holds scan indices i>=1 (secondary, free or moved primaries, card.c:3747-3762, 3873, 3880), never 0
 fn_803AF3F0+0x950 dead # the phys==0 case of fn_803AF3F0_queue_write_first/final: block_map[1] holds scan indices i>=1 (secondary, free or moved primaries, card.c:3747-3762, 3873, 3880), never 0
 fn_803AF3F0+0x958 dead # the phys==0 case of fn_803AF3F0_queue_write_first/final: block_map[1] holds scan indices i>=1 (secondary, free or moved primaries, card.c:3747-3762, 3873, 3880), never 0
@@ -764,7 +763,6 @@ fn_803B1338+0xb94 dead # the async==0 branch: its one caller, fn_803B1F78 (card.
 fn_803B1338+0xbc4 dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
 fn_803B1338+0xbcc dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
 fn_803B1338+0xbe8 dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
-hsd_803AAA48+0x60 hw # hsd_804D799C==1 at entry, a CARD transfer still in flight: the SDK layer completes card transfers at once (crates/sdk/src/hw.rs:448-499) and the callback (hsd_803A949C) clears it before the call that started the transfer returns
 hsd_803AAA48+0x3dc hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
 hsd_803AAA48+0x3f0 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
 hsd_803AAA48+0x40c hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
@@ -915,7 +913,6 @@ _Toy_8030E110+0x13a0 dead # setupTrophyEntry's free of the slot outside the 3-en
 _Toy_8030E110+0x160c dead # setupTrophyEntry's free of the slot outside the 3-entry window (toy.c:2595-2598): _Toy_8030FE48 NULLs all 13 archives and loads only the selected one (toy.c:5329-5331, 5396-5401), Toy_803087F4 loads only into selected_entry (toy.c:2800-2813), every shift frees the slot leaving the window (toy.c:3665-3669, 3751-3755, 4376-4378, 4442-4444, 4911-4916, 4997-5001) and Toy_80310660 frees all 13 before a rebuild (toy.c:5675-5684), so first->prev and last->next always hold NULL
 _Toy_8030E110+0x1680 dead # setupTrophyEntry's free of the slot outside the 3-entry window (toy.c:2595-2598): _Toy_8030FE48 NULLs all 13 archives and loads only the selected one (toy.c:5329-5331, 5396-5401), Toy_803087F4 loads only into selected_entry (toy.c:2800-2813), every shift frees the slot leaving the window (toy.c:3665-3669, 3751-3755, 4376-4378, 4442-4444, 4911-4916, 4997-5001) and Toy_80310660 frees all 13 before a rebuild (toy.c:5675-5684), so first->prev and last->next always hold NULL
 _Toy_8030E110+0x5d8 dead # the switch on Toy6E68.x61 (toy.c:4649) for a negative value: its only stores write 0, 1, 2 or 3 (toy.c:3031, 3083, 3386, 3450, 4045, 4059, 4684, 4722, 5194; the 9 `stb ...,0x61` in toy.s) after the memzero at toy.c:6185
-_tyDisplay_8031A94C+0x240 dead # cfg->x74 != 0 (tydisplay.c:1510): TyDspConfig.x74 is memzeroed at tydisplay.c:1857 and only ever decremented when nonzero (tydisplay.c:1351, 1511; the only stb to 0x74 in tydisplay.s are those two), so it stays 0
 grShrineRoute_8020A104+0xb0 dead # HSD_LObjGetNext(lobj) inlined in the while (lobj != NULL) loop (grshrineroute.c:910-917): r29 is tested non-null at +0xcc/+0xd0 before every pass and nothing writes it before the test at +0x9c, so the NULL arm cannot run
 grShrineRoute_8020AB58+0x3c dead # inlined lobj==NULL?NULL:lobj->next (grshrineroute.c:1367-1369): r30 is non-null on entry (+0x18/+0x24 return otherwise) and is only ever replaced by a next pointer the loop test at +0x60 found non-null
 grShrineRoute_8020AB58+0x54 dead # same loop as +0x3c: r30 non-null at every evaluation
@@ -1375,7 +1372,6 @@ gm_80160854+0xdc dead # switch on 'slot' after clrlwi r0,r3,24 (0..255): the arm
 gm_SetupHumanResultsScreen+0x8c dead # switch (MatchKind) arg0 after clrlwi r0,r30,24 (0..255): the arm for arg0 < 0 (fall-through of cmpwi 0 / bge), which no byte reaches
 gm_80167BC8+0x5c dead # switch (rules->mode) on lbz 0x2(r30) (0..255): the arm for mode < 0, which no byte reaches
 gm_80167FC4+0x54 dead # switch (rules->stage_sel): lbz 0x7(r3) is 0..255, ==1 already returned at +0x20 (r3 still the GameRules pointer, nothing between writes it), ==0/2/>=2 branch away, so the remaining fall-through (stage_sel 1 or negative) never runs
-gm_801639F4+0x30 dead # returns -1 only when gmMainLib_8015D710(arg0) is set; both callers (mnCharSel_8025C020 at 8025CCE8 and 8025CD0C) call it only after gm_801639C0(r31) != 0, i.e. !gmMainLib_8015D710(r31), with the same r31 and only lbLang_IsSavedLanguageJP between
 gm_80164504+0xb8 dead # unlock_idx is lbl_803B790C[i][0] for the first i whose [i][1] matches (loop at +0x4c over the 11 entries); the second loop (+0x90) searches the same column of the same 11 entries for it, so it always finds it and the 0x42 fallback never runs
 gm_UnlockCKind+0xb8 dead # unlock_idx comes from lbl_803B78C8[i].idx (gm_SelKindToUnlockIndex, loop at +0x4c); the second loop (+0x90) searches the same .idx column of the same 11 entries, so it always finds it and the 0x42 fallback never runs
 fn_80164B48+0x68 dead # gm_SelKindToUnlockIndex(ckind_to_selkind_map[DrMario]) on constant data: SELKIND_DRMARIO is in lbl_803B78C8 (gm_1601.c:152-230), so the not-found arm never runs
@@ -2406,17 +2402,11 @@ lbArchive_80017040+0x14 dead # the variadic prologue's FPR save (stfd f1-f8 afte
 lbArchive_800171CC+0x14 dead # the variadic prologue's FPR save (stfd f1-f8 after bne cr1) runs only when a caller sets cr1eq; all 1 call sites clear it (crclr cr1eq before the bl), and nothing else references the function
 DVDInit+0x98 hw # the JTAG arm (dvd.c:95): bootInfo->magic is 0xE5207C22 only when a dev kit's debugger loads the program; the SDK layer's boot writes 0x0D15EA5E there as the IPL does (crates/sdk/src/boot.rs:43), and DVDInit's only callers are main (gmmain) and __OSReboot (which OSResetSystem's stand-in never reaches); __fstLoad, which it calls, is already ledgered hw
 DVDInit+0xd4 hw # the boot ROM's own arm (dvd.c:105): bootInfo->magic is neither 0xE5207C22 nor 0x0D15EA5E only in the IPL itself; the SDK layer's boot writes 0x0D15EA5E (crates/sdk/src/boot.rs:43) before the apploader runs, and DVDInit runs once (DVDInitialized guard)
-cbForStateGettingError+0xe8 hw # resume_from for a category-0 error whose top byte is not 0x01: the SDK layer's drive (crates/sdk/src/hw.rs dvd_command) reports only 0x01023A00 (cover open, category 0, top byte 1), 0x00020400 (DVD_FATAL, category 1) and 0x00030200 (DVD_RETRY, category 2/3); no error with top byte 2, 3 or other reaches here
 cbForStateGettingError+0xf4 hw # as +0xe8: top byte 0x02 (cover closed), which the SDK layer's drive never reports
-cbForStateGettingError+0xfc hw # as +0xe8: top byte neither 1 nor 2, which the SDK layer's drive never reports for a category-0 error
 cbForStateGettingError+0x108 hw # as +0xe8: top byte 0x03 (no disc), which the SDK layer's drive never reports
-cbForStateGettingError+0x110 hw # as +0xe8: a category-0 error with top byte not 1-3, which the SDK layer's drive never reports
 cbForStateGettingError+0x1c4 hw # category 3 with error 0x031100 (dvd.c:310, the unrecovered-read seek): the SDK layer's drive's only retryable error is 0x00030200 (DVD_RETRY, crates/sdk/src/hw.rs:626)
-cbForStateGettingError+0x210 hw # category 0 with top byte not 0x01: the SDK layer's drive's only category-0 error is 0x01023A00 (cover open), so the 0x01 arm (+0x1fc) is the only one
 cbForStateGettingError+0x21c hw # category 0, top byte 0x02 (cover closed, dvd.c:321): never reported by the SDK layer's drive (hw.rs dvd_command reports 0x01023A00 while the cover is open)
-cbForStateGettingError+0x230 hw # category 0, top byte not 1 or 2: never reported by the SDK layer's drive
 cbForStateGettingError+0x23c hw # category 0, top byte 0x03 (no disc, dvd.c:325): the SDK layer has one disc that is always in
-cbForStateGettingError+0x250 hw # category 0 with another top byte (dvd.c:330, fatal 0x1234567): never reported by the SDK layer's drive
 cbForStateError+0x80 dead # calls CancelCallback, which only DVDCancelAsync's BUSY and COVER_CLOSED arms (dvd.c:1540, 1572) and __DVDPrepareResetAsync (dvd.c:1768) set; every real DVDCancelAsync call comes from DVDCancel in DVDClose (dvdfs.c:242), whose callers (lbFile_8001634C, lbFileGetSize, lbFile_800164A4, lbFile_80016580 right after DVDFastOpen, which sets cb.state END at dvdfs.c:196; AXDriver_8038DA70 after its read's callback ran with a result other than -1, axdriver.c:840) pass a block in state END, and __DVDPrepareResetAsync runs only from __OSReboot, which only OSResetSystem calls (stood in); so CancelCallback stays NULL and a mutated value can only be a non-function
 stateTimeout+0x74 dead # calls CancelCallback; as cbForStateError+0x80
 cbForStateGettingError+0x16c dead # calls CancelCallback; as cbForStateError+0x80
@@ -2953,9 +2943,6 @@ VIInit+0x344 hw # VIInit's display-position clamps (vi.c:360-378, AdjustingValue
 VIInit+0x37c hw # VIInit's display-position clamps (vi.c:360-378, AdjustingValues inlined): they trip only for a display offset or position past the screen edge; the SDK layer's SRAM has displayOffsetH 0 (crates/sdk/src/os.rs default_sram, read at vi.c:389), the boot leaves VI_DCR 0 (interlaced NTSC, as read at +0x1c4..+0x1dc) and the NTSC timing centres a 640-wide display
 VIInit+0x394 hw # VIInit's display-position clamps (vi.c:360-378, AdjustingValues inlined): they trip only for a display offset or position past the screen edge; the SDK layer's SRAM has displayOffsetH 0 (crates/sdk/src/os.rs default_sram, read at vi.c:389), the boot leaves VI_DCR 0 (interlaced NTSC, as read at +0x1c4..+0x1dc) and the NTSC timing centres a 640-wide display
 VIGetTvFormat+0x38 dead # switch (CurrTvMode) for a negative mode: CurrTvMode is a TV mode number 0..5 (vi.c:1019-1031)
-VIGetTvFormat+0x3c hw # CurrTvMode 3..5 (debug PAL, EURGB60): set from __OSTVMode (0x800000CC) or the render mode's format, and the SDK layer's console is NTSC (crates/sdk/src/boot.rs writes 0 there) while the game's render mode is GXNtsc480IntDf (initialize.c:41, gmmain.c:148)
-VIGetTvFormat+0x44 hw # as +0x3c
-VIGetTvFormat+0x48 hw # as +0x3c
 VIGetTvFormat+0x5c hw # CurrTvMode 2 or 5: as +0x3c
 __DVDInterruptHandler+0xa8 hw # DI break interrupt (DISR BRKINT 0x40) pending: the SDK layer's drive raises only TCINT and DEINT on DISR and CVRINT on DICVR (crates/sdk/src/hw.rs dvd_command, set_dvd_cover); a break is only ever StopAtNextInt in software
 __DVDInterruptHandler+0x164 dead # calls ResetCoverCallback: nothing calls DVDLowSetResetCoverCallback (no reference in the DOL), the handler only stores 0 to it (dvdlow.s 80336C94) and .sbss starts it NULL
@@ -3042,11 +3029,7 @@ grMaterial_801C94D8+0xbc dead # inlined 'p == NULL ? NULL : p->next' null arm (g
 fn_801C8EF8+0x2ec dead # reg2 < 4 with reg1 >= 4 (fn_801C8EF8_inline, grmaterial.c): reg1 = lbGetFreeColorRegister(0, mobj, NULL) >= 4 means registers 0..3 are used by mobj->texp/tevdesc; reg2 = lbGetFreeColorRegister(0, mobj, &cnst with reg1) searches the same texp/tevdesc plus reg1 (lb_00B0.c:649-681), so it returns > reg1 or -1 (assert at +0x248)
 fn_801C8EF8+0x300 dead # as +0x2ec (the lb_8000CCA4(reg2) call it guards)
 grKongo_801D55D8+0xcc dead # rand_range zero arm on fctiwz values: the cmpw operands and the subf. operands are the low words of the same two fctiwz results (stored twice to the stack), which differ in the a>b arm
-grKongo_801D55D8+0xd8 dead # the a<=b arm of rand_range((s32)unk30, (s32)unk2C) in the barrel's on_init: GrKg.dat yakumono_param +0x30 is 360.0 and +0x2c is 180.0, so a > b every time
-grKongo_801D55D8+0xe0 dead # as +0xd8
-grKongo_801D55D8+0xe8 dead # as +0xd8
 grKongo_801D55D8+0xf0 dead # as +0xd8 (and its zero arm)
-grKongo_801D55D8+0xf4 dead # as +0xd8
 grKongo_801D55D8+0x124 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two values, which differ there, so the beq to this li/mr r3,0 is never taken
 grKongo_801D55D8+0x144 dead # randrange zero arm: cmpw a,b / ble (or bge on the same cr0) then subf. of those same two values, which differ there, so the beq to this li/mr r3,0 is never taken
 grKongo_801D577C+0x248 dead # rand_range zero arm on fctiwz values: the cmpw operands and the subf. operands are the low words of the same two fctiwz results (stored twice to the stack), which differ in the a>b arm

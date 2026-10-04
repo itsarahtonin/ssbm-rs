@@ -183,7 +183,7 @@ def main():
 
     rows = []
     needed = {}
-    unreachable, contradicted = 0, []
+    unreachable, contradicted, disproved = 0, [], []
     for unit, name, insns, labels in funcs:
         bs = blocks(insns, labels)
         unreached = feasible.infeasible(insns, labels)
@@ -200,6 +200,10 @@ def main():
         gap = set(gaps.get(name, ())) | gaps.get(f"{unit}:{name}", set())
         explained = sum(1 for b in countable if ("*" in gap or b[0][0] - start in gap)
                         and not any(covered(bits, a) for a, _, _ in b))
+        # Ledger lines naming a block a run verified: the ledger said no run could.
+        key = f"{unit}:{name}" if f"{unit}:{name}" in gaps else name
+        disproved += [f"{key}+{b[0][0] - start:#x}" for b in bs if b[0][0] - start in gap
+                      and any(covered(bits, a) for a, _, _ in b)]
         calls, bad, uninit, mutated = ledger.get(start, (0, 0, 0, 0))
         missing = [(b[0][0], b[-1][0] + 4) for b in countable
                    if not any(covered(bits, a) for a, _, _ in b)
@@ -229,6 +233,9 @@ def main():
     if contradicted:
         print(f"blocks found unreachable that runs verified, so counted: {len(contradicted)} "
               f"({', '.join(contradicted[:8])})")
+    if disproved:
+        print(f"gap ledger lines whose blocks runs verified: {len(disproved)} "
+              f"({', '.join(disproved)})")
     print(f"checked: {len(checked)} functions; blocks verified: {blocks_done} "
           f"({100 * blocks_done / max(blocks_all, 1):.1f}%)")
     print(f"verified at {args.bar:.0%} of their blocks, with no mismatch: {len(verified)}")
