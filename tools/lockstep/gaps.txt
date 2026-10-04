@@ -495,3 +495,298 @@ gm_Scene_MemCard_OnFrame+0xb34 hw # decision 16 (gmscmemcard.c:424-428) is set o
 gm_Scene_MemCard_OnFrame+0xb40 hw # decision 16 (gmscmemcard.c:424-428) is set only at gmscmemcard.c:253, gm_801AF250's case 14 (LbCardResult_FatalError), which this ledger rules hw (gm_801AF250+0x290..+0x2a8); enter_data is file-static, with no other writer
 gm_Scene_MemCard_OnFrame+0xb48 hw # decision 16 (gmscmemcard.c:424-428) is set only at gmscmemcard.c:253, gm_801AF250's case 14 (LbCardResult_FatalError), which this ledger rules hw (gm_801AF250+0x290..+0x2a8); enter_data is file-static, with no other writer
 gm_Scene_MemCard_OnFrame+0xb4c hw # decision 16 (gmscmemcard.c:424-428) is set only at gmscmemcard.c:253, gm_801AF250's case 14 (LbCardResult_FatalError), which this ledger rules hw (gm_801AF250+0x290..+0x2a8); enter_data is file-static, with no other writer
+fn_803AC3F8+0xa4 dead # the zero-fill for (; i < 3; i++) after a loop that always runs i to 3 (card.c:1693-1709)
+fn_803AC3F8+0xb0 dead # the zero-fill for (; i < 3; i++) after a loop that always runs i to 3 (card.c:1693-1709)
+fn_803AC3F8+0x138 dead # the zero-fill for (; i < 3; i++) after a loop that always runs i to 3 (card.c:1693-1709)
+fn_803AC3F8+0x140 dead # the zero-fill for (; i < 3; i++) after a loop that always runs i to 3 (card.c:1693-1709)
+fn_803AC3F8+0x144 dead # the zero-fill for (; i < 3; i++) after a loop that always runs i to 3 (card.c:1693-1709)
+fn_803AC3F8+0x15c dead # the zero-fill for (; i < 3; i++) after a loop that always runs i to 3 (card.c:1693-1709)
+fn_803AC6B8+0x34 dead # an arm of the fn_803AC634 computation inlined in fn_803AC6B8 (card.c:1783-1826, guard at 1801, loop from 1 at 1805): size<=0 is guarded by the if at card.c:1801 on the same load, and i==0 is false in the loop from 1
+fn_803AC6B8+0xb4 dead # an arm of the fn_803AC634 computation inlined in fn_803AC6B8 (card.c:1783-1826, guard at 1801, loop from 1 at 1805): size<=0 is guarded by the if at card.c:1801 on the same load, and i==0 is false in the loop from 1
+fn_803AC6B8+0xdc dead # an arm of the fn_803AC634 computation inlined in fn_803AC6B8 (card.c:1783-1826, guard at 1801, loop from 1 at 1805): size<=0 is guarded by the if at card.c:1801 on the same load, and i==0 is false in the loop from 1
+fn_803AC6B8+0xe4 dead # an arm of the fn_803AC634 computation inlined in fn_803AC6B8 (card.c:1783-1826, guard at 1801, loop from 1 at 1805): size<=0 is guarded by the if at card.c:1801 on the same load, and i==0 is false in the loop from 1
+fn_803AC7DC+0x18 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0xb4 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0xc4 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0xec dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0xf4 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x130 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x140 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x168 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x170 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x1a4 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x1b4 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x1dc dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x1e4 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x21c dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x22c dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x254 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x25c dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x294 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x2a4 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x2cc dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x2d4 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x318 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x328 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x350 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AC7DC+0x358 dead # an arm of fn_803AC7DC_block_count inlined in the loop over files 1..8 (card.c:1887-1916): file_idx==0 is false there, and size<=0 was already skipped by the continue at card.c:1894 on the same load
+fn_803AD16C+0x214 dead # an arm of fn_803AC6B8_blocks_before/fn_803AC634 inlined in fn_803AD16C's loops over file_idx 0..8 (card.c:2383-2590): file_idx>=9 is false, and size<=0 was already skipped by the continue at card.c:2468/2493 on the same load
+fn_803AD16C+0x708 dead # an arm of fn_803AC6B8_blocks_before/fn_803AC634 inlined in fn_803AD16C's loops over file_idx 0..8 (card.c:2383-2590): file_idx>=9 is false, and size<=0 was already skipped by the continue at card.c:2468/2493 on the same load
+fn_803AD16C+0x77c dead # an arm of fn_803AC6B8_blocks_before/fn_803AC634 inlined in fn_803AD16C's loops over file_idx 0..8 (card.c:2383-2590): file_idx>=9 is false, and size<=0 was already skipped by the continue at card.c:2468/2493 on the same load
+fn_803AD16C+0x88c dead # an arm of fn_803AC6B8_blocks_before/fn_803AC634 inlined in fn_803AD16C's loops over file_idx 0..8 (card.c:2383-2590): file_idx>=9 is false, and size<=0 was already skipped by the continue at card.c:2468/2493 on the same load
+fn_803AD16C+0x900 dead # an arm of fn_803AC6B8_blocks_before/fn_803AC634 inlined in fn_803AD16C's loops over file_idx 0..8 (card.c:2383-2590): file_idx>=9 is false, and size<=0 was already skipped by the continue at card.c:2468/2493 on the same load
+fn_803AD16C+0x9ec dead # the phys==0 case at card.c:2523: the loop runs phys from 1 (card.c:2515)
+fn_803ADF90+0x574 dead # block_map[i]<0 inside the copy loop: card.c:2918-2926 already returned -259 for any block_map[i]<0, i<file_blocks
+fn_803ADF90+0x57c dead # block_map[i]<0 inside the copy loop: card.c:2918-2926 already returned -259 for any block_map[i]<0, i<file_blocks
+fn_803ADF90+0x584 dead # block_map[i]<0 inside the copy loop: card.c:2918-2926 already returned -259 for any block_map[i]<0, i<file_blocks
+fn_803ADF90+0x58c dead # block_map[i]<0 inside the copy loop: card.c:2918-2926 already returned -259 for any block_map[i]<0, i<file_blocks
+fn_803ADF90+0x5bc dead # block_map[i]<0 inside the copy loop: card.c:2918-2926 already returned -259 for any block_map[i]<0, i<file_blocks
+fn_803ADF90+0x5c4 dead # block_map[i]<0 inside the copy loop: card.c:2918-2926 already returned -259 for any block_map[i]<0, i<file_blocks
+fn_803ADF90+0x5d0 dead # block_map[i]<0 inside the copy loop: card.c:2918-2926 already returned -259 for any block_map[i]<0, i<file_blocks
+fn_803ADF90+0x5dc dead # block_map[i]<0 inside the copy loop: card.c:2918-2926 already returned -259 for any block_map[i]<0, i<file_blocks
+fn_803ADF90+0x5fc dead # block_map[i]<0 inside the copy loop: card.c:2918-2926 already returned -259 for any block_map[i]<0, i<file_blocks
+fn_803ADF90+0x608 dead # block_map[i]<0 inside the copy loop: card.c:2918-2926 already returned -259 for any block_map[i]<0, i<file_blocks
+fn_803ADF90+0x610 dead # block_map[i]<0 inside the copy loop: card.c:2918-2926 already returned -259 for any block_map[i]<0, i<file_blocks
+fn_803ADF90+0x230 dead # fn_803ACB74 inlined with seq_a=chunk inside the else of if (chunk < 0) (card.c:2897-2903), so seq_a<0 is false
+fn_803AE7F8+0x7e8 dead # the phys==0 case (card.c:3331/3389): block_map entries come from scan indices i>=1 or the free list of them (card.c:3100-3150), never 0
+fn_803AE7F8+0x7f0 dead # the phys==0 case (card.c:3331/3389): block_map entries come from scan indices i>=1 or the free list of them (card.c:3100-3150), never 0
+fn_803AE7F8+0x7f8 dead # the phys==0 case (card.c:3331/3389): block_map entries come from scan indices i>=1 or the free list of them (card.c:3100-3150), never 0
+fn_803AE7F8+0x9b4 dead # the phys==0 case (card.c:3331/3389): block_map entries come from scan indices i>=1 or the free list of them (card.c:3100-3150), never 0
+fn_803AE7F8+0x9bc dead # the phys==0 case (card.c:3331/3389): block_map entries come from scan indices i>=1 or the free list of them (card.c:3100-3150), never 0
+fn_803AE7F8+0x9c4 dead # the phys==0 case (card.c:3331/3389): block_map entries come from scan indices i>=1 or the free list of them (card.c:3100-3150), never 0
+fn_803AF3F0+0x708 dead # the phys==0 case of fn_803AF3F0_queue_write_first/final: block_map[1] holds scan indices i>=1 (secondary, free or moved primaries, card.c:3747-3762, 3873, 3880), never 0
+fn_803AF3F0+0x710 dead # the phys==0 case of fn_803AF3F0_queue_write_first/final: block_map[1] holds scan indices i>=1 (secondary, free or moved primaries, card.c:3747-3762, 3873, 3880), never 0
+fn_803AF3F0+0x948 dead # the phys==0 case of fn_803AF3F0_queue_write_first/final: block_map[1] holds scan indices i>=1 (secondary, free or moved primaries, card.c:3747-3762, 3873, 3880), never 0
+fn_803AF3F0+0x950 dead # the phys==0 case of fn_803AF3F0_queue_write_first/final: block_map[1] holds scan indices i>=1 (secondary, free or moved primaries, card.c:3747-3762, 3873, 3880), never 0
+fn_803AF3F0+0x958 dead # the phys==0 case of fn_803AF3F0_queue_write_first/final: block_map[1] holds scan indices i>=1 (secondary, free or moved primaries, card.c:3747-3762, 3873, 3880), never 0
+fn_803AF3F0+0xaf4 dead # the phys==0 case of fn_803AF3F0_queue_write_first/final: block_map[1] holds scan indices i>=1 (secondary, free or moved primaries, card.c:3747-3762, 3873, 3880), never 0
+fn_803AF3F0+0xafc dead # the phys==0 case of fn_803AF3F0_queue_write_first/final: block_map[1] holds scan indices i>=1 (secondary, free or moved primaries, card.c:3747-3762, 3873, 3880), never 0
+fn_803AF3F0+0xb04 dead # the phys==0 case of fn_803AF3F0_queue_write_first/final: block_map[1] holds scan indices i>=1 (secondary, free or moved primaries, card.c:3747-3762, 3873, 3880), never 0
+fn_803B0120+0x834 dead # the phys==0 && block_id!=0 case (card.c:4089): secondaries and free blocks are scan indices i>=1, and block_map[0][i]==0 only for file 0 logical 0, whose block_id is 0
+fn_803B0120+0x9e8 dead # the phys==0 && block_id!=0 case (card.c:4089): secondaries and free blocks are scan indices i>=1, and block_map[0][i]==0 only for file 0 logical 0, whose block_id is 0
+fn_803B0120+0xb88 dead # the phys==0 && block_id!=0 case (card.c:4089): secondaries and free blocks are scan indices i>=1, and block_map[0][i]==0 only for file 0 logical 0, whose block_id is 0
+fn_803B1338+0x88 dead # an arm of fn_803AC634/fn_803AC7DC_block_count inlined in fn_803B1338: inside the if (fn_803AC634(state,0) != 0) at card.c:4838/5054 size<=0 cannot hold, and the loops at card.c:4961/5057 start at index 1, so file_idx==0 is false
+fn_803B1338+0x4d0 dead # an arm of fn_803AC634/fn_803AC7DC_block_count inlined in fn_803B1338: inside the if (fn_803AC634(state,0) != 0) at card.c:4838/5054 size<=0 cannot hold, and the loops at card.c:4961/5057 start at index 1, so file_idx==0 is false
+fn_803B1338+0x4fc dead # an arm of fn_803AC634/fn_803AC7DC_block_count inlined in fn_803B1338: inside the if (fn_803AC634(state,0) != 0) at card.c:4838/5054 size<=0 cannot hold, and the loops at card.c:4961/5057 start at index 1, so file_idx==0 is false
+fn_803B1338+0x504 dead # an arm of fn_803AC634/fn_803AC7DC_block_count inlined in fn_803B1338: inside the if (fn_803AC634(state,0) != 0) at card.c:4838/5054 size<=0 cannot hold, and the loops at card.c:4961/5057 start at index 1, so file_idx==0 is false
+fn_803B1338+0x8f0 dead # an arm of fn_803AC634/fn_803AC7DC_block_count inlined in fn_803B1338: inside the if (fn_803AC634(state,0) != 0) at card.c:4838/5054 size<=0 cannot hold, and the loops at card.c:4961/5057 start at index 1, so file_idx==0 is false
+fn_803B1338+0x96c dead # an arm of fn_803AC634/fn_803AC7DC_block_count inlined in fn_803B1338: inside the if (fn_803AC634(state,0) != 0) at card.c:4838/5054 size<=0 cannot hold, and the loops at card.c:4961/5057 start at index 1, so file_idx==0 is false
+fn_803B1338+0x998 dead # an arm of fn_803AC634/fn_803AC7DC_block_count inlined in fn_803B1338: inside the if (fn_803AC634(state,0) != 0) at card.c:4838/5054 size<=0 cannot hold, and the loops at card.c:4961/5057 start at index 1, so file_idx==0 is false
+fn_803B1338+0x9a0 dead # an arm of fn_803AC634/fn_803AC7DC_block_count inlined in fn_803B1338: inside the if (fn_803AC634(state,0) != 0) at card.c:4838/5054 size<=0 cannot hold, and the loops at card.c:4961/5057 start at index 1, so file_idx==0 is false
+fn_803B1338+0x2d0 dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+fn_803B1338+0x2d8 dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+fn_803B1338+0x2e0 dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+fn_803B1338+0x374 dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+fn_803B1338+0x37c dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+fn_803B1338+0x384 dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+fn_803B1338+0x580 dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+fn_803B1338+0x588 dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+fn_803B1338+0x590 dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+fn_803B1338+0x624 dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+fn_803B1338+0x62c dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+fn_803B1338+0x634 dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+fn_803B1338+0x7f0 dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+fn_803B1338+0xa38 dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+fn_803B1338+0xa40 dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+fn_803B1338+0xa48 dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+fn_803B1338+0xadc dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+fn_803B1338+0xae4 dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+fn_803B1338+0xaec dead # the phys==0 test of fn_803B1338_queue_write(_data) and the -0x101 case: phys starts at 1 (card.c:4836) and only increments
+hsd_803B2550+0x6c dead # retry while file_info.fileNo == -1 after CARDOpen succeeded, which sets fileNo (CARDOpen.c, CARDOpen)
+fn_803ACC0C+0xdc dead # called only from the async==0 branches of fn_803AE7F8 (card.c:3221, 3263), fn_803AF3F0 (3784, 3808) and fn_803B0120 (4275, 4299), whose one caller, fn_803AA790 (card.c:699-708), passes async=1
+fn_803ACC0C+0xf8 dead # called only from the async==0 branches of fn_803AE7F8 (card.c:3221, 3263), fn_803AF3F0 (3784, 3808) and fn_803B0120 (4275, 4299), whose one caller, fn_803AA790 (card.c:699-708), passes async=1
+fn_803ACC0C+0x100 dead # called only from the async==0 branches of fn_803AE7F8 (card.c:3221, 3263), fn_803AF3F0 (3784, 3808) and fn_803B0120 (4275, 4299), whose one caller, fn_803AA790 (card.c:699-708), passes async=1
+fn_803ACC0C+0x10c dead # called only from the async==0 branches of fn_803AE7F8 (card.c:3221, 3263), fn_803AF3F0 (3784, 3808) and fn_803B0120 (4275, 4299), whose one caller, fn_803AA790 (card.c:699-708), passes async=1
+fn_803ACC0C+0x114 dead # called only from the async==0 branches of fn_803AE7F8 (card.c:3221, 3263), fn_803AF3F0 (3784, 3808) and fn_803B0120 (4275, 4299), whose one caller, fn_803AA790 (card.c:699-708), passes async=1
+fn_803ACC0C+0x12c dead # called only from the async==0 branches of fn_803AE7F8 (card.c:3221, 3263), fn_803AF3F0 (3784, 3808) and fn_803B0120 (4275, 4299), whose one caller, fn_803AA790 (card.c:699-708), passes async=1
+fn_803ACC0C+0x134 dead # called only from the async==0 branches of fn_803AE7F8 (card.c:3221, 3263), fn_803AF3F0 (3784, 3808) and fn_803B0120 (4275, 4299), whose one caller, fn_803AA790 (card.c:699-708), passes async=1
+fn_803ACD58+0x38 dead # called only from the async==0 branch of fn_803B0E9C (card.c:4560), whose callers pass async=1 (card.c:5160, 5239)
+fn_803ACD58+0x40 dead # called only from the async==0 branch of fn_803B0E9C (card.c:4560), whose callers pass async=1 (card.c:5160, 5239)
+fn_803ACD58+0x80 dead # called only from the async==0 branch of fn_803B0E9C (card.c:4560), whose callers pass async=1 (card.c:5160, 5239)
+fn_803ACD58+0xc8 dead # called only from the async==0 branch of fn_803B0E9C (card.c:4560), whose callers pass async=1 (card.c:5160, 5239)
+fn_803ACD58+0xe4 dead # called only from the async==0 branch of fn_803B0E9C (card.c:4560), whose callers pass async=1 (card.c:5160, 5239)
+fn_803ACD58+0x144 dead # called only from the async==0 branch of fn_803B0E9C (card.c:4560), whose callers pass async=1 (card.c:5160, 5239)
+fn_803ACD58+0x164 dead # called only from the async==0 branch of fn_803B0E9C (card.c:4560), whose callers pass async=1 (card.c:5160, 5239)
+fn_803ACD58+0x178 dead # called only from the async==0 branch of fn_803B0E9C (card.c:4560), whose callers pass async=1 (card.c:5160, 5239)
+fn_803ACD58+0x180 dead # called only from the async==0 branch of fn_803B0E9C (card.c:4560), whose callers pass async=1 (card.c:5160, 5239)
+fn_803ACD58+0x198 dead # called only from the async==0 branch of fn_803B0E9C (card.c:4560), whose callers pass async=1 (card.c:5160, 5239)
+fn_803ACFC0+0x94 dead # called only from the async==0 branches of fn_803AE7F8 (card.c:3362, 3420), fn_803AF3F0 (3861, 3916, 3942), fn_803B0120 (4352, 4388, 4413) and fn_803B1338 (4903-5089), whose callers pass async=1 (card.c:699-708, 5174)
+fn_803ACFC0+0x18c dead # called only from the async==0 branches of fn_803AE7F8 (card.c:3362, 3420), fn_803AF3F0 (3861, 3916, 3942), fn_803B0120 (4352, 4388, 4413) and fn_803B1338 (4903-5089), whose callers pass async=1 (card.c:699-708, 5174)
+fn_803ADF90+0x44 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x5c dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x364 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x480 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x4a8 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x4c4 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x4d0 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x4d8 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x4dc dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x4e4 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x500 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x504 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x520 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x528 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x530 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x538 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x550 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x554 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x55c dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x564 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x56c dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x6dc dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x704 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x720 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x72c dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x734 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x738 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x740 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x75c dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x760 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x77c dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x784 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x78c dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x794 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x7ac dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x7b0 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x7b8 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x7c0 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x7c8 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x804 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803ADF90+0x818 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:689), passes async=1
+fn_803AE7F8+0x544 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:699), passes async=1
+fn_803AE7F8+0x560 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:699), passes async=1
+fn_803AE7F8+0x564 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:699), passes async=1
+fn_803AE7F8+0x574 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:699), passes async=1
+fn_803AE7F8+0x580 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:699), passes async=1
+fn_803AE7F8+0x588 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:699), passes async=1
+fn_803AE7F8+0x920 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:699), passes async=1
+fn_803AE7F8+0x93c dead # the async==0 branch: its one caller, fn_803AA790 (card.c:699), passes async=1
+fn_803AE7F8+0x944 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:699), passes async=1
+fn_803AE7F8+0xaec dead # the async==0 branch: its one caller, fn_803AA790 (card.c:699), passes async=1
+fn_803AE7F8+0xb08 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:699), passes async=1
+fn_803AE7F8+0xb7c dead # the async==0 branch: its one caller, fn_803AA790 (card.c:699), passes async=1
+fn_803AE7F8+0xb90 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:699), passes async=1
+fn_803AE7F8+0xb9c dead # the async==0 branch: its one caller, fn_803AA790 (card.c:699), passes async=1
+fn_803AE7F8+0xba4 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:699), passes async=1
+fn_803AF3F0+0x484 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:704), passes async=1
+fn_803AF3F0+0x4a4 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:704), passes async=1
+fn_803AF3F0+0x4a8 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:704), passes async=1
+fn_803AF3F0+0x4b8 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:704), passes async=1
+fn_803AF3F0+0x4c4 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:704), passes async=1
+fn_803AF3F0+0x4cc dead # the async==0 branch: its one caller, fn_803AA790 (card.c:704), passes async=1
+fn_803AF3F0+0x7f8 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:704), passes async=1
+fn_803AF3F0+0xa78 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:704), passes async=1
+fn_803AF3F0+0xc24 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:704), passes async=1
+fn_803AF3F0+0xc98 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:704), passes async=1
+fn_803AF3F0+0xccc dead # the async==0 branch: its one caller, fn_803AA790 (card.c:704), passes async=1
+fn_803AF3F0+0xce0 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:704), passes async=1
+fn_803B0120+0x44 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0x5c dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0x190 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0x44c dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0x5e4 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0x5e8 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0x5f8 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0x604 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0x6d4 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0x6f8 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0x6fc dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0x70c dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0x718 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0x720 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0x7c4 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0x7d8 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0x924 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0x934 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0x940 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0xac8 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0xafc dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0xb0c dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0xb18 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0xb20 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0xc68 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0xc9c dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0xcac dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0xcb8 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0xcc0 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0xd18 dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0120+0xd2c dead # the async==0 branch: its one caller, fn_803AA790 (card.c:708), passes async=1
+fn_803B0E9C+0x220 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x22c dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x248 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x254 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x25c dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x280 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x284 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x28c dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x290 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x2ac dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x2c4 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x2e8 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x2f8 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x33c dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x358 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x364 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x36c dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x370 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x38c dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x394 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x3a8 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x3b8 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x3d4 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x3e0 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x3e8 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x3ec dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x440 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x45c dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x468 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x470 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x474 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x47c dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B0E9C+0x484 dead # the async==0 branch: both callers, fn_803B1F78 (card.c:5160) and fn_803B21E8 (card.c:5239), pass async=1
+fn_803B1338+0x3fc dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
+fn_803B1338+0x408 dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
+fn_803B1338+0x42c dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
+fn_803B1338+0x45c dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
+fn_803B1338+0x464 dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
+fn_803B1338+0x480 dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
+fn_803B1338+0x70c dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
+fn_803B1338+0x714 dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
+fn_803B1338+0x730 dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
+fn_803B1338+0x838 dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
+fn_803B1338+0x870 dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
+fn_803B1338+0xb64 dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
+fn_803B1338+0xb70 dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
+fn_803B1338+0xb94 dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
+fn_803B1338+0xbc4 dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
+fn_803B1338+0xbcc dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
+fn_803B1338+0xbe8 dead # the async==0 branch: its one caller, fn_803B1F78 (card.c:5174), passes async=1
+hsd_803AAA48+0x60 hw # hsd_804D799C==1 at entry, a CARD transfer still in flight: the SDK layer completes card transfers at once (crates/sdk/src/hw.rs:448-499) and the callback (hsd_803A949C) clears it before the call that started the transfer returns
+hsd_803AAA48+0x3dc hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x3f0 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x40c hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x4f8 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x50c hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x528 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x648 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x65c hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x678 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x7b4 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x7c8 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x7e4 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x8e0 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x8f4 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x910 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0xb6c hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0xb80 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0xb9c hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0xca8 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0xcbc hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0xcd8 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0xff0 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x12bc hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x12cc hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x12e8 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x15b8 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x15cc hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
+hsd_803AAA48+0x15e8 hw # a CARD call failing right after the CARDFastOpen/CARDGetStatus of the same step succeeded: the CARD library's other failures are excluded (offsets inside the file, chains passed CARDCheck this mount, same directory entry), leaving a card pulled between the two calls, which a console can do but the SDK layer delivers pulls only at wait points (crates/sdk/src/lib.rs:12-15)
