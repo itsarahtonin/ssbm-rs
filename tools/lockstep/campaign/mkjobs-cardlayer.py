@@ -21,6 +21,9 @@ PRESS = 4
 UNLIMITED = ("hsd_803AAA48,hsd_803A949C,fn_803AD16C,fn_803ADF90,fn_803AE7F8,fn_803AF3F0,"
              "fn_803B0120")
 TITLE = [("a", 400)]
+# A pull in the boot's load leaves the memory card screen up until the A at 400 answers it and the
+# save loads again; the title screen's A then comes at 500.
+BOOT_PULL = TITLE + [("a", 500)]
 # Options, Sound, and back: the second autosave (mnsound.c:119).
 SOUND = TITLE + [("down", 480), ("down", 520), ("down", 560), ("a", 600), ("down", 660),
                  ("a", 700), ("b", 800)]
@@ -69,14 +72,14 @@ JOBS = [
 ] + [
     # hsd_803AAA48 +0x1364 (steps 1, 23), +0x1548 (2-12, 24-34), +0x734 (13-21), +0x5a4 (35-36),
     # +0x35c (37-47), +0x9d0 (39-40): each step of the boot's load and the autosave
-    (f"pull{n}", "template-saved", TITLE,
+    (f"pull{n}", "template-saved", BOOT_PULL if n <= 22 else TITLE,
      {"CARD_REMOVE_STEP": f"{n},{BOOT_BACK if n <= 22 else SAVE_BACK}"}) for n in range(1, 49)
 ] + [
     # hsd_803AAA48 +0x454: the second and third header sectors' reads
-    (f"v4pull{n}", "v4", TITLE, {"CARD_REMOVE_STEP": f"{n},{BOOT_BACK}"}) for n in (2, 3)
+    (f"v4pull{n}", "v4", BOOT_PULL, {"CARD_REMOVE_STEP": f"{n},{BOOT_BACK}"}) for n in (2, 3)
 ] + [
     # hsd_803AAA48 +0x860 (13), +0xc18 (14): the mirror's rebuild
-    (f"v1pull{n}", "v1", TITLE, {"CARD_REMOVE_STEP": f"{n},{BOOT_BACK}"}) for n in (13, 14)
+    (f"v1pull{n}", "v1", BOOT_PULL, {"CARD_REMOVE_STEP": f"{n},{BOOT_BACK}"}) for n in (13, 14)
 ] + [
     # hsd_803AAA48 +0x1078 (38), +0xdd0 (39): the autosave's header rewrite and status
     (f"v3apull{n}", "v3a", TITLE, {"CARD_REMOVE_STEP": f"{n},{SAVE_BACK}"}) for n in (37, 38, 39)
