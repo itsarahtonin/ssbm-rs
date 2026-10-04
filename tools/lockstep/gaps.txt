@@ -327,3 +327,5 @@ RxHandler+* hw # HIO: runs past its first test only once HIOInit found the dev k
 OSExitThread+* fail # OSCreateThread makes it each thread's return address; the game's only OSCreateThread call (hsd_80397DA4, debugconsole_main) starts the crash screen's thread
 __setjmp+* oracle # ports call Ctx::setjmp (rt jump.rs) instead, so its port never runs; each check of a caller (granime, hsd_3B33, hsd_3B34) compares the original's setjmp with that
 __longjmp+* oracle # ports unwind to Ctx::setjmp (rt jump.rs) instead, so its port never runs; each check of a caller compares the original's longjmp with that
+__CARDUnlock+* hw # the card's unlock exchange, which DoMount runs only when the card's status lacks bit 0x40 (unlocked); the SDK layer's card (crates/sdk/src/card.rs), like Dolphin's, reports itself unlocked from power-on, so no run since it came in (a5a9448) has called it; the 468 calls are from earlier waves, before it, and every one stopped at ReadArrayUnlock's error
+DoneCallback+* hw # the done callback of the DSP task __CARDUnlock submits with DSPAddTask (CARDUnlock.c), which the SDK layer stands in for; runs only in the unlock exchange above
