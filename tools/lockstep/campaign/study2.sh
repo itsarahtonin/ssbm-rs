@@ -24,7 +24,7 @@ line=$(cat $L/jobs-wave*.txt $L/jobs-f*.txt 2>/dev/null | grep "^$JOB|" | head -
 args=${line#*|}
 envs=(); rest=()
 for a in $args; do
-    if [[ ${#rest[@]} -eq 0 && $a =~ ^[A-Z_]+= ]]; then envs+=("$a"); else rest+=("$a"); fi
+    if [[ ${#rest[@]} -eq 0 && $a =~ ^[A-Z_][A-Z0-9_]*= ]]; then envs+=("$a"); else rest+=("$a"); fi
 done
 # Fresh copies of any card the job uses.
 for i in "${!rest[@]}"; do

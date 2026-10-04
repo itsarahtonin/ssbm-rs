@@ -22,7 +22,7 @@ grep -v '^#' "${1:?JOBS_FILE}" | tr -d '\r' | xargs -P "${JOBS:-8}" -d '\n' -I{}
     rm -f $out.bin $out.csv
     envs=(); rest=()
     for a in $args; do
-        if [[ ${#rest[@]} -eq 0 && $a =~ ^[A-Z_]+= ]]; then envs+=("$a"); else rest+=("$a"); fi
+        if [[ ${#rest[@]} -eq 0 && $a =~ ^[A-Z_][A-Z0-9_]*= ]]; then envs+=("$a"); else rest+=("$a"); fi
     done
     env LOCKSTEP_BUDGET=$BUDGET LOCKSTEP_CALLS=$CALLS ${DONE:+LOCKSTEP_DONE=$DONE} \
       LOCKSTEP_COVERAGE=$out.bin LOCKSTEP_LEDGER=$out.csv $EXTRA "${envs[@]}" \

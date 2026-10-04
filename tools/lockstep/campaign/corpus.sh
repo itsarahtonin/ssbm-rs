@@ -27,7 +27,7 @@ collect)
     args=$(map_replays "${line#*|}")
     envs=(); rest=()
     for a in $args; do
-        if [[ ${#rest[@]} -eq 0 && $a =~ ^[A-Z_]+= ]]; then envs+=("$a"); else rest+=("$a"); fi
+        if [[ ${#rest[@]} -eq 0 && $a =~ ^[A-Z_][A-Z0-9_]*= ]]; then envs+=("$a"); else rest+=("$a"); fi
     done
     for i in "${!rest[@]}"; do
         if [[ ${rest[$i]} == --card ]]; then
