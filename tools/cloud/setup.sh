@@ -6,16 +6,22 @@
 # packages the tools need, writes local/env.sh and builds ssbm-run. Safe to run again: each step
 # is skipped once done.
 #
-#   bash tools/cloud/setup.sh
+#   GH_REPO=OWNER/PRIVATE_DATA_REPO REPLAYS_FROM=/original/replay/folder bash tools/cloud/setup.sh
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 REPO=$(pwd)
 DATA=${SSBM_DATA:-$HOME/ssbm-data}
 RELEASE=${RELEASE:-private-data}
-GH_REPO=${GH_REPO:-itsarahtonin/ssbm-rs}
+GH_REPO=${GH_REPO:?Set GH_REPO to the private repository holding the data release}
+REPLAYS_FROM=${REPLAYS_FROM:?Set REPLAYS_FROM to the replay folder named in the bundled job lists}
 MELEE_COMMIT=af0423e32394cdade84de17376c96f928961c534
 DISC_MD5=0e63d4223b01d9aba596259dc155a174
 MELEE=$(dirname "$REPO")/melee
+# Release names do not provide a privacy boundary.
+[[ $(gh api "repos/$GH_REPO" --jq '.private') == true ]] || {
+    echo "$GH_REPO must be private; game data cannot come from a public release" >&2
+    exit 1
+}
 mkdir -p "$DATA"
 
 # The reports judge each round's results stale against the commits since its binary.
@@ -68,13 +74,13 @@ fi
 # c2rs reads the units from objdiff.json and their flags from build.ninja.
 [[ -f $MELEE/objdiff.json ]] || (cd "$MELEE" && .venv/bin/python configure.py)
 
-cat > local/env.sh <<EOF
-# This cloud VM's paths for tools/lockstep/campaign/env.sh (written by tools/cloud/setup.sh).
-SSBM_DISC="$disc"
-MELEE="$MELEE"
-REPLAYS="$DATA/game/slippi"
-REPLAYS_FROM="C:/Users/malur/OneDrive/Documents/Slippi"
-EOF
+{
+    printf '%s\n' "# This cloud VM's paths for tools/lockstep/campaign/env.sh (written by tools/cloud/setup.sh)."
+    printf 'SSBM_DISC=%q\n' "$disc"
+    printf 'MELEE=%q\n' "$MELEE"
+    printf 'REPLAYS=%q\n' "$DATA/game/slippi"
+    printf 'REPLAYS_FROM=%q\n' "$REPLAYS_FROM"
+} > local/env.sh
 
 cargo build --release -p ssbm-run --target-dir target/t2
 echo "ready: $(nproc) CPUs; SSBM_DISC=$disc"

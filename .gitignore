@@ -1,4 +1,6 @@
 /target
+/.claude/
+/.codex/
 
 # Anything derived from a disc stays out of Git: images, extracted files,
 # captured memory, and replay corpora. Keep local data under /local.
@@ -24,4 +26,5 @@
 *.slpp
 *.call
 *.corp
+*.dff
 __pycache__/

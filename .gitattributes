@@ -1,1 +1,8 @@
 * text=auto eol=lf
+
+crates/types/src/gen/** linguist-generated=true
+crates/game/src/tu/** linguist-generated=true
+crates/game/src/patched.rs linguist-generated=true
+crates/slippi/src/denylist.rs linguist-generated=true
+tools/fp-fuzz/dolphin/** linguist-vendored=true
+tools/ax-dolphin/dolphin/** linguist-vendored=true

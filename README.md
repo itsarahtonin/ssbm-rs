@@ -1,57 +1,61 @@
 # ssbm-rs
 
-A Rust port of Super Smash Bros. Melee (NTSC 1.02, GALE01 revision 2) for Windows, macOS and Linux, built from the [doldecomp/melee](https://github.com/doldecomp/melee) decompilation.
+A Rust port of Super Smash Bros. Melee NTSC 1.02 (GALE01 revision 2), built from the [Melee decompilation](https://github.com/doldecomp/melee) and checked against the original game.
 
-- **Stage 1** is a faithful port, verified bit for bit against the original game.
-- **Stage 2** refactors it into idiomatic Rust with modern features, verified frame by frame against Stage 1.
+The project aims to preserve the game's behavior, including its floating-point results and memory layout. Rust functions are checked call by call against the original machine code, and recorded games are checked against their Slippi replays. The translator, runtime, and verification tools are also intended as a research resource for similar projects.
 
-This repository contains no game data. The port reads everything from the player's own disc image and checks its hash first.
+**Development preview:** a windowed player with audio, keyboard, gamepad, and GameCube adapter support exists. The full verification gate and release validation on Windows, macOS, and Linux remain work in progress. See [verification and limitations](docs/verification.md).
 
-The full plan lives in the [Melee Rust Port Plan](https://claude.ai/code/artifact/341d5fed-6bcb-4070-89e3-c0e1276f0816).
+Players supply their own disc image. The source tree contains no bundled disc image or extracted assets; the runtime loads the game's assets and data tables from the disc.
 
-## Status
+## Build and play
 
-Phase 3: everything else. Every function of the game is in Rust: `tools/c2rs` translates the decomp's C, and transliterates from machine code what only MWCC can compile. Lockstep checks each port against the original code, call by call, and the replay oracle checks whole games against their Slippi recordings.
+Install Rust through [rustup](https://rustup.rs). [rust-toolchain.toml](rust-toolchain.toml) pins the toolchain; Windows also requires the Visual Studio C++ build tools. Linux player builds need a C toolchain, pkg-config, and the ALSA and udev development libraries.
 
-| Crate | Purpose |
+```sh
+cargo build --locked --release -p ssbm-run --features player
+```
+
+Launch `target/release/ssbm-run.exe` on Windows, or `target/release/ssbm-run` on Linux and macOS. With no arguments, it asks for the disc image and remembers the choice. The supported game is the US NTSC 1.02 release; other revisions and modded discs are unsupported.
+
+ISO, RVZ, CISO, and GCZ images are supported through [nod](https://github.com/encounter/nod). The loader checks the game ID and revision, then verifies `main.dol` when booting. A full-disc SHA-1 check is available separately; opening an image does not hash the whole disc.
+
+The player keeps its disc path and memory card in an `ssbm-rs` directory under `APPDATA` on Windows, `XDG_CONFIG_HOME` when set, or `~/.config` otherwise. Saves modify that card.
+
+### Controls
+
+| Input | Mapping |
 | --- | --- |
-| [`gekko-fp`](crates/gekko-fp) | Bit-exact Gekko (GameCube CPU) floating-point operations |
-| [`ssbm-mem`](crates/mem) | GameCube main memory: 24 MB, big-endian, 32-bit addresses |
-| [`ssbm-disc`](crates/disc) | Disc image loading and verification, through nod |
-| [`ssbm-rt`](crates/rt) | Runtime core: machine context, handles, calls and lockstep |
-| [`ssbm-ppc`](crates/ppc) | Gekko interpreter that runs the original code in dev builds |
-| [`ssbm-sdk`](crates/sdk) | Stand-ins for the hardware and the parts of Nintendo's SDK that talk to it |
-| [`ssbm-types`](crates/types) | Generated handles, constants, globals and call stubs for the decomp's types and functions |
-| [`ssbm-game`](crates/game) | The game's code ported to Rust |
-| [`ssbm-slippi`](crates/slippi) | Slippi replay playback and recording |
-| [`ssbm-run`](tools/run) | Runs the game headless, with lockstep, probes and the replay oracle |
-| [`replay-sort`](tools/replay-sort) | Sorts Slippi replays and picks the smoke set |
-| [`fp-fuzz`](tools/fp-fuzz) | Differential fuzzing of `gekko-fp` against Dolphin |
+| Keyboard | Arrows: stick; X: A; Z: B; C: X; S: Y; D: Z; Q/W: L/R; Enter: Start; I/J/K/L: C-stick |
+| Gamepad | South/west/east/north: A/B/X/Y; right shoulder: Z; triggers: L/R |
+| GameCube adapter | Nintendo WUP-028 or Mayflash in Wii U mode; controllers use their adapter ports |
 
-The Python tools in `tools/typegen`, `tools/c2rs` and `tools/lockstep` generate the types and ports and track lockstep coverage.
+The keyboard and first ordinary gamepad share the first port without an adapter controller. Windows adapters require a WinUSB driver; another program cannot hold the adapter open at the same time. [Player and verification tools](tools/gx/README.md) cover calibration, rumble, and troubleshooting.
 
-## Building
+## Project scope
 
-Install Rust with [rustup](https://rustup.rs); `rust-toolchain.toml` pins the version. On Windows, the MSVC C++ build tools are also required.
+This repository develops and preserves the faithful port and the tools used to verify it. Competitive VS is the first priority; menus, single-player modes, and unusual hardware paths also need verification.
 
-```sh
-cargo test
-```
+A later idiomatic Rust refactor with netplay, training tools, and mods is intended for a **separate repository based on this one**. The faithful port remains useful as its reference and as an independently readable research artifact. See the [roadmap](docs/roadmap.md) and [reusable components](docs/components.md).
 
-Tests that need the disc run only when `SSBM_DISC` points at an image:
+## Explore the code
 
-```sh
-SSBM_DISC=/path/to/melee.iso cargo test -p ssbm-disc
-```
+| Area | Purpose |
+| --- | --- |
+| [gekko-fp](crates/gekko-fp) | Gekko floating-point behavior, with hardware and Slippi compatibility modes |
+| [Memory](crates/mem), [runtime](crates/rt), [interpreter](crates/ppc) | Original memory layout, dispatch, and the lockstep reference |
+| [Disc](crates/disc), [SDK](crates/sdk) | Disc loading and host implementations of hardware interactions |
+| [Types](crates/types), [game](crates/game) | Generated accessors and translated game functions |
+| [GX](crates/gx), [renderer](crates/render), [AX](crates/ax) | GPU commands, wgpu rendering, and audio mixing |
+| [Slippi](crates/slippi) | Replay playback, recording, and comparisons |
+| [Runner](tools/run), [replay-sort](tools/replay-sort) | Player, headless verification, and replay selection |
+| [c2rs](tools/c2rs/README.md), [typegen](tools/typegen) | Translation and accessor generation |
+| [Campaigns](tools/lockstep/campaign/README.md), [fp-fuzz](tools/fp-fuzz/README.md) | Coverage tracking and differential floating-point checks |
 
-## Design rules
+[Architecture](docs/architecture.md) explains how these pieces fit together. [Contributing](CONTRIBUTING.md) explains how to build, validate changes, and work with generated code.
 
-1. No game data in Git. Anything derived from a disc lives under `local/`, which is ignored.
-2. Every float operation in game code goes through `gekko-fp`. The original assembly decides which operations are fused and which stay in double precision.
-3. Game code reaches game state only through generated accessors such as `f.pos().x()`. They hide whether the storage is GameCube memory (Stage 1) or a native struct (Stage 2).
+## License and provenance
 
-## License
+Project code is offered under GPL-3.0-or-later; see [LICENSE](LICENSE) and [third-party provenance](THIRD_PARTY.md). Dolphin and Slippi source retains its upstream notices.
 
-Code in this repository is licensed under GPL-3.0-or-later; see [LICENSE](LICENSE). Parts of `gekko-fp` are ported from [Dolphin](https://github.com/dolphin-emu/dolphin) (GPL-2.0-or-later).
-
-The decomp this port is based on carries no license. Super Smash Bros. Melee and its assets belong to Nintendo and HAL Laboratory.
+The Melee decompilation has no stated license for the original game code. Translating it does not establish ownership of that code. Super Smash Bros. Melee and its assets belong to Nintendo and HAL Laboratory. The project's license does not grant rights to those assets or resolve the original code's licensing.
