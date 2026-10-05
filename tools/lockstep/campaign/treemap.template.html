@@ -81,6 +81,7 @@ svg text { fill: var(--muted); font: 11px "IBM Plex Mono", monospace; }
 .evidence details { margin: 12px 0; } .evidence summary { cursor: pointer; }
 .evidence .scroll { max-height: 420px; overflow: auto; }
 #matches { display: flex; flex-wrap: wrap; gap: 6px; max-height: 150px; overflow: auto; }
+#matches:empty { display: none; }
 [hidden] { display: none !important; }
 </style>
 
@@ -218,7 +219,7 @@ function header() {
   const summary = document.getElementById("ledger-summary");
   summary.setAttribute("aria-hidden", String(!showLedger));
   summary.textContent = `${fmt(explained)} additional blocks explained · ${pct(done + explained, blocksAll)} accounted for · ${fmt(blocksAll - done - explained)} unaccounted. Explained is not verified; mismatches remain unresolved independently.`;
-  document.getElementById("legend").innerHTML = [["ok", "100% verified"], ["low-hi", "partially verified (color follows measured percentage)"], ["never", "no verified/countable blocks"], ["explained", "striped fraction: ledger explanation"], ["review", "to review"], ["bad", "mismatch"]].map(([k, l]) => `<span${k === "explained" && !showLedger ? ' style="visibility:hidden" aria-hidden="true"' : ""}><i style="background:var(--${k})"></i>${l}</span>`).join("");
+  document.getElementById("legend").innerHTML = [["ok", "100% verified"], ["low-hi", "partially verified (color follows measured percentage)"], ["never", "no verified/countable blocks"], ...(showLedger ? [["explained", "striped fraction: ledger explanation"]] : []), ["review", "to review"], ["bad", "mismatch"]].map(([k, l]) => `<span><i style="background:var(--${k})"></i>${l}</span>`).join("");
 }
 
 // Treemap
@@ -341,7 +342,7 @@ function inspectFunction(f) {
   const area = root.children.find(n => n.data.name === f.area);
   zoomTo(area.children.find(n => n.data.name === f.unit));
   selectedFunction = f; evidencePanel();
-  document.getElementById("evidence").scrollIntoView({ behavior: "smooth", block: "start" });
+  document.getElementById("evidence").scrollIntoView({ behavior: "smooth", block: "end" });
 }
 function searchResults() {
   const matches = query.length >= 3 ? fns.filter(f => `${f.unit} ${f.name}`.toLowerCase().includes(query)) : [];
