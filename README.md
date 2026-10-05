@@ -8,7 +8,15 @@ The project aims to preserve the game's behavior, including its floating-point r
 
 Players supply their own disc image. The source tree contains no bundled disc image or extracted assets; the runtime loads the game's assets and data tables from the disc.
 
-## Build and play
+## Download and play
+
+Download the latest version from [Releases](https://github.com/itsarahtonin/ssbm-rs/releases/latest): `ssbm-rs.exe` for Windows 10 and 11, `ssbm-rs-macos.zip` for macOS 11 or later (Apple silicon or Intel), or `ssbm-rs-x86_64.AppImage` for Linux. Open it. The first time, it asks for your disc image and remembers it. The supported game is the US NTSC 1.02 release (GALE01 revision 2); other revisions and modded discs are unsupported. The builds aren't code-signed, so Windows and macOS ask once whether to run them; each release's notes explain how to allow it.
+
+ISO, RVZ, CISO, and GCZ images are supported through [nod](https://github.com/encounter/nod). The loader checks the game ID and revision, then verifies `main.dol` when booting. A full-disc SHA-1 check is available separately; opening an image does not hash the whole disc.
+
+The player keeps its disc path and memory card in an `ssbm-rs` directory under `APPDATA` on Windows, `XDG_CONFIG_HOME` when set, or `~/.config` otherwise. Saves modify that card.
+
+### Build from source
 
 Install Rust through [rustup](https://rustup.rs). [rust-toolchain.toml](rust-toolchain.toml) pins the toolchain; Windows also requires the Visual Studio C++ build tools. Linux player builds need a C toolchain, pkg-config, and the ALSA and udev development libraries.
 
@@ -16,11 +24,7 @@ Install Rust through [rustup](https://rustup.rs). [rust-toolchain.toml](rust-too
 cargo build --locked --release -p ssbm-run --features player
 ```
 
-Launch `target/release/ssbm-run.exe` on Windows, or `target/release/ssbm-run` on Linux and macOS. With no arguments, it asks for the disc image and remembers the choice. The supported game is the US NTSC 1.02 release; other revisions and modded discs are unsupported.
-
-ISO, RVZ, CISO, and GCZ images are supported through [nod](https://github.com/encounter/nod). The loader checks the game ID and revision, then verifies `main.dol` when booting. A full-disc SHA-1 check is available separately; opening an image does not hash the whole disc.
-
-The player keeps its disc path and memory card in an `ssbm-rs` directory under `APPDATA` on Windows, `XDG_CONFIG_HOME` when set, or `~/.config` otherwise. Saves modify that card.
+Launch `target/release/ssbm-run.exe` on Windows, or `target/release/ssbm-run` on Linux and macOS. `bash tools/run/release.sh` packages a release for the system it runs on, with its license notices; the [release workflow](.github/workflows/release.yml) builds Windows, macOS, and Linux releases from a version tag.
 
 ### Controls
 

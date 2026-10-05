@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=ssbm-rs
+Comment=Plays Super Smash Bros. Melee from your own copy of the game
+Exec=ssbm-rs
+Icon=ssbm-rs
+Terminal=false
+Categories=Game;

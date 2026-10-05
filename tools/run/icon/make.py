@@ -2,14 +2,16 @@
 artwork, nothing taken from the game), and writes it as ssbm-rs.ico (16 to 256 pixels, for
 the Windows executable), ssbm-rs.png (256 pixels) and window.rgba (64 by 64 RGBA pixels, the
 window's icon). The band shades from a periwinkle edge to a pale center; small sizes get a
-wider band so the hole stays open.
+wider band so the hole stays open. With --iconset DIR it writes the PNGs macOS's iconutil makes
+an .icns from instead (16 to 1024 pixels), for the release workflow's app bundle.
 
-    python tools/run/icon/make.py
+    python tools/run/icon/make.py [--iconset DIR]
 """
 
 import math
 import os
 import struct
+import sys
 import zlib
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -30,7 +32,7 @@ def render(size):
     radius = size / 2 * 0.97
     outer = radius * ROOT3 / 2
     inner = outer * hole
-    samples = 8 if size <= 64 else 4
+    samples = 8 if size <= 64 else 4 if size <= 256 else 2
     rows = []
     for py in range(size):
         row = bytearray()
@@ -78,7 +80,19 @@ def ico(images):
     return head + entries + data
 
 
+def iconset(folder):
+    os.makedirs(folder, exist_ok=True)
+    for size in [16, 32, 128, 256, 512]:
+        for scale, suffix in [(1, ""), (2, "@2x")]:
+            side = size * scale
+            with open(os.path.join(folder, f"icon_{size}x{size}{suffix}.png"), "wb") as f:
+                f.write(png(side, render(side)))
+
+
 def main():
+    if sys.argv[1:2] == ["--iconset"]:
+        iconset(sys.argv[2])
+        return
     images = []
     for size in SIZES:
         rows = render(size)

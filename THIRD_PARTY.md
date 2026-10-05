@@ -26,4 +26,4 @@ See [Slippi data provenance](crates/slippi/data/README.md). `crates/game/src/pat
 
 ## Cargo dependencies
 
-`Cargo.lock` records external versions. Their licenses remain applicable; this document covers directly vendored or adapted source and is not an exhaustive dependency-license inventory. Binary distribution needs corresponding-source and notice review for its actual features and dependencies.
+`Cargo.lock` records external versions. Their licenses remain applicable; this document covers directly vendored or adapted source. [tools/run/notices.py](tools/run/notices.py) lists the crates built into the player for a target, with their license files, and each release carries that list as `THIRD-PARTY-NOTICES` beside the GPL text; the release's tag is its corresponding source.

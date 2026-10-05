@@ -1,0 +1,143 @@
+name: Release
+
+# Builds the player for Windows, Linux and macOS. A run started by hand leaves the builds as
+# artifacts to try; a pushed version tag (vX.Y.Z) also drafts a GitHub release with them, its
+# notes from docs/releases/vX.Y.Z.md, for review before it is published.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  windows:
+    name: Windows
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build the release
+        shell: bash
+        run: bash tools/run/release.sh
+      - name: Collect
+        shell: bash
+        run: |
+          version=$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -1)
+          mkdir dist
+          cp "local/release/v$version/ssbm-rs.exe" dist/
+          cp "local/release/v$version/THIRD-PARTY-NOTICES.txt" dist/THIRD-PARTY-NOTICES-windows.txt
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: windows
+          path: dist/
+          if-no-files-found: error
+
+  linux:
+    name: Linux
+    # The oldest supported runner, so the AppImage's glibc requirement stays low.
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y pkg-config libasound2-dev libudev-dev
+      - name: Build
+        run: cargo build --locked --release -p ssbm-run --features player --target-dir target/player
+      - name: Package an AppImage
+        run: |
+          set -e
+          curl -fsSL -o appimagetool https://github.com/AppImage/appimagetool/releases/download/1.9.1/appimagetool-x86_64.AppImage
+          curl -fsSL -o runtime https://github.com/AppImage/type2-runtime/releases/download/20251108/runtime-x86_64
+          sha256sum -c <<'EOF'
+          ed4ce84f0d9caff66f50bcca6ff6f35aae54ce8135408b3fa33abfc3cb384eb0  appimagetool
+          2fca8b443c92510f1483a883f60061ad09b46b978b2631c807cd873a47ec260d  runtime
+          EOF
+          chmod +x appimagetool
+          mkdir -p AppDir/usr/bin dist
+          cp target/player/release/ssbm-run AppDir/usr/bin/ssbm-rs
+          cp tools/run/package/ssbm-rs.desktop tools/run/icon/ssbm-rs.png AppDir/
+          ln -s usr/bin/ssbm-rs AppDir/AppRun
+          APPIMAGE_EXTRACT_AND_RUN=1 ARCH=x86_64 ./appimagetool --runtime-file runtime AppDir dist/ssbm-rs-x86_64.AppImage
+          python3 tools/run/notices.py dist/THIRD-PARTY-NOTICES-linux.txt x86_64-unknown-linux-gnu
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: linux
+          path: dist/
+          if-no-files-found: error
+
+  macos:
+    name: macOS
+    runs-on: macos-14
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build for Apple Silicon and Intel
+        run: |
+          set -e
+          rustup target add aarch64-apple-darwin x86_64-apple-darwin
+          for target in aarch64-apple-darwin x86_64-apple-darwin; do
+            cargo build --locked --release -p ssbm-run --features player --target "$target" --target-dir target/player
+          done
+      - name: Package the app
+        run: |
+          set -e
+          version=$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -1)
+          app=stage/ssbm-rs.app
+          mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources" dist
+          lipo -create -output "$app/Contents/MacOS/ssbm-rs" \
+            target/player/aarch64-apple-darwin/release/ssbm-run \
+            target/player/x86_64-apple-darwin/release/ssbm-run
+          sed "s/@VERSION@/$version/g" tools/run/package/Info.plist > "$app/Contents/Info.plist"
+          python3 tools/run/icon/make.py --iconset stage/ssbm-rs.iconset
+          iconutil -c icns stage/ssbm-rs.iconset -o "$app/Contents/Resources/ssbm-rs.icns"
+          cp LICENSE "$app/Contents/Resources/LICENSE.txt"
+          python3 tools/run/notices.py "$app/Contents/Resources/THIRD-PARTY-NOTICES.txt" aarch64-apple-darwin
+          cp "$app/Contents/Resources/THIRD-PARTY-NOTICES.txt" dist/THIRD-PARTY-NOTICES-macos.txt
+          # Ad-hoc signed: Apple Silicon runs only signed code. Not notarized.
+          codesign --force --deep --sign - "$app"
+          ditto -c -k --keepParent "$app" dist/ssbm-rs-macos.zip
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: macos
+          path: dist/
+          if-no-files-found: error
+
+  release:
+    name: Draft the release
+    needs: [windows, linux, macos]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Draft it
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -e
+          cp LICENSE dist/LICENSE.txt
+          (cd dist && sha256sum * > SHA256SUMS.txt)
+          gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --draft --verify-tag \
+            --title "ssbm-rs ${TAG#v}" --notes-file "docs/releases/$TAG.md" dist/*
