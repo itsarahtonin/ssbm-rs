@@ -11,7 +11,8 @@
 //! that HP, `MATCH_TEAMS=1` makes them team matches and `MATCH_PLAYERS=N` leaves all but the
 //! first N ports empty. `MATCH_ITEMS=K[,K...]` spawns only those item kinds (ItemKind) and
 //! `MATCH_HUMAN_HANDS=1` has Master Hand and Crazy Hand join as humans, played from ports 3 and
-//! 4 as their code reads them. `MATCH_VS=1` gives the VS mode's matches (`--mode 2`) the same, as each
+//! 4 as their code reads them. A match with the hands has them as Classic does (see
+//! `hands_lineup`). `MATCH_VS=1` gives the VS mode's matches (`--mode 2`) the same, as each
 //! starts past its character and stage select, so that their results go through the VS mode's
 //! records: all but the fighters and stage, which stay those selects' choices. Deterministic for
 //! a seed.
@@ -636,6 +637,39 @@ pub fn install_cpu_players(ctx: &Ctx, seed: u64) {
     );
 }
 
+/// Whether `fighter` (CKind) is Master Hand or Crazy Hand.
+fn is_hand(fighter: usize) -> bool {
+    [CKind_MasterH, CKind_CrezyH].contains(&(fighter as i32))
+}
+
+/// The fighters of `ports` ports, drawn from `fighters`, as the game has the hands: Master Hand
+/// once at most, Crazy Hand once at most and only with Master Hand (Classic's last stage brings
+/// both), and at least one other fighter for them to face.
+fn hands_lineup(rng: &Rng, fighters: &[i32], ports: usize) -> Vec<usize> {
+    let others: Vec<usize> =
+        fighters.iter().map(|&f| f as usize).filter(|&f| !is_hand(f)).collect();
+    assert!(!others.is_empty(), "MATCH_FIGHTERS: the hands need another fighter to face");
+    let other = || others[rng.below(others.len() as u64) as usize];
+    let mut lineup: Vec<usize> =
+        (0..ports).map(|_| fighters[rng.below(fighters.len() as u64) as usize] as usize).collect();
+    for i in 0..ports {
+        if is_hand(lineup[i]) && lineup[..i].contains(&lineup[i]) {
+            lineup[i] = other();
+        }
+    }
+    let (master, crazy) = (CKind_MasterH as usize, CKind_CrezyH as usize);
+    if let Some(i) = lineup.iter().position(|&f| f == crazy)
+        && !lineup.contains(&master)
+    {
+        lineup[i] = master;
+    }
+    if lineup.iter().all(|&f| is_hand(f)) {
+        let last = lineup.len() - 1;
+        lineup[last] = other();
+    }
+    lineup
+}
+
 /// Sets up a match: with `keep`, of the VS mode, its players' fighters and its stage stay the
 /// character and stage selects' (the files the VS mode preloads for them are all the match has
 /// room for: other fighters run the heap out), and the players it has stay its only ones.
@@ -695,6 +729,16 @@ fn choose(ctx: &Ctx, rng: &Rng, data: StartMeleeData, chosen_rules: &Rules, keep
             _ => 1.0,
         });
     }
+    // A match drawn with the hands in it gets its line-up from hands_lineup, and is a time match
+    // without teams or one-life stamina for the others: the hands aim at the nearest opponent
+    // (ftLib_FindNearestOpponent) and fault when no fighter on another team is left.
+    let lineup = (!keep && fighters.iter().any(|&f| is_hand(f as usize)))
+        .then(|| hands_lineup(rng, fighters, chosen_rules.players.unwrap_or(4).min(4)));
+    if lineup.is_some() {
+        rules.set_match_kind(MatchKind_Time as u32);
+        rules.set_is_stock(0);
+        rules.set_is_teams(0);
+    }
     let mut chosen = Vec::new();
     let mut playing = Vec::new();
     for i in 0..4 {
@@ -720,13 +764,15 @@ fn choose(ctx: &Ctx, rng: &Rng, data: StartMeleeData, chosen_rules: &Rules, keep
         }
         let fighter = if keep {
             p.ckind() as usize
+        } else if let Some(lineup) = &lineup {
+            lineup[i as usize]
         } else {
             fighters[rng.below(fighters.len() as u64) as usize] as usize
         };
         // Bosses and the other special fighters only play as CPUs, as in the modes that have
         // them: the game crashes with some of them under a player's control. MATCH_HUMAN_HANDS
         // makes an exception of the hands.
-        let hand = [CKind_MasterH, CKind_CrezyH].contains(&(fighter as i32));
+        let hand = is_hand(fighter);
         let cpu = if hand && chosen_rules.human_hands {
             false
         } else {
@@ -757,21 +803,23 @@ fn choose(ctx: &Ctx, rng: &Rng, data: StartMeleeData, chosen_rules: &Rules, keep
         if cpu && let Some(kinds) = &chosen_rules.cpu_kinds {
             p.set_cpu_kind(kinds[rng.below(kinds.len() as u64) as usize]);
         }
-        if let Some(hp) = chosen_rules.stamina {
+        if let Some(hp) = chosen_rules.stamina
+            && lineup.is_none()
+        {
             p.set_xC_b7(1);
             p.set_hp(hp);
             p.set_stocks(1);
         }
-        if chosen_rules.teams && !varied {
+        if chosen_rules.teams && !varied && lineup.is_none() {
             p.set_team(rng.below(3) as u8);
         }
         chosen.push(format!("{}{}", FIGHTERS[fighter], if cpu { " (CPU)" } else { "" }));
     }
-    if chosen_rules.stamina.is_some() {
+    if chosen_rules.stamina.is_some() && lineup.is_none() {
         // A stock match, as the Stamina mode's (gm_801B931C), on the time limit still.
         rules.set_match_kind(MatchKind_Stock as u32);
     }
-    if chosen_rules.teams {
+    if chosen_rules.teams && lineup.is_none() {
         rules.set_is_teams(1);
         // Not all on one team, or the match is over as it starts.
         if let [first, .., last] = playing[..]
