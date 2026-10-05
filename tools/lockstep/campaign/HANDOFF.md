@@ -49,5 +49,4 @@ A focused round resumes with `RESUME=1 NAME=... bash tools/lockstep/campaign/foc
 - `lvvsnostage`'s 11 GB allocation (`stage_mask=0` in the VS rules): the runner or the game.
 - The "first matrix set on a freshly loaded joint" argument (JObjInit sets JOBJ_MTX_DIRTY, jobj.c:1472) is kept out of the ledger (~25 stage on_init blocks, efAsync_Dispatch's 35); a directed mutation of the joint flags would verify them instead.
 - MSL printf's unused conversions: names that are formats read leftover registers, so that job was dropped (its results are in `local/lockstep/quarantine/`). If the Name Entry keyboard can't type '%', those conversions are unreachable by any input the game accepts.
-- `fn_8017D9C0`: the sides saw different `HSD_RandSeedPtr` in a mutated check (reviewed, harness question open).
 - Lockstep checks a callback an interrupt handler calls only when the interrupt is taken outside any check; to aim a job at such callbacks, leave the code running when their interrupts arrive unchecked (LOCKSTEP_DONE), or take them later in a run.
