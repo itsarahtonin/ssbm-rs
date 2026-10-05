@@ -4,10 +4,12 @@ A Rust port of Super Smash Bros. Melee NTSC 1.02 (GALE01 revision 2), built from
 
 The project aims to preserve the game's behavior, including its floating-point results and memory layout. Rust functions are checked call by call against the original machine code, and recorded games are checked against their Slippi replays. The translator, runtime, and verification tools are also intended as a research resource for similar projects.
 
-<a href="docs/progress/README.md"><picture>
+<a href="https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb"><picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/progress/coverage-dark.svg">
   <img alt="Port coverage map: 152,934 of 163,387 blocks verified by lockstep (93.6%) at round f9, October 5, 2026" src="docs/progress/coverage-light.svg">
 </picture></a>
+
+Interactive: [Port Coverage Map](https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb) · [Graphics and Audio Ladder](https://claude.ai/artifact/Ppx3oVXq7qbkRck8tvcrZ4) · [about the dashboards](docs/progress/README.md)
 
 **Development preview:** a windowed player with audio, keyboard, gamepad, and GameCube adapter support exists. The full verification gate and release validation on Windows, macOS, and Linux remain work in progress. See [verification and limitations](docs/verification.md).
 
@@ -49,7 +51,7 @@ A later idiomatic Rust refactor with netplay, training tools, and mods is intend
 
 ## Explore the code
 
-The [progress dashboards](docs/progress/README.md) preserve the port coverage map, coverage-lever history, and graphics/audio ladder as browsable snapshots with aggregate data. Open their HTML locally from a checkout; the notes distinguish measured coverage from ledger explanations and describe the evidence's limitations.
+The [progress dashboards](docs/progress/README.md), the [Port Coverage Map](https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb) and the [Graphics and Audio Ladder](https://claude.ai/artifact/Ppx3oVXq7qbkRck8tvcrZ4), are snapshots with their aggregate data in the repository; the notes distinguish measured coverage from ledger explanations and describe the evidence's limitations.
 
 | Area | Purpose |
 | --- | --- |

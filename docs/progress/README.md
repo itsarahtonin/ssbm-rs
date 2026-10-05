@@ -4,16 +4,10 @@ These are saved research snapshots, with their aggregate data and rendering sour
 
 | Dashboard | Snapshot and purpose |
 | --- | --- |
-| [Port Coverage Map](coverage.html) · [data](data/coverage.json) | 19,668 functions, 32 saved rounds through f9, exported on October 5, 2026. Compare measured coverage, ledger explanations, and outstanding reviews. |
-| [Graphics and Audio Ladder](graphics.html) · [data](data/graphics.json) | Saved October 3, 2026 at 00:10 by the original tracker. Metrics for a suite of 40 GX-stream scenarios and 41 frame/audio scenarios, plus renderer features and measured history. |
+| [Port Coverage Map](https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb) · [source](coverage.html) · [data](data/coverage.json) | 19,668 functions, 32 saved rounds through f9, exported on October 5, 2026. Compare measured coverage, ledger explanations, and outstanding reviews. |
+| [Graphics and Audio Ladder](https://claude.ai/artifact/Ppx3oVXq7qbkRck8tvcrZ4) · [source](graphics.html) · [data](data/graphics.json) | Saved October 3, 2026 at 00:10 by the original tracker. Metrics for a suite of 40 GX-stream scenarios and 41 frame/audio scenarios, plus renderer features and measured history. |
 
-Open [index.html](index.html) from a downloaded checkout in a browser. GitHub displays HTML source rather than running these pages. The coverage page loads D3 7.9.0 from cdnjs; its charts need an internet connection. Alternatively, serve this folder locally:
-
-```sh
-python -m http.server 8765 --bind 127.0.0.1 --directory docs/progress
-```
-
-Then open `http://127.0.0.1:8765/`. Nothing is uploaded by this command.
+The dashboard links open the hosted pages, published from the HTML files here.
 
 ## Reading coverage
 
@@ -39,7 +33,7 @@ python tools/lockstep/campaign/coverage_svg.py
 python tools/gx/progress.py local/progress-render --from-json docs/progress/data/graphics.json
 ```
 
-The graphics command writes `local/progress-render/index.html`; copy that HTML to `docs/progress/graphics.html` when updating the committed page. Snapshot rendering does not read private results, copy game images, or append history. Updating the evidence itself requires a separately reviewed export from the campaign state; changing a page's timestamp does not refresh its measurements. A coverage export from private CSV reports also reads the repository's ledger and scope lists. Use `--evidence-revision` only when those files match that commit; otherwise it labels the ledger as an unversioned working tree and omits commit links. The packaged audit flags come from the saved working report summary, not a fresh analysis.
+The graphics command writes `local/progress-render/index.html`; copy that HTML to `docs/progress/graphics.html` when updating the committed page. Snapshot rendering does not read private results, copy game images, or append history. Updating the evidence itself requires a separately reviewed export from the campaign state; changing a page's timestamp does not refresh its measurements. A coverage export from private CSV reports also reads the repository's ledger and scope lists. Use `--evidence-revision` only when those files match that commit; otherwise it labels the ledger as an unversioned working tree and omits commit links.
 
 Lightweight regression checks exercise the generators and actual template logic without building or running the game:
 
@@ -48,5 +42,7 @@ python -m unittest discover -s tools/lockstep/campaign -p test_reports.py
 node tools/lockstep/campaign/test_treemap.cjs
 node tools/gx/test_progress.cjs
 ```
+
+To view a checkout's pages before publishing them, serve this folder with `python -m http.server 8765 --bind 127.0.0.1 --directory docs/progress` and open `http://127.0.0.1:8765/`.
 
 A Coverage Levers page, the instruction yield and cost of each campaign run, was a planning aid for the campaigns and is no longer published; `tools/lockstep/campaign/levers.py` still writes it locally from the campaign state.
