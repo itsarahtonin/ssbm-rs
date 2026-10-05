@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from reports import history_label, history_paths, identity, read_report, render
+from evidence import build_evidence
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
@@ -33,11 +34,12 @@ def build_data(state, label, reviewed_file, updated=None):
     rows = [[row['name'], unit_index[row['unit']], int(row['countable']),
              int(row['verified_blocks']), int(row['calls']), int(row['mismatches']),
              int(row['mutated']), int(is_reviewed(row)), int(row.get('explained') or 0),
-             row['address']] for row in latest]
+             row['address'], int(row['blocks'])] for row in latest]
 
     def snapshot(name, report):
         values = [0] * (3 * len(rows))
         counts = [0] * len(rows)
+        blocks = [0] * len(rows)
         for row in report:
             key = identity(row)
             if key not in order:
@@ -47,17 +49,20 @@ def build_data(state, label, reviewed_file, updated=None):
                 | (4 if int(row['mutated']) > 0 and not is_reviewed(row) else 0)
             values[3 * i:3 * i + 3] = [int(row['verified_blocks']), int(row.get('explained') or 0), flags]
             counts[i] = int(row['countable'])
+            blocks[i] = int(row['blocks'])
         if len(report) != len(rows):
             raise ValueError(f'{name}: changing function population needs an explicit migration')
         result = {'label': name, 'v': values}
         if counts != [row[2] for row in rows]:
             result['countable'] = counts
+        if blocks != [row[10] for row in rows]:
+            result['blocks'] = blocks
         return result
 
     snaps = [snapshot(history_label(path), read_report(path)) for path in history_paths(state)
              if history_label(path) != label]
     snaps.append(snapshot(label, latest))
-    return {'units': units, 'fns': rows, 'snaps': snaps, 'bar': 0.9,
+    return {'units': units, 'fns': rows, 'snaps': snaps,
             'updated': updated or datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}
 
 
@@ -69,9 +74,12 @@ def main():
     parser.add_argument('--reviewed', type=Path, default=ROOT / 'tools/lockstep/reviewed.txt')
     parser.add_argument('--from-json', type=Path)
     parser.add_argument('--json', type=Path)
+    parser.add_argument('--evidence-revision')
     args = parser.parse_args()
     data = json.loads(args.from_json.read_text(encoding='utf-8')) if args.from_json else \
         build_data(args.state_dir, args.label, args.reviewed)
+    if not args.from_json:
+        data['evidence'] = build_evidence(ROOT, data, args.evidence_revision)
     args.out_html.write_text(render(HERE / 'treemap.template.html', data), encoding='utf-8', newline='\n')
     if args.json:
         args.json.write_text(json.dumps(data, separators=(',', ':'), allow_nan=False) + '\n', encoding='utf-8')

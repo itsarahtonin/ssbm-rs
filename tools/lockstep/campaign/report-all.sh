@@ -8,7 +8,7 @@
 # needed.txt (the blocks each function still needs, for LOCKSTEP_NEEDED) beside this script, or
 # in OUT; BINARIES names another list of directories, and AT a commit to judge staleness at,
 # for the coverage as it stood then. BAR (default 0.9) sets the share of its
-# blocks a function needs to count as verified, 1 for the Phase 3 gate.
+# blocks a function needs to count as verified, 1 for full block coverage.
 cd "$(dirname "$0")/../../.."
 . tools/lockstep/campaign/env.sh
 OUT=${OUT:-$L}

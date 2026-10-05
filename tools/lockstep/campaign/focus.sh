@@ -6,7 +6,7 @@
 #
 #   NAME=f1 SEED=300 MUTATE=8 BIN=target/t2/release/ssbm-run$EXE bash tools/lockstep/campaign/focus.sh
 #
-# BAR (default 0.9) is the share of its blocks a function needs, 1 for the Phase 3 gate. Each job
+# BAR (default 0.9) is the share of its blocks a function needs, 1 for full block coverage. Each job
 # stops once STALE fields (default 1800) pass with nothing verified beyond what earlier results
 # hold (LOCKSTEP_KNOWN, from the opening report) and no other function mismatching, and checks
 # of a function end once the blocks it still needs (LOCKSTEP_NEEDED) are verified. Jobs in

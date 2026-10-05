@@ -16,7 +16,7 @@ The translation pipeline produces the bulk of the port. Earlier plans for assign
 - Continue directed checks for items, teams, multiple players, menus, memory cards, and single-player modes that competitive replays do not cover.
 - Validate the runtime independently with Dolphin-based checks, including graphics and audio.
 
-The first coverage milestone requires each function to meet the 90% coverage bar. The final function-verification gate requires every countable block to be verified or explained; an overall coverage percentage does not establish either milestone.
+The verification target is every countable block checked by lockstep, with no unexplained mismatches. Ledger explanations account for some unverified blocks separately; they do not establish measured verification. An overall coverage percentage does not establish function equivalence.
 
 ## Prepare a release
 

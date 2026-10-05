@@ -1,4 +1,4 @@
-# Handoff: Phase 3 gate (milestone 3b), 2026-10-04
+# Handoff: Lockstep coverage, 2026-10-04
 
 This is a historical session checkpoint. Check local processes and reports before resuming anything; its campaign statuses are not live. Current project scope is in the [roadmap](../../../docs/roadmap.md).
 

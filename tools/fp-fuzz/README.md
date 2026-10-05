@@ -1,6 +1,6 @@
 # fp-fuzz
 
-Differential fuzzing of `gekko-fp` and the interpreter against Dolphin's float instructions, compiled from Dolphin's own source. This is the Phase 0 gate.
+Differential fuzzing of `gekko-fp` and the interpreter against Dolphin's float instructions, compiled from Dolphin's own source. This checks the floating-point behavior needed for instruction-level equivalence.
 
 Every float instruction the game uses runs through both implementations on random inputs, constructed rounding ties, and every combination of special values. Register bits and CR must match:
 

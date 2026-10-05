@@ -29,14 +29,9 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; text-wrap: balance; }
 .stat .k { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
 .stat .v { font-size: 22px; font-weight: 500; }
 .stat .d { font-size: 12px; color: var(--muted); }
-.gates { display: grid; gap: 12px; }
 .gate { display: grid; gap: 6px; }
 .gate .legend { justify-content: space-between; }
 .gate b { color: var(--fg); font-weight: 600; }
-.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
-.seg button { font: 12px "IBM Plex Sans", sans-serif; background: var(--panel); color: var(--muted); border: 0; padding: 6px 10px; cursor: pointer; }
-.seg button + button { border-left: 1px solid var(--line); }
-.seg button[aria-pressed=true] { background: var(--fg); color: var(--bg); }
 .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .history { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
 .history input[type=range] { flex: 1 1 220px; min-width: 0; accent-color: var(--ok); }
@@ -76,6 +71,15 @@ svg text { fill: var(--muted); font: 11px "IBM Plex Mono", monospace; }
 .list span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
 .list span:last-child { color: var(--muted); flex: none; }
 .foot { color: var(--muted); font-size: 12px; }
+.evidence { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); padding: 16px; scroll-margin-top: 12px; overflow-wrap: anywhere; }
+.evidence h2, .evidence h3 { margin: 0 0 8px; } .evidence p { margin: 8px 0; }
+.evidence button, #matches button { font: inherit; text-align: left; border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 5px; padding: 6px 10px; cursor: pointer; }
+.evidence .claim { border-top: 1px solid var(--line); padding: 10px 0; overflow-wrap: anywhere; }
+.evidence .warning { color: var(--bad); } .evidence a { color: var(--hl); }
+.evidence details { margin: 12px 0; } .evidence summary { cursor: pointer; }
+.evidence .scroll { max-height: 420px; overflow: auto; }
+#matches { display: flex; flex-wrap: wrap; gap: 6px; max-height: 150px; overflow: auto; }
+[hidden] { display: none !important; }
 </style>
 
 <div class="wrap">
@@ -86,15 +90,10 @@ svg text { fill: var(--muted); font: 11px "IBM Plex Mono", monospace; }
 
   <div class="stats" id="stats"></div>
 
-  <div class="gates">
-    <div class="gate">
-      <div class="legend"><span><b>Milestone 3a</b> · every function verified at ≥90% of its countable blocks, with no mismatches</span><span class="num" id="g3a"></span></div>
-      <div class="bar" id="bar3a"></div>
-    </div>
-    <div class="gate">
-      <div class="legend"><span><b>Phase 3 gate (3b)</b> · every countable block verified, or explained in the reviewed gap ledger; no unexplained mismatches</span><span class="num" id="g3b"></span></div>
-      <div class="bar" id="bar3b"></div>
-    </div>
+  <div class="gate">
+    <div class="legend"><span><b>Measured verification</b> · target: every countable block, with no unexplained mismatches</span><span class="num" id="measured-label"></span></div>
+    <div class="bar" id="coverage-bar"></div>
+    <div class="sub" id="ledger-summary" hidden></div>
   </div>
 
   <div class="history" role="group" aria-label="Rounds">
@@ -110,34 +109,36 @@ svg text { fill: var(--muted); font: 11px "IBM Plex Mono", monospace; }
   <div class="map-head">
     <nav class="crumbs" id="crumbs"></nav>
     <div class="tools">
-      <div class="seg" role="group" aria-label="Color the map by"><button data-m="3a" aria-pressed="true">3a · 90% bar</button><button data-m="3b" aria-pressed="false">3b · every block</button></div>
-      <input type="search" id="q" placeholder="find a function…" autocomplete="off" spellcheck="false">
+      <label><input type="checkbox" id="ledger-toggle"> Show ledger explanations</label>
+      <input type="search" id="q" aria-label="Find a function or unit" placeholder="find a function or unit…" autocomplete="off" spellcheck="false">
     </div>
   </div>
+  <div id="matches"></div>
   <div class="legend" id="legend"></div>
   <div class="mapbox"><canvas id="map"></canvas><div class="tip" id="tip" hidden></div></div>
 
+  <section class="evidence" id="evidence" aria-label="Coverage evidence"></section>
+
   <div class="lower">
-    <section><h2 id="areas-h">Left to verify by area</h2><div class="areas" id="areas"></div></section>
+    <section><h2 id="areas-h">Unverified blocks by area</h2><div class="areas" id="areas"></div></section>
     <section>
-      <h2 id="trend-h">Verified over rounds</h2><div id="trend"></div>
+      <h2 id="trend-h">Measured coverage over rounds</h2><div id="trend"></div>
       <h2 style="margin-top:16px">To review</h2><div class="list" id="review"></div>
     </section>
   </div>
-  <p class="foot">Tiles are sized by countable blocks: the blocks that can run, leaving out those that only fail an assertion or that the machine code shows no input reaches. A block is verified once lockstep has run it in the original and the port and their results agreed. Under 3a a function counts as verified at ≥90% of its blocks. Under 3b green means every block was verified; blue means completion also relies on the gap ledger. Unreviewed mismatches prevent either milestone. “To review” means mismatches only under mutated inputs, not yet explained. Click an area or unit to zoom in; click the path above to zoom out. The round slider shows the map after each round; earlier rounds are counted again from their own results, with ports changed since then counting as they stood at that round. Reviews use the ledger available when this page was generated; this is a saved evidence snapshot, not a live progress feed.</p>
+  <p class="foot">Tiles are sized by countable blocks. Color shows measured coverage toward a fixed 100% target; green requires full coverage with no unexplained mismatches. The optional blue striped segment represents the fraction explained by ledger claims and never changes the verified percentage. Click an area or unit to zoom and inspect its evidence; click a function to inspect its claims. Use search to select small functions. Counts come from saved reports, with mutation reviews applied from the export's review list. Current ledger text is shown separately from historical counts. Scope exclusions and ledger provenance are inspectable below.</p>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script>
 const DATA = /*DATA*/null;
-let mode = "3a", BAR = DATA.bar;
-try { if (localStorage.getItem("mode") === "3b") { mode = "3b"; BAR = 1; } } catch (e) {}
+let showLedger = false;
 const units = DATA.units;
-// [name, unit, countable, verified_blocks, calls, mismatches, mutated, reviewed, explained, address]
-const fns = DATA.fns.map(r => ({ name: r[0], unit: units[r[1]], countable: r[2], done: r[3], calls: r[4], bad: r[5], mutated: r[6], reviewed: r[7], explained: r[8] || 0 }));
+// [name, unit, countable, verified_blocks, calls, mismatches, mutated, reviewed, explained, address, blocks]
+const fns = DATA.fns.map((r, index) => ({ index, name: r[0], unit: units[r[1]], countable: r[2], done: r[3], calls: r[4], bad: r[5], mutated: r[6], reviewed: r[7], explained: r[8] || 0, address: r[9], blocks: r[10] ?? null }));
 for (const f of fns) {
   f.area = f.unit.split("/").slice(0, 2).join("/");
-  f.latest = { countable: f.countable, done: f.done, explained: f.explained, calls: f.calls, bad: f.bad, mutated: f.mutated, reviewed: f.reviewed };
+  f.latest = { blocks: f.blocks, countable: f.countable, done: f.done, explained: f.explained, calls: f.calls, bad: f.bad, mutated: f.mutated, reviewed: f.reviewed };
 }
 // Each round's state: per function, blocks verified, blocks explained, and flags (1 called,
 // 2 mismatches, 4 mismatches with changed inputs not reviewed). The last is the latest.
@@ -150,6 +151,7 @@ function apply(i) {
     else {
       const fl = v[3 * k + 2];
       f.countable = SNAPS[i].countable ? SNAPS[i].countable[k] : DATA.fns[k][2];
+      f.blocks = SNAPS[i].blocks ? SNAPS[i].blocks[k] : (DATA.fns[k][10] ?? null);
       f.done = v[3 * k]; f.explained = v[3 * k + 1]; f.calls = fl & 1; f.bad = fl & 2 ? 1 : 0; f.mutated = fl & 4 ? 1 : 0; f.reviewed = 0;
     }
     f.share = f.countable ? f.done / f.countable : 1;
@@ -158,34 +160,31 @@ function apply(i) {
 }
 apply(at);
 // Each round's totals, for the trend and the changes since the round before.
-const SUMS = SNAPS.map(sn => {
-  let verified = 0, complete = 0, blocks = 0, explained = 0, countableAll = 0;
-  fns.forEach((f, k) => {
-    const done = sn.v[3 * k], x = sn.v[3 * k + 1], fl = sn.v[3 * k + 2], countable = sn.countable ? sn.countable[k] : DATA.fns[k][2];
-    blocks += done; explained += x; countableAll += countable;
-    if (!(fl & 6) && (fl & 1) && done >= DATA.bar * countable) verified++;
-    if (!(fl & 6) && done + x >= countable && ((fl & 1) || done === 0)) complete++;
-  });
-  return { label: sn.label, verified, complete, blocks, explained, countable: countableAll };
-});
-function isVerified(f, bar = BAR) {
-  return f.bad === 0 && (!f.mutated || !!f.reviewed) && (bar >= 1
-    ? f.whole >= 1 && (f.calls > 0 || f.done === 0)
-    : f.calls > 0 && f.share >= bar);
+function isVerified(f) {
+  return f.countable > 0 && f.done === f.countable && !f.bad && (!f.mutated || !!f.reviewed);
 }
 function classify() {
   for (const f of fns) f.status = f.bad > 0 ? "bad" : (f.mutated > 0 && !f.reviewed) ? "review"
-    : isVerified(f) ? (mode === "3b" && f.explained > 0 ? "explained" : "ok")
-    : f.calls > 0 ? "low" : "never";
+    : f.countable === 0 ? "excluded" : isVerified(f) ? "ok" : f.done > 0 ? "low" : "never";
 }
+function sumState(sn) {
+  let blocks = 0, explained = 0, countable = 0;
+  for (let k = 0; k < DATA.fns.length; k++) {
+    blocks += sn.v[3 * k]; explained += sn.v[3 * k + 1];
+    countable += sn.countable ? sn.countable[k] : DATA.fns[k][2];
+  }
+  return { label: sn.label, blocks, explained, countable };
+}
+const SUMS = SNAPS.map(sumState);
 classify();
-const STATUS = { ok: "verified", explained: "complete with ledger explanation", low: "called, below the bar", never: "never called", review: "to review", bad: "mismatch" };
+const STATUS = { ok: "fully verified", low: "partially verified", never: "no verified blocks", excluded: "no countable blocks", review: "unreviewed mutated-input mismatch", bad: "real-call mismatch" };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
 let C = {};
 function readColors() { const s = getComputedStyle(document.documentElement); for (const k of ["ok","explained","low-hi","low-lo","never","review","bad","area","panel","fg","muted","hl","line"]) C[k] = s.getPropertyValue("--" + k).trim(); }
 function fillOf(f) {
-  if (f.status === "low") return d3.interpolateRgb(C["low-lo"], C["low-hi"])(Math.min(1, f.share / BAR));
-  return C[f.status];
+  if (f.status === "low") return d3.interpolateRgb(C["low-lo"], C["low-hi"])(Math.min(1, f.share));
+  return C[f.status === "excluded" ? "never" : f.status];
 }
 
 // Header
@@ -199,28 +198,24 @@ function bar(el, parts, whole) { document.getElementById(el).innerHTML = parts.m
 function header() {
   document.getElementById("label").textContent = SNAPS[at].label;
   blocksAll = d3.sum(fns, f => f.countable);
-  const blocksDone = d3.sum(fns, f => f.done), explained = d3.sum(fns, f => f.explained);
-  const verified = fns.filter(f => isVerified(f)).length;
+  const done = d3.sum(fns, f => f.done), explained = d3.sum(fns, f => f.explained);
+  const verified = fns.filter(isVerified).length, eligible = fns.filter(f => f.countable > 0).length;
   const counts = d3.rollup(fns, v => v.length, f => f.status);
-  const prev = at > 0 ? SUMS[at - 1] : null, before = prev && (mode === "3a" ? prev.verified : prev.complete);
-  const since = prev ? ` · ${verified - before >= 0 ? "+" : ""}${fmt(verified - before)} since ${prev.label}` : "";
   const stats = [
-    [mode === "3a" ? "Functions verified (3a)" : "Functions complete (3b)", fmt(verified), `of ${fmt(total)} · ${pct(verified, total)}${since}`],
-    ["Blocks verified", pct(blocksDone, blocksAll), `${fmt(blocksDone)} of ${fmt(blocksAll)} countable`],
-    [mode === "3a" ? "Left to verify" : "Unaccounted blocks", mode === "3a" ? fmt(total - verified) : fmt(blocksAll - blocksDone - explained), mode === "3a" ? `functions: ${fmt(counts.get("low") || 0)} below the bar · ${fmt(counts.get("never") || 0)} never called` : `unaccounted blocks; ${fmt(total - verified)} functions incomplete or to review`],
+    ["Blocks verified", pct(done, blocksAll), `${fmt(done)} of ${fmt(blocksAll)} countable`],
+    ["Functions fully verified", fmt(verified), `of ${fmt(eligible)} with countable blocks; no unexplained mismatches`],
+    ["Blocks not verified", fmt(blocksAll - done), "includes blocks covered only by ledger claims"],
     ["Mismatches", fmt(counts.get("bad") || 0), "functions with real-call mismatches"],
     ["To review", fmt(counts.get("review") || 0), "functions with unreviewed mutated-input mismatches"],
   ];
   document.getElementById("stats").innerHTML = stats.map(([k, v, d]) => `<div class="stat"><span class="k">${k}</span><span class="v num">${v}</span><span class="d">${d}</span></div>`).join("");
-  // Both gates, whichever the map shows
-  const v3a = fns.filter(f => isVerified(f, DATA.bar)).length, near = fns.filter(f => f.calls > 0 && f.share < DATA.bar && !f.bad && (!f.mutated || f.reviewed)).length;
-  document.getElementById("g3a").textContent = `${fmt(v3a)} / ${fmt(total)} functions`;
-  bar("bar3a", [["ok", v3a], ["review", fns.filter(f => f.bad > 0 || (f.mutated > 0 && !f.reviewed)).length], ["low-hi", near]], total);
-  document.getElementById("g3b").textContent = `${fmt(blocksDone)}${explained ? ` + ${fmt(explained)} explained` : ""} / ${fmt(blocksAll)} blocks`;
-  bar("bar3b", [["ok", blocksDone], ["explained", explained]], blocksAll);
+  document.getElementById("measured-label").textContent = `${fmt(done)} / ${fmt(blocksAll)} blocks · ${pct(done, blocksAll)}`;
+  bar("coverage-bar", [["ok", done], ...(showLedger ? [["explained", explained]] : [])], blocksAll);
+  const summary = document.getElementById("ledger-summary");
+  summary.hidden = !showLedger;
+  summary.textContent = `${fmt(explained)} additional blocks explained · ${pct(done + explained, blocksAll)} accounted for · ${fmt(blocksAll - done - explained)} unaccounted. Explained is not verified; mismatches remain unresolved independently.`;
+  document.getElementById("legend").innerHTML = [["ok", "100% verified"], ["low-hi", "partially verified (color follows measured percentage)"], ["never", "no verified/countable blocks"], ...(showLedger ? [["explained", "striped fraction: ledger explanation"]] : []), ["review", "to review"], ["bad", "mismatch"]].map(([k, l]) => `<span><i style="background:var(--${k})"></i>${l}</span>`).join("");
 }
-
-document.getElementById("legend").innerHTML = [["ok", "verified"], ["explained", "complete with ledger explanation (3b)"], ["low-hi", "called, part of the way to the bar"], ["low-lo", "called, little run"], ["never", "never called"], ["review", "to review"], ["bad", "mismatch"]].map(([k, l]) => `<span><i style="background:var(--${k})"></i>${l}</span>`).join("");
 
 // Treemap
 const canvas = document.getElementById("map"), ctx = canvas.getContext("2d"), tip = document.getElementById("tip");
@@ -230,7 +225,7 @@ const tree = { name: "all", children: [] };
   for (const [area, us] of byArea) tree.children.push({ name: area, children: [...us].map(([u, fs]) => ({ name: u, children: fs })) });
 }
 const root = d3.hierarchy(tree).sum(d => d.children ? 0 : Math.max(1, d.countable)).sort((a, b) => b.value - a.value);
-let focus = root, leaves = [], query = "";
+let focus = root, leaves = [], query = "", selectedFunction = null;
 let W = 0, H = 0;
 
 function layout() {
@@ -259,6 +254,19 @@ function draw() {
     ctx.fillStyle = fillOf(n.data);
     ctx.globalAlpha = dim && n.data.status === n.data.prevStatus && n.data.done === n.data.prevDone && n.data.explained === n.data.prevExplained && n.data.countable === n.data.prevCountable ? 0.15 : 1;
     ctx.fillRect(n.x0, n.y0, w, h);
+    if (showLedger && n.data.explained > 0 && n.data.countable > 0) {
+      const alpha = ctx.globalAlpha;
+      const width = w * n.data.explained / n.data.countable, left = n.x1 - width;
+      ctx.save(); ctx.beginPath(); ctx.rect(left, n.y0, width, h); ctx.clip();
+      ctx.fillStyle = C.explained; ctx.globalAlpha *= 0.65; ctx.fillRect(left, n.y0, width, h);
+      ctx.strokeStyle = C.explained; ctx.lineWidth = 1; ctx.globalAlpha = alpha * 0.9;
+      for (let x = left - h; x < n.x1; x += 7) { ctx.beginPath(); ctx.moveTo(x, n.y1); ctx.lineTo(x + h, n.y0); ctx.stroke(); }
+      ctx.restore();
+      if (n.data.status === "bad" || n.data.status === "review") {
+        ctx.globalAlpha = alpha; ctx.strokeStyle = C[n.data.status]; ctx.lineWidth = 3;
+        ctx.strokeRect(n.x0 + 1.5, n.y0 + 1.5, Math.max(0, w - 3), Math.max(0, h - 3));
+      }
+    }
   }
   ctx.globalAlpha = 1;
   if (focus.depth >= 1) {
@@ -274,7 +282,7 @@ function draw() {
   }
   if (query) {
     ctx.strokeStyle = C.hl; ctx.lineWidth = 2;
-    for (const n of leaves) if (n.data.name.toLowerCase().includes(query)) ctx.strokeRect(n.x0 - 1, n.y0 - 1, Math.max(3, n.x1 - n.x0) + 2, Math.max(3, n.y1 - n.y0) + 2);
+    for (const n of leaves) if (`${n.data.unit} ${n.data.name}`.toLowerCase().includes(query)) ctx.strokeRect(n.x0 - 1, n.y0 - 1, Math.max(3, n.x1 - n.x0) + 2, Math.max(3, n.y1 - n.y0) + 2);
   }
   // Group outlines and labels
   ctx.textBaseline = "top";
@@ -285,9 +293,9 @@ function draw() {
     ctx.strokeStyle = isArea ? C.area : C.muted; ctx.globalAlpha = isArea ? 0.55 : 0.35; ctx.lineWidth = isArea ? 1.5 : 0.75;
     ctx.strokeRect(n.x0 + .5, n.y0 + .5, w - 1, h - 1); ctx.globalAlpha = 1;
     if (labelled && w > 40 && h > 18) {
-      const fs = n.leaves(), v = fs.filter(l => isVerified(l.data)).length;
+      const fs = n.leaves(), done = d3.sum(fs, l => l.data.done), countable = d3.sum(fs, l => l.data.countable);
       let label = (focus.depth === 0 ? n.data.name : n.data.name.split("/").slice(-1)[0]);
-      const tail = ` ${v}/${fs.length}`;
+      const tail = ` ${pct(done, countable)}`;
       ctx.font = "500 11px 'IBM Plex Mono', monospace"; ctx.fillStyle = C.fg;
       let t = label + tail;
       while (t.length > 3 && ctx.measureText(t).width > w - 6) t = t.slice(0, -2);
@@ -302,9 +310,9 @@ canvas.addEventListener("mousemove", e => {
   const n = hit(x, y);
   if (!n) { tip.hidden = true; return; }
   const f = n.data;
-  tip.innerHTML = `<b>${f.name}</b><div class="sub mono" style="word-break:break-all">${f.unit}</div>` +
+  tip.innerHTML = `<b>${esc(f.name)}</b><div class="sub mono" style="word-break:break-all">${esc(f.unit)}</div>` +
     `<div class="row"><span>status</span><span style="color:${fillOf(f)}">${STATUS[f.status]}</span></div>` +
-    `<div class="row"><span>blocks verified</span><span>${f.done} / ${f.countable} (${(100 * f.share).toFixed(0)}%)</span></div>` +
+    `<div class="row"><span>blocks verified</span><span>${f.done} / ${f.countable} (${pct(f.done, f.countable)})</span></div>` +
     (f.explained ? `<div class="row"><span>explained in the gap ledger</span><span>${f.explained}</span></div>` : "") +
     (at === SNAPS.length - 1 ? `<div class="row"><span>calls checked</span><span>${fmt(f.calls)}</span></div>` : `<div class="row"><span>called</span><span>${f.calls ? "yes" : "no"}</span></div>`) +
     (diffOn && at > 0 && f.prevStatus !== undefined ? `<div class="row"><span>in ${SNAPS[at - 1].label}</span><span>${STATUS[f.prevStatus]}, ${f.prevDone} blocks</span></div>` : "") +
@@ -321,38 +329,97 @@ canvas.addEventListener("click", e => {
   const r = canvas.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
   const next = (current.children || []).find(c => c.children && x >= c.x0 && x < c.x1 && y >= c.y0 && y < c.y1);
   if (next) zoomTo(findIn(focus, next.data));
+  else { const n = hit(x, y); if (n) inspectFunction(n.data); }
 });
 function findIn(base, data) { let hitNode = null; base.each(n => { if (n.data === data) hitNode = n; }); return hitNode; }
-function zoomTo(n) { if (!n) return; focus = n; crumbs(); layout(); }
+function zoomTo(n) { if (!n) return; focus = n; selectedFunction = null; crumbs(); layout(); evidencePanel(); }
+function inspectFunction(f) {
+  const area = root.children.find(n => n.data.name === f.area);
+  zoomTo(area.children.find(n => n.data.name === f.unit));
+  selectedFunction = f; evidencePanel();
+  document.getElementById("evidence").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+function searchResults() {
+  const matches = query.length >= 3 ? fns.filter(f => `${f.unit} ${f.name}`.toLowerCase().includes(query)) : [];
+  document.getElementById("matches").innerHTML = matches.slice(0, 60).map(f => `<button data-i="${f.index}">${esc(f.name)} <span class="sub">${esc(f.unit)}</span></button>`).join("")
+    + (matches.length > 60 ? `<span class="sub">${fmt(matches.length)} matches; showing 60. Refine the search.</span>` : query.length >= 3 && !matches.length ? '<span class="sub">No matching functions or units.</span>' : "");
+  document.querySelectorAll("#matches button").forEach(b => b.onclick = () => inspectFunction(fns[+b.dataset.i]));
+}
+function sourceLink(path, line, label) {
+  const revision = DATA.evidence?.revision;
+  if (!revision || !/^[0-9a-f]{40}$/.test(revision)) return "";
+  const url = `https://github.com/itsarahtonin/ssbm-rs/blob/${revision}/${path.split("/").map(encodeURIComponent).join("/")}${line ? "#L" + line : ""}`;
+  return `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(label)}</a>`;
+}
+function evidencePanel() {
+  const el = document.getElementById("evidence"), E = DATA.evidence;
+  const fs = selectedFunction ? [selectedFunction] : focus.leaves().map(n => n.data);
+  const done = d3.sum(fs, f => f.done), countable = d3.sum(fs, f => f.countable), explained = d3.sum(fs, f => f.explained);
+  const blocksKnown = fs.every(f => f.blocks !== null), blocks = d3.sum(fs, f => f.blocks || 0);
+  const title = selectedFunction ? `${selectedFunction.unit}: ${selectedFunction.name}` : focus.data.name;
+  const ids = [...new Set(fs.flatMap(f => E?.byFunction?.[String(f.index)] || []))].sort((a, b) => E.entries[a].line - E.entries[b].line);
+  const rev = E?.revision ? E.revision.slice(0, 12) : "unversioned working tree";
+  const historical = at !== SNAPS.length - 1;
+  const context = historical ? `Counts are from ${SNAPS[at].label}; the text below is the export's ledger (${rev}). A ledger copy for this historical round was not preserved, so these claims cannot be attributed to that round.`
+    : `Claims are from the export's ledger (${rev}). They are recorded rationales, not additional execution measurements or an independent proof of every claim.`;
+  const flagged = fs.filter(f => f.status === "bad" || f.status === "review");
+  el.innerHTML = `<h2>Coverage evidence · ${esc(title)}</h2>
+    <p class="num"><b>${pct(done, countable)} verified</b> · ${fmt(done)} verified + ${fmt(explained)} explained + ${fmt(countable - done - explained)} unaccounted = ${fmt(countable)} countable blocks.</p>
+    <div class="bar"><span style="width:${countable ? 100 * done / countable : 0}%;background:var(--ok)"></span>${showLedger ? `<span style="width:${countable ? 100 * explained / countable : 0}%;background:var(--explained)"></span>` : ""}</div>
+    <p class="sub">${blocksKnown ? `${fmt(blocks)} original blocks in these functions; ${fmt(blocks - countable)} excluded assertion/unreachable blocks in the saved report.` : "Original-block totals were not preserved in this export."} ${selectedFunction ? `Function address: ${esc(selectedFunction.address)}.` : `${fmt(fs.length)} functions in this view.`}</p>
+    ${flagged.length ? `<p class="warning">${fmt(flagged.length)} functions have unresolved mismatch reviews. Ledger claims do not settle those mismatches.</p>` : ""}
+    <p class="sub">${esc(context)}</p>
+    ${E ? `<p class="sub">Ledger SHA-256: <span class="mono">${esc(E.sha256)}</span> · ${sourceLink("tools/lockstep/gaps.txt", null, "Ledger source")} ${selectedFunction && E.codePaths[selectedFunction.unit] ? " · " + sourceLink(E.codePaths[selectedFunction.unit], null, "Port source") : ""}</p>
+      <details id="claims"><summary>Inspect ${fmt(ids.length)} current ledger claims for this view</summary><div class="scroll" id="claim-list"></div></details>
+      ${explained && !ids.length ? '<p class="warning">The report records explained blocks, but no matching claim text exists in the exported ledger. The explanation provenance needs reconciliation.</p>' : ""}
+      <details id="scope"><summary>Coverage scope and exclusions</summary><p>The denominator excludes statically unreachable blocks and blocks that call non-returning failure handlers. ${fmt(new Set(E.exclusions.map(x => x.name)).size)} named functions are excluded separately as unreachable or substituted by the SDK layer; they are outside this map. Lists below are from the current export, not archived per-round lists. The original counts above remain specific to the selected saved report.</p>
+        <p>${sourceLink("tools/lockstep/coverage.py", 195, "Counting rules")} · ${sourceLink("tools/lockstep/dead-card.txt", null, "Unreachable-function list")} · ${sourceLink("tools/lockstep/stand-ins-card.txt", null, "SDK substitution list")}</p>
+        <div class="scroll">${E.exclusions.map(x => `<div class="claim"><span class="mono">${esc(x.name)}</span> · ${esc(x.kind)}${x.unit ? " · " + esc(x.unit) : ""}${x.address ? " · " + esc(x.address) : ""}${x.reason ? "<p>" + esc(x.reason) + "</p>" : ""}</div>`).join("")}</div>
+      </details>` : '<p class="warning">This snapshot contains counts without ledger text. Regenerate its evidence export to inspect explanations and scope lists.</p>'}
+    ${E?.audit ? `<details><summary>Outstanding ledger audit · ${fmt(E.audit.contradicted.length)} claims flagged by the saved report</summary><p>These specific claimed-unreachable blocks were subsequently verified according to the latest saved report. The counts already exclude verified blocks from the explained total. The claim text still needs reconciliation. This is not a new audit run and does not prove other claims.</p><p class="mono">${E.audit.contradicted.map(esc).join(" · ")}</p></details>` : ""}`;
+  const details = document.getElementById("claims");
+  if (details) details.addEventListener("toggle", () => {
+    if (!details.open || document.getElementById("claim-list").childElementCount) return;
+    const contradicted = new Set(E.audit?.contradicted || []);
+    document.getElementById("claim-list").innerHTML = ids.length ? ids.map(i => {
+      const claim = E.entries[i];
+      return `<div class="claim"><b class="mono">${esc(claim.claim)}</b> · ${esc(E.categories[claim.kind])} · ${sourceLink("tools/lockstep/gaps.txt", claim.line, "line " + claim.line)}
+        ${claim.kind === "oracle" ? '<p class="warning">Provisional oracle rationale; this is not lockstep verification.</p>' : ""}
+        ${contradicted.has(claim.claim) ? '<p class="warning">Flagged by the latest saved report: a run verified this claimed-unreachable block.</p>' : ""}
+        <p>${esc(claim.reason || "No per-claim rationale recorded.")}</p>
+        ${claim.group !== null ? `<p class="sub">${esc(E.groups[claim.group])}</p>` : ""}</div>`;
+    }).join("") : '<p>No matching current ledger claims. An offset of * in a claim means all eligible blocks of that function; already verified blocks do not count as explained.</p>';
+    if (ids.length) document.getElementById("claim-list").insertAdjacentHTML("afterbegin", '<p class="sub">Offsets are relative to the function start; * means all eligible blocks. These are claimed offsets, not a list of the exact unverified blocks in the selected historical round. Already verified blocks do not count as explained.</p>');
+  });
+}
 function crumbs() {
   const el = document.getElementById("crumbs"); el.innerHTML = "";
   const path = focus.ancestors().reverse();
   path.forEach((n, i) => {
     if (i) el.insertAdjacentHTML("beforeend", '<span class="sep">/</span>');
     const b = document.createElement("button");
-    const fs = n.leaves(), v = fs.filter(l => isVerified(l.data)).length;
-    b.textContent = (i === 0 ? "all" : i === 1 ? n.data.name : n.data.name.split("/").slice(2).join("/")) + (i === path.length - 1 ? `  ·  ${fmt(v)} of ${fmt(fs.length)} ${mode === "3a" ? "verified" : "complete"}` : "");
+    const fs = n.leaves(), done = d3.sum(fs, l => l.data.done), countable = d3.sum(fs, l => l.data.countable);
+    b.textContent = (i === 0 ? "all" : i === 1 ? n.data.name : n.data.name.split("/").slice(2).join("/")) + (i === path.length - 1 ? `  ·  ${pct(done, countable)} verified` : "");
     b.onclick = () => zoomTo(n);
     el.appendChild(b);
   });
 }
 document.getElementById("q").addEventListener("input", e => {
   query = e.target.value.trim().toLowerCase();
+  searchResults();
   if (query.length >= 3 && focus !== root) {
-    const inView = leaves.some(n => n.data.name.toLowerCase().includes(query));
-    if (!inView) { focus = root; crumbs(); layout(); return; }
+    const inView = leaves.some(n => `${n.data.unit} ${n.data.name}`.toLowerCase().includes(query));
+    if (!inView) { zoomTo(root); return; }
   }
   draw();
 });
 
 // Areas list
 function areas() {
-  const rows = d3.rollups(fns, v => mode === "3a"
-      ? { n: v.length, v: v.filter(f => isVerified(f)).length, rv: v.filter(f => f.status === "review" || f.status === "bad").length, low: v.filter(f => f.status === "low").length }
-      : { n: d3.sum(v, f => f.countable), v: d3.sum(v, f => f.done), x: d3.sum(v, f => f.explained), rv: 0, low: 0 }, f => f.area)
-    .sort((a, b) => (b[1].n - b[1].v - (b[1].x || 0)) - (a[1].n - a[1].v - (a[1].x || 0)));
+  const rows = d3.rollups(fns, v => ({ n: d3.sum(v, f => f.countable), v: d3.sum(v, f => f.done), x: d3.sum(v, f => f.explained) }), f => f.area)
+    .sort((a, b) => (b[1].n - b[1].v) - (a[1].n - a[1].v));
   document.getElementById("areas").innerHTML = rows.map(([a, r]) =>
-    `<div class="arow" data-area="${a}"><span class="mono">${a}</span><div class="bar"><span style="width:${r.n ? 100 * r.v / r.n : 0}%;background:var(--ok)"></span><span style="width:${r.n ? 100 * (r.x || 0) / r.n : 0}%;background:var(--explained)"></span><span style="width:${r.n ? 100 * r.rv / r.n : 0}%;background:var(--review)"></span><span style="width:${r.n ? 100 * r.low / r.n : 0}%;background:var(--low-hi)"></span></div><span class="n num">${fmt(r.n - r.v - (r.x || 0))} ${mode === "3a" ? "left" : "blocks"}</span></div>`).join("");
+    `<div class="arow" data-area="${esc(a)}"><span class="mono">${esc(a)}</span><div class="bar"><span style="width:${r.n ? 100 * r.v / r.n : 0}%;background:var(--ok)"></span>${showLedger ? `<span style="width:${r.n ? 100 * r.x / r.n : 0}%;background:var(--explained)"></span>` : ""}</div><span class="n num">${fmt(r.n - r.v)} unverified</span></div>`).join("");
   document.querySelectorAll(".arow").forEach(r => r.onclick = () => { zoomTo(root.children.find(c => c.data.name === r.dataset.area)); document.getElementById("crumbs").scrollIntoView({ behavior: "smooth", block: "start" }); });
 }
 areas();
@@ -360,11 +427,11 @@ areas();
 // To review
 function reviews() {
   const rv = fns.filter(f => f.status === "review" || f.status === "bad").sort((a, b) => b.mutated - a.mutated);
-  document.getElementById("review").innerHTML = rv.length ? rv.map(f => `<div data-i="${fns.indexOf(f)}"><span class="mono">${f.name}</span><span class="num">${at === SNAPS.length - 1 ? fmt(f.mutated || f.bad) : "flagged"} · ${f.area}</span></div>`).join("") : '<span class="sub">nothing</span>';
+  document.getElementById("review").innerHTML = rv.length ? rv.map(f => `<div data-i="${f.index}"><span class="mono">${esc(f.name)}</span><span class="num">${at === SNAPS.length - 1 ? fmt(f.mutated || f.bad) : "flagged"} · ${f.area}</span></div>`).join("") : '<span class="sub">nothing</span>';
   document.querySelectorAll("#review div").forEach(d => d.onclick = () => {
     const q = document.getElementById("q"), f = fns[+d.dataset.i];
     zoomTo(root.children.find(n => n.data.name === f.area).children.find(n => n.data.name === f.unit));
-    q.value = f.name; q.dispatchEvent(new Event("input"));
+    q.value = f.name; q.dispatchEvent(new Event("input")); inspectFunction(f);
   });
 }
 
@@ -372,32 +439,28 @@ function reviews() {
 function trend() {
   const P = SUMS, el = document.getElementById("trend");
   if (P.length < 2) { el.innerHTML = '<span class="sub">one round so far</span>'; return; }
-  const w = el.clientWidth || 400, h = 150, m = { l: 48, r: 12, t: 10, b: 22 };
+  const w = el.clientWidth || 400, h = 180, m = { l: 42, r: 12, t: 16, b: 22 };
   const x = d3.scalePoint().domain(P.map(p => p.label)).range([m.l, w - m.r]).padding(0.3);
-  const val = p => mode === "3a" ? p.verified : +(100 * (p.blocks + p.explained) / p.countable).toFixed(1), top = mode === "3a" ? total : 100, tf = mode === "3a" ? d3.format(",") : (t => t + "%");
-  const lo = d3.min(P, val), y = d3.scaleLinear().domain(mode === "3a" ? [Math.floor(lo * 0.97 / 500) * 500, top] : [Math.floor(lo / 5) * 5 - 5, top]).range([h - m.b, m.t]);
-  const ticks = y.ticks(4);
-  el.innerHTML = `<svg width="100%" viewBox="0 0 ${w} ${h}" role="img" aria-label="Functions verified per round">
-    ${ticks.map(t => `<line x1="${m.l}" x2="${w - m.r}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)"/><text x="${m.l - 6}" y="${y(t) + 4}" text-anchor="end">${tf(t)}</text>`).join("")}
-    <line x1="${m.l}" x2="${w - m.r}" y1="${y(top)}" y2="${y(top)}" stroke="var(--ok)" stroke-dasharray="4 3"/>
-    <text x="${w - m.r}" y="${y(top) + 13}" text-anchor="end">${mode === "3a" ? "3a " + fmt(total) : "3b 100%"}</text>
+  const val = (p, ledger = false) => p.countable ? 100 * (p.blocks + (ledger ? p.explained : 0)) / p.countable : 0;
+  const y = d3.scaleLinear().domain([0, 100]).range([h - m.b, m.t]);
+  el.innerHTML = `<svg width="100%" viewBox="0 0 ${w} ${h}" role="img" aria-label="Measured block coverage over rounds">
+    ${y.ticks(4).map(t => `<line x1="${m.l}" x2="${w - m.r}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)"/><text x="${m.l - 6}" y="${y(t) + 4}" text-anchor="end">${t}%</text>`).join("")}
+    <text x="${w - m.r}" y="12" text-anchor="end">target: 100% verified</text>
+    ${showLedger ? `<polyline fill="none" stroke="var(--explained)" stroke-dasharray="4 3" stroke-width="2" points="${P.map(p => `${x(p.label)},${y(val(p, true))}`).join(" ")}"/>` : ""}
     <polyline fill="none" stroke="var(--ok)" stroke-width="2" points="${P.map(p => `${x(p.label)},${y(val(p))}`).join(" ")}"/>
-    ${P.map((p, i) => `<circle data-i="${i}" cx="${x(p.label)}" cy="${y(val(p))}" r="${i === at ? 6 : 3.5}" fill="var(--ok)" stroke="var(--fg)" stroke-width="${i === at ? 2 : 0}" style="cursor:pointer"><title>${p.label}: ${fmt(p.verified)} verified at 90%, ${fmt(p.complete)} complete, ${(100 * p.blocks / p.countable).toFixed(1)}% of blocks</title></circle><text x="${x(p.label)}" y="${h - 6}" text-anchor="middle">${p.label}</text>`).join("")}
-  </svg>`;
+    ${P.map((p, i) => `<circle data-i="${i}" cx="${x(p.label)}" cy="${y(val(p))}" r="${i === at ? 5 : 3}" fill="var(--ok)" style="cursor:pointer"><title>${esc(p.label)}: ${pct(p.blocks, p.countable)} verified; ${pct(p.blocks + p.explained, p.countable)} accounted for</title></circle>`).join("")}
+  </svg><div class="sub">Green: verified${showLedger ? " · dashed blue: verified + ledger claims" : ""}. Select a point or use the round slider.</div>`;
   el.querySelectorAll("circle").forEach(c => c.onclick = () => show(+c.dataset.i));
 }
 
 function all() { layout(); trend(); }
-function setMode(m) {
-  mode = m; BAR = m === "3a" ? DATA.bar : 1;
-  try { localStorage.setItem("mode", m); } catch (e) {}
-  document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.m === m)));
-  document.getElementById("trend-h").textContent = m === "3a" ? "Functions verified over rounds" : "Blocks accounted for over rounds";
-  show(at);
-}
+document.getElementById("ledger-toggle").addEventListener("change", e => {
+  showLedger = e.target.checked; show(at);
+});
 
 // The round shown, and what each function was the round before, for the changes.
 function show(i) {
+  const openEvidence = [...document.querySelectorAll("#evidence details[id][open]")].map(el => el.id);
   at = i;
   if (diffOn && at > 0) {
     apply(at - 1); classify();
@@ -407,7 +470,8 @@ function show(i) {
   const range = document.getElementById("h-range");
   range.max = SNAPS.length - 1; range.value = at;
   document.getElementById("h-label").textContent = SNAPS[at].label + (at === SNAPS.length - 1 ? " (latest)" : "");
-  header(); areas(); reviews(); crumbs(); layout(); trend();
+  header(); areas(); reviews(); crumbs(); layout(); trend(); evidencePanel();
+  openEvidence.forEach(id => { document.getElementById(id).open = true; });
 }
 // The label takes the room its longest text needs from the start, so the slider beside it keeps
 // its size as it moves.
@@ -425,8 +489,7 @@ document.getElementById("h-play").onclick = () => {
   if (at === SNAPS.length - 1) show(0);
   player = setInterval(() => { if (at >= SNAPS.length - 1) stopPlaying(); else show(at + 1); }, 1400);
 };
-document.querySelectorAll(".seg button").forEach(b => b.onclick = () => setMode(b.dataset.m));
-setMode(mode);
+show(at);
 let rt, lastW = 0; new ResizeObserver(() => { const w = canvas.clientWidth; if (w === lastW) return; lastW = w; clearTimeout(rt); rt = setTimeout(all, 120); }).observe(canvas);
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
 new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });

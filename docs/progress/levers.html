@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
 /* Layout: the coverage map's companion. A summary strip, then one column of sections, each a
-   chart or a table that answers which levers move the Phase 3 gate and by how much. */
+   chart or a table that answers which levers increase accounted coverage and by how much. */
 :root {
   --bg: #f6f5f1; --panel: #ffffff; --fg: #1d1f24; --muted: #646a74; --line: #dcdad3;
   --job: #9a958a; --fuzz: #1f6fd6; --ok: #3f9a5c; --open: #c4663a;
@@ -88,7 +88,7 @@ td .note { color: var(--muted); font-size: 12px; }
 <div class="wrap">
   <header>
     <h1>Coverage Levers</h1>
-    <div class="sub">What each way of verifying more blocks has yielded toward the Phase 3 gate (every countable block verified or explained). Gains count from round <span id="base-label"></span>. Updated <span class="mono" id="updated"></span>.</div>
+    <div class="sub">What each method has yielded toward accounted coverage (verified blocks plus ledger explanations). These totals keep measured verification and ledger claims separate. Gains count from round <span id="base-label"></span>. Updated <span class="mono" id="updated"></span>.</div>
   </header>
 
   <div class="stats" id="stats"></div>

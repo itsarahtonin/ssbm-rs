@@ -4,7 +4,7 @@ find them: what the original then gets is whatever a register or the stack held.
     python tools/c2rs/unset_scan.py <decomp root> [unit ...]
 
 Prints one line per finding: unit, function, clang's warning. The review of these readings is
-in the port plan's Phase 3 checklist.
+part of the function-equivalence review.
 """
 
 import json

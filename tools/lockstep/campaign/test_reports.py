@@ -6,6 +6,7 @@ from pathlib import Path
 import levers
 import reports
 import treemap
+import evidence
 
 FIELDS = 'address name unit blocks countable verified_blocks calls mismatches mutated explained'.split()
 
@@ -43,6 +44,8 @@ class ReportsTest(unittest.TestCase):
         write(self.state / 'history/01-f1.csv', [row(countable=5, verified=5)])
         data = treemap.build_data(self.state, 'latest', self.reviewed)
         self.assertEqual(data['snaps'][0]['countable'], [5])
+        self.assertEqual(data['snaps'][0]['blocks'], [5])
+        self.assertEqual(data['fns'][0][10], 10)
 
     def test_ambiguous_review_requires_unit(self):
         a, b = row('a'), row('b')
@@ -64,6 +67,11 @@ class ReportsTest(unittest.TestCase):
     def test_invalid_and_duplicate_evidence_fails(self):
         path = self.state / 'report.csv'
         write(path, [row(verified=8, explained=3)])
+        with self.assertRaises(ValueError):
+            reports.read_report(path)
+        invalid = row()
+        invalid['blocks'] = 9
+        write(path, [invalid])
         with self.assertRaises(ValueError):
             reports.read_report(path)
         write(path, [row(), row()])
@@ -104,6 +112,25 @@ class ReportsTest(unittest.TestCase):
         run = levers.build_data(self.state, 'f1')['runs'][0]
         self.assertEqual(run['cost'], 0.003)
         self.assertAlmostEqual(run['new'] / run['cost'], 1000 / 3)
+
+    def test_ledger_names_are_qualified_and_reasons_preserved(self):
+        path = self.state / 'gaps.txt'
+        path.write_text('# Shared call graph rationale\na:OnReset+* fail # <handler> & caller\n'
+                        'b:OnReset+0x4 dead # no path\nExcluded+* hw # substituted\n')
+        data = evidence.ledger(path, [['OnReset', 0], ['OnReset', 1]], ['a', 'b'])
+        self.assertEqual(data['byFunction'], {'0': [0], '1': [1]})
+        self.assertEqual(len(data['entries']), 3)
+        self.assertEqual(data['entries'][0]['reason'], '<handler> & caller')
+        self.assertEqual(data['groups'][0], 'Shared call graph rationale')
+        self.assertEqual(data['entries'][0]['line'], 2)
+        self.assertEqual(data['entries'][1]['group'], 0)
+
+    def test_ambiguous_or_invalid_ledger_claim_fails(self):
+        path = self.state / 'gaps.txt'
+        for text in ('OnReset+* fail', 'a:OnReset+* madeup', 'a:OnReset+wrong dead'):
+            path.write_text(text)
+            with self.subTest(text=text), self.assertRaises(ValueError):
+                evidence.ledger(path, [['OnReset', 0], ['OnReset', 1]], ['a', 'b'])
 
 
 if __name__ == '__main__':

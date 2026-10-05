@@ -1,6 +1,6 @@
 # Lockstep campaigns
 
-Phase 3's evidence comes from lockstep coverage campaigns: many runs of `ssbm-run --lockstep`, each checking every port against its original under real and mutated inputs, merged into one report. The Phase 3 gate (milestone 3b) is every countable block verified by lockstep or explained in the reviewed gap ledger (`tools/lockstep/gaps.txt`), with no unexplained mismatches, mutated ones included.
+Lockstep coverage campaigns merge many runs of `ssbm-run --lockstep`, each checking ports against their originals under real and mutated inputs, into one report. The measured target is every countable block verified, with no unexplained mismatches, mutated ones included. The gap ledger (`tools/lockstep/gaps.txt`) accounts for some unverified blocks separately; its explanations are inspectable claims, not execution measurements.
 
 The dated session checkpoint is in `HANDOFF.md`; it is not a live process-status report. Recipes for blocks still open: `recipes.md`. The project's verification scope and limitations are in [verification](../../../docs/verification.md).
 

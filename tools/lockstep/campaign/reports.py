@@ -19,6 +19,8 @@ def read_report(path):
         seen.add(key)
         countable, verified, explained = (int(row.get(k) or 0) for k in
                                           ('countable', 'verified_blocks', 'explained'))
+        if int(row['blocks']) < countable:
+            raise ValueError(f'{path}: countable exceeds original blocks for {key}')
         if not (0 <= verified <= countable and 0 <= explained <= countable - verified):
             raise ValueError(f'{path}: inconsistent coverage for {key}')
         for k in ('calls', 'mismatches', 'mutated'):
