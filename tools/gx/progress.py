@@ -10,6 +10,7 @@ ours, Dolphin's and their difference, as PNGs at full size; files.txt lists them
 beside the page.
 """
 import datetime
+import argparse
 import json
 import os
 import re
@@ -21,7 +22,6 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 GX = os.path.join(ROOT, "local", "gx")
 sys.path.insert(0, HERE)
-import compare  # noqa: E402
 
 # A frame matches Dolphin's within tolerance when its PSNR is at least this, and no more than
 # this share of its pixels is off by more than 32 levels in some channel.
@@ -139,6 +139,7 @@ def audio_results():
 
 
 def frame_results(img_dir):
+    import compare
     out = []
     d = os.path.join(GX, "frames")
     if not os.path.isdir(d):
@@ -170,7 +171,21 @@ def frame_results(img_dir):
 
 
 def main():
-    out_dir = sys.argv[1] if len(sys.argv) > 1 else os.path.join(GX, "progress")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("out_dir", nargs="?", default=os.path.join(GX, "progress"))
+    parser.add_argument("--from-json")
+    args = parser.parse_args()
+    out_dir = args.out_dir
+    if args.from_json:
+        with open(args.from_json, encoding="utf-8") as file:
+            data = json.load(file)
+        os.makedirs(out_dir, exist_ok=True)
+        with open(os.path.join(HERE, "progress.template.html"), encoding="utf-8") as file:
+            template = file.read()
+        encoded = json.dumps(data, separators=(",", ":"), allow_nan=False).replace("<", "\\u003c")
+        with open(os.path.join(out_dir, "index.html"), "w", encoding="utf-8", newline="\n") as file:
+            file.write(template.replace("/*DATA*/null", encoded))
+        return
     img_dir = os.path.join(out_dir, "img")
     shutil.rmtree(img_dir, ignore_errors=True)
     os.makedirs(img_dir)

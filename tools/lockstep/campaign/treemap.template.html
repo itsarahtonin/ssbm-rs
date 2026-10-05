@@ -1,4 +1,6 @@
+<!doctype html>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Port Coverage Map</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -6,16 +8,16 @@
 :root {
   --bg: #f6f5f1; --panel: #ffffff; --fg: #1d1f24; --muted: #646a74; --line: #dcdad3;
   --ok: #3f9a5c; --low-hi: #d9a23a; --low-lo: #c4663a; --never: #c9c7c0;
-  --review: #b83a8e; --bad: #d62f2f; --area: #1d1f24; --hl: #1f6fd6;
+  --explained: #568ec0; --review: #b83a8e; --bad: #d62f2f; --area: #1d1f24; --hl: #1f6fd6;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #15171b; --panel: #1d2026; --fg: #e7e8ea; --muted: #9aa0a9; --line: #30343b;
   --ok: #4fae6c; --low-hi: #d6a443; --low-lo: #c56a3e; --never: #3a3e45;
-  --review: #d356ab; --bad: #ef4b4b; --area: #e7e8ea; --hl: #5aa2ff; color-scheme: dark } }
+  --explained: #73a9da; --review: #d356ab; --bad: #ef4b4b; --area: #e7e8ea; --hl: #5aa2ff; color-scheme: dark } }
 :root[data-theme="dark"] {
   --bg: #15171b; --panel: #1d2026; --fg: #e7e8ea; --muted: #9aa0a9; --line: #30343b;
   --ok: #4fae6c; --low-hi: #d6a443; --low-lo: #c56a3e; --never: #3a3e45;
-  --review: #d356ab; --bad: #ef4b4b; --area: #e7e8ea; --hl: #5aa2ff; color-scheme: dark }
+  --explained: #73a9da; --review: #d356ab; --bad: #ef4b4b; --area: #e7e8ea; --hl: #5aa2ff; color-scheme: dark }
 body { background: var(--bg); color: var(--fg); font: 14px/1.45 "IBM Plex Sans", system-ui, sans-serif; }
 .wrap { max-width: 1400px; margin: 0 auto; padding: 20px 16px 40px; display: grid; gap: 18px; }
 .mono, .num { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
@@ -122,7 +124,7 @@ svg text { fill: var(--muted); font: 11px "IBM Plex Mono", monospace; }
       <h2 style="margin-top:16px">To review</h2><div class="list" id="review"></div>
     </section>
   </div>
-  <p class="foot">Tiles are sized by countable blocks: the blocks that can run, leaving out those that only fail an assertion or that the machine code shows no input reaches. A block is verified once lockstep has run it in the original and the port and their results agreed. Under 3a a function counts as verified at ≥90% of its blocks; under 3b only at all of them, or with the rest explained in the gap ledger. “To review” means mismatches only under mutated inputs, not yet explained. Click an area or unit to zoom in; click the path above to zoom out. The round slider shows the map after each round; earlier rounds are counted again from their own results, with ports changed since then counting as they stood at that round.</p>
+  <p class="foot">Tiles are sized by countable blocks: the blocks that can run, leaving out those that only fail an assertion or that the machine code shows no input reaches. A block is verified once lockstep has run it in the original and the port and their results agreed. Under 3a a function counts as verified at ≥90% of its blocks. Under 3b green means every block was verified; blue means completion also relies on the gap ledger. Unreviewed mismatches prevent either milestone. “To review” means mismatches only under mutated inputs, not yet explained. Click an area or unit to zoom in; click the path above to zoom out. The round slider shows the map after each round; earlier rounds are counted again from their own results, with ports changed since then counting as they stood at that round. Reviews use the ledger available when this page was generated; this is a saved evidence snapshot, not a live progress feed.</p>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
@@ -131,11 +133,11 @@ const DATA = /*DATA*/null;
 let mode = "3a", BAR = DATA.bar;
 try { if (localStorage.getItem("mode") === "3b") { mode = "3b"; BAR = 1; } } catch (e) {}
 const units = DATA.units;
-// [name, unit, countable, verified_blocks, calls, mismatches, mutated, reviewed, explained]
+// [name, unit, countable, verified_blocks, calls, mismatches, mutated, reviewed, explained, address]
 const fns = DATA.fns.map(r => ({ name: r[0], unit: units[r[1]], countable: r[2], done: r[3], calls: r[4], bad: r[5], mutated: r[6], reviewed: r[7], explained: r[8] || 0 }));
 for (const f of fns) {
   f.area = f.unit.split("/").slice(0, 2).join("/");
-  f.latest = { done: f.done, explained: f.explained, calls: f.calls, bad: f.bad, mutated: f.mutated, reviewed: f.reviewed };
+  f.latest = { countable: f.countable, done: f.done, explained: f.explained, calls: f.calls, bad: f.bad, mutated: f.mutated, reviewed: f.reviewed };
 }
 // Each round's state: per function, blocks verified, blocks explained, and flags (1 called,
 // 2 mismatches, 4 mismatches with changed inputs not reviewed). The last is the latest.
@@ -147,6 +149,7 @@ function apply(i) {
     if (latest) Object.assign(f, f.latest);
     else {
       const fl = v[3 * k + 2];
+      f.countable = SNAPS[i].countable ? SNAPS[i].countable[k] : DATA.fns[k][2];
       f.done = v[3 * k]; f.explained = v[3 * k + 1]; f.calls = fl & 1; f.bad = fl & 2 ? 1 : 0; f.mutated = fl & 4 ? 1 : 0; f.reviewed = 0;
     }
     f.share = f.countable ? f.done / f.countable : 1;
@@ -156,24 +159,30 @@ function apply(i) {
 apply(at);
 // Each round's totals, for the trend and the changes since the round before.
 const SUMS = SNAPS.map(sn => {
-  let verified = 0, complete = 0, blocks = 0, explained = 0;
+  let verified = 0, complete = 0, blocks = 0, explained = 0, countableAll = 0;
   fns.forEach((f, k) => {
-    const done = sn.v[3 * k], x = sn.v[3 * k + 1], fl = sn.v[3 * k + 2];
-    blocks += done; explained += x;
-    if (!(fl & 2) && (fl & 1) && done >= DATA.bar * f.countable) verified++;
-    if (!(fl & 2) && done + x >= f.countable && ((fl & 1) || done === 0)) complete++;
+    const done = sn.v[3 * k], x = sn.v[3 * k + 1], fl = sn.v[3 * k + 2], countable = sn.countable ? sn.countable[k] : DATA.fns[k][2];
+    blocks += done; explained += x; countableAll += countable;
+    if (!(fl & 6) && (fl & 1) && done >= DATA.bar * countable) verified++;
+    if (!(fl & 6) && done + x >= countable && ((fl & 1) || done === 0)) complete++;
   });
-  return { label: sn.label, verified, complete, blocks, explained };
+  return { label: sn.label, verified, complete, blocks, explained, countable: countableAll };
 });
+function isVerified(f, bar = BAR) {
+  return f.bad === 0 && (!f.mutated || !!f.reviewed) && (bar >= 1
+    ? f.whole >= 1 && (f.calls > 0 || f.done === 0)
+    : f.calls > 0 && f.share >= bar);
+}
 function classify() {
-  for (const f of fns) f.status = f.bad > 0 ? "bad" : (f.mutated > 0 && !f.reviewed) ? "review" : (mode === "3b" ? f.whole >= 1 && (f.calls > 0 || f.done === 0) : f.calls > 0 && f.share >= BAR) ? "ok" : f.calls > 0 ? "low" : "never";
+  for (const f of fns) f.status = f.bad > 0 ? "bad" : (f.mutated > 0 && !f.reviewed) ? "review"
+    : isVerified(f) ? (mode === "3b" && f.explained > 0 ? "explained" : "ok")
+    : f.calls > 0 ? "low" : "never";
 }
 classify();
-const STATUS = { ok: "verified", low: "called, below the bar", never: "never called", review: "to review", bad: "mismatch" };
-const isVerified = (f, bar = BAR) => f.bad === 0 && (bar >= 1 ? f.whole >= 1 && (f.calls > 0 || f.done === 0) : f.calls > 0 && f.share >= bar);
+const STATUS = { ok: "verified", explained: "complete with ledger explanation", low: "called, below the bar", never: "never called", review: "to review", bad: "mismatch" };
 
 let C = {};
-function readColors() { const s = getComputedStyle(document.documentElement); for (const k of ["ok","low-hi","low-lo","never","review","bad","area","panel","fg","muted","hl","line"]) C[k] = s.getPropertyValue("--" + k).trim(); }
+function readColors() { const s = getComputedStyle(document.documentElement); for (const k of ["ok","explained","low-hi","low-lo","never","review","bad","area","panel","fg","muted","hl","line"]) C[k] = s.getPropertyValue("--" + k).trim(); }
 function fillOf(f) {
   if (f.status === "low") return d3.interpolateRgb(C["low-lo"], C["low-hi"])(Math.min(1, f.share / BAR));
   return C[f.status];
@@ -182,14 +191,15 @@ function fillOf(f) {
 // Header
 document.getElementById("updated").textContent = DATA.updated;
 const total = fns.length;
-const blocksAll = d3.sum(fns, f => f.countable);
+let blocksAll = d3.sum(fns, f => f.countable);
 const fmt = d3.format(",");
-const pct = (n, d) => (100 * n / d).toFixed(1) + "%";
-function bar(el, parts, whole) { document.getElementById(el).innerHTML = parts.map(([k, n]) => `<span style="width:${100 * n / whole}%;background:var(--${k})"></span>`).join(""); }
+const pct = (n, d) => (d ? 100 * n / d : 0).toFixed(1) + "%";
+function bar(el, parts, whole) { document.getElementById(el).innerHTML = parts.map(([k, n]) => `<span style="width:${whole ? 100 * n / whole : 0}%;background:var(--${k})"></span>`).join(""); }
 
 function header() {
   document.getElementById("label").textContent = SNAPS[at].label;
-  const blocksDone = d3.sum(fns, f => f.done);
+  blocksAll = d3.sum(fns, f => f.countable);
+  const blocksDone = d3.sum(fns, f => f.done), explained = d3.sum(fns, f => f.explained);
   const verified = fns.filter(f => isVerified(f)).length;
   const counts = d3.rollup(fns, v => v.length, f => f.status);
   const prev = at > 0 ? SUMS[at - 1] : null, before = prev && (mode === "3a" ? prev.verified : prev.complete);
@@ -197,21 +207,20 @@ function header() {
   const stats = [
     [mode === "3a" ? "Functions verified (3a)" : "Functions complete (3b)", fmt(verified), `of ${fmt(total)} · ${pct(verified, total)}${since}`],
     ["Blocks verified", pct(blocksDone, blocksAll), `${fmt(blocksDone)} of ${fmt(blocksAll)} countable`],
-    ["Left to verify", mode === "3a" ? fmt(total - verified) : fmt(blocksAll - blocksDone), mode === "3a" ? `functions: ${fmt(counts.get("low") || 0)} below the bar · ${fmt(counts.get("never") || 0)} never called` : `blocks, in ${fmt(total - verified)} functions`],
-    ["Mismatches", fmt(counts.get("bad") || 0), "real calls disagreeing with the original"],
-    ["To review", fmt(counts.get("review") || 0), "only under mutated inputs"],
+    [mode === "3a" ? "Left to verify" : "Unaccounted blocks", mode === "3a" ? fmt(total - verified) : fmt(blocksAll - blocksDone - explained), mode === "3a" ? `functions: ${fmt(counts.get("low") || 0)} below the bar · ${fmt(counts.get("never") || 0)} never called` : `unaccounted blocks; ${fmt(total - verified)} functions incomplete or to review`],
+    ["Mismatches", fmt(counts.get("bad") || 0), "functions with real-call mismatches"],
+    ["To review", fmt(counts.get("review") || 0), "functions with unreviewed mutated-input mismatches"],
   ];
   document.getElementById("stats").innerHTML = stats.map(([k, v, d]) => `<div class="stat"><span class="k">${k}</span><span class="v num">${v}</span><span class="d">${d}</span></div>`).join("");
   // Both gates, whichever the map shows
-  const v3a = fns.filter(f => isVerified(f, DATA.bar)).length, near = fns.filter(f => f.calls > 0 && f.share < DATA.bar).length;
+  const v3a = fns.filter(f => isVerified(f, DATA.bar)).length, near = fns.filter(f => f.calls > 0 && f.share < DATA.bar && !f.bad && (!f.mutated || f.reviewed)).length;
   document.getElementById("g3a").textContent = `${fmt(v3a)} / ${fmt(total)} functions`;
   bar("bar3a", [["ok", v3a], ["review", fns.filter(f => f.bad > 0 || (f.mutated > 0 && !f.reviewed)).length], ["low-hi", near]], total);
-  const explained = d3.sum(fns, f => f.explained);
   document.getElementById("g3b").textContent = `${fmt(blocksDone)}${explained ? ` + ${fmt(explained)} explained` : ""} / ${fmt(blocksAll)} blocks`;
-  bar("bar3b", [["ok", blocksDone], ["low-hi", explained]], blocksAll);
+  bar("bar3b", [["ok", blocksDone], ["explained", explained]], blocksAll);
 }
 
-document.getElementById("legend").innerHTML = [["ok", "verified"], ["low-hi", "called, part of the way to the bar"], ["low-lo", "called, little run"], ["never", "never called"], ["review", "to review"], ["bad", "mismatch"]].map(([k, l]) => `<span><i style="background:var(--${k})"></i>${l}</span>`).join("");
+document.getElementById("legend").innerHTML = [["ok", "verified"], ["explained", "complete with ledger explanation (3b)"], ["low-hi", "called, part of the way to the bar"], ["low-lo", "called, little run"], ["never", "never called"], ["review", "to review"], ["bad", "mismatch"]].map(([k, l]) => `<span><i style="background:var(--${k})"></i>${l}</span>`).join("");
 
 // Treemap
 const canvas = document.getElementById("map"), ctx = canvas.getContext("2d"), tip = document.getElementById("tip");
@@ -248,7 +257,7 @@ function draw() {
     const w = n.x1 - n.x0, h = n.y1 - n.y0;
     if (w <= 0 || h <= 0) continue;
     ctx.fillStyle = fillOf(n.data);
-    ctx.globalAlpha = dim && n.data.status === n.data.prevStatus && n.data.done === n.data.prevDone ? 0.15 : 1;
+    ctx.globalAlpha = dim && n.data.status === n.data.prevStatus && n.data.done === n.data.prevDone && n.data.explained === n.data.prevExplained && n.data.countable === n.data.prevCountable ? 0.15 : 1;
     ctx.fillRect(n.x0, n.y0, w, h);
   }
   ctx.globalAlpha = 1;
@@ -322,7 +331,7 @@ function crumbs() {
     if (i) el.insertAdjacentHTML("beforeend", '<span class="sep">/</span>');
     const b = document.createElement("button");
     const fs = n.leaves(), v = fs.filter(l => isVerified(l.data)).length;
-    b.textContent = (i === 0 ? "all" : i === 1 ? n.data.name : n.data.name.split("/").slice(2).join("/")) + (i === path.length - 1 ? `  ·  ${fmt(v)} of ${fmt(fs.length)} verified` : "");
+    b.textContent = (i === 0 ? "all" : i === 1 ? n.data.name : n.data.name.split("/").slice(2).join("/")) + (i === path.length - 1 ? `  ·  ${fmt(v)} of ${fmt(fs.length)} ${mode === "3a" ? "verified" : "complete"}` : "");
     b.onclick = () => zoomTo(n);
     el.appendChild(b);
   });
@@ -340,19 +349,23 @@ document.getElementById("q").addEventListener("input", e => {
 function areas() {
   const rows = d3.rollups(fns, v => mode === "3a"
       ? { n: v.length, v: v.filter(f => isVerified(f)).length, rv: v.filter(f => f.status === "review" || f.status === "bad").length, low: v.filter(f => f.status === "low").length }
-      : { n: d3.sum(v, f => f.countable), v: d3.sum(v, f => f.done + f.explained), rv: 0, low: 0 }, f => f.area)
-    .sort((a, b) => (b[1].n - b[1].v) - (a[1].n - a[1].v));
+      : { n: d3.sum(v, f => f.countable), v: d3.sum(v, f => f.done), x: d3.sum(v, f => f.explained), rv: 0, low: 0 }, f => f.area)
+    .sort((a, b) => (b[1].n - b[1].v - (b[1].x || 0)) - (a[1].n - a[1].v - (a[1].x || 0)));
   document.getElementById("areas").innerHTML = rows.map(([a, r]) =>
-    `<div class="arow" data-area="${a}"><span class="mono">${a}</span><div class="bar"><span style="width:${100 * r.v / r.n}%;background:var(--ok)"></span><span style="width:${100 * r.rv / r.n}%;background:var(--review)"></span><span style="width:${100 * r.low / r.n}%;background:var(--low-hi)"></span></div><span class="n num">${fmt(r.n - r.v)} ${mode === "3a" ? "left" : "blocks"}</span></div>`).join("");
+    `<div class="arow" data-area="${a}"><span class="mono">${a}</span><div class="bar"><span style="width:${r.n ? 100 * r.v / r.n : 0}%;background:var(--ok)"></span><span style="width:${r.n ? 100 * (r.x || 0) / r.n : 0}%;background:var(--explained)"></span><span style="width:${r.n ? 100 * r.rv / r.n : 0}%;background:var(--review)"></span><span style="width:${r.n ? 100 * r.low / r.n : 0}%;background:var(--low-hi)"></span></div><span class="n num">${fmt(r.n - r.v - (r.x || 0))} ${mode === "3a" ? "left" : "blocks"}</span></div>`).join("");
   document.querySelectorAll(".arow").forEach(r => r.onclick = () => { zoomTo(root.children.find(c => c.data.name === r.dataset.area)); document.getElementById("crumbs").scrollIntoView({ behavior: "smooth", block: "start" }); });
 }
 areas();
 
 // To review
-{
+function reviews() {
   const rv = fns.filter(f => f.status === "review" || f.status === "bad").sort((a, b) => b.mutated - a.mutated);
-  document.getElementById("review").innerHTML = rv.length ? rv.map(f => `<div data-name="${f.name}"><span class="mono">${f.name}</span><span class="num">${fmt(f.mutated || f.bad)} · ${f.area}</span></div>`).join("") : '<span class="sub">nothing</span>';
-  document.querySelectorAll("#review div").forEach(d => d.onclick = () => { const q = document.getElementById("q"); q.value = d.dataset.name; q.dispatchEvent(new Event("input")); });
+  document.getElementById("review").innerHTML = rv.length ? rv.map(f => `<div data-i="${fns.indexOf(f)}"><span class="mono">${f.name}</span><span class="num">${at === SNAPS.length - 1 ? fmt(f.mutated || f.bad) : "flagged"} · ${f.area}</span></div>`).join("") : '<span class="sub">nothing</span>';
+  document.querySelectorAll("#review div").forEach(d => d.onclick = () => {
+    const q = document.getElementById("q"), f = fns[+d.dataset.i];
+    zoomTo(root.children.find(n => n.data.name === f.area).children.find(n => n.data.name === f.unit));
+    q.value = f.name; q.dispatchEvent(new Event("input"));
+  });
 }
 
 // Trend
@@ -361,7 +374,7 @@ function trend() {
   if (P.length < 2) { el.innerHTML = '<span class="sub">one round so far</span>'; return; }
   const w = el.clientWidth || 400, h = 150, m = { l: 48, r: 12, t: 10, b: 22 };
   const x = d3.scalePoint().domain(P.map(p => p.label)).range([m.l, w - m.r]).padding(0.3);
-  const val = p => mode === "3a" ? p.verified : +(100 * (p.blocks + p.explained) / blocksAll).toFixed(1), top = mode === "3a" ? total : 100, tf = mode === "3a" ? d3.format(",") : (t => t + "%");
+  const val = p => mode === "3a" ? p.verified : +(100 * (p.blocks + p.explained) / p.countable).toFixed(1), top = mode === "3a" ? total : 100, tf = mode === "3a" ? d3.format(",") : (t => t + "%");
   const lo = d3.min(P, val), y = d3.scaleLinear().domain(mode === "3a" ? [Math.floor(lo * 0.97 / 500) * 500, top] : [Math.floor(lo / 5) * 5 - 5, top]).range([h - m.b, m.t]);
   const ticks = y.ticks(4);
   el.innerHTML = `<svg width="100%" viewBox="0 0 ${w} ${h}" role="img" aria-label="Functions verified per round">
@@ -369,7 +382,7 @@ function trend() {
     <line x1="${m.l}" x2="${w - m.r}" y1="${y(top)}" y2="${y(top)}" stroke="var(--ok)" stroke-dasharray="4 3"/>
     <text x="${w - m.r}" y="${y(top) + 13}" text-anchor="end">${mode === "3a" ? "3a " + fmt(total) : "3b 100%"}</text>
     <polyline fill="none" stroke="var(--ok)" stroke-width="2" points="${P.map(p => `${x(p.label)},${y(val(p))}`).join(" ")}"/>
-    ${P.map((p, i) => `<circle data-i="${i}" cx="${x(p.label)}" cy="${y(val(p))}" r="${i === at ? 6 : 3.5}" fill="var(--ok)" stroke="var(--fg)" stroke-width="${i === at ? 2 : 0}" style="cursor:pointer"><title>${p.label}: ${fmt(p.verified)} verified at 90%, ${fmt(p.complete)} complete, ${(100 * p.blocks / blocksAll).toFixed(1)}% of blocks</title></circle><text x="${x(p.label)}" y="${h - 6}" text-anchor="middle">${p.label}</text>`).join("")}
+    ${P.map((p, i) => `<circle data-i="${i}" cx="${x(p.label)}" cy="${y(val(p))}" r="${i === at ? 6 : 3.5}" fill="var(--ok)" stroke="var(--fg)" stroke-width="${i === at ? 2 : 0}" style="cursor:pointer"><title>${p.label}: ${fmt(p.verified)} verified at 90%, ${fmt(p.complete)} complete, ${(100 * p.blocks / p.countable).toFixed(1)}% of blocks</title></circle><text x="${x(p.label)}" y="${h - 6}" text-anchor="middle">${p.label}</text>`).join("")}
   </svg>`;
   el.querySelectorAll("circle").forEach(c => c.onclick = () => show(+c.dataset.i));
 }
@@ -379,7 +392,7 @@ function setMode(m) {
   mode = m; BAR = m === "3a" ? DATA.bar : 1;
   try { localStorage.setItem("mode", m); } catch (e) {}
   document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.m === m)));
-  document.getElementById("trend-h").textContent = m === "3a" ? "Functions verified over rounds" : "Blocks verified over rounds";
+  document.getElementById("trend-h").textContent = m === "3a" ? "Functions verified over rounds" : "Blocks accounted for over rounds";
   show(at);
 }
 
@@ -388,13 +401,13 @@ function show(i) {
   at = i;
   if (diffOn && at > 0) {
     apply(at - 1); classify();
-    for (const f of fns) { f.prevStatus = f.status; f.prevDone = f.done; }
+    for (const f of fns) { f.prevStatus = f.status; f.prevDone = f.done; f.prevExplained = f.explained; f.prevCountable = f.countable; }
   }
   apply(at); classify();
   const range = document.getElementById("h-range");
   range.max = SNAPS.length - 1; range.value = at;
   document.getElementById("h-label").textContent = SNAPS[at].label + (at === SNAPS.length - 1 ? " (latest)" : "");
-  header(); areas(); crumbs(); if (current) draw(); trend();
+  header(); areas(); reviews(); crumbs(); layout(); trend();
 }
 // The label takes the room its longest text needs from the start, so the slider beside it keeps
 // its size as it moves.

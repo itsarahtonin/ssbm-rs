@@ -1,3 +1,6 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Coverage Levers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -119,7 +122,7 @@ td .note { color: var(--muted); font-size: 12px; }
   </section>
 
   <section>
-    <h2>Findings</h2>
+    <h2>Recorded findings</h2>
     <div class="panel"><ul class="notes" id="notes"></ul></div>
   </section>
 
@@ -214,7 +217,7 @@ for (const l of levers) {
   for (const r of l.runs) {
     const p = perG(r);
     rows += `<tr class="${isFuzz(r.lever) ? "fuzz" : ""}"><td>${esc(r.run)}${r.note ? `<div class="note">${esc(r.note)}</div>` : ""}</td>
-      <td class="r num">${fmt(r.new)}</td><td class="r num">${r.cost.toFixed(1)}</td>
+      <td class="r num">${fmt(r.new)}</td><td class="r num">${r.cost > 0 && r.cost < 0.1 ? r.cost.toFixed(3) : r.cost.toFixed(1)}</td>
       <td class="num"><span class="mini" style="width:${Math.max(2, 120 * p / maxPer).toFixed(0)}px"></span>${p.toFixed(p < 10 ? 1 : 0)}</td></tr>`;
   }
 }

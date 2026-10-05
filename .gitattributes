@@ -4,5 +4,7 @@ crates/types/src/gen/** linguist-generated=true
 crates/game/src/tu/** linguist-generated=true
 crates/game/src/patched.rs linguist-generated=true
 crates/slippi/src/denylist.rs linguist-generated=true
+docs/progress/*.html linguist-generated=true
+docs/progress/data/*.json linguist-generated=true
 tools/fp-fuzz/dolphin/** linguist-vendored=true
 tools/ax-dolphin/dolphin/** linguist-vendored=true

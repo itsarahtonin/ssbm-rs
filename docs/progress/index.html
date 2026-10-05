@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ssbm-rs · Progress snapshots</title>
+<style>
+  :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+  body { max-width: 780px; margin: 64px auto; padding: 0 24px; line-height: 1.6; }
+  h1 { line-height: 1.2; } li { margin: 24px 0; } a { color: light-dark(#245cab, #8bbcff); }
+  small { display: block; opacity: .8; } .note { border-left: 3px solid #568ec0; padding-left: 16px; }
+</style>
+<h1>ssbm-rs progress snapshots</h1>
+<p>Saved coverage, verification history, and graphics/audio metrics. These pages preserve research evidence; they are not a live status feed or a release-readiness claim.</p>
+<ul>
+  <li><a href="coverage.html">Port Coverage Map</a><small>19,668 functions · 31 saved rounds through f8.8, plus a separately labeled working report. Green is verified; blue is complete with ledger explanations under 3b.</small></li>
+  <li><a href="levers.html">Coverage Levers</a><small>204 recorded runs · instruction yield and cost · gains since the saved f7.10 baseline.</small></li>
+  <li><a href="graphics.html">Graphics and Audio Ladder</a><small>October 3 snapshot · stream comparisons, frame tolerance, audio synchronization, and renderer features. Frame images remain private.</small></li>
+</ul>
+<p class="note">The coverage and levers charts load D3 from cdnjs. Data and rendering sources are preserved alongside the pages. See <a href="README.md">the snapshot notes</a> for limitations, provenance, and regeneration commands.</p>
+</html>

@@ -40,6 +40,8 @@ A later idiomatic Rust refactor with netplay, training tools, and mods is intend
 
 ## Explore the code
 
+The [progress dashboards](docs/progress/README.md) preserve the port coverage map, coverage-lever history, and graphics/audio ladder as browsable snapshots with aggregate data. Open their HTML locally from a checkout; the notes distinguish measured coverage from ledger explanations and describe the evidence's limitations.
+
 | Area | Purpose |
 | --- | --- |
 | [gekko-fp](crates/gekko-fp) | Gekko floating-point behavior, with hardware and Slippi compatibility modes |

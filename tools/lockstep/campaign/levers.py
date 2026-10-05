@@ -1,112 +1,90 @@
-"""Writes the levers page: what each way of verifying more blocks has yielded, next to the
-coverage map.
-
-    python tools/lockstep/campaign/levers.py BASE OUT_HTML
-
-Each run in local/lockstep/levers.tsv (date, lever, run, known bitmap, results, corpus collection
-log or empty, note) counts the instructions its results verified beyond what the known bitmap
-held, and its cost as the original instructions it ran, in billions, from its log (and its
-corpus collection's). The open blocks over time come from the history entries history.sh and
-snapshot.sh save, and from report.csv as report-all.sh last wrote it; BASE names the history
-entry the page counts gains from (the last finished round). levers-notes.tsv holds dated
-findings.
-"""
+"""Write coverage-lever metrics and naturally ordered saved history."""
+import argparse
 import csv
 import datetime
-import glob
 import json
-import os
+import io
 import re
-import sys
+from pathlib import Path
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))
-L = os.path.join(ROOT, "local", "lockstep")
-base_label, out = sys.argv[1], sys.argv[2]
+from reports import history_label, history_paths, identity, read_report, render, totals
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[2]
 
 
 def words(path):
-    b = open(path, "rb").read()
-    return [int.from_bytes(b[i:i + 8], "little") for i in range(0, len(b), 8)]
+    data = Path(path).read_bytes()
+    return [int.from_bytes(data[i:i + 8], 'little') for i in range(0, len(data), 8)]
 
 
-def beyond(results, known):
-    try:
-        w = words(os.path.join(L, results + ".bin"))
-    except FileNotFoundError:
+def cost(path):
+    if not path.exists():
         return None
-    k = words(os.path.join(L, known))
-    return sum(bin(x & ~(k[i] if i < len(k) else 0)).count("1") for i, x in enumerate(w))
+    matches = re.findall(r'(\d+) fields, (\d+) M instructions', path.read_text(encoding='utf-8', errors='replace'))
+    return int(matches[-1][1]) / 1000 if matches else None
 
 
-def cost(log):
-    """Billions of original instructions the run's log reports, or None."""
-    try:
-        text = open(os.path.join(L, log + ".txt"), encoding="utf-8", errors="replace").read()
-    except FileNotFoundError:
-        return None
-    m = re.search(r"(\d+) fields, (\d+) M instructions", text)
-    return int(m.group(2)) / 1000 if m else None
+def build_data(state, base_label, updated=None):
+    state = Path(state)
+    runs = []
+    for row in csv.reader(io.StringIO((state / 'levers.tsv').read_text(encoding='utf-8')), delimiter='\t'):
+        if not row or row[0].startswith('#'):
+            continue
+        date, lever, run, known, results, collect, note = (row + [''] * 7)[:7]
+        bitmap = state / (results + '.bin')
+        spent = cost(state / (results + '.txt'))
+        if not bitmap.exists() or spent is None:
+            continue
+        actual, baseline = words(bitmap), words(state / known)
+        new = sum((value & ~(baseline[i] if i < len(baseline) else 0)).bit_count() for i, value in enumerate(actual))
+        collected = cost(state / (collect + '.txt')) if collect else None
+        runs.append({'date': date, 'lever': lever, 'run': run, 'new': new,
+                     'cost': spent + (collected or 0),
+                     'collect': collected, 'note': note})
+    timeline, base_rows = [], None
+    for path in history_paths(state):
+        label = history_label(path)
+        rows = read_report(path)
+        timeline.append({'label': label, **totals(rows)})
+        if label == base_label:
+            base_rows = rows
+    if base_rows is None:
+        raise ValueError(f'Unknown baseline round: {base_label}')
+    latest = read_report(state / 'report.csv')
+    now = totals(latest)
+    if not timeline or any(timeline[-1][key] != value for key, value in now.items()):
+        timeline.append({'label': 'working report', **now})
+    before = {identity(row): int(row['verified_blocks']) + int(row.get('explained') or 0) for row in base_rows}
+    gains = []
+    for row in latest:
+        gain = int(row['verified_blocks']) + int(row.get('explained') or 0) - before.get(identity(row), 0)
+        if gain > 0:
+            gains.append({'name': row['name'], 'unit': row['unit'], 'gained': gain,
+                          'open': int(row['countable']) - int(row['verified_blocks']) - int(row.get('explained') or 0)})
+    gains.sort(key=lambda row: -row['gained'])
+    notes = [{'date': row[0], 'text': row[1]} for row in
+             csv.reader(io.StringIO((state / 'levers-notes.tsv').read_text(encoding='utf-8')), delimiter='\t')
+             if row and not row[0].startswith('#') and len(row) > 1]
+    return {'updated': updated or datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M UTC'),
+            'base': base_label, 'baseTotals': totals(base_rows), 'now': now, 'timeline': timeline,
+            'runs': runs, 'gains': gains[:20], 'gainedFunctions': len(gains), 'notes': notes}
 
 
-runs = []
-for row in csv.reader(open(os.path.join(L, "levers.tsv"), encoding="utf-8"), delimiter="\t"):
-    if not row or row[0].startswith("#"):
-        continue
-    date, lever, run, known, results, collect, note = (row + [""] * 7)[:7]
-    new, spent = beyond(results, known), cost(results)
-    if new is None or spent is None:
-        continue
-    collected = cost(collect) if collect else None
-    runs.append({"date": date, "lever": lever, "run": run, "new": new,
-                 "cost": round(spent + (collected or 0), 2),
-                 "collect": round(collected, 2) if collected else None, "note": note})
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('base')
+    parser.add_argument('out_html', type=Path)
+    parser.add_argument('--state-dir', type=Path, default=ROOT / 'local/lockstep')
+    parser.add_argument('--from-json', type=Path)
+    parser.add_argument('--json', type=Path)
+    args = parser.parse_args()
+    data = json.loads(args.from_json.read_text(encoding='utf-8')) if args.from_json else build_data(args.state_dir, args.base)
+    args.out_html.write_text(render(HERE / 'levers.template.html', data), encoding='utf-8', newline='\n')
+    if args.json:
+        args.json.write_text(json.dumps(data, separators=(',', ':'), allow_nan=False) + '\n', encoding='utf-8')
+    print(f"{len(data['runs'])} runs, {len(data['timeline'])} timeline entries -> {args.out_html}")
 
 
-def totals(rows):
-    t = {"countable": 0, "verified": 0, "explained": 0}
-    for r in rows:
-        t["countable"] += int(r["countable"] or 0)
-        t["verified"] += int(r["verified_blocks"] or 0)
-        t["explained"] += int(r.get("explained") or 0)
-    t["open"] = t["countable"] - t["verified"] - t["explained"]
-    return t
-
-
-timeline, base_rows = [], None
-for path in sorted(glob.glob(os.path.join(L, "history", "*.csv"))):
-    label = os.path.basename(path)[:-4].split("-", 1)[1].replace("_", " ")
-    rows = list(csv.DictReader(open(path, encoding="utf-8")))
-    timeline.append({"label": label, **totals(rows)})
-    if label == base_label:
-        base_rows = rows
-latest = list(csv.DictReader(open(os.path.join(L, "report.csv"), encoding="utf-8")))
-now = totals(latest)
-if not timeline or timeline[-1]["open"] != now["open"]:
-    timeline.append({"label": "now", **now})
-base = totals(base_rows) if base_rows else now
-
-# Where the blocks verified or explained since the base landed, by function.
-before = {r["name"]: int(r["verified_blocks"] or 0) + int(r.get("explained") or 0)
-          for r in base_rows or []}
-gains = []
-for r in latest:
-    g = int(r["verified_blocks"] or 0) + int(r.get("explained") or 0) - before.get(r["name"], 0)
-    if g > 0:
-        gains.append({"name": r["name"], "unit": r["unit"], "gained": g,
-                      "open": int(r["countable"]) - int(r["verified_blocks"])
-                      - int(r.get("explained") or 0)})
-gains.sort(key=lambda g: -g["gained"])
-
-notes = [{"date": row[0], "text": row[1]}
-         for row in csv.reader(open(os.path.join(L, "levers-notes.tsv"), encoding="utf-8"),
-                               delimiter="\t")
-         if row and not row[0].startswith("#") and len(row) > 1]
-
-data = {"updated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
-        "base": base_label, "baseTotals": base, "now": now, "timeline": timeline,
-        "runs": runs, "gains": gains[:20], "gainedFunctions": len(gains), "notes": notes}
-template = open(os.path.join(HERE, "levers.template.html"), encoding="utf-8").read()
-open(out, "w", encoding="utf-8", newline="\n").write(
-    template.replace("/*DATA*/null", json.dumps(data, separators=(",", ":"))))
-print(f"{len(runs)} runs, {len(timeline)} timeline entries -> {out}")
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,278 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Graphics and Audio Ladder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #f6f5f1; --panel: #ffffff; --fg: #1d1f24; --muted: #646a74; --line: #dcdad3;
+  --ok: #3f9a5c; --warn: #d9a23a; --bad: #d62f2f; --idle: #c9c7c0; --hl: #1f6fd6; --wip: #1f6fd6;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15171b; --panel: #1d2026; --fg: #e7e8ea; --muted: #9aa0a9; --line: #30343b;
+  --ok: #4fae6c; --warn: #d6a443; --bad: #ef4b4b; --idle: #3a3e45; --hl: #5aa2ff; --wip: #5aa2ff; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #15171b; --panel: #1d2026; --fg: #e7e8ea; --muted: #9aa0a9; --line: #30343b;
+  --ok: #4fae6c; --warn: #d6a443; --bad: #ef4b4b; --idle: #3a3e45; --hl: #5aa2ff; --wip: #5aa2ff; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 14px/1.45 "IBM Plex Sans", system-ui, sans-serif; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 20px 16px 40px; display: grid; gap: 22px; }
+.mono, .num { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+header { display: grid; gap: 4px; }
+h1 { font-size: 22px; font-weight: 600; margin: 0; text-wrap: balance; }
+.sub { color: var(--muted); font-size: 13px; }
+section h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 10px; }
+.stats { display: flex; flex-wrap: wrap; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.stat { flex: 1 1 170px; background: var(--panel); padding: 12px 14px; display: grid; gap: 2px; }
+.stat .k { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.stat .v { font-size: 22px; font-weight: 500; }
+.stat .d { font-size: 12px; color: var(--muted); }
+.ladder { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.rung { background: var(--panel); display: grid; grid-template-columns: 34px minmax(0, 1fr) minmax(140px, 260px); gap: 6px 16px; padding: 14px; align-items: center; }
+.rung .idx { font: 500 18px "IBM Plex Mono", monospace; color: var(--muted); }
+.rung .t { font-weight: 600; }
+.rung .g { color: var(--muted); font-size: 13px; }
+.rung .right { display: grid; gap: 6px; }
+.pill { justify-self: start; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; padding: 2px 8px; border-radius: 999px; border: 1px solid currentColor; }
+.pill.done { color: var(--ok); } .pill.wip { color: var(--wip); } .pill.idle { color: var(--muted); }
+@media (max-width: 640px) { .rung { grid-template-columns: 28px minmax(0, 1fr); } .rung .right { grid-column: 2; } }
+.bar { height: 8px; border-radius: 4px; background: var(--idle); overflow: hidden; display: flex; }
+.bar span { display: block; height: 100%; }
+.frames { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 18px; align-items: start; }
+@media (max-width: 900px) { .frames { grid-template-columns: minmax(0, 1fr); } }
+.list { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; max-height: 560px; overflow: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 12px; }
+th { text-align: left; font-weight: 500; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; padding: 8px 10px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--panel); }
+td { padding: 6px 10px; border-bottom: 1px solid var(--line); }
+td.r, th.r { text-align: right; }
+tr.sel td { background: color-mix(in srgb, var(--hl) 12%, transparent); }
+tbody tr { cursor: pointer; }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; }
+.viewer { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px; display: grid; gap: 10px; }
+.viewer .head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; font-size: 13px; }
+.trip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 560px) { .trip { grid-template-columns: minmax(0, 1fr); } }
+figure { margin: 0; display: grid; gap: 4px; }
+figure button { all: unset; cursor: zoom-in; display: block; border-radius: 4px; }
+figure button:focus-visible { outline: 2px solid var(--hl); outline-offset: 2px; }
+figure img { display: block; width: 100%; aspect-ratio: 4 / 3; max-width: 100%; border-radius: 4px; background: var(--idle); }
+.zoom { position: fixed; inset: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 94%, transparent); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; padding: calc(12px + env(safe-area-inset-top, 0px)) 16px calc(12px + env(safe-area-inset-bottom, 0px)); gap: 10px; }
+.zoom[hidden] { display: none; }
+.zoom .bar2 { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; }
+.zoom .name { font: 500 13px "IBM Plex Mono", monospace; min-width: 0; overflow-wrap: anywhere; }
+.zoom .stage { overflow: auto; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+.zoom .stage img { display: block; image-rendering: pixelated; max-width: none; }
+.zoom .hint { font-size: 12px; color: var(--muted); }
+.btns { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.btns button { font: 12px "IBM Plex Sans", sans-serif; background: var(--panel); color: var(--muted); border: 0; padding: 6px 10px; cursor: pointer; }
+.btns button + button { border-left: 1px solid var(--line); }
+.btns button[aria-pressed=true] { background: var(--fg); color: var(--bg); }
+.close { font: 13px "IBM Plex Sans", sans-serif; background: var(--panel); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+figcaption { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.feats { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
+.feat { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: grid; gap: 2px; }
+.feat .n { font-weight: 500; }
+.feat .s { font-size: 12px; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--muted); }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 900px) { .two { grid-template-columns: minmax(0, 1fr); } }
+.chart { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+.chart svg { display: block; width: 100%; height: auto; }
+.note { font-size: 12px; color: var(--muted); max-width: 70ch; }
+</style>
+<div class="wrap">
+  <header>
+    <h1>Graphics and Audio Ladder</h1>
+    <div class="sub" id="sub"></div>
+    <div class="note">The renderer and audio track of ssbm-rs, rung by rung: the GPU command streams of original-code and all-ports runs must match, our wgpu renderer must draw the frames Dolphin's software renderer draws, AX audio must match Dolphin's DSP, and a windowed build must play at 60 Hz.</div>
+  </header>
+  <div class="stats" id="stats"></div>
+  <section>
+    <h2>Rungs</h2>
+    <div class="ladder" id="ladder"></div>
+  </section>
+  <section>
+    <h2>Frames against Dolphin's software renderer</h2>
+    <div class="legend" id="tol" style="margin-bottom:10px"></div>
+    <div class="frames">
+      <div class="list"><table><thead><tr><th>Run</th><th class="r">PSNR</th><th class="r">&gt;8</th><th class="r">&gt;32</th></tr></thead><tbody id="runs"></tbody></table></div>
+      <div class="viewer" id="viewer"></div>
+    </div>
+  </section>
+  <div class="two">
+    <section>
+      <h2>GX streams: original code against all ports</h2>
+      <div class="list"><table><thead><tr><th>Replay</th><th class="r">Frames</th><th class="r">Differ</th><th class="r">First</th></tr></thead><tbody id="streams"></tbody></table></div>
+    </section>
+    <section>
+      <h2>Audio: ssbm-ax against Dolphin's AX</h2>
+      <div class="list"><table><thead><tr><th>Run</th><th class="r">Lists</th><th class="r">Differ</th><th>Replay</th></tr></thead><tbody id="audio"></tbody></table></div>
+    </section>
+    <section>
+      <h2>History</h2>
+      <div class="chart" id="chart"></div>
+    </section>
+  </div>
+  <section>
+    <h2>Renderer features</h2>
+    <div class="feats" id="feats"></div>
+  </section>
+</div>
+<div class="zoom" id="zoom" hidden role="dialog" aria-modal="true" aria-label="Frame at full size">
+  <div class="bar2">
+    <span class="name" id="zname"></span>
+    <span class="btns" id="zviews"></span>
+    <span class="btns" id="zscale"></span>
+    <button class="close" id="zclose">Close</button>
+  </div>
+  <div class="stage"><img id="zimg" alt=""></div>
+  <div class="hint">1, 2, 3 pick the image; space flips between ours and Dolphin's; z changes the zoom; Esc closes.</div>
+</div>
+<script>
+const D = {"generated":"2026-10-03 00:10","branch":"feat/renderer","commit":"3a1229d2afa85ce6ce83ba51aeb2ecb2c779aa0f","subject":"docs: Mark the windowed build's rung done on the progress page","tolerance":{"psnr":38.0,"off32":0.25},"streams":[{"name":"scenario-001","done":true,"frames":13840,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-002","done":true,"frames":13721,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-003","done":true,"frames":14861,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-004","done":true,"frames":17201,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-005","done":true,"frames":3820,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-006","done":true,"frames":12099,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-007","done":true,"frames":13839,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-008","done":true,"frames":7240,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-009","done":true,"frames":11919,"differ":2814,"shape":1920,"first":9105,"explained":"Final Destination's background change: HSD_TExpSetReg reads stale stack"},{"name":"scenario-010","done":true,"frames":2260,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-011","done":true,"frames":21701,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-012","done":true,"frames":12940,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-013","done":true,"frames":10964,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-014","done":true,"frames":8742,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-015","done":true,"frames":8139,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-016","done":true,"frames":10779,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-017","done":true,"frames":12523,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-018","done":true,"frames":4183,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-019","done":true,"frames":14079,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-020","done":true,"frames":2861,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-021","done":true,"frames":3221,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-022","done":true,"frames":8500,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-023","done":true,"frames":7480,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-024","done":true,"frames":12819,"differ":3714,"shape":1920,"first":9105,"explained":"Final Destination's background change: HSD_TExpSetReg reads stale stack"},{"name":"scenario-025","done":true,"frames":13540,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-026","done":true,"frames":8320,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-027","done":true,"frames":9700,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-028","done":true,"frames":11800,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-029","done":true,"frames":14200,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-030","done":true,"frames":18400,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-031","done":true,"frames":13179,"differ":4074,"shape":1920,"first":9105,"explained":"Final Destination's background change: HSD_TExpSetReg reads stale stack"},{"name":"scenario-032","done":true,"frames":9580,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-033","done":true,"frames":11380,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-034","done":true,"frames":10660,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-035","done":true,"frames":8260,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-036","done":true,"frames":5260,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-037","done":true,"frames":4900,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-038","done":true,"frames":8561,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-039","done":true,"frames":12701,"differ":0,"shape":0,"first":null,"explained":null},{"name":"scenario-040","done":true,"frames":14620,"differ":0,"shape":0,"first":null,"explained":null}],"frames":[{"name":"scenario-001","frames":[{"n":1,"psnr":48.76,"off8":0.078,"off32":0.016},{"n":2,"psnr":49.17,"off8":0.098,"off32":0.012},{"n":3,"psnr":48.73,"off8":0.115,"off32":0.021},{"n":4,"psnr":48.62,"off8":0.087,"off32":0.017}],"ok":true,"worst":{"n":4,"psnr":48.62,"off8":0.087,"off32":0.017},"ours":null,"ref":null,"diff":null},{"name":"scenario-002","frames":[{"n":1,"psnr":45.98,"off8":0.104,"off32":0.027},{"n":2,"psnr":45.81,"off8":0.133,"off32":0.024},{"n":3,"psnr":45.99,"off8":0.097,"off32":0.025},{"n":4,"psnr":45.03,"off8":0.132,"off32":0.035}],"ok":true,"worst":{"n":4,"psnr":45.03,"off8":0.132,"off32":0.035},"ours":null,"ref":null,"diff":null},{"name":"scenario-003","frames":[{"n":1,"psnr":47.2,"off8":0.085,"off32":0.02},{"n":2,"psnr":48.82,"off8":0.064,"off32":0.011},{"n":3,"psnr":48.51,"off8":0.065,"off32":0.011},{"n":4,"psnr":49.04,"off8":0.072,"off32":0.01}],"ok":true,"worst":{"n":1,"psnr":47.2,"off8":0.085,"off32":0.02},"ours":null,"ref":null,"diff":null},{"name":"scenario-004","frames":[{"n":1,"psnr":43.21,"off8":0.623,"off32":0.089},{"n":2,"psnr":43.0,"off8":0.541,"off32":0.061},{"n":3,"psnr":43.96,"off8":0.525,"off32":0.06},{"n":4,"psnr":44.65,"off8":0.497,"off32":0.048}],"ok":true,"worst":{"n":2,"psnr":43.0,"off8":0.541,"off32":0.061},"ours":null,"ref":null,"diff":null},{"name":"scenario-005","frames":[{"n":1,"psnr":46.44,"off8":0.141,"off32":0.024},{"n":2,"psnr":46.2,"off8":0.112,"off32":0.023},{"n":3,"psnr":43.22,"off8":0.3,"off32":0.069},{"n":4,"psnr":44.99,"off8":0.229,"off32":0.045}],"ok":true,"worst":{"n":3,"psnr":43.22,"off8":0.3,"off32":0.069},"ours":null,"ref":null,"diff":null},{"name":"scenario-006","frames":[{"n":1,"psnr":48.13,"off8":0.078,"off32":0.014},{"n":2,"psnr":47.36,"off8":0.08,"off32":0.02},{"n":3,"psnr":48.34,"off8":0.087,"off32":0.02},{"n":4,"psnr":49.26,"off8":0.076,"off32":0.014}],"ok":true,"worst":{"n":2,"psnr":47.36,"off8":0.08,"off32":0.02},"ours":null,"ref":null,"diff":null},{"name":"scenario-007","frames":[{"n":1,"psnr":44.91,"off8":0.098,"off32":0.028},{"n":2,"psnr":45.07,"off8":0.099,"off32":0.023},{"n":3,"psnr":45.87,"off8":0.066,"off32":0.013},{"n":4,"psnr":45.9,"off8":0.072,"off32":0.014}],"ok":true,"worst":{"n":1,"psnr":44.91,"off8":0.098,"off32":0.028},"ours":null,"ref":null,"diff":null},{"name":"scenario-008","frames":[{"n":1,"psnr":48.39,"off8":0.108,"off32":0.016},{"n":2,"psnr":48.39,"off8":0.118,"off32":0.016},{"n":3,"psnr":48.09,"off8":0.158,"off32":0.023},{"n":4,"psnr":45.56,"off8":0.173,"off32":0.058}],"ok":true,"worst":{"n":4,"psnr":45.56,"off8":0.173,"off32":0.058},"ours":null,"ref":null,"diff":null},{"name":"scenario-009","frames":[{"n":1,"psnr":44.59,"off8":0.216,"off32":0.055},{"n":2,"psnr":45.24,"off8":0.219,"off32":0.047},{"n":3,"psnr":44.24,"off8":0.362,"off32":0.062},{"n":4,"psnr":44.06,"off8":0.348,"off32":0.066}],"ok":true,"worst":{"n":4,"psnr":44.06,"off8":0.348,"off32":0.066},"ours":null,"ref":null,"diff":null},{"name":"scenario-010","frames":[{"n":1,"psnr":45.28,"off8":0.094,"off32":0.018},{"n":2,"psnr":45.38,"off8":0.087,"off32":0.018},{"n":3,"psnr":45.78,"off8":0.067,"off32":0.011},{"n":4,"psnr":45.43,"off8":0.087,"off32":0.021}],"ok":true,"worst":{"n":1,"psnr":45.28,"off8":0.094,"off32":0.018},"ours":null,"ref":null,"diff":null},{"name":"scenario-011","frames":[{"n":1,"psnr":46.15,"off8":0.082,"off32":0.006},{"n":2,"psnr":46.2,"off8":0.063,"off32":0.005},{"n":3,"psnr":46.27,"off8":0.098,"off32":0.002},{"n":4,"psnr":46.32,"off8":0.047,"off32":0.003}],"ok":true,"worst":{"n":1,"psnr":46.15,"off8":0.082,"off32":0.006},"ours":null,"ref":null,"diff":null},{"name":"scenario-012","frames":[{"n":1,"psnr":46.26,"off8":0.145,"off32":0.034},{"n":2,"psnr":46.2,"off8":0.167,"off32":0.032},{"n":3,"psnr":46.29,"off8":0.15,"off32":0.031},{"n":4,"psnr":46.05,"off8":0.139,"off32":0.035}],"ok":true,"worst":{"n":4,"psnr":46.05,"off8":0.139,"off32":0.035},"ours":null,"ref":null,"diff":null},{"name":"scenario-013","frames":[{"n":1,"psnr":45.26,"off8":0.206,"off32":0.031},{"n":2,"psnr":44.64,"off8":0.326,"off32":0.032},{"n":3,"psnr":44.81,"off8":0.205,"off32":0.036},{"n":4,"psnr":45.03,"off8":0.239,"off32":0.029}],"ok":true,"worst":{"n":2,"psnr":44.64,"off8":0.326,"off32":0.032},"ours":null,"ref":null,"diff":null},{"name":"scenario-014","frames":[{"n":1,"psnr":44.5,"off8":0.299,"off32":0.052},{"n":2,"psnr":43.36,"off8":0.244,"off32":0.072},{"n":3,"psnr":42.4,"off8":0.264,"off32":0.088},{"n":4,"psnr":41.96,"off8":0.285,"off32":0.106}],"ok":true,"worst":{"n":4,"psnr":41.96,"off8":0.285,"off32":0.106},"ours":null,"ref":null,"diff":null},{"name":"scenario-015","frames":[{"n":1,"psnr":43.06,"off8":0.401,"off32":0.083},{"n":2,"psnr":43.45,"off8":0.368,"off32":0.083},{"n":3,"psnr":41.86,"off8":0.484,"off32":0.102},{"n":4,"psnr":41.81,"off8":0.428,"off32":0.112}],"ok":true,"worst":{"n":4,"psnr":41.81,"off8":0.428,"off32":0.112},"ours":null,"ref":null,"diff":null},{"name":"scenario-016","frames":[{"n":1,"psnr":46.02,"off8":0.103,"off32":0.015},{"n":2,"psnr":46.19,"off8":0.094,"off32":0.017},{"n":3,"psnr":45.72,"off8":0.11,"off32":0.023},{"n":4,"psnr":44.84,"off8":0.124,"off32":0.033}],"ok":true,"worst":{"n":4,"psnr":44.84,"off8":0.124,"off32":0.033},"ours":null,"ref":null,"diff":null},{"name":"scenario-017","frames":[{"n":1,"psnr":46.31,"off8":0.096,"off32":0.023},{"n":2,"psnr":46.53,"off8":0.102,"off32":0.02},{"n":3,"psnr":46.25,"off8":0.111,"off32":0.023},{"n":4,"psnr":46.71,"off8":0.089,"off32":0.019}],"ok":true,"worst":{"n":3,"psnr":46.25,"off8":0.111,"off32":0.023},"ours":null,"ref":null,"diff":null},{"name":"scenario-018","frames":[{"n":1,"psnr":46.46,"off8":0.148,"off32":0.029},{"n":2,"psnr":45.01,"off8":0.201,"off32":0.043},{"n":3,"psnr":46.17,"off8":0.168,"off32":0.03},{"n":4,"psnr":44.24,"off8":0.245,"off32":0.07}],"ok":true,"worst":{"n":4,"psnr":44.24,"off8":0.245,"off32":0.07},"ours":null,"ref":null,"diff":null},{"name":"scenario-019","frames":[{"n":1,"psnr":49.5,"off8":0.055,"off32":0.004},{"n":2,"psnr":49.27,"off8":0.059,"off32":0.004},{"n":3,"psnr":49.07,"off8":0.066,"off32":0.006},{"n":4,"psnr":49.34,"off8":0.071,"off32":0.006}],"ok":true,"worst":{"n":3,"psnr":49.07,"off8":0.066,"off32":0.006},"ours":null,"ref":null,"diff":null},{"name":"scenario-020","frames":[{"n":1,"psnr":46.32,"off8":0.117,"off32":0.032},{"n":2,"psnr":45.07,"off8":0.125,"off32":0.041},{"n":3,"psnr":46.41,"off8":0.116,"off32":0.026},{"n":4,"psnr":45.71,"off8":0.112,"off32":0.034}],"ok":true,"worst":{"n":2,"psnr":45.07,"off8":0.125,"off32":0.041},"ours":null,"ref":null,"diff":null},{"name":"scenario-021","frames":[{"n":1,"psnr":47.37,"off8":0.044,"off32":0.012},{"n":2,"psnr":47.1,"off8":0.068,"off32":0.011},{"n":3,"psnr":47.05,"off8":0.098,"off32":0.012},{"n":4,"psnr":46.9,"off8":0.074,"off32":0.017}],"ok":true,"worst":{"n":4,"psnr":46.9,"off8":0.074,"off32":0.017},"ours":null,"ref":null,"diff":null},{"name":"scenario-022","frames":[{"n":1,"psnr":49.1,"off8":0.084,"off32":0.015},{"n":2,"psnr":49.33,"off8":0.092,"off32":0.012},{"n":3,"psnr":49.03,"off8":0.082,"off32":0.012},{"n":4,"psnr":48.83,"off8":0.099,"off32":0.015}],"ok":true,"worst":{"n":4,"psnr":48.83,"off8":0.099,"off32":0.015},"ours":null,"ref":null,"diff":null},{"name":"scenario-023","frames":[{"n":1,"psnr":45.32,"off8":0.133,"off32":0.023},{"n":2,"psnr":45.55,"off8":0.095,"off32":0.02},{"n":3,"psnr":45.5,"off8":0.104,"off32":0.022},{"n":4,"psnr":45.63,"off8":0.117,"off32":0.02}],"ok":true,"worst":{"n":1,"psnr":45.32,"off8":0.133,"off32":0.023},"ours":null,"ref":null,"diff":null},{"name":"scenario-024","frames":[{"n":1,"psnr":44.02,"off8":0.238,"off32":0.057},{"n":2,"psnr":43.28,"off8":0.23,"off32":0.064},{"n":3,"psnr":40.89,"off8":0.293,"off32":0.137},{"n":4,"psnr":43.07,"off8":0.401,"off32":0.096}],"ok":true,"worst":{"n":3,"psnr":40.89,"off8":0.293,"off32":0.137},"ours":null,"ref":null,"diff":null},{"name":"scenario-025","frames":[{"n":1,"psnr":45.89,"off8":0.105,"off32":0.01},{"n":2,"psnr":46.1,"off8":0.067,"off32":0.009},{"n":3,"psnr":45.09,"off8":0.097,"off32":0.025},{"n":4,"psnr":45.66,"off8":0.087,"off32":0.018}],"ok":true,"worst":{"n":3,"psnr":45.09,"off8":0.097,"off32":0.025},"ours":null,"ref":null,"diff":null},{"name":"scenario-026","frames":[{"n":1,"psnr":47.02,"off8":0.151,"off32":0.045},{"n":2,"psnr":47.81,"off8":0.119,"off32":0.023},{"n":3,"psnr":44.98,"off8":0.223,"off32":0.082},{"n":4,"psnr":48.06,"off8":0.123,"off32":0.018}],"ok":true,"worst":{"n":3,"psnr":44.98,"off8":0.223,"off32":0.082},"ours":null,"ref":null,"diff":null},{"name":"scenario-027","frames":[{"n":1,"psnr":48.18,"off8":0.092,"off32":0.012},{"n":2,"psnr":47.8,"off8":0.098,"off32":0.015},{"n":3,"psnr":47.9,"off8":0.105,"off32":0.016},{"n":4,"psnr":47.21,"off8":0.127,"off32":0.021}],"ok":true,"worst":{"n":4,"psnr":47.21,"off8":0.127,"off32":0.021},"ours":null,"ref":null,"diff":null},{"name":"scenario-028","frames":[{"n":1,"psnr":46.19,"off8":0.113,"off32":0.033},{"n":2,"psnr":46.88,"off8":0.087,"off32":0.03},{"n":3,"psnr":44.89,"off8":0.116,"off32":0.043},{"n":4,"psnr":45.18,"off8":0.129,"off32":0.042}],"ok":true,"worst":{"n":3,"psnr":44.89,"off8":0.116,"off32":0.043},"ours":null,"ref":null,"diff":null},{"name":"scenario-029","frames":[{"n":1,"psnr":46.8,"off8":0.118,"off32":0.031},{"n":2,"psnr":46.33,"off8":0.155,"off32":0.039},{"n":3,"psnr":48.53,"off8":0.062,"off32":0.01},{"n":4,"psnr":48.71,"off8":0.047,"off32":0.008}],"ok":true,"worst":{"n":2,"psnr":46.33,"off8":0.155,"off32":0.039},"ours":null,"ref":null,"diff":null},{"name":"scenario-030","frames":[{"n":1,"psnr":49.49,"off8":0.039,"off32":0.008},{"n":2,"psnr":48.58,"off8":0.054,"off32":0.015},{"n":3,"psnr":48.97,"off8":0.063,"off32":0.006},{"n":4,"psnr":48.88,"off8":0.052,"off32":0.007}],"ok":true,"worst":{"n":2,"psnr":48.58,"off8":0.054,"off32":0.015},"ours":null,"ref":null,"diff":null},{"name":"scenario-031","frames":[{"n":1,"psnr":42.9,"off8":0.406,"off32":0.089},{"n":2,"psnr":43.68,"off8":0.345,"off32":0.077},{"n":3,"psnr":45.08,"off8":0.253,"off32":0.052},{"n":4,"psnr":43.7,"off8":0.247,"off32":0.084}],"ok":true,"worst":{"n":1,"psnr":42.9,"off8":0.406,"off32":0.089},"ours":null,"ref":null,"diff":null},{"name":"scenario-032","frames":[{"n":1,"psnr":42.35,"off8":1.134,"off32":0.035},{"n":2,"psnr":41.7,"off8":0.935,"off32":0.084},{"n":3,"psnr":42.27,"off8":1.204,"off32":0.056},{"n":4,"psnr":42.93,"off8":0.938,"off32":0.035}],"ok":true,"worst":{"n":2,"psnr":41.7,"off8":0.935,"off32":0.084},"ours":null,"ref":null,"diff":null},{"name":"scenario-033","frames":[{"n":1,"psnr":46.86,"off8":0.148,"off32":0.024},{"n":2,"psnr":46.32,"off8":0.15,"off32":0.033},{"n":3,"psnr":47.18,"off8":0.125,"off32":0.02},{"n":4,"psnr":47.03,"off8":0.158,"off32":0.03}],"ok":true,"worst":{"n":2,"psnr":46.32,"off8":0.15,"off32":0.033},"ours":null,"ref":null,"diff":null},{"name":"scenario-034","frames":[{"n":1,"psnr":46.44,"off8":0.032,"off32":0.003},{"n":2,"psnr":44.95,"off8":0.071,"off32":0.026},{"n":3,"psnr":45.98,"off8":0.039,"off32":0.01},{"n":4,"psnr":44.12,"off8":0.132,"off32":0.044}],"ok":true,"worst":{"n":4,"psnr":44.12,"off8":0.132,"off32":0.044},"ours":null,"ref":null,"diff":null},{"name":"scenario-035","frames":[{"n":1,"psnr":46.72,"off8":0.11,"off32":0.021},{"n":2,"psnr":45.92,"off8":0.246,"off32":0.033},{"n":3,"psnr":48.16,"off8":0.091,"off32":0.015},{"n":4,"psnr":48.73,"off8":0.109,"off32":0.007}],"ok":true,"worst":{"n":2,"psnr":45.92,"off8":0.246,"off32":0.033},"ours":null,"ref":null,"diff":null},{"name":"scenario-036","frames":[{"n":1,"psnr":40.94,"off8":1.377,"off32":0.138},{"n":2,"psnr":41.17,"off8":1.309,"off32":0.117},{"n":3,"psnr":39.99,"off8":1.402,"off32":0.161},{"n":4,"psnr":42.16,"off8":1.097,"off32":0.087}],"ok":true,"worst":{"n":3,"psnr":39.99,"off8":1.402,"off32":0.161},"ours":null,"ref":null,"diff":null},{"name":"scenario-037","frames":[{"n":1,"psnr":46.08,"off8":0.111,"off32":0.02},{"n":2,"psnr":46.89,"off8":0.097,"off32":0.019},{"n":3,"psnr":47.21,"off8":0.09,"off32":0.016},{"n":4,"psnr":45.68,"off8":0.127,"off32":0.034}],"ok":true,"worst":{"n":4,"psnr":45.68,"off8":0.127,"off32":0.034},"ours":null,"ref":null,"diff":null},{"name":"scenario-038","frames":[{"n":1,"psnr":47.92,"off8":0.121,"off32":0.028},{"n":2,"psnr":47.67,"off8":0.139,"off32":0.028},{"n":3,"psnr":48.24,"off8":0.132,"off32":0.019},{"n":4,"psnr":47.85,"off8":0.126,"off32":0.025}],"ok":true,"worst":{"n":2,"psnr":47.67,"off8":0.139,"off32":0.028},"ours":null,"ref":null,"diff":null},{"name":"scenario-039","frames":[{"n":1,"psnr":42.97,"off8":0.514,"off32":0.068},{"n":2,"psnr":43.84,"off8":0.519,"off32":0.038},{"n":3,"psnr":44.41,"off8":0.414,"off32":0.034},{"n":4,"psnr":44.11,"off8":0.509,"off32":0.041}],"ok":true,"worst":{"n":1,"psnr":42.97,"off8":0.514,"off32":0.068},"ours":null,"ref":null,"diff":null},{"name":"scenario-040","frames":[{"n":1,"psnr":45.54,"off8":0.111,"off32":0.03},{"n":2,"psnr":48.05,"off8":0.098,"off32":0.016},{"n":3,"psnr":47.72,"off8":0.099,"off32":0.017},{"n":4,"psnr":47.97,"off8":0.097,"off32":0.017}],"ok":true,"worst":{"n":1,"psnr":45.54,"off8":0.111,"off32":0.03},"ours":null,"ref":null,"diff":null},{"name":"scenario-041","frames":[{"n":1,"psnr":43.8,"off8":0.001,"off32":0.0},{"n":2,"psnr":43.79,"off8":0.001,"off32":0.0},{"n":3,"psnr":43.8,"off8":0.001,"off32":0.0},{"n":4,"psnr":43.8,"off8":0.001,"off32":0.0}],"ok":true,"worst":{"n":2,"psnr":43.79,"off8":0.001,"off32":0.0},"ours":null,"ref":null,"diff":null}],"features":[{"name":"Vertex loading","status":"done","note":"All formats, indexed arrays, matrix indices, normal carry-over"},{"name":"Transform and lighting","status":"done","note":"Dolphin's software transform unit, on the CPU"},{"name":"Texture coordinate generation","status":"done","note":"Regular, emboss, color; dual transform"},{"name":"Culling and clipping","status":"done","note":"GX's facing test; the GPU clips"},{"name":"Rasterization","status":"approximate","note":"The GPU's, at GX's sample positions; edges differ by ties"},{"name":"TEV","status":"done","note":"Integer combiners, compare modes, konst, swap tables"},{"name":"Texture formats","status":"done","note":"All eleven, with palettes"},{"name":"Texture sampling","status":"done","note":"By hand in integers: wrap, bilinear, mip levels and LOD"},{"name":"Indirect texturing","status":"done","note":"Ported, not yet seen in Melee's frames"},{"name":"Fog","status":"done","note":"All types and range adjustment"},{"name":"Z textures","status":"done","note":"Late z only, as on hardware"},{"name":"Alpha test and early z","status":"done","note":"Two passes when early z must still write depth"},{"name":"Blending","status":"approximate","note":"The GPU's blender: off by one where GX rounds down"},{"name":"Logic ops","status":"missing","note":"Not met in Melee's frames so far"},{"name":"Dithering (RGBA6)","status":"approximate","note":"Exact without blending"},{"name":"Lines and points","status":"done","note":"As quads, GX's caps; texture offsets missing"},{"name":"EFB copies to textures","status":"done","note":"Encoded into memory as the copy writes it"},{"name":"XFB copies","status":"done","note":"Copy filter, gamma, YUV 4:2:2"},{"name":"Depth copies (Z24)","status":"missing","note":"Not met in Melee's frames so far"}],"audio":[{"name":"scenario-001","lists":46000,"differ":0,"sync":"86227 events compared through frame Some(13655), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-002","lists":45000,"differ":0,"sync":"88013 events compared through frame Some(13547), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-003","lists":49000,"differ":0,"sync":"91187 events compared through frame Some(14635), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-004","lists":57000,"differ":0,"sync":"108390 events compared through frame Some(16983), 0 not reached, 2 diverge (2 known), 0 known no longer diverge","synced":true},{"name":"scenario-005","lists":12000,"differ":0,"sync":"26652 events compared through frame Some(3579), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-006","lists":40000,"differ":0,"sync":"79347 events compared through frame Some(11867), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-007","lists":46000,"differ":0,"sync":"91074 events compared through frame Some(13662), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-008","lists":24000,"differ":0,"sync":"57686 events compared through frame Some(7055), 0 not reached, 2 diverge (2 known), 0 known no longer diverge","synced":true},{"name":"scenario-009","lists":39000,"differ":0,"sync":"75223 events compared through frame Some(11723), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-010","lists":7000,"differ":0,"sync":"13829 events compared through frame Some(2057), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-011","lists":72000,"differ":0,"sync":"152355 events compared through frame Some(21491), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-012","lists":43000,"differ":0,"sync":"92298 events compared through frame Some(12710), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-013","lists":36000,"differ":0,"sync":"73609 events compared through frame Some(10777), 0 not reached, 2 diverge (2 known), 0 known no longer diverge","synced":true},{"name":"scenario-014","lists":29000,"differ":0,"sync":"56953 events compared through frame Some(8558), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-015","lists":27000,"differ":0,"sync":"53206 events compared through frame Some(7901), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-016","lists":36000,"differ":0,"sync":"67597 events compared through frame Some(10562), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-017","lists":41000,"differ":0,"sync":"77426 events compared through frame Some(12326), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-018","lists":14000,"differ":0,"sync":"35419 events compared through frame Some(3958), 0 not reached, 5 diverge (5 known), 0 known no longer diverge","synced":true},{"name":"scenario-019","lists":47000,"differ":0,"sync":"91490 events compared through frame Some(13869), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-020","lists":9000,"differ":0,"sync":"18569 events compared through frame Some(2662), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-021","lists":10000,"differ":0,"sync":"20527 events compared through frame Some(2995), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-022","lists":28000,"differ":0,"sync":"53631 events compared through frame Some(8307), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-023","lists":25000,"differ":0,"sync":"46437 events compared through frame Some(7269), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-024","lists":42000,"differ":0,"sync":"83260 events compared through frame Some(12610), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-025","lists":45000,"differ":0,"sync":"85272 events compared through frame Some(13319), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-026","lists":27000,"differ":0,"sync":"65856 events compared through frame Some(8101), 0 not reached, 7 diverge (7 known), 0 known no longer diverge","synced":true},{"name":"scenario-027","lists":32000,"differ":0,"sync":"60296 events compared through frame Some(9509), 0 not reached, 2 diverge (2 known), 0 known no longer diverge","synced":true},{"name":"scenario-028","lists":39000,"differ":0,"sync":"74738 events compared through frame Some(11587), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-029","lists":47000,"differ":0,"sync":"89454 events compared through frame Some(14022), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-030","lists":61000,"differ":0,"sync":"118589 events compared through frame Some(18204), 0 not reached, 1 diverge (1 known), 0 known no longer diverge","synced":true},{"name":"scenario-031","lists":44000,"differ":0,"sync":"85092 events compared through frame Some(12963), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-032","lists":32000,"differ":0,"sync":"61149 events compared through frame Some(9343), 0 not reached, 2 diverge (2 known), 0 known no longer diverge","synced":true},{"name":"scenario-033","lists":38000,"differ":0,"sync":"102376 events compared through frame Some(11172), 0 not reached, 7 diverge (7 known), 0 known no longer diverge","synced":true},{"name":"scenario-034","lists":35000,"differ":0,"sync":"67202 events compared through frame Some(10466), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-035","lists":27000,"differ":0,"sync":"68125 events compared through frame Some(8040), 0 not reached, 7 diverge (7 known), 0 known no longer diverge","synced":true},{"name":"scenario-036","lists":17000,"differ":0,"sync":"33304 events compared through frame Some(5074), 0 not reached, 2 diverge (2 known), 0 known no longer diverge","synced":true},{"name":"scenario-037","lists":16000,"differ":0,"sync":"30236 events compared through frame Some(4676), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-038","lists":28000,"differ":0,"sync":"71019 events compared through frame Some(8327), 0 not reached, 4 diverge (4 known), 0 known no longer diverge","synced":true},{"name":"scenario-039","lists":42000,"differ":0,"sync":"83820 events compared through frame Some(12502), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-040","lists":48000,"differ":0,"sync":"99688 events compared through frame Some(14402), 0 not reached, 0 diverge (0 known), 0 known no longer diverge","synced":true},{"name":"scenario-041","lists":23000,"differ":0,"sync":"no replay","synced":true}],"window":{"status":"done","detail":"--window (feature window) holds 59.94 fields/s, redrawing once a frame; a gamepad plays (tried by hand), GameCube controllers on a Wii U adapter play (tried by hand, with their origins applied as the PAD library does), and the keyboard passes the unattended controls test"},"history":[{"at":"2026-10-02 21:59","commit":"54f367f55c4b46dac3d4e1ee7aea1ebe1693b18a","streams_zero":37,"streams_done":40,"frames_ok":41,"frames_done":41,"worst_psnr":39.99},{"at":"2026-10-02 22:04","commit":"5e24af10577d5173cbaff0dcd79a3821ca0fb105","streams_zero":37,"streams_done":40,"frames_ok":41,"frames_done":41,"worst_psnr":39.99},{"at":"2026-10-02 23:02","commit":"ebbf3b586c19440ff6cb93f8d601da2879c525f5","streams_zero":40,"streams_done":40,"frames_ok":41,"frames_done":41,"worst_psnr":39.99},{"at":"2026-10-02 23:11","commit":"a5d4758cccb561450cdc4756ce8c50bc27136ba3","streams_zero":40,"streams_done":40,"frames_ok":41,"frames_done":41,"worst_psnr":39.99},{"at":"2026-10-02 23:52","commit":"c01e504208e7a559382b176e7ce672bdcee4ce9d","streams_zero":40,"streams_done":40,"frames_ok":41,"frames_done":41,"worst_psnr":39.99},{"at":"2026-10-03 00:03","commit":"959516493520e2def1b286aecbde904127beef50","streams_zero":40,"streams_done":40,"frames_ok":41,"frames_done":41,"worst_psnr":39.99},{"at":"2026-10-03 00:09","commit":"daf470855e51619b74bc44e22cba935decd29e88","streams_zero":40,"streams_done":40,"frames_ok":41,"frames_done":41,"worst_psnr":39.99},{"at":"2026-10-03 00:10","commit":"3a1229d2afa85ce6ce83ba51aeb2ecb2c779aa0f","streams_zero":40,"streams_done":40,"frames_ok":41,"frames_done":41,"worst_psnr":39.99}],"expected":{"streams":40,"frames":41,"audio":41},"imagesOmitted":true,"provenance":{"sourceRevision":"3fa0418bba7892cdf92e2e0a832ffe116016da5b","exportedUtc":"2026-10-05 03:17 UTC","kind":"saved aggregate evidence; no new game runs","measuredRevision":"3a1229d2afa85ce6ce83ba51aeb2ecb2c779aa0f","imagePolicy":"Screenshots remain in the private evidence set; scenario filenames anonymized."}};
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const short = (n) => n.replace(/^Game_/, "").replace(/\.slp$/, "");
+const statusColor = { done: "var(--ok)", approximate: "var(--warn)", missing: "var(--bad)" };
+
+$("sub").innerHTML = `<span class="mono">${esc(D.branch)} · ${esc(D.commit)}</span> · ${esc(D.subject)} · updated ${esc(D.generated)}`;
+
+const streams = D.streams.filter((s) => s.done);
+const expected = D.expected || { streams: 40, frames: 41, audio: 41 };
+const zero = streams.filter((s) => s.differ === 0 || s.explained).length;
+const explainedCount = streams.filter((s) => s.differ !== 0 && s.explained).length;
+const runs = D.frames.filter((f) => f.frames.length);
+const ok = runs.filter((f) => f.ok).length;
+const worst = runs.length ? Math.min(...runs.map((f) => f.worst.psnr)) : null;
+const audioRuns = D.audio.filter((a) => a.lists > 0);
+const audioZero = audioRuns.filter((a) => a.differ === 0).length;
+const audioLists = audioRuns.reduce((s, a) => s + a.lists, 0);
+const audioUnsynced = D.audio.filter((a) => !a.synced).length;
+const audioDone = D.audio.length === expected.audio && audioZero === expected.audio && audioUnsynced === 0;
+const median = (() => {
+  const v = runs.map((f) => f.worst.psnr).sort((a, b) => a - b);
+  return v.length ? v[Math.floor(v.length / 2)] : null;
+})();
+const stat = (k, v, d) => `<div class="stat"><span class="k">${k}</span><span class="v num">${v}</span><span class="d">${d}</span></div>`;
+$("stats").innerHTML = [
+  stat("GX streams", `${zero}/${streams.length}`, `smoke replays at zero diff or explained (${explainedCount} explained)`),
+  stat("Frames", `${ok}/${runs.length}`, "runs within tolerance of Dolphin"),
+  stat("Median PSNR", median === null ? "–" : `${Number(median).toFixed(1)} dB`, worst === null ? "" : `worst ${worst.toFixed(1)} dB`),
+  stat("Audio", `${audioZero}/${D.audio.length || 41}`, "runs whose AX matches Dolphin's"),
+  stat("Window", D.window.status, "60 Hz with controllers"),
+].join("");
+
+const rung = (i, title, goal, status, frac, detail) => {
+  const cls = status === "done" ? "done" : status === "not started" ? "idle" : "wip";
+  const bar = frac === null ? "" : `<div class="bar" role="img" aria-label="${Math.round(frac * 100)}%"><span style="width:${(frac * 100).toFixed(1)}%;background:var(--${cls === "idle" ? "idle" : cls === "done" ? "ok" : "wip"})"></span></div>`;
+  return `<div class="rung"><span class="idx">${i}</span><div><div class="t">${title}</div><div class="g">${goal}</div></div>
+    <div class="right"><span class="pill ${cls}">${status}</span>${bar}<span class="g">${detail}</span></div></div>`;
+};
+const streamDone = streams.length === expected.streams && zero === expected.streams;
+const framesDone = runs.length === expected.frames && ok === expected.frames;
+$("ladder").innerHTML = [
+  rung(1, "GX streams match", "Original code and all ports send the GPU the same draws, on the 40 smoke replays; each difference fixed or explained.",
+    streamDone ? "done" : "in progress", D.streams.length ? zero / D.streams.length : 0,
+    `${zero - explainedCount} of ${D.streams.length} replays at zero diff, ${explainedCount} explained${streams.length < D.streams.length ? `, ${D.streams.length - streams.length} still running` : ""}`),
+  rung(2, "Frames match Dolphin", "The wgpu renderer draws what Dolphin's software renderer draws from the same FIFO logs, within tolerance, on the smoke replays and a menu run.",
+    framesDone ? "done" : "in progress", expected.frames ? ok / expected.frames : 0,
+    `${ok} of ${runs.length} runs within tolerance`),
+  rung(3, "Audio matches", "AX mixing matches Dolphin's DSP output: every command list of the smoke replays and a menu run, byte for byte against Dolphin's AX code built from its source.",
+    audioDone ? "done" : "in progress", expected.audio ? audioZero / expected.audio : 0,
+    `${audioZero} of ${D.audio.length} runs checked with no list differing (${audioLists.toLocaleString()} command lists)${audioUnsynced ? `; ${audioUnsynced} replays desync with mixing on` : ""}`),
+  rung(4, "Windowed build", "Plays in a window with controllers at 60 Hz.", D.window.status, null, esc(D.window.detail)),
+].join("");
+
+$("tol").innerHTML = `<span>Tolerance: every frame at least <b class="num">${D.tolerance.psnr} dB</b> PSNR, and at most <b class="num">${D.tolerance.off32}%</b> of pixels off by more than 32 levels.</span><span><i class="dot" style="background:var(--ok)"></i>within</span><span><i class="dot" style="background:var(--bad)"></i>outside</span>`;
+const order = [...D.frames].sort((a, b) => (a.frames.length ? a.worst.psnr : 1e9) - (b.frames.length ? b.worst.psnr : 1e9));
+let selected = order.find((f) => f.frames.length) || null;
+function renderRuns() {
+  $("runs").innerHTML = order.map((f, i) => {
+    if (!f.frames.length) return `<tr><td colspan="4"><i class="dot" style="background:var(--idle)"></i><span class="mono">${esc(short(f.name))}</span> <span class="g">not compared yet</span></td></tr>`;
+    const sel = f === selected ? " sel" : "";
+    return `<tr class="${sel}" data-i="${i}"><td><i class="dot" style="background:${f.ok ? "var(--ok)" : "var(--bad)"}"></i><span class="mono">${esc(short(f.name))}</span></td>
+      <td class="r num">${Number(f.worst.psnr).toFixed(2)}</td><td class="r num">${f.worst.off8.toFixed(2)}%</td><td class="r num">${f.worst.off32.toFixed(3)}%</td></tr>`;
+  }).join("");
+  const f = selected;
+  if (!f) { $("viewer").innerHTML = `<div class="g">No runs compared yet.</div>`; return; }
+  const img = (src, cap, view) => `<figure>${src ? `<button data-view="${view}" aria-label="Open ${cap} at full size"><img alt="${cap}" src="${src}"></button>` : `<div style="aspect-ratio:4/3;background:var(--idle);border-radius:4px"></div>`}<figcaption>${cap}</figcaption></figure>`;
+  $("viewer").innerHTML = `<div class="head"><span class="mono">${esc(f.name)}</span><span class="num">worst frame ${f.worst.n}: ${Number(f.worst.psnr).toFixed(2)} dB</span></div>
+    ${D.imagesOmitted ? '<p class="g">Game-frame images are retained in the private evidence set. This snapshot includes comparison metrics only.</p>' : `<div class="trip">${img(f.ours, "Ours", "ours")}${img(f.ref, "Dolphin", "ref")}${img(f.diff, "Difference ×4", "diff")}</div>`}
+    <div class="g">${f.frames.map((x) => `frame ${x.n}: ${Number(x.psnr).toFixed(2)} dB`).join(" · ")}</div>`;
+}
+// Full size: flip between ours, Dolphin's and the difference, at 1x or 2x.
+const VIEWS = [["ours", "Ours"], ["ref", "Dolphin"], ["diff", "Difference ×4"]];
+let zoomView = null, zoomScale = 1;
+function renderZoom() {
+  const f = selected;
+  if (D.imagesOmitted || !zoomView || !f) { $("zoom").hidden = true; return; }
+  $("zoom").hidden = false;
+  $("zname").textContent = `${f.name} · frame ${f.worst.n} · ${Number(f.worst.psnr).toFixed(2)} dB`;
+  $("zviews").innerHTML = VIEWS.map(([k, label], i) => `<button data-view="${k}" aria-pressed="${k === zoomView}">${i + 1} · ${label}</button>`).join("");
+  $("zscale").innerHTML = [1, 2, 3].map((z) => `<button data-scale="${z}" aria-pressed="${z === zoomScale}">${z}×</button>`).join("");
+  const img = $("zimg");
+  img.src = f[zoomView];
+  img.alt = VIEWS.find(([k]) => k === zoomView)[1];
+  img.style.width = `${640 * zoomScale}px`;
+}
+$("viewer").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-view]");
+  if (!b) return;
+  zoomView = b.dataset.view;
+  renderZoom();
+});
+$("zviews").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-view]");
+  if (b) { zoomView = b.dataset.view; renderZoom(); }
+});
+$("zscale").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-scale]");
+  if (b) { zoomScale = +b.dataset.scale; renderZoom(); }
+});
+$("zclose").addEventListener("click", () => { zoomView = null; renderZoom(); });
+document.addEventListener("keydown", (e) => {
+  if (!zoomView) return;
+  if (e.key === "Escape") zoomView = null;
+  else if (e.key >= "1" && e.key <= "3") zoomView = VIEWS[+e.key - 1][0];
+  else if (e.key === " ") { zoomView = zoomView === "ours" ? "ref" : "ours"; e.preventDefault(); }
+  else if (e.key === "z") zoomScale = zoomScale % 3 + 1;
+  else return;
+  renderZoom();
+});
+$("runs").addEventListener("click", (e) => {
+  const tr = e.target.closest("tr[data-i]");
+  if (!tr) return;
+  selected = order[+tr.dataset.i];
+  renderRuns();
+});
+renderRuns();
+
+$("streams").innerHTML = D.streams.map((s) => s.done
+  ? `<tr title="${esc(s.explained || "")}"><td><i class="dot" style="background:${!s.differ ? "var(--ok)" : s.explained ? "var(--warn)" : "var(--bad)"}"></i><span class="mono">${esc(short(s.name))}</span>${s.explained ? `<div class="g" style="font-size:11px">${esc(s.explained)}</div>` : ""}</td><td class="r num">${s.frames}</td><td class="r num">${s.differ}</td><td class="r num">${s.first ?? "–"}</td></tr>`
+  : `<tr><td colspan="4"><i class="dot" style="background:var(--idle)"></i><span class="mono">${esc(short(s.name))}</span> <span class="g">running</span></td></tr>`).join("");
+
+$("audio").innerHTML = D.audio.length ? D.audio.map((a) => `<tr><td><i class="dot" style="background:${a.differ === 0 && a.synced ? "var(--ok)" : a.differ ? "var(--bad)" : "var(--warn)"}"></i><span class="mono">${esc(short(a.name))}</span></td><td class="r num">${a.lists.toLocaleString()}</td><td class="r num">${a.differ ?? "–"}</td><td class="g">${a.synced ? "synced" : esc(a.sync)}</td></tr>`).join("") : `<tr><td colspan="4" class="g">Not checked yet.</td></tr>`;
+$("feats").innerHTML = D.features.map((f) => `<div class="feat"><span class="n"><i class="dot" style="background:${statusColor[f.status]}"></i>${esc(f.name)}</span><span class="s">${esc(f.status)} · ${esc(f.note)}</span></div>`).join("");
+
+(function chart() {
+  const h = D.history;
+  if (!h.length) { $("chart").innerHTML = `<div class="g">No history yet.</div>`; return; }
+  const W = 560, H = 200, L = 34, R = 10, T = 14, B = 26;
+  const x = (i) => L + (h.length === 1 ? (W - L - R) / 2 : (i * (W - L - R)) / (h.length - 1));
+  const y = (v) => T + (1 - v) * (H - T - B);
+  const series = [
+    { name: "GX streams at zero diff or explained", color: "var(--ok)", v: (e) => e.streams_done ? e.streams_zero / 40 : 0 },
+    { name: "Runs within tolerance", color: "var(--hl)", v: (e) => e.frames_done ? e.frames_ok / Math.max(e.frames_done, 41) : 0 },
+  ];
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Progress over time">`;
+  for (const g of [0, 0.5, 1]) s += `<line x1="${L}" x2="${W - R}" y1="${y(g)}" y2="${y(g)}" stroke="var(--line)"/><text x="${L - 6}" y="${y(g) + 4}" text-anchor="end" font-size="10" fill="var(--muted)">${g * 100}%</text>`;
+  for (const se of series) {
+    const pts = h.map((e, i) => `${x(i)},${y(se.v(e))}`).join(" ");
+    s += `<polyline points="${pts}" fill="none" stroke="${se.color}" stroke-width="2"/>`;
+    h.forEach((e, i) => { s += `<circle cx="${x(i)}" cy="${y(se.v(e))}" r="3" fill="${se.color}"><title>${esc(e.at)}: ${(se.v(e) * 100).toFixed(0)}%</title></circle>`; });
+  }
+  s += `<text x="${L}" y="${H - 6}" font-size="10" fill="var(--muted)">${esc(h[0].at)}</text><text x="${W - R}" y="${H - 6}" font-size="10" text-anchor="end" fill="var(--muted)">${esc(h[h.length - 1].at)}</text></svg>`;
+  s += `<div class="legend">${series.map((se) => `<span><i class="dot" style="background:${se.color}"></i>${se.name}</span>`).join("")}</div>`;
+  $("chart").innerHTML = s;
+})();
+</script>

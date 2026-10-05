@@ -6,6 +6,8 @@ The dated session checkpoint is in `HANDOFF.md`; it is not a live process-status
 
 ## Setup
 
+For portable saved dashboard data, rendering commands, and lightweight regression checks, see [progress snapshots](../../../docs/progress/README.md). Historical functions are keyed by unit and address; the levers generator rejects an absent baseline rather than substituting the current report.
+
 The scripts read the machine's paths from `local/env.sh` (ignored; see `env.sh` for the variables). For a cloud VM, [private-data setup](../../cloud/README.md) restores the disc, replays, cards, generated inputs, and campaign state from an explicitly selected private repository. Never commit anything from `local/`: it holds game data and captured memory.
 
 Campaign state lives in `local/lockstep` (`L`); the scripts in `tools/lockstep/campaign` (`T`). Run them from the repository root.

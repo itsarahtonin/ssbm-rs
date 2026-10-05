@@ -26,4 +26,6 @@ A frame is within tolerance when its PSNR is at least 38 dB and no more than 0.2
 
 ## The progress page
 
+The [portable progress snapshot](../../docs/progress/README.md) preserves saved metrics and history without game-frame images. `progress.py OUT_DIR --from-json SNAPSHOT.json` renders that snapshot without reading private captures or changing the measurement history. Full-suite graphics/audio gates have a lightweight check: `node tools/gx/test_progress.cjs`.
+
 `python3 tools/gx/progress.py` writes `local/gx/progress/index.html` from the results above, with each run's worst frame (ours, Dolphin's and their difference) as full-size PNGs in `img/` beside it (listed in `files.txt`), and adds an entry to its history. Inspect the page locally; it does not require a hosted artifact. The renderer's feature list and the audio and window rungs' status are at the top of `progress.py`.

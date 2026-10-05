@@ -1,4 +1,6 @@
+<!doctype html>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Graphics and Audio Ladder</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -55,6 +57,7 @@ figure button { all: unset; cursor: zoom-in; display: block; border-radius: 4px;
 figure button:focus-visible { outline: 2px solid var(--hl); outline-offset: 2px; }
 figure img { display: block; width: 100%; aspect-ratio: 4 / 3; max-width: 100%; border-radius: 4px; background: var(--idle); }
 .zoom { position: fixed; inset: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 94%, transparent); display: grid; grid-template-rows: auto minmax(0, 1fr) auto; padding: calc(12px + env(safe-area-inset-top, 0px)) 16px calc(12px + env(safe-area-inset-bottom, 0px)); gap: 10px; }
+.zoom[hidden] { display: none; }
 .zoom .bar2 { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; }
 .zoom .name { font: 500 13px "IBM Plex Mono", monospace; min-width: 0; overflow-wrap: anywhere; }
 .zoom .stage { overflow: auto; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
@@ -135,6 +138,7 @@ const statusColor = { done: "var(--ok)", approximate: "var(--warn)", missing: "v
 $("sub").innerHTML = `<span class="mono">${esc(D.branch)} · ${esc(D.commit)}</span> · ${esc(D.subject)} · updated ${esc(D.generated)}`;
 
 const streams = D.streams.filter((s) => s.done);
+const expected = D.expected || { streams: 40, frames: 41, audio: 41 };
 const zero = streams.filter((s) => s.differ === 0 || s.explained).length;
 const explainedCount = streams.filter((s) => s.differ !== 0 && s.explained).length;
 const runs = D.frames.filter((f) => f.frames.length);
@@ -144,7 +148,7 @@ const audioRuns = D.audio.filter((a) => a.lists > 0);
 const audioZero = audioRuns.filter((a) => a.differ === 0).length;
 const audioLists = audioRuns.reduce((s, a) => s + a.lists, 0);
 const audioUnsynced = D.audio.filter((a) => !a.synced).length;
-const audioDone = audioZero >= 41;
+const audioDone = D.audio.length === expected.audio && audioZero === expected.audio && audioUnsynced === 0;
 const median = (() => {
   const v = runs.map((f) => f.worst.psnr).sort((a, b) => a - b);
   return v.length ? v[Math.floor(v.length / 2)] : null;
@@ -153,7 +157,7 @@ const stat = (k, v, d) => `<div class="stat"><span class="k">${k}</span><span cl
 $("stats").innerHTML = [
   stat("GX streams", `${zero}/${streams.length}`, `smoke replays at zero diff or explained (${explainedCount} explained)`),
   stat("Frames", `${ok}/${runs.length}`, "runs within tolerance of Dolphin"),
-  stat("Median PSNR", median === null ? "–" : `${median.toFixed(1)} dB`, worst === null ? "" : `worst ${worst.toFixed(1)} dB`),
+  stat("Median PSNR", median === null ? "–" : `${Number(median).toFixed(1)} dB`, worst === null ? "" : `worst ${worst.toFixed(1)} dB`),
   stat("Audio", `${audioZero}/${D.audio.length || 41}`, "runs whose AX matches Dolphin's"),
   stat("Window", D.window.status, "60 Hz with controllers"),
 ].join("");
@@ -164,17 +168,17 @@ const rung = (i, title, goal, status, frac, detail) => {
   return `<div class="rung"><span class="idx">${i}</span><div><div class="t">${title}</div><div class="g">${goal}</div></div>
     <div class="right"><span class="pill ${cls}">${status}</span>${bar}<span class="g">${detail}</span></div></div>`;
 };
-const streamDone = streams.length === D.streams.length && zero === streams.length && streams.length > 0;
-const framesDone = runs.length > 0 && ok === runs.length;
+const streamDone = streams.length === expected.streams && zero === expected.streams;
+const framesDone = runs.length === expected.frames && ok === expected.frames;
 $("ladder").innerHTML = [
   rung(1, "GX streams match", "Original code and all ports send the GPU the same draws, on the 40 smoke replays; each difference fixed or explained.",
     streamDone ? "done" : "in progress", D.streams.length ? zero / D.streams.length : 0,
     `${zero - explainedCount} of ${D.streams.length} replays at zero diff, ${explainedCount} explained${streams.length < D.streams.length ? `, ${D.streams.length - streams.length} still running` : ""}`),
   rung(2, "Frames match Dolphin", "The wgpu renderer draws what Dolphin's software renderer draws from the same FIFO logs, within tolerance, on the smoke replays and a menu run.",
-    framesDone ? "done" : "in progress", runs.length ? ok / Math.max(runs.length, 41) : 0,
+    framesDone ? "done" : "in progress", expected.frames ? ok / expected.frames : 0,
     `${ok} of ${runs.length} runs within tolerance`),
   rung(3, "Audio matches", "AX mixing matches Dolphin's DSP output: every command list of the smoke replays and a menu run, byte for byte against Dolphin's AX code built from its source.",
-    audioDone ? "done" : "in progress", audioZero / 41,
+    audioDone ? "done" : "in progress", expected.audio ? audioZero / expected.audio : 0,
     `${audioZero} of ${D.audio.length} runs checked with no list differing (${audioLists.toLocaleString()} command lists)${audioUnsynced ? `; ${audioUnsynced} replays desync with mixing on` : ""}`),
   rung(4, "Windowed build", "Plays in a window with controllers at 60 Hz.", D.window.status, null, esc(D.window.detail)),
 ].join("");
@@ -187,23 +191,23 @@ function renderRuns() {
     if (!f.frames.length) return `<tr><td colspan="4"><i class="dot" style="background:var(--idle)"></i><span class="mono">${esc(short(f.name))}</span> <span class="g">not compared yet</span></td></tr>`;
     const sel = f === selected ? " sel" : "";
     return `<tr class="${sel}" data-i="${i}"><td><i class="dot" style="background:${f.ok ? "var(--ok)" : "var(--bad)"}"></i><span class="mono">${esc(short(f.name))}</span></td>
-      <td class="r num">${f.worst.psnr.toFixed(2)}</td><td class="r num">${f.worst.off8.toFixed(2)}%</td><td class="r num">${f.worst.off32.toFixed(3)}%</td></tr>`;
+      <td class="r num">${Number(f.worst.psnr).toFixed(2)}</td><td class="r num">${f.worst.off8.toFixed(2)}%</td><td class="r num">${f.worst.off32.toFixed(3)}%</td></tr>`;
   }).join("");
   const f = selected;
   if (!f) { $("viewer").innerHTML = `<div class="g">No runs compared yet.</div>`; return; }
   const img = (src, cap, view) => `<figure>${src ? `<button data-view="${view}" aria-label="Open ${cap} at full size"><img alt="${cap}" src="${src}"></button>` : `<div style="aspect-ratio:4/3;background:var(--idle);border-radius:4px"></div>`}<figcaption>${cap}</figcaption></figure>`;
-  $("viewer").innerHTML = `<div class="head"><span class="mono">${esc(f.name)}</span><span class="num">worst frame ${f.worst.n}: ${f.worst.psnr.toFixed(2)} dB</span></div>
-    <div class="trip">${img(f.ours, "Ours", "ours")}${img(f.ref, "Dolphin", "ref")}${img(f.diff, "Difference ×4", "diff")}</div>
-    <div class="g">${f.frames.map((x) => `frame ${x.n}: ${x.psnr.toFixed(2)} dB`).join(" · ")}</div>`;
+  $("viewer").innerHTML = `<div class="head"><span class="mono">${esc(f.name)}</span><span class="num">worst frame ${f.worst.n}: ${Number(f.worst.psnr).toFixed(2)} dB</span></div>
+    ${D.imagesOmitted ? '<p class="g">Game-frame images are retained in the private evidence set. This snapshot includes comparison metrics only.</p>' : `<div class="trip">${img(f.ours, "Ours", "ours")}${img(f.ref, "Dolphin", "ref")}${img(f.diff, "Difference ×4", "diff")}</div>`}
+    <div class="g">${f.frames.map((x) => `frame ${x.n}: ${Number(x.psnr).toFixed(2)} dB`).join(" · ")}</div>`;
 }
 // Full size: flip between ours, Dolphin's and the difference, at 1x or 2x.
 const VIEWS = [["ours", "Ours"], ["ref", "Dolphin"], ["diff", "Difference ×4"]];
 let zoomView = null, zoomScale = 1;
 function renderZoom() {
   const f = selected;
-  if (!zoomView || !f) { $("zoom").hidden = true; return; }
+  if (D.imagesOmitted || !zoomView || !f) { $("zoom").hidden = true; return; }
   $("zoom").hidden = false;
-  $("zname").textContent = `${f.name} · frame ${f.worst.n} · ${f.worst.psnr.toFixed(2)} dB`;
+  $("zname").textContent = `${f.name} · frame ${f.worst.n} · ${Number(f.worst.psnr).toFixed(2)} dB`;
   $("zviews").innerHTML = VIEWS.map(([k, label], i) => `<button data-view="${k}" aria-pressed="${k === zoomView}">${i + 1} · ${label}</button>`).join("");
   $("zscale").innerHTML = [1, 2, 3].map((z) => `<button data-scale="${z}" aria-pressed="${z === zoomScale}">${z}×</button>`).join("");
   const img = $("zimg");
