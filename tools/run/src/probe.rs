@@ -299,57 +299,71 @@ fn probe_some(ctx: &Ctx, state: &State) {
                     .for_each(|a| ctx.write_u32(a, float(rng).to_bits())),
                 _ => {}
             }
-            ctx.regs.set_r(1, (low - 0x20) & !0xF);
             let (mut r, mut f, mut next) = (3, 1, base);
+            // Integer arguments past r10 go in the parameter words above the stack pointer, as
+            // the EABI passes them: r11 and r12 are scratch, and r13 is the small-data base
+            // original code reads its globals through.
+            let mut stack = Vec::new();
+            let put = |r: &mut usize, stack: &mut Vec<u32>, v: u32| {
+                if *r <= 10 {
+                    ctx.regs.set_r(*r, v);
+                } else {
+                    stack.push(v);
+                }
+                *r += 1;
+            };
             for (&k, v) in p.params.iter().zip(&values) {
                 match k {
                     b'f' => {
                         ctx.regs.set_f(f, f64::from(float(rng)));
                         f += 1;
                     }
-                    b'i' => {
-                        ctx.regs.set_r(r, int(rng));
-                        r += 1;
-                    }
+                    b'i' => put(&mut r, &mut stack, int(rng)),
                     // Narrower integers extended as a C caller passes them.
                     b'b' | b'B' | b'h' | b'H' => {
                         let v = int(rng);
-                        ctx.regs.set_r(r, match k {
+                        let v = match k {
                             b'b' => v & 0xFF,
                             b'B' => v as u8 as i8 as u32,
                             b'h' => v & 0xFFFF,
                             _ => v as u16 as i16 as u32,
-                        });
-                        r += 1;
+                        };
+                        put(&mut r, &mut stack, v);
                     }
                     b'w' => {
-                        // In the next pair of registers that starts at an odd one.
+                        // In the next pair of registers that starts at an odd one, or past r10
+                        // in the next doubleword of the parameter words, after which every
+                        // integer argument goes there.
                         r |= 1;
                         let high = if rng.chance(25) { int(rng) } else { 0 };
-                        ctx.regs.set_r(r, high);
-                        ctx.regs.set_r(r + 1, int(rng));
-                        r += 2;
+                        let word = int(rng);
+                        if r > 9 {
+                            r = 11;
+                            if stack.len() % 2 == 1 {
+                                stack.push(0);
+                            }
+                        }
+                        put(&mut r, &mut stack, high);
+                        put(&mut r, &mut stack, word);
                     }
                     // A tenth of pointers are null, for the checks of them that real calls pass.
-                    b'x' => {
-                        ctx.regs.set_r(r, if rng.chance(10) { 0 } else { noop(ctx) });
-                        r += 1;
-                    }
+                    b'x' => put(&mut r, &mut stack, if rng.chance(10) { 0 } else { noop(ctx) }),
                     b'p' => {
-                        ctx.regs.set_r(r, if rng.chance(10) { 0 } else { next });
+                        put(&mut r, &mut stack, if rng.chance(10) { 0 } else { next });
                         next += SCRATCH;
-                        r += 1;
                     }
-                    _ => {
-                        ctx.regs.set_r(r, if rng.chance(10) { 0 } else { v.unwrap_or(0) });
-                        r += 1;
-                    }
+                    _ => put(&mut r, &mut stack, if rng.chance(10) { 0 } else { v.unwrap_or(0) }),
                 }
             }
+            let sp = (low - 0x20 - 4 * stack.len() as u32) & !0xF;
+            ctx.regs.set_r(1, sp);
+            for (i, &v) in stack.iter().enumerate() {
+                ctx.write_u32(sp + 8 + 4 * i as u32, v);
+            }
             if log {
-                let gpr: Vec<u32> = (3..r).map(|i| ctx.regs.r(i)).collect();
+                let gpr: Vec<u32> = (3..r.min(11)).map(|i| ctx.regs.r(i)).collect();
                 let fpr: Vec<f64> = (1..f).map(|i| ctx.regs.f(i)).collect();
-                eprintln!("  r1 {:08X}, r3.. {gpr:08X?}, f1.. {fpr:?}", ctx.regs.r(1));
+                eprintln!("  r1 {sp:08X}, r3.. {gpr:08X?}, stack {stack:08X?}, f1.. {fpr:?}");
             }
         });
         if ran_it {
