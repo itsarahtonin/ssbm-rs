@@ -4,6 +4,11 @@ A Rust port of Super Smash Bros. Melee NTSC 1.02 (GALE01 revision 2), built from
 
 The project aims to preserve the game's behavior, including its floating-point results and memory layout. Rust functions are checked call by call against the original machine code, and recorded games are checked against their Slippi replays. The translator, runtime, and verification tools are also intended as a research resource for similar projects.
 
+<a href="docs/progress/README.md"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/progress/coverage-dark.svg">
+  <img alt="Port coverage map: 152,934 of 163,387 blocks verified by lockstep (93.6%) at round f9, October 5, 2026" src="docs/progress/coverage-light.svg">
+</picture></a>
+
 **Development preview:** a windowed player with audio, keyboard, gamepad, and GameCube adapter support exists. The full verification gate and release validation on Windows, macOS, and Linux remain work in progress. See [verification and limitations](docs/verification.md).
 
 Players supply their own disc image. The source tree contains no bundled disc image or extracted assets; the runtime loads the game's assets and data tables from the disc.
