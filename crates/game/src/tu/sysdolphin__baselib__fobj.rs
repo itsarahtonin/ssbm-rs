@@ -24,6 +24,7 @@ use ssbm_types::fns;
 use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
+use crate::manual::sysdolphin__baselib__fobj as manual;
 use crate::support::*;
 
 pub fn HSD_FObjGetAllocData<'a>(ctx: &'a Ctx) -> _HSD_ObjAllocData<'a> {
@@ -287,83 +288,6 @@ pub fn FObjLaunchKeyData<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>) {
         (fobj).set_flags(((((fobj).flags() as i32) | 128_i32) as u8));
         (fobj).set_p0((fobj).p1());
     }
-}
-
-pub fn FObjUpdateAnim<'a>(ctx: &'a Ctx, fobj: HSD_FObj<'a>, obj: Addr<'a>, obj_update: FnPtr<'a>) {
-    let __frame = ctx.stack_frame(0x38);
-    let fobjdata: HSD_ObjData<'a> = frame_at(ctx, &__frame, 0xc);
-    let mut fobj = fobj;
-    let mut obj = obj;
-    let mut obj_update = obj_update;
-    let mut phi_f0: f64 = 0.0;
-    if Handle::is_null(obj_update) {
-        return;
-    }
-    's1: {
-        let __case = match ((fobj).op_intrp() as i32) {
-            6_i32 => 0,
-            1_i32 => 1,
-            2_i32 => 2,
-            3_i32 => 3,
-            4_i32 => 3,
-            5_i32 => 3,
-            _ => 4,
-        };
-        if __case <= 0 {
-            if ((((fobj).flags() as i32) & 128_i32) != 0) {
-                fobjdata.set_fv((fobj).p0());
-                (fobj).set_flags(((((fobj).flags() as u32) & 0xffffff7f_u32) as u8));
-            } else {
-                return;
-            }
-            break 's1;
-        }
-        if __case <= 1 {
-            if (fobj).time() >= fp::frsp(((fobj).fterm() as i32) as f64) {
-                phi_f0 = (fobj).p1();
-            } else {
-                phi_f0 = (fobj).p0();
-            }
-            fobjdata.set_fv(phi_f0);
-            break 's1;
-        }
-        if __case <= 2 {
-            if ((((fobj).flags() as i32) & 32_i32) != 0) {
-                (fobj).set_flags(((((fobj).flags() as u32) & 0xffffffdf_u32) as u8));
-                if ((fobj).fterm() as i32) != 0_i32 {
-                    (fobj).set_d0(fp::fdivs(
-                        (fp::fsubs((fobj).p1(), (fobj).p0())),
-                        fp::frsp(((fobj).fterm() as i32) as f64),
-                    ));
-                } else {
-                    (fobj).set_d0(fp::frsp(0_i32 as f64));
-                    (fobj).set_p0((fobj).p1());
-                }
-            }
-            fobjdata.set_fv(fp::fmadds((fobj).d0(), (fobj).time(), (fobj).p0()));
-            break 's1;
-        }
-        if __case <= 3 {
-            if ((fobj).fterm() as i32) != 0_i32 {
-                fobjdata.set_fv(fns::splGetHelmite(
-                    ctx,
-                    fp::frsp(fp::fdiv(1.0, (((fobj).fterm() as i32) as f64))),
-                    (fobj).time(),
-                    (fobj).p0(),
-                    (fobj).p1(),
-                    (fobj).d0(),
-                    (fobj).d1(),
-                ));
-            } else {
-                fobjdata.set_fv((fobj).p1());
-            }
-            break 's1;
-        }
-        if __case <= 4 {
-            break 's1;
-        }
-    }
-    obj_update.call::<_, ()>((obj, ((fobj).obj_type() as i32), fobjdata));
 }
 
 pub fn HSD_FObjInterpretAnim<'a>(
@@ -1017,7 +941,7 @@ pub fn register(ctx: &Ctx) {
         0x8036ae70,
         |ctx| {
             let (a0, a1, a2): (HSD_FObj<'_>, Addr<'_>, FnPtr<'_>) = Args::take_all(ctx);
-            Ret::put(FObjUpdateAnim(ctx, a0, a1, a2), ctx);
+            Ret::put(manual::FObjUpdateAnim(ctx, a0, a1, a2), ctx);
         },
         Returns::Nothing,
     );

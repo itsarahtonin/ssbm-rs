@@ -17,6 +17,7 @@ pub mod melee__gm__gm_1601;
 pub mod MSL__string;
 pub mod Runtime__Gecko_setjmp;
 pub mod Runtime__runtime;
+pub mod sysdolphin__baselib__fobj;
 pub mod sysdolphin__baselib__hsd_397E;
 
 mod exception;
