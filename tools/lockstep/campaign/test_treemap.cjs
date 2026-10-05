@@ -8,7 +8,7 @@ const elements = new Map();
 const context = vm.createContext({ showLedger: false, at: 0, fns: [],
   DATA: { fns: [[0, 0, 10]] }, SNAPS: [{ label: 'old', v: [5, 0, 1], countable: [5] }],
   document: { getElementById: id => {
-    if (!elements.has(id)) elements.set(id, {});
+    if (!elements.has(id)) elements.set(id, { setAttribute(name, value) { this[name] = value; } });
     return elements.get(id);
   } },
   d3: { sum: (rows, fn) => rows.reduce((sum, row) => sum + fn(row), 0),
@@ -41,12 +41,12 @@ context.showLedger = false;
 vm.runInContext('header()', context);
 const stats = elements.get('stats').innerHTML;
 assert.match(stats, /23\.5%/);
-assert.equal(elements.get('ledger-summary').hidden, true);
+assert.equal(elements.get('ledger-summary')['aria-hidden'], 'true');
 assert.doesNotMatch(elements.get('coverage-bar').innerHTML, /explained/);
 context.showLedger = true;
 vm.runInContext('header()', context);
 assert.equal(elements.get('stats').innerHTML, stats);
-assert.equal(elements.get('ledger-summary').hidden, false);
+assert.equal(elements.get('ledger-summary')['aria-hidden'], 'false');
 assert.match(elements.get('ledger-summary').textContent, /100\.0% accounted for/);
 assert.match(elements.get('coverage-bar').innerHTML, /explained/);
 assert.equal(vm.runInContext('esc("<script> & ")', context), '&lt;script&gt; &amp; ');

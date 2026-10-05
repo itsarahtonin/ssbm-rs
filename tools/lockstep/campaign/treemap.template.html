@@ -44,6 +44,8 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; text-wrap: balance; }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--muted); align-items: center; }
 .legend i { display: inline-block; width: 11px; height: 11px; border-radius: 2px; vertical-align: -1px; margin-right: 5px; }
 .map-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
+.map-context { display: grid; gap: 4px; flex: 1 1 420px; min-width: 0; }
+#ledger-summary[aria-hidden=true] { visibility: hidden; }
 .crumbs { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; font-size: 13px; min-width: 0; }
 .crumbs button { font: inherit; background: none; border: 0; padding: 2px 4px; color: var(--hl); cursor: pointer; border-radius: 4px; }
 .crumbs button:last-child { color: var(--fg); cursor: default; font-weight: 500; }
@@ -93,7 +95,6 @@ svg text { fill: var(--muted); font: 11px "IBM Plex Mono", monospace; }
   <div class="gate">
     <div class="legend"><span><b>Measured verification</b> · target: every countable block, with no unexplained mismatches</span><span class="num" id="measured-label"></span></div>
     <div class="bar" id="coverage-bar"></div>
-    <div class="sub" id="ledger-summary" hidden></div>
   </div>
 
   <div class="history" role="group" aria-label="Rounds">
@@ -107,7 +108,10 @@ svg text { fill: var(--muted); font: 11px "IBM Plex Mono", monospace; }
   </div>
 
   <div class="map-head">
-    <nav class="crumbs" id="crumbs"></nav>
+    <div class="map-context">
+      <nav class="crumbs" id="crumbs" aria-label="Map navigation"></nav>
+      <div class="sub" id="ledger-summary" aria-hidden="true"></div>
+    </div>
     <div class="tools">
       <label><input type="checkbox" id="ledger-toggle"> Show ledger explanations</label>
       <input type="search" id="q" aria-label="Find a function or unit" placeholder="find a function or unit…" autocomplete="off" spellcheck="false">
@@ -212,9 +216,9 @@ function header() {
   document.getElementById("measured-label").textContent = `${fmt(done)} / ${fmt(blocksAll)} blocks · ${pct(done, blocksAll)}`;
   bar("coverage-bar", [["ok", done], ...(showLedger ? [["explained", explained]] : [])], blocksAll);
   const summary = document.getElementById("ledger-summary");
-  summary.hidden = !showLedger;
+  summary.setAttribute("aria-hidden", String(!showLedger));
   summary.textContent = `${fmt(explained)} additional blocks explained · ${pct(done + explained, blocksAll)} accounted for · ${fmt(blocksAll - done - explained)} unaccounted. Explained is not verified; mismatches remain unresolved independently.`;
-  document.getElementById("legend").innerHTML = [["ok", "100% verified"], ["low-hi", "partially verified (color follows measured percentage)"], ["never", "no verified/countable blocks"], ...(showLedger ? [["explained", "striped fraction: ledger explanation"]] : []), ["review", "to review"], ["bad", "mismatch"]].map(([k, l]) => `<span><i style="background:var(--${k})"></i>${l}</span>`).join("");
+  document.getElementById("legend").innerHTML = [["ok", "100% verified"], ["low-hi", "partially verified (color follows measured percentage)"], ["never", "no verified/countable blocks"], ["explained", "striped fraction: ledger explanation"], ["review", "to review"], ["bad", "mismatch"]].map(([k, l]) => `<span${k === "explained" && !showLedger ? ' style="visibility:hidden" aria-hidden="true"' : ""}><i style="background:var(--${k})"></i>${l}</span>`).join("");
 }
 
 // Treemap
@@ -394,12 +398,12 @@ function evidencePanel() {
 }
 function crumbs() {
   const el = document.getElementById("crumbs"); el.innerHTML = "";
+  el.hidden = focus === root;
   const path = focus.ancestors().reverse();
   path.forEach((n, i) => {
     if (i) el.insertAdjacentHTML("beforeend", '<span class="sep">/</span>');
     const b = document.createElement("button");
-    const fs = n.leaves(), done = d3.sum(fs, l => l.data.done), countable = d3.sum(fs, l => l.data.countable);
-    b.textContent = (i === 0 ? "all" : i === 1 ? n.data.name : n.data.name.split("/").slice(2).join("/")) + (i === path.length - 1 ? `  ·  ${pct(done, countable)} verified` : "");
+    b.textContent = i === 0 ? "all" : i === 1 ? n.data.name : n.data.name.split("/").slice(2).join("/");
     b.onclick = () => zoomTo(n);
     el.appendChild(b);
   });
