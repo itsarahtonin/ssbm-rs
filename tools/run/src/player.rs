@@ -42,8 +42,11 @@ fn welcome(note: &str) -> bool {
         ))
         .set_buttons(MessageButtons::OkCancelCustom(BROWSE.to_owned(), "Quit".to_owned()))
         .show();
+    // On Linux the dialog is zenity's, whose Quit answers Custom: plain Cancel means zenity
+    // couldn't run, so go on to the disc picker (the desktop's portal) rather than quit unasked.
     matches!(result, MessageDialogResult::Ok)
         || matches!(&result, MessageDialogResult::Custom(s) if s == BROWSE)
+        || cfg!(target_os = "linux") && matches!(result, MessageDialogResult::Cancel)
 }
 
 /// The arguments a double-click means, or None when given some: the disc (the one remembered,
