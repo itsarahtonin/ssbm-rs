@@ -4,9 +4,9 @@ ssbm-rs measures function behavior, replay state, GPU output, and audio separate
 
 ## Recorded coverage
 
-The local campaign report `report-f8.txt` from October 4, 2026 records 152,636 of 163,387 countable blocks verified by runs (93.4%), with another 5,069 explained by the gap ledger. These are campaign measurements, not a fresh result from building this checkout.
+The latest local campaign report, from October 5, 2026, records 152,934 of 163,387 countable blocks verified by runs (93.6%), with another 5,061 explained by the gap ledger. These are campaign measurements, not a fresh result from building this checkout. The ledger has changed since that report: 32 claims whose blocks runs had verified were removed, and 66 reviewed claims about fighter code were added. The next report will recount the explained blocks.
 
-That report records no unmutated mismatches, ten reviewed input-dependent cases, and one mutated case awaiting review. The session handoff records a completed review of an earlier remaining case; report and handoff state must be reconciled before claiming no outstanding reviews. The report also flags 24 ledger entries whose blocks were subsequently verified. Those claims need removal from the ledger.
+The report's one mismatch with real inputs, in `OSResumeThread`, came from a match the game never sets up: a Crazy Hand without Master Hand, which failed one of the game's own assertions, so the check met the assertion's crash path. The original code alone also fails that match. The runner no longer draws such line-ups. Every mismatch from changed inputs is reviewed in `tools/lockstep/reviewed.txt`, eleven functions in all: ten come from inputs the game cannot produce, and one (`fn_8017D9C0`) from the two sides seeing different checked state, with a harness question still open. None awaits review.
 
 Results are counted across frozen binaries only where the function's port is unchanged. Harness corrections can invalidate earlier results independently of a port change. The [campaign workflow](../tools/lockstep/campaign/README.md) explains staleness, exclusions, and reviewed ledgers.
 
