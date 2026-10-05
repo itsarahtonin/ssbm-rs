@@ -29,6 +29,7 @@ zstd = "0.12"
 
 [build-dependencies]
 embed-manifest = "1.5"
+winresource = "0.1.31"
 
 [features]
 # AX_CHECK: Dolphin's AX microcode, built from its source, to check ssbm-ax against.

@@ -340,10 +340,17 @@ fn fs(i: Out) -> @location(0) vec4<f32> {
 }
 "#;
 
+/// The window's icon: the player's (tools/run/icon/make.py draws it), 64 by 64 RGBA pixels.
+fn window_icon() -> winit::window::Icon {
+    const RGBA: &[u8] = include_bytes!("../icon/window.rgba");
+    winit::window::Icon::from_rgba(RGBA.to_vec(), 64, 64).expect("the window icon")
+}
+
 impl App {
     fn show(&mut self, event_loop: &ActiveEventLoop) -> Shown {
         let attrs = Window::default_attributes()
             .with_title("ssbm-rs")
+            .with_window_icon(Some(window_icon()))
             .with_inner_size(winit::dpi::LogicalSize::new(1280.0, 960.0));
         let window = Arc::new(event_loop.create_window(attrs).expect("a window"));
         let surface = self
