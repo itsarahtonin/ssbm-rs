@@ -209,6 +209,74 @@ fn calls_that_never_return_go_unchecked() {
 }
 
 #[test]
+fn mutated_checks_compare_calls_that_never_return() {
+    // f: p = *(u32*) 0x80600010; if (!p) assert(file, 42); return *p. A mutated check that makes
+    // p null ends both sides at the assertion's call, compared by what they pass it.
+    const A: u32 = CODE + 0x80;
+    let f = [
+        0x7C08_02A6, // mflr r0
+        0x9001_0004, // stw r0, 4(r1)
+        0x9421_FFF0, // stwu r1, -16(r1)
+        0x3C80_8060, // lis r4, 0x8060
+        0x80A4_0010, // lwz r5, 0x10(r4)
+        0x2805_0000, // cmplwi r5, 0
+        0x4082_0014, // bne +20
+        0x3C60_8060, // lis r3, 0x8060
+        addi(3, 3, 0x200),
+        li(4, 42),
+        bl(CODE + 40, A),
+        0x8065_0000, // lwz r3, 0(r5)
+        0x8001_0014, // lwz r0, 20(r1)
+        addi(1, 1, 16),
+        0x7C08_03A6, // mtlr r0
+        BLR,
+    ];
+    let run = |line: u32| {
+        let ctx = machine(&f);
+        ctx.write_u32(A, 0x4800_0000); // b .
+        ctx.write_u32(0x8060_0010, 0x8060_0100);
+        ctx.write_u32(0x8060_0100, 5);
+        ctx.register(A, |_| panic!("the assertion's call ran"));
+        ctx.lockstep.noreturn.borrow_mut().insert(A);
+        ctx.lockstep.arg_regs.borrow_mut().insert(A, (2, 0));
+        thread_local!(static LINE: std::cell::Cell<u32> = const { std::cell::Cell::new(0) });
+        LINE.with(|l| l.set(line));
+        ctx.register_port(
+            CODE,
+            |ctx| {
+                let p = ctx.read_u32(0x8060_0010);
+                if p == 0 {
+                    ctx.regs.set_r(3, 0x8060_0200);
+                    ctx.regs.set_r(4, LINE.with(std::cell::Cell::get));
+                    ctx.invoke(A);
+                }
+                ctx.regs.set_r(3, ctx.read_u32(p));
+            },
+            ssbm_rt::lockstep::Returns::Int,
+        );
+        ctx.set_mode(CODE, Mode::Lockstep);
+        ctx.lockstep.mutations.set(50);
+        ctx.lockstep.rng.set(1);
+        let load = ssbm_rt::lockstep::Target::Load {
+            pc: CODE + 16,
+            size: 4,
+            value: 0,
+            test: ssbm_rt::lockstep::Test::Equal,
+        };
+        ctx.lockstep.targets.borrow_mut().insert(CODE, vec![load]);
+        ctx.invoke(CODE);
+        assert_eq!(ctx.regs.r(3), 5, "the call itself goes on unchanged");
+        let mismatches = ctx.lockstep.mismatches.borrow().len();
+        (mismatches, ctx.lockstep.stats.borrow()[&CODE].calls)
+    };
+    let (mismatches, calls) = run(42);
+    assert_eq!(mismatches, 0);
+    assert!(calls > 1, "mutated checks that reach the assertion count");
+    // A port that asserts on another line differs there.
+    assert!(run(43).0 > 0);
+}
+
+#[test]
 fn mutated_checks_change_a_call_alike_whatever_ran_before() {
     // f(n) = n + 1, whose port is wrong for n with bit 4 set; g's checks, run first in one of
     // the two machines, must not change which of f's mutated checks find that.

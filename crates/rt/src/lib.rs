@@ -999,8 +999,17 @@ impl Ctx {
     fn invoke_traced(&self, addr: u32) {
         if self.lockstep.is_mutating() && self.lockstep.noreturn.borrow().contains(&addr) {
             // Its inputs fail an assertion, whose handlers save the CPU's registers, which
-            // ports keep elsewhere, and never return.
-            std::panic::panic_any(lockstep::Runaway("called a function that never returns"));
+            // ports keep elsewhere, and never return: the side stops at the call.
+            // What it takes of r3..r5, as its prototype says; locals lie at different stack
+            // addresses on the two sides, so a pointer to one is only that.
+            let n = self.lockstep.arg_regs.borrow().get(&addr).map_or(3, |&(i, _)| i.min(3));
+            let bounds = self.stack_bounds.borrow().as_ref().and_then(|f| f(self));
+            let sp = self.regs.r(1);
+            let (lo, hi) = bounds.unwrap_or((sp, sp.saturating_add(lockstep::STACK_SCRATCH)));
+            let args = (3..3 + u32::from(n))
+                .map(|r| Some(self.regs.r(r as usize)).filter(|v| !(lo..hi).contains(v)))
+                .collect();
+            std::panic::panic_any(lockstep::Halt { addr, args });
         }
         if let Some((r3, f1)) = self.lockstep.stubbed(addr) {
             // Stood in for by a mutated check, on both its sides alike.

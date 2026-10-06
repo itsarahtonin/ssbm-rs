@@ -629,6 +629,13 @@ fn panic_text(p: &(dyn std::any::Any + Send)) -> String {
         j
     } else if let Some(d) = p.downcast_ref::<Diverged>() {
         d.0.clone()
+    } else if let Some(h) = p.downcast_ref::<Halt>() {
+        let args: Vec<String> = h
+            .args
+            .iter()
+            .map(|a| a.map_or_else(|| "a local".to_owned(), |v| format!("{v:#X}")))
+            .collect();
+        format!("called {:#010X}, which never returns, with ({})", h.addr, args.join(", "))
     } else if let Some(f) = p.downcast_ref::<crate::Fault>() {
         f.to_string()
     } else if let Some(s) = p.downcast_ref::<String>() {
@@ -737,7 +744,7 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
         Some("its original broke the calling convention".to_string())
     } else if let Some(Runaway(how)) = original_panic.as_ref().and_then(|p| p.downcast_ref()) {
         Some(format!("its original {how}"))
-    } else if outermost && mutating {
+    } else if outermost && mutating && !original_panic.as_ref().is_some_and(|p| p.is::<Halt>()) {
         original.as_ref().map(|p| format!("its original failed: {p}"))
     } else {
         None
@@ -854,10 +861,11 @@ pub(crate) fn run(ctx: &Ctx, addr: u32, native: Native, returns: Returns) {
     let log_writes = deep && mutating && !ctx.mem.is_logging();
     let mut write_logs = None;
     let mut dropped = false;
-    // An original that faults through a bad pointer, as mutated inputs make one, may also have
-    // read stack it never wrote before: its second look faults likewise, if it agrees.
+    // An original that faults through a bad pointer, as mutated inputs make one, or that calls
+    // what never returns, may also have read stack it never wrote before: its second look
+    // ends likewise, if it agrees.
     let faults = |p: &Option<Box<dyn std::any::Any + Send>>| {
-        p.as_ref().is_some_and(|p| panic_text(p.as_ref()).starts_with("unmapped "))
+        p.as_ref().is_some_and(|p| p.is::<Halt>() || panic_text(p.as_ref()).starts_with("unmapped "))
     };
     if !diffs.is_empty()
         && (original.is_none() || faults(&original_panic))
@@ -1154,6 +1162,15 @@ fn drop_check(ctx: &Ctx, traced: bool, enclosing: Phase, outermost: bool, why: &
 /// Panic payload that ends a mutated check whose original runs on and on, from the heartbeat or
 /// the limit on its calls, or that reaches what no call the game makes does. Names which.
 pub struct Runaway(pub &'static str);
+
+/// Panic payload that ends a mutated check's side at a call to a function that never returns,
+/// such as a failed assertion's, with the r3..r5 it passes. Ports keep their calls' order, so
+/// both sides making that call alike, after the same writes, is the same behavior.
+pub struct Halt {
+    pub addr: u32,
+    /// Those it takes, `None` for a pointer to the stack.
+    pub args: Vec<Option<u32>>,
+}
 
 /// Checks the port of `addr` from a call no code made, whose arguments `setup` puts in place,
 /// on the state the game is in: as a mutated check, counted apart and undone after. Only outside
