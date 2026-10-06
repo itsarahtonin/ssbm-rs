@@ -44,13 +44,11 @@ enum Packet {
     Forget(u32, u32),
 }
 
-/// Frames the render thread has finished, and what its copies to textures wrote to memory
-/// that the game thread hasn't taken yet.
+/// Frames the render thread has finished.
 #[derive(Default)]
 struct Done {
     frames: Mutex<u64>,
     cond: Condvar,
-    written: Mutex<Vec<(u32, Vec<u8>)>>,
 }
 
 /// A `Renderer` on its own thread, as a sink for the game thread's GX stream.
@@ -155,13 +153,6 @@ impl Sink for Threaded {
         if self.batch.len() >= BATCH {
             self.send();
         }
-    }
-
-    /// What the render thread's copies wrote so far, without waiting for it: the game reads
-    /// a copy frames after making it, as a camera snapshot's three frames on, and the render
-    /// thread is never more than `AHEAD` frames behind by the end of a frame.
-    fn take_written(&mut self) -> Vec<(u32, Vec<u8>)> {
-        std::mem::take(&mut *self.done.written.lock().unwrap())
     }
 
     fn copy(&mut self, state: &State, value: u32, mem: &dyn Memory) {
@@ -296,8 +287,6 @@ fn run(mut renderer: Renderer, rx: &mpsc::Receiver<Vec<Packet>>, done: &Done) {
                     if bits(value, 14, 1) != 0 {
                         *done.frames.lock().unwrap() += 1;
                         done.cond.notify_all();
-                    } else {
-                        done.written.lock().unwrap().extend(renderer.take_written());
                     }
                 }
             }
