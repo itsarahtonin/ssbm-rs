@@ -45,7 +45,7 @@ A job line is `name|[VAR=V ...] ssbm-run args`; its own variables override the r
 Mutated checks run against null hardware and are dropped when they fault, run away, or read what only the original keeps; `LOCKSTEP_DROP_LOG=1` prints why. A mismatch under mutated inputs is "to review": either a port bug, or something the inputs make impossible, which goes into `tools/lockstep/reviewed.txt` with the reason.
 
 - `repro.sh ROUND JOB FUNC` reruns a round's job exactly, with a deep trace of FUNC (call traces and both sides' writes).
-- Faster: `CAPTURE=DIR` saves each mismatching call, and `ssbm-run DISC --call FILE --port all --lockstep` checks it again in a fraction of a second. `CORPUS=FILE CAPTURE_FUNCS=@local/lockstep/needed-fN.txt` collects real calls for `--corpus FILE` (with `LOCKSTEP_MUTATE`, a fuzzer). `calls-check.sh DIR` confirms saved calls end as in their run. Mismatches from the corpus fuzzer were replay artifacts when last checked (see `local/lockstep/open-issues.md`).
+- Faster: `CAPTURE=DIR` saves each mismatching call, and `ssbm-run DISC --call FILE --port all --lockstep` checks it again in a fraction of a second. `CORPUS=FILE CAPTURE_FUNCS=@local/lockstep/needed-fN.txt` collects real calls for `--corpus FILE` (with `LOCKSTEP_MUTATE`, a fuzzer). `calls-check.sh DIR` confirms saved calls end as in their run. A job can also play a recorded session (`--inputs FILE`, recorded with `--record` or by the player), which reaches what only a person playing does. Mismatches from the corpus fuzzer were replay artifacts when last checked (see `local/lockstep/open-issues.md`).
 
 ## The gap ledger
 

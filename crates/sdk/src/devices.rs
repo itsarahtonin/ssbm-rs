@@ -44,7 +44,12 @@ pub struct Devices {
     pub mix_audio: Cell<bool>,
     ax: RefCell<Option<ssbm_ax::Ax>>,
     ax_observer: RefCell<Option<AxObserver>>,
+    pad_tap: RefCell<Option<PadTap>>,
 }
+
+/// Sees, and may change, the controllers each `PADRead` reports, before the game reads them:
+/// a recording keeps them, a playback puts its own in their place.
+pub type PadTap = Box<dyn FnMut(&Ctx, &mut [PadStatus; 4])>;
 
 /// Sees each AX command list before the DSP runs it: memory as it stands, the microcode's hash,
 /// and the list's address and size.
@@ -54,6 +59,11 @@ impl Devices {
     /// Shows `f` each command list the DSP mixes (with `mix_audio`).
     pub fn observe_ax(&self, f: AxObserver) {
         *self.ax_observer.borrow_mut() = Some(f);
+    }
+
+    /// Hands `f` the controllers of each `PADRead`, to keep or change.
+    pub fn tap_pads(&self, f: PadTap) {
+        *self.pad_tap.borrow_mut() = Some(f);
     }
 }
 
@@ -72,6 +82,7 @@ impl Default for Devices {
             mix_audio: Cell::new(false),
             ax: RefCell::default(),
             ax_observer: RefCell::default(),
+            pad_tap: RefCell::default(),
         }
     }
 }
@@ -171,7 +182,11 @@ fn ret(ctx: &Ctx, v: u32) {
 
 fn pad_read(ctx: &Ctx) {
     let status = ctx.regs.r(3);
-    let pads = *ctx.ext::<Sdk>().dev.pads.borrow();
+    let dev = &ctx.ext::<Sdk>().dev;
+    let mut pads = *dev.pads.borrow();
+    if let Some(tap) = dev.pad_tap.borrow_mut().as_mut() {
+        tap(ctx, &mut pads);
+    }
     for (i, p) in pads.iter().enumerate() {
         let at = status + 12 * i as u32;
         let bytes = if p.connected {

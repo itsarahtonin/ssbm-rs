@@ -104,11 +104,43 @@ pub fn args() -> Option<Vec<String>> {
     {
         error(&format!("Couldn't keep settings in {}: {e}", folder.display()));
     }
-    Some(vec![
+    let mut args = vec![
         std::env::args().next().unwrap_or_default(),
         disc.to_string_lossy().into_owned(),
         "--window".to_owned(),
         "--card".to_owned(),
         card.to_string_lossy().into_owned(),
-    ])
+    ];
+    // A recordings folder in the settings folder asks for each session's controllers to be
+    // kept there (inputs.rs), named for the time it started (UTC), to play back with --inputs.
+    let recordings = folder.join("recordings");
+    if recordings.is_dir() {
+        let name = format!("{}.inputs", session_name());
+        args.extend(["--record".to_owned(), recordings.join(name).to_string_lossy().into_owned()]);
+    }
+    Some(args)
+}
+
+/// The time now as YYYY-MM-DD_HH-MM-SS, in UTC.
+fn session_name() -> String {
+    let secs = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map_or(0, |d| d.as_secs());
+    let (days, rest) = ((secs / 86_400) as i64, secs % 86_400);
+    // Days since 1970-01-01 to a civil date (Howard Hinnant's algorithm).
+    let z = days + 719_468;
+    let era = z.div_euclid(146_097);
+    let doe = z - era * 146_097;
+    let yoe = (doe - doe / 1_460 + doe / 36_524 - doe / 146_096) / 365;
+    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
+    let mp = (5 * doy + 2) / 153;
+    let day = doy - (153 * mp + 2) / 5 + 1;
+    let month = if mp < 10 { mp + 3 } else { mp - 9 };
+    let year = yoe + era * 400 + i64::from(month <= 2);
+    format!(
+        "{year:04}-{month:02}-{day:02}_{:02}-{:02}-{:02}",
+        rest / 3600,
+        rest / 60 % 60,
+        rest % 60
+    )
 }

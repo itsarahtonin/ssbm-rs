@@ -683,6 +683,11 @@ impl Hw {
         }
     }
 
+    /// Bytes a second disc reads transfer at, if not at once (`set_disc_rate`).
+    pub fn disc_rate(&self) -> Option<u64> {
+        self.disc_rate.get()
+    }
+
     /// Gives disc reads a transfer time at `rate` bytes a second, on top of each command's
     /// latency, as a drive takes; `None` (the default) finishes each command in that latency,
     /// as Slippi's fast disc nearly does. The game's music needs a drive's pace: HSD starts a

@@ -41,6 +41,7 @@ use ssbm_sdk::{Sdk, boot, hw};
 
 mod matches;
 mod calls;
+mod inputs;
 mod monkey;
 mod probe;
 mod wav;
@@ -285,7 +286,11 @@ fn main() -> ExitCode {
 fn run() -> ExitCode {
     let mut disc_path = std::env::var("SSBM_DISC").ok();
     // A window plays until it's closed.
-    let mut fields = if args().iter().any(|a| a == "--window") { u64::MAX / 4 } else { 600 };
+    let mut fields = if args().iter().any(|a| a == "--window" || a == "--inputs") {
+        u64::MAX / 4
+    } else {
+        600
+    };
     let mut replay_path = None;
     let mut fp_mode = None;
     let mut known_path = None;
@@ -301,6 +306,9 @@ fn run() -> ExitCode {
     let mut call_path: Option<std::path::PathBuf> = None;
     let mut corpus_path: Option<std::path::PathBuf> = None;
     let mut repeat = 1u32;
+    let mut record_path: Option<std::path::PathBuf> = None;
+    let mut inputs_path: Option<std::path::PathBuf> = None;
+    let mut playback_card: Option<std::path::PathBuf> = None;
     let mut args = crate::args().iter().cloned().skip(1);
     while let Some(a) = args.next() {
         match a.as_str() {
@@ -368,6 +376,8 @@ fn run() -> ExitCode {
                 }
             }
             "--window" => {}
+            "--record" => record_path = Some(args.next().expect("--record FILE").into()),
+            "--inputs" => inputs_path = Some(args.next().expect("--inputs FILE").into()),
             _ => disc_path = Some(a),
         }
     }
@@ -446,6 +456,22 @@ fn run() -> ExitCode {
         ssbm_sdk::Card::new(Some(p.clone()))
             .unwrap_or_else(|e| panic!("memory card {}: {e}", p.display()))
     };
+    // --record FILE keeps the controllers the game reads (inputs.rs), and the card as the
+    // session found it; --inputs FILE plays them back on a copy of that card.
+    if let (Some(record), Some(card)) = (&record_path, &card_path) {
+        inputs::keep_card(record, card);
+    }
+    let recording = inputs_path.as_ref().map(|p| inputs::load(p));
+    if let Some((settings, _)) = &recording
+        && card_path.is_none()
+        && let Some(card) = &settings.card
+    {
+        // A run's own copy, so playbacks of one recording side by side don't share a card.
+        let copy = std::env::temp_dir().join(format!("ssbm-rs-playback-{}.card", std::process::id()));
+        std::fs::copy(card, &copy).unwrap_or_else(|e| panic!("{}: {e}", card.display()));
+        card_path = Some(copy.clone());
+        playback_card = Some(copy);
+    }
     let card = card_path.map(open_card);
     let card_b = card_b_path.map(open_card);
     let sdk = ssbm_sdk::install(&ctx, disc, card, card_b);
@@ -640,6 +666,20 @@ fn run() -> ExitCode {
     #[cfg(feature = "window")]
     if window::requested() {
         window::install(&sdk, replay_path.is_none());
+    }
+    // The settings a recording keeps are the ones the run has now, a window's included; a
+    // playback takes them unless AX or DISC_RATE says otherwise.
+    if let Some(path) = &record_path {
+        inputs::record(&sdk, path);
+    }
+    if let Some((settings, reads)) = recording {
+        if std::env::var_os("AX").is_none() {
+            sdk.dev.mix_audio.set(settings.sound);
+        }
+        if std::env::var_os("DISC_RATE").is_none() {
+            sdk.hw.set_disc_rate(settings.disc_rate);
+        }
+        inputs::play(&sdk, reads);
     }
     // GX_RENDER=DIR draws the GPU's command stream (ssbm-render) and saves each frame there.
     // GX_RENDER=- draws them and keeps none, to time the renderer. GX_GPU_XFB=1 copies frames
@@ -1672,6 +1712,10 @@ fn run() -> ExitCode {
     }
     sdk.hw.finish_renderer();
     ssbm_sdk::flush_cards();
+    inputs::flush();
+    if let Some(copy) = playback_card {
+        let _ = std::fs::remove_file(copy);
+    }
     eprintln!(
         "{} fields, {} M instructions, {} draws",
         sdk.hw.fields.get(),
