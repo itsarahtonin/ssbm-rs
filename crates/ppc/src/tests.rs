@@ -211,7 +211,8 @@ fn calls_that_never_return_go_unchecked() {
 #[test]
 fn mutated_checks_compare_calls_that_never_return() {
     // f: p = *(u32*) 0x80600010; if (!p) assert(file, 42); return *p. A mutated check that makes
-    // p null ends both sides at the assertion's call, compared by what they pass it.
+    // p null ends both sides at the assertion's call, compared by what they pass it: the file
+    // name's text, which the port passes another copy of.
     const A: u32 = CODE + 0x80;
     let f = [
         0x7C08_02A6, // mflr r0
@@ -236,6 +237,10 @@ fn mutated_checks_compare_calls_that_never_return() {
         ctx.write_u32(A, 0x4800_0000); // b .
         ctx.write_u32(0x8060_0010, 0x8060_0100);
         ctx.write_u32(0x8060_0100, 5);
+        for (i, b) in b"f.c\0".iter().enumerate() {
+            ctx.write_u8(0x8060_0200 + i as u32, *b);
+            ctx.write_u8(0x8060_0300 + i as u32, *b);
+        }
         ctx.register(A, |_| panic!("the assertion's call ran"));
         ctx.lockstep.noreturn.borrow_mut().insert(A);
         ctx.lockstep.arg_regs.borrow_mut().insert(A, (2, 0));
@@ -246,7 +251,7 @@ fn mutated_checks_compare_calls_that_never_return() {
             |ctx| {
                 let p = ctx.read_u32(0x8060_0010);
                 if p == 0 {
-                    ctx.regs.set_r(3, 0x8060_0200);
+                    ctx.regs.set_r(3, 0x8060_0300);
                     ctx.regs.set_r(4, LINE.with(std::cell::Cell::get));
                     ctx.invoke(A);
                 }

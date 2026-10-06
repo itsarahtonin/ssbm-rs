@@ -996,18 +996,47 @@ impl Ctx {
         self.lockstep.call_ends(trace);
     }
 
+    /// The printable text a NUL-terminated string at `addr` in main memory holds, such as the
+    /// empty format OSPanic is often given.
+    fn c_string(&self, addr: u32) -> Option<String> {
+        const MAX: u32 = 256;
+        if !(0x8000_0000..0x8180_0000 - MAX).contains(&addr) {
+            return None;
+        }
+        let mut text = String::new();
+        for i in 0..MAX {
+            match self.read_u8(addr + i) {
+                0 => return Some(text),
+                b @ (0x20..=0x7E | b'\n' | b'\t') => text.push(char::from(b)),
+                _ => return None,
+            }
+        }
+        None
+    }
+
     fn invoke_traced(&self, addr: u32) {
         if self.lockstep.is_mutating() && self.lockstep.noreturn.borrow().contains(&addr) {
             // Its inputs fail an assertion, whose handlers save the CPU's registers, which
             // ports keep elsewhere, and never return: the side stops at the call.
-            // What it takes of r3..r5, as its prototype says; locals lie at different stack
-            // addresses on the two sides, so a pointer to one is only that.
+            // What it takes of r3..r5, as its prototype says. Locals lie at different stack
+            // addresses on the two sides, so a pointer to one is only that; a string, such as
+            // an assertion's expression, may be another copy of the same literal, so it is
+            // its text.
             let n = self.lockstep.arg_regs.borrow().get(&addr).map_or(3, |&(i, _)| i.min(3));
             let bounds = self.stack_bounds.borrow().as_ref().and_then(|f| f(self));
             let sp = self.regs.r(1);
             let (lo, hi) = bounds.unwrap_or((sp, sp.saturating_add(lockstep::STACK_SCRATCH)));
-            let args = (3..3 + u32::from(n))
-                .map(|r| Some(self.regs.r(r as usize)).filter(|v| !(lo..hi).contains(v)))
+            let args = (3..3 + usize::from(n))
+                .map(|r| {
+                    let v = self.regs.r(r);
+                    if (lo..hi).contains(&v) {
+                        "a local".to_owned()
+                    } else if let Some(text) = self.c_string(v) {
+                        format!("{text:?}")
+                    } else {
+                        format!("{v:#X}")
+                    }
+                })
                 .collect();
             std::panic::panic_any(lockstep::Halt { addr, args });
         }

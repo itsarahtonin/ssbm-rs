@@ -630,12 +630,7 @@ fn panic_text(p: &(dyn std::any::Any + Send)) -> String {
     } else if let Some(d) = p.downcast_ref::<Diverged>() {
         d.0.clone()
     } else if let Some(h) = p.downcast_ref::<Halt>() {
-        let args: Vec<String> = h
-            .args
-            .iter()
-            .map(|a| a.map_or_else(|| "a local".to_owned(), |v| format!("{v:#X}")))
-            .collect();
-        format!("called {:#010X}, which never returns, with ({})", h.addr, args.join(", "))
+        format!("called {:#010X}, which never returns, with ({})", h.addr, h.args.join(", "))
     } else if let Some(f) = p.downcast_ref::<crate::Fault>() {
         f.to_string()
     } else if let Some(s) = p.downcast_ref::<String>() {
@@ -1168,8 +1163,8 @@ pub struct Runaway(pub &'static str);
 /// both sides making that call alike, after the same writes, is the same behavior.
 pub struct Halt {
     pub addr: u32,
-    /// Those it takes, `None` for a pointer to the stack.
-    pub args: Vec<Option<u32>>,
+    /// Those it takes, as values, strings' texts or "a local".
+    pub args: Vec<String>,
 }
 
 /// Checks the port of `addr` from a call no code made, whose arguments `setup` puts in place,
