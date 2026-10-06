@@ -13,6 +13,7 @@ use std::collections::{BTreeMap, HashMap, HashSet};
 use std::hash::{DefaultHasher, Hash, Hasher};
 use std::io::{BufWriter, Write};
 use std::path::{Path, PathBuf};
+use std::panic::{AssertUnwindSafe, catch_unwind, resume_unwind};
 use std::rc::Rc;
 
 use ssbm_rt::Ctx;
@@ -62,9 +63,27 @@ fn check(ctx: &Ctx, call: &Call) {
     });
     ctx.lockstep.resume(call.mutated || poked, call.stub);
     DEADLINE.with(|d| d.set(ctx.executed() + REPLAY_MAX));
-    ctx.invoke(call.addr);
+    let result = catch_unwind(AssertUnwindSafe(|| ctx.invoke(call.addr)));
     DEADLINE.with(|d| d.set(0));
     ctx.lockstep.resume(false, None);
+    // A fault outside any check, as a saved mutated state makes where its function's checks
+    // have ended, loses that call, not the calls after it.
+    if let Err(p) = result {
+        if p.is::<ssbm_rt::Stop>() {
+            resume_unwind(p);
+        }
+        let why = p
+            .downcast_ref::<ssbm_rt::Fault>()
+            .map(|f| f.to_string())
+            .or_else(|| p.downcast_ref::<String>().cloned())
+            .or_else(|| p.downcast_ref::<&str>().map(|s| (*s).to_owned()))
+            .unwrap_or_else(|| "panic".to_owned());
+        eprintln!(
+            "corpus: a{} call of {} stopped outside its checks ({why}); going on",
+            if call.mutated { " mutated" } else { "" },
+            ctx.name_of(call.addr)
+        );
+    }
 }
 
 /// Mismatching checks saved per function.
