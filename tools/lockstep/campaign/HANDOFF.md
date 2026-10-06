@@ -12,7 +12,7 @@ Mismatches: none with real inputs (the overnight one below came from a match the
 
 Everything lives in this clone, ignored by Git: `local/` (env.sh, lockstep results and reports, cards, replays, captures, traces) and the frozen runners in `target/alt/release`. `local/lockstep/binaries.txt` names each results directory's commit in this repository's history; the predecessor repository's hashes are kept in `binaries-old-history.txt` (the trees of `crates/game/src` match pair by pair, so staleness carries over). The private data release stays in the predecessor repository (`tools/cloud/`). The album jobs' 24-snapshot card is `local/lockstep/templates/template-snaps.raw` (copy it to `$L/cards/snap/` before `mkjobs-album.py`).
 
-The overnight wave's controller, queue, binary provenance and reports are in `C:/Users/malur/.codex/reports/ssbm-overnight-2026-10-05/`.
+The overnight wave's controller, queue, binary provenance and reports are kept outside the repository, on the machine that ran it (`ssbm-overnight-2026-10-05` in the Codex reports folder).
 
 ## Campaigns
 
