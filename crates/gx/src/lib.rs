@@ -55,6 +55,22 @@ pub trait Sink {
     }
     /// Finishes what was sent, at the end of a run.
     fn finish(&mut self) {}
+    /// What copies from the EFB to textures wrote to memory since the last call, for the host
+    /// to write to its own: the game's code may read a copy, as it does a camera snapshot's to
+    /// save it. Copies kept on the GPU are left out.
+    fn take_written(&mut self) -> Vec<Written> {
+        Vec::new()
+    }
+}
+
+/// A row a copy from the EFB wrote to memory.
+pub struct Written {
+    /// Its physical address.
+    pub address: u32,
+    pub bytes: Vec<u8>,
+    /// Memory there as the copy found it, when the game has run on since: on the console the
+    /// copy lands at once, so each byte the game has changed since keeps the game's value.
+    pub before: Option<Vec<u8>>,
 }
 
 /// Registers and texture memory changed since the last `State::take_delta`: what a copy of the

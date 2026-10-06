@@ -6,7 +6,7 @@
 //! each draw's vertices, and a renderer on another thread, with a copy of its own, draws them,
 //! so the game runs on while it draws, at most `AHEAD` frames behind.
 
-use std::collections::HashMap;
+use std::collections::{HashMap, VecDeque};
 use std::sync::{Arc, Condvar, Mutex, mpsc};
 
 use ssbm_gx::{Delta, Draw, Memory, Sink, State, vertex};
@@ -44,11 +44,13 @@ enum Packet {
     Forget(u32, u32),
 }
 
-/// Frames the render thread has finished.
+/// Frames the render thread has finished, and what its copies to textures wrote to memory
+/// that the game thread hasn't taken yet, by which copy it was (counting from 0).
 #[derive(Default)]
 struct Done {
     frames: Mutex<u64>,
     cond: Condvar,
+    written: Mutex<Vec<(u64, Vec<(u32, Vec<u8>)>)>>,
 }
 
 /// A `Renderer` on its own thread, as a sink for the game thread's GX stream.
@@ -64,6 +66,11 @@ pub struct Threaded {
     frames: u64,
     /// Where copies went: this thread reads the game's memory, the renderer can't.
     footprints: copy::Footprints,
+    /// Copies to textures sent.
+    copies: u64,
+    /// The memory under each copy the renderer encodes into memory, as the copy found it, by
+    /// which copy it is: its first byte's physical address and the bytes to its last.
+    before: VecDeque<(u64, u32, Vec<u8>)>,
 }
 
 impl Threaded {
@@ -92,6 +99,8 @@ impl Threaded {
             done,
             frames: 0,
             footprints: copy::Footprints::default(),
+            copies: 0,
+            before: VecDeque::new(),
         }
     }
 
@@ -155,6 +164,35 @@ impl Sink for Threaded {
         }
     }
 
+    /// What the render thread's copies wrote so far, without waiting for it, each with the
+    /// memory as its copy found it: the game runs on, up to `AHEAD` frames, before the bytes
+    /// land, and what it wrote meanwhile stays (`Written::before`). A copy whose memory this
+    /// thread didn't keep, one kept on the GPU, writes nothing.
+    fn take_written(&mut self) -> Vec<ssbm_gx::Written> {
+        let done = std::mem::take(&mut *self.done.written.lock().unwrap());
+        let mut out = Vec::new();
+        for (copy, rows) in done {
+            while self.before.front().is_some_and(|b| b.0 < copy) {
+                self.before.pop_front();
+            }
+            let Some((_, start, before)) = self.before.pop_front_if(|b| b.0 == copy) else {
+                continue;
+            };
+            for (at, bytes) in rows {
+                let from = (at & 0x01FF_FFFF).wrapping_sub(start) as usize;
+                let Some(old) = before.get(from..from + bytes.len()) else {
+                    continue;
+                };
+                out.push(ssbm_gx::Written {
+                    address: at,
+                    bytes,
+                    before: Some(old.to_vec()),
+                });
+            }
+        }
+        out
+    }
+
     fn copy(&mut self, state: &State, value: u32, mem: &dyn Memory) {
         self.changes(state);
         let frame_end = bits(value, 14, 1) != 0;
@@ -163,7 +201,17 @@ impl Sink for Threaded {
                 self.batch.push(Packet::Forget(start, end));
             }
         } else if let Some(f) = copy::footprint(state, value) {
+            if copy::request(state, value).is_none() {
+                let (start, end) = f.span();
+                let start = start & 0x01FF_FFFF;
+                let mut bytes = vec![0; end.saturating_sub(f.address) as usize];
+                mem.read(start, &mut bytes);
+                self.before.push_back((self.copies, start, bytes));
+            }
             self.footprints.record(f, mem);
+        }
+        if !frame_end {
+            self.copies += 1;
         }
         self.batch.push(Packet::Copy(value));
         if frame_end {
@@ -240,6 +288,7 @@ fn prepare_all(rx: &mpsc::Receiver<Vec<Packet>>, tx: &mpsc::Sender<Vec<Packet>>)
 
 fn run(mut renderer: Renderer, rx: &mpsc::Receiver<Vec<Packet>>, done: &Done) {
     let mut state = State::new();
+    let mut copies = 0u64;
     let mut memory = Held(HashMap::new());
     while let Ok(batch) = rx.recv() {
         for packet in batch {
@@ -287,6 +336,16 @@ fn run(mut renderer: Renderer, rx: &mpsc::Receiver<Vec<Packet>>, done: &Done) {
                     if bits(value, 14, 1) != 0 {
                         *done.frames.lock().unwrap() += 1;
                         done.cond.notify_all();
+                    } else {
+                        let rows: Vec<(u32, Vec<u8>)> = renderer
+                            .take_written()
+                            .into_iter()
+                            .map(|w| (w.address, w.bytes))
+                            .collect();
+                        if !rows.is_empty() {
+                            done.written.lock().unwrap().push((copies, rows));
+                        }
+                        copies += 1;
                     }
                 }
             }
