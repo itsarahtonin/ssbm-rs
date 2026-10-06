@@ -2,7 +2,7 @@
 # Lockstep checks of played sessions: takes the controller recordings (--record, which the
 # player makes when its folder has a recordings folder) from RECORDINGS into $L/recordings,
 # each with the card its session started on, adds a job playing each one to jobs-rec.txt and
-# runs those not yet done on BIN (built from HEAD) into cov-OUT (cov-rec by default), with
+# runs those not yet done on BIN (built from HEAD) into cov-NAME (cov-rec by default), with
 # LOCKSTEP_KNOWN from the latest report so each job tells what it verified beyond earlier
 # results. Then reports again.
 #
@@ -17,7 +17,7 @@ cd "$(dirname "$0")/../../.."
 . tools/lockstep/campaign/env.sh
 need_disc
 SRC=${RECORDINGS:-${APPDATA:?RECORDINGS}/ssbm-rs/recordings}
-NAME=${OUT:-rec}
+NAME=${NAME:-rec}
 COMMIT=$(git rev-parse --short HEAD)
 mkdir -p $L/recordings
 touch $L/jobs-rec.txt
