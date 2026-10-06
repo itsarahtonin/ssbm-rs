@@ -44,6 +44,7 @@ mod calls;
 mod inputs;
 mod monkey;
 mod probe;
+mod trace;
 mod wav;
 #[cfg(feature = "window")]
 mod adapter;
@@ -1574,9 +1575,15 @@ fn run() -> ExitCode {
         if slippi.is_some() {
             ssbm_slippi::apply_bootloader(&ctx);
         }
+        // STATE_TRACE=FILE writes the game's state at the end of every engine tick, for
+        // melee-hd's oracle (trace.rs).
+        if let Ok(path) = std::env::var("STATE_TRACE") {
+            trace::install(&ctx, &path);
+        }
         eprintln!("booting {} at {entry:#010X}", disc_path);
         ctx.invoke(entry);
     }));
+    trace::finish();
     let executed = interp.executed.get();
     let mut replay_ok = true;
     if let Some(dev) = &slippi {
