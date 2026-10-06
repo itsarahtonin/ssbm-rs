@@ -9,7 +9,11 @@ runs from them, and sums them per unit, to choose what to aim at next:
   uncalled   in a function no run has called
 
     python tools/lockstep/triage.py C:/Projects/melee local/lockstep/report.csv \\
-        --coverage local/lockstep/known.bin --gaps tools/lockstep/gaps.txt [--units N]
+        --coverage local/lockstep/known.bin --gaps tools/lockstep/gaps.txt [--units N] \\
+        [--functions OUT]
+
+--functions writes each function's open blocks by bucket, a line each: name, then the counts in
+the order above.
 
 Its total matches the report's open blocks (countable less verified and explained), as
 coverage.py counts them; frontier.py breaks the frontier down further by target kind.
@@ -36,6 +40,7 @@ def main():
     ap.add_argument("--coverage", nargs="+", default=[])
     ap.add_argument("--gaps")
     ap.add_argument("--units", type=int, default=30)
+    ap.add_argument("--functions")
     args = ap.parse_args()
     rows = list(csv.DictReader(open(args.report, encoding="utf-8")))
     info = {r["name"]: r for r in rows}
@@ -49,6 +54,7 @@ def main():
     total = collections.Counter()
     per_unit = collections.defaultdict(collections.Counter)
     per_fn = collections.Counter()
+    fn_kinds = collections.defaultdict(collections.Counter)
     unit_consts = {}
     for unit, name, insns, labels in funcs:
         start = insns[0][0]
@@ -87,6 +93,11 @@ def main():
             total[kind] += 1
             per_unit[unit][kind] += 1
             per_fn[name] += 1
+            fn_kinds[name][kind] += 1
+    if args.functions:
+        with open(args.functions, "w", encoding="utf-8", newline="\n") as out:
+            for name, c in sorted(fn_kinds.items(), key=lambda kv: -sum(kv[1].values())):
+                out.write(f"{name} " + " ".join(str(c[k]) for k in KINDS) + "\n")
     print(f"open blocks: {sum(total.values())}")
     for kind in KINDS:
         print(f"  {kind:9} {total[kind]:5}")

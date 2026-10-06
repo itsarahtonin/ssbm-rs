@@ -13,6 +13,8 @@
 # (or those CORPORA names) REPEAT times (1) with MUTATE mutated checks each (200), aimed by
 # targets-ROUND.txt, into $L/cov-NAME (one results file per corpus, skipping corpora done
 # there), and adds cov-NAME to binaries.txt at HEAD. DIR is CORPUS_DIR, $L/corpus by default.
+# DIRECTED=1 makes every other mutated check a directed one (LOCKSTEP_DIRECTED): saved calls
+# are outermost checks, which a function only ever called inside other checks gets nowhere else.
 cd "$(dirname "$0")/../../.."
 . tools/lockstep/campaign/env.sh
 need_disc
@@ -68,6 +70,7 @@ fuzz)
         n=$(basename $c .corpus)
         grep -q "^lockstep:" $OUT/$n.txt 2>/dev/null && continue
         env LOCKSTEP_MUTATE=$MUTATE LOCKSTEP_SEED=$SEED LOCKSTEP_TARGETS=$L/targets-$ROUND.txt \
+            ${DIRECTED:+LOCKSTEP_DIRECTED=1} \
             LOCKSTEP_NEEDED=$L/needed-$ROUND.txt LOCKSTEP_DONE=$L/done-$ROUND.txt \
             LOCKSTEP_COVERAGE=$OUT/$n.bin LOCKSTEP_LEDGER=$OUT/$n.csv \
             timeout 7200 $BIN "$SSBM_DISC" --corpus $c --repeat $REPEAT --port all --lockstep > $OUT/$n.txt 2>&1
