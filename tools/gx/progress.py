@@ -3,11 +3,13 @@ comparison of original-code and all-ports runs (smoke.sh), the renderer's frames
 Dolphin's software renderer (frames.sh), and the status of the rungs not measured yet. Each run
 adds an entry to local/gx/progress-history.json, which the page charts.
 
-    python3 tools/gx/progress.py [OUT_DIR]
+    python3 tools/gx/progress.py [OUT_DIR] [--json SNAPSHOT]
 
 OUT_DIR (local/gx/progress by default) gets index.html, and img/ with each run's worst frame,
 ours, Dolphin's and their difference, as PNGs at full size; files.txt lists them, to publish
-beside the page.
+beside the page. --json also writes the data as the portable snapshot keeps it
+(docs/progress/data/graphics.json): replays named scenario-001 on in sorted order, no images,
+and the history SNAPSHOT already holds followed by the local entries measured since.
 """
 import datetime
 import argparse
@@ -22,6 +24,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 GX = os.path.join(ROOT, "local", "gx")
 sys.path.insert(0, HERE)
+
+import compare  # noqa: E402, beside this script
 
 # A frame matches Dolphin's within tolerance when its PSNR is at least this, and no more than
 # this share of its pixels is off by more than 32 levels in some channel.
@@ -139,7 +143,6 @@ def audio_results():
 
 
 def frame_results(img_dir):
-    import compare
     out = []
     d = os.path.join(GX, "frames")
     if not os.path.isdir(d):
@@ -170,10 +173,47 @@ def frame_results(img_dir):
     return out
 
 
+def write_snapshot(path, data):
+    """The page's data as the portable snapshot keeps it: replays anonymized, no images, and the
+    snapshot's history (its commits mapped to this repository) before the newer local entries."""
+    old = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {}
+    names = sorted({r["name"] for kind in ("streams", "frames", "audio") for r in data[kind]})
+    label = {n: f"scenario-{i + 1:03d}" for i, n in enumerate(names)}
+    snap = json.loads(json.dumps(data))
+    for kind in ("streams", "frames", "audio"):
+        for r in snap[kind]:
+            r["name"] = label[r["name"]]
+    for r in snap["frames"]:
+        r["ours"] = r["ref"] = r["diff"] = None
+    history = old.get("history", [])
+    last = history[-1]["at"] if history else ""
+    commit = git("rev-parse", "HEAD")
+    for entry in data["history"]:
+        if entry["at"] > last:
+            history.append(dict(entry, commit=git("rev-parse", entry["commit"]) or entry["commit"]))
+    snap.update(
+        branch="main",
+        commit=commit,
+        history=history,
+        expected={"streams": len(snap["streams"]), "frames": len(snap["frames"]), "audio": len(snap["audio"])},
+        imagesOmitted=True,
+        provenance={
+            "sourceRevision": commit,
+            "exportedUtc": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+            "kind": "measured by smoke.sh, frames.sh and audio.sh at the source revision",
+            "measuredRevision": commit,
+            "imagePolicy": "Screenshots remain in the private evidence set; scenario filenames anonymized.",
+        },
+    )
+    with open(path, "w", encoding="utf-8", newline="\n") as file:
+        json.dump(snap, file, separators=(",", ":"), allow_nan=False)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("out_dir", nargs="?", default=os.path.join(GX, "progress"))
     parser.add_argument("--from-json")
+    parser.add_argument("--json")
     args = parser.parse_args()
     out_dir = args.out_dir
     if args.from_json:
@@ -221,6 +261,8 @@ def main():
         "window": {"status": WINDOW[0], "detail": WINDOW[1]},
         "history": history,
     }
+    if args.json:
+        write_snapshot(args.json, data)
     template = open(os.path.join(HERE, "progress.template.html"), encoding="utf-8").read()
     html = template.replace("/*DATA*/null", json.dumps(data, separators=(",", ":")))
     out = os.path.join(out_dir, "index.html")

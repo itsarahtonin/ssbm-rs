@@ -5,7 +5,7 @@ These are saved research snapshots, with their aggregate data and rendering sour
 | Dashboard | Snapshot and purpose |
 | --- | --- |
 | [Port Coverage Map](https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb) · [source](coverage.html) · [data](data/coverage.json) | 19,668 functions, 33 saved rounds through f10, exported on October 6, 2026 (UTC). Compare measured coverage, ledger explanations, and outstanding reviews. |
-| [Graphics and Audio Ladder](https://claude.ai/artifact/Ppx3oVXq7qbkRck8tvcrZ4) · [source](graphics.html) · [data](data/graphics.json) | Saved October 3, 2026 at 00:10 by the original tracker. Metrics for a suite of 40 GX-stream scenarios and 41 frame/audio scenarios, plus renderer features and measured history. |
+| [Graphics and Audio Ladder](https://claude.ai/artifact/Ppx3oVXq7qbkRck8tvcrZ4) · [source](graphics.html) · [data](data/graphics.json) | Measured October 5, 2026 on main: all 40 GX-stream scenarios at zero difference, all 41 frame scenarios within tolerance and all 41 audio scenarios matching, plus renderer features and measured history. |
 
 The dashboard links open the hosted pages, published from the HTML files here.
 
@@ -21,7 +21,7 @@ History is reconstructed from saved per-function reports, identified by unit and
 
 ## Graphics
 
-Graphics/audio status requires the full expected suite to pass, and audio also requires replay synchronization. Historical graphics commits are mapped to the corresponding source trees in this repository; the saved tracker measured revision `3a1229d2afa85ce6ce83ba51aeb2ecb2c779aa0f`. Its branch label describes that historical measurement, not the current checkout. Replay filenames have stable anonymous scenario labels within the graphics dataset. Game-frame images remain private, so the frame viewer preserves metrics and explains why images are unavailable. Renderer features and window status are saved tracker annotations, not new measurements made during this export.
+Graphics/audio status requires the full expected suite to pass, and audio also requires replay synchronization. The latest entry was measured on main (`progress.py --json` writes the snapshot from the local results); the history's earlier commits are mapped to the corresponding source trees in this repository. Replay filenames have stable anonymous scenario labels within the graphics dataset. Game-frame images stay out of the repository, so this copy's frame viewer shows metrics only; the hosted page shows the worst frames, with other players' name tags covered (`tools/gx/redact.py`). Renderer features and window status are annotations in `progress.py`, not measurements.
 
 ## Regeneration and checks
 
