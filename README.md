@@ -2,12 +2,11 @@
 
 A Rust port of Super Smash Bros. Melee NTSC 1.02 (GALE01 revision 2), built from the [Melee decompilation](https://github.com/doldecomp/melee) and checked against the original game.
 
-The project aims to preserve the game's behavior, including its floating-point results and memory layout. Rust functions are checked call by call against the original machine code, and recorded games are checked against their Slippi replays. The translator, runtime, and verification tools are also intended as a research resource for similar projects.
+The project aims to preserve the game's behavior, including its floating-point results and memory layout. Rust functions are checked call by call against the original machine code, and recorded games are checked against their Slippi replays.
 
-<a href="https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb"><picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/progress/coverage-dark.svg">
-  <img alt="Port coverage map: 152,971 of 163,387 blocks verified by lockstep (93.6%) at round f10, October 6, 2026 (UTC)" src="docs/progress/coverage-light.svg">
-</picture></a>
+ssbm-rs is a hobby project, shared in case the port or the tools behind it are useful or interesting to someone else.
+
+<a href="https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb"><img alt="Port coverage at round f10: 152,971 of 163,387 blocks verified by lockstep (93.6%), 3.1% explained by the gap ledger, 3.2% open; then the same split for each area of the code" src="docs/progress/coverage.svg"></a>
 
 Interactive: [Port Coverage Map](https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb) · [Graphics and Audio Ladder](https://claude.ai/artifact/Ppx3oVXq7qbkRck8tvcrZ4) · [about the dashboards](docs/progress/README.md)
 
