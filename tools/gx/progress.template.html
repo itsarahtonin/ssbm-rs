@@ -155,7 +155,7 @@ const median = (() => {
 })();
 const stat = (k, v, d) => `<div class="stat"><span class="k">${k}</span><span class="v num">${v}</span><span class="d">${d}</span></div>`;
 $("stats").innerHTML = [
-  stat("GX streams", `${zero}/${streams.length}`, `smoke replays at zero diff or explained (${explainedCount} explained)`),
+  stat("GX streams", `${zero}/${streams.length}`, explainedCount ? `smoke replays at zero diff or explained (${explainedCount} explained)` : "smoke replays at zero diff"),
   stat("Frames", `${ok}/${runs.length}`, "runs within tolerance of Dolphin"),
   stat("Median PSNR", median === null ? "–" : `${Number(median).toFixed(1)} dB`, worst === null ? "" : `worst ${worst.toFixed(1)} dB`),
   stat("Audio", `${audioZero}/${D.audio.length || 41}`, "runs whose AX matches Dolphin's"),
@@ -171,9 +171,9 @@ const rung = (i, title, goal, status, frac, detail) => {
 const streamDone = streams.length === expected.streams && zero === expected.streams;
 const framesDone = runs.length === expected.frames && ok === expected.frames;
 $("ladder").innerHTML = [
-  rung(1, "GX streams match", "Original code and all ports send the GPU the same draws, on the 40 smoke replays; each difference fixed or explained.",
+  rung(1, "GX streams match", `Original code and all ports send the GPU the same draws, on the 40 smoke replays${explainedCount ? "; each difference fixed or explained" : ""}.`,
     streamDone ? "done" : "in progress", D.streams.length ? zero / D.streams.length : 0,
-    `${zero - explainedCount} of ${D.streams.length} replays at zero diff, ${explainedCount} explained${streams.length < D.streams.length ? `, ${D.streams.length - streams.length} still running` : ""}`),
+    `${zero - explainedCount} of ${D.streams.length} replays at zero diff${explainedCount ? `, ${explainedCount} explained` : ""}${streams.length < D.streams.length ? `, ${D.streams.length - streams.length} still running` : ""}`),
   rung(2, "Frames match Dolphin", "The wgpu renderer draws what Dolphin's software renderer draws from the same FIFO logs, within tolerance, on the smoke replays and a menu run.",
     framesDone ? "done" : "in progress", expected.frames ? ok / expected.frames : 0,
     `${ok} of ${runs.length} runs within tolerance`),
