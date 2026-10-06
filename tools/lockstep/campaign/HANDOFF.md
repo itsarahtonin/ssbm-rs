@@ -6,7 +6,7 @@ A dated checkpoint, not a live status: check local processes and reports before 
 
 The last report (October 5, after round f10): 152,971 of 163,387 countable blocks verified (93.6%), 5,124 explained by the ledger.
 
-Mismatches: none with real inputs in a match the game can set up (the overnight one is below); every mismatch from changed inputs is reviewed in `tools/lockstep/reviewed.txt` (12 functions; round f10's `ftCo_Fall_IASA_Inner` and `ftCo_800A75DC` were the last: a mutated air special lookup that calls a Mute City callback, and a floor-line walk sent into the hardware registers).
+Mismatches: none with real inputs (the overnight one below came from a match the game can't set up, and `nighthands13`'s results are in `local/lockstep/quarantine/`); every mismatch from changed inputs is reviewed in `tools/lockstep/reviewed.txt` (12 functions; round f10's `ftCo_Fall_IASA_Inner` and `ftCo_800A75DC` were the last: a mutated air special lookup that calls a Mute City callback, and a floor-line walk sent into the hardware registers).
 
 ## Runtime data
 
