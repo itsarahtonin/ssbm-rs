@@ -4,9 +4,9 @@ A dated checkpoint, not a live status: check local processes and reports before 
 
 ## Numbers
 
-The last report (October 5, after the overnight wave below): 152,934 of 163,387 countable blocks verified (93.6%), 5,061 explained by the ledger. Since then the ledger dropped the 32 claims runs had refuted and gained 66 reviewed fighter claims, so the next report recounts the explained blocks.
+The last report (October 5, after round f10): 152,971 of 163,387 countable blocks verified (93.6%), 5,124 explained by the ledger.
 
-Mismatches: none with real inputs in a match the game can set up (the overnight one is below); every mismatch from changed inputs is reviewed in `tools/lockstep/reviewed.txt` (11 functions; `Fighter_procMap` was the last, a mutated callback that became `memset`).
+Mismatches: none with real inputs in a match the game can set up (the overnight one is below); every mismatch from changed inputs is reviewed in `tools/lockstep/reviewed.txt` (12 functions; round f10's `ftCo_Fall_IASA_Inner` and `ftCo_800A75DC` were the last: a mutated air special lookup that calls a Mute City callback, and a floor-line walk sent into the hardware registers).
 
 ## Runtime data
 
@@ -16,7 +16,7 @@ The overnight wave's controller, queue, binary provenance and reports are in `C:
 
 ## Campaigns
 
-Finished: cov-f8, cov-levers, cov-recipes-menus, cov-recipes-matches and cov-recipes-more (624 of 625 jobs with a result; `lvvsnostage` stopped after asking for an 11 GB allocation, undiagnosed).
+Finished: cov-f8, cov-levers, cov-recipes-menus, cov-recipes-matches and cov-recipes-more (624 of 625 jobs with a result; `lvvsnostage` stopped after asking for an 11 GB allocation, undiagnosed), and cov-f10 (287 focused jobs on 3d9e1c3, the first round whose probes pass arguments past r10 on the stack; about four hours, 145 more blocks verified, its two mutated mismatches reviewed).
 
 The overnight wave (`jobs-f9night.txt`, 275 focused jobs, and `jobs-night-targeted.txt`, 24 human-hands and 16 item jobs, on `ssbm-run-f9night`) ran 53 of 315 jobs before a real-call mismatch stopped its controller; 262 never ran. That mismatch, `OSResumeThread` in `nighthands13`, came from a match with a Crazy Hand and no Master Hand, which failed one of the game's own assertions and met its crash path; the original code alone fails the same match too. `nighthands08` and `nighthands11` (only hands) stopped on the hands' null nearest opponent (`ftBossLib_8015C208`), identically with the original alone, as did `rxhandsstamina` once its one-life Foxes were out. The runner now gives matches with the hands a line-up the game can have, so the hands jobs need regenerating before they run again; the rest of the queue can run as written.
 
@@ -38,7 +38,7 @@ A focused round resumes with `RESUME=1 NAME=... bash tools/lockstep/campaign/foc
 
 ## Next steps
 
-1. Regenerate the human-hands jobs with the fixed runner, then decide on running the 262 queued jobs, watched rather than under a detached stop-on-mismatch controller. Report afterwards and update the dashboards' data.
+1. Regenerate the human-hands jobs (`jobs-night-targeted.txt`) with the fixed runner and run them with its item jobs. Round f10 regenerated the focused jobs, so the rest of the f9night queue is superseded.
 2. The long tail: about 2,200 open blocks in units no analysis covered, grouped in `local/lockstep/notes-tail/units-*.tsv`. Only the fighters group was analysed (`notes-tail/fighters.txt` has its recipes; 66 of its 68 ledger lines are in gaps.txt, the other two in `fighters-ledger-held.txt`); items, libraries, other melee code and gm/mn remain.
 3. Recipes not yet turned into jobs: `recipes.md`, `local/lockstep/notes-gr3/` and the fighters notes, less what the generators cover. Runner changes still wanted: `NAMES` with raw bytes and `DVD_COVER` with a third toggle.
 4. When jobs stop gaining, the rest of the unverified blocks in analysed units are mostly odd state (null arms on loaded data, matrix-dirty tests, data-fixed random ranges): directed mutated checks (`LOCKSTEP_DIRECTED`, targets on those loads) or the ledger if the evidence is strong.

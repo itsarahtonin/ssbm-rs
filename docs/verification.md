@@ -4,7 +4,7 @@ ssbm-rs measures function behavior, replay state, GPU output, and audio separate
 
 ## Recorded coverage
 
-The latest local campaign report, from October 5, 2026, records 152,934 of 163,387 countable blocks verified by runs (93.6%), with another 5,061 explained by the gap ledger. These are campaign measurements, not a fresh result from building this checkout. The ledger has changed since that report: 32 claims whose blocks runs had verified were removed, and 66 reviewed claims about fighter code were added. The next report will recount the explained blocks.
+The latest local campaign report, after round f10 on October 5, 2026, records 152,971 of 163,387 countable blocks verified by runs (93.6%), with another 5,124 explained by the gap ledger. These are campaign measurements, not a fresh result from building this checkout.
 
 The report's one mismatch with real inputs, in `OSResumeThread`, came from a match the game never sets up: a Crazy Hand without Master Hand, which failed one of the game's own assertions, so the check met the assertion's crash path. The original code alone also fails that match. The runner no longer draws such line-ups. Every mismatch from changed inputs is reviewed in `tools/lockstep/reviewed.txt`: twelve functions, all from inputs the game cannot produce. None awaits review. `fn_8017D9C0`'s two mismatches, once reviewed as the two sides seeing different state, came from the probe harness passing arguments past r10 in registers, which overwrote r13 for three probed functions; probes now pass them on the stack, and those functions' earlier probe results no longer count.
 

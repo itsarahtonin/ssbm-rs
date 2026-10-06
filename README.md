@@ -6,7 +6,7 @@ The project aims to preserve the game's behavior, including its floating-point r
 
 <a href="https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb"><picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/progress/coverage-dark.svg">
-  <img alt="Port coverage map: 152,934 of 163,387 blocks verified by lockstep (93.6%) at round f9, October 5, 2026" src="docs/progress/coverage-light.svg">
+  <img alt="Port coverage map: 152,971 of 163,387 blocks verified by lockstep (93.6%) at round f10, October 6, 2026 (UTC)" src="docs/progress/coverage-light.svg">
 </picture></a>
 
 Interactive: [Port Coverage Map](https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb) · [Graphics and Audio Ladder](https://claude.ai/artifact/Ppx3oVXq7qbkRck8tvcrZ4) · [about the dashboards](docs/progress/README.md)
