@@ -58,7 +58,13 @@ impl ssbm_gx::Memory for GpuMemory<'_> {
 
     fn copy(&self, state: &State, value: u32) {
         if let Some(sink) = self.sink {
-            sink.borrow_mut().copy(state, value, self);
+            let mut sink = sink.borrow_mut();
+            sink.copy(state, value, self);
+            // Memory as the copy left it, as the GPU writes it on the console. Without a
+            // renderer, nothing draws what a copy would hold, and memory stays as it was.
+            for (at, bytes) in sink.take_written() {
+                let _ = self.ctx.dma_write(0x8000_0000 | (at & 0x01FF_FFFF), &bytes);
+            }
         }
     }
 

@@ -187,6 +187,8 @@ pub struct Renderer {
     hashes: HashMap<(u32, u32), u64>,
     /// What copies from the EFB to textures wrote, by address: memory as the GPU then reads it.
     copies: Vec<(u32, Vec<u8>)>,
+    /// What copies wrote since the host last took it (`Sink::take_written`).
+    written: Vec<(u32, Vec<u8>)>,
     /// Copies from the EFB kept on the GPU instead, by the address they copied to.
     copier: copy::Copier,
     gpu_copies: HashMap<u32, copy::Copied>,
@@ -440,6 +442,7 @@ impl Renderer {
             bind_groups: HashMap::new(),
             hashes: HashMap::new(),
             copies: Vec::new(),
+            written: Vec::new(),
             copier,
             gpu_copies: HashMap::new(),
             footprints: copy::Footprints::default(),
@@ -1285,6 +1288,10 @@ impl Sink for Renderer {
     fn copy(&mut self, state: &State, value: u32, mem: &dyn Memory) {
         self.copy_timed(state, value, mem);
     }
+
+    fn take_written(&mut self) -> Vec<(u32, Vec<u8>)> {
+        std::mem::take(&mut self.written)
+    }
 }
 
 /// Decodes a draw's vertices into `inputs` and, unless its scissor leaves nothing to draw,
@@ -1621,6 +1628,7 @@ impl Renderer {
                         self.copies.retain(|(a, b)| {
                             !(*a as u64 >= at as u64 && *a as u64 + b.len() as u64 <= end)
                         });
+                        self.written.push((at, row.clone()));
                         self.copies.push((at, row));
                     }
                     self.hashes.clear();
