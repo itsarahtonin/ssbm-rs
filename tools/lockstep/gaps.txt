@@ -1379,6 +1379,7 @@ fn_8018A514+0x148 dead # 9 <= count < 14 arm: the unrolled loop needs count - 9 
 fn_8018A514+0x160 dead # as +0x148 (body of that unrolled loop)
 fn_8018A514+0x1cc dead # as +0x148 (exit of that unrolled loop)
 fn_8018AA74+0x94 dead # switch (entry->x4): lbz at +0x74, 0 already excluded (beq at +0x7c), so x4 < 1 (the fall-through of cmpwi 1 / bge) never runs
+gm_801905F0+0xf8 dead # a stock match's 99-minute time limit for a stock time limit of 0 (gmtoulib.c:2577): a stock match turns the timer on only when that same byte, rules+0x8, is nonzero (8019067C), and nothing writes the rules in between, so with the timer on it is never 0
 fn_8018AA74+0x10c dead # case 2 switch (slot_idx): slot_idx is inner_idx 0..3 from its only caller fn_8018E85C (8018EBB8, gmtoulib.c:1841-1893), so slot_idx < 0 never runs
 fn_8018AA74+0x210 dead # case 3 switch (slot_idx): as +0x10c, slot_idx is 0..3, so the < 0 arm never runs
 fn_8018C8D4+0x58 dead # switch (data->x4) on lbz 0x4(r3) (0..255): the arm for x4 < 0, which no byte reaches
