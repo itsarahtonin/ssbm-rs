@@ -1383,7 +1383,6 @@ fn_8018AA74+0x10c dead # case 2 switch (slot_idx): slot_idx is inner_idx 0..3 fr
 fn_8018AA74+0x210 dead # case 3 switch (slot_idx): as +0x10c, slot_idx is 0..3, so the < 0 arm never runs
 fn_8018C8D4+0x58 dead # switch (data->x4) on lbz 0x4(r3) (0..255): the arm for x4 < 0, which no byte reaches
 fn_8018E46C+0x78 dead # switch on lbz 0x3(r31) (0..255): the arm for a negative value, which no byte reaches
-gm_801905F0+0x1cc dead # switch on lbz 0x6(r31) (0..255): the arm for a negative value, which no byte reaches
 mnCharSel_8025BD30+0xf0 dead # JP switch (rules->mode) on lbz 0x2 (0..255): the arm for mode < 0, which no byte reaches
 mnCharSel_8025BD30+0x170 dead # US switch (rules->mode) on lbz 0x2 (0..255): the arm for mode < 0, which no byte reaches
 mnCharSel_8025DB34+0x63c dead # switch on lbz 0x0(r28) (0..255): the arm for a negative value, which no byte reaches
