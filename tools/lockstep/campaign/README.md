@@ -49,7 +49,7 @@ Mutated checks run against null hardware and are dropped when they fault, run aw
 
 ## The gap ledger
 
-`tools/lockstep/gaps.txt` explains blocks no run can reach, by kind (dead, dev, fail, hw, oracle) with evidence. `tools/lockstep/callers.py MELEE UNIT...` lists what refers into a set of units from outside, the usual evidence for code only certain entry points lead to. `tools/lockstep/frontier.py` sorts the unreached blocks next to verified ones by what keeps mutations out of them.
+`tools/lockstep/gaps.txt` explains blocks no run can reach, by kind (dead, dev, fail, hw, oracle) with evidence. `tools/lockstep/callers.py MELEE UNIT...` lists what refers into a set of units from outside, the usual evidence for code only certain entry points lead to. `tools/lockstep/frontier.py` sorts the unreached blocks next to verified ones by what keeps mutations out of them. `tools/lockstep/triage.py` sorts all the open blocks (those neither verified nor explained) into what directed mutation can reach, untraced compares, switch cases, blocks behind other open ones and functions no run calls, and sums them per unit; `focus.sh` with `DIRECTED=1` runs a round with directed mutated checks.
 
 ## Habits
 

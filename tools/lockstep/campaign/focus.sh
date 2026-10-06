@@ -11,7 +11,8 @@
 # hold (LOCKSTEP_KNOWN, from the opening report) and no other function mismatching, and checks
 # of a function end once the blocks it still needs (LOCKSTEP_NEEDED) are verified. Jobs in
 # jobs-extra-NAME.txt join the round's. RESUME=1 goes on with a round whose report, probes,
-# targets and jobs are already written.
+# targets and jobs are already written. DIRECTED=1 makes every other mutated check a directed one,
+# setting exactly one target to the value its branch looks for (LOCKSTEP_DIRECTED).
 cd "$(dirname "$0")/../../.."
 . tools/lockstep/campaign/env.sh
 need_disc
@@ -43,7 +44,7 @@ for f in $(grep -o "$L/cards/${NAME}\(w[0-9]\|pm\)cf[a-z0-9]*\.raw" $L/jobs-$NAM
 done
 rm -f $L/cards/${NAME}??card*.raw $L/cards/${NAME}??jp*.raw $L/cards/${NAME}??dvd*.raw $L/cards/${NAME}??unlock*.raw
 echo "round $NAME: $(grep -vc '^#' $L/jobs-$NAME.txt) jobs, $(wc -l < $L/done-$NAME.txt) done, binary from $COMMIT"
-BIN=$BINCOPY EXTRA="PROBES=$L/probes-$NAME.txt LOCKSTEP_TARGETS=$L/targets-$NAME.txt LOCKSTEP_TRACE_CALLS=1 LOCKSTEP_KNOWN=$L/known-$NAME.bin LOCKSTEP_STALE=${STALE:-1800} LOCKSTEP_NEEDED=$L/needed-$NAME.txt" \
+BIN=$BINCOPY EXTRA="PROBES=$L/probes-$NAME.txt LOCKSTEP_TARGETS=$L/targets-$NAME.txt LOCKSTEP_TRACE_CALLS=1 LOCKSTEP_KNOWN=$L/known-$NAME.bin LOCKSTEP_STALE=${STALE:-1800} LOCKSTEP_NEEDED=$L/needed-$NAME.txt${DIRECTED:+ LOCKSTEP_DIRECTED=1}" \
     DONE=$L/done-$NAME.txt OUT=$L/cov-$NAME BUDGET=5000000 CALLS=3000 JOBS=${JOBS:-14} TIMEOUT=5400 \
     bash $T/campaign.sh $L/jobs-$NAME.txt
 bash $T/report-all.sh > $L/report-$NAME.txt 2>&1
