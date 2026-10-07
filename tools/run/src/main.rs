@@ -623,11 +623,13 @@ fn run() -> ExitCode {
             count.trim().parse().expect("COUNT"),
         );
     }
-    // AX=1 has the DSP mix the game's sound (ssbm-ax) rather than only answer the CPU, and
-    // AUDIO_OUT=FILE.wav records what the audio interface plays.
-    if std::env::var_os("AX").is_some_and(|v| v != "0") {
-        sdk.dev.mix_audio.set(true);
-    }
+    // The DSP mixes the game's sound (ssbm-ax), as the console's does: mixing updates the
+    // voices' parameter blocks, so a voice ends when its samples run out, and the game reads
+    // them back. AX=0 has it only answer the CPU, which no console does. AUDIO_OUT=FILE.wav
+    // records what the audio interface plays.
+    sdk.dev
+        .mix_audio
+        .set(std::env::var_os("AX").is_none_or(|v| v != "0"));
     // AX_CHECK=1 (with the ax-check feature) also runs each command list through Dolphin's AX
     // microcode, built from its source (tools/ax-dolphin), and reports where what it writes
     // differs from ssbm-ax's.
