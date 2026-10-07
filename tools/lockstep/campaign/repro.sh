@@ -5,6 +5,9 @@
 # place so port faults name their ports. Writes local/lockstep/repro/ROUND-JOB-FUNC.txt.
 #
 #   bash tools/lockstep/campaign/repro.sh ROUND JOB FUNC [FIELDS]
+#
+# DIRECTED=1 reruns a round run with DIRECTED=1 (focus.sh, corpus.sh) as it ran: every other
+# mutated check directed, which changes which inputs each mutated check gets.
 cd "$(dirname "$0")/../../.."
 . tools/lockstep/campaign/env.sh
 ROUND=$1 JOB=$2 FUNC=$3 FIELDS=${4:-}
@@ -30,6 +33,9 @@ for i in "${!rest[@]}"; do
             src=$L/cards/template-saved.raw
         elif [[ $card =~ ^$ROUND(w[0-9]|pm)cf([a-z0-9]*[a-z])[0-9]*$ ]]; then
             src=$L/cards/faults/${BASH_REMATCH[2]}.raw
+        elif [[ $card =~ ^$ROUND(w[0-9]|pm)(card|jp|dvd|unlock) ]]; then
+            # focus.sh deletes these before a round: the job started without a card file.
+            src=
         fi
         if [[ -f $src ]]; then cp "$src" "$copy"; else rm -f "$copy"; fi
         rest[$((i + 1))]=$copy
@@ -41,6 +47,7 @@ out=$L/repro/$ROUND-$JOB-$FUNC.txt
 more=()
 [[ -f $L/needed-$ROUND.txt ]] && more+=(LOCKSTEP_NEEDED=$L/needed-$ROUND.txt)
 [[ -f $L/known-$ROUND.bin ]] && more+=(LOCKSTEP_KNOWN=$L/known-$ROUND.bin)
+[[ -n $DIRECTED ]] && more+=(LOCKSTEP_DIRECTED=1)
 env "${more[@]}" LOCKSTEP_BUDGET=5000000 LOCKSTEP_CALLS=3000 LOCKSTEP_DONE=$L/done-$ROUND.txt \
     PROBES=$L/probes-$ROUND.txt LOCKSTEP_TARGETS=$L/targets-$ROUND.txt LOCKSTEP_TRACE_CALLS=1 \
     "${envs[@]}" LOCKSTEP_TRACE_DEEP=$FUNC \
