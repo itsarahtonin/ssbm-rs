@@ -16,8 +16,9 @@ const SYSTEM_TIME_OFFSET: u32 = 0x8000_30D8;
 
 #[derive(Default)]
 pub struct Os {
-    /// Scheduled alarms, by address, with the generation of their current schedule.
-    alarms: RefCell<HashMap<u32, u64>>,
+    /// Scheduled alarms, by address, with the generation of their current schedule and its
+    /// event, to cancel it by.
+    alarms: RefCell<HashMap<u32, (u64, u64)>>,
     generation: Cell<u64>,
     /// The thread queue the (only) thread sleeps on, and whether it was woken.
     sleeping_on: Cell<Option<u32>>,
@@ -111,10 +112,13 @@ fn schedule_alarm(ctx: &Ctx, alarm: u32, handler: u32, fire: i64) {
     ctx.write_u64(alarm + 8, fire as u64);
     let generation = sdk.os.generation.get() + 1;
     sdk.os.generation.set(generation);
-    sdk.os.alarms.borrow_mut().insert(alarm, generation);
     let offset = ctx.read_u64(SYSTEM_TIME_OFFSET) as i64;
     let at = fire.wrapping_sub(offset).max(Sdk::now(ctx) as i64) as u64;
-    sdk.schedule(at, move |ctx| fire_alarm(ctx, alarm, generation));
+    let seq = sdk.schedule(at, move |ctx| fire_alarm(ctx, alarm, generation));
+    // An alarm set again no longer fires at its old time.
+    if let Some((_, old)) = sdk.os.alarms.borrow_mut().insert(alarm, (generation, seq)) {
+        sdk.cancel(old);
+    }
 }
 
 /// When a periodic alarm fires next, as `InsertAlarm` computes it.
@@ -131,7 +135,7 @@ fn next_periodic(ctx: &Ctx, alarm: u32) -> i64 {
 
 fn fire_alarm(ctx: &Ctx, alarm: u32, generation: u64) {
     let sdk = ctx.ext::<Sdk>();
-    if sdk.os.alarms.borrow().get(&alarm) != Some(&generation) {
+    if sdk.os.alarms.borrow().get(&alarm).map(|a| a.0) != Some(generation) {
         return; // cancelled or set again
     }
     sdk.os.alarms.borrow_mut().remove(&alarm);
@@ -164,7 +168,11 @@ fn os_cancel_alarm(ctx: &Ctx) {
     if ctx.read_u32(alarm) == 0 {
         return;
     }
-    sdk.os.alarms.borrow_mut().remove(&alarm);
+    // On the console the alarm leaves the OS's queue and the decrementer is set for the next
+    // one: nothing happens at its time.
+    if let Some((_, seq)) = sdk.os.alarms.borrow_mut().remove(&alarm) {
+        sdk.cancel(seq);
+    }
     ctx.write_u32(alarm, 0);
 }
 

@@ -16,7 +16,7 @@
 
 use std::cell::{Cell, RefCell};
 use std::cmp::Reverse;
-use std::collections::{BinaryHeap, HashMap};
+use std::collections::{BinaryHeap, HashMap, HashSet};
 use std::rc::Rc;
 use std::sync::OnceLock;
 
@@ -98,6 +98,9 @@ pub struct Sdk {
     pub disc: RefCell<Disc>,
     events: RefCell<BinaryHeap<Reverse<Scheduled>>>,
     next_seq: Cell<u64>,
+    /// Events taken back before they ran (`cancel`), by sequence number: they leave the queue
+    /// when they reach its head, and never set the time a wait jumps to.
+    cancelled: RefCell<HashSet<u64>>,
     /// Raised interrupts not yet delivered, as OS interrupt mask bits.
     pending: Cell<u32>,
     in_service: Cell<bool>,
@@ -114,6 +117,7 @@ impl Sdk {
             disc: RefCell::new(disc),
             events: RefCell::default(),
             next_seq: Cell::new(0),
+            cancelled: RefCell::default(),
             pending: Cell::new(0),
             in_service: Cell::new(false),
             hw: Hw::default(),
@@ -139,7 +143,7 @@ impl Sdk {
             self.pending.get(),
             ctx.read_u32(INTERRUPT_MASK_GLOBAL),
             ctx.read_u32(INTERRUPT_MASK_USER),
-            self.events.borrow().peek().map(|e| e.0.at),
+            self.next_at(),
             Self::now(ctx)
         )
     }
@@ -149,8 +153,9 @@ impl Sdk {
         ctx.regs.tb.get()
     }
 
-    /// Runs `run` at time base value `at`, at the first wait point after it.
-    pub fn schedule(&self, at: u64, run: impl FnOnce(&Ctx) + 'static) {
+    /// Runs `run` at time base value `at`, at the first wait point after it. Returns the
+    /// event's sequence number, to `cancel` it by.
+    pub fn schedule(&self, at: u64, run: impl FnOnce(&Ctx) + 'static) -> u64 {
         let seq = self.next_seq.get();
         self.next_seq.set(seq + 1);
         self.events.borrow_mut().push(Reverse(Scheduled {
@@ -158,11 +163,41 @@ impl Sdk {
             seq,
             run: Box::new(run),
         }));
+        seq
     }
 
     /// Runs `run` `delay` ticks from now.
-    pub fn after(&self, ctx: &Ctx, delay: u64, run: impl FnOnce(&Ctx) + 'static) {
-        self.schedule(Self::now(ctx) + delay, run);
+    pub fn after(&self, ctx: &Ctx, delay: u64, run: impl FnOnce(&Ctx) + 'static) -> u64 {
+        self.schedule(Self::now(ctx) + delay, run)
+    }
+
+    /// Takes back a scheduled event that hasn't run, as a cancelled alarm or a stopped DMA
+    /// takes back its interrupt on the console: nothing happens at its time.
+    pub fn cancel(&self, seq: u64) {
+        if seq < self.next_seq.get() {
+            self.cancelled.borrow_mut().insert(seq);
+        }
+    }
+
+    /// Drops cancelled events from the head of the queue.
+    fn prune(&self) {
+        let mut cancelled = self.cancelled.borrow_mut();
+        if cancelled.is_empty() {
+            return;
+        }
+        let mut events = self.events.borrow_mut();
+        while let Some(e) = events.peek() {
+            if !cancelled.remove(&e.0.seq) {
+                break;
+            }
+            events.pop();
+        }
+    }
+
+    /// When the next event that will run is due.
+    fn next_at(&self) -> Option<u64> {
+        self.prune();
+        self.events.borrow().peek().map(|e| e.0.at)
     }
 
     /// Takes back OS interrupt `n` if it is raised and not yet delivered: the device's flag
@@ -188,7 +223,7 @@ impl Sdk {
             return;
         }
         let now = Self::now(ctx);
-        let due = sdk.events.borrow().peek().is_some_and(|e| e.0.at <= now);
+        let due = sdk.next_at().is_some_and(|at| at <= now);
         let masked = ctx.read_u32(INTERRUPT_MASK_GLOBAL) | ctx.read_u32(INTERRUPT_MASK_USER);
         if due || sdk.pending.get() & !masked != 0 {
             sdk.as_interrupt(ctx, || sdk.service(ctx));
@@ -196,6 +231,7 @@ impl Sdk {
     }
 
     fn next_due(&self, now: u64) -> Option<Event> {
+        self.prune();
         let mut events = self.events.borrow_mut();
         if events.peek().is_some_and(|e| e.0.at <= now) {
             events.pop().map(|e| e.0.run)
@@ -270,7 +306,7 @@ impl Sdk {
         let sdk = ctx.ext::<Sdk>();
         sdk.as_interrupt(ctx, || {
             let now = ctx.regs.tb.get();
-            let next = sdk.events.borrow().peek().map(|e| e.0.at);
+            let next = sdk.next_at();
             match next {
                 Some(at) => ctx
                     .regs

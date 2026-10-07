@@ -145,6 +145,8 @@ pub struct Hw {
     audio_out: RefCell<Option<Box<dyn FnMut(&[u8])>>>,
     /// Bumped to cancel scheduled audio DMA interrupts.
     ai_generation: Cell<u64>,
+    /// The scheduled end of the current audio DMA block, to cancel when the DMA stops.
+    ai_event: Cell<Option<u64>>,
     /// Video fields shown so far, and when the current frame started.
     pub fields: Cell<u64>,
     frame_start: Cell<u64>,
@@ -180,6 +182,7 @@ impl Default for Hw {
             aram: RefCell::new(vec![0; ARAM_SIZE]),
             audio_out: RefCell::default(),
             ai_generation: Cell::new(0),
+            ai_event: Cell::new(None),
             fields: Cell::new(0),
             frame_start: Cell::new(0),
             ais_base: Cell::new(0),
@@ -361,6 +364,9 @@ impl Hw {
                     self.ai_schedule(ctx, sdk);
                 } else if !now {
                     self.ai_generation.set(self.ai_generation.get() + 1);
+                    if let Some(seq) = self.ai_event.take() {
+                        sdk.cancel(seq);
+                    }
                 }
             }
             _ => {}
@@ -747,15 +753,19 @@ impl Hw {
     fn ai_schedule(&self, ctx: &Ctx, sdk: &Sdk) {
         let generation = self.ai_generation.get() + 1;
         self.ai_generation.set(generation);
+        if let Some(seq) = self.ai_event.take() {
+            sdk.cancel(seq);
+        }
         let blocks = u64::from(self.get16(AI_DMA_CONTROL) & 0x7FFF).max(1);
         // 32-byte blocks of 16-bit stereo at 32 kHz.
         let ticks = blocks * 32 / 4 * TB_HZ / 32_000;
-        sdk.after(ctx, ticks, move |ctx| {
+        let seq = sdk.after(ctx, ticks, move |ctx| {
             let sdk = ctx.ext::<Sdk>();
             let hw = &sdk.hw;
             if hw.ai_generation.get() != generation {
                 return;
             }
+            hw.ai_event.set(None);
             // The next block starts from the registers as they stand.
             hw.ai_play(ctx);
             let csr = hw.get16(DSP_CSR) | CSR_AIDINT;
@@ -765,6 +775,7 @@ impl Hw {
             }
             hw.ai_schedule(ctx, &sdk);
         });
+        self.ai_event.set(Some(seq));
     }
 
     /// The streaming audio sample counter, which counts while a stream plays.
