@@ -77,7 +77,8 @@ def letter(p, records):
     if k == "ptr":
         to = p.get("to") or {}
         if to.get("k") == "fn":
-            return "x"
+            # A callback returning a float returns it in f1, which the stand-in must set.
+            return "y" if (to.get("ret") or {}).get("k") == "float" else "x"
         name = records.get(to.get("id"), {}).get("name") if to.get("k") == "rec" else None
         return RECORDS.get(name, "p")
     return None

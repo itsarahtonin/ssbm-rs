@@ -211,6 +211,30 @@ fn noop(ctx: &Ctx) -> u32 {
     NOOP.get()
 }
 
+/// A function that does nothing but return 0.0 in f1 (`lfs f1, d(r2)`; `blr`, robj.c's
+/// `dummy_func`), for callbacks returning a float: `noop` would leave f1 as the caller had it,
+/// which ports keep elsewhere, so the two sides would read back different values. Falls back
+/// to `noop`.
+fn zero_float(ctx: &Ctx) -> u32 {
+    thread_local! {
+        static ZERO: Cell<u32> = const { Cell::new(0) };
+    }
+    if ZERO.get() == 0 {
+        let sda2 = ctx.regs.r(2);
+        let found = ssbm_types::symbols::SYMBOLS.iter().find(|s| {
+            let (Ok(load), Ok(ret)) = (ctx.mem.read_u32(s.0), ctx.mem.read_u32(s.0 + 4)) else {
+                return false;
+            };
+            s.3 && s.1 == 8
+                && load & 0xFFFF_0000 == 0xC022_0000
+                && ret == 0x4E80_0020
+                && ctx.mem.read_u32(sda2.wrapping_add(load as u16 as i16 as u32)).ok() == Some(0)
+        });
+        ZERO.set(found.map_or_else(|| noop(ctx), |s| s.0));
+    }
+    ZERO.get()
+}
+
 /// An integer argument: mostly small, as kinds and indices are, now and then -1, a byte or a
 /// flag. Larger values mostly index past the game's tables and stack arrays, into what ports
 /// keep elsewhere, such as saved registers.
@@ -348,6 +372,9 @@ fn probe_some(ctx: &Ctx, state: &State) {
                     }
                     // A tenth of pointers are null, for the checks of them that real calls pass.
                     b'x' => put(&mut r, &mut stack, if rng.chance(10) { 0 } else { noop(ctx) }),
+                    b'y' => {
+                        put(&mut r, &mut stack, if rng.chance(10) { 0 } else { zero_float(ctx) })
+                    }
                     b'p' => {
                         put(&mut r, &mut stack, if rng.chance(10) { 0 } else { next });
                         next += SCRATCH;
