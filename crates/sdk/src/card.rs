@@ -346,6 +346,23 @@ pub fn flush_cards() {
     }
 }
 
+/// `flush_cards` for a panic hook, which runs before the panic lets go of its locks: a card
+/// whose locks are held (perhaps by the panic itself) or mid-write is left to its thread.
+pub fn flush_cards_after_panic() {
+    let Ok(savers) = SAVERS.try_lock() else {
+        return;
+    };
+    for saver in savers.iter() {
+        let Ok(st) = saver.state.try_lock() else {
+            continue;
+        };
+        if st.writing || st.changes == st.written || saver.data.try_lock().is_err() {
+            continue;
+        }
+        saver.write(st);
+    }
+}
+
 /// The byte address a read or program command names: AD1, AD2, AD3 and BA.
 fn address(b: &[u8]) -> usize {
     usize::from(b[0] & 0x7F) << 17

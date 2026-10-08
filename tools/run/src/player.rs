@@ -56,7 +56,13 @@ pub fn args() -> Option<Vec<String>> {
     if std::env::args().len() > 1 {
         return None;
     }
-    std::panic::set_hook(Box::new(|info| error(&format!("ssbm-rs stopped: {info}"))));
+    // The card and the recording first: the window may be closed rather than the message
+    // answered.
+    std::panic::set_hook(Box::new(|info| {
+        ssbm_sdk::flush_cards_after_panic();
+        crate::inputs::flush();
+        error(&format!("ssbm-rs stopped: {info}"));
+    }));
     let folder = folder();
     let remembered = folder.join("disc.txt");
     let before = std::fs::read_to_string(&remembered)

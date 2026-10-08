@@ -85,9 +85,15 @@ pub fn record(sdk: &Sdk, path: &Path) {
     }));
 }
 
-/// Writes what the recording holds yet, as a run ends.
+/// Writes what the recording holds yet, as a run ends or stops on a panic. A panic that left the
+/// recording mid-read (holding it) skips this rather than wait on itself.
 pub fn flush() {
-    if let Some(out) = WRITER.lock().unwrap().as_mut() {
+    let mut guard = match WRITER.try_lock() {
+        Ok(guard) => guard,
+        Err(std::sync::TryLockError::Poisoned(p)) => p.into_inner(),
+        Err(std::sync::TryLockError::WouldBlock) => return,
+    };
+    if let Some(out) = guard.as_mut() {
         let _ = out.flush();
     }
 }
