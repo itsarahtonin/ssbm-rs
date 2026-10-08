@@ -17,7 +17,7 @@ use std::io::{BufWriter, Write};
 use ssbm_rt::{Ctx, Mode, Native};
 
 const MAGIC: &[u8; 8] = b"SSBMTRC\0";
-const VERSION: u32 = 1;
+const VERSION: u32 = 2;
 const CHUNK: u32 = 300;
 
 /// What a region holds.
@@ -36,12 +36,17 @@ enum Kind {
     Fighter = 4,
     /// An item's `Item`, from the items' p_link.
     Item = 5,
+    /// A joint of a fighter's model (`HSD_JObj`), in the tree's pre-order; the region's GObj is
+    /// the fighter's.
+    JObj = 6,
 }
 
 const FIGHTER_SIZE: u32 = 0x23EC;
 const ITEM_SIZE: u32 = 0xFCC;
 const PLINK_FIGHTER: u32 = 8;
 const PLINK_ITEM: u32 = 9;
+const JOBJ_SIZE: u32 = 0x88;
+const JOBJ_INSTANCE: u32 = 1 << 12;
 
 struct Trace {
     out: Option<zstd::Encoder<'static, BufWriter<File>>>,
@@ -109,6 +114,22 @@ fn after_tick(ctx: &Ctx) {
     });
 }
 
+/// A joint tree in pre-order, as `HSD_JObjWalkTree` visits it: an instance's children belong
+/// to the tree it instances.
+fn joints(ctx: &Ctx, gobj: u32, root: u32, regions: &mut Vec<(Kind, u32, u32, u32)>) {
+    let mut stack = vec![root];
+    while let Some(j) = stack.pop() {
+        if j == 0 {
+            continue;
+        }
+        regions.push((Kind::JObj, j, gobj, JOBJ_SIZE));
+        stack.push(ctx.read_u32(j + 8));
+        if ctx.read_u32(j + 0x14) & JOBJ_INSTANCE == 0 {
+            stack.push(ctx.read_u32(j + 0x10));
+        }
+    }
+}
+
 impl Trace {
     fn record(&mut self, ctx: &Ctx) {
         let mut regions: Vec<(Kind, u32, u32, u32)> =
@@ -124,6 +145,9 @@ impl Trace {
                     let data = ctx.read_u32(gobj + 0x2C);
                     if data != 0 {
                         regions.push((kind, data, gobj, size));
+                    }
+                    if link == PLINK_FIGHTER {
+                        joints(ctx, gobj, ctx.read_u32(gobj + 0x28), &mut regions);
                     }
                     gobj = ctx.read_u32(gobj + 0x8);
                 }
