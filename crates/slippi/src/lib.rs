@@ -28,10 +28,22 @@ pub const EXI_TRANSFER_BUFFER: u32 = 0x8000_55F0;
 /// Where the bootloader's code list goes, in the low memory the code handler would use.
 const BOOTLOADER_LIST: u32 = 0x8000_2000;
 
+/// The playback codes a run applies: the set's enabled codes, without its optional Show Player
+/// Names when `SLIPPI_PLAYER_NAMES=0` (Slippi Dolphin's setting for it). That code draws the
+/// players' names over the match and makes HUD objects for them, which melee-hd's oracle
+/// leaves to the presentation.
+pub fn playback_codes() -> Vec<gecko::Code> {
+    let mut codes = gecko::parse_ini(PLAYBACK_INI);
+    if std::env::var("SLIPPI_PLAYER_NAMES").is_ok_and(|v| v == "0") {
+        codes.retain(|c| c.name != "Optional: Show Player Names");
+    }
+    codes
+}
+
 /// Puts a Slippi device holding `replay` into `ctx`. Call `apply_bootloader` once the game is
 /// loaded.
 pub fn install(ctx: &Ctx, replay: Replay) -> Rc<Device> {
-    let gct = gecko::gct(&gecko::parse_ini(PLAYBACK_INI));
+    let gct = gecko::gct(&playback_codes());
     let device = ctx.set_ext(Device::new(replay, gct));
     ctx.register(EXI_TRANSFER_BUFFER, exi_transfer_buffer);
     ctx.mark_external(EXI_TRANSFER_BUFFER);
@@ -59,7 +71,7 @@ pub fn applied_codes(device: &Device) -> Vec<gecko::Parsed> {
 fn applied_lines(device: &Device) -> Vec<(u32, u32)> {
     let mut lines: Vec<(u32, u32)> = gecko::parse_list(BOOTLOADER)
         .iter()
-        .chain(gecko::parse_ini(PLAYBACK_INI).iter())
+        .chain(playback_codes().iter())
         .flat_map(|c| c.lines.clone())
         .collect();
     lines.extend(gecko::lines(device.gecko_list()));

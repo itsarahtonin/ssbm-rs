@@ -9,6 +9,13 @@
 //! `MAGIC` and a version (u32), then each tick: its number (u32, from 0), a region count
 //! (u32), and per region its kind (u8, `Kind`), address (u32), owning GObj (u32, 0 for
 //! globals) and length (u32), then its bytes. Header integers are little-endian.
+//!
+//! With `STATE_TRACE_MEMORY=FROM..TO` (ticks; `TO` may be left out, and `1` means from the
+//! first), the ticks in that window also hold main memory as `Page` regions (version 3): every
+//! 4 KiB page that changed since the previous tick, or every nonzero page at the window's first
+//! tick, XORed with what it held then, so a reader keeps an image of memory and XORs each page
+//! into it. The main thread's stack and the GX FIFO are left out: neither is game state, and
+//! both change every tick. Since version 4, those ticks also hold the time base (`Time`).
 
 use std::cell::{Cell, RefCell};
 use std::fs::File;
@@ -17,7 +24,7 @@ use std::io::{BufWriter, Write};
 use ssbm_rt::{Ctx, Mode, Native};
 
 const MAGIC: &[u8; 8] = b"SSBMTRC\0";
-const VERSION: u32 = 2;
+const VERSION: u32 = 4;
 const CHUNK: u32 = 300;
 
 /// What a region holds.
@@ -39,6 +46,11 @@ enum Kind {
     /// A joint of a fighter's model (`HSD_JObj`), in the tree's pre-order; the region's GObj is
     /// the fighter's.
     JObj = 6,
+    /// A page of main memory XORed with its contents at the previous tick (`STATE_TRACE_MEMORY`).
+    Page = 7,
+    /// The time base at the tick's end (8 bytes, big-endian), with memory: what melee-hd's
+    /// audio timeline starts from when it takes up a tick.
+    Time = 8,
 }
 
 const FIGHTER_SIZE: u32 = 0x23EC;
@@ -47,6 +59,11 @@ const PLINK_FIGHTER: u32 = 8;
 const PLINK_ITEM: u32 = 9;
 const JOBJ_SIZE: u32 = 0x88;
 const JOBJ_INSTANCE: u32 = 1 << 12;
+const MEM1: u32 = 0x8000_0000;
+const MEM1_SIZE: usize = 24 << 20;
+const PAGE: usize = 0x1000;
+/// The main thread's stack (`__init_registers`' r1 and the 64 KiB below it).
+const STACK: std::ops::Range<u32> = 0x804D_EC00..0x804E_EC00;
 
 struct Trace {
     out: Option<zstd::Encoder<'static, BufWriter<File>>>,
@@ -54,6 +71,10 @@ struct Trace {
     tick: u32,
     globals: [(Kind, u32, u32); 4],
     plink_heads: u32,
+    /// The ticks whose memory the trace holds, and main memory at the previous one.
+    window: Option<std::ops::Range<u32>>,
+    memory: Option<Vec<u8>>,
+    fifo_obj: u32,
 }
 
 thread_local! {
@@ -87,8 +108,24 @@ pub fn install(ctx: &Ctx, path: &str) {
                 (Kind::Camera, sym("game_camera"), 0x39C),
             ],
             plink_heads: sym("HSD_GObjPLinkHead"),
+            window: std::env::var("STATE_TRACE_MEMORY").ok().map(|w| window(&w)),
+            memory: None,
+            fifo_obj: sym("DefaultFifoObj"),
         })
     });
+}
+
+/// The ticks `STATE_TRACE_MEMORY` names: `FROM..TO`, `FROM..` or `1` (every tick).
+fn window(w: &str) -> std::ops::Range<u32> {
+    if w == "1" {
+        return 0..u32::MAX;
+    }
+    let tick = |s: &str| s.parse::<u32>().unwrap_or_else(|_| panic!("STATE_TRACE_MEMORY={w}"));
+    match w.split_once("..") {
+        Some((from, "")) => tick(from)..u32::MAX,
+        Some((from, to)) => tick(from)..tick(to),
+        None => panic!("STATE_TRACE_MEMORY={w}: FROM..TO, FROM.. or 1"),
+    }
 }
 
 /// Finishes the file. Ticks after this are not written.
@@ -153,13 +190,41 @@ impl Trace {
                 }
             }
         }
+        let mut pages = Vec::new();
+        if self.window.as_ref().is_some_and(|w| w.contains(&self.tick)) {
+            let before = self.memory.get_or_insert_with(|| vec![0; MEM1_SIZE]);
+            let mut now = vec![0; MEM1_SIZE];
+            ctx.mem.read_bytes(MEM1, &mut now).expect("main memory");
+            // The FIFO `HSD_AllocateFifo` made, once `HSD_GXInit` has set it up.
+            let fifo = ctx.read_u32(self.fifo_obj);
+            let fifo = if fifo != 0 {
+                let base = ctx.read_u32(fifo);
+                base..base.wrapping_add(ctx.read_u32(fifo + 8))
+            } else {
+                0..0
+            };
+            let pages_iter = before.chunks_exact(PAGE).zip(now.chunks_exact(PAGE)).enumerate();
+            for (i, (old, new)) in pages_iter {
+                let at = MEM1 + (i * PAGE) as u32;
+                let page = at..at + PAGE as u32;
+                let overlaps = |r: &std::ops::Range<u32>| page.start < r.end && r.start < page.end;
+                if old != new && !overlaps(&STACK) && !overlaps(&fifo) {
+                    let xor: Vec<u8> = old.iter().zip(new).map(|(a, b)| a ^ b).collect();
+                    pages.push((at, xor));
+                }
+            }
+            *before = now;
+        }
         let out = self.out.get_or_insert_with(|| {
             let file = self.file.take().expect("trace file");
             zstd::Encoder::new(file, 3).unwrap()
         });
         let mut put = |b: &[u8]| out.write_all(b).unwrap();
         put(&self.tick.to_le_bytes());
-        put(&(regions.len() as u32).to_le_bytes());
+        let time = usize::from(
+            self.memory.is_some() && self.window.as_ref().is_some_and(|w| w.contains(&self.tick)),
+        );
+        put(&((regions.len() + pages.len() + time) as u32).to_le_bytes());
         let mut bytes = Vec::new();
         for (kind, address, gobj, len) in regions {
             bytes.resize(len as usize, 0);
@@ -171,6 +236,20 @@ impl Trace {
             put(&gobj.to_le_bytes());
             put(&len.to_le_bytes());
             put(&bytes);
+        }
+        if self.memory.is_some() && self.window.as_ref().is_some_and(|w| w.contains(&self.tick)) {
+            put(&[Kind::Time as u8]);
+            put(&0u32.to_le_bytes());
+            put(&0u32.to_le_bytes());
+            put(&8u32.to_le_bytes());
+            put(&ctx.regs.tb.get().to_be_bytes());
+        }
+        for (address, xor) in pages {
+            put(&[Kind::Page as u8]);
+            put(&address.to_le_bytes());
+            put(&0u32.to_le_bytes());
+            put(&(PAGE as u32).to_le_bytes());
+            put(&xor);
         }
         self.tick += 1;
         if self.tick.is_multiple_of(CHUNK) {
