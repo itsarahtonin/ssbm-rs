@@ -16,6 +16,9 @@
 //! tick, XORed with what it held then, so a reader keeps an image of memory and XORs each page
 //! into it. The main thread's stack and the GX FIFO are left out: neither is game state, and
 //! both change every tick. Since version 4, those ticks also hold the time base (`Time`).
+//! Before version 5 every page they touched was left out; since, only their own bytes are,
+//! held at zero, so the rest of a page they share (the OS heap descriptors after the FIFO, for
+//! one) is recorded.
 
 use std::cell::{Cell, RefCell};
 use std::fs::File;
@@ -24,7 +27,7 @@ use std::io::{BufWriter, Write};
 use ssbm_rt::{Ctx, Mode, Native};
 
 const MAGIC: &[u8; 8] = b"SSBMTRC\0";
-const VERSION: u32 = 4;
+const VERSION: u32 = 5;
 const CHUNK: u32 = 300;
 
 /// What a region holds.
@@ -203,12 +206,18 @@ impl Trace {
             } else {
                 0..0
             };
+            // Their bytes held at zero, so the pages they share record everything else.
+            for r in [STACK, fifo] {
+                let lo = (r.start.max(MEM1) - MEM1) as usize;
+                let hi = (r.end.min(MEM1 + MEM1_SIZE as u32).max(MEM1) - MEM1) as usize;
+                if lo < hi {
+                    now[lo..hi].fill(0);
+                }
+            }
             let pages_iter = before.chunks_exact(PAGE).zip(now.chunks_exact(PAGE)).enumerate();
             for (i, (old, new)) in pages_iter {
                 let at = MEM1 + (i * PAGE) as u32;
-                let page = at..at + PAGE as u32;
-                let overlaps = |r: &std::ops::Range<u32>| page.start < r.end && r.start < page.end;
-                if old != new && !overlaps(&STACK) && !overlaps(&fifo) {
+                if old != new {
                     let xor: Vec<u8> = old.iter().zip(new).map(|(a, b)| a ^ b).collect();
                     pages.push((at, xor));
                 }
