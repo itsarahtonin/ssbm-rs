@@ -41,6 +41,7 @@ use ssbm_sdk::{Sdk, boot, hw};
 
 mod audio_probe;
 mod audio_timeline;
+mod bench;
 mod matches;
 mod calls;
 mod inputs;
@@ -499,6 +500,8 @@ fn run() -> ExitCode {
     if std::env::var_os("PAD_UNPLUG").is_some() {
         monkey::unplug(&sdk);
     }
+    // BENCH_CODES=FILE.ini boots straight into a benchmark match and records it (bench.rs).
+    let bench = bench::install(&ctx, &sdk);
     // --matches SEED gives each match of the debug VS mode (--mode e) random fighters, stage
     // and items.
     if let Some(seed) = match_seed {
@@ -1369,8 +1372,9 @@ fn run() -> ExitCode {
         );
     }
 
-    // A replay run also stops once the game ends, a second after the recording codes send it.
-    if let Some(dev) = slippi.clone() {
+    // A replay run also stops once the game ends, a second after the recording codes send it,
+    // and so does a benchmark match.
+    if let Some(dev) = slippi.clone().or_else(|| bench.as_ref().map(|b| b.device.clone())) {
         fn check(dev: Rc<ssbm_slippi::Device>, field: u64) -> impl FnOnce(&Ctx) + 'static {
             move |ctx| {
                 if dev.ended.get() || dev.terminated.get() {
@@ -1579,6 +1583,9 @@ fn run() -> ExitCode {
         if slippi.is_some() {
             ssbm_slippi::apply_bootloader(&ctx);
         }
+        if let Some(bench) = &bench {
+            bench.apply(&ctx);
+        }
         // STATE_TRACE=FILE writes the game's state at the end of every engine tick, for
         // melee-hd's oracle (trace.rs).
         if let Ok(path) = std::env::var("STATE_TRACE") {
@@ -1656,6 +1663,29 @@ fn run() -> ExitCode {
         }
         for (event, frame, port) in &report.first_missing {
             eprintln!("  not reached: frame {frame}: {event} port {}", port + 1);
+        }
+    }
+    if let Some(bench) = &bench {
+        bench.save();
+        let dev = &bench.device;
+        eprintln!(
+            "bench: {} bytes recorded, game ended {}",
+            dev.recorded.borrow().len(),
+            dev.ended.get()
+        );
+        if let Some(replay) = &bench.pads_replay {
+            let report = ssbm_slippi::compare::compare(&replay.events, &dev.recorded.borrow());
+            replay_ok = report.divergences.is_empty() && report.missing == 0;
+            eprintln!(
+                "bench check: {} events compared through frame {:?}, {} not reached, {} diverge",
+                report.compared,
+                report.last_frame_compared,
+                report.missing,
+                report.divergences.len()
+            );
+            for d in report.divergences.iter().take(10) {
+                eprintln!("  {d}");
+            }
         }
     }
     let mut lockstep_ok = true;
