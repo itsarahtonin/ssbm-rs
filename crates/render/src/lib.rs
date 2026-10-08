@@ -314,6 +314,32 @@ fn blend_factor(factor: u32, is_src: bool) -> wgpu::BlendFactor {
     }
 }
 
+/// Has `device`'s errors name the GPU loss behind them. A lost device hands out unusable
+/// resources and tells only its lost-device callback why, so without this the first use of one
+/// (a buffer written, say) panics with the resource's name and not the loss.
+pub fn watch(device: &wgpu::Device, gpu: String) {
+    use std::sync::{Arc, Mutex, PoisonError};
+    let lost = Arc::new(Mutex::new(None::<String>));
+    let at_loss = lost.clone();
+    device.set_device_lost_callback(move |reason, message| {
+        *at_loss.lock().unwrap_or_else(PoisonError::into_inner) =
+            Some(format!("{reason:?}: {message}"));
+    });
+    device.on_uncaptured_error(Arc::new(move |error| {
+        let lost = lost.lock().unwrap_or_else(PoisonError::into_inner).clone();
+        match lost {
+            Some(why) => panic!("the GPU ({gpu}) stopped working ({why})\n\nwgpu said: {error}"),
+            None => panic!("wgpu error on the GPU ({gpu}): {error}"),
+        }
+    }));
+}
+
+/// The adapter's name and backend, for errors.
+pub fn describe(adapter: &wgpu::Adapter) -> String {
+    let info = adapter.get_info();
+    format!("{}, {:?}", info.name, info.backend)
+}
+
 impl Renderer {
     /// A renderer on a headless device.
     pub fn new() -> Result<Self, String> {
@@ -339,6 +365,7 @@ impl Renderer {
             ..Default::default()
         }))
         .map_err(|e| format!("no GPU device: {e}"))?;
+        watch(&device, describe(adapter));
         Ok(Self::with_device(device, queue))
     }
 

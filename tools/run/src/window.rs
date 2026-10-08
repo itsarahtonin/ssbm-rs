@@ -74,6 +74,7 @@ pub fn start() -> Gpu {
         ..Default::default()
     }))
     .expect("a GPU device");
+    ssbm_render::watch(&device, ssbm_render::describe(&adapter));
     let link = Arc::new(Link {
         device,
         queue,
