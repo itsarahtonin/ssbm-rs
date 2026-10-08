@@ -152,7 +152,7 @@ pub fn install_capture(
             *mutations <= MUTATED
         } else if funcs.contains(&addr)
             && cost <= COST_MAX
-            && !interacted
+            && (!interacted || std::env::var_os("CAPTURE_INTERACTED").is_some())
             && ctx.ext::<ssbm_sdk::Sdk>().hw.fields.get() >= from
         {
             *calls += 1;

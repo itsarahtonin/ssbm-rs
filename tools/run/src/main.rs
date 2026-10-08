@@ -39,6 +39,8 @@ use ssbm_ppc::Interpreter;
 use ssbm_rt::{Ctx, Stop};
 use ssbm_sdk::{Sdk, boot, hw};
 
+mod audio_probe;
+mod audio_timeline;
 mod matches;
 mod calls;
 mod inputs;
@@ -1582,10 +1584,18 @@ fn run() -> ExitCode {
         if let Ok(path) = std::env::var("STATE_TRACE") {
             trace::install(&ctx, &path);
         }
+        if let Ok(path) = std::env::var("AUDIO_TRACE") {
+            audio_probe::install(&ctx, &path);
+        }
+        if let Ok(dir) = std::env::var("AUDIO_TIMELINE") {
+            audio_timeline::install(&ctx, &dir);
+        }
         eprintln!("booting {} at {entry:#010X}", disc_path);
         ctx.invoke(entry);
     }));
     trace::finish();
+    audio_probe::finish();
+    audio_timeline::finish();
     let executed = interp.executed.get();
     let mut replay_ok = true;
     if let Some(dev) = &slippi {
