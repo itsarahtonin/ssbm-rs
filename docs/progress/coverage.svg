@@ -1,107 +1,107 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 534" width="960" height="534" font-family="system-ui, -apple-system, Segoe UI, sans-serif">
-<title>ssbm-rs port coverage: 152,971 of 163,387 blocks verified by lockstep (93.6%), round f10, 2026-10-06</title>
+<title>ssbm-rs port coverage: 153,619 of 163,387 blocks verified by lockstep (94.0%), round f12 + play, 2026-10-10</title>
 <rect width="960" height="534" fill="#15171b"/>
 <text x="16" y="30" font-size="18" font-weight="600" fill="#e7e8ea">Port coverage</text>
-<text x="944" y="30" font-size="13" text-anchor="end" fill="#9aa0a9">round f10 · 2026-10-06</text>
+<text x="944" y="30" font-size="13" text-anchor="end" fill="#9aa0a9">round f12 + play · 2026-10-10</text>
 <rect x="16" y="44" width="928" height="26" rx="3" fill="#2a2e35"/>
-<rect x="16.0" y="44" width="868.8" height="26" fill="#4fae6c"/>
-<rect x="884.8" y="44" width="29.1" height="26" fill="#73a9da"/>
-<rect x="913.9" y="44" width="30.1" height="26" fill="#d6a443"/>
+<rect x="16.0" y="44" width="872.5" height="26" fill="#4fae6c"/>
+<rect x="888.5" y="44" width="28.8" height="26" fill="#73a9da"/>
+<rect x="917.3" y="44" width="26.7" height="26" fill="#d6a443"/>
 <rect x="16" y="84" width="12" height="12" rx="2" fill="#4fae6c"/>
-<text x="34" y="95" font-size="14" fill="#e7e8ea">93.6% verified by lockstep</text>
+<text x="34" y="95" font-size="14" fill="#e7e8ea">94.0% verified by lockstep</text>
 <rect x="259.6" y="84" width="12" height="12" rx="2" fill="#73a9da"/>
 <text x="277.6" y="95" font-size="14" fill="#e7e8ea">3.1% explained by the gap ledger</text>
 <rect x="548.8" y="84" width="12" height="12" rx="2" fill="#d6a443"/>
-<text x="566.8" y="95" font-size="14" fill="#e7e8ea">3.2% open</text>
+<text x="566.8" y="95" font-size="14" fill="#e7e8ea">2.9% open</text>
 <text x="944" y="95" font-size="13" text-anchor="end" fill="#9aa0a9">163,387 blocks</text>
 <line x1="16" y1="114" x2="944" y2="114" stroke="#2a2e35"/>
 <text x="16" y="146" font-size="13" fill="#e7e8ea">Fighters</text>
 <text x="16" y="158" font-size="10" fill="#9aa0a9">melee/ft</text>
 <rect x="230" y="136" width="560" height="14" rx="3" fill="#2a2e35"/>
-<rect x="230.0" y="136" width="542.8" height="14" fill="#4fae6c"/>
-<rect x="772.8" y="136" width="4.0" height="14" fill="#73a9da"/>
-<rect x="776.8" y="136" width="13.2" height="14" fill="#d6a443"/>
-<text x="944" y="148" font-size="13" text-anchor="end" fill="#e7e8ea">96.9%<tspan fill="#9aa0a9" font-size="11"> of 39,537</tspan></text>
+<rect x="230.0" y="136" width="543.9" height="14" fill="#4fae6c"/>
+<rect x="773.9" y="136" width="4.0" height="14" fill="#73a9da"/>
+<rect x="777.8" y="136" width="12.2" height="14" fill="#d6a443"/>
+<text x="944" y="148" font-size="13" text-anchor="end" fill="#e7e8ea">97.1%<tspan fill="#9aa0a9" font-size="11"> of 39,537</tspan></text>
 <text x="16" y="176" font-size="13" fill="#e7e8ea">Items</text>
 <text x="16" y="188" font-size="10" fill="#9aa0a9">melee/it</text>
 <rect x="230" y="166" width="560" height="14" rx="3" fill="#2a2e35"/>
-<rect x="230.0" y="166" width="545.8" height="14" fill="#4fae6c"/>
-<rect x="775.8" y="166" width="2.5" height="14" fill="#73a9da"/>
-<rect x="778.3" y="166" width="11.7" height="14" fill="#d6a443"/>
-<text x="944" y="178" font-size="13" text-anchor="end" fill="#e7e8ea">97.5%<tspan fill="#9aa0a9" font-size="11"> of 22,356</tspan></text>
+<rect x="230.0" y="166" width="547.0" height="14" fill="#4fae6c"/>
+<rect x="777.0" y="166" width="2.5" height="14" fill="#73a9da"/>
+<rect x="779.4" y="166" width="10.6" height="14" fill="#d6a443"/>
+<text x="944" y="178" font-size="13" text-anchor="end" fill="#e7e8ea">97.7%<tspan fill="#9aa0a9" font-size="11"> of 22,356</tspan></text>
 <text x="16" y="206" font-size="13" fill="#e7e8ea">Stages</text>
 <text x="16" y="218" font-size="10" fill="#9aa0a9">melee/gr</text>
 <rect x="230" y="196" width="560" height="14" rx="3" fill="#2a2e35"/>
-<rect x="230.0" y="196" width="525.3" height="14" fill="#4fae6c"/>
-<rect x="755.3" y="196" width="14.0" height="14" fill="#73a9da"/>
-<rect x="769.3" y="196" width="20.7" height="14" fill="#d6a443"/>
-<text x="944" y="208" font-size="13" text-anchor="end" fill="#e7e8ea">93.8%<tspan fill="#9aa0a9" font-size="11"> of 19,667</tspan></text>
+<rect x="230.0" y="196" width="531.9" height="14" fill="#4fae6c"/>
+<rect x="761.9" y="196" width="13.9" height="14" fill="#73a9da"/>
+<rect x="775.8" y="196" width="14.2" height="14" fill="#d6a443"/>
+<text x="944" y="208" font-size="13" text-anchor="end" fill="#e7e8ea">95.0%<tspan fill="#9aa0a9" font-size="11"> of 19,667</tspan></text>
 <text x="16" y="236" font-size="13" fill="#e7e8ea">Game modes</text>
 <text x="16" y="248" font-size="10" fill="#9aa0a9">melee/gm</text>
 <rect x="230" y="226" width="560" height="14" rx="3" fill="#2a2e35"/>
-<rect x="230.0" y="226" width="520.2" height="14" fill="#4fae6c"/>
-<rect x="750.2" y="226" width="10.9" height="14" fill="#73a9da"/>
-<rect x="761.1" y="226" width="28.9" height="14" fill="#d6a443"/>
-<text x="944" y="238" font-size="13" text-anchor="end" fill="#e7e8ea">92.9%<tspan fill="#9aa0a9" font-size="11"> of 18,332</tspan></text>
+<rect x="230.0" y="226" width="523.4" height="14" fill="#4fae6c"/>
+<rect x="753.4" y="226" width="10.9" height="14" fill="#73a9da"/>
+<rect x="764.3" y="226" width="25.7" height="14" fill="#d6a443"/>
+<text x="944" y="238" font-size="13" text-anchor="end" fill="#e7e8ea">93.5%<tspan fill="#9aa0a9" font-size="11"> of 18,332</tspan></text>
 <text x="16" y="266" font-size="13" fill="#e7e8ea">HAL's engine</text>
 <text x="16" y="278" font-size="10" fill="#9aa0a9">sysdolphin/baselib</text>
 <rect x="230" y="256" width="560" height="14" rx="3" fill="#2a2e35"/>
-<rect x="230.0" y="256" width="485.0" height="14" fill="#4fae6c"/>
-<rect x="715.0" y="256" width="51.1" height="14" fill="#73a9da"/>
-<rect x="766.1" y="256" width="23.9" height="14" fill="#d6a443"/>
-<text x="944" y="268" font-size="13" text-anchor="end" fill="#e7e8ea">86.6%<tspan fill="#9aa0a9" font-size="11"> of 17,578</tspan></text>
+<rect x="230.0" y="256" width="488.0" height="14" fill="#4fae6c"/>
+<rect x="718.0" y="256" width="50.1" height="14" fill="#73a9da"/>
+<rect x="768.1" y="256" width="21.9" height="14" fill="#d6a443"/>
+<text x="944" y="268" font-size="13" text-anchor="end" fill="#e7e8ea">87.1%<tspan fill="#9aa0a9" font-size="11"> of 17,578</tspan></text>
 <text x="16" y="296" font-size="13" fill="#e7e8ea">Menus</text>
 <text x="16" y="308" font-size="10" fill="#9aa0a9">melee/mn</text>
 <rect x="230" y="286" width="560" height="14" rx="3" fill="#2a2e35"/>
-<rect x="230.0" y="286" width="530.0" height="14" fill="#4fae6c"/>
-<rect x="760.0" y="286" width="3.6" height="14" fill="#73a9da"/>
-<rect x="763.6" y="286" width="26.4" height="14" fill="#d6a443"/>
-<text x="944" y="298" font-size="13" text-anchor="end" fill="#e7e8ea">94.6%<tspan fill="#9aa0a9" font-size="11"> of 10,524</tspan></text>
+<rect x="230.0" y="286" width="532.3" height="14" fill="#4fae6c"/>
+<rect x="762.3" y="286" width="3.5" height="14" fill="#73a9da"/>
+<rect x="765.8" y="286" width="24.2" height="14" fill="#d6a443"/>
+<text x="944" y="298" font-size="13" text-anchor="end" fill="#e7e8ea">95.1%<tspan fill="#9aa0a9" font-size="11"> of 10,524</tspan></text>
 <text x="16" y="326" font-size="13" fill="#e7e8ea">Shared library</text>
 <text x="16" y="338" font-size="10" fill="#9aa0a9">melee/lb</text>
 <rect x="230" y="316" width="560" height="14" rx="3" fill="#2a2e35"/>
-<rect x="230.0" y="316" width="531.6" height="14" fill="#4fae6c"/>
-<rect x="761.6" y="316" width="14.3" height="14" fill="#73a9da"/>
-<rect x="775.9" y="316" width="14.1" height="14" fill="#d6a443"/>
+<rect x="230.0" y="316" width="531.7" height="14" fill="#4fae6c"/>
+<rect x="761.7" y="316" width="14.3" height="14" fill="#73a9da"/>
+<rect x="776.0" y="316" width="14.0" height="14" fill="#d6a443"/>
 <text x="944" y="328" font-size="13" text-anchor="end" fill="#e7e8ea">94.9%<tspan fill="#9aa0a9" font-size="11"> of 6,072</tspan></text>
 <text x="16" y="356" font-size="13" fill="#e7e8ea">Trophies</text>
 <text x="16" y="368" font-size="10" fill="#9aa0a9">melee/ty</text>
 <rect x="230" y="346" width="560" height="14" rx="3" fill="#2a2e35"/>
-<rect x="230.0" y="346" width="532.9" height="14" fill="#4fae6c"/>
-<rect x="762.9" y="346" width="4.1" height="14" fill="#73a9da"/>
-<rect x="767.0" y="346" width="23.0" height="14" fill="#d6a443"/>
+<rect x="230.0" y="346" width="533.0" height="14" fill="#4fae6c"/>
+<rect x="763.0" y="346" width="4.1" height="14" fill="#73a9da"/>
+<rect x="767.1" y="346" width="22.9" height="14" fill="#d6a443"/>
 <text x="944" y="358" font-size="13" text-anchor="end" fill="#e7e8ea">95.2%<tspan fill="#9aa0a9" font-size="11"> of 4,869</tspan></text>
 <text x="16" y="386" font-size="13" fill="#e7e8ea">Collision</text>
 <text x="16" y="398" font-size="10" fill="#9aa0a9">melee/mp</text>
 <rect x="230" y="376" width="560" height="14" rx="3" fill="#2a2e35"/>
-<rect x="230.0" y="376" width="546.2" height="14" fill="#4fae6c"/>
-<rect x="776.2" y="376" width="4.3" height="14" fill="#73a9da"/>
-<rect x="780.5" y="376" width="9.5" height="14" fill="#d6a443"/>
-<text x="944" y="388" font-size="13" text-anchor="end" fill="#e7e8ea">97.5%<tspan fill="#9aa0a9" font-size="11"> of 4,467</tspan></text>
+<rect x="230.0" y="376" width="550.2" height="14" fill="#4fae6c"/>
+<rect x="780.2" y="376" width="3.4" height="14" fill="#73a9da"/>
+<rect x="783.6" y="376" width="6.4" height="14" fill="#d6a443"/>
+<text x="944" y="388" font-size="13" text-anchor="end" fill="#e7e8ea">98.3%<tspan fill="#9aa0a9" font-size="11"> of 4,467</tspan></text>
 <text x="16" y="416" font-size="13" fill="#e7e8ea">Player records</text>
 <text x="16" y="428" font-size="10" fill="#9aa0a9">melee/pl</text>
 <rect x="230" y="406" width="560" height="14" rx="3" fill="#2a2e35"/>
-<rect x="230.0" y="406" width="557.3" height="14" fill="#4fae6c"/>
-<rect x="787.3" y="406" width="2.7" height="14" fill="#d6a443"/>
-<text x="944" y="418" font-size="13" text-anchor="end" fill="#e7e8ea">99.5%<tspan fill="#9aa0a9" font-size="11"> of 2,738</tspan></text>
+<rect x="230.0" y="406" width="557.5" height="14" fill="#4fae6c"/>
+<rect x="787.5" y="406" width="2.5" height="14" fill="#d6a443"/>
+<text x="944" y="418" font-size="13" text-anchor="end" fill="#e7e8ea">99.6%<tspan fill="#9aa0a9" font-size="11"> of 2,738</tspan></text>
 <text x="16" y="446" font-size="13" fill="#e7e8ea">Interface</text>
 <text x="16" y="458" font-size="10" fill="#9aa0a9">melee/if</text>
 <rect x="230" y="436" width="560" height="14" rx="3" fill="#2a2e35"/>
-<rect x="230.0" y="436" width="543.2" height="14" fill="#4fae6c"/>
-<rect x="773.2" y="436" width="16.8" height="14" fill="#d6a443"/>
+<rect x="230.0" y="436" width="543.4" height="14" fill="#4fae6c"/>
+<rect x="773.4" y="436" width="16.6" height="14" fill="#d6a443"/>
 <text x="944" y="448" font-size="13" text-anchor="end" fill="#e7e8ea">97.0%<tspan fill="#9aa0a9" font-size="11"> of 2,732</tspan></text>
 <text x="16" y="476" font-size="13" fill="#e7e8ea">Effects</text>
 <text x="16" y="488" font-size="10" fill="#9aa0a9">melee/ef</text>
 <rect x="230" y="466" width="560" height="14" rx="3" fill="#2a2e35"/>
-<rect x="230.0" y="466" width="529.6" height="14" fill="#4fae6c"/>
-<rect x="759.6" y="466" width="5.8" height="14" fill="#73a9da"/>
-<rect x="765.4" y="466" width="24.6" height="14" fill="#d6a443"/>
-<text x="944" y="478" font-size="13" text-anchor="end" fill="#e7e8ea">94.6%<tspan fill="#9aa0a9" font-size="11"> of 2,504</tspan></text>
+<rect x="230.0" y="466" width="530.3" height="14" fill="#4fae6c"/>
+<rect x="760.3" y="466" width="5.8" height="14" fill="#73a9da"/>
+<rect x="766.1" y="466" width="23.9" height="14" fill="#d6a443"/>
+<text x="944" y="478" font-size="13" text-anchor="end" fill="#e7e8ea">94.7%<tspan fill="#9aa0a9" font-size="11"> of 2,504</tspan></text>
 <text x="16" y="506" font-size="13" fill="#e7e8ea">Everything else</text>
 <text x="16" y="518" font-size="10" fill="#9aa0a9">68 more areas, the SDK's among them</text>
 <rect x="230" y="496" width="560" height="14" rx="3" fill="#2a2e35"/>
-<rect x="230.0" y="496" width="452.2" height="14" fill="#4fae6c"/>
-<rect x="682.2" y="496" width="91.8" height="14" fill="#73a9da"/>
-<rect x="774.0" y="496" width="16.0" height="14" fill="#d6a443"/>
-<text x="944" y="508" font-size="13" text-anchor="end" fill="#e7e8ea">80.7%<tspan fill="#9aa0a9" font-size="11"> of 12,011</tspan></text>
+<rect x="230.0" y="496" width="452.8" height="14" fill="#4fae6c"/>
+<rect x="682.8" y="496" width="91.7" height="14" fill="#73a9da"/>
+<rect x="774.5" y="496" width="15.5" height="14" fill="#d6a443"/>
+<text x="944" y="508" font-size="13" text-anchor="end" fill="#e7e8ea">80.9%<tspan fill="#9aa0a9" font-size="11"> of 12,011</tspan></text>
 </svg>

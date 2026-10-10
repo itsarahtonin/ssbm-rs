@@ -4,7 +4,7 @@ These are saved research snapshots, with their aggregate data and rendering sour
 
 | Dashboard | Snapshot and purpose |
 | --- | --- |
-| [Port Coverage Map](https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb) · [source](coverage.html) · [data](data/coverage.json) | 19,668 functions, 33 saved rounds through f10, exported on October 6, 2026 (UTC). Compare measured coverage, ledger explanations, and outstanding reviews. |
+| [Port Coverage Map](https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb) · [source](coverage.html) · [data](data/coverage.json) | 19,668 functions, 36 saved rounds through f12 + play (round f12, a rerun of its probes after a harness fix, and played sessions), exported on October 10, 2026 (UTC). Compare measured coverage, ledger explanations, and outstanding reviews. |
 | [Graphics and Audio Ladder](https://claude.ai/artifact/Ppx3oVXq7qbkRck8tvcrZ4) · [source](graphics.html) · [data](data/graphics.json) | Measured October 5, 2026 on main: all 40 GX-stream scenarios at zero difference, all 41 frame scenarios within tolerance and all 41 audio scenarios matching, plus renderer features and measured history. |
 
 The dashboard links open the hosted pages, published from the HTML files here.
@@ -13,11 +13,11 @@ The dashboard links open the hosted pages, published from the HTML files here.
 
 The round slider follows saved coverage history toward a fixed target of 100% measured verification. Green functions have every countable block verified and no unexplained mismatch, including unreviewed mutations. Partially verified functions keep their measured color. **Show ledger explanations**, off by default, adds blue stripes over the explained fraction and a separate accounted percentage. It never changes the measured percentage or hides mismatch indicators.
 
-For example, `sysdolphin/baselib/debugconsole_main` contains 48 functions and 827 countable blocks. At f5, 194 blocks were verified and 633 explained, leaving zero unaccounted blocks. The default display shows 23.5% measured verification. Turning on explanations adds stripes for the remaining 76.5%; it does not turn the unit fully verified. The explanations concern crash-screen functions reached through panic/error handlers; this display audit checked the saved arithmetic and ledger attribution, without independently proving that call graph or every ledger claim. At f10 the split is the same, 197 verified and 630 explained.
+For example, `sysdolphin/baselib/debugconsole_main` contains 48 functions and 827 countable blocks. At f5, 194 blocks were verified and 633 explained, leaving zero unaccounted blocks. The default display shows 23.5% measured verification. Turning on explanations adds stripes for the remaining 76.5%; it does not turn the unit fully verified. The explanations concern crash-screen functions reached through panic/error handlers; this display audit checked the saved arithmetic and ledger attribution, without independently proving that call graph or every ledger claim. At f10 and at f12 + play the split is the same, 197 verified and 630 explained.
 
 History is reconstructed from saved per-function reports, identified by unit and address. Each round retains its counts and mismatch flags, but mutation reviews use `reviewed.txt` as it stood at the export's source revision. These are not immutable records of what had been reviewed on each historical date. Snapshot provenance lists available frozen-binary revisions and exclusion files, mapped into this repository's commit history; an unavailable historical manifest is explicitly marked. Raw instruction bitmaps and logs remain private. Click a unit or search for a function to inspect its counts, ledger category, claim offsets, rationale, shared context, and source links. The evidence panel also exposes assertion/unreachable block counts and the current lists of functions excluded as unreachable or SDK substitutions. Historical ledger copies were not saved: current claim text and scope lists are explicitly distinguished from historical counts.
 
-“Unaccounted blocks” subtracts both measured and explained coverage; it is not a count of all unexecuted blocks. Outstanding mismatch reviews can block completion even when no blocks remain unaccounted. Any ledger claim whose blocks a run has since verified is flagged in the evidence panel; at f10 the ledger has none (see [verification](../verification.md)).
+“Unaccounted blocks” subtracts both measured and explained coverage; it is not a count of all unexecuted blocks. Outstanding mismatch reviews can block completion even when no blocks remain unaccounted. Any ledger claim whose blocks a run has since verified is flagged in the evidence panel; at f12 + play the ledger has none (see [verification](../verification.md)).
 
 ## Graphics
 
@@ -28,7 +28,7 @@ Graphics/audio status requires the full expected suite to pass, and audio also r
 The JSON files are sufficient to regenerate these HTML pages with Python's standard library. Run from the repository root:
 
 ```sh
-python tools/lockstep/campaign/treemap.py f10 docs/progress/coverage.html --from-json docs/progress/data/coverage.json
+python tools/lockstep/campaign/treemap.py "f12 + play" docs/progress/coverage.html --from-json docs/progress/data/coverage.json
 python tools/lockstep/campaign/coverage_svg.py
 python tools/gx/progress.py local/progress-render --from-json docs/progress/data/graphics.json
 ```

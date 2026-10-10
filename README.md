@@ -6,7 +6,7 @@ The project aims to preserve the game's behavior, including its floating-point r
 
 ssbm-rs is a hobby project, shared in case the port or the tools behind it are useful or interesting to someone else.
 
-<a href="https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb"><img alt="Port coverage at round f10: 152,971 of 163,387 blocks verified by lockstep (93.6%), 3.1% explained by the gap ledger, 3.2% open; then the same split for each area of the code" src="docs/progress/coverage.svg"></a>
+<a href="https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb"><img alt="Port coverage at round f12 + play: 153,619 of 163,387 blocks verified by lockstep (94.0%), 3.1% explained by the gap ledger, 2.9% open; then the same split for each area of the code" src="docs/progress/coverage.svg"></a>
 
 Interactive: [Port Coverage Map](https://claude.ai/artifact/T1No6obYSvv81w5vVLpLkb) · [Graphics and Audio Ladder](https://claude.ai/artifact/Ppx3oVXq7qbkRck8tvcrZ4) · [about the dashboards](docs/progress/README.md)
 
