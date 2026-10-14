@@ -2358,16 +2358,10 @@ cbForStateCheckID1+0x84 dead # Canceling arm
 cbForStateCheckID1+0xb4 dead # in the Canceling arm
 cbForStateCheckID1+0xc4 dead # in the Canceling arm
 cbForStateCheckID1+0xe0 dead # in the Canceling arm
-cbForStateCheckID3+0x5c dead # Canceling arm
-cbForStateCheckID3+0x88 dead # in the Canceling arm
-cbForStateCheckID3+0x98 dead # in the Canceling arm
-cbForStateCheckID3+0xb4 dead # in the Canceling arm
 cbForStateBusy+0xbc dead # Canceling arm of the CHANGE_DISK branch
 cbForStateBusy+0xec dead # in it
 cbForStateBusy+0xfc dead # in it
 cbForStateBusy+0x118 dead # in it
-DVDCancelAsync+0x7c dead # BUSY arm with Canceling already 1
-DVDCancelAsync+0x15c dead # COVER_CLOSED arm with Canceling already 1
 __DVDPrepareResetAsync+0x34 dead # Canceling != 0
 cbForStateGoToRetry+0xa8 dead # CurrCommand in {4,5,0xd,0xf}
 stateCheckID+0x28 dead # CurrCommand == 3 (CHANGE_DISK)
@@ -3258,7 +3252,6 @@ ftCo_800DCE34+0xc8 dead # inside the fp1->x221B_b7 arm, which never runs: ftCo_8
 ftCo_800DCE34+0xcc dead # inside the fp1->x221B_b7 arm, which never runs: ftCo_800DC920 just cleared x221B_b7 on both fighters (ftCo_CaptureCut.c:114, :195)
 ftCo_800DCE34+0xd4 dead # inside the fp1->x221B_b7 arm, which never runs: ftCo_800DC920 just cleared x221B_b7 on both fighters (ftCo_CaptureCut.c:114, :195)
 ftMh_MS_389_80151018+0x54 dead # the inlined `x2258 == Wait2_0 (0x156)` arm of ftMh_MS_389_80150DC4: x2258 was stored 0x186 (Wait2_1) at 80151058, reloaded at 80151060 and compared at 80151064
-ftMh_MS_389_80150C8C+0x30 dead # the `x2258 == 0x155 || x2258 == 0x185` arm: the function's only reference is the bl at 80151074 (ftMh_MS_389_80151018), reached with x2258 = 0x186 stored at 80151058
 ftMh_MS_389_80150D28+0x30 dead # the function's only reference is the bl at 8015106C, in ftMh_MS_389_80151018's dead x2258 == 0x156 arm (x2258 was just stored 0x186); no run enters it (its other blocks are probe coverage)
 ftMh_MS_389_80150DC4+0x3c dead # inside x2258 == 0x156 (cmpwi/bne at 80150DF4), the inlined 80150D28's test reuses cr0: beq at 80150DFC always branches, so the cmpwi 0x186 is never reached
 ftMh_MS_389_80150DC4+0x68 dead # the inlined 80150D28's else arm, reached only from the never-reached +0x3c (beq at 80150DFC always taken inside x2258 == 0x156)
