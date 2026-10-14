@@ -1049,7 +1049,6 @@ fn asm_itNesspkflash_UnkMotion0_Phys(ctx: &Ctx) {
             0x802ab03c_u32 => {
                 // bl ftNs_SpecialN_CheckSpecialNHold
                 c::call(ctx, 0x80116ebc_u32, 0x802ab040_u32);
-                unset |= 0x10;
                 pc = 0x802ab040_u32;
             }
             0x802ab040_u32 => {
@@ -1067,7 +1066,6 @@ fn asm_itNesspkflash_UnkMotion0_Phys(ctx: &Ctx) {
             0x802ab048_u32 => {
                 // bl ftKb_SpecialNNs_800FEC78
                 c::call(ctx, 0x800fec78_u32, 0x802ab04c_u32);
-                unset |= 0x10;
                 pc = 0x802ab04c_u32;
             }
             0x802ab04c_u32 => {
@@ -1111,7 +1109,6 @@ fn asm_itNesspkflash_UnkMotion0_Phys(ctx: &Ctx) {
                     c::unset_read(ctx);
                 }
                 c::call(ctx, 0x800865d8_u32, 0x802ab068_u32);
-                unset |= 0x10;
                 pc = 0x802ab068_u32;
             }
             0x802ab068_u32 => {

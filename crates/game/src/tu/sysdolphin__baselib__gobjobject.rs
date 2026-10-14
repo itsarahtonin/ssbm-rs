@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn HSD_GObjObject_80390A3C<'a>(ctx: &'a Ctx, id: u16, arg1: u8) -> HSD_GObj<'a> {
     let mut id = id;
@@ -76,18 +77,128 @@ pub fn HSD_GObjObject_80390ADC<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a>
     return obj;
 }
 
-pub fn HSD_GObjObject_80390B0C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let mut gobj = gobj;
-    if ((gobj).obj_kind() as i32) != 255_i32 {
-        (Handle::add(
-            fns::HSD_GObj_804D7810(ctx).get(),
-            ((gobj).obj_kind() as i32),
-        ))
-        .get()
-        .call::<_, ()>((Handle::cast::<HSD_Obj<'a>>((gobj).hsd_obj()),));
-        (gobj).set_obj_kind((255_i32 as u8));
-        (gobj).set_hsd_obj(null::<Addr<'a>>(ctx));
+pub fn HSD_GObjObject_80390B0C<'a>(ctx: &'a Ctx, a0: HSD_GObj<'a>) {
+    // Transliterated from its machine code: leaves f1, f2, f3, r5, r8 as grDatFiles_801C6038, ported from machine code, reads it.
+    (a0,).put_regs(ctx);
+    asm_HSD_GObjObject_80390B0C(ctx);
+}
+
+fn asm_HSD_GObjObject_80390B0C(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80390b0c_u32;
+    loop {
+        match pc {
+            0x80390b0c_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // mr r31, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[31].set(v);
+                }
+                // lbz r0, 0x6(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x6_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // cmplwi r0, 0xff
+                {
+                    let (x, y) = (g[0].get(), 0xff_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80390B54
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80390b54_u32;
+                    continue;
+                }
+                pc = 0x80390b2c_u32;
+            }
+            0x80390b2c_u32 => {
+                // lwz r4, HSD_GObj_804D7810@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffc170_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // slwi r0, r0, 2
+                {
+                    let v = g[0].get().rotate_left(2) & 0xfffffffc_u32;
+                    g[0].set(v);
+                }
+                // lwz r3, 0x28(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x28_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // lwzx r12, r4, r0
+                g[12].set(ctx.read_u32(g[4].get().wrapping_add(g[0].get())));
+                // mtlr r12
+                ctx.regs.set_spr(8, g[12].get());
+                // blrl
+                c::call(ctx, ctx.regs.lr.get() & !3, 0x80390b44_u32);
+                pc = 0x80390b44_u32;
+            }
+            0x80390b44_u32 => {
+                // li r0, 0xff
+                g[0].set(0xff_u32);
+                // stb r0, 0x6(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x6_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stw r0, 0x28(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x28_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                pc = 0x80390b54_u32;
+            }
+            0x80390b54_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of HSD_GObjObject_80390B0C");
+            }
+            _ => unreachable!("HSD_GObjObject_80390B0C: no block at {pc:#010x}"),
+        }
     }
 }
 
@@ -117,12 +228,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80390b0c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(HSD_GObjObject_80390B0C(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80390b0c, asm_HSD_GObjObject_80390B0C, Returns::Nothing);
 }

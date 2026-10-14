@@ -780,15 +780,97 @@ pub fn Ground_801C0FB8<'a>(ctx: &'a Ctx, pair: StageIdPair<'a>) {
     );
 }
 
-pub fn Ground_DemoInit<'a>(ctx: &'a Ctx, pair: StageIdPair<'a>, arg1: i32) {
-    let __frame = ctx.stack_frame(0x8);
-    let mut pair = pair;
-    let mut arg1 = arg1;
-    (statics::melee__gr__ground::stage_datas(ctx)
-        .at((pair).grkind())
-        .get())
-    .on_demo_init()
-    .call::<_, ()>((arg1,));
+pub fn Ground_DemoInit<'a>(ctx: &'a Ctx, a0: StageIdPair<'a>, a1: i32) {
+    // Transliterated from its machine code: leaves f1 as vi1201v1_Scene_OnEnter, ported from machine code, reads it.
+    (a0, a1).put_regs(ctx);
+    asm_Ground_DemoInit(ctx);
+}
+
+fn asm_Ground_DemoInit(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x801c1074_u32;
+    loop {
+        match pc {
+            0x801c1074_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // lwz r0, 0x0(r3)
+                {
+                    let ea = g[3].get();
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lis r3, stage_datas@ha
+                g[3].set(0x803e0000_u32);
+                // slwi r5, r0, 2
+                {
+                    let v = g[0].get().rotate_left(2) & 0xfffffffc_u32;
+                    g[5].set(v);
+                }
+                // addi r0, r3, stage_datas@l
+                g[0].set(g[3].get().wrapping_add(0xfffffedc_u32));
+                // add r3, r0, r5
+                {
+                    let (v, ca, ov) = c::add3(g[0].get(), g[5].get(), 0);
+                    g[3].set(v);
+                    let _ = (ca, ov);
+                }
+                // lwz r5, 0x0(r3)
+                {
+                    let ea = g[3].get();
+                    g[5].set(ctx.read_u32(ea));
+                }
+                // mr r3, r4
+                {
+                    let v = g[4].get() | g[4].get();
+                    g[3].set(v);
+                }
+                // lwz r12, 0x10(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x10_u32);
+                    g[12].set(ctx.read_u32(ea));
+                }
+                // mtlr r12
+                ctx.regs.set_spr(8, g[12].get());
+                // blrl
+                c::call(ctx, ctx.regs.lr.get() & !3, 0x801c10a8_u32);
+                pc = 0x801c10a8_u32;
+            }
+            0x801c10a8_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of Ground_DemoInit");
+            }
+            _ => unreachable!("Ground_DemoInit: no block at {pc:#010x}"),
+        }
+    }
 }
 
 pub fn Ground_801C10B8<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: FnPtr<'a>) {
@@ -3105,14 +3187,57 @@ pub fn Ground_801C4338<'a>(ctx: &'a Ctx) {
     }
 }
 
-pub fn Ground_801C4368<'a>(ctx: &'a Ctx, slope: Val<'a, F32>, intercept: Val<'a, F32>) {
-    let mut slope = slope;
-    let mut intercept = intercept;
-    (slope).set(fns::stage_info(ctx).x724());
-    (intercept).set(fp::fsubs(
-        fns::stage_info(ctx).x724(),
-        fns::stage_info(ctx).x728(),
-    ));
+pub fn Ground_801C4368<'a>(ctx: &'a Ctx, a0: Val<'a, F32>, a1: Val<'a, F32>) {
+    // Transliterated from its machine code: leaves r5 as ftCo_800B3900, ported from machine code, reads it.
+    (a0, a1).put_regs(ctx);
+    asm_Ground_801C4368(ctx);
+}
+
+fn asm_Ground_801C4368(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // lis r5, stage_info@ha
+    g[5].set(0x804a0000_u32);
+    // addi r5, r5, stage_info@l
+    g[5].set(g[5].get().wrapping_add(0xffffe6c8_u32));
+    // lfs f0, 0x724(r5)
+    {
+        let ea = g[5].get().wrapping_add(0x724_u32);
+        c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
+    }
+    // stfs f0, 0x0(r3)
+    {
+        let ea = g[3].get();
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+    }
+    // lfs f1, 0x724(r5)
+    {
+        let ea = g[5].get().wrapping_add(0x724_u32);
+        c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
+    }
+    // lfs f0, 0x728(r5)
+    {
+        let ea = g[5].get().wrapping_add(0x728_u32);
+        c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
+    }
+    // fsubs f0, f1, f0
+    {
+        let v = fp::fsubs(ctx.regs.f(1), ctx.regs.f(0));
+        c::fill(ctx, 0, v);
+    }
+    // stfs f0, 0x0(r4)
+    {
+        let ea = g[4].get();
+        ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+    }
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
 }
 
 pub fn Ground_801C438C<'a>(ctx: &'a Ctx, val: f64) {
@@ -6110,14 +6235,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801c1074,
-        |ctx| {
-            let (a0, a1): (StageIdPair<'_>, i32) = Args::take_all(ctx);
-            Ret::put(Ground_DemoInit(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801c1074, asm_Ground_DemoInit, Returns::Nothing);
     ctx.register_port(
         0x801c10b8,
         |ctx| {
@@ -6740,14 +6858,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801c4368,
-        |ctx| {
-            let (a0, a1): (Val<'_, F32>, Val<'_, F32>) = Args::take_all(ctx);
-            Ret::put(Ground_801C4368(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801c4368, asm_Ground_801C4368, Returns::Nothing);
     ctx.register_port(
         0x801c438c,
         |ctx| {

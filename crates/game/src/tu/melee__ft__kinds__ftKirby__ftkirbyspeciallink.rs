@@ -2553,7 +2553,6 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                     c::unset_read(ctx);
                 }
                 c::call(ctx, 0x8006f190_u32, 0x800fbc4c_u32);
-                unset |= 0x200000000;
                 pc = 0x800fbc4c_u32;
             }
             0x800fbc4c_u32 => {
@@ -2564,7 +2563,6 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                 }
                 // bl ftKb_SpecialNLk800FB500
                 c::call(ctx, 0x800fb500_u32, 0x800fbc54_u32);
-                unset |= 0x200000000;
                 pc = 0x800fbc54_u32;
             }
             0x800fbc54_u32 => {
@@ -2810,7 +2808,6 @@ fn asm_ftKb_LkSpecialNStart_Anim(ctx: &Ctx) {
                 g[5].set(g[1].get().wrapping_add(0x3c_u32));
                 // bl it_802A8398
                 c::call(ctx, 0x802a8398_u32, 0x800fbd08_u32);
-                unset |= 0x200000000;
                 pc = 0x800fbd08_u32;
             }
             0x800fbd08_u32 => {
@@ -4687,7 +4684,6 @@ fn asm_ftKb_LkSpecialNStart_IASA(ctx: &Ctx) {
                     c::unset_read(ctx);
                 }
                 c::call(ctx, 0x800693ac_u32, 0x800fc43c_u32);
-                unset |= 0x400000000;
                 pc = 0x800fc43c_u32;
             }
             0x800fc43c_u32 => {
@@ -5120,7 +5116,6 @@ fn asm_ftKb_LkSpecialAirNStart_IASA(ctx: &Ctx) {
                     c::unset_read(ctx);
                 }
                 c::call(ctx, 0x800693ac_u32, 0x800fc608_u32);
-                unset |= 0x400000000;
                 pc = 0x800fc608_u32;
             }
             0x800fc608_u32 => {

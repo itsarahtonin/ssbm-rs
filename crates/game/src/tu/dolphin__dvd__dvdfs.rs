@@ -1090,52 +1090,224 @@ pub fn DVDClose<'a>(ctx: &'a Ctx, fileInfo: DVDFileInfo<'a>) -> i32 {
 
 pub fn DVDReadAsyncPrio<'a>(
     ctx: &'a Ctx,
-    fileInfo: DVDFileInfo<'a>,
-    addr: Addr<'a>,
-    length: i32,
-    offset: i32,
-    callback: FnPtr<'a>,
-    prio: i32,
+    a0: DVDFileInfo<'a>,
+    a1: Addr<'a>,
+    a2: i32,
+    a3: i32,
+    a4: FnPtr<'a>,
+    a5: i32,
 ) -> i32 {
-    let __frame = ctx.stack_frame(0x38);
-    let mut fileInfo = fileInfo;
-    let mut addr = addr;
-    let mut length = length;
-    let mut offset = offset;
-    let mut callback = callback;
-    let mut prio = prio;
-    if !((0_i32 <= offset) && ((offset as u32) < (fileInfo).length())) {
-        fns::OSPanic(
-            ctx,
-            cstr(ctx, 0x804d5b88),
-            0x2e3_i32,
-            cstr(ctx, 0x80400e48),
-            &[],
-        );
+    // Transliterated from its machine code: leaves r8 as grDatFiles_801C6038, ported from machine code, reads it.
+    (a0, a1, a2, a3, a4, a5).put_regs(ctx);
+    asm_DVDReadAsyncPrio(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_DVDReadAsyncPrio(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80337cf8_u32;
+    loop {
+        match pc {
+            0x80337cf8_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x38(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffc8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stmw r26, 0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x20_u32);
+                    for (i, reg) in (26..32).enumerate() {
+                        ctx.write_u32(ea.wrapping_add(4 * i as u32), g[reg].get());
+                    }
+                }
+                // mr. r29, r6
+                {
+                    let v = g[6].get() | g[6].get();
+                    g[29].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // addi r26, r3, 0x0
+                g[26].set(g[3].get());
+                // addi r27, r4, 0x0
+                g[27].set(g[4].get());
+                // addi r28, r5, 0x0
+                g[28].set(g[5].get());
+                // addi r30, r7, 0x0
+                g[30].set(g[7].get());
+                // addi r31, r8, 0x0
+                g[31].set(g[8].get());
+                // blt .L_80337D30
+                if (c::cr_bit(ctx, 0) == true) {
+                    pc = 0x80337d30_u32;
+                    continue;
+                }
+                pc = 0x80337d24_u32;
+            }
+            0x80337d24_u32 => {
+                // lwz r0, 0x34(r26)
+                {
+                    let ea = g[26].get().wrapping_add(0x34_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmplw r29, r0
+                {
+                    let (x, y) = (g[29].get(), g[0].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // blt .L_80337D48
+                if (c::cr_bit(ctx, 0) == true) {
+                    pc = 0x80337d48_u32;
+                    continue;
+                }
+                pc = 0x80337d30_u32;
+            }
+            0x80337d30_u32 => {
+                // lis r3, "@142"@ha
+                g[3].set(0x80400000_u32);
+                // crclr cr1eq
+                {
+                    let (x, y) = (c::cr_bit(ctx, 6), c::cr_bit(ctx, 6));
+                    c::set_cr_bit(ctx, 6, x ^ y);
+                }
+                // addi r5, r3, "@142"@l
+                g[5].set(g[3].get().wrapping_add(0xe48_u32));
+                // li r3, "@121"@sda21
+                g[3].set(g[13].get().wrapping_add(0xffffa4e8_u32));
+                // li r4, 0x2e3
+                g[4].set(0x2e3_u32);
+                // bl OSPanic
+                c::call(ctx, 0x80345728_u32, 0x80337d48_u32);
+                pc = 0x80337d48_u32;
+            }
+            0x80337d48_u32 => {
+                // add. r4, r29, r28
+                {
+                    let (v, ca, ov) = c::add3(g[29].get(), g[28].get(), 0);
+                    g[4].set(v);
+                    c::update_cr0(ctx, v);
+                    let _ = (ca, ov);
+                }
+                // blt .L_80337D60
+                if (c::cr_bit(ctx, 0) == true) {
+                    pc = 0x80337d60_u32;
+                    continue;
+                }
+                pc = 0x80337d50_u32;
+            }
+            0x80337d50_u32 => {
+                // lwz r3, 0x34(r26)
+                {
+                    let ea = g[26].get().wrapping_add(0x34_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // addi r0, r3, 0x20
+                g[0].set(g[3].get().wrapping_add(0x20_u32));
+                // cmplw r4, r0
+                {
+                    let (x, y) = (g[4].get(), g[0].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // blt .L_80337D78
+                if (c::cr_bit(ctx, 0) == true) {
+                    pc = 0x80337d78_u32;
+                    continue;
+                }
+                pc = 0x80337d60_u32;
+            }
+            0x80337d60_u32 => {
+                // lis r3, "@142"@ha
+                g[3].set(0x80400000_u32);
+                // crclr cr1eq
+                {
+                    let (x, y) = (c::cr_bit(ctx, 6), c::cr_bit(ctx, 6));
+                    c::set_cr_bit(ctx, 6, x ^ y);
+                }
+                // addi r5, r3, "@142"@l
+                g[5].set(g[3].get().wrapping_add(0xe48_u32));
+                // li r3, "@121"@sda21
+                g[3].set(g[13].get().wrapping_add(0xffffa4e8_u32));
+                // li r4, 0x2e9
+                g[4].set(0x2e9_u32);
+                // bl OSPanic
+                c::call(ctx, 0x80345728_u32, 0x80337d78_u32);
+                pc = 0x80337d78_u32;
+            }
+            0x80337d78_u32 => {
+                // stw r30, 0x38(r26)
+                {
+                    let ea = g[26].get().wrapping_add(0x38_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // lis r3, cbForReadAsync@ha
+                g[3].set(0x80330000_u32);
+                // addi r7, r3, cbForReadAsync@l
+                g[7].set(g[3].get().wrapping_add(0x7db8_u32));
+                // lwz r0, 0x30(r26)
+                {
+                    let ea = g[26].get().wrapping_add(0x30_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r3, r26, 0x0
+                g[3].set(g[26].get());
+                // addi r4, r27, 0x0
+                g[4].set(g[27].get());
+                // addi r5, r28, 0x0
+                g[5].set(g[28].get());
+                // addi r8, r31, 0x0
+                g[8].set(g[31].get());
+                // add r6, r0, r29
+                {
+                    let (v, ca, ov) = c::add3(g[0].get(), g[29].get(), 0);
+                    g[6].set(v);
+                    let _ = (ca, ov);
+                }
+                // bl DVDReadAbsAsyncPrio
+                c::call(ctx, 0x80339888_u32, 0x80337da0_u32);
+                pc = 0x80337da0_u32;
+            }
+            0x80337da0_u32 => {
+                // lmw r26, 0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x20_u32);
+                    for (i, reg) in (26..32).enumerate() {
+                        g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
+                    }
+                }
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // lwz r0, 0x3c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x3c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x38
+                g[1].set(g[1].get().wrapping_add(0x38_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of DVDReadAsyncPrio");
+            }
+            _ => unreachable!("DVDReadAsyncPrio: no block at {pc:#010x}"),
+        }
     }
-    if !((0_i32 <= offset.wrapping_add(length))
-        && ((offset.wrapping_add(length) as u32)
-            < (fileInfo).length().wrapping_add((32_i32 as u32))))
-    {
-        fns::OSPanic(
-            ctx,
-            cstr(ctx, 0x804d5b88),
-            0x2e9_i32,
-            cstr(ctx, 0x80400e48),
-            &[],
-        );
-    }
-    (fileInfo).set_callback(callback);
-    let _ = fns::DVDReadAbsAsyncPrio(
-        ctx,
-        (fileInfo).cb(),
-        addr,
-        length,
-        (((fileInfo).startAddr().wrapping_add((offset as u32))) as i32),
-        fnptr(ctx, 0x80337db8),
-        prio,
-    );
-    return 1_i32;
 }
 
 pub fn cbForReadAsync<'a>(ctx: &'a Ctx, result: i32, block: DVDCommandBlock<'a>) {
@@ -1180,15 +1352,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80337cf8,
-        |ctx| {
-            let (a0, a1, a2, a3, a4, a5): (DVDFileInfo<'_>, Addr<'_>, i32, i32, FnPtr<'_>, i32) =
-                Args::take_all(ctx);
-            Ret::put(DVDReadAsyncPrio(ctx, a0, a1, a2, a3, a4, a5), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80337cf8, asm_DVDReadAsyncPrio, Returns::Int);
     ctx.register_port(
         0x80337db8,
         |ctx| {

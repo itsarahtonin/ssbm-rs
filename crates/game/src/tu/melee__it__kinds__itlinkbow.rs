@@ -388,7 +388,6 @@ fn asm_it_802AF32C(ctx: &Ctx) {
                 }
                 // bl Item_802694CC
                 c::call(ctx, 0x802694cc_u32, 0x802af3f4_u32);
-                unset |= 0x10;
                 pc = 0x802af3f4_u32;
             }
             0x802af3f4_u32 => {
@@ -434,7 +433,6 @@ fn asm_it_802AF32C(ctx: &Ctx) {
                 }
                 // bl Item_802694CC
                 c::call(ctx, 0x802694cc_u32, 0x802af418_u32);
-                unset |= 0x10;
                 pc = 0x802af418_u32;
             }
             0x802af418_u32 => {
@@ -764,7 +762,6 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
                 }
                 // bl Item_802694CC
                 c::call(ctx, 0x802694cc_u32, 0x802af4ec_u32);
-                unset |= 0x10;
                 pc = 0x802af4ec_u32;
             }
             0x802af4ec_u32 => {
@@ -970,7 +967,6 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
                 }
                 // bl HSD_JObjSetMtxDirtySub
                 c::call(ctx, 0x803732e8_u32, 0x802af580_u32);
-                unset |= 0x10;
                 pc = 0x802af580_u32;
             }
             0x802af580_u32 => {
@@ -1003,7 +999,6 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
                 }
                 // bl Item_802694CC
                 c::call(ctx, 0x802694cc_u32, 0x802af59c_u32);
-                unset |= 0x10;
                 pc = 0x802af59c_u32;
             }
             0x802af59c_u32 => {
@@ -1209,7 +1204,6 @@ fn asm_itLinkBow_Logic100_PickedUp(ctx: &Ctx) {
                 }
                 // bl HSD_JObjSetMtxDirtySub
                 c::call(ctx, 0x803732e8_u32, 0x802af630_u32);
-                unset |= 0x10;
                 pc = 0x802af630_u32;
             }
             0x802af630_u32 => {

@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn BlockReadCallback<'a>(ctx: &'a Ctx, chan: i32, result: i32) {
     let __frame = ctx.stack_frame(0x20);
@@ -61,30 +62,133 @@ pub fn BlockReadCallback<'a>(ctx: &'a Ctx, chan: i32, result: i32) {
     }
 }
 
-pub fn __CARDRead<'a>(
-    ctx: &'a Ctx,
-    chan: i32,
-    addr: u32,
-    length: i32,
-    dst: Addr<'a>,
-    callback: FnPtr<'a>,
-) -> i32 {
-    let __frame = ctx.stack_frame(0x8);
-    let mut chan = chan;
-    let mut addr = addr;
-    let mut length = length;
-    let mut dst = dst;
-    let mut callback = callback;
-    let mut card: CARDControl<'a> = null(ctx);
-    card = fns::__CARDBlock(ctx).get(chan);
-    if (card).attached() == 0_i32 {
-        return (3_i32.wrapping_neg());
+pub fn __CARDRead<'a>(ctx: &'a Ctx, a0: i32, a1: u32, a2: i32, a3: Addr<'a>, a4: FnPtr<'a>) -> i32 {
+    // Transliterated from its machine code: leaves r8 as grDatFiles_801C6038, ported from machine code, reads it.
+    (a0, a1, a2, a3, a4).put_regs(ctx);
+    asm___CARDRead(ctx);
+    Ret::get(ctx)
+}
+
+fn asm___CARDRead(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x803547fc_u32;
+    loop {
+        match pc {
+            0x803547fc_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // mulli r9, r3, 0x110
+                g[9].set((g[3].get() as i32).wrapping_mul(272_i32) as u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lis r8, __CARDBlock@ha
+                g[8].set(0x804b0000_u32);
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // addi r0, r8, __CARDBlock@l
+                g[0].set(g[8].get().wrapping_add(0xffff8b38_u32));
+                // add r8, r0, r9
+                {
+                    let (v, ca, ov) = c::add3(g[0].get(), g[9].get(), 0);
+                    g[8].set(v);
+                    let _ = (ca, ov);
+                }
+                // lwz r0, 0x0(r8)
+                {
+                    let ea = g[8].get();
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_8035482C
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x8035482c_u32;
+                    continue;
+                }
+                pc = 0x80354824_u32;
+            }
+            0x80354824_u32 => {
+                // li r3, -0x3
+                g[3].set(0xfffffffd_u32);
+                // b .L_80354850
+                pc = 0x80354850_u32;
+                continue;
+                pc = 0x8035482c_u32;
+            }
+            0x8035482c_u32 => {
+                // stw r7, 0xd4(r8)
+                {
+                    let ea = g[8].get().wrapping_add(0xd4_u32);
+                    ctx.write_u32(ea, g[7].get());
+                }
+                // srwi r0, r5, 9
+                {
+                    let v = g[5].get().rotate_left(23) & 0x7fffff_u32;
+                    g[0].set(v);
+                }
+                // lis r5, BlockReadCallback@ha
+                g[5].set(0x80350000_u32);
+                // stw r0, 0xac(r8)
+                {
+                    let ea = g[8].get().wrapping_add(0xac_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // addi r0, r5, BlockReadCallback@l
+                g[0].set(g[5].get().wrapping_add(0x4720_u32));
+                // stw r4, 0xb0(r8)
+                {
+                    let ea = g[8].get().wrapping_add(0xb0_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // mr r4, r0
+                {
+                    let v = g[0].get() | g[0].get();
+                    g[4].set(v);
+                }
+                // stw r6, 0xb4(r8)
+                {
+                    let ea = g[8].get().wrapping_add(0xb4_u32);
+                    ctx.write_u32(ea, g[6].get());
+                }
+                // bl __CARDReadSegment
+                c::call(ctx, 0x80352db4_u32, 0x80354850_u32);
+                pc = 0x80354850_u32;
+            }
+            0x80354850_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of __CARDRead");
+            }
+            _ => unreachable!("__CARDRead: no block at {pc:#010x}"),
+        }
     }
-    (card).set_xferCallback(callback);
-    (card).set_repeat(((div_u32((length as u32), 0x200_u32)) as i32));
-    (card).set_addr(addr);
-    (card).set_buffer(dst);
-    return fns::__CARDReadSegment(ctx, chan, fnptr(ctx, 0x80354720));
 }
 
 pub fn BlockWriteCallback<'a>(ctx: &'a Ctx, chan: i32, result: i32) {
@@ -163,14 +267,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x803547fc,
-        |ctx| {
-            let (a0, a1, a2, a3, a4): (i32, u32, i32, Addr<'_>, FnPtr<'_>) = Args::take_all(ctx);
-            Ret::put(__CARDRead(ctx, a0, a1, a2, a3, a4), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x803547fc, asm___CARDRead, Returns::Int);
     ctx.register_port(
         0x80354860,
         |ctx| {

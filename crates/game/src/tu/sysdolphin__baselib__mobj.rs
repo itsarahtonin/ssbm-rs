@@ -206,19 +206,105 @@ pub fn MObjUpdateFunc<'a>(ctx: &'a Ctx, obj: Addr<'a>, r#type: i32, val: HSD_Obj
     }
 }
 
-pub fn HSD_MObjAnim<'a>(ctx: &'a Ctx, mobj: HSD_MObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let mut mobj = mobj;
-    if Handle::is_null(mobj) {
-        return;
+pub fn HSD_MObjAnim<'a>(ctx: &'a Ctx, a0: HSD_MObj<'a>) {
+    // Transliterated from its machine code: leaves r3, r5 as mnSnap_8025441C, ported from machine code, reads it.
+    (a0,).put_regs(ctx);
+    asm_HSD_MObjAnim(ctx);
+}
+
+fn asm_HSD_MObjAnim(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x803630fc_u32;
+    loop {
+        match pc {
+            0x803630fc_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // mr. r31, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[31].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_80363130
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80363130_u32;
+                    continue;
+                }
+                pc = 0x80363114_u32;
+            }
+            0x80363114_u32 => {
+                // lis r4, MObjUpdateFunc@ha
+                g[4].set(0x80360000_u32);
+                // lwz r3, 0x14(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x14_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // addi r5, r4, MObjUpdateFunc@l
+                g[5].set(g[4].get().wrapping_add(0x2eec_u32));
+                // addi r4, r31, 0x0
+                g[4].set(g[31].get());
+                // bl HSD_AObjInterpretAnim
+                c::call(ctx, 0x80364190_u32, 0x80363128_u32);
+                pc = 0x80363128_u32;
+            }
+            0x80363128_u32 => {
+                // lwz r3, 0x8(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x8_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // bl HSD_TObjAnimAll
+                c::call(ctx, 0x8035eba0_u32, 0x80363130_u32);
+                pc = 0x80363130_u32;
+            }
+            0x80363130_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of HSD_MObjAnim");
+            }
+            _ => unreachable!("HSD_MObjAnim: no block at {pc:#010x}"),
+        }
     }
-    fns::HSD_AObjInterpretAnim(
-        ctx,
-        (mobj).aobj(),
-        Handle::cast::<Addr<'a>>(mobj),
-        fnptr(ctx, 0x80362eec),
-    );
-    fns::HSD_TObjAnimAll(ctx, (mobj).tobj());
 }
 
 pub fn MObjLoad<'a>(ctx: &'a Ctx, a0: HSD_MObj<'a>, a1: _HSD_MObjDesc<'a>) -> i32 {
@@ -1443,14 +1529,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x803630fc,
-        |ctx| {
-            let (a0,): (HSD_MObj<'_>,) = Args::take_all(ctx);
-            Ret::put(HSD_MObjAnim(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x803630fc, asm_HSD_MObjAnim, Returns::Nothing);
     ctx.register_port(0x80363144, asm_MObjLoad, Returns::Int);
     ctx.register_port(
         0x803631e4,

@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn it_80278F2C<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, cmd: CommandInfo<'a>) {
     let __frame = ctx.stack_frame(0x78);
@@ -627,18 +628,79 @@ pub fn it_80279B64<'a>(ctx: &'a Ctx, item: Item<'a>) {
     fns::lb_80014498(ctx, (item).x548_colorOverlay());
 }
 
-pub fn it_80279B88<'a>(ctx: &'a Ctx, item: Item<'a>, arg1: i32, arg2: i32) {
-    let __frame = ctx.stack_frame(0x8);
-    let mut item = item;
-    let mut arg1 = arg1;
-    let mut arg2 = arg2;
-    let _ = fns::lb_800144C8(
-        ctx,
-        (item).x548_colorOverlay(),
-        fns::it_804D6D04(ctx).get(),
-        arg1,
-        arg2,
-    );
+pub fn it_80279B88<'a>(ctx: &'a Ctx, a0: Item<'a>, a1: i32, a2: i32) {
+    // Transliterated from its machine code: leaves r5 as Fighter_procCollResolve, ported from machine code, reads it.
+    (a0, a1, a2).put_regs(ctx);
+    asm_it_80279B88(ctx);
+}
+
+fn asm_it_80279B88(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80279b88_u32;
+    loop {
+        match pc {
+            0x80279b88_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // addi r6, r5, 0x0
+                g[6].set(g[5].get());
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // mr r0, r4
+                {
+                    let v = g[4].get() | g[4].get();
+                    g[0].set(v);
+                }
+                // mr r5, r0
+                {
+                    let v = g[0].get() | g[0].get();
+                    g[5].set(v);
+                }
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // addi r3, r3, 0x548
+                g[3].set(g[3].get().wrapping_add(0x548_u32));
+                // lwz r4, it_804D6D04@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffb664_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // bl lb_800144C8
+                c::call(ctx, 0x800144c8_u32, 0x80279bac_u32);
+                pc = 0x80279bac_u32;
+            }
+            0x80279bac_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of it_80279B88");
+            }
+            _ => unreachable!("it_80279B88: no block at {pc:#010x}"),
+        }
+    }
 }
 
 pub fn it_80279BBC<'a>(ctx: &'a Ctx, item: Item<'a>) {
@@ -840,14 +902,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80279b88,
-        |ctx| {
-            let (a0, a1, a2): (Item<'_>, i32, i32) = Args::take_all(ctx);
-            Ret::put(it_80279B88(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80279b88, asm_it_80279B88, Returns::Nothing);
     ctx.register_port(
         0x80279bbc,
         |ctx| {

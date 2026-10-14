@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn ftDemo_CreateFighter<'a>(ctx: &'a Ctx, alloc_info: plAllocInfo2<'a>) -> HSD_GObj<'a> {
     let __frame = ctx.stack_frame(0x30);
@@ -222,22 +223,92 @@ pub fn ftDemo_GetMotionFileString<'a>(ctx: &'a Ctx, cb_idx: i32, cb_arg: i32) ->
     return null(ctx);
 }
 
-pub fn ftDemo_SetFacingDirection<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, facing_dir: f64) {
-    let __frame = ctx.stack_frame(0x8);
-    let mut gobj = gobj;
-    let mut facing_dir = facing_dir;
-    let mut fp: Fighter<'a> =
-        (Handle::cast::<Fighter<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, gobj)));
-    (fp).set_facing_dir(facing_dir);
-    fns::ftPartSetRotY(
-        ctx,
-        fp,
-        0_i32,
-        fp::frsp(fp::fmul(
-            (fp::fdiv(3.141592653589793, (2_i32 as f64))),
-            (fp).facing_dir(),
-        )),
-    );
+pub fn ftDemo_SetFacingDirection<'a>(ctx: &'a Ctx, a0: HSD_GObj<'a>, a1: f64) {
+    // Transliterated from its machine code: leaves f1 as vi1201v2_Scene_OnEnter, ported from machine code, reads it.
+    (a0, Single(a1)).put_regs(ctx);
+    asm_ftDemo_SetFacingDirection(ctx);
+}
+
+fn asm_ftDemo_SetFacingDirection(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x800bec74_u32;
+    loop {
+        match pc {
+            0x800bec74_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // lwz r3, 0x2c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x2c_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // stfs f1, 0x2c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x2c_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(1)));
+                }
+                // lfd f1, "@286"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffff9218_u32);
+                    ctx.regs.set_f(1, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // lfs f0, 0x2c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x2c_u32);
+                    c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
+                }
+                // fmul f1, f1, f0
+                {
+                    let v = fp::fmul(ctx.regs.f(1), ctx.regs.f(0));
+                    ctx.regs.set_f(1, v);
+                }
+                // frsp f1, f1
+                {
+                    let v = fp::frsp(ctx.regs.f(1));
+                    c::fill(ctx, 1, v);
+                }
+                // bl ftPartSetRotY
+                c::call(ctx, 0x80075af0_u32, 0x800beca0_u32);
+                pc = 0x800beca0_u32;
+            }
+            0x800beca0_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of ftDemo_SetFacingDirection");
+            }
+            _ => unreachable!("ftDemo_SetFacingDirection: no block at {pc:#010x}"),
+        }
+    }
 }
 
 fn inl_initFighter_unfused<'a>(
@@ -253,11 +324,6 @@ fn inl_initFighter_unfused<'a>(
     temp1.set_slot((alloc_info).slot());
     temp1.x6().set_b0((alloc_info).xC().has_transformation());
     fns::Fighter_UnkInitLoad_80068914(ctx, gobj, temp1);
-}
-
-fn inl_HSD_GObjGetUserData_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) -> Addr<'a> {
-    let mut gobj = gobj;
-    return (gobj).user_data();
 }
 
 /// Registers this unit's ports.
@@ -293,12 +359,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x800bec74,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, Single) = Args::take_all(ctx);
-            Ret::put(ftDemo_SetFacingDirection(ctx, a0, a1.0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800bec74, asm_ftDemo_SetFacingDirection, Returns::Nothing);
 }

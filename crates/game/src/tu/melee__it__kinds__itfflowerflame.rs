@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn it_8029A748<'a>(
     ctx: &'a Ctx,
@@ -79,24 +80,131 @@ pub fn it_8029A748<'a>(
     return null(ctx);
 }
 
-pub fn it_8029A89C<'a>(ctx: &'a Ctx, arg0: HSD_GObj<'a>, arg1: f64) {
-    let __frame = ctx.stack_frame(0x28);
-    let mut arg0 = arg0;
-    let mut arg1 = arg1;
-    let mut temp_r3: HSD_JObj<'a> = null(ctx);
-    'l1: loop {
-        'c2: {}
-        if !(0_i32 != 0) {
-            break 'l1;
-        }
-    }
-    if !Handle::is_null(arg0) {
-        let mut item: Item<'a> =
-            (Handle::cast::<Item<'a>>(inl_HSD_GObjGetUserData_unfused(ctx, arg0)));
-        if !Handle::is_null(item) {
-            temp_r3 = fns::it_80272CC0(ctx, arg0, 1_i32);
-            (item).xDD4_itemVar().fflowerflame().set_unk(arg1);
-            fns::it_80272F7C(ctx, temp_r3, (item).xDD4_itemVar().fflowerflame().unk());
+pub fn it_8029A89C<'a>(ctx: &'a Ctx, a0: HSD_GObj<'a>, a1: f64) {
+    // Transliterated from its machine code: leaves f1 as gm_Scene_ToyFall_OnEnter, ported from machine code, reads it.
+    (a0, Single(a1)).put_regs(ctx);
+    asm_it_8029A89C(ctx);
+}
+
+fn asm_it_8029A89C(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8029a89c_u32;
+    loop {
+        match pc {
+            0x8029a89c_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // cmplwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x28(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffd8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stfd f31, 0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x20_u32);
+                    ctx.write_u64(ea, ctx.regs.f(31).to_bits());
+                }
+                // fmr f31, f1
+                {
+                    let v = ctx.regs.f(1);
+                    ctx.regs.set_f(31, v);
+                }
+                // stw r31, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // beq .L_8029A8DC
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x8029a8dc_u32;
+                    continue;
+                }
+                pc = 0x8029a8bc_u32;
+            }
+            0x8029a8bc_u32 => {
+                // lwz r31, 0x2c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x2c_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // cmplwi r31, 0x0
+                {
+                    let (x, y) = (g[31].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_8029A8DC
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x8029a8dc_u32;
+                    continue;
+                }
+                pc = 0x8029a8c8_u32;
+            }
+            0x8029a8c8_u32 => {
+                // li r4, 0x1
+                g[4].set(0x1_u32);
+                // bl it_80272CC0
+                c::call(ctx, 0x80272cc0_u32, 0x8029a8d0_u32);
+                pc = 0x8029a8d0_u32;
+            }
+            0x8029a8d0_u32 => {
+                // stfs f31, 0xde0(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xde0_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(31)));
+                }
+                // lfs f1, 0xde0(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xde0_u32);
+                    c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
+                }
+                // bl it_80272F7C
+                c::call(ctx, 0x80272f7c_u32, 0x8029a8dc_u32);
+                pc = 0x8029a8dc_u32;
+            }
+            0x8029a8dc_u32 => {
+                // lwz r0, 0x2c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x2c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lfd f31, 0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x20_u32);
+                    ctx.regs.set_f(31, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // lwz r31, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x28
+                g[1].set(g[1].get().wrapping_add(0x28_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of it_8029A89C");
+            }
+            _ => unreachable!("it_8029A89C: no block at {pc:#010x}"),
         }
     }
 }
@@ -461,14 +569,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8029a89c,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, Single) = Args::take_all(ctx);
-            Ret::put(it_8029A89C(ctx, a0, a1.0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8029a89c, asm_it_8029A89C, Returns::Nothing);
     ctx.register_port(
         0x8029a8f4,
         |ctx| {

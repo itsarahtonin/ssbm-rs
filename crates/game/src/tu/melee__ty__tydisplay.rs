@@ -400,7 +400,7 @@ pub fn _tyDisplay_80318714<'a>(ctx: &'a Ctx, base_: TySortElem<'a>, lo: i32, hi:
 }
 
 pub fn _tyDisplay_80318B1C<'a>(ctx: &'a Ctx, a0: i32) {
-    // Transliterated from its machine code: calls tyDisplay_8031B9DC, which reads registers its caller sets without passing them.
+    // Transliterated from its machine code: calls Toy_803060BC, which reads registers its caller sets without passing them.
     (a0,).put_regs(ctx);
     asm__tyDisplay_80318B1C(ctx);
 }
@@ -16998,7 +16998,7 @@ pub fn tyDisplay_8031C2EC<'a>(ctx: &'a Ctx) -> i32 {
 }
 
 pub fn tyDisplay_8031C354<'a>(ctx: &'a Ctx, a0: i32, a1: Val<'a, i32>, a2: i32, a3: i32) -> i32 {
-    // Transliterated from its machine code: calls tyDisplay_8031B9DC, which reads registers its caller sets without passing them.
+    // Transliterated from its machine code: calls Toy_803060BC, which reads registers its caller sets without passing them.
     (a0, a1, a2, a3).put_regs(ctx);
     asm_tyDisplay_8031C354(ctx);
     Ret::get(ctx)

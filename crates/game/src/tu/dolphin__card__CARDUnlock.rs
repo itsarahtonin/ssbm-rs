@@ -64,77 +64,360 @@ pub fn bitrev<'a>(ctx: &'a Ctx, data: u32) -> u32 {
     return wk;
 }
 
-pub fn ReadArrayUnlock<'a>(
-    ctx: &'a Ctx,
-    chan: i32,
-    data: u32,
-    rbuf: Addr<'a>,
-    rlen: i32,
-    mode: i32,
-) -> i32 {
-    let __frame = ctx.stack_frame(0x40);
-    let cmd: ArrV<'a, u8, 5> = frame_at(ctx, &__frame, 0x14);
-    let mut chan = chan;
-    let mut data = data;
-    let mut rbuf = rbuf;
-    let mut rlen = rlen;
-    let mut mode = mode;
-    let mut card: CARDControl<'a> = null(ctx);
-    let mut err: i32 = 0;
-    card = fns::__CARDBlock(ctx).get(chan);
-    if !(fns::EXISelect(ctx, chan, (0_i32 as u32), (4_i32 as u32)) != 0) {
-        return (3_i32.wrapping_neg());
+pub fn ReadArrayUnlock<'a>(ctx: &'a Ctx, a0: i32, a1: u32, a2: Addr<'a>, a3: i32, a4: i32) -> i32 {
+    // Transliterated from its machine code: leaves r8 as grDatFiles_801C6038, ported from machine code, reads it.
+    (a0, a1, a2, a3, a4).put_regs(ctx);
+    asm_ReadArrayUnlock(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_ReadArrayUnlock(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80353678_u32;
+    loop {
+        match pc {
+            0x80353678_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x40(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffc0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stmw r26, 0x28(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x28_u32);
+                    for (i, reg) in (26..32).enumerate() {
+                        ctx.write_u32(ea.wrapping_add(4 * i as u32), g[reg].get());
+                    }
+                }
+                // addi r29, r3, 0x0
+                g[29].set(g[3].get());
+                // lis r3, __CARDBlock@ha
+                g[3].set(0x804b0000_u32);
+                // addi r0, r3, __CARDBlock@l
+                g[0].set(g[3].get().wrapping_add(0xffff8b38_u32));
+                // mulli r8, r29, 0x110
+                g[8].set((g[29].get() as i32).wrapping_mul(272_i32) as u32);
+                // addi r26, r4, 0x0
+                g[26].set(g[4].get());
+                // addi r30, r5, 0x0
+                g[30].set(g[5].get());
+                // addi r31, r6, 0x0
+                g[31].set(g[6].get());
+                // addi r27, r7, 0x0
+                g[27].set(g[7].get());
+                // addi r3, r29, 0x0
+                g[3].set(g[29].get());
+                // add r28, r0, r8
+                {
+                    let (v, ca, ov) = c::add3(g[0].get(), g[8].get(), 0);
+                    g[28].set(v);
+                    let _ = (ca, ov);
+                }
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x4
+                g[5].set(0x4_u32);
+                // bl EXISelect
+                c::call(ctx, 0x80346688_u32, 0x803536bc_u32);
+                pc = 0x803536bc_u32;
+            }
+            0x803536bc_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_803536CC
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x803536cc_u32;
+                    continue;
+                }
+                pc = 0x803536c4_u32;
+            }
+            0x803536c4_u32 => {
+                // li r3, -0x3
+                g[3].set(0xfffffffd_u32);
+                // b .L_803537A8
+                pc = 0x803537a8_u32;
+                continue;
+                pc = 0x803536cc_u32;
+            }
+            0x803536cc_u32 => {
+                // clrrwi r26, r26, 12
+                {
+                    let v = g[26].get().rotate_left(0) & 0xfffff000_u32;
+                    g[26].set(v);
+                }
+                // addi r3, r1, 0x1c
+                g[3].set(g[1].get().wrapping_add(0x1c_u32));
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r5, 0x5
+                g[5].set(0x5_u32);
+                // bl memset
+                c::call(ctx, 0x80003100_u32, 0x803536e0_u32);
+                pc = 0x803536e0_u32;
+            }
+            0x803536e0_u32 => {
+                // li r0, 0x52
+                g[0].set(0x52_u32);
+                // cmpwi r27, 0x0
+                {
+                    let (x, y) = (g[27].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // stb r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                // bne .L_80353714
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80353714_u32;
+                    continue;
+                }
+                pc = 0x803536f0_u32;
+            }
+            0x803536f0_u32 => {
+                // extrwi r0, r26, 2, 1
+                {
+                    let v = g[26].get().rotate_left(3) & 0x3_u32;
+                    g[0].set(v);
+                }
+                // stb r0, 0x1d(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1d_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                // extrwi r0, r26, 8, 3
+                {
+                    let v = g[26].get().rotate_left(11) & 0xff_u32;
+                    g[0].set(v);
+                }
+                // extrwi r3, r26, 2, 11
+                {
+                    let v = g[26].get().rotate_left(13) & 0x3_u32;
+                    g[3].set(v);
+                }
+                // stb r0, 0x1e(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1e_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                // extrwi r0, r26, 7, 13
+                {
+                    let v = g[26].get().rotate_left(20) & 0x7f_u32;
+                    g[0].set(v);
+                }
+                // stb r3, 0x1f(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1f_u32);
+                    ctx.write_u8(ea, g[3].get() as u8);
+                }
+                // stb r0, 0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x20_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                // b .L_80353724
+                pc = 0x80353724_u32;
+                continue;
+                pc = 0x80353714_u32;
+            }
+            0x80353714_u32 => {
+                // srwi r0, r26, 24
+                {
+                    let v = g[26].get().rotate_left(8) & 0xff_u32;
+                    g[0].set(v);
+                }
+                // stb r0, 0x1d(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1d_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                // extrwi r0, r26, 8, 8
+                {
+                    let v = g[26].get().rotate_left(16) & 0xff_u32;
+                    g[0].set(v);
+                }
+                // stb r0, 0x1e(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1e_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                pc = 0x80353724_u32;
+            }
+            0x80353724_u32 => {
+                // addi r3, r29, 0x0
+                g[3].set(g[29].get());
+                // addi r4, r1, 0x1c
+                g[4].set(g[1].get().wrapping_add(0x1c_u32));
+                // li r5, 0x5
+                g[5].set(0x5_u32);
+                // li r6, 0x1
+                g[6].set(0x1_u32);
+                // bl EXIImmEx
+                c::call(ctx, 0x80345dc0_u32, 0x80353738_u32);
+                pc = 0x80353738_u32;
+            }
+            0x80353738_u32 => {
+                // lwz r4, 0x80(r28)
+                {
+                    let ea = g[28].get().wrapping_add(0x80_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // cntlzw r0, r3
+                {
+                    let v = g[3].get().leading_zeros();
+                    g[0].set(v);
+                }
+                // lwz r5, 0x14(r28)
+                {
+                    let ea = g[28].get().wrapping_add(0x14_u32);
+                    g[5].set(ctx.read_u32(ea));
+                }
+                // addi r3, r29, 0x0
+                g[3].set(g[29].get());
+                // srwi r28, r0, 5
+                {
+                    let v = g[0].get().rotate_left(27) & 0x7ffffff_u32;
+                    g[28].set(v);
+                }
+                // addi r4, r4, 0x200
+                g[4].set(g[4].get().wrapping_add(0x200_u32));
+                // li r6, 0x1
+                g[6].set(0x1_u32);
+                // bl EXIImmEx
+                c::call(ctx, 0x80345dc0_u32, 0x80353758_u32);
+                pc = 0x80353758_u32;
+            }
+            0x80353758_u32 => {
+                // cntlzw r0, r3
+                {
+                    let v = g[3].get().leading_zeros();
+                    g[0].set(v);
+                }
+                // srwi r0, r0, 5
+                {
+                    let v = g[0].get().rotate_left(27) & 0x7ffffff_u32;
+                    g[0].set(v);
+                }
+                // addi r3, r29, 0x0
+                g[3].set(g[29].get());
+                // addi r4, r30, 0x0
+                g[4].set(g[30].get());
+                // addi r5, r31, 0x0
+                g[5].set(g[31].get());
+                // or r28, r28, r0
+                {
+                    let v = g[28].get() | g[0].get();
+                    g[28].set(v);
+                }
+                // li r6, 0x0
+                g[6].set(0_u32);
+                // bl EXIImmEx
+                c::call(ctx, 0x80345dc0_u32, 0x80353778_u32);
+                pc = 0x80353778_u32;
+            }
+            0x80353778_u32 => {
+                // cntlzw r0, r3
+                {
+                    let v = g[3].get().leading_zeros();
+                    g[0].set(v);
+                }
+                // srwi r0, r0, 5
+                {
+                    let v = g[0].get().rotate_left(27) & 0x7ffffff_u32;
+                    g[0].set(v);
+                }
+                // addi r3, r29, 0x0
+                g[3].set(g[29].get());
+                // or r28, r28, r0
+                {
+                    let v = g[28].get() | g[0].get();
+                    g[28].set(v);
+                }
+                // bl EXIDeselect
+                c::call(ctx, 0x803467b4_u32, 0x8035378c_u32);
+                pc = 0x8035378c_u32;
+            }
+            0x8035378c_u32 => {
+                // cntlzw r0, r3
+                {
+                    let v = g[3].get().leading_zeros();
+                    g[0].set(v);
+                }
+                // srwi r0, r0, 5
+                {
+                    let v = g[0].get().rotate_left(27) & 0x7ffffff_u32;
+                    g[0].set(v);
+                }
+                // or. r28, r28, r0
+                {
+                    let v = g[28].get() | g[0].get();
+                    g[28].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // beq .L_803537A4
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x803537a4_u32;
+                    continue;
+                }
+                pc = 0x8035379c_u32;
+            }
+            0x8035379c_u32 => {
+                // li r3, -0x3
+                g[3].set(0xfffffffd_u32);
+                // b .L_803537A8
+                pc = 0x803537a8_u32;
+                continue;
+                pc = 0x803537a4_u32;
+            }
+            0x803537a4_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                pc = 0x803537a8_u32;
+            }
+            0x803537a8_u32 => {
+                // lmw r26, 0x28(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x28_u32);
+                    for (i, reg) in (26..32).enumerate() {
+                        g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
+                    }
+                }
+                // lwz r0, 0x44(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x44_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x40
+                g[1].set(g[1].get().wrapping_add(0x40_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of ReadArrayUnlock");
+            }
+            _ => unreachable!("ReadArrayUnlock: no block at {pc:#010x}"),
+        }
     }
-    data = (data & 0xfffff000_u32);
-    let _ = fns::memset(
-        ctx,
-        Handle::cast::<Addr<'a>>(cmd.at(0)),
-        0_i32,
-        (5_i32 as u32),
-    );
-    cmd.at(0_i32).set((82_i32 as u8));
-    if mode == 0_i32 {
-        cmd.at(1_i32)
-            .set((((shr_u32((data), (29_i32 as u32))) & (3_i32 as u32)) as u8));
-        cmd.at(2_i32)
-            .set((((shr_u32((data), (21_i32 as u32))) & (255_i32 as u32)) as u8));
-        cmd.at(3_i32)
-            .set((((shr_u32((data), (19_i32 as u32))) & (3_i32 as u32)) as u8));
-        cmd.at(4_i32)
-            .set((((shr_u32((data), (12_i32 as u32))) & (127_i32 as u32)) as u8));
-    } else {
-        cmd.at(1_i32)
-            .set(((shr_u32((data & 0xff000000_u32), (24_i32 as u32))) as u8));
-        cmd.at(2_i32)
-            .set(((shr_u32((data & (0xff0000_i32 as u32)), (16_i32 as u32))) as u8));
-    }
-    err = 0_i32;
-    err = (err
-        | (!(fns::EXIImmEx(
-            ctx,
-            chan,
-            Handle::cast::<Addr<'a>>(cmd.at(0)),
-            5_i32,
-            (1_i32 as u32),
-        ) != 0) as i32));
-    err = (err
-        | (!(fns::EXIImmEx(
-            ctx,
-            chan,
-            Handle::cast::<Addr<'a>>(Handle::add(
-                Handle::cast::<Val<'a, u8>>((card).workArea()),
-                (0x200_u32 as i32),
-            )),
-            (card).latency(),
-            (1_i32 as u32),
-        ) != 0) as i32));
-    err = (err | (!(fns::EXIImmEx(ctx, chan, rbuf, rlen, (0_i32 as u32)) != 0) as i32));
-    err = (err | (!(fns::EXIDeselect(ctx, chan) != 0) as i32));
-    return (if (err != 0) {
-        (3_i32.wrapping_neg())
-    } else {
-        0_i32
-    });
 }
 
 pub fn DummyLen<'a>(ctx: &'a Ctx) -> i32 {
@@ -171,185 +454,3504 @@ pub fn DummyLen<'a>(ctx: &'a Ctx) -> i32 {
     return tmp;
 }
 
-pub fn __CARDUnlock<'a>(ctx: &'a Ctx, chan: i32, flashID: Val<'a, u8>) -> i32 {
-    let __frame = ctx.stack_frame(0x110);
-    let rbuf: ArrV<'a, u8, 64> = frame_at(ctx, &__frame, 0x8c);
-    let mut chan = chan;
-    let mut flashID = flashID;
-    let mut init_val: u32 = 0;
-    let mut data: u32 = 0;
-    let mut dummy: i32 = 0;
-    let mut rlen: i32 = 0;
-    let mut rshift: u32 = 0;
-    let mut fsts: u8 = 0;
-    let mut wk: u32 = 0;
-    let mut wk1: u32 = 0;
-    let mut Ans1: u32 = (0_i32 as u32);
-    let mut Ans2: u32 = (0_i32 as u32);
-    let mut dp: Val<'a, u32> = null(ctx);
-    let mut para1A: u32 = (0_i32 as u32);
-    let mut para1B: u32 = (0_i32 as u32);
-    let mut para2A: u32 = (0_i32 as u32);
-    let mut para2B: u32 = (0_i32 as u32);
-    let mut card: CARDControl<'a> = null(ctx);
-    let mut task: STRUCT_DSP_TASK<'a> = null(ctx);
-    let mut param: CARDDecParam<'a> = null(ctx);
-    let mut input: Val<'a, u8> = null(ctx);
-    let mut output: Val<'a, u8> = null(ctx);
-    card = fns::__CARDBlock(ctx).get(chan);
-    task = (card).task();
-    param = Handle::cast::<CARDDecParam<'a>>((card).workArea());
-    input = (Handle::add(Handle::cast::<Val<'a, u8>>(param), (16_u32 as i32)));
-    input = ptr::<Val<'a, u8>>(
-        ctx,
-        ((Handle::addr((input))
-            .wrapping_add((32_i32 as u32))
-            .wrapping_sub((1_i32 as u32)))
-            & ((!(32_i32.wrapping_sub(1_i32))) as u32)) as u32,
-    );
-    output = Handle::add(input, 32_i32);
-    fsts = (0_i32 as u8);
-    init_val = inl_GetInitVal_unfused(ctx);
-    dummy = statics::dolphin__card__CARDUnlock::DummyLen(ctx);
-    rlen = dummy;
-    if statics::dolphin__card__CARDUnlock::ReadArrayUnlock(
-        ctx,
-        chan,
-        init_val,
-        Handle::cast::<Addr<'a>>(rbuf.at(0)),
-        rlen,
-        0_i32,
-    ) < 0_i32
-    {
-        return (3_i32.wrapping_neg());
+pub fn __CARDUnlock<'a>(ctx: &'a Ctx, a0: i32, a1: Val<'a, u8>) -> i32 {
+    // Transliterated from its machine code: leaves r8 as grDatFiles_801C6038, ported from machine code, reads it.
+    (a0, a1).put_regs(ctx);
+    asm___CARDUnlock(ctx);
+    Ret::get(ctx)
+}
+
+fn asm___CARDUnlock(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80353850_u32;
+    loop {
+        match pc {
+            0x80353850_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x110(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffef0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stmw r22, 0xe8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xe8_u32);
+                    for (i, reg) in (22..32).enumerate() {
+                        ctx.write_u32(ea.wrapping_add(4 * i as u32), g[reg].get());
+                    }
+                }
+                // addi r28, r3, 0x0
+                g[28].set(g[3].get());
+                // lis r3, __CARDBlock@ha
+                g[3].set(0x804b0000_u32);
+                // mulli r5, r28, 0x110
+                g[5].set((g[28].get() as i32).wrapping_mul(272_i32) as u32);
+                // addi r0, r3, __CARDBlock@l
+                g[0].set(g[3].get().wrapping_add(0xffff8b38_u32));
+                // add r31, r0, r5
+                {
+                    let (v, ca, ov) = c::add3(g[0].get(), g[5].get(), 0);
+                    g[31].set(v);
+                    let _ = (ca, ov);
+                }
+                // addi r23, r4, 0x0
+                g[23].set(g[4].get());
+                // addi r30, r31, 0x30
+                g[30].set(g[31].get().wrapping_add(0x30_u32));
+                // lwz r3, 0x80(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x80_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // addi r0, r3, 0x2f
+                g[0].set(g[3].get().wrapping_add(0x2f_u32));
+                // clrrwi r27, r0, 5
+                {
+                    let v = g[0].get().rotate_left(0) & 0xffffffe0_u32;
+                    g[27].set(v);
+                }
+                // addi r29, r3, 0x0
+                g[29].set(g[3].get());
+                // addi r22, r27, 0x20
+                g[22].set(g[27].get().wrapping_add(0x20_u32));
+                // bl OSGetTick
+                c::call(ctx, 0x8034c408_u32, 0x80353894_u32);
+                pc = 0x80353894_u32;
+            }
+            0x80353894_u32 => {
+                // bl srand
+                c::call(ctx, 0x803257bc_u32, 0x80353898_u32);
+                pc = 0x80353898_u32;
+            }
+            0x80353898_u32 => {
+                // lis r3, 0x7fed
+                g[3].set(0x7fed0000_u32);
+                // addi r24, r3, -0x8000
+                g[24].set(g[3].get().wrapping_add(0xffff8000_u32));
+                // bl rand
+                c::call(ctx, 0x803257c4_u32, 0x803538a4_u32);
+                pc = 0x803538a4_u32;
+            }
+            0x803538a4_u32 => {
+                // or r24, r24, r3
+                {
+                    let v = g[24].get() | g[3].get();
+                    g[24].set(v);
+                }
+                // clrrwi r24, r24, 12
+                {
+                    let v = g[24].get().rotate_left(0) & 0xfffff000_u32;
+                    g[24].set(v);
+                }
+                // bl DummyLen
+                c::call(ctx, 0x803537bc_u32, 0x803538b0_u32);
+                pc = 0x803538b0_u32;
+            }
+            0x803538b0_u32 => {
+                // addi r25, r3, 0x0
+                g[25].set(g[3].get());
+                // addi r6, r25, 0x0
+                g[6].set(g[25].get());
+                // addi r3, r28, 0x0
+                g[3].set(g[28].get());
+                // addi r4, r24, 0x0
+                g[4].set(g[24].get());
+                // addi r5, r1, 0x94
+                g[5].set(g[1].get().wrapping_add(0x94_u32));
+                // li r7, 0x0
+                g[7].set(0_u32);
+                // bl ReadArrayUnlock
+                c::call(ctx, 0x80353678_u32, 0x803538cc_u32);
+                pc = 0x803538cc_u32;
+            }
+            0x803538cc_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bge .L_803538DC
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x803538dc_u32;
+                    continue;
+                }
+                pc = 0x803538d4_u32;
+            }
+            0x803538d4_u32 => {
+                // li r3, -0x3
+                g[3].set(0xfffffffd_u32);
+                // b .L_80354378
+                pc = 0x80354378_u32;
+                continue;
+                pc = 0x803538dc_u32;
+            }
+            0x803538dc_u32 => {
+                // slwi r3, r25, 3
+                {
+                    let v = g[25].get().rotate_left(3) & 0xfffffff8_u32;
+                    g[3].set(v);
+                }
+                // addi r4, r3, 0x1
+                g[4].set(g[3].get().wrapping_add(0x1_u32));
+                // cmplwi r4, 0x0
+                {
+                    let (x, y) = (g[4].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // ble .L_80353A54
+                if (c::cr_bit(ctx, 1) == false) {
+                    pc = 0x80353a54_u32;
+                    continue;
+                }
+                pc = 0x803538f0_u32;
+            }
+            0x803538f0_u32 => {
+                // cmplwi r4, 0x8
+                {
+                    let (x, y) = (g[4].get(), 0x8_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // subi r5, r4, 0x8
+                g[5].set(g[4].get().wrapping_add(0xfffffff8_u32));
+                // ble .L_80353A1C
+                if (c::cr_bit(ctx, 1) == false) {
+                    pc = 0x80353a1c_u32;
+                    continue;
+                }
+                pc = 0x803538fc_u32;
+            }
+            0x803538fc_u32 => {
+                // addi r0, r5, 0x7
+                g[0].set(g[5].get().wrapping_add(0x7_u32));
+                // srwi r0, r0, 3
+                {
+                    let v = g[0].get().rotate_left(29) & 0x1fffffff_u32;
+                    g[0].set(v);
+                }
+                // cmplwi r5, 0x0
+                {
+                    let (x, y) = (g[5].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // mtctr r0
+                ctx.regs.set_spr(9, g[0].get());
+                // ble .L_80353A1C
+                if (c::cr_bit(ctx, 1) == false) {
+                    pc = 0x80353a1c_u32;
+                    continue;
+                }
+                pc = 0x80353910_u32;
+            }
+            0x80353910_u32 => {
+                // srwi r0, r24, 7
+                {
+                    let v = g[24].get().rotate_left(25) & 0x1ffffff_u32;
+                    g[0].set(v);
+                }
+                // srwi r5, r24, 15
+                {
+                    let v = g[24].get().rotate_left(17) & 0x1ffff_u32;
+                    g[5].set(v);
+                }
+                // xor r0, r24, r0
+                {
+                    let v = g[24].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // xor r0, r5, r0
+                {
+                    let v = g[5].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // srwi r6, r24, 23
+                {
+                    let v = g[24].get().rotate_left(9) & 0x1ff_u32;
+                    g[6].set(v);
+                }
+                // eqv r0, r6, r0
+                {
+                    let v = !(g[6].get() ^ g[0].get());
+                    g[0].set(v);
+                }
+                // srwi r5, r24, 1
+                {
+                    let v = g[24].get().rotate_left(31) & 0x7fffffff_u32;
+                    g[5].set(v);
+                }
+                // clrlslwi r0, r0, 31, 30
+                {
+                    let v = g[0].get().rotate_left(30) & 0x40000000_u32;
+                    g[0].set(v);
+                }
+                // or r7, r5, r0
+                {
+                    let v = g[5].get() | g[0].get();
+                    g[7].set(v);
+                }
+                // srwi r0, r7, 7
+                {
+                    let v = g[7].get().rotate_left(25) & 0x1ffffff_u32;
+                    g[0].set(v);
+                }
+                // srwi r5, r7, 15
+                {
+                    let v = g[7].get().rotate_left(17) & 0x1ffff_u32;
+                    g[5].set(v);
+                }
+                // xor r0, r7, r0
+                {
+                    let v = g[7].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // srwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(9) & 0x1ff_u32;
+                    g[6].set(v);
+                }
+                // xor r0, r5, r0
+                {
+                    let v = g[5].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // eqv r0, r6, r0
+                {
+                    let v = !(g[6].get() ^ g[0].get());
+                    g[0].set(v);
+                }
+                // clrlslwi r8, r0, 31, 30
+                {
+                    let v = g[0].get().rotate_left(30) & 0x40000000_u32;
+                    g[8].set(v);
+                }
+                // rlwimi r8, r7, 31, 2, 31
+                {
+                    let v = (g[7].get().rotate_left(31) & 0x3fffffff_u32)
+                        | (g[8].get() & 0xc0000000_u32);
+                    g[8].set(v);
+                }
+                // srwi r0, r8, 7
+                {
+                    let v = g[8].get().rotate_left(25) & 0x1ffffff_u32;
+                    g[0].set(v);
+                }
+                // srwi r5, r8, 15
+                {
+                    let v = g[8].get().rotate_left(17) & 0x1ffff_u32;
+                    g[5].set(v);
+                }
+                // xor r0, r8, r0
+                {
+                    let v = g[8].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // srwi r6, r8, 23
+                {
+                    let v = g[8].get().rotate_left(9) & 0x1ff_u32;
+                    g[6].set(v);
+                }
+                // xor r0, r5, r0
+                {
+                    let v = g[5].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // eqv r0, r6, r0
+                {
+                    let v = !(g[6].get() ^ g[0].get());
+                    g[0].set(v);
+                }
+                // clrlslwi r7, r0, 31, 30
+                {
+                    let v = g[0].get().rotate_left(30) & 0x40000000_u32;
+                    g[7].set(v);
+                }
+                // rlwimi r7, r8, 31, 2, 31
+                {
+                    let v = (g[8].get().rotate_left(31) & 0x3fffffff_u32)
+                        | (g[7].get() & 0xc0000000_u32);
+                    g[7].set(v);
+                }
+                // srwi r0, r7, 7
+                {
+                    let v = g[7].get().rotate_left(25) & 0x1ffffff_u32;
+                    g[0].set(v);
+                }
+                // srwi r5, r7, 15
+                {
+                    let v = g[7].get().rotate_left(17) & 0x1ffff_u32;
+                    g[5].set(v);
+                }
+                // xor r0, r7, r0
+                {
+                    let v = g[7].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // srwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(9) & 0x1ff_u32;
+                    g[6].set(v);
+                }
+                // xor r0, r5, r0
+                {
+                    let v = g[5].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // eqv r0, r6, r0
+                {
+                    let v = !(g[6].get() ^ g[0].get());
+                    g[0].set(v);
+                }
+                // clrlslwi r8, r0, 31, 30
+                {
+                    let v = g[0].get().rotate_left(30) & 0x40000000_u32;
+                    g[8].set(v);
+                }
+                // rlwimi r8, r7, 31, 2, 31
+                {
+                    let v = (g[7].get().rotate_left(31) & 0x3fffffff_u32)
+                        | (g[8].get() & 0xc0000000_u32);
+                    g[8].set(v);
+                }
+                // srwi r0, r8, 7
+                {
+                    let v = g[8].get().rotate_left(25) & 0x1ffffff_u32;
+                    g[0].set(v);
+                }
+                // srwi r5, r8, 15
+                {
+                    let v = g[8].get().rotate_left(17) & 0x1ffff_u32;
+                    g[5].set(v);
+                }
+                // xor r0, r8, r0
+                {
+                    let v = g[8].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // srwi r6, r8, 23
+                {
+                    let v = g[8].get().rotate_left(9) & 0x1ff_u32;
+                    g[6].set(v);
+                }
+                // xor r0, r5, r0
+                {
+                    let v = g[5].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // eqv r0, r6, r0
+                {
+                    let v = !(g[6].get() ^ g[0].get());
+                    g[0].set(v);
+                }
+                // clrlslwi r7, r0, 31, 30
+                {
+                    let v = g[0].get().rotate_left(30) & 0x40000000_u32;
+                    g[7].set(v);
+                }
+                // rlwimi r7, r8, 31, 2, 31
+                {
+                    let v = (g[8].get().rotate_left(31) & 0x3fffffff_u32)
+                        | (g[7].get() & 0xc0000000_u32);
+                    g[7].set(v);
+                }
+                // srwi r0, r7, 7
+                {
+                    let v = g[7].get().rotate_left(25) & 0x1ffffff_u32;
+                    g[0].set(v);
+                }
+                // srwi r5, r7, 15
+                {
+                    let v = g[7].get().rotate_left(17) & 0x1ffff_u32;
+                    g[5].set(v);
+                }
+                // xor r0, r7, r0
+                {
+                    let v = g[7].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // srwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(9) & 0x1ff_u32;
+                    g[6].set(v);
+                }
+                // xor r0, r5, r0
+                {
+                    let v = g[5].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // eqv r0, r6, r0
+                {
+                    let v = !(g[6].get() ^ g[0].get());
+                    g[0].set(v);
+                }
+                // clrlslwi r8, r0, 31, 30
+                {
+                    let v = g[0].get().rotate_left(30) & 0x40000000_u32;
+                    g[8].set(v);
+                }
+                // rlwimi r8, r7, 31, 2, 31
+                {
+                    let v = (g[7].get().rotate_left(31) & 0x3fffffff_u32)
+                        | (g[8].get() & 0xc0000000_u32);
+                    g[8].set(v);
+                }
+                // srwi r0, r8, 7
+                {
+                    let v = g[8].get().rotate_left(25) & 0x1ffffff_u32;
+                    g[0].set(v);
+                }
+                // srwi r5, r8, 15
+                {
+                    let v = g[8].get().rotate_left(17) & 0x1ffff_u32;
+                    g[5].set(v);
+                }
+                // xor r0, r8, r0
+                {
+                    let v = g[8].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // srwi r6, r8, 23
+                {
+                    let v = g[8].get().rotate_left(9) & 0x1ff_u32;
+                    g[6].set(v);
+                }
+                // xor r0, r5, r0
+                {
+                    let v = g[5].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // eqv r0, r6, r0
+                {
+                    let v = !(g[6].get() ^ g[0].get());
+                    g[0].set(v);
+                }
+                // clrlslwi r7, r0, 31, 30
+                {
+                    let v = g[0].get().rotate_left(30) & 0x40000000_u32;
+                    g[7].set(v);
+                }
+                // rlwimi r7, r8, 31, 2, 31
+                {
+                    let v = (g[8].get().rotate_left(31) & 0x3fffffff_u32)
+                        | (g[7].get() & 0xc0000000_u32);
+                    g[7].set(v);
+                }
+                // srwi r0, r7, 7
+                {
+                    let v = g[7].get().rotate_left(25) & 0x1ffffff_u32;
+                    g[0].set(v);
+                }
+                // srwi r5, r7, 15
+                {
+                    let v = g[7].get().rotate_left(17) & 0x1ffff_u32;
+                    g[5].set(v);
+                }
+                // xor r0, r7, r0
+                {
+                    let v = g[7].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // srwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(9) & 0x1ff_u32;
+                    g[6].set(v);
+                }
+                // xor r0, r5, r0
+                {
+                    let v = g[5].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // eqv r0, r6, r0
+                {
+                    let v = !(g[6].get() ^ g[0].get());
+                    g[0].set(v);
+                }
+                // clrlslwi r24, r0, 31, 30
+                {
+                    let v = g[0].get().rotate_left(30) & 0x40000000_u32;
+                    g[24].set(v);
+                }
+                // rlwimi r24, r7, 31, 2, 31
+                {
+                    let v = (g[7].get().rotate_left(31) & 0x3fffffff_u32)
+                        | (g[24].get() & 0xc0000000_u32);
+                    g[24].set(v);
+                }
+                // addi r3, r3, 0x8
+                g[3].set(g[3].get().wrapping_add(0x8_u32));
+                // bdnz .L_80353910
+                if c::ctr_ok(ctx, 16) {
+                    pc = 0x80353910_u32;
+                    continue;
+                }
+                pc = 0x80353a1c_u32;
+            }
+            0x80353a1c_u32 => {
+                // subf r0, r3, r4
+                {
+                    let (v, ca, ov) = c::add3(!g[3].get(), g[4].get(), 1);
+                    g[0].set(v);
+                    let _ = (ca, ov);
+                }
+                // cmplw r3, r4
+                {
+                    let (x, y) = (g[3].get(), g[4].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // mtctr r0
+                ctx.regs.set_spr(9, g[0].get());
+                // bge .L_80353A54
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x80353a54_u32;
+                    continue;
+                }
+                pc = 0x80353a2c_u32;
+            }
+            0x80353a2c_u32 => {
+                // srwi r0, r24, 7
+                {
+                    let v = g[24].get().rotate_left(25) & 0x1ffffff_u32;
+                    g[0].set(v);
+                }
+                // srwi r3, r24, 15
+                {
+                    let v = g[24].get().rotate_left(17) & 0x1ffff_u32;
+                    g[3].set(v);
+                }
+                // xor r0, r24, r0
+                {
+                    let v = g[24].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // srwi r4, r24, 23
+                {
+                    let v = g[24].get().rotate_left(9) & 0x1ff_u32;
+                    g[4].set(v);
+                }
+                // xor r0, r3, r0
+                {
+                    let v = g[3].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // eqv r0, r4, r0
+                {
+                    let v = !(g[4].get() ^ g[0].get());
+                    g[0].set(v);
+                }
+                // srwi r3, r24, 1
+                {
+                    let v = g[24].get().rotate_left(31) & 0x7fffffff_u32;
+                    g[3].set(v);
+                }
+                // clrlslwi r0, r0, 31, 30
+                {
+                    let v = g[0].get().rotate_left(30) & 0x40000000_u32;
+                    g[0].set(v);
+                }
+                // or r24, r3, r0
+                {
+                    let v = g[3].get() | g[0].get();
+                    g[24].set(v);
+                }
+                // bdnz .L_80353A2C
+                if c::ctr_ok(ctx, 16) {
+                    pc = 0x80353a2c_u32;
+                    continue;
+                }
+                pc = 0x80353a54_u32;
+            }
+            0x80353a54_u32 => {
+                // srwi r0, r24, 7
+                {
+                    let v = g[24].get().rotate_left(25) & 0x1ffffff_u32;
+                    g[0].set(v);
+                }
+                // srwi r3, r24, 15
+                {
+                    let v = g[24].get().rotate_left(17) & 0x1ffff_u32;
+                    g[3].set(v);
+                }
+                // xor r0, r24, r0
+                {
+                    let v = g[24].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // srwi r4, r24, 23
+                {
+                    let v = g[24].get().rotate_left(9) & 0x1ff_u32;
+                    g[4].set(v);
+                }
+                // xor r0, r3, r0
+                {
+                    let v = g[3].get() ^ g[0].get();
+                    g[0].set(v);
+                }
+                // eqv r0, r4, r0
+                {
+                    let v = !(g[4].get() ^ g[0].get());
+                    g[0].set(v);
+                }
+                // slwi r0, r0, 31
+                {
+                    let v = g[0].get().rotate_left(31) & 0x80000000_u32;
+                    g[0].set(v);
+                }
+                // or r0, r24, r0
+                {
+                    let v = g[24].get() | g[0].get();
+                    g[0].set(v);
+                }
+                // stw r0, 0x28(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x28_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lwz r3, 0x28(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x28_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // bl bitrev
+                c::call(ctx, 0x8035350c_u32, 0x80353a80_u32);
+                pc = 0x80353a80_u32;
+            }
+            0x80353a80_u32 => {
+                // stw r3, 0x28(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x28_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // bl DummyLen
+                c::call(ctx, 0x803537bc_u32, 0x80353a88_u32);
+                pc = 0x80353a88_u32;
+            }
+            0x80353a88_u32 => {
+                // addi r26, r3, 0x0
+                g[26].set(g[3].get());
+                // addi r6, r26, 0x14
+                g[6].set(g[26].get().wrapping_add(0x14_u32));
+                // addi r3, r28, 0x0
+                g[3].set(g[28].get());
+                // addi r5, r1, 0x94
+                g[5].set(g[1].get().wrapping_add(0x94_u32));
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r7, 0x1
+                g[7].set(0x1_u32);
+                // bl ReadArrayUnlock
+                c::call(ctx, 0x80353678_u32, 0x80353aa4_u32);
+                pc = 0x80353aa4_u32;
+            }
+            0x80353aa4_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bge .L_80353AB4
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x80353ab4_u32;
+                    continue;
+                }
+                pc = 0x80353aac_u32;
+            }
+            0x80353aac_u32 => {
+                // li r3, -0x3
+                g[3].set(0xfffffffd_u32);
+                // b .L_80354378
+                pc = 0x80354378_u32;
+                continue;
+                pc = 0x80353ab4_u32;
+            }
+            0x80353ab4_u32 => {
+                // li r3, 0x4
+                g[3].set(0x4_u32);
+                // lwz r7, 0x28(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x28_u32);
+                    g[7].set(ctx.read_u32(ea));
+                }
+                // lwz r25, 0x94(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x94_u32);
+                    g[25].set(ctx.read_u32(ea));
+                }
+                // mtctr r3
+                ctx.regs.set_spr(9, g[3].get());
+                // lwz r28, 0x98(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x98_u32);
+                    g[28].set(ctx.read_u32(ea));
+                }
+                // lwz r24, 0x9c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x9c_u32);
+                    g[24].set(ctx.read_u32(ea));
+                }
+                // xor r25, r25, r7
+                {
+                    let v = g[25].get() ^ g[7].get();
+                    g[25].set(v);
+                }
+                // lwz r0, 0xa0(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xa0_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r5, 0xa4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xa4_u32);
+                    g[5].set(ctx.read_u32(ea));
+                }
+                pc = 0x80353ad8_u32;
+            }
+            0x80353ad8_u32 => {
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 1
+                {
+                    let v = g[7].get().rotate_left(1) & 0xfffffffe_u32;
+                    g[4].set(v);
+                }
+                // rlwinm r3, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[3].set(v);
+                }
+                // or r7, r4, r3
+                {
+                    let v = g[4].get() | g[3].get();
+                    g[7].set(v);
+                }
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r9, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[9].set(v);
+                }
+                // rlwimi r9, r7, 1, 0, 29
+                {
+                    let v = (g[7].get().rotate_left(1) & 0xfffffffc_u32) | (g[9].get() & 0x3_u32);
+                    g[9].set(v);
+                }
+                // slwi r3, r9, 7
+                {
+                    let v = g[9].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r9, 15
+                {
+                    let v = g[9].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r9, r3
+                {
+                    let v = g[9].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r9, 23
+                {
+                    let v = g[9].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r8, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[8].set(v);
+                }
+                // rlwimi r8, r9, 1, 0, 29
+                {
+                    let v = (g[9].get().rotate_left(1) & 0xfffffffc_u32) | (g[8].get() & 0x3_u32);
+                    g[8].set(v);
+                }
+                // slwi r3, r8, 7
+                {
+                    let v = g[8].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r8, 15
+                {
+                    let v = g[8].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r8, r3
+                {
+                    let v = g[8].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r8, 23
+                {
+                    let v = g[8].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r7, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[7].set(v);
+                }
+                // rlwimi r7, r8, 1, 0, 29
+                {
+                    let v = (g[8].get().rotate_left(1) & 0xfffffffc_u32) | (g[7].get() & 0x3_u32);
+                    g[7].set(v);
+                }
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r8, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[8].set(v);
+                }
+                // rlwimi r8, r7, 1, 0, 29
+                {
+                    let v = (g[7].get().rotate_left(1) & 0xfffffffc_u32) | (g[8].get() & 0x3_u32);
+                    g[8].set(v);
+                }
+                // slwi r3, r8, 7
+                {
+                    let v = g[8].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r8, 15
+                {
+                    let v = g[8].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r8, r3
+                {
+                    let v = g[8].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r8, 23
+                {
+                    let v = g[8].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r7, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[7].set(v);
+                }
+                // rlwimi r7, r8, 1, 0, 29
+                {
+                    let v = (g[8].get().rotate_left(1) & 0xfffffffc_u32) | (g[7].get() & 0x3_u32);
+                    g[7].set(v);
+                }
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r8, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[8].set(v);
+                }
+                // rlwimi r8, r7, 1, 0, 29
+                {
+                    let v = (g[7].get().rotate_left(1) & 0xfffffffc_u32) | (g[8].get() & 0x3_u32);
+                    g[8].set(v);
+                }
+                // slwi r3, r8, 7
+                {
+                    let v = g[8].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r8, 15
+                {
+                    let v = g[8].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r8, r3
+                {
+                    let v = g[8].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r8, 23
+                {
+                    let v = g[8].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r7, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[7].set(v);
+                }
+                // rlwimi r7, r8, 1, 0, 29
+                {
+                    let v = (g[8].get().rotate_left(1) & 0xfffffffc_u32) | (g[7].get() & 0x3_u32);
+                    g[7].set(v);
+                }
+                // bdnz .L_80353AD8
+                if c::ctr_ok(ctx, 16) {
+                    pc = 0x80353ad8_u32;
+                    continue;
+                }
+                pc = 0x80353be0_u32;
+            }
+            0x80353be0_u32 => {
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // srwi r3, r3, 31
+                {
+                    let v = g[3].get().rotate_left(1) & 0x1_u32;
+                    g[3].set(v);
+                }
+                // or r3, r7, r3
+                {
+                    let v = g[7].get() | g[3].get();
+                    g[3].set(v);
+                }
+                // stw r3, 0x28(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x28_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // li r3, 0x4
+                g[3].set(0x4_u32);
+                // mtctr r3
+                ctx.regs.set_spr(9, g[3].get());
+                // lwz r7, 0x28(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x28_u32);
+                    g[7].set(ctx.read_u32(ea));
+                }
+                // xor r28, r28, r7
+                {
+                    let v = g[28].get() ^ g[7].get();
+                    g[28].set(v);
+                }
+                pc = 0x80353c14_u32;
+            }
+            0x80353c14_u32 => {
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 1
+                {
+                    let v = g[7].get().rotate_left(1) & 0xfffffffe_u32;
+                    g[4].set(v);
+                }
+                // rlwinm r3, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[3].set(v);
+                }
+                // or r7, r4, r3
+                {
+                    let v = g[4].get() | g[3].get();
+                    g[7].set(v);
+                }
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r9, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[9].set(v);
+                }
+                // rlwimi r9, r7, 1, 0, 29
+                {
+                    let v = (g[7].get().rotate_left(1) & 0xfffffffc_u32) | (g[9].get() & 0x3_u32);
+                    g[9].set(v);
+                }
+                // slwi r3, r9, 7
+                {
+                    let v = g[9].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r9, 15
+                {
+                    let v = g[9].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r9, r3
+                {
+                    let v = g[9].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r9, 23
+                {
+                    let v = g[9].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r8, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[8].set(v);
+                }
+                // rlwimi r8, r9, 1, 0, 29
+                {
+                    let v = (g[9].get().rotate_left(1) & 0xfffffffc_u32) | (g[8].get() & 0x3_u32);
+                    g[8].set(v);
+                }
+                // slwi r3, r8, 7
+                {
+                    let v = g[8].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r8, 15
+                {
+                    let v = g[8].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r8, r3
+                {
+                    let v = g[8].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r8, 23
+                {
+                    let v = g[8].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r7, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[7].set(v);
+                }
+                // rlwimi r7, r8, 1, 0, 29
+                {
+                    let v = (g[8].get().rotate_left(1) & 0xfffffffc_u32) | (g[7].get() & 0x3_u32);
+                    g[7].set(v);
+                }
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r8, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[8].set(v);
+                }
+                // rlwimi r8, r7, 1, 0, 29
+                {
+                    let v = (g[7].get().rotate_left(1) & 0xfffffffc_u32) | (g[8].get() & 0x3_u32);
+                    g[8].set(v);
+                }
+                // slwi r3, r8, 7
+                {
+                    let v = g[8].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r8, 15
+                {
+                    let v = g[8].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r8, r3
+                {
+                    let v = g[8].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r8, 23
+                {
+                    let v = g[8].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r7, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[7].set(v);
+                }
+                // rlwimi r7, r8, 1, 0, 29
+                {
+                    let v = (g[8].get().rotate_left(1) & 0xfffffffc_u32) | (g[7].get() & 0x3_u32);
+                    g[7].set(v);
+                }
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r8, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[8].set(v);
+                }
+                // rlwimi r8, r7, 1, 0, 29
+                {
+                    let v = (g[7].get().rotate_left(1) & 0xfffffffc_u32) | (g[8].get() & 0x3_u32);
+                    g[8].set(v);
+                }
+                // slwi r3, r8, 7
+                {
+                    let v = g[8].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r8, 15
+                {
+                    let v = g[8].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r8, r3
+                {
+                    let v = g[8].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r8, 23
+                {
+                    let v = g[8].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r7, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[7].set(v);
+                }
+                // rlwimi r7, r8, 1, 0, 29
+                {
+                    let v = (g[8].get().rotate_left(1) & 0xfffffffc_u32) | (g[7].get() & 0x3_u32);
+                    g[7].set(v);
+                }
+                // bdnz .L_80353C14
+                if c::ctr_ok(ctx, 16) {
+                    pc = 0x80353c14_u32;
+                    continue;
+                }
+                pc = 0x80353d1c_u32;
+            }
+            0x80353d1c_u32 => {
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // srwi r3, r3, 31
+                {
+                    let v = g[3].get().rotate_left(1) & 0x1_u32;
+                    g[3].set(v);
+                }
+                // or r3, r7, r3
+                {
+                    let v = g[7].get() | g[3].get();
+                    g[3].set(v);
+                }
+                // stw r3, 0x28(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x28_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // li r3, 0x4
+                g[3].set(0x4_u32);
+                // mtctr r3
+                ctx.regs.set_spr(9, g[3].get());
+                // lwz r7, 0x28(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x28_u32);
+                    g[7].set(ctx.read_u32(ea));
+                }
+                // xor r24, r24, r7
+                {
+                    let v = g[24].get() ^ g[7].get();
+                    g[24].set(v);
+                }
+                pc = 0x80353d50_u32;
+            }
+            0x80353d50_u32 => {
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 1
+                {
+                    let v = g[7].get().rotate_left(1) & 0xfffffffe_u32;
+                    g[4].set(v);
+                }
+                // rlwinm r3, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[3].set(v);
+                }
+                // or r7, r4, r3
+                {
+                    let v = g[4].get() | g[3].get();
+                    g[7].set(v);
+                }
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r9, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[9].set(v);
+                }
+                // rlwimi r9, r7, 1, 0, 29
+                {
+                    let v = (g[7].get().rotate_left(1) & 0xfffffffc_u32) | (g[9].get() & 0x3_u32);
+                    g[9].set(v);
+                }
+                // slwi r3, r9, 7
+                {
+                    let v = g[9].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r9, 15
+                {
+                    let v = g[9].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r9, r3
+                {
+                    let v = g[9].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r9, 23
+                {
+                    let v = g[9].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r8, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[8].set(v);
+                }
+                // rlwimi r8, r9, 1, 0, 29
+                {
+                    let v = (g[9].get().rotate_left(1) & 0xfffffffc_u32) | (g[8].get() & 0x3_u32);
+                    g[8].set(v);
+                }
+                // slwi r3, r8, 7
+                {
+                    let v = g[8].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r8, 15
+                {
+                    let v = g[8].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r8, r3
+                {
+                    let v = g[8].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r8, 23
+                {
+                    let v = g[8].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r7, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[7].set(v);
+                }
+                // rlwimi r7, r8, 1, 0, 29
+                {
+                    let v = (g[8].get().rotate_left(1) & 0xfffffffc_u32) | (g[7].get() & 0x3_u32);
+                    g[7].set(v);
+                }
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r8, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[8].set(v);
+                }
+                // rlwimi r8, r7, 1, 0, 29
+                {
+                    let v = (g[7].get().rotate_left(1) & 0xfffffffc_u32) | (g[8].get() & 0x3_u32);
+                    g[8].set(v);
+                }
+                // slwi r3, r8, 7
+                {
+                    let v = g[8].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r8, 15
+                {
+                    let v = g[8].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r8, r3
+                {
+                    let v = g[8].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r8, 23
+                {
+                    let v = g[8].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r7, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[7].set(v);
+                }
+                // rlwimi r7, r8, 1, 0, 29
+                {
+                    let v = (g[8].get().rotate_left(1) & 0xfffffffc_u32) | (g[7].get() & 0x3_u32);
+                    g[7].set(v);
+                }
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r8, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[8].set(v);
+                }
+                // rlwimi r8, r7, 1, 0, 29
+                {
+                    let v = (g[7].get().rotate_left(1) & 0xfffffffc_u32) | (g[8].get() & 0x3_u32);
+                    g[8].set(v);
+                }
+                // slwi r3, r8, 7
+                {
+                    let v = g[8].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r8, 15
+                {
+                    let v = g[8].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r8, r3
+                {
+                    let v = g[8].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r8, 23
+                {
+                    let v = g[8].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r7, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[7].set(v);
+                }
+                // rlwimi r7, r8, 1, 0, 29
+                {
+                    let v = (g[8].get().rotate_left(1) & 0xfffffffc_u32) | (g[7].get() & 0x3_u32);
+                    g[7].set(v);
+                }
+                // bdnz .L_80353D50
+                if c::ctr_ok(ctx, 16) {
+                    pc = 0x80353d50_u32;
+                    continue;
+                }
+                pc = 0x80353e58_u32;
+            }
+            0x80353e58_u32 => {
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // srwi r3, r3, 31
+                {
+                    let v = g[3].get().rotate_left(1) & 0x1_u32;
+                    g[3].set(v);
+                }
+                // or r3, r7, r3
+                {
+                    let v = g[7].get() | g[3].get();
+                    g[3].set(v);
+                }
+                // stw r3, 0x28(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x28_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // li r3, 0x4
+                g[3].set(0x4_u32);
+                // mtctr r3
+                ctx.regs.set_spr(9, g[3].get());
+                // lwz r7, 0x28(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x28_u32);
+                    g[7].set(ctx.read_u32(ea));
+                }
+                // xor r0, r0, r7
+                {
+                    let v = g[0].get() ^ g[7].get();
+                    g[0].set(v);
+                }
+                pc = 0x80353e8c_u32;
+            }
+            0x80353e8c_u32 => {
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 1
+                {
+                    let v = g[7].get().rotate_left(1) & 0xfffffffe_u32;
+                    g[4].set(v);
+                }
+                // rlwinm r3, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[3].set(v);
+                }
+                // or r7, r4, r3
+                {
+                    let v = g[4].get() | g[3].get();
+                    g[7].set(v);
+                }
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r9, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[9].set(v);
+                }
+                // rlwimi r9, r7, 1, 0, 29
+                {
+                    let v = (g[7].get().rotate_left(1) & 0xfffffffc_u32) | (g[9].get() & 0x3_u32);
+                    g[9].set(v);
+                }
+                // slwi r3, r9, 7
+                {
+                    let v = g[9].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r9, 15
+                {
+                    let v = g[9].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r9, r3
+                {
+                    let v = g[9].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r9, 23
+                {
+                    let v = g[9].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r8, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[8].set(v);
+                }
+                // rlwimi r8, r9, 1, 0, 29
+                {
+                    let v = (g[9].get().rotate_left(1) & 0xfffffffc_u32) | (g[8].get() & 0x3_u32);
+                    g[8].set(v);
+                }
+                // slwi r3, r8, 7
+                {
+                    let v = g[8].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r8, 15
+                {
+                    let v = g[8].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r8, r3
+                {
+                    let v = g[8].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r8, 23
+                {
+                    let v = g[8].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r7, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[7].set(v);
+                }
+                // rlwimi r7, r8, 1, 0, 29
+                {
+                    let v = (g[8].get().rotate_left(1) & 0xfffffffc_u32) | (g[7].get() & 0x3_u32);
+                    g[7].set(v);
+                }
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r8, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[8].set(v);
+                }
+                // rlwimi r8, r7, 1, 0, 29
+                {
+                    let v = (g[7].get().rotate_left(1) & 0xfffffffc_u32) | (g[8].get() & 0x3_u32);
+                    g[8].set(v);
+                }
+                // slwi r3, r8, 7
+                {
+                    let v = g[8].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r8, 15
+                {
+                    let v = g[8].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r8, r3
+                {
+                    let v = g[8].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r8, 23
+                {
+                    let v = g[8].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r7, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[7].set(v);
+                }
+                // rlwimi r7, r8, 1, 0, 29
+                {
+                    let v = (g[8].get().rotate_left(1) & 0xfffffffc_u32) | (g[7].get() & 0x3_u32);
+                    g[7].set(v);
+                }
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r8, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[8].set(v);
+                }
+                // rlwimi r8, r7, 1, 0, 29
+                {
+                    let v = (g[7].get().rotate_left(1) & 0xfffffffc_u32) | (g[8].get() & 0x3_u32);
+                    g[8].set(v);
+                }
+                // slwi r3, r8, 7
+                {
+                    let v = g[8].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r8, 15
+                {
+                    let v = g[8].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r8, r3
+                {
+                    let v = g[8].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r8, 23
+                {
+                    let v = g[8].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // rlwinm r7, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[7].set(v);
+                }
+                // rlwimi r7, r8, 1, 0, 29
+                {
+                    let v = (g[8].get().rotate_left(1) & 0xfffffffc_u32) | (g[7].get() & 0x3_u32);
+                    g[7].set(v);
+                }
+                // bdnz .L_80353E8C
+                if c::ctr_ok(ctx, 16) {
+                    pc = 0x80353e8c_u32;
+                    continue;
+                }
+                pc = 0x80353f94_u32;
+            }
+            0x80353f94_u32 => {
+                // slwi r3, r7, 7
+                {
+                    let v = g[7].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r7, 15
+                {
+                    let v = g[7].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r7, r3
+                {
+                    let v = g[7].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r6, r7, 23
+                {
+                    let v = g[7].get().rotate_left(23) & 0xff800000_u32;
+                    g[6].set(v);
+                }
+                // eqv r3, r6, r3
+                {
+                    let v = !(g[6].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // srwi r3, r3, 31
+                {
+                    let v = g[3].get().rotate_left(1) & 0x1_u32;
+                    g[3].set(v);
+                }
+                // or r3, r7, r3
+                {
+                    let v = g[7].get() | g[3].get();
+                    g[3].set(v);
+                }
+                // stw r3, 0x28(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x28_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // slwi r4, r26, 3
+                {
+                    let v = g[26].get().rotate_left(3) & 0xfffffff8_u32;
+                    g[4].set(v);
+                }
+                // cmplwi r4, 0x0
+                {
+                    let (x, y) = (g[4].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // lwz r6, 0x28(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x28_u32);
+                    g[6].set(ctx.read_u32(ea));
+                }
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // xor r5, r5, r6
+                {
+                    let v = g[5].get() ^ g[6].get();
+                    g[5].set(v);
+                }
+                // ble .L_80354134
+                if (c::cr_bit(ctx, 1) == false) {
+                    pc = 0x80354134_u32;
+                    continue;
+                }
+                pc = 0x80353fd0_u32;
+            }
+            0x80353fd0_u32 => {
+                // cmplwi r4, 0x8
+                {
+                    let (x, y) = (g[4].get(), 0x8_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // subi r8, r4, 0x8
+                g[8].set(g[4].get().wrapping_add(0xfffffff8_u32));
+                // ble .L_803540FC
+                if (c::cr_bit(ctx, 1) == false) {
+                    pc = 0x803540fc_u32;
+                    continue;
+                }
+                pc = 0x80353fdc_u32;
+            }
+            0x80353fdc_u32 => {
+                // addi r7, r8, 0x7
+                g[7].set(g[8].get().wrapping_add(0x7_u32));
+                // srwi r7, r7, 3
+                {
+                    let v = g[7].get().rotate_left(29) & 0x1fffffff_u32;
+                    g[7].set(v);
+                }
+                // cmplwi r8, 0x0
+                {
+                    let (x, y) = (g[8].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // mtctr r7
+                ctx.regs.set_spr(9, g[7].get());
+                // ble .L_803540FC
+                if (c::cr_bit(ctx, 1) == false) {
+                    pc = 0x803540fc_u32;
+                    continue;
+                }
+                pc = 0x80353ff0_u32;
+            }
+            0x80353ff0_u32 => {
+                // slwi r7, r6, 7
+                {
+                    let v = g[6].get().rotate_left(7) & 0xffffff80_u32;
+                    g[7].set(v);
+                }
+                // slwi r8, r6, 15
+                {
+                    let v = g[6].get().rotate_left(15) & 0xffff8000_u32;
+                    g[8].set(v);
+                }
+                // xor r7, r6, r7
+                {
+                    let v = g[6].get() ^ g[7].get();
+                    g[7].set(v);
+                }
+                // xor r7, r8, r7
+                {
+                    let v = g[8].get() ^ g[7].get();
+                    g[7].set(v);
+                }
+                // slwi r9, r6, 23
+                {
+                    let v = g[6].get().rotate_left(23) & 0xff800000_u32;
+                    g[9].set(v);
+                }
+                // eqv r7, r9, r7
+                {
+                    let v = !(g[9].get() ^ g[7].get());
+                    g[7].set(v);
+                }
+                // slwi r8, r6, 1
+                {
+                    let v = g[6].get().rotate_left(1) & 0xfffffffe_u32;
+                    g[8].set(v);
+                }
+                // rlwinm r6, r7, 2, 30, 30
+                {
+                    let v = g[7].get().rotate_left(2) & 0x2_u32;
+                    g[6].set(v);
+                }
+                // or r9, r8, r6
+                {
+                    let v = g[8].get() | g[6].get();
+                    g[9].set(v);
+                }
+                // slwi r6, r9, 7
+                {
+                    let v = g[9].get().rotate_left(7) & 0xffffff80_u32;
+                    g[6].set(v);
+                }
+                // slwi r7, r9, 15
+                {
+                    let v = g[9].get().rotate_left(15) & 0xffff8000_u32;
+                    g[7].set(v);
+                }
+                // xor r6, r9, r6
+                {
+                    let v = g[9].get() ^ g[6].get();
+                    g[6].set(v);
+                }
+                // slwi r8, r9, 23
+                {
+                    let v = g[9].get().rotate_left(23) & 0xff800000_u32;
+                    g[8].set(v);
+                }
+                // xor r6, r7, r6
+                {
+                    let v = g[7].get() ^ g[6].get();
+                    g[6].set(v);
+                }
+                // eqv r6, r8, r6
+                {
+                    let v = !(g[8].get() ^ g[6].get());
+                    g[6].set(v);
+                }
+                // rlwinm r10, r6, 2, 30, 30
+                {
+                    let v = g[6].get().rotate_left(2) & 0x2_u32;
+                    g[10].set(v);
+                }
+                // rlwimi r10, r9, 1, 0, 29
+                {
+                    let v = (g[9].get().rotate_left(1) & 0xfffffffc_u32) | (g[10].get() & 0x3_u32);
+                    g[10].set(v);
+                }
+                // slwi r6, r10, 7
+                {
+                    let v = g[10].get().rotate_left(7) & 0xffffff80_u32;
+                    g[6].set(v);
+                }
+                // slwi r7, r10, 15
+                {
+                    let v = g[10].get().rotate_left(15) & 0xffff8000_u32;
+                    g[7].set(v);
+                }
+                // xor r6, r10, r6
+                {
+                    let v = g[10].get() ^ g[6].get();
+                    g[6].set(v);
+                }
+                // slwi r8, r10, 23
+                {
+                    let v = g[10].get().rotate_left(23) & 0xff800000_u32;
+                    g[8].set(v);
+                }
+                // xor r6, r7, r6
+                {
+                    let v = g[7].get() ^ g[6].get();
+                    g[6].set(v);
+                }
+                // eqv r6, r8, r6
+                {
+                    let v = !(g[8].get() ^ g[6].get());
+                    g[6].set(v);
+                }
+                // rlwinm r9, r6, 2, 30, 30
+                {
+                    let v = g[6].get().rotate_left(2) & 0x2_u32;
+                    g[9].set(v);
+                }
+                // rlwimi r9, r10, 1, 0, 29
+                {
+                    let v = (g[10].get().rotate_left(1) & 0xfffffffc_u32) | (g[9].get() & 0x3_u32);
+                    g[9].set(v);
+                }
+                // slwi r6, r9, 7
+                {
+                    let v = g[9].get().rotate_left(7) & 0xffffff80_u32;
+                    g[6].set(v);
+                }
+                // slwi r7, r9, 15
+                {
+                    let v = g[9].get().rotate_left(15) & 0xffff8000_u32;
+                    g[7].set(v);
+                }
+                // xor r6, r9, r6
+                {
+                    let v = g[9].get() ^ g[6].get();
+                    g[6].set(v);
+                }
+                // slwi r8, r9, 23
+                {
+                    let v = g[9].get().rotate_left(23) & 0xff800000_u32;
+                    g[8].set(v);
+                }
+                // xor r6, r7, r6
+                {
+                    let v = g[7].get() ^ g[6].get();
+                    g[6].set(v);
+                }
+                // eqv r6, r8, r6
+                {
+                    let v = !(g[8].get() ^ g[6].get());
+                    g[6].set(v);
+                }
+                // rlwinm r10, r6, 2, 30, 30
+                {
+                    let v = g[6].get().rotate_left(2) & 0x2_u32;
+                    g[10].set(v);
+                }
+                // rlwimi r10, r9, 1, 0, 29
+                {
+                    let v = (g[9].get().rotate_left(1) & 0xfffffffc_u32) | (g[10].get() & 0x3_u32);
+                    g[10].set(v);
+                }
+                // slwi r6, r10, 7
+                {
+                    let v = g[10].get().rotate_left(7) & 0xffffff80_u32;
+                    g[6].set(v);
+                }
+                // slwi r7, r10, 15
+                {
+                    let v = g[10].get().rotate_left(15) & 0xffff8000_u32;
+                    g[7].set(v);
+                }
+                // xor r6, r10, r6
+                {
+                    let v = g[10].get() ^ g[6].get();
+                    g[6].set(v);
+                }
+                // slwi r8, r10, 23
+                {
+                    let v = g[10].get().rotate_left(23) & 0xff800000_u32;
+                    g[8].set(v);
+                }
+                // xor r6, r7, r6
+                {
+                    let v = g[7].get() ^ g[6].get();
+                    g[6].set(v);
+                }
+                // eqv r6, r8, r6
+                {
+                    let v = !(g[8].get() ^ g[6].get());
+                    g[6].set(v);
+                }
+                // rlwinm r9, r6, 2, 30, 30
+                {
+                    let v = g[6].get().rotate_left(2) & 0x2_u32;
+                    g[9].set(v);
+                }
+                // rlwimi r9, r10, 1, 0, 29
+                {
+                    let v = (g[10].get().rotate_left(1) & 0xfffffffc_u32) | (g[9].get() & 0x3_u32);
+                    g[9].set(v);
+                }
+                // slwi r6, r9, 7
+                {
+                    let v = g[9].get().rotate_left(7) & 0xffffff80_u32;
+                    g[6].set(v);
+                }
+                // slwi r7, r9, 15
+                {
+                    let v = g[9].get().rotate_left(15) & 0xffff8000_u32;
+                    g[7].set(v);
+                }
+                // xor r6, r9, r6
+                {
+                    let v = g[9].get() ^ g[6].get();
+                    g[6].set(v);
+                }
+                // slwi r8, r9, 23
+                {
+                    let v = g[9].get().rotate_left(23) & 0xff800000_u32;
+                    g[8].set(v);
+                }
+                // xor r6, r7, r6
+                {
+                    let v = g[7].get() ^ g[6].get();
+                    g[6].set(v);
+                }
+                // eqv r6, r8, r6
+                {
+                    let v = !(g[8].get() ^ g[6].get());
+                    g[6].set(v);
+                }
+                // rlwinm r10, r6, 2, 30, 30
+                {
+                    let v = g[6].get().rotate_left(2) & 0x2_u32;
+                    g[10].set(v);
+                }
+                // rlwimi r10, r9, 1, 0, 29
+                {
+                    let v = (g[9].get().rotate_left(1) & 0xfffffffc_u32) | (g[10].get() & 0x3_u32);
+                    g[10].set(v);
+                }
+                // slwi r6, r10, 7
+                {
+                    let v = g[10].get().rotate_left(7) & 0xffffff80_u32;
+                    g[6].set(v);
+                }
+                // slwi r7, r10, 15
+                {
+                    let v = g[10].get().rotate_left(15) & 0xffff8000_u32;
+                    g[7].set(v);
+                }
+                // xor r6, r10, r6
+                {
+                    let v = g[10].get() ^ g[6].get();
+                    g[6].set(v);
+                }
+                // slwi r8, r10, 23
+                {
+                    let v = g[10].get().rotate_left(23) & 0xff800000_u32;
+                    g[8].set(v);
+                }
+                // xor r6, r7, r6
+                {
+                    let v = g[7].get() ^ g[6].get();
+                    g[6].set(v);
+                }
+                // eqv r6, r8, r6
+                {
+                    let v = !(g[8].get() ^ g[6].get());
+                    g[6].set(v);
+                }
+                // rlwinm r9, r6, 2, 30, 30
+                {
+                    let v = g[6].get().rotate_left(2) & 0x2_u32;
+                    g[9].set(v);
+                }
+                // rlwimi r9, r10, 1, 0, 29
+                {
+                    let v = (g[10].get().rotate_left(1) & 0xfffffffc_u32) | (g[9].get() & 0x3_u32);
+                    g[9].set(v);
+                }
+                // slwi r6, r9, 7
+                {
+                    let v = g[9].get().rotate_left(7) & 0xffffff80_u32;
+                    g[6].set(v);
+                }
+                // slwi r7, r9, 15
+                {
+                    let v = g[9].get().rotate_left(15) & 0xffff8000_u32;
+                    g[7].set(v);
+                }
+                // xor r6, r9, r6
+                {
+                    let v = g[9].get() ^ g[6].get();
+                    g[6].set(v);
+                }
+                // slwi r8, r9, 23
+                {
+                    let v = g[9].get().rotate_left(23) & 0xff800000_u32;
+                    g[8].set(v);
+                }
+                // xor r6, r7, r6
+                {
+                    let v = g[7].get() ^ g[6].get();
+                    g[6].set(v);
+                }
+                // eqv r6, r8, r6
+                {
+                    let v = !(g[8].get() ^ g[6].get());
+                    g[6].set(v);
+                }
+                // rlwinm r6, r6, 2, 30, 30
+                {
+                    let v = g[6].get().rotate_left(2) & 0x2_u32;
+                    g[6].set(v);
+                }
+                // rlwimi r6, r9, 1, 0, 29
+                {
+                    let v = (g[9].get().rotate_left(1) & 0xfffffffc_u32) | (g[6].get() & 0x3_u32);
+                    g[6].set(v);
+                }
+                // addi r3, r3, 0x8
+                g[3].set(g[3].get().wrapping_add(0x8_u32));
+                // bdnz .L_80353FF0
+                if c::ctr_ok(ctx, 16) {
+                    pc = 0x80353ff0_u32;
+                    continue;
+                }
+                pc = 0x803540fc_u32;
+            }
+            0x803540fc_u32 => {
+                // subf r7, r3, r4
+                {
+                    let (v, ca, ov) = c::add3(!g[3].get(), g[4].get(), 1);
+                    g[7].set(v);
+                    let _ = (ca, ov);
+                }
+                // cmplw r3, r4
+                {
+                    let (x, y) = (g[3].get(), g[4].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // mtctr r7
+                ctx.regs.set_spr(9, g[7].get());
+                // bge .L_80354134
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x80354134_u32;
+                    continue;
+                }
+                pc = 0x8035410c_u32;
+            }
+            0x8035410c_u32 => {
+                // slwi r3, r6, 7
+                {
+                    let v = g[6].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r6, 15
+                {
+                    let v = g[6].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r6, r3
+                {
+                    let v = g[6].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r7, r6, 23
+                {
+                    let v = g[6].get().rotate_left(23) & 0xff800000_u32;
+                    g[7].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r7, r3
+                {
+                    let v = !(g[7].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // slwi r4, r6, 1
+                {
+                    let v = g[6].get().rotate_left(1) & 0xfffffffe_u32;
+                    g[4].set(v);
+                }
+                // rlwinm r3, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[3].set(v);
+                }
+                // or r6, r4, r3
+                {
+                    let v = g[4].get() | g[3].get();
+                    g[6].set(v);
+                }
+                // bdnz .L_8035410C
+                if c::ctr_ok(ctx, 16) {
+                    pc = 0x8035410c_u32;
+                    continue;
+                }
+                pc = 0x80354134_u32;
+            }
+            0x80354134_u32 => {
+                // slwi r3, r6, 7
+                {
+                    let v = g[6].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r4, r6, 15
+                {
+                    let v = g[6].get().rotate_left(15) & 0xffff8000_u32;
+                    g[4].set(v);
+                }
+                // xor r3, r6, r3
+                {
+                    let v = g[6].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r7, r6, 23
+                {
+                    let v = g[6].get().rotate_left(23) & 0xff800000_u32;
+                    g[7].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r7, r3
+                {
+                    let v = !(g[7].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // srwi r3, r3, 31
+                {
+                    let v = g[3].get().rotate_left(1) & 0x1_u32;
+                    g[3].set(v);
+                }
+                // or r3, r6, r3
+                {
+                    let v = g[6].get() | g[3].get();
+                    g[3].set(v);
+                }
+                // stw r3, 0x28(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x28_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // li r3, 0x4
+                g[3].set(0x4_u32);
+                // mtctr r3
+                ctx.regs.set_spr(9, g[3].get());
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // lwz r4, 0x28(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x28_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                pc = 0x80354168_u32;
+            }
+            0x80354168_u32 => {
+                // slwi r6, r4, 7
+                {
+                    let v = g[4].get().rotate_left(7) & 0xffffff80_u32;
+                    g[6].set(v);
+                }
+                // slwi r7, r4, 15
+                {
+                    let v = g[4].get().rotate_left(15) & 0xffff8000_u32;
+                    g[7].set(v);
+                }
+                // xor r6, r4, r6
+                {
+                    let v = g[4].get() ^ g[6].get();
+                    g[6].set(v);
+                }
+                // xor r6, r7, r6
+                {
+                    let v = g[7].get() ^ g[6].get();
+                    g[6].set(v);
+                }
+                // slwi r8, r4, 23
+                {
+                    let v = g[4].get().rotate_left(23) & 0xff800000_u32;
+                    g[8].set(v);
+                }
+                // eqv r6, r8, r6
+                {
+                    let v = !(g[8].get() ^ g[6].get());
+                    g[6].set(v);
+                }
+                // slwi r7, r4, 1
+                {
+                    let v = g[4].get().rotate_left(1) & 0xfffffffe_u32;
+                    g[7].set(v);
+                }
+                // rlwinm r4, r6, 2, 30, 30
+                {
+                    let v = g[6].get().rotate_left(2) & 0x2_u32;
+                    g[4].set(v);
+                }
+                // or r8, r7, r4
+                {
+                    let v = g[7].get() | g[4].get();
+                    g[8].set(v);
+                }
+                // slwi r4, r8, 7
+                {
+                    let v = g[8].get().rotate_left(7) & 0xffffff80_u32;
+                    g[4].set(v);
+                }
+                // slwi r6, r8, 15
+                {
+                    let v = g[8].get().rotate_left(15) & 0xffff8000_u32;
+                    g[6].set(v);
+                }
+                // xor r4, r8, r4
+                {
+                    let v = g[8].get() ^ g[4].get();
+                    g[4].set(v);
+                }
+                // slwi r7, r8, 23
+                {
+                    let v = g[8].get().rotate_left(23) & 0xff800000_u32;
+                    g[7].set(v);
+                }
+                // xor r4, r6, r4
+                {
+                    let v = g[6].get() ^ g[4].get();
+                    g[4].set(v);
+                }
+                // eqv r4, r7, r4
+                {
+                    let v = !(g[7].get() ^ g[4].get());
+                    g[4].set(v);
+                }
+                // rlwinm r9, r4, 2, 30, 30
+                {
+                    let v = g[4].get().rotate_left(2) & 0x2_u32;
+                    g[9].set(v);
+                }
+                // rlwimi r9, r8, 1, 0, 29
+                {
+                    let v = (g[8].get().rotate_left(1) & 0xfffffffc_u32) | (g[9].get() & 0x3_u32);
+                    g[9].set(v);
+                }
+                // slwi r4, r9, 7
+                {
+                    let v = g[9].get().rotate_left(7) & 0xffffff80_u32;
+                    g[4].set(v);
+                }
+                // slwi r6, r9, 15
+                {
+                    let v = g[9].get().rotate_left(15) & 0xffff8000_u32;
+                    g[6].set(v);
+                }
+                // xor r4, r9, r4
+                {
+                    let v = g[9].get() ^ g[4].get();
+                    g[4].set(v);
+                }
+                // slwi r7, r9, 23
+                {
+                    let v = g[9].get().rotate_left(23) & 0xff800000_u32;
+                    g[7].set(v);
+                }
+                // xor r4, r6, r4
+                {
+                    let v = g[6].get() ^ g[4].get();
+                    g[4].set(v);
+                }
+                // eqv r4, r7, r4
+                {
+                    let v = !(g[7].get() ^ g[4].get());
+                    g[4].set(v);
+                }
+                // rlwinm r8, r4, 2, 30, 30
+                {
+                    let v = g[4].get().rotate_left(2) & 0x2_u32;
+                    g[8].set(v);
+                }
+                // rlwimi r8, r9, 1, 0, 29
+                {
+                    let v = (g[9].get().rotate_left(1) & 0xfffffffc_u32) | (g[8].get() & 0x3_u32);
+                    g[8].set(v);
+                }
+                // slwi r4, r8, 7
+                {
+                    let v = g[8].get().rotate_left(7) & 0xffffff80_u32;
+                    g[4].set(v);
+                }
+                // slwi r6, r8, 15
+                {
+                    let v = g[8].get().rotate_left(15) & 0xffff8000_u32;
+                    g[6].set(v);
+                }
+                // xor r4, r8, r4
+                {
+                    let v = g[8].get() ^ g[4].get();
+                    g[4].set(v);
+                }
+                // slwi r7, r8, 23
+                {
+                    let v = g[8].get().rotate_left(23) & 0xff800000_u32;
+                    g[7].set(v);
+                }
+                // xor r4, r6, r4
+                {
+                    let v = g[6].get() ^ g[4].get();
+                    g[4].set(v);
+                }
+                // eqv r4, r7, r4
+                {
+                    let v = !(g[7].get() ^ g[4].get());
+                    g[4].set(v);
+                }
+                // rlwinm r9, r4, 2, 30, 30
+                {
+                    let v = g[4].get().rotate_left(2) & 0x2_u32;
+                    g[9].set(v);
+                }
+                // rlwimi r9, r8, 1, 0, 29
+                {
+                    let v = (g[8].get().rotate_left(1) & 0xfffffffc_u32) | (g[9].get() & 0x3_u32);
+                    g[9].set(v);
+                }
+                // slwi r4, r9, 7
+                {
+                    let v = g[9].get().rotate_left(7) & 0xffffff80_u32;
+                    g[4].set(v);
+                }
+                // slwi r6, r9, 15
+                {
+                    let v = g[9].get().rotate_left(15) & 0xffff8000_u32;
+                    g[6].set(v);
+                }
+                // xor r4, r9, r4
+                {
+                    let v = g[9].get() ^ g[4].get();
+                    g[4].set(v);
+                }
+                // slwi r7, r9, 23
+                {
+                    let v = g[9].get().rotate_left(23) & 0xff800000_u32;
+                    g[7].set(v);
+                }
+                // xor r4, r6, r4
+                {
+                    let v = g[6].get() ^ g[4].get();
+                    g[4].set(v);
+                }
+                // eqv r4, r7, r4
+                {
+                    let v = !(g[7].get() ^ g[4].get());
+                    g[4].set(v);
+                }
+                // rlwinm r8, r4, 2, 30, 30
+                {
+                    let v = g[4].get().rotate_left(2) & 0x2_u32;
+                    g[8].set(v);
+                }
+                // rlwimi r8, r9, 1, 0, 29
+                {
+                    let v = (g[9].get().rotate_left(1) & 0xfffffffc_u32) | (g[8].get() & 0x3_u32);
+                    g[8].set(v);
+                }
+                // slwi r4, r8, 7
+                {
+                    let v = g[8].get().rotate_left(7) & 0xffffff80_u32;
+                    g[4].set(v);
+                }
+                // slwi r6, r8, 15
+                {
+                    let v = g[8].get().rotate_left(15) & 0xffff8000_u32;
+                    g[6].set(v);
+                }
+                // xor r4, r8, r4
+                {
+                    let v = g[8].get() ^ g[4].get();
+                    g[4].set(v);
+                }
+                // slwi r7, r8, 23
+                {
+                    let v = g[8].get().rotate_left(23) & 0xff800000_u32;
+                    g[7].set(v);
+                }
+                // xor r4, r6, r4
+                {
+                    let v = g[6].get() ^ g[4].get();
+                    g[4].set(v);
+                }
+                // eqv r4, r7, r4
+                {
+                    let v = !(g[7].get() ^ g[4].get());
+                    g[4].set(v);
+                }
+                // rlwinm r9, r4, 2, 30, 30
+                {
+                    let v = g[4].get().rotate_left(2) & 0x2_u32;
+                    g[9].set(v);
+                }
+                // rlwimi r9, r8, 1, 0, 29
+                {
+                    let v = (g[8].get().rotate_left(1) & 0xfffffffc_u32) | (g[9].get() & 0x3_u32);
+                    g[9].set(v);
+                }
+                // slwi r4, r9, 7
+                {
+                    let v = g[9].get().rotate_left(7) & 0xffffff80_u32;
+                    g[4].set(v);
+                }
+                // slwi r6, r9, 15
+                {
+                    let v = g[9].get().rotate_left(15) & 0xffff8000_u32;
+                    g[6].set(v);
+                }
+                // xor r4, r9, r4
+                {
+                    let v = g[9].get() ^ g[4].get();
+                    g[4].set(v);
+                }
+                // slwi r7, r9, 23
+                {
+                    let v = g[9].get().rotate_left(23) & 0xff800000_u32;
+                    g[7].set(v);
+                }
+                // xor r4, r6, r4
+                {
+                    let v = g[6].get() ^ g[4].get();
+                    g[4].set(v);
+                }
+                // eqv r4, r7, r4
+                {
+                    let v = !(g[7].get() ^ g[4].get());
+                    g[4].set(v);
+                }
+                // rlwinm r8, r4, 2, 30, 30
+                {
+                    let v = g[4].get().rotate_left(2) & 0x2_u32;
+                    g[8].set(v);
+                }
+                // rlwimi r8, r9, 1, 0, 29
+                {
+                    let v = (g[9].get().rotate_left(1) & 0xfffffffc_u32) | (g[8].get() & 0x3_u32);
+                    g[8].set(v);
+                }
+                // slwi r4, r8, 7
+                {
+                    let v = g[8].get().rotate_left(7) & 0xffffff80_u32;
+                    g[4].set(v);
+                }
+                // slwi r6, r8, 15
+                {
+                    let v = g[8].get().rotate_left(15) & 0xffff8000_u32;
+                    g[6].set(v);
+                }
+                // xor r4, r8, r4
+                {
+                    let v = g[8].get() ^ g[4].get();
+                    g[4].set(v);
+                }
+                // slwi r7, r8, 23
+                {
+                    let v = g[8].get().rotate_left(23) & 0xff800000_u32;
+                    g[7].set(v);
+                }
+                // xor r4, r6, r4
+                {
+                    let v = g[6].get() ^ g[4].get();
+                    g[4].set(v);
+                }
+                // eqv r4, r7, r4
+                {
+                    let v = !(g[7].get() ^ g[4].get());
+                    g[4].set(v);
+                }
+                // rlwinm r4, r4, 2, 30, 30
+                {
+                    let v = g[4].get().rotate_left(2) & 0x2_u32;
+                    g[4].set(v);
+                }
+                // rlwimi r4, r8, 1, 0, 29
+                {
+                    let v = (g[8].get().rotate_left(1) & 0xfffffffc_u32) | (g[4].get() & 0x3_u32);
+                    g[4].set(v);
+                }
+                // addi r3, r3, 0x8
+                g[3].set(g[3].get().wrapping_add(0x8_u32));
+                // bdnz .L_80354168
+                if c::ctr_ok(ctx, 16) {
+                    pc = 0x80354168_u32;
+                    continue;
+                }
+                pc = 0x80354274_u32;
+            }
+            0x80354274_u32 => {
+                // subfic r6, r3, 0x21
+                {
+                    let (v, ca, _) = c::add3(!g[3].get(), 0x21_u32, 1);
+                    g[6].set(v);
+                    c::set_ca(ctx, ca);
+                }
+                // cmplwi r3, 0x21
+                {
+                    let (x, y) = (g[3].get(), 0x21_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // mtctr r6
+                ctx.regs.set_spr(9, g[6].get());
+                // bge .L_803542AC
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x803542ac_u32;
+                    continue;
+                }
+                pc = 0x80354284_u32;
+            }
+            0x80354284_u32 => {
+                // slwi r3, r4, 7
+                {
+                    let v = g[4].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r6, r4, 15
+                {
+                    let v = g[4].get().rotate_left(15) & 0xffff8000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r7, r4, 23
+                {
+                    let v = g[4].get().rotate_left(23) & 0xff800000_u32;
+                    g[7].set(v);
+                }
+                // xor r3, r6, r3
+                {
+                    let v = g[6].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r7, r3
+                {
+                    let v = !(g[7].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // slwi r4, r4, 1
+                {
+                    let v = g[4].get().rotate_left(1) & 0xfffffffe_u32;
+                    g[4].set(v);
+                }
+                // rlwinm r3, r3, 2, 30, 30
+                {
+                    let v = g[3].get().rotate_left(2) & 0x2_u32;
+                    g[3].set(v);
+                }
+                // or r4, r4, r3
+                {
+                    let v = g[4].get() | g[3].get();
+                    g[4].set(v);
+                }
+                // bdnz .L_80354284
+                if c::ctr_ok(ctx, 16) {
+                    pc = 0x80354284_u32;
+                    continue;
+                }
+                pc = 0x803542ac_u32;
+            }
+            0x803542ac_u32 => {
+                // slwi r3, r4, 7
+                {
+                    let v = g[4].get().rotate_left(7) & 0xffffff80_u32;
+                    g[3].set(v);
+                }
+                // slwi r6, r4, 15
+                {
+                    let v = g[4].get().rotate_left(15) & 0xffff8000_u32;
+                    g[6].set(v);
+                }
+                // xor r3, r4, r3
+                {
+                    let v = g[4].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // slwi r7, r4, 23
+                {
+                    let v = g[4].get().rotate_left(23) & 0xff800000_u32;
+                    g[7].set(v);
+                }
+                // xor r3, r6, r3
+                {
+                    let v = g[6].get() ^ g[3].get();
+                    g[3].set(v);
+                }
+                // eqv r3, r7, r3
+                {
+                    let v = !(g[7].get() ^ g[3].get());
+                    g[3].set(v);
+                }
+                // srwi r3, r3, 31
+                {
+                    let v = g[3].get().rotate_left(1) & 0x1_u32;
+                    g[3].set(v);
+                }
+                // or r3, r4, r3
+                {
+                    let v = g[4].get() | g[3].get();
+                    g[3].set(v);
+                }
+                // stw r3, 0x28(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x28_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // li r6, 0x8
+                g[6].set(0x8_u32);
+                // li r26, 0x0
+                g[26].set(0_u32);
+                // stw r0, 0x0(r27)
+                {
+                    let ea = g[27].get();
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // addi r3, r27, 0x0
+                g[3].set(g[27].get());
+                // li r4, 0x8
+                g[4].set(0x8_u32);
+                // stw r5, 0x4(r27)
+                {
+                    let ea = g[27].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[5].get());
+                }
+                // stw r27, 0x0(r29)
+                {
+                    let ea = g[29].get();
+                    ctx.write_u32(ea, g[27].get());
+                }
+                // stw r6, 0x4(r29)
+                {
+                    let ea = g[29].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[6].get());
+                }
+                // stw r22, 0xc(r29)
+                {
+                    let ea = g[29].get().wrapping_add(0xc_u32);
+                    ctx.write_u32(ea, g[22].get());
+                }
+                // stw r26, 0x8(r29)
+                {
+                    let ea = g[29].get().wrapping_add(0x8_u32);
+                    ctx.write_u32(ea, g[26].get());
+                }
+                // bl DCFlushRange
+                c::call(ctx, 0x8034480c_u32, 0x803542fc_u32);
+                pc = 0x803542fc_u32;
+            }
+            0x803542fc_u32 => {
+                // addi r3, r22, 0x0
+                g[3].set(g[22].get());
+                // li r4, 0x4
+                g[4].set(0x4_u32);
+                // bl DCInvalidateRange
+                c::call(ctx, 0x803447dc_u32, 0x80354308_u32);
+                pc = 0x80354308_u32;
+            }
+            0x80354308_u32 => {
+                // addi r3, r29, 0x0
+                g[3].set(g[29].get());
+                // li r4, 0x10
+                g[4].set(0x10_u32);
+                // bl DCFlushRange
+                c::call(ctx, 0x8034480c_u32, 0x80354314_u32);
+                pc = 0x80354314_u32;
+            }
+            0x80354314_u32 => {
+                // li r0, 0xff
+                g[0].set(0xff_u32);
+                // lis r3, CardData@ha
+                g[3].set(0x80400000_u32);
+                // stw r0, 0x4(r30)
+                {
+                    let ea = g[30].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // addi r3, r3, CardData@l
+                g[3].set(g[3].get().wrapping_add(0x3000_u32));
+                // addis r0, r3, 0x8000
+                g[0].set(g[3].get().wrapping_add(0x80000000_u32));
+                // stw r0, 0xc(r30)
+                {
+                    let ea = g[30].get().wrapping_add(0xc_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // li r0, 0x160
+                g[0].set(0x160_u32);
+                // lis r4, InitCallback@ha
+                g[4].set(0x80350000_u32);
+                // stw r0, 0x10(r30)
+                {
+                    let ea = g[30].get().wrapping_add(0x10_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lis r3, DoneCallback@ha
+                g[3].set(0x80350000_u32);
+                // li r5, 0x10
+                g[5].set(0x10_u32);
+                // stw r26, 0x14(r30)
+                {
+                    let ea = g[30].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[26].get());
+                }
+                // addi r4, r4, InitCallback@l
+                g[4].set(g[4].get().wrapping_add(0x438c_u32));
+                // addi r0, r3, DoneCallback@l
+                g[0].set(g[3].get().wrapping_add(0x43fc_u32));
+                // sth r5, 0x24(r30)
+                {
+                    let ea = g[30].get().wrapping_add(0x24_u32);
+                    ctx.write_u16(ea, g[5].get() as u16);
+                }
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // stw r4, 0x28(r30)
+                {
+                    let ea = g[30].get().wrapping_add(0x28_u32);
+                    ctx.write_u32(ea, g[4].get());
+                }
+                // stw r26, 0x2c(r30)
+                {
+                    let ea = g[30].get().wrapping_add(0x2c_u32);
+                    ctx.write_u32(ea, g[26].get());
+                }
+                // stw r0, 0x30(r30)
+                {
+                    let ea = g[30].get().wrapping_add(0x30_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stw r26, 0x34(r30)
+                {
+                    let ea = g[30].get().wrapping_add(0x34_u32);
+                    ctx.write_u32(ea, g[26].get());
+                }
+                // bl DSPAddTask
+                c::call(ctx, 0x803360d4_u32, 0x80354368_u32);
+                pc = 0x80354368_u32;
+            }
+            0x80354368_u32 => {
+                // stw r25, 0x0(r23)
+                {
+                    let ea = g[23].get();
+                    ctx.write_u32(ea, g[25].get());
+                }
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // stw r28, 0x4(r23)
+                {
+                    let ea = g[23].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[28].get());
+                }
+                // stw r24, 0x8(r23)
+                {
+                    let ea = g[23].get().wrapping_add(0x8_u32);
+                    ctx.write_u32(ea, g[24].get());
+                }
+                pc = 0x80354378_u32;
+            }
+            0x80354378_u32 => {
+                // lmw r22, 0xe8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xe8_u32);
+                    for (i, reg) in (22..32).enumerate() {
+                        g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
+                    }
+                }
+                // lwz r0, 0x114(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x114_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x110
+                g[1].set(g[1].get().wrapping_add(0x110_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of __CARDUnlock");
+            }
+            _ => unreachable!("__CARDUnlock: no block at {pc:#010x}"),
+        }
     }
-    rshift = ((dummy.wrapping_mul(8_i32).wrapping_add(1_i32)) as u32);
-    wk = inl_exnor_1st_unfused(ctx, init_val, rshift);
-    wk1 = (!(((wk ^ (shr_u32(wk, (7_i32 as u32)))) ^ (shr_u32(wk, (15_i32 as u32))))
-        ^ (shr_u32(wk, (23_i32 as u32)))));
-    (card).set_scramble((wk | ((shl_u32(wk1, (31_i32 as u32))) & 0x80000000_u32)));
-    (card).set_scramble(statics::dolphin__card__CARDUnlock::bitrev(
-        ctx,
-        (card).scramble(),
-    ));
-    dummy = statics::dolphin__card__CARDUnlock::DummyLen(ctx);
-    rlen = 20_i32.wrapping_add(dummy);
-    data = (0_i32 as u32);
-    if statics::dolphin__card__CARDUnlock::ReadArrayUnlock(
-        ctx,
-        chan,
-        data,
-        Handle::cast::<Addr<'a>>(rbuf.at(0)),
-        rlen,
-        1_i32,
-    ) < 0_i32
-    {
-        return (3_i32.wrapping_neg());
-    }
-    dp = Handle::cast::<Val<'a, u32>>(rbuf.at(0));
-    para1A = ({
-        let __t1 = dp;
-        dp = Handle::add(dp, 1);
-        __t1
-    })
-    .get();
-    para1B = ({
-        let __t2 = dp;
-        dp = Handle::add(dp, 1);
-        __t2
-    })
-    .get();
-    Ans1 = ({
-        let __t3 = dp;
-        dp = Handle::add(dp, 1);
-        __t3
-    })
-    .get();
-    para2A = ({
-        let __t4 = dp;
-        dp = Handle::add(dp, 1);
-        __t4
-    })
-    .get();
-    para2B = ({
-        let __t5 = dp;
-        dp = Handle::add(dp, 1);
-        __t5
-    })
-    .get();
-    para1A = (para1A ^ (card).scramble());
-    rshift = (32_i32 as u32);
-    wk = inl_exnor_unfused(ctx, (card).scramble(), rshift);
-    wk1 = (!(((wk ^ (shl_u32(wk, (7_i32 as u32)))) ^ (shl_u32(wk, (15_i32 as u32))))
-        ^ (shl_u32(wk, (23_i32 as u32)))));
-    (card).set_scramble((wk | ((shr_u32(wk1, (31_i32 as u32))) & (1_i32 as u32))));
-    para1B = (para1B ^ (card).scramble());
-    rshift = (32_i32 as u32);
-    wk = inl_exnor_unfused(ctx, (card).scramble(), rshift);
-    wk1 = (!(((wk ^ (shl_u32(wk, (7_i32 as u32)))) ^ (shl_u32(wk, (15_i32 as u32))))
-        ^ (shl_u32(wk, (23_i32 as u32)))));
-    (card).set_scramble((wk | ((shr_u32(wk1, (31_i32 as u32))) & (1_i32 as u32))));
-    Ans1 = (Ans1 ^ (card).scramble());
-    rshift = (32_i32 as u32);
-    wk = inl_exnor_unfused(ctx, (card).scramble(), rshift);
-    wk1 = (!(((wk ^ (shl_u32(wk, (7_i32 as u32)))) ^ (shl_u32(wk, (15_i32 as u32))))
-        ^ (shl_u32(wk, (23_i32 as u32)))));
-    (card).set_scramble((wk | ((shr_u32(wk1, (31_i32 as u32))) & (1_i32 as u32))));
-    para2A = (para2A ^ (card).scramble());
-    rshift = (32_i32 as u32);
-    wk = inl_exnor_unfused(ctx, (card).scramble(), rshift);
-    wk1 = (!(((wk ^ (shl_u32(wk, (7_i32 as u32)))) ^ (shl_u32(wk, (15_i32 as u32))))
-        ^ (shl_u32(wk, (23_i32 as u32)))));
-    (card).set_scramble((wk | ((shr_u32(wk1, (31_i32 as u32))) & (1_i32 as u32))));
-    para2B = (para2B ^ (card).scramble());
-    rshift = ((dummy.wrapping_mul(8_i32)) as u32);
-    wk = inl_exnor_unfused(ctx, (card).scramble(), rshift);
-    wk1 = (!(((wk ^ (shl_u32(wk, (7_i32 as u32)))) ^ (shl_u32(wk, (15_i32 as u32))))
-        ^ (shl_u32(wk, (23_i32 as u32)))));
-    (card).set_scramble((wk | ((shr_u32(wk1, (31_i32 as u32))) & (1_i32 as u32))));
-    rshift = (32_i32.wrapping_add(1_i32) as u32);
-    wk = inl_exnor_unfused(ctx, (card).scramble(), rshift);
-    wk1 = (!(((wk ^ (shl_u32(wk, (7_i32 as u32)))) ^ (shl_u32(wk, (15_i32 as u32))))
-        ^ (shl_u32(wk, (23_i32 as u32)))));
-    (card).set_scramble((wk | ((shr_u32(wk1, (31_i32 as u32))) & (1_i32 as u32))));
-    (Handle::cast::<Val<'a, u32>>((Handle::add(input, 0_i32)))).set(para2A);
-    (Handle::cast::<Val<'a, u32>>((Handle::add(input, 4_i32)))).set(para2B);
-    (param).set_inputAddr(input);
-    (param).set_inputLength((8_i32 as u32));
-    (param).set_outputAddr(output);
-    (param).set_aramAddr((0_i32 as u32));
-    fns::DCFlushRange(ctx, Handle::cast::<Addr<'a>>(input), (8_i32 as u32));
-    fns::DCInvalidateRange(ctx, Handle::cast::<Addr<'a>>(output), (4_i32 as u32));
-    fns::DCFlushRange(ctx, Handle::cast::<Addr<'a>>(param), 16_u32);
-    (task).set_priority((255_i32 as u32));
-    (task).set_iram_mmem_addr(ptr::<Val<'a, u16>>(
-        ctx,
-        (Handle::addr(statics::dolphin__card__CARDUnlock::CardData(ctx).at(0))
-            .wrapping_sub(((shl_i32(0x8000_i32, (16_i32 as u32))) as u32))) as u32,
-    ));
-    (task).set_iram_length((0x160_i32 as u32));
-    (task).set_iram_addr((0_i32 as u32));
-    (task).set_dsp_init_vector((16_i32 as u16));
-    (task).set_init_cb(fnptr(ctx, 0x8035438c));
-    (task).set_res_cb(null::<FnPtr<'a>>(ctx));
-    (task).set_done_cb(fnptr(ctx, 0x803543fc));
-    (task).set_req_cb(null::<FnPtr<'a>>(ctx));
-    let _ = fns::DSPAddTask(ctx, task);
-    dp = Handle::cast::<Val<'a, u32>>(flashID);
-    ({
-        let __t6 = dp;
-        dp = Handle::add(dp, 1);
-        __t6
-    })
-    .set(para1A);
-    ({
-        let __t7 = dp;
-        dp = Handle::add(dp, 1);
-        __t7
-    })
-    .set(para1B);
-    (dp).set(Ans1);
-    return 0_i32;
 }
 
 pub fn InitCallback<'a>(ctx: &'a Ctx, a0: Addr<'a>) {
@@ -1451,63 +5053,6 @@ fn asm_DoneCallback(ctx: &Ctx) {
     }
 }
 
-fn inl_GetInitVal_unfused<'a>(ctx: &'a Ctx) -> u32 {
-    let mut tmp: u32 = 0;
-    let mut tick: u32 = 0;
-    tick = fns::OSGetTick(ctx);
-    fns::srand(ctx, tick);
-    tmp = (0x7fec8000_i32 as u32);
-    tmp = (tmp | (fns::rand(ctx) as u32));
-    tmp = (tmp & 0xfffff000_u32);
-    return tmp;
-}
-
-fn inl_exnor_1st_unfused<'a>(ctx: &'a Ctx, data: u32, rshift: u32) -> u32 {
-    let mut data = data;
-    let mut rshift = rshift;
-    let mut wk: u32 = 0;
-    let mut work: u32 = 0;
-    let mut i: u32 = 0;
-    work = data;
-    {
-        i = (0_i32 as u32);
-        'l1: while i < rshift {
-            'c2: {
-                wk = (!(((work ^ (shr_u32(work, (7_i32 as u32))))
-                    ^ (shr_u32(work, (15_i32 as u32))))
-                    ^ (shr_u32(work, (23_i32 as u32)))));
-                work = ((shr_u32(work, (1_i32 as u32)))
-                    | ((shl_u32(wk, (30_i32 as u32))) & (0x40000000_i32 as u32)));
-            }
-            i = i.wrapping_add(1);
-        }
-    }
-    return work;
-}
-
-fn inl_exnor_unfused<'a>(ctx: &'a Ctx, data: u32, lshift: u32) -> u32 {
-    let mut data = data;
-    let mut lshift = lshift;
-    let mut wk: u32 = 0;
-    let mut work: u32 = 0;
-    let mut i: u32 = 0;
-    work = data;
-    {
-        i = (0_i32 as u32);
-        'l1: while i < lshift {
-            'c2: {
-                wk = (!(((work ^ (shl_u32(work, (7_i32 as u32))))
-                    ^ (shl_u32(work, (15_i32 as u32))))
-                    ^ (shl_u32(work, (23_i32 as u32)))));
-                work = ((shl_u32(work, (1_i32 as u32)))
-                    | ((shr_u32(wk, (30_i32 as u32))) & (2_i32 as u32)));
-            }
-            i = i.wrapping_add(1);
-        }
-    }
-    return work;
-}
-
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
     ctx.register_port(
@@ -1518,14 +5063,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80353678,
-        |ctx| {
-            let (a0, a1, a2, a3, a4): (i32, u32, Addr<'_>, i32, i32) = Args::take_all(ctx);
-            Ret::put(ReadArrayUnlock(ctx, a0, a1, a2, a3, a4), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80353678, asm_ReadArrayUnlock, Returns::Int);
     ctx.register_port(
         0x803537bc,
         |ctx| {
@@ -1533,14 +5071,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80353850,
-        |ctx| {
-            let (a0, a1): (i32, Val<'_, u8>) = Args::take_all(ctx);
-            Ret::put(__CARDUnlock(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80353850, asm___CARDUnlock, Returns::Int);
     ctx.register_port(0x8035438c, asm_InitCallback, Returns::Nothing);
     ctx.register_port(0x803543fc, asm_DoneCallback, Returns::Nothing);
 }

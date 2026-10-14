@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn Command_00<'a>(ctx: &'a Ctx, info: CommandInfo<'a>) {
     let mut info = info;
@@ -216,18 +217,109 @@ pub fn Command_09<'a>(ctx: &'a Ctx, info: CommandInfo<'a>) {
     }
 }
 
-pub fn Command_Execute<'a>(ctx: &'a Ctx, info: CommandInfo<'a>, command: u32) -> i32 {
-    let __frame = ctx.stack_frame(0x8);
-    let mut info = info;
-    let mut command = command;
-    if command < (10_i32 as u32) {
-        fns::lbCommand_803B9840(ctx)
-            .at((command as i32))
-            .get()
-            .call::<_, ()>((info,));
-        return 1_i32;
+pub fn Command_Execute<'a>(ctx: &'a Ctx, a0: CommandInfo<'a>, a1: u32) -> i32 {
+    // Transliterated from its machine code: leaves r5 as Fighter_procCollResolve, ported from machine code, reads it.
+    (a0, a1).put_regs(ctx);
+    asm_Command_Execute(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_Command_Execute(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80005b64_u32;
+    loop {
+        match pc {
+            0x80005b64_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // cmplwi r4, 0xa
+                {
+                    let (x, y) = (g[4].get(), 0xa_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // bge .L_80005B9C
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x80005b9c_u32;
+                    continue;
+                }
+                pc = 0x80005b78_u32;
+            }
+            0x80005b78_u32 => {
+                // lis r5, lbCommand_803B9840@ha
+                g[5].set(0x803c0000_u32);
+                // slwi r4, r4, 2
+                {
+                    let v = g[4].get().rotate_left(2) & 0xfffffffc_u32;
+                    g[4].set(v);
+                }
+                // addi r0, r5, lbCommand_803B9840@l
+                g[0].set(g[5].get().wrapping_add(0xffff9840_u32));
+                // add r4, r0, r4
+                {
+                    let (v, ca, ov) = c::add3(g[0].get(), g[4].get(), 0);
+                    g[4].set(v);
+                    let _ = (ca, ov);
+                }
+                // lwz r12, 0x0(r4)
+                {
+                    let ea = g[4].get();
+                    g[12].set(ctx.read_u32(ea));
+                }
+                // mtlr r12
+                ctx.regs.set_spr(8, g[12].get());
+                // blrl
+                c::call(ctx, ctx.regs.lr.get() & !3, 0x80005b94_u32);
+                pc = 0x80005b94_u32;
+            }
+            0x80005b94_u32 => {
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // b .L_80005BA0
+                pc = 0x80005ba0_u32;
+                continue;
+                pc = 0x80005b9c_u32;
+            }
+            0x80005b9c_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                pc = 0x80005ba0_u32;
+            }
+            0x80005ba0_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of Command_Execute");
+            }
+            _ => unreachable!("Command_Execute: no block at {pc:#010x}"),
+        }
     }
-    return 0_i32;
 }
 
 /// Registers this unit's ports.
@@ -312,12 +404,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80005b64,
-        |ctx| {
-            let (a0, a1): (CommandInfo<'_>, u32) = Args::take_all(ctx);
-            Ret::put(Command_Execute(ctx, a0, a1), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80005b64, asm_Command_Execute, Returns::Int);
 }

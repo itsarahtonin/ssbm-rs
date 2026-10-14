@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn HSD_DObjSetCurrent<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>) {
     let mut dobj = dobj;
@@ -167,20 +168,141 @@ pub fn HSD_DObjReqAnimAll<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>, startframe: f64)
     }
 }
 
-pub fn HSD_DObjAnimAll<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let mut dobj = dobj;
-    let mut dp: HSD_DObj<'a> = null(ctx);
-    if Handle::is_null(dobj) {
-        return;
-    }
-    {
-        dp = dobj;
-        'l1: while !Handle::is_null(dp) {
-            'c2: {
-                inl_HSD_DObjAnim_unfused(ctx, dp);
+pub fn HSD_DObjAnimAll<'a>(ctx: &'a Ctx, a0: HSD_DObj<'a>) {
+    // Transliterated from its machine code: leaves r3 as mnSnap_8025441C, ported from machine code, reads it.
+    (a0,).put_regs(ctx);
+    asm_HSD_DObjAnimAll(ctx);
+}
+
+fn asm_HSD_DObjAnimAll(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8035e04c_u32;
+    loop {
+        match pc {
+            0x8035e04c_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // cmplwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // beq .L_8035E090
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x8035e090_u32;
+                    continue;
+                }
+                pc = 0x8035e064_u32;
             }
-            dp = (dp).next();
+            0x8035e064_u32 => {
+                // mr r31, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[31].set(v);
+                }
+                // b .L_8035E088
+                pc = 0x8035e088_u32;
+                continue;
+                pc = 0x8035e06c_u32;
+            }
+            0x8035e06c_u32 => {
+                // cmplwi r31, 0x0
+                {
+                    let (x, y) = (g[31].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_8035E084
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x8035e084_u32;
+                    continue;
+                }
+                pc = 0x8035e074_u32;
+            }
+            0x8035e074_u32 => {
+                // lwz r3, 0xc(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xc_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // bl HSD_PObjAnimAll
+                c::call(ctx, 0x8036bb40_u32, 0x8035e07c_u32);
+                pc = 0x8035e07c_u32;
+            }
+            0x8035e07c_u32 => {
+                // lwz r3, 0x8(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x8_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // bl HSD_MObjAnim
+                c::call(ctx, 0x803630fc_u32, 0x8035e084_u32);
+                pc = 0x8035e084_u32;
+            }
+            0x8035e084_u32 => {
+                // lwz r31, 0x4(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x4_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                pc = 0x8035e088_u32;
+            }
+            0x8035e088_u32 => {
+                // cmplwi r31, 0x0
+                {
+                    let (x, y) = (g[31].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_8035E06C
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x8035e06c_u32;
+                    continue;
+                }
+                pc = 0x8035e090_u32;
+            }
+            0x8035e090_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of HSD_DObjAnimAll");
+            }
+            _ => unreachable!("HSD_DObjAnimAll: no block at {pc:#010x}"),
         }
     }
 }
@@ -455,15 +577,6 @@ fn inl_HSD_DObjReqAnimByFlags_unfused<'a>(
     fns::HSD_MObjReqAnimByFlags(ctx, (dobj).mobj(), startframe, flags);
 }
 
-fn inl_HSD_DObjAnim_unfused<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>) {
-    let mut dobj = dobj;
-    if Handle::is_null(dobj) {
-        return;
-    }
-    fns::HSD_PObjAnimAll(ctx, (dobj).pobj());
-    fns::HSD_MObjAnim(ctx, (dobj).mobj());
-}
-
 fn inl_HSD_DObjModifyFlags_unfused<'a>(ctx: &'a Ctx, dobj: HSD_DObj<'a>, flags: u32, mask: u32) {
     let mut dobj = dobj;
     let mut flags = flags;
@@ -576,14 +689,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8035e04c,
-        |ctx| {
-            let (a0,): (HSD_DObj<'_>,) = Args::take_all(ctx);
-            Ret::put(HSD_DObjAnimAll(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8035e04c, asm_HSD_DObjAnimAll, Returns::Nothing);
     ctx.register_port(
         0x8035e0a4,
         |ctx| {

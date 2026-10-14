@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn itRabbitC_Logic30_ShieldBounced<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>) -> i32 {
     let __frame = ctx.stack_frame(0x8);
@@ -53,17 +54,87 @@ pub fn it_80294DC0<'a>(ctx: &'a Ctx, pos: Vec<'a>) -> HSD_GObj<'a> {
     return item_gobj;
 }
 
-pub fn it_80294E78<'a>(ctx: &'a Ctx, item_gobj: HSD_GObj<'a>, arg1: f64) {
-    let __frame = ctx.stack_frame(0x20);
-    let mut item_gobj = item_gobj;
-    let mut arg1 = arg1;
-    'l1: loop {
-        'c2: {}
-        if !(0_i32 != 0) {
-            break 'l1;
+pub fn it_80294E78<'a>(ctx: &'a Ctx, a0: HSD_GObj<'a>, a1: f64) {
+    // Transliterated from its machine code: leaves f1 as gm_Scene_ToyFall_OnEnter, ported from machine code, reads it.
+    (a0, Single(a1)).put_regs(ctx);
+    asm_it_80294E78(ctx);
+}
+
+fn asm_it_80294E78(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80294e78_u32;
+    loop {
+        match pc {
+            0x80294e78_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // li r4, 0x1
+                g[4].set(0x1_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stfd f31, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    ctx.write_u64(ea, ctx.regs.f(31).to_bits());
+                }
+                // fmr f31, f1
+                {
+                    let v = ctx.regs.f(1);
+                    ctx.regs.set_f(31, v);
+                }
+                // bl it_80272CC0
+                c::call(ctx, 0x80272cc0_u32, 0x80294e94_u32);
+                pc = 0x80294e94_u32;
+            }
+            0x80294e94_u32 => {
+                // fmr f1, f31
+                {
+                    let v = ctx.regs.f(31);
+                    ctx.regs.set_f(1, v);
+                }
+                // bl it_80272F7C
+                c::call(ctx, 0x80272f7c_u32, 0x80294e9c_u32);
+                pc = 0x80294e9c_u32;
+            }
+            0x80294e9c_u32 => {
+                // lwz r0, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lfd f31, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    ctx.regs.set_f(31, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // addi r1, r1, 0x20
+                g[1].set(g[1].get().wrapping_add(0x20_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of it_80294E78");
+            }
+            _ => unreachable!("it_80294E78: no block at {pc:#010x}"),
         }
     }
-    fns::it_80272F7C(ctx, fns::it_80272CC0(ctx, item_gobj, 1_i32), arg1);
 }
 
 pub fn it_80294EB0<'a>(
@@ -412,14 +483,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80294e78,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, Single) = Args::take_all(ctx);
-            Ret::put(it_80294E78(ctx, a0, a1.0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80294e78, asm_it_80294E78, Returns::Nothing);
     ctx.register_port(
         0x80294eb0,
         |ctx| {

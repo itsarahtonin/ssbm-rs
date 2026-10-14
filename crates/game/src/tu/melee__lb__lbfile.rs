@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn lbFile_8001615C<'a>(ctx: &'a Ctx, dcreq: i32, args: u32, buf: Addr<'a>, cancelflag: i32) {
     let __frame = ctx.stack_frame(0x8);
@@ -336,21 +337,233 @@ pub fn lbFile_80016580<'a>(
     );
 }
 
-pub fn lbFile_8001668C<'a>(ctx: &'a Ctx, basename: Val<'a, i8>, dst: Addr<'a>, size: Val<'a, u32>) {
-    let __frame = ctx.stack_frame(0x30);
-    let mut basename = basename;
-    let mut dst = dst;
-    let mut size = size;
-    statics::melee__lb__lbfile::cancel(ctx).set(0_i32);
-    inl_lbFile_80016580_unfused(
-        ctx,
-        basename,
-        dst,
-        size,
-        fnptr(ctx, 0x8001615c),
-        (0_i32 as u32),
-    );
-    inl_waitForDisc_unfused(ctx);
+pub fn lbFile_8001668C<'a>(ctx: &'a Ctx, a0: Val<'a, i8>, a1: Addr<'a>, a2: Val<'a, u32>) {
+    // Transliterated from its machine code: leaves r8 as grDatFiles_801C6038, ported from machine code, reads it.
+    (a0, a1, a2).put_regs(ctx);
+    asm_lbFile_8001668C(ctx);
+}
+
+fn asm_lbFile_8001668C(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8001668c_u32;
+    loop {
+        match pc {
+            0x8001668c_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // lis r6, "@4"@ha
+                g[6].set(0x803c0000_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // li r0, 0x0
+                g[0].set(0_u32);
+                // stwu r1, -0x30(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffd0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stmw r27, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    for (i, reg) in (27..32).enumerate() {
+                        ctx.write_u32(ea.wrapping_add(4 * i as u32), g[reg].get());
+                    }
+                }
+                // addi r31, r6, "@4"@l
+                g[31].set(g[6].get().wrapping_add(0xffffa508_u32));
+                // addi r27, r4, 0x0
+                g[27].set(g[4].get());
+                // addi r28, r5, 0x0
+                g[28].set(g[5].get());
+                // stw r0, cancel@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffad28_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // bl lbFileGetFullName
+                c::call(ctx, 0x80016204_u32, 0x800166b8_u32);
+                pc = 0x800166b8_u32;
+            }
+            0x800166b8_u32 => {
+                // mr r30, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[30].set(v);
+                }
+                // bl DVDConvertPathToEntrynum
+                c::call(ctx, 0x8033796c_u32, 0x800166c0_u32);
+                pc = 0x800166c0_u32;
+            }
+            0x800166c0_u32 => {
+                // addi r29, r3, 0x0
+                g[29].set(g[3].get());
+                // cmpwi r29, -0x1
+                {
+                    let (x, y) = (g[29].get() as i32, -1_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_800166F0
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x800166f0_u32;
+                    continue;
+                }
+                pc = 0x800166cc_u32;
+            }
+            0x800166cc_u32 => {
+                // addi r4, r30, 0x0
+                g[4].set(g[30].get());
+                // crclr cr1eq
+                {
+                    let (x, y) = (c::cr_bit(ctx, 6), c::cr_bit(ctx, 6));
+                    c::set_cr_bit(ctx, 6, x ^ y);
+                }
+                // addi r5, r29, 0x0
+                g[5].set(g[29].get());
+                // addi r3, r31, 0x50
+                g[3].set(g[31].get().wrapping_add(0x50_u32));
+                // bl OSReport
+                c::call(ctx, 0x803456a8_u32, 0x800166e0_u32);
+                pc = 0x800166e0_u32;
+            }
+            0x800166e0_u32 => {
+                // addi r3, r31, 0x0
+                g[3].set(g[31].get());
+                // addi r5, r31, 0x6c
+                g[5].set(g[31].get().wrapping_add(0x6c_u32));
+                // li r4, 0x11a
+                g[4].set(0x11a_u32);
+                // bl __assert
+                c::call(ctx, 0x80388220_u32, 0x800166f0_u32);
+                pc = 0x800166f0_u32;
+            }
+            0x800166f0_u32 => {
+                // mr r3, r29
+                {
+                    let v = g[29].get() | g[29].get();
+                    g[3].set(v);
+                }
+                // bl lbFile_8001634C
+                c::call(ctx, 0x8001634c_u32, 0x800166f8_u32);
+                pc = 0x800166f8_u32;
+            }
+            0x800166f8_u32 => {
+                // lis r0, 0x8000
+                g[0].set(0x80000000_u32);
+                // stw r3, 0x0(r28)
+                {
+                    let ea = g[28].get();
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // cmplw r27, r0
+                {
+                    let (x, y) = (g[27].get(), g[0].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // blt .L_80016710
+                if (c::cr_bit(ctx, 0) == true) {
+                    pc = 0x80016710_u32;
+                    continue;
+                }
+                pc = 0x80016708_u32;
+            }
+            0x80016708_u32 => {
+                // li r7, 0x21
+                g[7].set(0x21_u32);
+                // b .L_80016714
+                pc = 0x80016714_u32;
+                continue;
+                pc = 0x80016710_u32;
+            }
+            0x80016710_u32 => {
+                // li r7, 0x23
+                g[7].set(0x23_u32);
+                pc = 0x80016714_u32;
+            }
+            0x80016714_u32 => {
+                // lwz r4, 0x0(r28)
+                {
+                    let ea = g[28].get();
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // lis r3, lbFile_8001615C@ha
+                g[3].set(0x80010000_u32);
+                // addi r9, r3, lbFile_8001615C@l
+                g[9].set(g[3].get().wrapping_add(0x615c_u32));
+                // addi r0, r4, 0x1f
+                g[0].set(g[4].get().wrapping_add(0x1f_u32));
+                // addi r3, r29, 0x0
+                g[3].set(g[29].get());
+                // addi r5, r27, 0x0
+                g[5].set(g[27].get());
+                // clrrwi r6, r0, 5
+                {
+                    let v = g[0].get().rotate_left(0) & 0xffffffe0_u32;
+                    g[6].set(v);
+                }
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // li r8, 0x1
+                g[8].set(0x1_u32);
+                // li r10, 0x0
+                g[10].set(0_u32);
+                // bl HSD_DevComRequest
+                c::call(ctx, 0x8038f6d4_u32, 0x80016740_u32);
+                pc = 0x80016740_u32;
+            }
+            0x80016740_u32 => {
+                // bl discIsDone
+                c::call(ctx, 0x800161a0_u32, 0x80016744_u32);
+                pc = 0x80016744_u32;
+            }
+            0x80016744_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80016740
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80016740_u32;
+                    continue;
+                }
+                pc = 0x8001674c_u32;
+            }
+            0x8001674c_u32 => {
+                // lmw r27, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    for (i, reg) in (27..32).enumerate() {
+                        g[reg].set(ctx.read_u32(ea.wrapping_add(4 * i as u32)));
+                    }
+                }
+                // lwz r0, 0x34(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x34_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x30
+                g[1].set(g[1].get().wrapping_add(0x30_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of lbFile_8001668C");
+            }
+            _ => unreachable!("lbFile_8001668C: no block at {pc:#010x}"),
+        }
+    }
 }
 
 pub fn lbFile_80016760<'a>(
@@ -470,6 +683,34 @@ fn inl_lbFile_800164A4_unfused<'a>(
     );
 }
 
+fn inl_lbFileGetSize_unfused<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> u32 {
+    let mut basename = basename;
+    let mut entry_num: i32 = 0;
+    let mut filename: Val<'a, i8> = fns::lbFileGetFullName(ctx, basename);
+    entry_num = fns::DVDConvertPathToEntrynum(ctx, filename);
+    (if entry_num != 1_i32.wrapping_neg() {
+        { () }
+    } else {
+        ({
+            fns::OSReport(
+                ctx,
+                cstr(ctx, 0x803ba558),
+                &[
+                    VarArg::Int(Handle::addr(filename)),
+                    VarArg::Int(entry_num as u32),
+                ],
+            );
+            fns::__assert(
+                ctx,
+                cstr(ctx, 0x803ba508),
+                (238_i32 as u32),
+                cstr(ctx, 0x803ba574),
+            )
+        })
+    });
+    return fns::lbFile_8001634C(ctx, entry_num);
+}
+
 fn inl_lbFile_800164A4_unfused_2<'a>(
     ctx: &'a Ctx,
     file: i32,
@@ -558,34 +799,6 @@ fn inl_lbFile_80016580_unfused<'a>(
         fnptr(ctx, 0x8001615c),
         args,
     );
-}
-
-fn inl_lbFileGetSize_unfused<'a>(ctx: &'a Ctx, basename: Val<'a, i8>) -> u32 {
-    let mut basename = basename;
-    let mut entry_num: i32 = 0;
-    let mut filename: Val<'a, i8> = fns::lbFileGetFullName(ctx, basename);
-    entry_num = fns::DVDConvertPathToEntrynum(ctx, filename);
-    (if entry_num != 1_i32.wrapping_neg() {
-        { () }
-    } else {
-        ({
-            fns::OSReport(
-                ctx,
-                cstr(ctx, 0x803ba558),
-                &[
-                    VarArg::Int(Handle::addr(filename)),
-                    VarArg::Int(entry_num as u32),
-                ],
-            );
-            fns::__assert(
-                ctx,
-                cstr(ctx, 0x803ba508),
-                (238_i32 as u32),
-                cstr(ctx, 0x803ba574),
-            )
-        })
-    });
-    return fns::lbFile_8001634C(ctx, entry_num);
 }
 
 fn inl_loadFile_unfused<'a>(
@@ -686,14 +899,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8001668c,
-        |ctx| {
-            let (a0, a1, a2): (Val<'_, i8>, Addr<'_>, Val<'_, u32>) = Args::take_all(ctx);
-            Ret::put(lbFile_8001668C(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8001668c, asm_lbFile_8001668C, Returns::Nothing);
     ctx.register_port(
         0x80016760,
         |ctx| {

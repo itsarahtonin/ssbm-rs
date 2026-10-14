@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn ftCo_80098B20<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     let __frame = ctx.stack_frame(0x20);
@@ -84,13 +85,280 @@ pub fn ftCo_ShieldBreakFly_Coll<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
     fns::ft_80082C74(ctx, gobj, fnptr(ctx, 0x80098e3c));
 }
 
-pub fn ftCo_80098C9C<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let __frame = ctx.stack_frame(0x28);
-    let unused: ArrV<'a, u8, 8> = frame_at(ctx, &__frame, 0x0);
-    let mut gobj = gobj;
-    ctx.fill(Handle::addr(unused), 0, 0x8);
-    unused.at(0).set((0_i32 as u8));
-    inl_ftCo_80098B20_unfused(ctx, gobj);
+pub fn ftCo_80098C9C<'a>(ctx: &'a Ctx, a0: HSD_GObj<'a>) {
+    // Transliterated from its machine code: leaves r5 as Fighter_procCollResolve, ported from machine code, reads it.
+    (a0,).put_regs(ctx);
+    asm_ftCo_80098C9C(ctx);
+}
+
+fn asm_ftCo_80098C9C(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80098c9c_u32;
+    loop {
+        match pc {
+            0x80098c9c_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x28(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffd8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x20_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // mr r30, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[30].set(v);
+                }
+                // lwz r31, 0x2c(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x2c_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // mr r3, r31
+                {
+                    let v = g[31].get() | g[31].get();
+                    g[3].set(v);
+                }
+                // bl ftCommon_8007D5D4
+                c::call(ctx, 0x8007d5d4_u32, 0x80098cc0_u32);
+                pc = 0x80098cc0_u32;
+            }
+            0x80098cc0_u32 => {
+                // lfs f1, "@236"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffff8c70_u32);
+                    c::fill(ctx, 1, fp::lfs(ctx.read_u32(ea)));
+                }
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // lfs f2, "@237"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffff8c74_u32);
+                    c::fill(ctx, 2, fp::lfs(ctx.read_u32(ea)));
+                }
+                // li r4, 0xcd
+                g[4].set(0xcd_u32);
+                // fmr f3, f1
+                {
+                    let v = ctx.regs.f(1);
+                    ctx.regs.set_f(3, v);
+                }
+                // li r5, 0x40
+                g[5].set(0x40_u32);
+                // li r6, 0x0
+                g[6].set(0_u32);
+                // bl Fighter_ChangeMotionState
+                c::call(ctx, 0x800693ac_u32, 0x80098ce0_u32);
+                pc = 0x80098ce0_u32;
+            }
+            0x80098ce0_u32 => {
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // bl ftAnim_8006EBA4
+                c::call(ctx, 0x8006eba4_u32, 0x80098ce8_u32);
+                pc = 0x80098ce8_u32;
+            }
+            0x80098ce8_u32 => {
+                // lfs f0, "@236"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffff8c70_u32);
+                    c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
+                }
+                // stfs f0, 0x80(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x80_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+                }
+                // lfs f0, 0x1a4(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x1a4_u32);
+                    c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
+                }
+                // stfs f0, 0x84(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x84_u32);
+                    ctx.write_u32(ea, fp::stfs(ctx.regs.f(0)));
+                }
+                // lwz r0, 0x4(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x4_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmpwi r0, 0xf
+                {
+                    let (x, y) = (g[0].get() as i32, 15_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80098D14
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80098d14_u32;
+                    continue;
+                }
+                pc = 0x80098d04_u32;
+            }
+            0x80098d04_u32 => {
+                // lbz r0, 0x2222(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x2222_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // rlwimi r0, r3, 4, 27, 27
+                {
+                    let v = (g[3].get().rotate_left(4) & 0x10_u32) | (g[0].get() & 0xffffffef_u32);
+                    g[0].set(v);
+                }
+                // stb r0, 0x2222(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x2222_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                pc = 0x80098d14_u32;
+            }
+            0x80098d14_u32 => {
+                // lwz r4, 0x10c(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x10c_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // lwz r7, 0x5e8(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x5e8_u32);
+                    g[7].set(ctx.read_u32(ea));
+                }
+                // crclr cr1eq
+                {
+                    let (x, y) = (c::cr_bit(ctx, 6), c::cr_bit(ctx, 6));
+                    c::set_cr_bit(ctx, 6, x ^ y);
+                }
+                // lwz r5, 0x8(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x8_u32);
+                    g[5].set(ctx.read_u32(ea));
+                }
+                // lwz r6, 0x2c(r30)
+                {
+                    let ea = g[30].get().wrapping_add(0x2c_u32);
+                    g[6].set(ctx.read_u32(ea));
+                }
+                // lbz r0, 0x11(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x11_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // addi r4, r6, 0x60c
+                g[4].set(g[6].get().wrapping_add(0x60c_u32));
+                // slwi r0, r0, 4
+                {
+                    let v = g[0].get().rotate_left(4) & 0xfffffff0_u32;
+                    g[0].set(v);
+                }
+                // lwzx r7, r7, r0
+                g[7].set(ctx.read_u32(g[7].get().wrapping_add(g[0].get())));
+                // li r6, 0x41b
+                g[6].set(0x41b_u32);
+                // bl efAsync_Spawn
+                c::call(ctx, 0x800676f0_u32, 0x80098d48_u32);
+                pc = 0x80098d48_u32;
+            }
+            0x80098d48_u32 => {
+                // addi r3, r31, 0x0
+                g[3].set(g[31].get());
+                // li r4, 0x82
+                g[4].set(0x82_u32);
+                // li r5, 0x7f
+                g[5].set(0x7f_u32);
+                // li r6, 0x40
+                g[6].set(0x40_u32);
+                // bl ft_PlaySFX
+                c::call(ctx, 0x80088148_u32, 0x80098d5c_u32);
+                pc = 0x80098d5c_u32;
+            }
+            0x80098d5c_u32 => {
+                // addi r3, r31, 0x0
+                g[3].set(g[31].get());
+                // li r4, 0x18
+                g[4].set(0x18_u32);
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl ftCommon_8007EBAC
+                c::call(ctx, 0x8007ebac_u32, 0x80098d6c_u32);
+                pc = 0x80098d6c_u32;
+            }
+            0x80098d6c_u32 => {
+                // addi r3, r30, 0x0
+                g[3].set(g[30].get());
+                // li r4, 0x2
+                g[4].set(0x2_u32);
+                // bl ftColl_8007B62C
+                c::call(ctx, 0x8007b62c_u32, 0x80098d78_u32);
+                pc = 0x80098d78_u32;
+            }
+            0x80098d78_u32 => {
+                // lwz r0, 0x2c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x2c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x20_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x28
+                g[1].set(g[1].get().wrapping_add(0x28_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of ftCo_80098C9C");
+            }
+            _ => unreachable!("ftCo_80098C9C: no block at {pc:#010x}"),
+        }
+    }
 }
 
 fn inl_ftCo_SpawnEf_unfused<'a>(
@@ -114,39 +382,6 @@ fn inl_ftCo_SpawnEf_unfused<'a>(
         }
     }
     fns::efAsync_Spawn(ctx, gobj, (fp).x60C_ref(), arg2, (arg3 as u32), joint, &[]);
-}
-
-fn inl_ftCo_80098B20_unfused<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
-    let mut gobj = gobj;
-    let mut fp: Fighter<'a> = Handle::cast::<Fighter<'a>>((gobj).user_data());
-    fns::ftCommon_8007D5D4(ctx, fp);
-    fns::Fighter_ChangeMotionState(
-        ctx,
-        gobj,
-        205_i32,
-        64_u32,
-        fp::frsp(0_i32 as f64),
-        fp::frsp(1_i32 as f64),
-        fp::frsp(0_i32 as f64),
-        null::<HSD_GObj<'a>>(ctx),
-    );
-    fns::ftAnim_8006EBA4(ctx, gobj);
-    (fp).self_vel().set_x(fp::frsp(0_i32 as f64));
-    (fp).self_vel()
-        .set_y((fp).co_attrs().shield_break_initial_velocity());
-    if (fp).kind() == (((enums::Ft_Kind_Purin as i32) as u32) as i32) {
-        (fp).set_x2222_b3((1_i32 as u8));
-    }
-    inl_ftCo_SpawnEf_unfused(
-        ctx,
-        gobj,
-        (Handle::add((fp).parts(), ((((fp).ft_data()).x8()).x11() as i32))).joint(),
-        (0_i32 as u32),
-        0x41b_i32,
-    );
-    fns::ft_PlaySFX(ctx, fp, 130_i32, (127_i32 as u8), (64_i32 as u8));
-    fns::ftCommon_8007EBAC(ctx, fp, (24_i32 as u32), 0_u32);
-    fns::ftColl_8007B62C(ctx, gobj, 2_i32);
 }
 
 /// Registers this unit's ports.
@@ -191,12 +426,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80098c9c,
-        |ctx| {
-            let (a0,): (HSD_GObj<'_>,) = Args::take_all(ctx);
-            Ret::put(ftCo_80098C9C(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80098c9c, asm_ftCo_80098C9C, Returns::Nothing);
 }

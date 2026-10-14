@@ -3180,7 +3180,6 @@ fn asm_ftCo_800C2FD8(ctx: &Ctx) {
             0x800c303c_u32 => {
                 // bl itGetKind
                 c::call(ctx, 0x8026b300_u32, 0x800c3040_u32);
-                unset |= 0x20;
                 pc = 0x800c3040_u32;
             }
             0x800c3040_u32 => {
@@ -3218,7 +3217,6 @@ fn asm_ftCo_800C2FD8(ctx: &Ctx) {
                     c::unset_read(ctx);
                 }
                 c::call(ctx, 0x802852b8_u32, 0x800c305c_u32);
-                unset |= 0x20;
                 pc = 0x800c305c_u32;
             }
             0x800c305c_u32 => {
@@ -3419,7 +3417,6 @@ fn asm_ftCo_800C2FD8(ctx: &Ctx) {
                     c::unset_read(ctx);
                 }
                 c::call(ctx, 0x8000b1cc_u32, 0x800c3108_u32);
-                unset |= 0x20;
                 pc = 0x800c3108_u32;
             }
             0x800c3108_u32 => {

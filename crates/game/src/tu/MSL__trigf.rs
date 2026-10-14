@@ -145,7 +145,7 @@ pub fn sinf<'a>(ctx: &'a Ctx, x: f64) -> f64 {
 }
 
 pub fn cosf<'a>(ctx: &'a Ctx, a0: f64) -> f64 {
-    // Transliterated from its machine code: leaves r3 as it_802C4D10, ported from machine code, reads it.
+    // Transliterated from its machine code: leaves f2, f3, r3 as it_802C4D10, ported from machine code, reads it.
     (Single(a0),).put_regs(ctx);
     asm_cosf(ctx);
     Ret::get(ctx)

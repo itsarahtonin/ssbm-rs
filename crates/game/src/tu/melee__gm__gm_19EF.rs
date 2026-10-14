@@ -682,7 +682,7 @@ pub fn fn_8019F810<'a>(ctx: &'a Ctx) {
 }
 
 pub fn fn_8019F9C4<'a>(ctx: &'a Ctx, a0: u32) {
-    // Transliterated from its machine code: calls gm_80160564, which reads registers its caller sets without passing them.
+    // Transliterated from its machine code: calls Toy_803060BC, which reads registers its caller sets without passing them.
     (a0,).put_regs(ctx);
     asm_fn_8019F9C4(ctx);
 }

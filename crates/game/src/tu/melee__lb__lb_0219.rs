@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn lbBgFlash_Free<'a>(ctx: &'a Ctx, arg0: Addr<'a>) {
     let __frame = ctx.stack_frame(0x8);
@@ -132,19 +133,84 @@ pub fn fn_80021C1C<'a>(ctx: &'a Ctx) {
     fns::lb_80014498(ctx, (user_data).x4());
 }
 
-pub fn lbBgFlash_80021C48<'a>(ctx: &'a Ctx, arg0: u32, arg1: u32) {
-    let __frame = ctx.stack_frame(0x8);
-    let mut arg0 = arg0;
-    let mut arg1 = arg1;
-    let mut data: BgFlashUserData<'a> =
-        Handle::cast::<BgFlashUserData<'a>>((fns::flash_gobj(ctx).get()).user_data());
-    let _ = fns::lb_800144C8(
-        ctx,
-        (data).x4(),
-        fns::lbl_804D63DC(ctx).get(),
-        (arg0 as i32),
-        (arg1 as i32),
-    );
+pub fn lbBgFlash_80021C48<'a>(ctx: &'a Ctx, a0: u32, a1: u32) {
+    // Transliterated from its machine code: leaves r5 as Fighter_procCollResolve, ported from machine code, reads it.
+    (a0, a1).put_regs(ctx);
+    asm_lbBgFlash_80021C48(ctx);
+}
+
+fn asm_lbBgFlash_80021C48(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80021c48_u32;
+    loop {
+        match pc {
+            0x80021c48_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // mr r6, r4
+                {
+                    let v = g[4].get() | g[4].get();
+                    g[6].set(v);
+                }
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // lwz r5, flash_gobj@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffad40_u32);
+                    g[5].set(ctx.read_u32(ea));
+                }
+                // lwz r4, lbl_804D63DC@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffad3c_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // lwz r7, 0x2c(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x2c_u32);
+                    g[7].set(ctx.read_u32(ea));
+                }
+                // addi r5, r3, 0x0
+                g[5].set(g[3].get());
+                // addi r3, r7, 0x4
+                g[3].set(g[7].get().wrapping_add(0x4_u32));
+                // bl lb_800144C8
+                c::call(ctx, 0x800144c8_u32, 0x80021c70_u32);
+                pc = 0x80021c70_u32;
+            }
+            0x80021c70_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of lbBgFlash_80021C48");
+            }
+            _ => unreachable!("lbBgFlash_80021C48: no block at {pc:#010x}"),
+        }
+    }
 }
 
 pub fn fn_80021C80<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>) {
@@ -214,14 +280,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80021c48,
-        |ctx| {
-            let (a0, a1): (u32, u32) = Args::take_all(ctx);
-            Ret::put(lbBgFlash_80021C48(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80021c48, asm_lbBgFlash_80021C48, Returns::Nothing);
     ctx.register_port(
         0x80021c80,
         |ctx| {

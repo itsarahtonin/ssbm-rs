@@ -25,47 +25,103 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
-pub fn wcstombs<'a>(ctx: &'a Ctx, dest: Val<'a, i8>, src: Val<'a, u16>, max: u32) -> u32 {
-    let mut dest = dest;
-    let mut src = src;
-    let mut max = max;
-    let mut i: u32 = 0;
-    let mut c: u16 = 0;
-    {
-        i = (0_i32 as u32);
-        'l1: while i < max {
-            'c2: {
-                c = ({
-                    let __t1 = src;
-                    src = Handle::add(src, 1);
-                    __t1
-                })
-                .get();
-                ({
-                    let __t2 = dest;
-                    dest = Handle::add(dest, 1);
-                    __t2
-                })
-                .set((c as i8));
-                if ((c as i8) as i32) == 0_i32 {
-                    break 'l1;
+pub fn wcstombs<'a>(ctx: &'a Ctx, a0: Val<'a, i8>, a1: Val<'a, u16>, a2: u32) -> u32 {
+    // Transliterated from its machine code: leaves r5 as Fighter_procCollResolve, ported from machine code, reads it.
+    (a0, a1, a2).put_regs(ctx);
+    asm_wcstombs(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_wcstombs(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8032388c_u32;
+    loop {
+        match pc {
+            0x8032388c_u32 => {
+                // cmplwi r5, 0x0
+                {
+                    let (x, y) = (g[5].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
                 }
+                // mtctr r5
+                ctx.regs.set_spr(9, g[5].get());
+                // li r6, 0x0
+                g[6].set(0_u32);
+                // ble .L_803238C0
+                if (c::cr_bit(ctx, 1) == false) {
+                    pc = 0x803238c0_u32;
+                    continue;
+                }
+                pc = 0x8032389c_u32;
             }
-            i = i.wrapping_add(1);
+            0x8032389c_u32 => {
+                // lhz r0, 0x0(r4)
+                {
+                    let ea = g[4].get();
+                    g[0].set(u32::from(ctx.read_u16(ea)));
+                }
+                // addi r4, r4, 0x2
+                g[4].set(g[4].get().wrapping_add(0x2_u32));
+                // extsb r5, r0
+                {
+                    let v = g[0].get() as i8 as u32;
+                    g[5].set(v);
+                }
+                // extsb. r0, r5
+                {
+                    let v = g[5].get() as i8 as u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // stb r5, 0x0(r3)
+                {
+                    let ea = g[3].get();
+                    ctx.write_u8(ea, g[5].get() as u8);
+                }
+                // addi r3, r3, 0x1
+                g[3].set(g[3].get().wrapping_add(0x1_u32));
+                // beq .L_803238C0
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x803238c0_u32;
+                    continue;
+                }
+                pc = 0x803238b8_u32;
+            }
+            0x803238b8_u32 => {
+                // addi r6, r6, 0x1
+                g[6].set(g[6].get().wrapping_add(0x1_u32));
+                // bdnz .L_8032389C
+                if c::ctr_ok(ctx, 16) {
+                    pc = 0x8032389c_u32;
+                    continue;
+                }
+                pc = 0x803238c0_u32;
+            }
+            0x803238c0_u32 => {
+                // mr r3, r6
+                {
+                    let v = g[6].get() | g[6].get();
+                    g[3].set(v);
+                }
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of wcstombs");
+            }
+            _ => unreachable!("wcstombs: no block at {pc:#010x}"),
         }
     }
-    return i;
 }
 
 /// Registers this unit's ports.
 pub fn register(ctx: &Ctx) {
-    ctx.register_port(
-        0x8032388c,
-        |ctx| {
-            let (a0, a1, a2): (Val<'_, i8>, Val<'_, u16>, u32) = Args::take_all(ctx);
-            Ret::put(wcstombs(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8032388c, asm_wcstombs, Returns::Int);
 }

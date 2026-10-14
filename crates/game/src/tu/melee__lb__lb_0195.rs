@@ -315,9 +315,37 @@ pub fn lb_80019628<'a>(ctx: &'a Ctx) {
     statics::melee__lb__lb_0195::lb_804329F0(ctx).set_x48(1_i32);
 }
 
-pub fn lb_80019880<'a>(ctx: &'a Ctx, arg0: u64) {
-    let mut arg0 = arg0;
-    statics::melee__lb__lb_0195::lb_804329F0(ctx).set_x38(arg0);
+pub fn lb_80019880<'a>(ctx: &'a Ctx, a0: u64) {
+    // Transliterated from its machine code: leaves r5 as Fighter_procCollResolve, ported from machine code, reads it.
+    (a0,).put_regs(ctx);
+    asm_lb_80019880(ctx);
+}
+
+fn asm_lb_80019880(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    // lis r5, lb_804329F0@ha
+    g[5].set(0x80430000_u32);
+    // addi r5, r5, lb_804329F0@l
+    g[5].set(g[5].get().wrapping_add(0x29f0_u32));
+    // stw r4, 0x3c(r5)
+    {
+        let ea = g[5].get().wrapping_add(0x3c_u32);
+        ctx.write_u32(ea, g[4].get());
+    }
+    // stw r3, 0x38(r5)
+    {
+        let ea = g[5].get().wrapping_add(0x38_u32);
+        ctx.write_u32(ea, g[3].get());
+    }
+    // blr
+    let to = ctx.regs.lr.get() & !3;
+    if to != lr0 & !3 {
+        c::tail_call(ctx, to);
+    }
+    return;
 }
 
 pub fn lb_80019894<'a>(ctx: &'a Ctx) -> u8 {
@@ -501,14 +529,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x80019880,
-        |ctx| {
-            let (a0,): (u64,) = Args::take_all(ctx);
-            Ret::put(lb_80019880(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x80019880, asm_lb_80019880, Returns::Nothing);
     ctx.register_port(
         0x80019894,
         |ctx| {

@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn CARDProbe<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
     let __frame = ctx.stack_frame(0x8);
@@ -101,171 +102,1343 @@ pub fn CARDProbeEx<'a>(
     return result;
 }
 
-pub fn DoMount<'a>(ctx: &'a Ctx, chan: i32) -> i32 {
-    let __frame = ctx.stack_frame(0x30);
-    let id: Val<'a, u32> = frame_at(ctx, &__frame, 0x10);
-    let status: Val<'a, u8> = frame_at(ctx, &__frame, 0xc);
-    let mut chan = chan;
-    let mut card: CARDControl<'a> = null(ctx);
-    let mut result: i32 = 0;
-    let mut sram: OSSramEx<'a> = null(ctx);
-    let mut i: i32 = 0;
-    let mut checkSum: u8 = 0;
-    let mut step: i32 = 0;
-    'goto_error: {
-        card = fns::__CARDBlock(ctx).get(chan);
-        if (card).mountStep() == 0_i32 {
-            if fns::EXIGetID(ctx, chan, (0_i32 as u32), id) == 0_i32 {
-                result = (3_i32.wrapping_neg());
-            } else if ((id.get() == 0x80000004_u32)
-                && ((fns::__CARDVendorID(ctx).get() as i32) != 0xffff_i32))
-                || ((!((id.get() & 0xffff0000_u32) != 0)) && (!((id.get() & (3_i32 as u32)) != 0)))
-            {
-                result = 0_i32;
-            } else {
-                result = (2_i32.wrapping_neg());
-            }
-            if result < 0_i32 {
-                break 'goto_error;
-            }
-            (card).set_cid((id.get() as i32));
-            (card).set_size(((id.get() & (252_i32 as u32)) as u16));
-            (card).set_sectorSize(
-                (statics::dolphin__card__CARDMount::SectorSizeTable(ctx)
-                    .at((shr_u32((id.get() & (0x3800_i32 as u32)), (11_i32 as u32)) as i32))
-                    .get() as i32),
-            );
-            (card).set_cBlock(
-                ((div_i32(
-                    (div_i32(
-                        ((card).size() as i32)
-                            .wrapping_mul(0x400_i32)
-                            .wrapping_mul(0x400_i32),
-                        8_i32,
-                    )),
-                    (card).sectorSize(),
-                )) as u16),
-            );
-            (card).set_latency(
-                (statics::dolphin__card__CARDMount::LatencyTable(ctx)
-                    .at((shr_u32((id.get() & (0x700_i32 as u32)), (8_i32 as u32)) as i32))
-                    .get() as i32),
-            );
-            if ((card).sectorSize() == 0_i32) || (((card).cBlock() as i32) < 8_i32) {
-                result = 2_i32.wrapping_neg();
-                break 'goto_error;
-            }
-            result = fns::__CARDClearStatus(ctx, chan);
-            if result < 0_i32 {
-                break 'goto_error;
-            }
-            result = fns::__CARDReadStatus(ctx, chan, status);
-            if result < 0_i32 {
-                break 'goto_error;
-            }
-            if !(fns::EXIProbe(ctx, chan) != 0) {
-                result = (3_i32.wrapping_neg());
-                break 'goto_error;
-            }
-            if !(((status.get() as i32) & 64_i32) != 0) {
-                result = fns::__CARDUnlock(ctx, chan, (card).id().at(0));
-                if result < 0_i32 {
-                    break 'goto_error;
-                }
-                checkSum = (0_i32 as u8);
-                sram = fns::__OSLockSramEx(ctx);
+pub fn DoMount<'a>(ctx: &'a Ctx, a0: i32) -> i32 {
+    // Transliterated from its machine code: leaves r8 as grDatFiles_801C6038, ported from machine code, reads it.
+    (a0,).put_regs(ctx);
+    asm_DoMount(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_DoMount(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x80356130_u32;
+    loop {
+        match pc {
+            0x80356130_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
                 {
-                    i = 0_i32;
-                    'l1: while i < 12_i32 {
-                        'c2: {
-                            (sram)
-                                .flashID()
-                                .get(chan)
-                                .at(i)
-                                .set((card).id().at(i).get());
-                            checkSum = ((checkSum as i32)
-                                .wrapping_add(((card).id().at(i).get() as i32))
-                                as u8);
-                        }
-                        i = i.wrapping_add(1);
-                    }
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
                 }
-                (sram)
-                    .flashIDCheckSum()
-                    .at(chan)
-                    .set(((!(checkSum as i32)) as u8));
-                let _ = fns::__OSUnlockSramEx(ctx, 1_i32);
-                return result;
-            } else {
-                (card).set_mountStep(1_i32);
-                checkSum = (0_i32 as u8);
-                sram = fns::__OSLockSramEx(ctx);
+                // stwu r1, -0x30(r1)
                 {
-                    i = 0_i32;
-                    'l3: while i < 12_i32 {
-                        'c4: {
-                            checkSum = ((checkSum as i32)
-                                .wrapping_add(((sram).flashID().get(chan).at(i).get() as i32))
-                                as u8);
-                        }
-                        i = i.wrapping_add(1);
-                    }
+                    let ea = g[1].get().wrapping_add(0xffffffd0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
                 }
-                let _ = fns::__OSUnlockSramEx(ctx, 0_i32);
-                if ((sram).flashIDCheckSum().at(chan).get() as i32)
-                    != (((!(checkSum as i32)) as u8) as i32)
+                // stw r31, 0x2c(r1)
                 {
-                    result = (5_i32.wrapping_neg());
-                    break 'goto_error;
+                    let ea = g[1].get().wrapping_add(0x2c_u32);
+                    ctx.write_u32(ea, g[31].get());
                 }
+                // stw r30, 0x28(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x28_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // stw r29, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    ctx.write_u32(ea, g[29].get());
+                }
+                // addi r29, r3, 0x0
+                g[29].set(g[3].get());
+                // mulli r4, r29, 0x110
+                g[4].set((g[29].get() as i32).wrapping_mul(272_i32) as u32);
+                // stw r28, 0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x20_u32);
+                    ctx.write_u32(ea, g[28].get());
+                }
+                // lis r3, __CARDBlock@ha
+                g[3].set(0x804b0000_u32);
+                // addi r0, r3, __CARDBlock@l
+                g[0].set(g[3].get().wrapping_add(0xffff8b38_u32));
+                // add r3, r0, r4
+                {
+                    let (v, ca, ov) = c::add3(g[0].get(), g[4].get(), 0);
+                    g[3].set(v);
+                    let _ = (ca, ov);
+                }
+                // lwz r0, 0x24(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x24_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r31, r3, 0x0
+                g[31].set(g[3].get());
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80356458
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80356458_u32;
+                    continue;
+                }
+                pc = 0x80356170_u32;
             }
+            0x80356170_u32 => {
+                // addi r3, r29, 0x0
+                g[3].set(g[29].get());
+                // addi r5, r1, 0x18
+                g[5].set(g[1].get().wrapping_add(0x18_u32));
+                // li r4, 0x0
+                g[4].set(0_u32);
+                // bl EXIGetID
+                c::call(ctx, 0x80346f90_u32, 0x80356180_u32);
+                pc = 0x80356180_u32;
+            }
+            0x80356180_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80356190
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80356190_u32;
+                    continue;
+                }
+                pc = 0x80356188_u32;
+            }
+            0x80356188_u32 => {
+                // li r30, -0x3
+                g[30].set(0xfffffffd_u32);
+                // b .L_803561CC
+                pc = 0x803561cc_u32;
+                continue;
+                pc = 0x80356190_u32;
+            }
+            0x80356190_u32 => {
+                // lwz r3, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // addis r0, r3, 0x8000
+                g[0].set(g[3].get().wrapping_add(0x80000000_u32));
+                // cmplwi r0, 0x4
+                {
+                    let (x, y) = (g[0].get(), 0x4_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_803561AC
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x803561ac_u32;
+                    continue;
+                }
+                pc = 0x803561a0_u32;
+            }
+            0x803561a0_u32 => {
+                // lhz r0, __CARDVendorID@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffa5c0_u32);
+                    g[0].set(u32::from(ctx.read_u16(ea)));
+                }
+                // cmplwi r0, 0xffff
+                {
+                    let (x, y) = (g[0].get(), 0xffff_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_803561C0
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x803561c0_u32;
+                    continue;
+                }
+                pc = 0x803561ac_u32;
+            }
+            0x803561ac_u32 => {
+                // lwz r3, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // clrrwi. r0, r3, 16
+                {
+                    let v = g[3].get().rotate_left(0) & 0xffff0000_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // bne .L_803561C8
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x803561c8_u32;
+                    continue;
+                }
+                pc = 0x803561b8_u32;
+            }
+            0x803561b8_u32 => {
+                // clrlwi. r0, r3, 30
+                {
+                    let v = g[3].get().rotate_left(0) & 0x3_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // bne .L_803561C8
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x803561c8_u32;
+                    continue;
+                }
+                pc = 0x803561c0_u32;
+            }
+            0x803561c0_u32 => {
+                // li r30, 0x0
+                g[30].set(0_u32);
+                // b .L_803561CC
+                pc = 0x803561cc_u32;
+                continue;
+                pc = 0x803561c8_u32;
+            }
+            0x803561c8_u32 => {
+                // li r30, -0x2
+                g[30].set(0xfffffffe_u32);
+                pc = 0x803561cc_u32;
+            }
+            0x803561cc_u32 => {
+                // cmpwi r30, 0x0
+                {
+                    let (x, y) = (g[30].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // blt .L_80356534
+                if (c::cr_bit(ctx, 0) == true) {
+                    pc = 0x80356534_u32;
+                    continue;
+                }
+                pc = 0x803561d4_u32;
+            }
+            0x803561d4_u32 => {
+                // lwz r0, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lis r4, SectorSizeTable@ha
+                g[4].set(0x80400000_u32);
+                // lis r3, LatencyTable@ha
+                g[3].set(0x80400000_u32);
+                // stw r0, 0x108(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x108_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // addi r0, r3, LatencyTable@l
+                g[0].set(g[3].get().wrapping_add(0x3180_u32));
+                // addi r4, r4, SectorSizeTable@l
+                g[4].set(g[4].get().wrapping_add(0x3160_u32));
+                // lwz r3, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // rlwinm r3, r3, 0, 24, 29
+                {
+                    let v = g[3].get().rotate_left(0) & 0xfc_u32;
+                    g[3].set(v);
+                }
+                // sth r3, 0x8(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x8_u32);
+                    ctx.write_u16(ea, g[3].get() as u16);
+                }
+                // lwz r3, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // rlwinm r3, r3, 23, 27, 29
+                {
+                    let v = g[3].get().rotate_left(23) & 0x1c_u32;
+                    g[3].set(v);
+                }
+                // add r3, r4, r3
+                {
+                    let (v, ca, ov) = c::add3(g[4].get(), g[3].get(), 0);
+                    g[3].set(v);
+                    let _ = (ca, ov);
+                }
+                // lwz r3, 0x0(r3)
+                {
+                    let ea = g[3].get();
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // stw r3, 0xc(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xc_u32);
+                    ctx.write_u32(ea, g[3].get());
+                }
+                // lhz r4, 0x8(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x8_u32);
+                    g[4].set(u32::from(ctx.read_u16(ea)));
+                }
+                // lwz r3, 0xc(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xc_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // slwi r4, r4, 20
+                {
+                    let v = g[4].get().rotate_left(20) & 0xfff00000_u32;
+                    g[4].set(v);
+                }
+                // srawi r4, r4, 3
+                {
+                    let s = g[4].get() as i32;
+                    c::set_ca(ctx, s < 0 && true && (s as u32) & 0x7_u32 != 0);
+                    let v = (s >> 3) as u32;
+                    g[4].set(v);
+                }
+                // addze r4, r4
+                {
+                    let (v, ca, ov) = c::add3(g[4].get(), 0, c::ca(ctx));
+                    g[4].set(v);
+                    c::set_ca(ctx, ca);
+                    let _ = (ca, ov);
+                }
+                // divw r3, r4, r3
+                {
+                    let (v, ov) = {
+                        let (sx, sy) = (g[4].get() as i32, g[3].get() as i32);
+                        let o = sy == 0 || (g[4].get() == 0x8000_0000 && sy == -1);
+                        (
+                            if o {
+                                if sx < 0 { u32::MAX } else { 0 }
+                            } else {
+                                (sx / sy) as u32
+                            },
+                            o,
+                        )
+                    };
+                    g[3].set(v);
+                    let _ = ov;
+                }
+                // sth r3, 0x10(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x10_u32);
+                    ctx.write_u16(ea, g[3].get() as u16);
+                }
+                // lwz r3, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // rlwinm r3, r3, 26, 27, 29
+                {
+                    let v = g[3].get().rotate_left(26) & 0x1c_u32;
+                    g[3].set(v);
+                }
+                // add r3, r0, r3
+                {
+                    let (v, ca, ov) = c::add3(g[0].get(), g[3].get(), 0);
+                    g[3].set(v);
+                    let _ = (ca, ov);
+                }
+                // lwz r0, 0x0(r3)
+                {
+                    let ea = g[3].get();
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // stw r0, 0x14(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // lwz r0, 0xc(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmpwi r0, 0x0
+                {
+                    let (x, y) = (g[0].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80356254
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80356254_u32;
+                    continue;
+                }
+                pc = 0x80356248_u32;
+            }
+            0x80356248_u32 => {
+                // lhz r0, 0x10(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x10_u32);
+                    g[0].set(u32::from(ctx.read_u16(ea)));
+                }
+                // cmplwi r0, 0x8
+                {
+                    let (x, y) = (g[0].get(), 0x8_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bge .L_8035625C
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x8035625c_u32;
+                    continue;
+                }
+                pc = 0x80356254_u32;
+            }
+            0x80356254_u32 => {
+                // li r30, -0x2
+                g[30].set(0xfffffffe_u32);
+                // b .L_80356534
+                pc = 0x80356534_u32;
+                continue;
+                pc = 0x8035625c_u32;
+            }
+            0x8035625c_u32 => {
+                // mr r3, r29
+                {
+                    let v = g[29].get() | g[29].get();
+                    g[3].set(v);
+                }
+                // bl __CARDClearStatus
+                c::call(ctx, 0x80352774_u32, 0x80356264_u32);
+                pc = 0x80356264_u32;
+            }
+            0x80356264_u32 => {
+                // mr. r30, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[30].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // blt .L_80356534
+                if (c::cr_bit(ctx, 0) == true) {
+                    pc = 0x80356534_u32;
+                    continue;
+                }
+                pc = 0x8035626c_u32;
+            }
+            0x8035626c_u32 => {
+                // addi r3, r29, 0x0
+                g[3].set(g[29].get());
+                // addi r4, r1, 0x14
+                g[4].set(g[1].get().wrapping_add(0x14_u32));
+                // bl __CARDReadStatus
+                c::call(ctx, 0x80352684_u32, 0x80356278_u32);
+                pc = 0x80356278_u32;
+            }
+            0x80356278_u32 => {
+                // mr. r30, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[30].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // blt .L_80356534
+                if (c::cr_bit(ctx, 0) == true) {
+                    pc = 0x80356534_u32;
+                    continue;
+                }
+                pc = 0x80356280_u32;
+            }
+            0x80356280_u32 => {
+                // mr r3, r29
+                {
+                    let v = g[29].get() | g[29].get();
+                    g[3].set(v);
+                }
+                // bl EXIProbe
+                c::call(ctx, 0x8034638c_u32, 0x80356288_u32);
+                pc = 0x80356288_u32;
+            }
+            0x80356288_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_80356298
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x80356298_u32;
+                    continue;
+                }
+                pc = 0x80356290_u32;
+            }
+            0x80356290_u32 => {
+                // li r30, -0x3
+                g[30].set(0xfffffffd_u32);
+                // b .L_80356534
+                pc = 0x80356534_u32;
+                continue;
+                pc = 0x80356298_u32;
+            }
+            0x80356298_u32 => {
+                // lbz r0, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // rlwinm. r0, r0, 0, 25, 25
+                {
+                    let v = g[0].get().rotate_left(0) & 0x40_u32;
+                    g[0].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // bne .L_803563B4
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x803563b4_u32;
+                    continue;
+                }
+                pc = 0x803562a4_u32;
+            }
+            0x803562a4_u32 => {
+                // addi r3, r29, 0x0
+                g[3].set(g[29].get());
+                // addi r4, r31, 0x18
+                g[4].set(g[31].get().wrapping_add(0x18_u32));
+                // bl __CARDUnlock
+                c::call(ctx, 0x80353850_u32, 0x803562b0_u32);
+                pc = 0x803562b0_u32;
+            }
+            0x803562b0_u32 => {
+                // mr. r30, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[30].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // blt .L_80356534
+                if (c::cr_bit(ctx, 0) == true) {
+                    pc = 0x80356534_u32;
+                    continue;
+                }
+                pc = 0x803562b8_u32;
+            }
+            0x803562b8_u32 => {
+                // bl __OSLockSramEx
+                c::call(ctx, 0x80348d98_u32, 0x803562bc_u32);
+                pc = 0x803562bc_u32;
+            }
+            0x803562bc_u32 => {
+                // mulli r0, r29, 0xc
+                g[0].set((g[29].get() as i32).wrapping_mul(12_i32) as u32);
+                // add r4, r3, r0
+                {
+                    let (v, ca, ov) = c::add3(g[3].get(), g[0].get(), 0);
+                    g[4].set(v);
+                    let _ = (ca, ov);
+                }
+                // lbz r0, 0x18(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x18_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // addi r5, r31, 0x18
+                g[5].set(g[31].get().wrapping_add(0x18_u32));
+                // stb r0, 0x0(r4)
+                {
+                    let ea = g[4].get();
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                // addi r8, r5, 0x2
+                g[8].set(g[5].get().wrapping_add(0x2_u32));
+                // addi r9, r5, 0x3
+                g[9].set(g[5].get().wrapping_add(0x3_u32));
+                // lbz r7, 0x18(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x18_u32);
+                    g[7].set(u32::from(ctx.read_u8(ea)));
+                }
+                // addi r10, r5, 0x4
+                g[10].set(g[5].get().wrapping_add(0x4_u32));
+                // lbz r0, 0x19(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x19_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // addi r11, r5, 0x5
+                g[11].set(g[5].get().wrapping_add(0x5_u32));
+                // addi r12, r5, 0x6
+                g[12].set(g[5].get().wrapping_add(0x6_u32));
+                // stb r0, 0x1(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x1_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                // addi r28, r5, 0x7
+                g[28].set(g[5].get().wrapping_add(0x7_u32));
+                // li r5, 0x8
+                g[5].set(0x8_u32);
+                // lbz r0, 0x19(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x19_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // lbz r6, 0x0(r8)
+                {
+                    let ea = g[8].get();
+                    g[6].set(u32::from(ctx.read_u8(ea)));
+                }
+                // add r0, r7, r0
+                {
+                    let (v, ca, ov) = c::add3(g[7].get(), g[0].get(), 0);
+                    g[0].set(v);
+                    let _ = (ca, ov);
+                }
+                // stb r6, 0x2(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x2_u32);
+                    ctx.write_u8(ea, g[6].get() as u8);
+                }
+                // lbz r7, 0x0(r8)
+                {
+                    let ea = g[8].get();
+                    g[7].set(u32::from(ctx.read_u8(ea)));
+                }
+                // lbz r6, 0x0(r9)
+                {
+                    let ea = g[9].get();
+                    g[6].set(u32::from(ctx.read_u8(ea)));
+                }
+                // add r0, r0, r7
+                {
+                    let (v, ca, ov) = c::add3(g[0].get(), g[7].get(), 0);
+                    g[0].set(v);
+                    let _ = (ca, ov);
+                }
+                // stb r6, 0x3(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x3_u32);
+                    ctx.write_u8(ea, g[6].get() as u8);
+                }
+                // lbz r7, 0x0(r9)
+                {
+                    let ea = g[9].get();
+                    g[7].set(u32::from(ctx.read_u8(ea)));
+                }
+                // lbz r6, 0x0(r10)
+                {
+                    let ea = g[10].get();
+                    g[6].set(u32::from(ctx.read_u8(ea)));
+                }
+                // add r0, r0, r7
+                {
+                    let (v, ca, ov) = c::add3(g[0].get(), g[7].get(), 0);
+                    g[0].set(v);
+                    let _ = (ca, ov);
+                }
+                // stb r6, 0x4(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x4_u32);
+                    ctx.write_u8(ea, g[6].get() as u8);
+                }
+                // lbz r7, 0x0(r10)
+                {
+                    let ea = g[10].get();
+                    g[7].set(u32::from(ctx.read_u8(ea)));
+                }
+                // lbz r6, 0x0(r11)
+                {
+                    let ea = g[11].get();
+                    g[6].set(u32::from(ctx.read_u8(ea)));
+                }
+                // add r0, r0, r7
+                {
+                    let (v, ca, ov) = c::add3(g[0].get(), g[7].get(), 0);
+                    g[0].set(v);
+                    let _ = (ca, ov);
+                }
+                // stb r6, 0x5(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x5_u32);
+                    ctx.write_u8(ea, g[6].get() as u8);
+                }
+                // lbz r7, 0x0(r11)
+                {
+                    let ea = g[11].get();
+                    g[7].set(u32::from(ctx.read_u8(ea)));
+                }
+                // lbz r6, 0x0(r12)
+                {
+                    let ea = g[12].get();
+                    g[6].set(u32::from(ctx.read_u8(ea)));
+                }
+                // add r0, r0, r7
+                {
+                    let (v, ca, ov) = c::add3(g[0].get(), g[7].get(), 0);
+                    g[0].set(v);
+                    let _ = (ca, ov);
+                }
+                // stb r6, 0x6(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x6_u32);
+                    ctx.write_u8(ea, g[6].get() as u8);
+                }
+                // lbz r7, 0x0(r12)
+                {
+                    let ea = g[12].get();
+                    g[7].set(u32::from(ctx.read_u8(ea)));
+                }
+                // lbz r6, 0x0(r28)
+                {
+                    let ea = g[28].get();
+                    g[6].set(u32::from(ctx.read_u8(ea)));
+                }
+                // add r0, r0, r7
+                {
+                    let (v, ca, ov) = c::add3(g[0].get(), g[7].get(), 0);
+                    g[0].set(v);
+                    let _ = (ca, ov);
+                }
+                // stb r6, 0x7(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x7_u32);
+                    ctx.write_u8(ea, g[6].get() as u8);
+                }
+                // lbz r6, 0x0(r28)
+                {
+                    let ea = g[28].get();
+                    g[6].set(u32::from(ctx.read_u8(ea)));
+                }
+                // add r0, r0, r6
+                {
+                    let (v, ca, ov) = c::add3(g[0].get(), g[6].get(), 0);
+                    g[0].set(v);
+                    let _ = (ca, ov);
+                }
+                // b .L_80356550
+                pc = 0x80356550_u32;
+                continue;
+                pc = 0x80356364_u32;
+            }
+            0x80356364_u32 => {
+                // subfic r4, r5, 0xc
+                {
+                    let (v, ca, _) = c::add3(!g[5].get(), 0xc_u32, 1);
+                    g[4].set(v);
+                    c::set_ca(ctx, ca);
+                }
+                // cmpwi r5, 0xc
+                {
+                    let (x, y) = (g[5].get() as i32, 12_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // mtctr r4
+                ctx.regs.set_spr(9, g[4].get());
+                // bge .L_80356398
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x80356398_u32;
+                    continue;
+                }
+                pc = 0x80356374_u32;
+            }
+            0x80356374_u32 => {
+                // addi r7, r5, 0x18
+                g[7].set(g[5].get().wrapping_add(0x18_u32));
+                // add r7, r31, r7
+                {
+                    let (v, ca, ov) = c::add3(g[31].get(), g[7].get(), 0);
+                    g[7].set(v);
+                    let _ = (ca, ov);
+                }
+                // lbz r4, 0x0(r7)
+                {
+                    let ea = g[7].get();
+                    g[4].set(u32::from(ctx.read_u8(ea)));
+                }
+                // addi r5, r5, 0x1
+                g[5].set(g[5].get().wrapping_add(0x1_u32));
+                // stb r4, 0x0(r6)
+                {
+                    let ea = g[6].get();
+                    ctx.write_u8(ea, g[4].get() as u8);
+                }
+                // addi r6, r6, 0x1
+                g[6].set(g[6].get().wrapping_add(0x1_u32));
+                // lbz r4, 0x0(r7)
+                {
+                    let ea = g[7].get();
+                    g[4].set(u32::from(ctx.read_u8(ea)));
+                }
+                // add r0, r0, r4
+                {
+                    let (v, ca, ov) = c::add3(g[0].get(), g[4].get(), 0);
+                    g[0].set(v);
+                    let _ = (ca, ov);
+                }
+                // bdnz .L_80356374
+                if c::ctr_ok(ctx, 16) {
+                    pc = 0x80356374_u32;
+                    continue;
+                }
+                pc = 0x80356398_u32;
+            }
+            0x80356398_u32 => {
+                // add r3, r3, r29
+                {
+                    let (v, ca, ov) = c::add3(g[3].get(), g[29].get(), 0);
+                    g[3].set(v);
+                    let _ = (ca, ov);
+                }
+                // nor r0, r0, r0
+                {
+                    let v = !(g[0].get() | g[0].get());
+                    g[0].set(v);
+                }
+                // stb r0, 0x26(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x26_u32);
+                    ctx.write_u8(ea, g[0].get() as u8);
+                }
+                // li r3, 0x1
+                g[3].set(0x1_u32);
+                // bl __OSUnlockSramEx
+                c::call(ctx, 0x80349120_u32, 0x803563ac_u32);
+                pc = 0x803563ac_u32;
+            }
+            0x803563ac_u32 => {
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // b .L_80356560
+                pc = 0x80356560_u32;
+                continue;
+                pc = 0x803563b4_u32;
+            }
+            0x803563b4_u32 => {
+                // li r0, 0x1
+                g[0].set(0x1_u32);
+                // stw r0, 0x24(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x24_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // bl __OSLockSramEx
+                c::call(ctx, 0x80348d98_u32, 0x803563c0_u32);
+                pc = 0x803563c0_u32;
+            }
+            0x803563c0_u32 => {
+                // mulli r0, r29, 0xc
+                g[0].set((g[29].get() as i32).wrapping_mul(12_i32) as u32);
+                // addi r30, r3, 0x0
+                g[30].set(g[3].get());
+                // add r5, r30, r0
+                {
+                    let (v, ca, ov) = c::add3(g[30].get(), g[0].get(), 0);
+                    g[5].set(v);
+                    let _ = (ca, ov);
+                }
+                // lbz r4, 0x0(r5)
+                {
+                    let ea = g[5].get();
+                    g[4].set(u32::from(ctx.read_u8(ea)));
+                }
+                // li r6, 0x8
+                g[6].set(0x8_u32);
+                // lbz r0, 0x1(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x1_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // lbz r3, 0x2(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x2_u32);
+                    g[3].set(u32::from(ctx.read_u8(ea)));
+                }
+                // add r28, r4, r0
+                {
+                    let (v, ca, ov) = c::add3(g[4].get(), g[0].get(), 0);
+                    g[28].set(v);
+                    let _ = (ca, ov);
+                }
+                // lbz r0, 0x3(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x3_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // add r28, r28, r3
+                {
+                    let (v, ca, ov) = c::add3(g[28].get(), g[3].get(), 0);
+                    g[28].set(v);
+                    let _ = (ca, ov);
+                }
+                // lbz r3, 0x4(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x4_u32);
+                    g[3].set(u32::from(ctx.read_u8(ea)));
+                }
+                // add r28, r28, r0
+                {
+                    let (v, ca, ov) = c::add3(g[28].get(), g[0].get(), 0);
+                    g[28].set(v);
+                    let _ = (ca, ov);
+                }
+                // lbz r0, 0x5(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x5_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // add r28, r28, r3
+                {
+                    let (v, ca, ov) = c::add3(g[28].get(), g[3].get(), 0);
+                    g[28].set(v);
+                    let _ = (ca, ov);
+                }
+                // lbz r3, 0x6(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x6_u32);
+                    g[3].set(u32::from(ctx.read_u8(ea)));
+                }
+                // add r28, r28, r0
+                {
+                    let (v, ca, ov) = c::add3(g[28].get(), g[0].get(), 0);
+                    g[28].set(v);
+                    let _ = (ca, ov);
+                }
+                // lbz r0, 0x7(r5)
+                {
+                    let ea = g[5].get().wrapping_add(0x7_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // add r28, r28, r3
+                {
+                    let (v, ca, ov) = c::add3(g[28].get(), g[3].get(), 0);
+                    g[28].set(v);
+                    let _ = (ca, ov);
+                }
+                // add r28, r28, r0
+                {
+                    let (v, ca, ov) = c::add3(g[28].get(), g[0].get(), 0);
+                    g[28].set(v);
+                    let _ = (ca, ov);
+                }
+                // b .L_80356558
+                pc = 0x80356558_u32;
+                continue;
+                pc = 0x80356410_u32;
+            }
+            0x80356410_u32 => {
+                // subfic r0, r6, 0xc
+                {
+                    let (v, ca, _) = c::add3(!g[6].get(), 0xc_u32, 1);
+                    g[0].set(v);
+                    c::set_ca(ctx, ca);
+                }
+                // cmpwi r6, 0xc
+                {
+                    let (x, y) = (g[6].get() as i32, 12_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // mtctr r0
+                ctx.regs.set_spr(9, g[0].get());
+                // bge .L_80356430
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x80356430_u32;
+                    continue;
+                }
+                pc = 0x80356420_u32;
+            }
+            0x80356420_u32 => {
+                // lbz r0, 0x0(r3)
+                {
+                    let ea = g[3].get();
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                }
+                // addi r3, r3, 0x1
+                g[3].set(g[3].get().wrapping_add(0x1_u32));
+                // add r28, r28, r0
+                {
+                    let (v, ca, ov) = c::add3(g[28].get(), g[0].get(), 0);
+                    g[28].set(v);
+                    let _ = (ca, ov);
+                }
+                // bdnz .L_80356420
+                if c::ctr_ok(ctx, 16) {
+                    pc = 0x80356420_u32;
+                    continue;
+                }
+                pc = 0x80356430_u32;
+            }
+            0x80356430_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // bl __OSUnlockSramEx
+                c::call(ctx, 0x80349120_u32, 0x80356438_u32);
+                pc = 0x80356438_u32;
+            }
+            0x80356438_u32 => {
+                // add r3, r30, r29
+                {
+                    let (v, ca, ov) = c::add3(g[30].get(), g[29].get(), 0);
+                    g[3].set(v);
+                    let _ = (ca, ov);
+                }
+                // nor r0, r28, r28
+                {
+                    let v = !(g[28].get() | g[28].get());
+                    g[0].set(v);
+                }
+                // lbz r3, 0x26(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x26_u32);
+                    g[3].set(u32::from(ctx.read_u8(ea)));
+                }
+                // clrlwi r0, r0, 24
+                {
+                    let v = g[0].get().rotate_left(0) & 0xff_u32;
+                    g[0].set(v);
+                }
+                // cmplw r3, r0
+                {
+                    let (x, y) = (g[3].get(), g[0].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_80356458
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x80356458_u32;
+                    continue;
+                }
+                pc = 0x80356450_u32;
+            }
+            0x80356450_u32 => {
+                // li r30, -0x5
+                g[30].set(0xfffffffb_u32);
+                // b .L_80356534
+                pc = 0x80356534_u32;
+                continue;
+                pc = 0x80356458_u32;
+            }
+            0x80356458_u32 => {
+                // lwz r0, 0x24(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x24_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmpwi r0, 0x1
+                {
+                    let (x, y) = (g[0].get() as i32, 1_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_803564E8
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x803564e8_u32;
+                    continue;
+                }
+                pc = 0x80356464_u32;
+            }
+            0x80356464_u32 => {
+                // lwz r3, 0x108(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x108_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // addis r0, r3, 0x8000
+                g[0].set(g[3].get().wrapping_add(0x80000000_u32));
+                // cmplwi r0, 0x4
+                {
+                    let (x, y) = (g[0].get(), 0x4_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_803564A4
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x803564a4_u32;
+                    continue;
+                }
+                pc = 0x80356474_u32;
+            }
+            0x80356474_u32 => {
+                // bl __OSLockSramEx
+                c::call(ctx, 0x80348d98_u32, 0x80356478_u32);
+                pc = 0x80356478_u32;
+            }
+            0x80356478_u32 => {
+                // mulli r0, r29, 0xc
+                g[0].set((g[29].get() as i32).wrapping_mul(12_i32) as u32);
+                // lhzx r28, r3, r0
+                g[28].set(u32::from(ctx.read_u16(g[3].get().wrapping_add(g[0].get()))));
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // bl __OSUnlockSramEx
+                c::call(ctx, 0x80349120_u32, 0x80356488_u32);
+                pc = 0x80356488_u32;
+            }
+            0x80356488_u32 => {
+                // lhz r0, __CARDVendorID@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffa5c0_u32);
+                    g[0].set(u32::from(ctx.read_u16(ea)));
+                }
+                // cmplwi r0, 0xffff
+                {
+                    let (x, y) = (g[0].get(), 0xffff_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_8035649C
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x8035649c_u32;
+                    continue;
+                }
+                pc = 0x80356494_u32;
+            }
+            0x80356494_u32 => {
+                // cmplw r28, r0
+                {
+                    let (x, y) = (g[28].get(), g[0].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_803564A4
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x803564a4_u32;
+                    continue;
+                }
+                pc = 0x8035649c_u32;
+            }
+            0x8035649c_u32 => {
+                // li r30, -0x2
+                g[30].set(0xfffffffe_u32);
+                // b .L_80356534
+                pc = 0x80356534_u32;
+                continue;
+                pc = 0x803564a4_u32;
+            }
+            0x803564a4_u32 => {
+                // li r0, 0x2
+                g[0].set(0x2_u32);
+                // stw r0, 0x24(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x24_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // addi r3, r29, 0x0
+                g[3].set(g[29].get());
+                // li r4, 0x1
+                g[4].set(0x1_u32);
+                // bl __CARDEnableInterrupt
+                c::call(ctx, 0x803525c4_u32, 0x803564b8_u32);
+                pc = 0x803564b8_u32;
+            }
+            0x803564b8_u32 => {
+                // mr. r30, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[30].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // blt .L_80356534
+                if (c::cr_bit(ctx, 0) == true) {
+                    pc = 0x80356534_u32;
+                    continue;
+                }
+                pc = 0x803564c0_u32;
+            }
+            0x803564c0_u32 => {
+                // lis r3, __CARDExiHandler@ha
+                g[3].set(0x80350000_u32);
+                // addi r4, r3, __CARDExiHandler@l
+                g[4].set(g[3].get().wrapping_add(0x2380_u32));
+                // addi r3, r29, 0x0
+                g[3].set(g[29].get());
+                // bl EXISetExiCallback
+                c::call(ctx, 0x8034619c_u32, 0x803564d0_u32);
+                pc = 0x803564d0_u32;
+            }
+            0x803564d0_u32 => {
+                // mr r3, r29
+                {
+                    let v = g[29].get() | g[29].get();
+                    g[3].set(v);
+                }
+                // bl EXIUnlock
+                c::call(ctx, 0x80346e74_u32, 0x803564d8_u32);
+                pc = 0x803564d8_u32;
+            }
+            0x803564d8_u32 => {
+                // lis r4, 0x1
+                g[4].set(0x10000_u32);
+                // lwz r3, 0x80(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x80_u32);
+                    g[3].set(ctx.read_u32(ea));
+                }
+                // subi r4, r4, 0x6000
+                g[4].set(g[4].get().wrapping_add(0xffffa000_u32));
+                // bl DCInvalidateRange
+                c::call(ctx, 0x803447dc_u32, 0x803564e8_u32);
+                pc = 0x803564e8_u32;
+            }
+            0x803564e8_u32 => {
+                // lwz r4, 0x24(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x24_u32);
+                    g[4].set(ctx.read_u32(ea));
+                }
+                // lis r3, __CARDMountCallback@ha
+                g[3].set(0x80350000_u32);
+                // lwz r0, 0xc(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r7, r3, __CARDMountCallback@l
+                g[7].set(g[3].get().wrapping_add(0x6580_u32));
+                // subi r3, r4, 0x2
+                g[3].set(g[4].get().wrapping_add(0xfffffffe_u32));
+                // mullw r4, r0, r3
+                {
+                    let (v, ov) = {
+                        let p = i64::from(g[0].get() as i32) * i64::from(g[3].get() as i32);
+                        (p as u32, p != i64::from(p as i32))
+                    };
+                    g[4].set(v);
+                    let _ = ov;
+                }
+                // lwz r5, 0x80(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0x80_u32);
+                    g[5].set(ctx.read_u32(ea));
+                }
+                // slwi r0, r3, 13
+                {
+                    let v = g[3].get().rotate_left(13) & 0xffffe000_u32;
+                    g[0].set(v);
+                }
+                // add r6, r5, r0
+                {
+                    let (v, ca, ov) = c::add3(g[5].get(), g[0].get(), 0);
+                    g[6].set(v);
+                    let _ = (ca, ov);
+                }
+                // addi r3, r29, 0x0
+                g[3].set(g[29].get());
+                // li r5, 0x2000
+                g[5].set(0x2000_u32);
+                // bl __CARDRead
+                c::call(ctx, 0x803547fc_u32, 0x80356518_u32);
+                pc = 0x80356518_u32;
+            }
+            0x80356518_u32 => {
+                // mr. r28, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[28].set(v);
+                    c::update_cr0(ctx, v);
+                }
+                // bge .L_8035652C
+                if (c::cr_bit(ctx, 0) == false) {
+                    pc = 0x8035652c_u32;
+                    continue;
+                }
+                pc = 0x80356520_u32;
+            }
+            0x80356520_u32 => {
+                // addi r3, r31, 0x0
+                g[3].set(g[31].get());
+                // addi r4, r28, 0x0
+                g[4].set(g[28].get());
+                // bl __CARDPutControlBlock
+                c::call(ctx, 0x80353270_u32, 0x8035652c_u32);
+                pc = 0x8035652c_u32;
+            }
+            0x8035652c_u32 => {
+                // mr r3, r28
+                {
+                    let v = g[28].get() | g[28].get();
+                    g[3].set(v);
+                }
+                // b .L_80356560
+                pc = 0x80356560_u32;
+                continue;
+                pc = 0x80356534_u32;
+            }
+            0x80356534_u32 => {
+                // mr r3, r29
+                {
+                    let v = g[29].get() | g[29].get();
+                    g[3].set(v);
+                }
+                // bl EXIUnlock
+                c::call(ctx, 0x80346e74_u32, 0x8035653c_u32);
+                pc = 0x8035653c_u32;
+            }
+            0x8035653c_u32 => {
+                // addi r3, r29, 0x0
+                g[3].set(g[29].get());
+                // addi r4, r30, 0x0
+                g[4].set(g[30].get());
+                // bl DoUnmount
+                c::call(ctx, 0x80356828_u32, 0x80356548_u32);
+                pc = 0x80356548_u32;
+            }
+            0x80356548_u32 => {
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // b .L_80356560
+                pc = 0x80356560_u32;
+                continue;
+                pc = 0x80356550_u32;
+            }
+            0x80356550_u32 => {
+                // addi r6, r4, 0x8
+                g[6].set(g[4].get().wrapping_add(0x8_u32));
+                // b .L_80356364
+                pc = 0x80356364_u32;
+                continue;
+                pc = 0x80356558_u32;
+            }
+            0x80356558_u32 => {
+                // addi r3, r5, 0x8
+                g[3].set(g[5].get().wrapping_add(0x8_u32));
+                // b .L_80356410
+                pc = 0x80356410_u32;
+                continue;
+                pc = 0x80356560_u32;
+            }
+            0x80356560_u32 => {
+                // lwz r0, 0x34(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x34_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x2c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x2c_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x28(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x28_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // lwz r29, 0x24(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x24_u32);
+                    g[29].set(ctx.read_u32(ea));
+                }
+                // lwz r28, 0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x20_u32);
+                    g[28].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x30
+                g[1].set(g[1].get().wrapping_add(0x30_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of DoMount");
+            }
+            _ => unreachable!("DoMount: no block at {pc:#010x}"),
         }
-        if (card).mountStep() == 1_i32 {
-            if ((card).cid() as u32) == 0x80000004_u32 {
-                let mut vendorID: u16 = 0;
-                sram = fns::__OSLockSramEx(ctx);
-                vendorID = (Handle::cast::<Val<'a, u16>>((sram).flashID().get(chan).at(0))).get();
-                let _ = fns::__OSUnlockSramEx(ctx, 0_i32);
-                if ((fns::__CARDVendorID(ctx).get() as i32) == 0xffff_i32)
-                    || ((vendorID as i32) != (fns::__CARDVendorID(ctx).get() as i32))
-                {
-                    result = (2_i32.wrapping_neg());
-                    break 'goto_error;
-                }
-            }
-            (card).set_mountStep(2_i32);
-            result = fns::__CARDEnableInterrupt(ctx, chan, 1_i32);
-            if result < 0_i32 {
-                break 'goto_error;
-            }
-            let _ = fns::EXISetExiCallback(ctx, chan, fnptr(ctx, 0x80352380));
-            let _ = fns::EXIUnlock(ctx, chan);
-            fns::DCInvalidateRange(
-                ctx,
-                (card).workArea(),
-                ((5_i32.wrapping_mul(8_i32).wrapping_mul(0x400_i32)) as u32),
-            );
-        }
-        step = (card).mountStep().wrapping_sub(2_i32);
-        result = fns::__CARDRead(
-            ctx,
-            chan,
-            ((card).sectorSize() as u32).wrapping_mul((step as u32)),
-            (((8_i32 as u32).wrapping_mul(0x400_u32)) as i32),
-            Handle::cast::<Addr<'a>>(Handle::add(
-                Handle::cast::<Val<'a, u8>>((card).workArea()),
-                ((((8_i32 as u32).wrapping_mul(0x400_u32)).wrapping_mul((step as u32))) as i32),
-            )),
-            fnptr(ctx, 0x80356580),
-        );
-        if result < 0_i32 {
-            let _ = fns::__CARDPutControlBlock(ctx, card, result);
-        }
-        return result;
     }
-    let _ = fns::EXIUnlock(ctx, chan);
-    statics::dolphin__card__CARDMount::DoUnmount(ctx, chan, result);
-    return result;
 }
 
 pub fn __CARDMountCallback<'a>(ctx: &'a Ctx, chan: i32, result: i32) {
@@ -445,14 +1618,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x80356130,
-        |ctx| {
-            let (a0,): (i32,) = Args::take_all(ctx);
-            Ret::put(DoMount(ctx, a0), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x80356130, asm_DoMount, Returns::Int);
     ctx.register_port(
         0x80356580,
         |ctx| {

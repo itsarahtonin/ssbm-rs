@@ -856,23 +856,94 @@ pub fn ftKb_Init_UnkMotionStates5<'a>(ctx: &'a Ctx) {
     fns::Player_80031DC8(ctx, fnptr(ctx, 0x800eed50));
 }
 
-pub fn ftKb_SpecialN_800EEEC4<'a>(ctx: &'a Ctx, gobj: HSD_GObj<'a>, kind: i32) {
-    let __frame = ctx.stack_frame(0x8);
-    let mut gobj = gobj;
-    let mut kind = kind;
-    let mut cb: FnPtr<'a> = null(ctx);
-    if !Handle::is_null(
-        ({
-            let __t1 = fns::ftKb_Init_803C9CC8(ctx)
-                .at(kind
-                    .wrapping_mul(((2_i32 as u32) as i32))
-                    .wrapping_add(((1_i32 as u32) as i32)))
-                .get();
-            cb = __t1;
-            __t1
-        }),
-    ) {
-        cb.call::<_, ()>((gobj,));
+pub fn ftKb_SpecialN_800EEEC4<'a>(ctx: &'a Ctx, a0: HSD_GObj<'a>, a1: i32) {
+    // Transliterated from its machine code: leaves r5 as Fighter_procCollResolve, ported from machine code, reads it.
+    (a0, a1).put_regs(ctx);
+    asm_ftKb_SpecialN_800EEEC4(ctx);
+}
+
+fn asm_ftKb_SpecialN_800EEEC4(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x800eeec4_u32;
+    loop {
+        match pc {
+            0x800eeec4_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // lis r5, ftKb_Init_803C9CC8@ha
+                g[5].set(0x803d0000_u32);
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // addi r5, r5, ftKb_Init_803C9CC8@l
+                g[5].set(g[5].get().wrapping_add(0xffff9cc8_u32));
+                // slwi r0, r4, 3
+                {
+                    let v = g[4].get().rotate_left(3) & 0xfffffff8_u32;
+                    g[0].set(v);
+                }
+                // stwu r1, -0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // add r4, r5, r0
+                {
+                    let (v, ca, ov) = c::add3(g[5].get(), g[0].get(), 0);
+                    g[4].set(v);
+                    let _ = (ca, ov);
+                }
+                // lwz r12, 0x4(r4)
+                {
+                    let ea = g[4].get().wrapping_add(0x4_u32);
+                    g[12].set(ctx.read_u32(ea));
+                }
+                // cmplwi r12, 0x0
+                {
+                    let (x, y) = (g[12].get(), 0x0_u32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_800EEEF4
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x800eeef4_u32;
+                    continue;
+                }
+                pc = 0x800eeeec_u32;
+            }
+            0x800eeeec_u32 => {
+                // mtlr r12
+                ctx.regs.set_spr(8, g[12].get());
+                // blrl
+                c::call(ctx, ctx.regs.lr.get() & !3, 0x800eeef4_u32);
+                pc = 0x800eeef4_u32;
+            }
+            0x800eeef4_u32 => {
+                // lwz r0, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x8
+                g[1].set(g[1].get().wrapping_add(0x8_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of ftKb_SpecialN_800EEEC4");
+            }
+            _ => unreachable!("ftKb_SpecialN_800EEEC4: no block at {pc:#010x}"),
+        }
     }
 }
 
@@ -3574,14 +3645,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x800eeec4,
-        |ctx| {
-            let (a0, a1): (HSD_GObj<'_>, i32) = Args::take_all(ctx);
-            Ret::put(ftKb_SpecialN_800EEEC4(ctx, a0, a1), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x800eeec4, asm_ftKb_SpecialN_800EEEC4, Returns::Nothing);
     ctx.register_port(
         0x800eef04,
         |ctx| {

@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn __AXGetNumVoices<'a>(ctx: &'a Ctx) -> u32 {
     return statics::dolphin__ax__AXVPB::__AXNumVoices(ctx).get();
@@ -1345,23 +1346,207 @@ pub fn AXSetVoiceSrc<'a>(ctx: &'a Ctx, p: _AXVPB<'a>, src_: _AXPBSRC<'a>) {
     let _ = fns::OSRestoreInterrupts(ctx, old);
 }
 
-pub fn AXSetVoiceSrcRatio<'a>(ctx: &'a Ctx, p: _AXVPB<'a>, ratio: f64) {
-    let __frame = ctx.stack_frame(0x28);
-    let mut p = p;
-    let mut ratio = ratio;
-    let mut r: u32 = 0;
-    let mut old: i32 = 0;
-    old = fns::OSDisableInterrupts(ctx);
-    r = fns::__cvt_fp2unsigned(ctx, fp::fmuls(65536.0, ratio));
-    if r > (0x40000_i32 as u32) {
-        r = (0x40000_i32 as u32);
+pub fn AXSetVoiceSrcRatio<'a>(ctx: &'a Ctx, a0: _AXVPB<'a>, a1: f64) {
+    // Transliterated from its machine code: leaves f1 as Toy_8031263C, ported from machine code, reads it.
+    (a0, Single(a1)).put_regs(ctx);
+    asm_AXSetVoiceSrcRatio(ctx);
+}
+
+fn asm_AXSetVoiceSrcRatio(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8035b574_u32;
+    loop {
+        match pc {
+            0x8035b574_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x28(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffd8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stfd f31, 0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x20_u32);
+                    ctx.write_u64(ea, ctx.regs.f(31).to_bits());
+                }
+                // fmr f31, f1
+                {
+                    let v = ctx.regs.f(1);
+                    ctx.regs.set_f(31, v);
+                }
+                // stw r31, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // stw r29, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[29].get());
+                }
+                // mr r29, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[29].set(v);
+                }
+                // bl OSDisableInterrupts
+                c::call(ctx, 0x80347364_u32, 0x8035b59c_u32);
+                pc = 0x8035b59c_u32;
+            }
+            0x8035b59c_u32 => {
+                // lfs f0, "@234"@sda21(r0)
+                {
+                    let ea = g[2].get().wrapping_add(0xffffe978_u32);
+                    c::fill(ctx, 0, fp::lfs(ctx.read_u32(ea)));
+                }
+                // mr r30, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[30].set(v);
+                }
+                // fmuls f31, f0, f31
+                {
+                    let v = fp::fmuls(ctx.regs.f(0), ctx.regs.f(31));
+                    c::fill(ctx, 31, v);
+                }
+                // fmr f1, f31
+                {
+                    let v = ctx.regs.f(31);
+                    ctx.regs.set_f(1, v);
+                }
+                // bl __cvt_fp2unsigned
+                c::call(ctx, 0x803228c0_u32, 0x8035b5b0_u32);
+                pc = 0x8035b5b0_u32;
+            }
+            0x8035b5b0_u32 => {
+                // fmr f1, f31
+                {
+                    let v = ctx.regs.f(31);
+                    ctx.regs.set_f(1, v);
+                }
+                // mr r31, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[31].set(v);
+                }
+                // bl __cvt_fp2unsigned
+                c::call(ctx, 0x803228c0_u32, 0x8035b5bc_u32);
+                pc = 0x8035b5bc_u32;
+            }
+            0x8035b5bc_u32 => {
+                // lis r0, 0x4
+                g[0].set(0x40000_u32);
+                // cmplw r3, r0
+                {
+                    let (x, y) = (g[3].get(), g[0].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // ble .L_8035B5CC
+                if (c::cr_bit(ctx, 1) == false) {
+                    pc = 0x8035b5cc_u32;
+                    continue;
+                }
+                pc = 0x8035b5c8_u32;
+            }
+            0x8035b5c8_u32 => {
+                // lis r31, 0x4
+                g[31].set(0x40000_u32);
+                pc = 0x8035b5cc_u32;
+            }
+            0x8035b5cc_u32 => {
+                // srwi r0, r31, 16
+                {
+                    let v = g[31].get().rotate_left(16) & 0xffff_u32;
+                    g[0].set(v);
+                }
+                // sth r0, 0x1de(r29)
+                {
+                    let ea = g[29].get().wrapping_add(0x1de_u32);
+                    ctx.write_u16(ea, g[0].get() as u16);
+                }
+                // mr r3, r30
+                {
+                    let v = g[30].get() | g[30].get();
+                    g[3].set(v);
+                }
+                // sth r31, 0x1e0(r29)
+                {
+                    let ea = g[29].get().wrapping_add(0x1e0_u32);
+                    ctx.write_u16(ea, g[31].get() as u16);
+                }
+                // lwz r0, 0x1c(r29)
+                {
+                    let ea = g[29].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // oris r0, r0, 0x8
+                g[0].set(g[0].get() | 0x80000_u32);
+                // stw r0, 0x1c(r29)
+                {
+                    let ea = g[29].get().wrapping_add(0x1c_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // bl OSRestoreInterrupts
+                c::call(ctx, 0x8034738c_u32, 0x8035b5ec_u32);
+                pc = 0x8035b5ec_u32;
+            }
+            0x8035b5ec_u32 => {
+                // lwz r0, 0x2c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x2c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lfd f31, 0x20(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x20_u32);
+                    ctx.regs.set_f(31, f64::from_bits(ctx.read_u64(ea)));
+                }
+                // lwz r31, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // lwz r30, 0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x18_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // lwz r29, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[29].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x28
+                g[1].set(g[1].get().wrapping_add(0x28_u32));
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of AXSetVoiceSrcRatio");
+            }
+            _ => unreachable!("AXSetVoiceSrcRatio: no block at {pc:#010x}"),
+        }
     }
-    (p).pb()
-        .src()
-        .set_ratioHi(((shr_u32(r, (16_i32 as u32))) as u16));
-    (p).pb().src().set_ratioLo(((r) as u16));
-    (p).set_sync(((p).sync() | ((shl_i32(1_i32, (19_i32 as u32))) as u32)));
-    let _ = fns::OSRestoreInterrupts(ctx, old);
 }
 
 pub fn AXSetVoiceAdpcmLoop<'a>(ctx: &'a Ctx, p: _AXVPB<'a>, adpcmloop: _AXPBADPCMLOOP<'a>) {
@@ -1605,14 +1790,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x8035b574,
-        |ctx| {
-            let (a0, a1): (_AXVPB<'_>, Single) = Args::take_all(ctx);
-            Ret::put(AXSetVoiceSrcRatio(ctx, a0, a1.0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8035b574, asm_AXSetVoiceSrcRatio, Returns::Nothing);
     ctx.register_port(
         0x8035b60c,
         |ctx| {

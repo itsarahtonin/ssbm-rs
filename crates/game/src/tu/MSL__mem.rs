@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn memmove<'a>(ctx: &'a Ctx, dst: Addr<'a>, src: Addr<'a>, len: u32) -> Addr<'a> {
     let __frame = ctx.stack_frame(0x20);
@@ -99,31 +100,87 @@ pub fn memmove<'a>(ctx: &'a Ctx, dst: Addr<'a>, src: Addr<'a>, len: u32) -> Addr
     return dst;
 }
 
-pub fn memchr<'a>(ctx: &'a Ctx, str: Addr<'a>, c: i32, len: u32) -> Addr<'a> {
-    let mut str = str;
-    let mut c = c;
-    let mut len = len;
-    let mut val: u8 = (c as u8);
-    let mut p: Val<'a, u8> = Handle::add((Handle::cast::<Val<'a, u8>>(str)), 1_i32.wrapping_neg());
-    len = len.wrapping_add(1);
-    'l1: while {
-        len = len.wrapping_sub(1);
-        len
-    } > (0_i32 as u32)
-    {
-        'c2: {
-            if (({
-                p = Handle::add(p, 1);
-                p
-            })
-            .get() as i32)
-                == (val as i32)
-            {
-                return Handle::cast::<Addr<'a>>(p);
+pub fn memchr<'a>(ctx: &'a Ctx, a0: Addr<'a>, a1: i32, a2: u32) -> Addr<'a> {
+    // Transliterated from its machine code: leaves r5 as Fighter_procCollResolve, ported from machine code, reads it.
+    (a0, a1, a2).put_regs(ctx);
+    asm_memchr(ctx);
+    Ret::get(ctx)
+}
+
+fn asm_memchr(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8032390c_u32;
+    loop {
+        match pc {
+            0x8032390c_u32 => {
+                // clrlwi r4, r4, 24
+                {
+                    let v = g[4].get().rotate_left(0) & 0xff_u32;
+                    g[4].set(v);
+                }
+                // subi r3, r3, 0x1
+                g[3].set(g[3].get().wrapping_add(0xffffffff_u32));
+                // addi r5, r5, 0x1
+                g[5].set(g[5].get().wrapping_add(0x1_u32));
+                // b .L_80323928
+                pc = 0x80323928_u32;
+                continue;
+                pc = 0x8032391c_u32;
             }
+            0x8032391c_u32 => {
+                // lbzu r0, 0x1(r3)
+                {
+                    let ea = g[3].get().wrapping_add(0x1_u32);
+                    g[0].set(u32::from(ctx.read_u8(ea)));
+                    g[3].set(ea);
+                }
+                // cmplw r0, r4
+                {
+                    let (x, y) = (g[0].get(), g[4].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beqlr
+                if (c::cr_bit(ctx, 2) == true) {
+                    let to = ctx.regs.lr.get() & !3;
+                    if to != lr0 & !3 {
+                        c::tail_call(ctx, to);
+                    }
+                    return;
+                }
+                pc = 0x80323928_u32;
+            }
+            0x80323928_u32 => {
+                // subic. r5, r5, 0x1
+                {
+                    let (v, ca, _) = c::add3(g[5].get(), 0xffffffff_u32, 0);
+                    g[5].set(v);
+                    c::set_ca(ctx, ca);
+                    c::update_cr0(ctx, v);
+                }
+                // bne .L_8032391C
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x8032391c_u32;
+                    continue;
+                }
+                pc = 0x80323930_u32;
+            }
+            0x80323930_u32 => {
+                // li r3, 0x0
+                g[3].set(0_u32);
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of memchr");
+            }
+            _ => unreachable!("memchr: no block at {pc:#010x}"),
         }
     }
-    return null::<Addr<'a>>(ctx);
 }
 
 pub fn memcmp<'a>(ctx: &'a Ctx, str1: Addr<'a>, str2: Addr<'a>, len: u32) -> i32 {
@@ -175,14 +232,7 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Int,
     );
-    ctx.register_port(
-        0x8032390c,
-        |ctx| {
-            let (a0, a1, a2): (Addr<'_>, i32, u32) = Args::take_all(ctx);
-            Ret::put(memchr(ctx, a0, a1, a2), ctx);
-        },
-        Returns::Int,
-    );
+    ctx.register_port(0x8032390c, asm_memchr, Returns::Int);
     ctx.register_port(
         0x803238c8,
         |ctx| {
