@@ -44,6 +44,8 @@ Raw captures, cards, and replay corpora stay outside Git because they can contai
 
 The initial 40-replay smoke set matched the same recording comparisons as original-code runs. Twelve replays have documented entry-frame or off-screen-flag differences in local known-divergence lists. This is not evidence that a large rotating corpus or every Slippi code set has passed.
 
+Some online replays recorded with Slippi 3.16 can't be reproduced from the file, by ssbm-rs or by Slippi Dolphin with its resync turned off. That version's UCF code snaps a C-stick held near a cardinal to exactly 1.0 using the raw C-stick bytes, after the recorder has saved the frame's inputs, and 3.16 replays don't record those bytes (3.17 does). The difference first shows at the end of hitlag, where smash DI moves 3 times the C-stick and playback comes out 0.0375 short. In a sample of 61 online replays, 20 of the 51 recorded with 3.16 diverged this way.
+
 ## Player limitations
 
 The reference disc is Melee US NTSC 1.02, GALE01 revision 2. Other revisions and modded builds are unsupported. Replay patches outside translated code sets can retain original execution; supported playback must be established per code set.
