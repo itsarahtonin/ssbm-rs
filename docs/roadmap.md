@@ -1,6 +1,6 @@
 # Roadmap
 
-This repository's goal is a faithful, verifiable Melee port and a durable record of how it was built. Its idiomatic Rust follow-on, melee-hd, lives in a separate repository and uses this one as its reference.
+This repository's goal is a faithful, verifiable Melee port and a durable record of how it was built. Its follow-on, melee-hd, lives in a separate repository.
 
 ## Current development
 
@@ -36,4 +36,4 @@ Reusable libraries may eventually move to their own repositories. [Component ass
 
 ## Separate modern Rust project
 
-The follow-on project, melee-hd, started in October 2026. It is a new repository, not a fork, and is not public yet. Rather than replacing this port's storage and object systems piece by piece, as earlier plans had it, melee-hd rewrites the game from scratch in idiomatic Rust. It reuses some of this repository's crates as dependencies, and it checks its simulation against this port tick by tick, comparing the whole game state over recorded and Slippi replays. Its aim is a bit-exact simulation of the whole game, with Vanilla and Slippi rulesets and, later, netplay. Gameplay stays identical by default, and any intentional change is made explicit.
+The follow-on project, melee-hd, started in October 2026 in a separate repository, which is not public yet.
