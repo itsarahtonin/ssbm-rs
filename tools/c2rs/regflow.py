@@ -59,6 +59,8 @@ KEEPS_REGISTERS = {"OSSaveContext", "__OSSaveFPUContext", "__setjmp", "OSDefault
 NORETURN = {"__assert", "OSPanic", "HSD_Panic", "OSResetSystem", "PPCHalt", "gm_801A4510"}
 # Where a return reads, for `flows`.
 RETURN = ("return", 0)
+# What a call (not a tail call) writes besides registers, so its effect never writes nothing.
+CALL = ("call", 0)
 # Callers a seed's dependence may pass through before the seed is left be.
 FOLLOWED = 10
 # Functions whose unset reads stay with them: their callers would pass the dependence up
@@ -195,6 +197,96 @@ class Program:
             for _, mnem, ops in insns:
                 if mnem in ("bl", "b") and ops and ops[0] in self.funcs and ops[0] != name:
                     self.callers.setdefault(ops[0], set()).add(name)
+        # What each callee writes, from `writes`. With `exact`, a call clears only the
+        # registers its callee writes on every way back, so a value that passes through it is
+        # followed on; without, as while they are computed, every volatile register.
+        self.every = self.some = None
+        self.exact = False
+        # The registers code ported from machine code reads from its callers, by function, as
+        # `callers_to_port` found them: what calls to them read beyond their parameters.
+        self.unset = {}
+
+    def writes(self):
+        """Computes `some` and `every`: the volatile registers each function's code (or its
+        callees') writes on some way back to its caller, and those it writes on every way
+        back. Ways that end in a call that never returns don't count."""
+        if self.every is not None or self.some is not None:
+            return
+        names = [n for n in self.funcs if n not in KEEPS_REGISTERS]
+        raw = {n: self.blocks(n, {}, {RETURN}) for n in names}
+        top = frozenset(VOLATILE)
+        some = {n: set() for n in names}
+        every = {n: set(top) for n in names}
+
+        def written(callee, w, table):
+            if callee is None:
+                return set(w) & top
+            return set(table.get(callee, top))
+
+        changed = True
+        while changed:
+            changed = False
+            for n in names:
+                blocks = raw[n]
+                # Whether a block's start leads back to the caller.
+                back = [False] * len(blocks)
+                again = True
+                while again:
+                    again = False
+                    for j, (effects, succ) in enumerate(blocks):
+                        ok = any(back[t] for t in succ)
+                        for callee, _, r in reversed(effects):
+                            if callee in NORETURN:
+                                ok = False
+                            elif RETURN in r:
+                                ok = True
+                        if ok and not back[j]:
+                            back[j] = again = True
+                s = set()
+                for effects, succ in blocks:
+                    ok = any(back[t] for t in succ)
+                    for callee, w, r in reversed(effects):
+                        if callee in NORETURN:
+                            ok = False
+                            continue
+                        if RETURN in r:
+                            ok = True
+                        if ok:
+                            s |= written(callee, w, some)
+                s &= top
+                # Every way back: what each way has surely written, met where ways join.
+                into = [None] * len(blocks)
+                if blocks:
+                    into[0] = set()
+                out_sets, ret = [None] * len(blocks), None
+                again = True
+                while again:
+                    again = False
+                    for j, (effects, succ) in enumerate(blocks):
+                        if into[j] is None:
+                            continue
+                        cur = set(into[j])
+                        for callee, w, r in effects:
+                            if callee in NORETURN:
+                                cur = None
+                                break
+                            cur |= written(callee, w, every)
+                            if RETURN in r:
+                                ret = set(cur) if ret is None else ret & cur
+                        if cur is None or cur == out_sets[j]:
+                            continue
+                        out_sets[j] = cur
+                        for t in succ:
+                            new = set(cur) if into[t] is None else into[t] & cur
+                            if new != into[t]:
+                                into[t] = new
+                                again = True
+                e = (ret if ret is not None else set(top)) & top
+                if s != some[n] or e != every[n]:
+                    some[n] |= s
+                    every[n] = e & every[n]
+                    changed = True
+        self.some, self.every, self.exact = some, every, True
 
     def params(self, name):
         args, rets = arg_regs(self.types.get(name))
@@ -216,6 +308,7 @@ class Program:
         its parameters, given what each callee reads beyond its own (`extra`)."""
         if name in KEEPS_REGISTERS:
             return set()
+        self.writes()
         live, _ = self.liveness(name, extra)
         return live - self.params(name)[0] - FIXED
 
@@ -260,7 +353,8 @@ class Program:
                         put((callee, set(), reads | rets))
                         falls = False
                         break
-                    put((callee, set(VOLATILE), reads))
+                    put((callee, set(self.every.get(callee, VOLATILE) if self.exact
+                                     else VOLATILE) | {CALL}, reads))
                     continue
                 if m == "bl":
                     put((None, set(VOLATILE), set()))  # code without a listing
@@ -301,6 +395,7 @@ class Program:
     def effects_at(self, name):
         """{address: (callee or None, registers written, registers read)} of `name`'s
         instructions, as `blocks` gives them."""
+        self.writes()
         at = {}
         self.blocks(name, {}, self.params(name)[1], at)
         return at
@@ -309,6 +404,7 @@ class Program:
         """(registers live at `name`'s entry, [(callee, registers live once it returns)]),
         given what each callee reads beyond its parameters (`extra`) and what `name`'s callers
         read once it returns (`rets`, by default what its C returns)."""
+        self.writes()
         if rets is None:
             rets = self.params(name)[1]
         blocks = self.blocks(name, extra, rets)
@@ -339,14 +435,15 @@ class Program:
 
     def leftovers(self, name, returned=frozenset()):
         """[(callee, registers)]: the calls in `name` after which its code reads registers the
-        callee's C doesn't return, which the callee's code left."""
+        callee's C doesn't return, which the callee's code may have left: read by `name`'s own
+        instructions or by a callee of it that takes them from its caller (`unset`)."""
         if name in KEEPS_REGISTERS or name not in self.funcs:
             return []
         # A function without a known type, such as an inline one's copy, returns nothing more.
         rets = (self.params(name)[1] if name in self.types else set()) | returned
         out = []
-        for callee, live in self.liveness(name, {}, rets)[1]:
-            left = (live & VOLATILE) - self.params(callee)[1]
+        for callee, live in self.liveness(name, self.unset, rets)[1]:
+            left = (live & self.some.get(callee, VOLATILE)) - self.params(callee)[1]
             if left and callee not in NORETURN:
                 out.append((callee, left))
         return out
@@ -355,6 +452,7 @@ class Program:
         """(the registers of `regs` that `name`'s own code sets on some way to a return that
         keeps them there, [(callee, registers)] whose values reach a return as the callee left
         them)."""
+        self.writes()
         blocks = self.blocks(name, {}, {RETURN})
 
         def back(effects, live, own=None, calls=None):
@@ -365,8 +463,10 @@ class Program:
                         calls.append((callee, regs & VOLATILE))
                     live = set()
                 elif callee is not None:
-                    if calls is not None and live & VOLATILE:
-                        calls.append((callee, live & VOLATILE))
+                    left = live & self.some.get(callee, VOLATILE)
+                    if calls is not None and left:
+                        calls.append((callee, left))
+                    # What the callee may leave as it found it is live before the call.
                     live = live - w
                 elif RETURN in r:
                     live = live | regs
@@ -428,17 +528,26 @@ class Program:
         for seed in sorted(set(seeds)):
             if seed not in self.funcs or seed in IGNORED:
                 continue
-            found, passing = self.follow([seed])
+            found, passing, extra = self.follow([seed])
             if passing > FOLLOWED:
-                left.append(seed)
-                continue
+                # Followed through the callees that leave registers as they found them, the
+                # dependence goes further: follow it as if every call set them, as far as that
+                # takes it, rather than not at all.
+                self.exact = False
+                found, passing, extra = self.follow([seed])
+                self.exact = True
+                if passing > FOLLOWED:
+                    left.append(seed)
+                    continue
             for c, f in found.items():
                 port.setdefault(c, f)
+            for c, r in extra.items():
+                self.unset[c] = self.unset.get(c, set()) | r
         return {c: f for c, f in port.items() if c not in seeds}, left
 
     def follow(self, seeds):
-        """({caller: callee}, how many pass it on) for the callers the dependence of `seeds`
-        carries to."""
+        """({caller: callee}, how many pass it on, {function: registers its callers pass it
+        without parameters}) for the callers the dependence of `seeds` carries to."""
         extra = {f: r for f in seeds for r in [self.reads(f, {})] if r}
         own, port = {}, {}
         passing = set()
@@ -456,7 +565,7 @@ class Program:
                     extra[c] = r
                     passing.add(c)
                     work.append(c)
-        return port, len(passing)
+        return port, len(passing), extra
 
 
 def fmt(regs):
