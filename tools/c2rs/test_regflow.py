@@ -80,6 +80,18 @@ class Regflow(unittest.TestCase):
         self.assertEqual(set(callers), {"middle"})
         self.assertEqual(set(prog.callees_to_port({"reader", "middle"})), {"always"})
 
+    def test_follows_leftovers_through_callees_already_ported(self):
+        prog = self.program({
+            "reader": self.READER,
+            "setter": ["li r5, 0x1", "blr"],
+            # Ported from machine code for some other reason, and leaves setter's r5.
+            "ported": ["bl setter", "blr"],
+            "middle": ["bl ported", "bl reader", "blr"],
+        })
+        callers, _ = prog.callers_to_port(["reader"])
+        self.assertEqual(set(prog.callees_to_port({"reader", "ported"} | set(callers))),
+                         {"setter"})
+
     def test_writes_before_a_failed_assertion_leave_nothing(self):
         prog = self.program({
             "reader": self.READER,

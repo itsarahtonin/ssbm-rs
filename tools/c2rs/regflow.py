@@ -501,16 +501,19 @@ class Program:
         work = [(callee, regs, f) for f in sorted(set(ported)) for callee, regs in self.leftovers(f)]
         while work:
             callee, regs, reader = work.pop()
-            if callee in ported or callee in NORETURN or callee not in self.funcs:
+            if callee in NORETURN or callee not in self.funcs:
                 continue
-            # What its C returns, a port of it returns there too.
-            regs = regs - self.params(callee)[1]
+            if callee not in ported:
+                # What its C returns, a port of it returns there too.
+                regs = regs - self.params(callee)[1]
             known = seen.get(callee, set())
             if regs <= known:
                 continue
             seen[callee] = known | regs
+            # One ported from machine code already leaves its own writes there, but what it
+            # leaves as a callee of its own did still comes from that callee.
             own, calls = self.flows(callee, seen[callee])
-            if own:
+            if own and callee not in ported:
                 first, before = port.get(callee, (reader, set()))
                 port[callee] = (first, before | own)
             work.extend((c, r, reader) for c, r in calls)
