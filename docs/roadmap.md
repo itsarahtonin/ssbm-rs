@@ -4,7 +4,7 @@ This repository's goal is a faithful, verifiable Melee port and a durable record
 
 ## Current development
 
-The game functions have Rust implementations, the smoke replay set has been exercised with the ports, and a windowed player with rendering, audio, and controllers exists. Work is focused on verification coverage and closing or explaining remaining differences. Dated evidence and its limits are in [verification](verification.md).
+Active development paused in October 2026. The game functions have Rust implementations, the smoke replay set has been exercised with the ports, and a windowed player with rendering, audio, and controllers exists. The lockstep campaigns ended after round f12 and played sessions, with 94.0% of countable blocks verified, 3.2% explained by the gap ledger and 2.8% open. The open blocks are reachable code that no run has reached yet, mostly in features that need scenarios of their own. The repository stays useful as a reference: its runtime plays Slippi replays (the 3.14 to 3.17 and 3.19 recordings tried play to their end) and records state traces that other implementations can be compared with. Dated evidence and its limits are in [verification](verification.md).
 
 The translation pipeline produces the bulk of the port. Earlier plans for assigning individual C files to manual porting tasks have been superseded by generator fixes, directed verification, and reviewed manual implementations.
 
