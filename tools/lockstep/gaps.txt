@@ -3270,3 +3270,86 @@ ftCo_80097630+0x4c dead # the sfx_ids[2] arm of `t >= x1F0 ? [0] : t >= x1F4 ? [
 ftCo_800976A4+0x120 dead # the inlined ftCo_80097630's sfx_ids[2] arm: `t >= x1F4` repeated after it failed (ftCo_DownBound.c:56)
 ftCo_800976A4+0x1d4 dead # the second inlined ftCo_80097630's common_sfx_ids[2] arm: `t >= x1F4` repeated after it failed (ftCo_DownBound.c:56)
 ftCo_80097AF4+0x100 dead # `if (x2226_b1) b = !b` (ftCo_DownBound.c:179): ftCo_80097AF4 runs only when is_sandbag (inlineA1, ftCo_DownBound.c:215), which only ftSb_Init_OnLoad sets (ftsandbag.s 8014FA08; the only other store to 0x2228 bit 26 clears it), while x2226_b1 is set only by the Bowser, Giga Bowser and Yoshi OnLoads (the only other store, Fighter_UnkInitLoad at 80068DF0, clears it before OnLoad)
+
+# The open blocks' triage (2026-10-13): debug-level code, the panic path, and the printf features no format string in the game uses. The format strings are every printf spec in the DOL's data sections (all flags, widths, precisions, lengths and conversions): no + or space or # flag, no * width or precision, no h, hh or L length, no n conversion, no precision or length on s or c, and ll only in OSError's two time base strings.
+onEnterApproach+0x50 dev # gm_Mode_Debug_States (GM_DEBUG, gmdebugmode.c:78) is the only reference; GM_DEBUG and the other debug modes are set only by onExitTitle (gmopeningmode.c:283) and gmtitlemode's onExit (gmtitlemode.c:42), both under DbLevel >= DbLKind_DebugRom, and by the debug sound test (if_3004); a retail disc boots at DbLKind_Master, as /develop.ini is absent (gmMain_8015FDA4, gmmain.c:63-102)
+onEnterApproach+0x5c dev # as +0x50
+onEnterApproach+0x68 dev # as +0x50
+onEnterApproach+0x74 dev # as +0x50
+onEnterApproach+0x80 dev # as +0x50
+onEnterApproach+0x8c dev # as +0x50
+onEnterApproach+0x98 dev # as +0x50
+onEnterApproach+0xa4 dev # as +0x50
+onEnterApproach+0xb0 dev # as +0x50
+onEnterApproach+0xbc dev # as +0x50
+onEnterApproach+0xc8 dev # as +0x50
+fn_8030110C+0x80 dev # the debug menus (if_2FFC, if_3004): callers.py lists only gmdebugmode's onEnterPrize, onEnterVs, onEnterIntroEasy and onEnterIntroAllstar referring into them, which only the debug modes run (see onEnterApproach+*)
+un_80301964+0x44 dev # a debug menu entry's callback in if_3004's tables; as fn_8030110C+*
+un_80301964+0x50 dev # as +0x44
+un_80301964+0x58 dev # as +0x44
+un_80301964+0x68 dev # as +0x44
+un_80301964+0x74 dev # as +0x44
+un_80301964+0x78 dev # as +0x44
+un_80301A64+0x40 dev # a debug menu entry's callback in if_3004's tables; as fn_8030110C+*
+un_80301A64+0x4c dev # as +0x40
+un_80301A64+0x54 dev # as +0x40
+un_80301AD4+0x44 dev # a debug menu entry's callback in if_3004's tables; as fn_8030110C+*
+un_80301AD4+0x50 dev # as +0x44
+un_80301AD4+0x58 dev # as +0x44
+fn_80228E54+0xfc dev # the debug bonus display: called only by itself and fn_CheckBonusInfo, which only db_RunEveryFrame calls, and that returns at once unless DbLevel >= DbLKind_DebugRom (dbinit.c:169); a retail disc boots at DbLKind_Master (see onEnterApproach+*)
+fn_80228E54+0x108 dev # as +0xfc
+fn_80228E54+0x118 dev # as +0xfc
+fn_UpdateItemAndPokemonMenu+0xec dev # called only by fn_CheckItemAndPokemonMenu, which only db_RunEveryFrame calls; as fn_80228E54+*
+fn_UpdateSoundInfo+0x13c dev # called only by fn_CheckSoundInfo, which only db_RunEveryFrame calls; as fn_80228E54+*
+HSD_Panic+* fail # HSD_Panic runs only once the game has failed: its callers are __assert (debug.c:42) and 28 panic arms for unexpected types, exhausted memory and missing objects (aobj, bytecode, cobj, displayfunc, dobj, fog, initialize, jobj, lobj, pobj, robj, texp, tobj, video, ftmetal); it ends in OSPanic, which the SDK layer stands in for
+__pformatter+0x1a4 hw # %d with ll (long_long_argument): the only ll specs in the DOL are OSError's local "TB = 0x%016llx" (@39) and "Last interrupt (%d): SRR0 = 0x%08x  TB = 0x%016llx" (@47), which only OSError's code prints, through OSReport, which the SDK layer stands in for (gaps.txt OSReport+*); and those are x, not d
+__pformatter+0x1e8 dead # %d with hh (char_argument): no format string in the DOL has an h or hh length (a scan of every printf spec in the DOL's data sections)
+__pformatter+0x1f8 hw # %d with ll calls longlong2str; as +0x1a4
+__pformatter+0x214 hw # after longlong2str for %d with ll; as +0x1a4
+__pformatter+0x260 hw # %x/%u/%o with ll: as +0x1a4 (OSError's two ll strings, printed only through OSReport, which is stood in)
+__pformatter+0x294 dead # %x/%u/%o with h (short_argument); as +0x1e8
+__pformatter+0x2a4 dead # %x/%u/%o with hh (char_argument); as +0x1e8
+__pformatter+0x2b4 hw # %x with ll calls longlong2str; as +0x260
+__pformatter+0x2d0 hw # after longlong2str for %x with ll; as +0x260
+__pformatter+0x324 dead # %ls (wchar_argument): no %ls or %lc in the DOL (the only l spec is "Data %lx"); a scan of every printf spec in the DOL's data sections
+__pformatter+0x33c dead # the %ls path; as +0x324
+__pformatter+0x340 dead # the %ls path; as +0x324
+__pformatter+0x354 dead # the %ls path; as +0x324
+__pformatter+0x384 dead # %#s (alternate_form, a Pascal string): no format string in the DOL has a # flag (nor + or space)
+__pformatter+0x398 dead # %#s with a precision; as +0x384
+__pformatter+0x3a4 dead # %#s with a precision; as +0x384
+__pformatter+0x3b8 dead # %s with a precision (memchr): no %.Ns or %.*s in the DOL; a scan of every printf spec in the DOL's data sections
+__pformatter+0x3d4 dead # %s with a precision; as +0x3b8
+__pformatter+0x414 dead # %n: no format string in the DOL has an n conversion (the one %n match, at 803F02C5, is inside a table of pointers, not a string)
+__pformatter+0x418 dead # %n; as +0x414
+__pformatter+0x420 dead # %n; as +0x414
+__pformatter+0x424 dead # %n; as +0x414
+__pformatter+0x430 dead # %hn; as +0x414
+__pformatter+0x43c dead # %ln; as +0x414
+__pformatter+0x444 dead # %lln; as +0x414
+longlong2str+0xc0 hw # its only callers are __pformatter's ll arms (+0x1f8, +0x2b4), which only OSError's two ll strings reach, through OSReport, which the SDK layer stands in for (see __pformatter+0x1a4)
+longlong2str+0x158 hw # as +0xc0
+longlong2str+0x1c8 hw # as +0xc0
+longlong2str+0x1d8 hw # as +0xc0
+longlong2str+0x1e4 hw # as +0xc0
+longlong2str+0x1f0 hw # as +0xc0
+longlong2str+0x208 hw # as +0xc0
+longlong2str+0x214 hw # as +0xc0
+longlong2str+0x244 hw # as +0xc0
+longlong2str+0x270 hw # as +0xc0
+longlong2str+0x27c hw # as +0xc0
+longlong2str+0x294 hw # as +0xc0
+longlong2str+0x2ac hw # as +0xc0
+longlong2str+0x2c0 hw # as +0xc0
+parse_format+0x210 dead # a negative field width from *: no format string in the DOL has a * width or precision
+parse_format+0x29c dead # hh: no format string in the DOL has an h or hh length
+parse_format+0x2c0 hw # ll: only OSError's two strings have it, printed only through OSReport, which the SDK layer stands in for (see __pformatter+0x1a4)
+parse_format+0x378 dead # %f with h or ll: the DOL's f specs are %f, %3.2f, %2.3f, %2.2f, %03.2f and %.1f, none with a length
+parse_format+0x3cc dead # %e/%g with h, ll or hh: no e, E, g or G spec in the DOL has a length
+parse_format+0x420 dead # %lc: no c spec in the DOL has a length (%c only)
+parse_format+0x440 dead # %c with a precision or a length other than l: the DOL's c specs are %c and %8c
+parse_format+0x458 dead # %ls; as __pformatter+0x324
+parse_format+0x46c dead # %s with a length: the DOL's s specs are all plain %s
+parse_format+0x484 dead # %Ln: no n conversion in the DOL; as __pformatter+0x414
+float2str+0x330 dead # an exponent-form result longer than 509 needs a precision above 504; the DOL's e/f/g specs have precisions of at most 6 (the default), plus 4 or 5 exponent characters
+float2str+0x454 dead # a fixed-form result longer than 509 needs a precision of about 200: a double's integer part has at most 309 digits, and the DOL's f specs have precisions of at most 6
