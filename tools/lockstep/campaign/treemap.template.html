@@ -218,7 +218,7 @@ function header() {
   bar("coverage-bar", [["ok", done], ...(showLedger ? [["explained", explained]] : [])], blocksAll);
   const summary = document.getElementById("ledger-summary");
   summary.setAttribute("aria-hidden", String(!showLedger));
-  summary.textContent = `${fmt(explained)} additional blocks explained · ${pct(done + explained, blocksAll)} accounted for · ${fmt(blocksAll - done - explained)} unaccounted. Explained is not verified; mismatches remain unresolved independently.`;
+  summary.textContent = `${fmt(explained)} additional blocks explained · ${pct(done + explained, blocksAll)} accounted for · ${fmt(blocksAll - done - explained)} unaccounted. Explained is not verified; mismatches remain unresolved independently. Unaccounted blocks are code runs could reach but have not; docs/verification.md sorts them.`;
   document.getElementById("legend").innerHTML = [["ok", "100% verified"], ["low-hi", "partially verified (color follows measured percentage)"], ["never", "no verified/countable blocks"], ...(showLedger ? [["explained", "striped fraction: ledger explanation"]] : []), ["review", "to review"], ["bad", "mismatch"]].map(([k, l]) => `<span><i style="background:var(--${k})"></i>${l}</span>`).join("");
 }
 

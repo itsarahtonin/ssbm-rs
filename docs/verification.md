@@ -4,7 +4,23 @@ ssbm-rs measures function behavior, replay state, GPU output, and audio separate
 
 ## Recorded coverage
 
-The latest local campaign report, after round f12, a rerun of its probes and played sessions, on October 10, 2026, records 153,619 of 163,387 countable blocks verified by runs (94.0%), with another 5,075 explained by the gap ledger. No ledger line covers a block runs have verified: round f12's mutated checks reached 42 that lines called unreachable, and those lines were dropped. These are campaign measurements, not a fresh result from building this checkout.
+The latest local campaign report, after round f12, a rerun of its probes and played sessions, on October 10, 2026, records 153,619 of 163,387 countable blocks verified by runs (94.0%), with another 5,157 explained by the gap ledger (3.2%), leaving 4,611 open (2.8%). No ledger line covers a block runs have verified: round f12's mutated checks reached 42 that lines called unreachable, and those lines were dropped. These are campaign measurements, not a fresh result from building this checkout.
+
+### The open blocks
+
+The gap ledger takes only code no run can reach: dead branches, developer-only code, code that runs once the game has failed, and code for hardware the SDK layer leaves out. A block that unusual state could reach stays open, even when no real game reaches it. A triage of the open blocks on October 13, 2026 moved what qualified into the ledger: the debug modes' and debug menus' code, which runs only at a debug level a retail disc never sets; `HSD_Panic`; and the printf features that no format string in the game uses. That added 82 blocks.
+
+The rest are reachable code that no run has reached yet. `tools/lockstep/triage.py` sorts them by what stands in the way:
+
+| Kind | Blocks | What reaching them takes |
+| --- | ---: | --- |
+| Directed | 2,916 | A value at a branch next to verified code that a directed mutated check could set |
+| Deep | 1,354 | Reaching an open block before them first |
+| Untraced | 296 | A compare whose value can't be traced back to a mutation target |
+| Switch | 21 | An untaken case of a switch next to verified code |
+| Uncalled | 24 | Marth's Dancing Blade, which no run played |
+
+By area they are 859 blocks in fighters, 829 in game modes and scenes, 685 in HAL's library, 497 in stages, 454 in menus, 422 in items, 199 in trophies, 107 in effects, 313 in other game code, 202 in Nintendo's SDK and 44 in the C and runtime libraries. They are spread thin: 1,515 functions have open blocks, 1,089 of them only one or two. The largest groups are features no run plays far: the snapshot album (`mnsnap`, 111), trophy collection (`toy`, 128), event matches (`gmevent`, 79), the memory card scene (`gmscmemcard`, 67) and Big Blue (`grbigblue`, 83), along with the memory card library's error paths (`sysdolphin/baselib/card`, 147). Each takes a scenario of its own for tens of blocks, so the campaigns stopped here.
 
 The report has no mismatch with real inputs. The last one, in `OSResumeThread`, came from a match the game never sets up: a Crazy Hand without Master Hand, which failed one of the game's own assertions, so the check met the assertion's crash path. The original code alone also fails that match. The runner no longer draws such line-ups, and that job's results (`nighthands13`) are quarantined. Every mismatch from changed inputs is reviewed in `tools/lockstep/reviewed.txt`: twelve functions, all from inputs the game cannot produce. None awaits review. `fn_8017D9C0`'s two mismatches, once reviewed as the two sides seeing different state, came from the probe harness passing arguments past r10 in registers, which overwrote r13 for three probed functions; probes now pass them on the stack, and those functions' earlier probe results no longer count.
 
