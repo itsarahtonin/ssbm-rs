@@ -12,6 +12,8 @@ mod copy;
 mod copy_tests;
 mod encode;
 mod thread;
+#[cfg(test)]
+mod vertex_tests;
 mod xfb;
 
 pub use thread::Threaded;
@@ -261,16 +263,18 @@ fn hash_bytes(bytes: &[u8]) -> u64 {
     h ^ (h >> 33)
 }
 
-/// Dolphin's rounding of a float to an integer: truncation, then up from a half or more.
-fn iround(x: f32) -> i32 {
-    let t = x as i32;
-    if x - t as f32 >= 0.5 { t + 1 } else { t }
+/// Dolphin's rounding of a float to an integer: truncation, then up from a half or more. In
+/// floats, as an `i32` saturates at 2^31 sixteenths of a pixel (134 million pixels), and a
+/// vertex just behind the eye lies farther out: saturated, it moved in clip space.
+fn iround(x: f32) -> f32 {
+    let t = x.trunc();
+    if x - t >= 0.5 { t + 1.0 } else { t }
 }
 
 /// A position in the EFB, snapped to the rasterizer's sixteenths and moved so the GPU's pixel
 /// centers sample where the GameCube's rasterizer does (9/16 into a pixel, as Dolphin's has it).
 fn snap(v: f32) -> f32 {
-    (iround(16.0 * v) - 1) as f32 / 16.0
+    (iround(16.0 * v) - 1.0) / 16.0
 }
 
 fn compare_function(func: u32) -> wgpu::CompareFunction {
@@ -820,10 +824,19 @@ impl Renderer {
         )
     }
 
-    fn gpu_vertex(o: &Output, screen: [f32; 3], off: (f32, f32)) -> GpuVertex {
+    /// A vertex at `screen` in the EFB (the screen position of `o`, or a line's or point's
+    /// corner beside it), back in clip space for the GPU to clip as the GameCube does.
+    fn gpu_vertex(o: &Output, screen: [f32; 3], off: (f32, f32), vp: &Viewport) -> GpuVertex {
         let w = o.clip[3];
-        let x = snap(screen[0] - off.0) / (EFB_WIDTH as f32 / 2.0) - 1.0;
-        let y = 1.0 - snap(screen[1] - off.1) / (EFB_HEIGHT as f32 / 2.0);
+        let (hw, hh) = (EFB_WIDTH as f32 / 2.0, EFB_HEIGHT as f32 / 2.0);
+        let x = snap(screen[0] - off.0) / hw - 1.0;
+        let y = 1.0 - snap(screen[1] - off.1) / hh;
+        // In the eye's plane (w = 0) it has no screen position, only a direction.
+        let (x, y) = if x.is_finite() && y.is_finite() {
+            (x * w, y * w)
+        } else {
+            (o.clip[0] * vp.wd / hw, -o.clip[1] * vp.ht / hh)
+        };
         let c = |c: [u8; 4]| {
             [
                 f32::from(c[0]),
@@ -833,7 +846,7 @@ impl Renderer {
             ]
         };
         GpuVertex {
-            pos: [x * w, y * w, o.clip[2] + w, w],
+            pos: [x, y, o.clip[2] + w, w],
             c0: c(o.color[0]),
             c1: c(o.color[1]),
             tex: o.tex,
@@ -981,11 +994,17 @@ impl Renderer {
             return;
         }
         let first = self.vertices.len() as u32;
+        // At the depth the shader writes for it, the clear's own. On NVIDIA (Vulkan and D3D12)
+        // with the GPU frames behind, a clear sometimes landed at its rasterized depth instead
+        // of the one its shader wrote (seen in melee-hd's renderer); at 0.5 that left the depth
+        // buffer nearer than the whole scene, and the next frame drew only what doesn't test
+        // depth.
+        let z = mode[2] as f32 / 16_777_216.0;
         let corner = |px: u32, py: u32| {
             let nx = px as f32 / (EFB_WIDTH as f32 / 2.0) - 1.0;
             let ny = 1.0 - py as f32 / (EFB_HEIGHT as f32 / 2.0);
             GpuVertex {
-                pos: [nx, ny, 0.5, 1.0],
+                pos: [nx, ny, z, 1.0],
                 ..GpuVertex::zeroed()
             }
         };
@@ -1423,7 +1442,8 @@ impl Renderer {
             };
             if !culled {
                 for i in [a, b, c] {
-                    r.vertices.push(Self::gpu_vertex(&outs[i], screens[i], off));
+                    r.vertices
+                        .push(Self::gpu_vertex(&outs[i], screens[i], off, &vp));
                 }
             }
         };
@@ -1468,12 +1488,12 @@ impl Renderer {
                     (1..n).map(|i| (i - 1, i)).collect()
                 };
                 for (a, b) in pairs {
-                    self.line(state, &outs[a], screens[a], &outs[b], screens[b], off);
+                    self.line(state, &outs[a], screens[a], &outs[b], screens[b]);
                 }
             }
             _ => {
                 for i in 0..n {
-                    self.point(state, &outs[i], screens[i], off);
+                    self.point(state, &outs[i], screens[i]);
                 }
             }
         }
@@ -1713,15 +1733,9 @@ fn alpha_passes(at: u32, a: u32) -> bool {
 
 impl Renderer {
     /// A line: a quad its width wide, its caps vertical or horizontal by its slope.
-    fn line(
-        &mut self,
-        state: &State,
-        a: &Output,
-        sa: [f32; 3],
-        b: &Output,
-        sb: [f32; 3],
-        off: (f32, f32),
-    ) {
+    fn line(&mut self, state: &State, a: &Output, sa: [f32; 3], b: &Output, sb: [f32; 3]) {
+        let vp = Viewport::of(&state.xf);
+        let (_, off) = Self::scissor(state, &vp);
         let half = bits(state.bp[0x22], 0, 8) as f32 / 12.0;
         let (dx, dy) = (sb[0] - sa[0], sb[1] - sa[1]);
         let (px, py) = if dx.abs() > dy.abs() {
@@ -1734,6 +1748,7 @@ impl Renderer {
                 o,
                 [s[0] + sign * px * half, s[1] + sign * py * half, s[2]],
                 off,
+                &vp,
             )
         };
         if bits(state.bp[0x22], 16, 3) != 0 {
@@ -1749,9 +1764,11 @@ impl Renderer {
     }
 
     /// A point: a square its size wide.
-    fn point(&mut self, state: &State, o: &Output, s: [f32; 3], off: (f32, f32)) {
+    fn point(&mut self, state: &State, o: &Output, s: [f32; 3]) {
+        let vp = Viewport::of(&state.xf);
+        let (_, off) = Self::scissor(state, &vp);
         let r = bits(state.bp[0x22], 8, 8) as f32 / 12.0;
-        let at = |x: f32, y: f32| Self::gpu_vertex(o, [s[0] + x * r, s[1] + y * r, s[2]], off);
+        let at = |x: f32, y: f32| Self::gpu_vertex(o, [s[0] + x * r, s[1] + y * r, s[2]], off, &vp);
         if bits(state.bp[0x22], 19, 3) != 0 {
             self.note("point texture offsets");
         }
