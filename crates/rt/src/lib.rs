@@ -58,6 +58,22 @@ impl Drop for InvokeDepth<'_> {
     }
 }
 
+/// A call from a port whose original return address isn't known, while it runs.
+pub(crate) struct UnknownLr<'a>(&'a Ctx);
+
+impl<'a> UnknownLr<'a> {
+    pub(crate) fn enter(ctx: &'a Ctx, callee: u32, sp: u32) -> Self {
+        ctx.unknown_lr.borrow_mut().push((callee, sp));
+        Self(ctx)
+    }
+}
+
+impl Drop for UnknownLr<'_> {
+    fn drop(&mut self) {
+        self.0.unknown_lr.borrow_mut().pop();
+    }
+}
+
 /// The interpreter's record of the original calls it is in, to see each keep the calling
 /// convention, and the first function seen breaking it.
 #[derive(Default)]
@@ -158,6 +174,14 @@ pub struct Ctx {
     backend: OnceCell<Box<dyn Backend>>,
     mmio: OnceCell<Box<dyn Mmio>>,
     names: OnceCell<Box<dyn Fn(u32) -> Option<String>>>,
+    /// Each function's `[start, end)` in the original code, usually from the decomp's symbols.
+    bounds: OnceCell<Box<dyn Fn(u32) -> Option<(u32, u32)>>>,
+    /// Per port and callee: the return address of the original's only `bl` from one to the
+    /// other, if it has exactly one.
+    call_sites: RefCell<FxHashMap<(u32, u32), Option<u32>>>,
+    /// Calls from ports whose original return address isn't known, as (callee, r1), innermost
+    /// last: their callees save no LR.
+    unknown_lr: RefCell<Vec<(u32, u32)>>,
     hooks: RefCell<FxHashMap<u32, Hook>>,
     /// When the hooks set with `set_hook_unless` do nothing.
     hook_skips: RefCell<FxHashMap<u32, HookSkip>>,
@@ -256,6 +280,11 @@ pub const TB_READ_STEP: u64 = 16;
 pub const FLAG_NATIVE: u8 = 1;
 /// The word has a hook.
 pub const FLAG_HOOK: u8 = 2;
+/// The function starting at the word has had its prologue read for `FLAG_SAVES_LR`.
+const FLAG_LR_READ: u8 = 4;
+/// The function starting at the word saves LR in its caller's frame, at 4 above the r1 it
+/// was called with.
+const FLAG_SAVES_LR: u8 = 8;
 
 impl Default for Ctx {
     fn default() -> Self {
@@ -272,6 +301,9 @@ impl Ctx {
             backend: OnceCell::new(),
             mmio: OnceCell::new(),
             names: OnceCell::new(),
+            bounds: OnceCell::new(),
+            call_sites: RefCell::default(),
+            unknown_lr: RefCell::default(),
             hooks: RefCell::default(),
             hook_skips: RefCell::default(),
             flags: vec![Cell::new(0); (MEM1_SIZE / 4) as usize].into_boxed_slice(),
@@ -723,6 +755,12 @@ impl Ctx {
         let _ = self.names.set(names);
     }
 
+    /// Gives each function's `[start, end)` in the original code, which lets ports save return
+    /// addresses where the original's prologues do (`call_site`).
+    pub fn set_function_bounds(&self, bounds: Box<dyn Fn(u32) -> Option<(u32, u32)>>) {
+        let _ = self.bounds.set(bounds);
+    }
+
     pub fn name_of(&self, addr: u32) -> String {
         self.names
             .get()
@@ -1105,11 +1143,78 @@ impl Ctx {
         if self.flags_at(addr) & FLAG_HOOK != 0 {
             self.run_hook(addr);
         }
+        self.save_lr(addr);
         self.natives.borrow_mut().push(addr);
         let original = self.running_original.replace(false);
         native(self);
         self.running_original.set(original);
         self.natives.borrow_mut().pop();
+    }
+
+    /// Saves LR in the caller's frame where the original's prologue of the port at `addr`
+    /// does (`mflr r0` and `stw r0, 4` above the r1 it was called with): code that later reads
+    /// that stack without writing it, such as the CPU AI's island end, gets the console's word.
+    /// Not when a port called it from no `bl` of the original's that this call is known to be.
+    fn save_lr(&self, addr: u32) {
+        let mut flags = self.flags_at(addr);
+        if flags & FLAG_LR_READ == 0 {
+            self.set_flag(addr, FLAG_LR_READ, true);
+            self.set_flag(addr, FLAG_SAVES_LR, self.prologue_saves_lr(addr));
+            flags = self.flags_at(addr);
+        }
+        if flags & FLAG_SAVES_LR == 0 {
+            return;
+        }
+        let sp = self.regs.r(1);
+        if self.unknown_lr.borrow().last() == Some(&(addr, sp)) {
+            return;
+        }
+        self.write_u32(sp.wrapping_add(4), self.regs.lr.get());
+    }
+
+    /// Whether the original code at `addr` saves LR at 4 above the r1 it starts with, before
+    /// its first branch, as MWCC's prologues do.
+    fn prologue_saves_lr(&self, addr: u32) -> bool {
+        let mut lr_in_r0 = false;
+        let mut frame: i32 = 0;
+        for i in 0..16 {
+            let Ok(w) = self.mem.read_u32(addr.wrapping_add(4 * i)) else {
+                return false;
+            };
+            let d = i32::from(w as u16 as i16);
+            match w {
+                0x7C08_02A6 => lr_in_r0 = true,
+                _ if w >> 16 == 0x9421 => frame = -d,
+                _ if w >> 16 == 0x9001 && lr_in_r0 => return d - frame == 4,
+                // A branch ends the prologue.
+                _ if matches!(w >> 26, 16 | 18 | 19) => return false,
+                _ => {}
+            }
+        }
+        false
+    }
+
+    /// The return address of the original's call from the running port to `callee`: after its
+    /// only `bl` to it, if it has exactly one.
+    fn call_site(&self, callee: u32) -> Option<u32> {
+        let caller = *self.natives.borrow().last()?;
+        if let Some(&site) = self.call_sites.borrow().get(&(caller, callee)) {
+            return site;
+        }
+        let site = self.bounds.get().and_then(|f| f(caller)).and_then(|(start, end)| {
+            let mut sites = (start..end).step_by(4).filter(|&pc| {
+                self.mem.read_u32(pc).is_ok_and(|w| {
+                    // bl, relative.
+                    w >> 26 == 18
+                        && w & 3 == 1
+                        && pc.wrapping_add((((w & 0x03FF_FFFC) << 6) as i32 >> 6) as u32) == callee
+                })
+            });
+            let first = sites.next()?;
+            sites.next().is_none().then_some(first + 4)
+        });
+        self.call_sites.borrow_mut().insert((caller, callee), site);
+        site
     }
 
     /// The ports that were running when a run stopped, innermost last.

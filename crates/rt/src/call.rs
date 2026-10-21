@@ -4,7 +4,7 @@
 //! values in aligned pairs), floats in f1..f8, results in r3 (r3:r4) or f1. Arguments that do
 //! not fit go in 4-byte slots at 8(r1), with `float`s stored as singles.
 
-use crate::{Ctx, Handle};
+use crate::{Ctx, Handle, UnknownLr};
 
 /// Where the next argument goes, and the stack words for those that overflow.
 pub struct ArgRegs {
@@ -321,6 +321,15 @@ impl Ctx {
         for (i, w) in r.stack.iter().enumerate() {
             self.write_u32(sp + 8 + 4 * i as u32, *w);
         }
+        // The callee's prologue may save LR in this frame: the original's return address
+        // there, where it's known.
+        let _unknown = match self.call_site(addr) {
+            Some(ret) => {
+                self.regs.lr.set(ret);
+                None
+            }
+            None => Some(UnknownLr::enter(self, addr, sp)),
+        };
         self.invoke(addr);
         if let Some(to) = self.take_resume_at() {
             // A jump to no code faults where the original fetches its first instruction.

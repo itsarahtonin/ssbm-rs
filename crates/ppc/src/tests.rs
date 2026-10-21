@@ -988,3 +988,61 @@ fn lockstep_flags_a_wrong_port() {
     );
     assert_eq!(bad.read_u32(0x8100_2000), 5);
 }
+
+const CALLER: u32 = 0x8000_5000;
+const CALLEE: u32 = 0x8000_6000;
+/// What a slot holds before anything saves a return address in it.
+const STALE: u32 = 0xDEAD_BEEF;
+
+/// A port at CALLER that calls the port at CALLEE from a 16-byte frame, as an original whose
+/// code is `calls` (each `bl CALLEE` at its index) does; CALLEE's original prologue is
+/// `callee`. Returns where CALLEE's prologue saves LR, and what it holds after the call.
+fn port_calls(calls: &[usize], callee: &[u32]) -> u32 {
+    let ctx = machine(&[BLR]);
+    for i in 0..8u32 {
+        let at = CALLER + 4 * i;
+        let w = if calls.contains(&(i as usize)) { bl(at, CALLEE) } else { li(3, 0) };
+        ctx.write_u32(at, w);
+    }
+    for (i, w) in callee.iter().enumerate() {
+        ctx.write_u32(CALLEE + 4 * i as u32, *w);
+    }
+    ctx.set_function_bounds(Box::new(|a| (a == CALLER).then_some((CALLER, CALLER + 32))));
+    ctx.register(CALLER, |ctx| {
+        let _frame = ctx.stack_frame(16);
+        let () = ctx.call(CALLEE, ());
+    });
+    ctx.register(CALLEE, |_| {});
+    let slot = ctx.regs.r(1) - 16 + 4;
+    ctx.write_u32(slot, STALE);
+    ctx.invoke(CALLER);
+    ctx.read_u32(slot)
+}
+
+const SAVES_LR: [u32; 3] = [
+    0x7C08_02A6, // mflr r0
+    0x9001_0004, // stw r0, 4(r1)
+    0x9421_FFF0, // stwu r1, -16(r1)
+];
+
+#[test]
+fn ports_save_the_return_address_where_the_original_does() {
+    assert_eq!(port_calls(&[3], &SAVES_LR), CALLER + 16);
+    // The save after the frame is made, at 4 above the caller's r1 all the same.
+    let after = [0x7C08_02A6, 0x9421_FFE0, 0x9001_0024];
+    assert_eq!(port_calls(&[5], &after), CALLER + 24);
+}
+
+#[test]
+fn ports_save_no_return_address_the_original_does_not() {
+    // A leaf: no mflr.
+    assert_eq!(port_calls(&[3], &[0x9421_FFF0, li(3, 0), BLR]), STALE);
+}
+
+#[test]
+fn ports_save_no_return_address_they_cannot_tell() {
+    // Two calls to the callee: which one the port's is isn't known.
+    assert_eq!(port_calls(&[2, 6], &SAVES_LR), STALE);
+    // None: the port's call is one the original inlined or makes elsewhere.
+    assert_eq!(port_calls(&[], &SAVES_LR), STALE);
+}

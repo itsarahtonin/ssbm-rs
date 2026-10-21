@@ -453,6 +453,7 @@ fn run() -> ExitCode {
     INTERP.with(|i| *i.borrow_mut() = Some(interp.clone()));
     ctx.set_backend(Box::new(RcBackend(interp.clone())));
     ctx.set_names(Box::new(ssbm_types::describe));
+    ctx.set_function_bounds(Box::new(ssbm_types::function_bounds));
     let dol = disc.main_dol().ok();
     // --card FILE puts a memory card in slot A with that file's contents, blank if there is
     // none, and keeps what the game writes there; --card-b FILE puts one in slot B.
