@@ -195,7 +195,7 @@ checksum = "f2032f911046de80f0a198e0901378627c33f59ea0ac00e363d481118bd70a53"
 
 [[package]]
 name = "ax-dolphin"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "cc",
  "ssbm-ax",
@@ -856,7 +856,7 @@ checksum = "ee1b05cbd864bcaecbd3455d6d967862d446e4ebfc3c2e5e5b9841e53cba6673"
 
 [[package]]
 name = "fp-fuzz"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "cc",
  "gekko-fp",
@@ -890,7 +890,7 @@ dependencies = [
 
 [[package]]
 name = "gekko-fp"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "num-bigint",
 ]
@@ -1033,7 +1033,7 @@ dependencies = [
 
 [[package]]
 name = "gxplay"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "png",
  "ssbm-gx",
@@ -2472,7 +2472,7 @@ checksum = "19b30a45b0cd0bcca8037f3d0dc3421eaf95327a17cad11964fb8179b4fc4832"
 
 [[package]]
 name = "replay-sort"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "peppi",
  "ssbm-data",
@@ -2776,7 +2776,7 @@ dependencies = [
 
 [[package]]
 name = "ssbm-ax"
-version = "0.1.0"
+version = "0.2.0"
 
 [[package]]
 name = "ssbm-data"
@@ -2789,7 +2789,7 @@ dependencies = [
 
 [[package]]
 name = "ssbm-disc"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "nod",
  "sha1 0.10.7",
@@ -2799,7 +2799,7 @@ dependencies = [
 
 [[package]]
 name = "ssbm-game"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "gekko-fp",
  "ssbm-disc",
@@ -2811,11 +2811,11 @@ dependencies = [
 
 [[package]]
 name = "ssbm-gx"
-version = "0.1.0"
+version = "0.2.0"
 
 [[package]]
 name = "ssbm-mem"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "gekko-fp",
  "thiserror 2.0.21",
@@ -2823,7 +2823,7 @@ dependencies = [
 
 [[package]]
 name = "ssbm-ppc"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "gekko-fp",
  "ssbm-rt",
@@ -2831,7 +2831,7 @@ dependencies = [
 
 [[package]]
 name = "ssbm-render"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "bytemuck",
  "png",
@@ -2843,7 +2843,7 @@ dependencies = [
 
 [[package]]
 name = "ssbm-rt"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "gekko-fp",
  "rustc-hash 2.1.3",
@@ -2852,7 +2852,7 @@ dependencies = [
 
 [[package]]
 name = "ssbm-run"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "ax-dolphin",
  "cpal",
@@ -2878,7 +2878,7 @@ dependencies = [
 
 [[package]]
 name = "ssbm-sdk"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "gekko-fp",
  "ssbm-ax",
@@ -2891,7 +2891,7 @@ dependencies = [
 
 [[package]]
 name = "ssbm-slippi"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "ssbm-rt",
  "thiserror 2.0.21",
@@ -2899,7 +2899,7 @@ dependencies = [
 
 [[package]]
 name = "ssbm-types"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "gekko-fp",
  "ssbm-rt",

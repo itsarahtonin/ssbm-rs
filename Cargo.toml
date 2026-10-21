@@ -4,7 +4,7 @@ members = ["crates/*", "tools/ax-dolphin", "tools/fp-fuzz", "tools/gxplay", "too
 exclude = ["tools/typegen", "tools/c2rs", "tools/lockstep"]
 
 [workspace.package]
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 license = "GPL-3.0-or-later"
 rust-version = "1.98"
