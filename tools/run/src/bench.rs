@@ -42,6 +42,11 @@ const MATCH_MINOR: u8 = 1;
 const FIRST_FRAME: i32 = -123;
 /// How many polls HSD's controller queue holds (`HSD_PadLibData.qcount`).
 const PAD_QUEUE_COUNT: u32 = 0x804C_1F7B;
+/// The game's speed (`lb_804329F0`): a frame's cost (i64), then the count toward it (i64, at
+/// +0x8), and what each pass of the scene loop adds (i64, at +0x40).
+const SPEED: u32 = 0x8043_29F0;
+const SPEED_COUNT: u32 = 0x8;
+const SPEED_STEP: u32 = 0x40;
 const RANDOM_SEED: u32 = 0x804D_5F90;
 const PLAYER_SLOTS: u32 = 0x8045_3080;
 const PLAYER_SLOT_SIZE: u32 = 0xE90;
@@ -158,9 +163,12 @@ impl Bench {
     }
 }
 
-/// The match frame whose engine tick the poll being taken now goes to, or -1 before the match:
-/// HSD's queue hands each tick the oldest poll, so it is the next tick after the polls queued
-/// before it.
+/// The match frame whose controllers the poll being taken now holds, or -1 before the match.
+/// HSD's queue hands each pass of the scene loop the oldest poll, and a pass adds the game's
+/// speed to a count (`lb_80019900`): the frame runs, taking that pass's poll as the game's
+/// controllers, only when the count reaches a frame's cost. At full speed every pass runs one;
+/// at half speed every other one does. A poll that no frame takes keeps the frame before's, so
+/// a press shows on the pass that runs.
 fn frame_polled(ctx: &Ctx) -> i32 {
     let in_match = ctx.read_u8(SCENE) == MATCH_MAJOR && ctx.read_u8(SCENE + 3) == MATCH_MINOR;
     if !in_match {
@@ -171,7 +179,19 @@ fn frame_polled(ctx: &Ctx) -> i32 {
     } else {
         ctx.read_u32(FRAME_INDEX) as i32 + 1
     };
-    next + i32::from(ctx.read_u8(PAD_QUEUE_COUNT))
+    let cost = ctx.read_u64(SPEED) as i64;
+    let speed = ctx.read_u64(SPEED + SPEED_STEP) as i64;
+    let mut count = ctx.read_u64(SPEED + SPEED_COUNT) as i64;
+    let mut frame = next - 1;
+    // The passes of the polls queued before this one, then this one's.
+    for _ in 0..=ctx.read_u8(PAD_QUEUE_COUNT) {
+        count += speed;
+        if count >= cost {
+            count -= cost;
+            frame += 1;
+        }
+    }
+    frame
 }
 
 /// The CPU AI plays `ports`' human players: around `Fighter_procCpu` the player counts as a CPU
