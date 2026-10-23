@@ -42,6 +42,10 @@ Launch `target/release/ssbm-run.exe` on Windows, or `target/release/ssbm-run` on
 
 The keyboard and first ordinary gamepad share the first port without an adapter controller. Windows adapters require a WinUSB driver; another program cannot hold the adapter open at the same time. [Player and verification tools](tools/gx/README.md) cover calibration, rumble, and troubleshooting.
 
+### Debug menus
+
+Melee keeps its developers' debug menus and tools, which run only from a disc with a `/develop.ini` file, as HAL's own discs had. To play as from such a disc, put a file named `develop.ini` in the settings folder. On the title screen, Y then opens the debug menu, A the debug versus mode and X the sound test. The file can name the debug level with a `level = N` line, from 0 (as a retail disc) to 4 (Develop, the default); the menus need 3 or 4. Session recordings keep the level, so they replay at it. The debug code is the game's own, translated like the rest, but the retail game never runs it, so it has been checked less.
+
 ## Project scope
 
 This repository develops and preserves the faithful port and the tools used to verify it. Competitive VS is the first priority; menus, single-player modes, and unusual hardware paths also need verification.

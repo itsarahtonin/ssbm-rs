@@ -124,7 +124,41 @@ pub fn args() -> Option<Vec<String>> {
         let name = format!("{}.inputs", session_name());
         args.extend(["--record".to_owned(), recordings.join(name).to_string_lossy().into_owned()]);
     }
+    // A develop.ini in the settings folder runs the game as the developers' discs with
+    // /develop.ini did, at the debug level it names (--develop).
+    let develop = folder.join("develop.ini");
+    if develop.is_file() {
+        let level = develop_level(&std::fs::read_to_string(&develop).unwrap_or_default())
+            .unwrap_or_else(|line| {
+                error(&format!(
+                    "{}: \"{line}\" isn't a level from 0 to 4, so the game runs at level {DEVELOP}.",
+                    develop.display()
+                ));
+                DEVELOP
+            });
+        args.extend(["--develop".to_owned(), level.to_string()]);
+    }
     Some(args)
+}
+
+/// The debug level a develop.ini without a `level` line gives: Develop, the highest.
+const DEVELOP: u32 = 4;
+
+/// The debug level a develop.ini names on a `level = N` line (DbLKind, 0 to 4), `DEVELOP` if
+/// it names none, or the line if its level isn't one. Lines starting with `#` or `;` are
+/// comments.
+fn develop_level(text: &str) -> Result<u32, String> {
+    for line in text.lines().map(str::trim) {
+        if line.starts_with('#') || line.starts_with(';') {
+            continue;
+        }
+        if let Some((key, value)) = line.split_once('=')
+            && key.trim().eq_ignore_ascii_case("level")
+        {
+            return value.trim().parse().ok().filter(|&n| n <= 4).ok_or_else(|| line.to_owned());
+        }
+    }
+    Ok(DEVELOP)
 }
 
 /// The time now as YYYY-MM-DD_HH-MM-SS, in UTC.
@@ -149,4 +183,20 @@ fn session_name() -> String {
         rest / 60 % 60,
         rest % 60
     )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn develop_ini_levels() {
+        assert_eq!(develop_level(""), Ok(DEVELOP));
+        assert_eq!(develop_level("level = 3
+"), Ok(3));
+        assert_eq!(develop_level("# level = 1
+LEVEL=0"), Ok(0));
+        assert_eq!(develop_level("level = 5"), Err("level = 5".to_owned()));
+        assert_eq!(develop_level("level = jp"), Err("level = jp".to_owned()));
+    }
 }

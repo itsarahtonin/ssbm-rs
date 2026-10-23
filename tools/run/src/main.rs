@@ -314,6 +314,7 @@ fn run() -> ExitCode {
     let mut record_path: Option<std::path::PathBuf> = None;
     let mut inputs_path: Option<std::path::PathBuf> = None;
     let mut playback_card: Option<std::path::PathBuf> = None;
+    let mut develop: Option<u32> = None;
     let mut args = crate::args().iter().cloned().skip(1);
     while let Some(a) = args.next() {
         match a.as_str() {
@@ -383,6 +384,14 @@ fn run() -> ExitCode {
             "--window" => {}
             "--record" => record_path = Some(args.next().expect("--record FILE").into()),
             "--inputs" => inputs_path = Some(args.next().expect("--inputs FILE").into()),
+            "--develop" => {
+                develop = Some(
+                    args.next()
+                        .and_then(|v| v.parse().ok())
+                        .filter(|&n: &u32| n <= 4)
+                        .expect("--develop LEVEL (0 to 4)"),
+                )
+            }
             _ => disc_path = Some(a),
         }
     }
@@ -478,6 +487,8 @@ fn run() -> ExitCode {
         card_path = Some(copy.clone());
         playback_card = Some(copy);
     }
+    // A playback runs at the debug level its session did, unless --develop says otherwise.
+    let develop = develop.or(recording.as_ref().and_then(|(settings, _)| settings.develop));
     let card = card_path.map(open_card);
     let card_b = card_b_path.map(open_card);
     let sdk = ssbm_sdk::install(&ctx, disc, card, card_b);
@@ -709,7 +720,7 @@ fn run() -> ExitCode {
     // The settings a recording keeps are the ones the run has now, a window's included; a
     // playback takes them unless AX or DISC_RATE says otherwise.
     if let Some(path) = &record_path {
-        inputs::record(&sdk, path);
+        inputs::record(&sdk, path, develop);
     }
     if let Some((settings, reads)) = recording {
         if std::env::var_os("AX").is_none() {
@@ -791,12 +802,26 @@ fn run() -> ExitCode {
     if std::env::var("GAME_LANGUAGE").is_ok_and(|v| v == "jp") {
         matches::install_japanese(&ctx);
     }
-    // DBLEVEL=N runs the game at debug level N (DbLKind: 1 to 4), as a disc with /develop.ini
-    // does, from after its boot's USB check: a retail disc has none and runs at 0.
-    if let Some(level) = std::env::var("DBLEVEL").ok().map(|v| v.parse::<u32>().expect("DBLEVEL=N")) {
+    // --develop LEVEL runs the game as from a disc with /develop.ini, as the developers' discs
+    // had: the boot finds the file and marks it (db_804D6B20), and the debug level is LEVEL
+    // (DbLKind, 0 to 4), which on such a disc the buttons held at power-on choose. The player
+    // passes it when its settings folder has a develop.ini (player.rs). DBLEVEL=N sets the debug
+    // level alone. Both apply from after the boot's USB check: a retail disc has no
+    // /develop.ini and runs at 0, which leaves the debug menus and the checks behind DbLevel
+    // unreached.
+    let dblevel = std::env::var("DBLEVEL").ok().map(|v| v.parse::<u32>().expect("DBLEVEL=N"));
+    if develop.is_some() || dblevel.is_some() {
         ctx.set_hook(
             ssbm_sdk::sym("db_InitScreenshot"),
-            Rc::new(move |ctx| ctx.write_u32(ssbm_sdk::sym("DbLevel"), level)),
+            Rc::new(move |ctx| {
+                if let Some(level) = develop {
+                    ctx.write_u32(ssbm_sdk::sym("db_804D6B20"), 1);
+                    ctx.write_u32(ssbm_sdk::sym("DbLevel"), level);
+                }
+                if let Some(level) = dblevel {
+                    ctx.write_u32(ssbm_sdk::sym("DbLevel"), level);
+                }
+            }),
         );
     }
     // EVENT=N makes the Event mode start at event match N (from 0); EVENT_FIGHTER=CKIND,COLOR

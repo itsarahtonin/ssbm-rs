@@ -7,7 +7,8 @@
 //! the same things in the same order whatever pace the session was played at.
 //!
 //! The file is "SSBMINP1", a version (u32), the disc rate in bytes a second (u64, 0 for none)
-//! and flags (u8: 1 sound mixed, 2 a card beside it), all little-endian. Version 2 adds the
+//! and flags (u8: 1 sound mixed, 2 a card beside it, and in bits 4 to 6 the debug level a
+//! develop.ini set plus one, 0 for none), all little-endian. Version 2 adds the
 //! console's settings the boot reads (`Console`): the clock at power-on (u64, time base ticks
 //! from 2000-01-01), the VI's DTV status (u8, 1 a component cable), and the SRAM's language and
 //! flags (u8 each); a version 1 file has the defaults. Then comes a byte per read: 0 for the
@@ -26,6 +27,8 @@ const MAGIC: &[u8; 8] = b"SSBMINP1";
 const VERSION: u32 = 2;
 const SOUND: u8 = 1;
 const CARD: u8 = 2;
+const DEVELOP_SHIFT: u8 = 4;
+const DEVELOP_MASK: u8 = 0x70;
 const PAD_BYTES: usize = 11;
 
 /// The settings a recorded session ran with.
@@ -35,6 +38,8 @@ pub struct Settings {
     /// The card the session started with, if it had one.
     pub card: Option<PathBuf>,
     pub console: Console,
+    /// The debug level the session ran at from a develop.ini (`--develop`), if it did.
+    pub develop: Option<u32>,
 }
 
 /// The open recording, flushed as a run ends.
@@ -53,12 +58,14 @@ pub fn keep_card(path: &Path, card: &Path) {
     }
 }
 
-/// Records every `PADRead` into `path`, with the settings the run has now.
-pub fn record(sdk: &Sdk, path: &Path) {
+/// Records every `PADRead` into `path`, with the settings the run has now and the debug level
+/// `--develop` set, if any.
+pub fn record(sdk: &Sdk, path: &Path, develop: Option<u32>) {
     let mut out =
         BufWriter::new(File::create(path).unwrap_or_else(|e| panic!("{}: {e}", path.display())));
     let flags = (if sdk.dev.mix_audio.get() { SOUND } else { 0 })
-        | (if card_path(path).exists() { CARD } else { 0 });
+        | (if card_path(path).exists() { CARD } else { 0 })
+        | develop.map_or(0, |level| (level as u8 + 1) << DEVELOP_SHIFT);
     out.write_all(MAGIC).unwrap();
     out.write_all(&VERSION.to_le_bytes()).unwrap();
     out.write_all(&sdk.hw.disc_rate().unwrap_or(0).to_le_bytes())
@@ -156,6 +163,10 @@ pub fn load(path: &Path) -> (Settings, Vec<[PadStatus; 4]>) {
         sound: flags & SOUND != 0,
         card: (flags & CARD != 0).then(|| card_path(path)),
         console,
+        develop: match (flags & DEVELOP_MASK) >> DEVELOP_SHIFT {
+            0 => None,
+            n => Some(u32::from(n) - 1),
+        },
     };
     (settings, reads)
 }
@@ -250,6 +261,7 @@ mod tests {
         assert_eq!(settings.disc_rate, Some(3_000_000));
         assert!(settings.sound);
         assert_eq!(settings.console, Console::default());
+        assert_eq!(settings.develop, None);
         assert_eq!(reads.len(), 3);
         assert_eq!(reads[2][3].stick_x, 3);
     }
@@ -270,5 +282,17 @@ mod tests {
         assert_eq!(settings.console, console);
         assert_eq!(reads.len(), 3);
         assert_eq!(reads[0][1].button, 0x0100);
+    }
+
+    #[test]
+    fn the_flags_keep_a_develop_level() {
+        for level in 0..=4u8 {
+            let mut data = header(1);
+            data[20] |= (level + 1) << DEVELOP_SHIFT;
+            data.extend(reads());
+            let (settings, _) = load_bytes("develop", &data);
+            assert_eq!(settings.develop, Some(u32::from(level)));
+            assert!(settings.sound);
+        }
     }
 }
