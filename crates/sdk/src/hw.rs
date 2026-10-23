@@ -432,10 +432,12 @@ impl Hw {
     }
 
     /// A write to an EXI status register: its interrupt flags clear when written as 1, and
-    /// selecting or deselecting the card in slot A or B starts or ends a command.
+    /// selecting or deselecting the card in slot A or B starts or ends a command. EXT is the
+    /// device line, which reads give (`read`): the driver writes back the EXT it read, which
+    /// mustn't stay once the card is pulled.
     fn exi_status(&self, ctx: &Ctx, sdk: &Rc<Sdk>, off: u32, old: u32, v: u32) {
         let flags = EXI_INT | EXI_TCINT | EXI_EXTINT;
-        self.set32(off, (v & !flags) | (old & flags & !v));
+        self.set32(off, (v & !flags & !EXI_EXT) | (old & flags & !v));
         // A flag cleared before its interrupt was taken takes the interrupt back.
         let chan = exi_chan(off);
         for (flag, n) in [(EXI_INT, 9), (EXI_TCINT, 10), (EXI_EXTINT, 11)] {
