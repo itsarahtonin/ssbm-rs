@@ -171,6 +171,16 @@ pub struct Hw {
     dvd_cover_open: Cell<bool>,
     /// Bytes a second disc reads transfer at, if not at once (`set_disc_rate`).
     disc_rate: Cell<Option<u64>>,
+    /// Told of each drive command as its control register write starts it (`Start`), and as
+    /// it ends (`Done`), with the command's three words (DVD_TIMELINE).
+    pub dvd_observer: RefCell<Option<Box<dyn Fn(&Ctx, DvdEvent, [u32; 3])>>>,
+}
+
+/// A drive command's start or end, for `Hw::dvd_observer`.
+#[derive(Clone, Copy, Debug)]
+pub enum DvdEvent {
+    Start,
+    Done,
 }
 
 impl Default for Hw {
@@ -201,6 +211,7 @@ impl Default for Hw {
             dvd_fail_next: Cell::new(None),
             dvd_cover_open: Cell::new(false),
             disc_rate: Cell::new(None),
+            dvd_observer: RefCell::default(),
         };
         hw.set32(PI_FLIPPER_REV, 0x2465_00B1);
         hw
@@ -609,6 +620,9 @@ impl Hw {
             self.get32(DI_CMD + 4),
             self.get32(DI_CMD + 8),
         ];
+        if let Some(observe) = self.dvd_observer.borrow().as_ref() {
+            observe(ctx, DvdEvent::Start, cmd);
+        }
         let mar = self.get32(DI_MAR) & 0x03FF_FFE0;
         let len = self.get32(DI_LENGTH);
         let transfer = match self.disc_rate.get() {
@@ -618,6 +632,9 @@ impl Hw {
         sdk.after(ctx, DVD_LATENCY + transfer, move |ctx| {
             let sdk = ctx.ext::<Sdk>();
             let hw = &sdk.hw;
+            if let Some(observe) = hw.dvd_observer.borrow().as_ref() {
+                observe(ctx, DvdEvent::Done, cmd);
+            }
             let dma = |data: &[u8]| {
                 let _ = ctx.dma_write(0x8000_0000 | mar, data);
                 hw.set32(DI_MAR, mar + data.len() as u32);

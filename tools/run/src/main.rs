@@ -40,6 +40,7 @@ use ssbm_rt::{Ctx, Stop};
 use ssbm_sdk::{Sdk, boot, hw};
 
 mod audio_probe;
+mod dvd_timeline;
 mod audio_timeline;
 mod bench;
 mod matches;
@@ -1627,12 +1628,18 @@ fn run() -> ExitCode {
         if let Ok(dir) = std::env::var("AUDIO_TIMELINE") {
             audio_timeline::install(&ctx, &dir);
         }
+        // DVD_TIMELINE=FILE logs the disc reads' requests, starts, ends and callbacks
+        // (dvd_timeline.rs).
+        if let Ok(path) = std::env::var("DVD_TIMELINE") {
+            dvd_timeline::install(&ctx, &path);
+        }
         eprintln!("booting {} at {entry:#010X}", disc_path);
         ctx.invoke(entry);
     }));
     trace::finish();
     audio_probe::finish();
     audio_timeline::finish();
+    dvd_timeline::finish();
     let executed = interp.executed.get();
     let mut replay_ok = true;
     if let Some(dev) = &slippi {
