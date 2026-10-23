@@ -93,6 +93,29 @@ impl Ord for Scheduled {
     }
 }
 
+/// The console's settings the boot reads, which a session recording keeps (with the disc rate
+/// and the sound).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Console {
+    /// The clock at power-on, in time base ticks from 2000-01-01: what the boot sets the time
+    /// base to, so `OSGetTime` reads it plus the time since.
+    pub power_on: u64,
+    /// Whether the VI reports a component cable (`VIGetDTVStatus`), which has the boot ask
+    /// about progressive scan.
+    pub dtv: bool,
+    /// The SRAM's language (`OSSram::language`, 0 English).
+    pub language: u8,
+    /// The SRAM's flags (`OSSram::flags`: 0x04 stereo, 0x80 progressive scan, and so on).
+    pub sram_flags: u8,
+}
+
+impl Default for Console {
+    /// Dolphin's: the clock at 2000-01-01, no component cable, English, stereo.
+    fn default() -> Self {
+        Self { power_on: 0, dtv: false, language: 0, sram_flags: os::DEFAULT_SRAM_FLAGS }
+    }
+}
+
 /// Everything the SDK layer keeps per machine. Lives in the `Ctx` as an extension.
 pub struct Sdk {
     pub disc: RefCell<Disc>,
@@ -109,6 +132,8 @@ pub struct Sdk {
     pub dev: devices::Devices,
     /// Where `OSReport` output goes.
     pub report: RefCell<ReportSink>,
+    /// The console's settings, which the boot applies.
+    pub console: Cell<Console>,
 }
 
 impl Sdk {
@@ -124,6 +149,7 @@ impl Sdk {
             os: os::Os::default(),
             dev: devices::Devices::default(),
             report: RefCell::new(Box::new(|s| print!("{s}"))),
+            console: Cell::new(Console::default()),
         }
     }
 

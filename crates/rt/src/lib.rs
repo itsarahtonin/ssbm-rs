@@ -666,7 +666,7 @@ impl Ctx {
     /// `mftb` of the time base's low word. Time passes between reads, so loops that wait on
     /// the time base finish.
     pub fn read_tbl(&self) -> u32 {
-        let v = self.regs.tb.get() as u32;
+        let v = self.regs.time_base() as u32;
         self.tick(TB_READ_STEP);
         v
     }

@@ -40,8 +40,12 @@ pub struct Regs {
     pub fpscr: Cell<u32>,
     pub msr: Cell<u32>,
     pub gqr: [Cell<u32>; 8],
-    /// The time base, which counts at a quarter of the bus clock (40.5 MHz).
+    /// The time base, which counts at a quarter of the bus clock (40.5 MHz) from power-on and
+    /// times the hardware.
     pub tb: Cell<u64>,
+    /// What the boot set the time base to at power-on: the console's clock then. The code's
+    /// reads and writes of the time base (`time_base`) see `tb` plus this.
+    pub tb_power_on: Cell<u64>,
     /// Every other SPR by number, such as HID0, SRR0 or the DMA registers.
     pub spr: RefCell<BTreeMap<u32, u32>>,
 }
@@ -87,14 +91,23 @@ impl Regs {
         self.fpr[i].set(ps);
     }
 
+    /// The time base as the code reads it.
+    pub fn time_base(&self) -> u64 {
+        self.tb.get().wrapping_add(self.tb_power_on.get())
+    }
+
+    fn set_time_base(&self, v: u64) {
+        self.tb.set(v.wrapping_sub(self.tb_power_on.get()));
+    }
+
     pub fn get_spr(&self, n: u32) -> u32 {
         match n {
             spr::XER => self.xer.get(),
             spr::LR => self.lr.get(),
             spr::CTR => self.ctr.get(),
             912..=919 => self.gqr[(n - spr::GQR0) as usize].get(),
-            spr::TBL_R => self.tb.get() as u32,
-            spr::TBU_R => (self.tb.get() >> 32) as u32,
+            spr::TBL_R => self.time_base() as u32,
+            spr::TBU_R => (self.time_base() >> 32) as u32,
             _ => self.spr.borrow().get(&n).copied().unwrap_or(0),
         }
     }
@@ -105,10 +118,10 @@ impl Regs {
             spr::LR => self.lr.set(v),
             spr::CTR => self.ctr.set(v),
             912..=919 => self.gqr[(n - spr::GQR0) as usize].set(v),
-            spr::TBL_W => self.tb.set((self.tb.get() & !0xFFFF_FFFF) | u64::from(v)),
-            spr::TBU_W => self
-                .tb
-                .set((self.tb.get() & 0xFFFF_FFFF) | (u64::from(v) << 32)),
+            spr::TBL_W => self.set_time_base((self.time_base() & !0xFFFF_FFFF) | u64::from(v)),
+            spr::TBU_W => {
+                self.set_time_base((self.time_base() & 0xFFFF_FFFF) | (u64::from(v) << 32))
+            }
             _ => {
                 self.spr.borrow_mut().insert(n, v);
             }
@@ -147,5 +160,22 @@ impl Regs {
         }
         self.tb.set(s.tb);
         *self.spr.borrow_mut() = s.spr.clone();
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn time_base_reads_and_writes_add_the_power_on_time() {
+        let regs = Regs::default();
+        regs.tb.set(0x10);
+        regs.tb_power_on.set(0x1_0000_0000);
+        assert_eq!(regs.get_spr(spr::TBU_R), 1);
+        assert_eq!(regs.get_spr(spr::TBL_R), 0x10);
+        regs.set_spr(spr::TBL_W, 0x20);
+        assert_eq!(regs.tb.get(), 0x20);
+        assert_eq!(regs.time_base(), 0x1_0000_0020);
     }
 }

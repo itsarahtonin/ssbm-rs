@@ -102,8 +102,9 @@ fn os_reset_system(ctx: &Ctx) {
 
 // Alarms: kept on the SDK layer's event queue instead of the decrementer.
 
+/// The system time alarms are set in: the time base as the code reads it, plus the offset.
 fn system_time(ctx: &Ctx) -> i64 {
-    (Sdk::now(ctx) as i64).wrapping_add(ctx.read_u64(SYSTEM_TIME_OFFSET) as i64)
+    (ctx.regs.time_base() as i64).wrapping_add(ctx.read_u64(SYSTEM_TIME_OFFSET) as i64)
 }
 
 fn schedule_alarm(ctx: &Ctx, alarm: u32, handler: u32, fire: i64) {
@@ -112,7 +113,9 @@ fn schedule_alarm(ctx: &Ctx, alarm: u32, handler: u32, fire: i64) {
     ctx.write_u64(alarm + 8, fire as u64);
     let generation = sdk.os.generation.get() + 1;
     sdk.os.generation.set(generation);
-    let offset = ctx.read_u64(SYSTEM_TIME_OFFSET) as i64;
+    // The event queue's time counts from power-on, without the boot's setting.
+    let offset =
+        (ctx.read_u64(SYSTEM_TIME_OFFSET) as i64).wrapping_add(ctx.regs.tb_power_on.get() as i64);
     let at = fire.wrapping_sub(offset).max(Sdk::now(ctx) as i64) as u64;
     let seq = sdk.schedule(at, move |ctx| fire_alarm(ctx, alarm, generation));
     // An alarm set again no longer fires at its old time.
@@ -197,10 +200,19 @@ fn os_wakeup_thread(ctx: &Ctx) {
 
 // SRAM, as Dolphin initializes it: English, stereo, no progressive scan.
 
+/// Dolphin's SRAM flags: stereo, setup done, bit 5.
+pub(crate) const DEFAULT_SRAM_FLAGS: u8 = 0x2C;
+
 /// The 64 bytes of `OSSram` and `OSSramEx`.
 pub fn default_sram() -> [u8; 64] {
+    sram(0, DEFAULT_SRAM_FLAGS)
+}
+
+/// The SRAM with this language and these flags.
+fn sram(language: u8, flags: u8) -> [u8; 64] {
     let mut s = [0u8; 64];
-    s[19] = 0x2C; // flags: stereo, setup done, bit 5
+    s[18] = language;
+    s[19] = flags;
     s[20..32].copy_from_slice(b"DOLPHINSLOTA");
     s[32..44].copy_from_slice(b"DOLPHINSLOTB");
     s[58] = 0x6E;
@@ -219,7 +231,8 @@ pub fn default_sram() -> [u8; 64] {
 
 fn os_init_sram(ctx: &Ctx) {
     let scb = sym("Scb");
-    let mut sram = default_sram();
+    let console = ctx.ext::<Sdk>().console.get();
+    let mut sram = sram(console.language, console.sram_flags);
     // A formatted card in slot B gets its flash ID there, as Dolphin sets it from the card
     // (SetCardFlashID), so it mounts whichever console formatted it. On a console the card's
     // unlock reads the flash ID from the card itself, and CARDMount puts it in the SRAM; the

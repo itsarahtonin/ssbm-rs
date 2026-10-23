@@ -51,6 +51,8 @@ pub fn boot(ctx: &Ctx, clock_seconds: u64) -> u32 {
         ctx.write_u32(handler, 0x4C00_0064); // rfi
     }
     ctx.write_u64(0x8000_30D8, clock_seconds * TB_HZ);
+    // The time base the IPL leaves: the console's clock (Console::power_on).
+    ctx.regs.tb_power_on.set(sdk.console.get().power_on);
 
     let mut id = [0u8; 0x20];
     sdk.read_disc(0, &mut id);

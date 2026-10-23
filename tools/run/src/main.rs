@@ -676,6 +676,35 @@ fn run() -> ExitCode {
     if window::requested() {
         window::install(&sdk, replay_path.is_none());
     }
+    // POWER_ON=SECONDS (from 2000-01-01), DTV=1, SRAM_LANGUAGE=N and SRAM_FLAGS=N set the
+    // console's settings the boot reads (ssbm_sdk::Console); a playback takes its recording's
+    // where these leave them.
+    let mut console = recording
+        .as_ref()
+        .map_or_else(ssbm_sdk::Console::default, |(settings, _)| settings.console);
+    let setting = |var: &str| {
+        std::env::var(var).ok().map(|v| {
+            let v = v.trim();
+            match v.strip_prefix("0x") {
+                Some(hex) => u64::from_str_radix(hex, 16),
+                None => v.parse(),
+            }
+            .unwrap_or_else(|_| panic!("{var}=N"))
+        })
+    };
+    if let Some(seconds) = setting("POWER_ON") {
+        console.power_on = seconds * ssbm_sdk::TB_HZ;
+    }
+    if let Some(dtv) = setting("DTV") {
+        console.dtv = dtv != 0;
+    }
+    if let Some(language) = setting("SRAM_LANGUAGE") {
+        console.language = language as u8;
+    }
+    if let Some(flags) = setting("SRAM_FLAGS") {
+        console.sram_flags = flags as u8;
+    }
+    sdk.console.set(console);
     // The settings a recording keeps are the ones the run has now, a window's included; a
     // playback takes them unless AX or DISC_RATE says otherwise.
     if let Some(path) = &record_path {

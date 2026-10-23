@@ -7,9 +7,12 @@
 //! the same things in the same order whatever pace the session was played at.
 //!
 //! The file is "SSBMINP1", a version (u32), the disc rate in bytes a second (u64, 0 for none)
-//! and flags (u8: 1 sound mixed, 2 a card beside it), all little-endian, then a byte per read:
-//! 0 for the same controllers as the read before, or 1 followed by the four controllers, 11
-//! bytes each (connected, buttons big-endian, the sticks, triggers and analog buttons).
+//! and flags (u8: 1 sound mixed, 2 a card beside it), all little-endian. Version 2 adds the
+//! console's settings the boot reads (`Console`): the clock at power-on (u64, time base ticks
+//! from 2000-01-01), the VI's DTV status (u8, 1 a component cable), and the SRAM's language and
+//! flags (u8 each); a version 1 file has the defaults. Then comes a byte per read: 0 for the
+//! same controllers as the read before, or 1 followed by the four controllers, 11 bytes each
+//! (connected, buttons big-endian, the sticks, triggers and analog buttons).
 
 use std::fs::File;
 use std::io::{BufWriter, Write};
@@ -17,10 +20,10 @@ use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 
 use ssbm_rt::Stop;
-use ssbm_sdk::{PadStatus, Sdk, TB_HZ};
+use ssbm_sdk::{Console, PadStatus, Sdk, TB_HZ};
 
 const MAGIC: &[u8; 8] = b"SSBMINP1";
-const VERSION: u32 = 1;
+const VERSION: u32 = 2;
 const SOUND: u8 = 1;
 const CARD: u8 = 2;
 const PAD_BYTES: usize = 11;
@@ -31,6 +34,7 @@ pub struct Settings {
     pub sound: bool,
     /// The card the session started with, if it had one.
     pub card: Option<PathBuf>,
+    pub console: Console,
 }
 
 /// The open recording, flushed as a run ends.
@@ -60,6 +64,10 @@ pub fn record(sdk: &Sdk, path: &Path) {
     out.write_all(&sdk.hw.disc_rate().unwrap_or(0).to_le_bytes())
         .unwrap();
     out.write_all(&[flags]).unwrap();
+    let console = sdk.console.get();
+    out.write_all(&console.power_on.to_le_bytes()).unwrap();
+    out.write_all(&[u8::from(console.dtv), console.language, console.sram_flags])
+        .unwrap();
     *WRITER.lock().unwrap() = Some(out);
     let mut last: Option<[PadStatus; 4]> = None;
     let mut reads = 0u64;
@@ -107,16 +115,27 @@ pub fn load(path: &Path) -> (Settings, Vec<[PadStatus; 4]>) {
         path.display()
     );
     let version = u32::from_le_bytes(data[8..12].try_into().unwrap());
-    assert!(
-        version == VERSION,
-        "{}: recording version {version}",
-        path.display()
-    );
+    let header = match version {
+        1 => 21,
+        2 => 32,
+        _ => panic!("{}: recording version {version}", path.display()),
+    };
+    assert!(data.len() >= header, "{}: a cut-off header", path.display());
     let rate = u64::from_le_bytes(data[12..20].try_into().unwrap());
     let flags = data[20];
+    let console = if version >= 2 {
+        Console {
+            power_on: u64::from_le_bytes(data[21..29].try_into().unwrap()),
+            dtv: data[29] != 0,
+            language: data[30],
+            sram_flags: data[31],
+        }
+    } else {
+        Console::default()
+    };
     let mut reads = Vec::new();
     let mut last = [PadStatus::default(); 4];
-    let mut at = 21;
+    let mut at = header;
     while at < data.len() {
         match data[at] {
             0 => at += 1,
@@ -136,6 +155,7 @@ pub fn load(path: &Path) -> (Settings, Vec<[PadStatus; 4]>) {
         disc_rate: (rate > 0).then_some(rate),
         sound: flags & SOUND != 0,
         card: (flags & CARD != 0).then(|| card_path(path)),
+        console,
     };
     (settings, reads)
 }
@@ -189,5 +209,66 @@ fn decode(b: &[u8]) -> PadStatus {
         trigger_r: b[8],
         analog_a: b[9],
         analog_b: b[10],
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn header(version: u32) -> Vec<u8> {
+        let mut d = MAGIC.to_vec();
+        d.extend_from_slice(&version.to_le_bytes());
+        d.extend_from_slice(&3_000_000u64.to_le_bytes());
+        d.push(SOUND);
+        d
+    }
+
+    fn reads() -> Vec<u8> {
+        let mut d = vec![1];
+        for i in 0..4u8 {
+            d.extend_from_slice(&[1, 0x01, 0x00, i, 0, 0, 0, 0, 0, 0, 0]);
+        }
+        d.extend_from_slice(&[0, 0]);
+        d
+    }
+
+    fn load_bytes(name: &str, data: &[u8]) -> (Settings, Vec<[PadStatus; 4]>) {
+        let path =
+            std::env::temp_dir().join(format!("ssbm-rs-{name}-{}.inputs", std::process::id()));
+        std::fs::write(&path, data).unwrap();
+        let loaded = load(&path);
+        std::fs::remove_file(&path).unwrap();
+        loaded
+    }
+
+    #[test]
+    fn version_1_has_the_default_console() {
+        let mut data = header(1);
+        data.extend(reads());
+        let (settings, reads) = load_bytes("v1", &data);
+        assert_eq!(settings.disc_rate, Some(3_000_000));
+        assert!(settings.sound);
+        assert_eq!(settings.console, Console::default());
+        assert_eq!(reads.len(), 3);
+        assert_eq!(reads[2][3].stick_x, 3);
+    }
+
+    #[test]
+    fn version_2_keeps_the_console() {
+        let console = Console {
+            power_on: 0x1234_5678_9ABC,
+            dtv: true,
+            language: 1,
+            sram_flags: 0xA4,
+        };
+        let mut data = header(2);
+        data.extend_from_slice(&console.power_on.to_le_bytes());
+        data.extend_from_slice(&[1, 1, 0xA4]);
+        data.extend(reads());
+        let (settings, reads) = load_bytes("v2", &data);
+        assert_eq!(settings.console, console);
+        assert_eq!(reads.len(), 3);
+        assert_eq!(reads[0][1].button, 0x0100);
     }
 }

@@ -37,6 +37,8 @@ const PE_TOKEN: u32 = 0x100E;
 const VI_DI0: u32 = 0x2030;
 const VI_VCT: u32 = 0x202C;
 const VI_HCT: u32 = 0x202E;
+/// The VI's DTV status: bit 0 a component cable.
+const VI_DTV: u32 = 0x206E;
 const PI_INTSR: u32 = 0x3000;
 const PI_FIFO_BASE: u32 = 0x300C;
 const PI_FIFO_END: u32 = 0x3010;
@@ -282,6 +284,7 @@ impl Hw {
         match (off, size) {
             (CP_STATUS, 2) => 0x000E, // FIFO empty, reads and commands idle
             (VI_VCT | VI_HCT, 2) => self.beam(ctx, off),
+            (VI_DTV, 2) => u32::from(ctx.ext::<Sdk>().console.get().dtv),
             (PI_INTSR, 4) => 0x0001_0000, // reset switch released
             (AI_DMA_LEFT, 2) => 0,
             (AR_MODE, 2) => u32::from(self.get16(off)) | 1, // ARAM ready
