@@ -4148,7 +4148,8 @@ SWAPPED_CALL = "a product whose factors MWCC swaps around a call"
 # What makes a function's C untranslatable where its machine code is the source to port.
 MACHINE_CODE_REASONS = ("MWCC-only code", "inline asm", SWAPPED_CALL)
 
-# C functions ported from their machine code anyway, and why.
+# C functions ported from their machine code anyway, and why: by name, or as "unit:name" for
+# one of several file-local functions of that name.
 FROM_MACHINE_CODE = {
     # MWCC inlines the stream setters and schedules their hardware register accesses out of
     # the source's order, which the audio interface sees.
@@ -4164,6 +4165,18 @@ FROM_MACHINE_CODE = {
     "__va_arg": "register it leaves that other code reads",
     # MWCC drops its second, dead read of a video interface register, volatile as it is.
     "__VIRetraceHandler": "dead read of a hardware register that MWCC drops",
+    # After a tie, the automatic handicap's fn_80169000 reads a word of the main stack it never
+    # sets: VIWaitForRetrace's retrace count, which OSSleepThread saves there. Its bytes index
+    # handicaps[] up the stack and can move a byte of the registers this chain's prologues save
+    # there, which their epilogues load back, so the chain keeps them as the console does
+    # (gm_801A4014 already is, for DVDCheckDisk's registers).
+    "VIWaitForRetrace": "registers saved on the stack that unset reads reach",
+    "HSD_VIWaitXFBFlush": "registers saved on the stack that unset reads reach",
+    "gm_80168638": "registers saved on the stack that unset reads reach",
+    "gmVsMelee_ExitResults": "registers saved on the stack that unset reads reach",
+    "melee/gm/gmvsmode:onExitResults": "registers saved on the stack that unset reads reach",
+    "runGameMode": "registers saved on the stack that unset reads reach",
+    "gm_801A4510": "registers saved on the stack that unset reads reach",
     # Its loop reads dir_ptr before setting it the first time round, which clang does not see:
     # the original takes whatever a register holds.
     "it_802BA3BC": "pointer read before it is set, in a loop",
@@ -4291,7 +4304,8 @@ def translate_unit(args):
                         f"Returns::{returns_of(unit, c)});")
             unit.ported.append(name)
             continue
-        why = FROM_MACHINE_CODE.get(name) or (UNSET_REASON if name in unset else None) or \
+        listed = FROM_MACHINE_CODE.get(f"{unit_name}:{name}") or FROM_MACHINE_CODE.get(name)
+        why = listed or (UNSET_REASON if name in unset else None) or \
             reasons.get(name) or (
             HARDWARE_REASON if hardware_order(unit.listing, f.get("symbol") or name) else None)
         code = None
@@ -4301,7 +4315,7 @@ def translate_unit(args):
             except (Unsupported, asm2rs.AsmUnsupported) as e:
                 # Functions only MWCC compiles have nothing else to fall back on; the rest take
                 # their C translation, whose unset values start at zero.
-                if name in FROM_MACHINE_CODE:
+                if listed:
                     raise
                 unit.unset_fallbacks.append((name, str(e)))
         if code is not None:

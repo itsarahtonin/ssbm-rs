@@ -2879,20 +2879,127 @@ fn asm_VIInit(ctx: &Ctx) {
 }
 
 pub fn VIWaitForRetrace<'a>(ctx: &'a Ctx) {
-    let __frame = ctx.stack_frame(0x10);
-    let mut enabled: i32 = 0;
-    let mut count: u32 = 0;
-    enabled = fns::OSDisableInterrupts(ctx);
-    count = statics::dolphin__vi__vi::retraceCount(ctx).get();
-    'l1: loop {
-        'c2: {
-            fns::OSSleepThread(ctx, statics::dolphin__vi__vi::retraceQueue(ctx));
-        }
-        if !(count == statics::dolphin__vi__vi::retraceCount(ctx).get()) {
-            break 'l1;
+    // Transliterated from its machine code: registers saved on the stack that unset reads reach.
+    ().put_regs(ctx);
+    asm_VIWaitForRetrace(ctx);
+}
+
+fn asm_VIWaitForRetrace(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x8034f314_u32;
+    loop {
+        match pc {
+            0x8034f314_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x10(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xfffffff0_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // stw r30, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    ctx.write_u32(ea, g[30].get());
+                }
+                // bl OSDisableInterrupts
+                c::call(ctx, 0x80347364_u32, 0x8034f32c_u32);
+                pc = 0x8034f32c_u32;
+            }
+            0x8034f32c_u32 => {
+                // lwz r30, retraceCount@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbd80_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // mr r31, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[31].set(v);
+                }
+                pc = 0x8034f334_u32;
+            }
+            0x8034f334_u32 => {
+                // li r3, retraceQueue@sda21
+                g[3].set(g[13].get().wrapping_add(0xffffbd88_u32));
+                // bl OSSleepThread
+                c::call(ctx, 0x8034ba14_u32, 0x8034f33c_u32);
+                pc = 0x8034f33c_u32;
+            }
+            0x8034f33c_u32 => {
+                // lwz r0, retraceCount@sda21(r0)
+                {
+                    let ea = g[13].get().wrapping_add(0xffffbd80_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // cmplw r30, r0
+                {
+                    let (x, y) = (g[30].get(), g[0].get());
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // beq .L_8034F334
+                if (c::cr_bit(ctx, 2) == true) {
+                    pc = 0x8034f334_u32;
+                    continue;
+                }
+                pc = 0x8034f348_u32;
+            }
+            0x8034f348_u32 => {
+                // mr r3, r31
+                {
+                    let v = g[31].get() | g[31].get();
+                    g[3].set(v);
+                }
+                // bl OSRestoreInterrupts
+                c::call(ctx, 0x8034738c_u32, 0x8034f350_u32);
+                pc = 0x8034f350_u32;
+            }
+            0x8034f350_u32 => {
+                // lwz r0, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0xc(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xc_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // lwz r30, 0x8(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x8_u32);
+                    g[30].set(ctx.read_u32(ea));
+                }
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // addi r1, r1, 0x10
+                g[1].set(g[1].get().wrapping_add(0x10_u32));
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of VIWaitForRetrace");
+            }
+            _ => unreachable!("VIWaitForRetrace: no block at {pc:#010x}"),
         }
     }
-    let _ = fns::OSRestoreInterrupts(ctx, enabled);
 }
 
 pub fn setFbbRegs<'a>(
@@ -4648,13 +4755,7 @@ pub fn register(ctx: &Ctx) {
     );
     ctx.register_port(0x8034eca4, asm___VIInit, Returns::Nothing);
     ctx.register_port(0x8034ee9c, asm_VIInit, Returns::Nothing);
-    ctx.register_port(
-        0x8034f314,
-        |ctx| {
-            Ret::put(VIWaitForRetrace(ctx), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x8034f314, asm_VIWaitForRetrace, Returns::Nothing);
     ctx.register_port(
         0x8034f368,
         |ctx| {

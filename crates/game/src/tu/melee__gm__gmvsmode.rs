@@ -25,6 +25,7 @@ use ssbm_types::records::*;
 use ssbm_types::tu as statics;
 
 use crate::support::*;
+use ssbm_rt::cpu as c;
 
 pub fn onEnterDebugVs<'a>(ctx: &'a Ctx, state: GameModeState<'a>) {
     let __frame = ctx.stack_frame(0x28);
@@ -211,21 +212,119 @@ pub fn onEnterResults<'a>(ctx: &'a Ctx, state: GameModeState<'a>) {
     fns::gmVsMelee_EnterResults(ctx, state);
 }
 
-pub fn onExitResults<'a>(ctx: &'a Ctx, state: GameModeState<'a>) {
-    let __frame = ctx.stack_frame(0x18);
-    let mut state = state;
-    fns::gmVsMelee_ExitResults(
-        ctx,
-        state,
-        fns::gmVsMelee_GetVsData(ctx),
-        ((enums::gmVsMode_State_Css as i32) as u8),
-    );
-    if !(fns::gm_WasMatchCanceled(
-        ctx,
-        fns::gmVsMelee_ResultsEnterData(ctx).match_end().outcome(),
-    ) != 0)
-    {
-        let _ = fns::gm_801623A4(ctx, fns::gmVsMelee_ResultsEnterData(ctx).match_end());
+pub fn onExitResults<'a>(ctx: &'a Ctx, a0: GameModeState<'a>) {
+    // Transliterated from its machine code: registers saved on the stack that unset reads reach.
+    (a0,).put_regs(ctx);
+    asm_onExitResults(ctx);
+}
+
+fn asm_onExitResults(ctx: &Ctx) {
+    let g = &ctx.regs.gpr;
+    let f = &ctx.regs.fpr;
+    let lr0 = ctx.regs.lr.get();
+    let _ = (g, f, lr0);
+    let mut pc: u32 = 0x801b16c8_u32;
+    loop {
+        match pc {
+            0x801b16c8_u32 => {
+                // mflr r0
+                g[0].set(ctx.regs.get_spr(8));
+                // stw r0, 0x4(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x4_u32);
+                    ctx.write_u32(ea, g[0].get());
+                }
+                // stwu r1, -0x18(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0xffffffe8_u32);
+                    ctx.stack_allocated(ea, g[1].get());
+                    ctx.write_u32(ea, g[1].get());
+                    g[1].set(ea);
+                }
+                // stw r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    ctx.write_u32(ea, g[31].get());
+                }
+                // mr r31, r3
+                {
+                    let v = g[3].get() | g[3].get();
+                    g[31].set(v);
+                }
+                // bl gmVsMelee_GetVsData
+                c::call(ctx, 0x801a5244_u32, 0x801b16e0_u32);
+                pc = 0x801b16e0_u32;
+            }
+            0x801b16e0_u32 => {
+                // addi r4, r3, 0x0
+                g[4].set(g[3].get());
+                // addi r3, r31, 0x0
+                g[3].set(g[31].get());
+                // li r5, 0x0
+                g[5].set(0_u32);
+                // bl gmVsMelee_ExitResults
+                c::call(ctx, 0x801a5f64_u32, 0x801b16f0_u32);
+                pc = 0x801b16f0_u32;
+            }
+            0x801b16f0_u32 => {
+                // lis r3, gmVsMelee_ResultsEnterData@ha
+                g[3].set(0x80480000_u32);
+                // addi r31, r3, gmVsMelee_ResultsEnterData@l
+                g[31].set(g[3].get().wrapping_add(0xffffc020_u32));
+                // lbz r3, 0xc(r31)
+                {
+                    let ea = g[31].get().wrapping_add(0xc_u32);
+                    g[3].set(u32::from(ctx.read_u8(ea)));
+                }
+                // bl gm_WasMatchCanceled
+                c::call(ctx, 0x801743a4_u32, 0x801b1700_u32);
+                pc = 0x801b1700_u32;
+            }
+            0x801b1700_u32 => {
+                // cmpwi r3, 0x0
+                {
+                    let (x, y) = (g[3].get() as i32, 0_i32);
+                    c::compare(ctx, 0, x < y, x > y);
+                }
+                // bne .L_801B1710
+                if (c::cr_bit(ctx, 2) == false) {
+                    pc = 0x801b1710_u32;
+                    continue;
+                }
+                pc = 0x801b1708_u32;
+            }
+            0x801b1708_u32 => {
+                // addi r3, r31, 0x8
+                g[3].set(g[31].get().wrapping_add(0x8_u32));
+                // bl gm_801623A4
+                c::call(ctx, 0x801623a4_u32, 0x801b1710_u32);
+                pc = 0x801b1710_u32;
+            }
+            0x801b1710_u32 => {
+                // lwz r0, 0x1c(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x1c_u32);
+                    g[0].set(ctx.read_u32(ea));
+                }
+                // lwz r31, 0x14(r1)
+                {
+                    let ea = g[1].get().wrapping_add(0x14_u32);
+                    g[31].set(ctx.read_u32(ea));
+                }
+                // addi r1, r1, 0x18
+                g[1].set(g[1].get().wrapping_add(0x18_u32));
+                // mtlr r0
+                ctx.regs.set_spr(8, g[0].get());
+                // blr
+                let to = ctx.regs.lr.get() & !3;
+                if to != lr0 & !3 {
+                    c::tail_call(ctx, to);
+                }
+                return;
+                panic!("ran off the end of onExitResults");
+            }
+            _ => unreachable!("onExitResults: no block at {pc:#010x}"),
+        }
     }
 }
 
@@ -311,12 +410,5 @@ pub fn register(ctx: &Ctx) {
         },
         Returns::Nothing,
     );
-    ctx.register_port(
-        0x801b16c8,
-        |ctx| {
-            let (a0,): (GameModeState<'_>,) = Args::take_all(ctx);
-            Ret::put(onExitResults(ctx, a0), ctx);
-        },
-        Returns::Nothing,
-    );
+    ctx.register_port(0x801b16c8, asm_onExitResults, Returns::Nothing);
 }
