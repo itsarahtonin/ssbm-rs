@@ -278,7 +278,16 @@ impl Sdk {
         let handler = ctx.read_u32(INTERRUPT_TABLE + 4 * n);
         if handler != 0 {
             let context = ctx.read_u32(CURRENT_CONTEXT);
-            ctx.call::<_, ()>(handler, (n as i16, context));
+            // On the console, `__OSDispatchInterrupt` runs at the interrupted r1 and calls the
+            // handler from its 0x28 frame with r29 the interrupt, r30 the context and r31 the
+            // handler, then calls `__OSReschedule`.
+            let dispatch = sym("__OSDispatchInterrupt");
+            exception_frame(ctx, 0x28, 29, dispatch + 0x318, || {
+                ctx.regs.set_r(29, n);
+                ctx.regs.set_r(30, context);
+                ctx.regs.set_r(31, handler);
+                ctx.call::<_, ()>(handler, (n as i16, context));
+            });
         }
         true
     }
@@ -347,6 +356,48 @@ impl Sdk {
             sdk.service(ctx);
         });
     }
+}
+
+/// Runs `f` in a frame the console's OS builds at the r1 an exception interrupted, as
+/// `__OSDispatchInterrupt` and `DecrementerExceptionCallback` do: their prologues save LR above
+/// r1, a back chain and r`first`-r31 in a frame of `size`, so the handler's frames go where
+/// the console's do. After it, the `__OSReschedule` call the OS makes next saves `reschedule`,
+/// its return address, and a back chain. Restores r1, LR and the saved registers after.
+pub(crate) fn exception_frame(
+    ctx: &Ctx,
+    size: u32,
+    first: usize,
+    reschedule: u32,
+    f: impl FnOnce(),
+) {
+    let sp = ctx.regs.r(1);
+    let lr = ctx.regs.lr.get();
+    let saved: Vec<u32> = (first..32).map(|r| ctx.regs.r(r)).collect();
+    let frame = push_frame(ctx, size, first, Some(lr));
+    f();
+    ctx.write_u32(frame + 4, reschedule);
+    ctx.write_u32(frame - 8, frame);
+    for (r, v) in (first..32).zip(saved) {
+        ctx.regs.set_r(r, v);
+    }
+    ctx.regs.set_r(1, sp);
+    ctx.regs.lr.set(lr);
+}
+
+/// An MWCC prologue's stores: `lr` at 4 above r1, a frame of `size` with its back chain, and
+/// r`first`-r31 at its top. Moves r1 to the frame and returns it.
+pub(crate) fn push_frame(ctx: &Ctx, size: u32, first: usize, lr: Option<u32>) -> u32 {
+    let sp = ctx.regs.r(1);
+    let frame = sp - size;
+    if let Some(lr) = lr {
+        ctx.write_u32(sp + 4, lr);
+    }
+    ctx.write_u32(frame, sp);
+    for r in first..32 {
+        ctx.write_u32(sp - 4 * (32 - r as u32), ctx.regs.r(r));
+    }
+    ctx.regs.set_r(1, frame);
+    frame
 }
 
 /// The address of a decomp symbol. Panics on unknown names.

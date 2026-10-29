@@ -6,10 +6,10 @@
 use std::cell::{Cell, RefCell};
 use std::collections::HashMap;
 
-use ssbm_rt::{Args, Ctx, Native};
+use ssbm_rt::{Args, Ctx, MSR_EE, Native};
 
 use crate::printf::{self, VaArgs};
-use crate::{Sdk, sym};
+use crate::{Sdk, exception_frame, push_frame, sym};
 
 /// OS time base offset: added to the time base to get the calendar-based system time.
 const SYSTEM_TIME_OFFSET: u32 = 0x8000_30D8;
@@ -148,7 +148,16 @@ fn fire_alarm(ctx: &Ctx, alarm: u32, generation: u64) {
         schedule_alarm(ctx, alarm, handler, next_periodic(ctx, alarm));
     }
     let context = ctx.read_u32(0x8000_00D4);
-    ctx.call::<_, ()>(handler, (alarm, context));
+    // On the console, `DecrementerExceptionCallback` runs at the interrupted r1 and calls the
+    // handler from its 0x2F0 frame with r29 the context, r30 the handler and r31 the alarm (r28,
+    // the OS's next queued alarm, has no counterpart here), then calls `__OSReschedule`.
+    let callback = sym("DecrementerExceptionCallback");
+    exception_frame(ctx, 0x2F0, 28, callback + 0x208, || {
+        ctx.regs.set_r(29, context);
+        ctx.regs.set_r(30, handler);
+        ctx.regs.set_r(31, alarm);
+        ctx.call::<_, ()>(handler, (alarm, context));
+    });
 }
 
 fn os_set_alarm(ctx: &Ctx) {
@@ -181,14 +190,35 @@ fn os_cancel_alarm(ctx: &Ctx) {
 
 // Threads: the game only ever runs one, so sleeping means waiting for an event to wake it.
 
+/// The thread sleeps on the stack as the console's does: in `OSSleepThread`'s frame (its LR
+/// saved as a port's is), then `SelectThread`'s, whose idle loop takes the interrupts with r30
+/// its argument (0), r31 `RunQueue` and LR after its `bl OSEnableInterrupts`. Code that later
+/// reads that stack without writing it gets the console's words, and the handlers' frames go
+/// below these, where the console's do.
 fn os_sleep_thread(ctx: &Ctx) {
     let sdk = ctx.ext::<Sdk>();
-    sdk.os.sleeping_on.set(Some(ctx.regs.r(3)));
+    let queue = ctx.regs.r(3);
+    let (sp, lr, r30, r31) = (ctx.regs.r(1), ctx.regs.lr.get(), ctx.regs.r(30), ctx.regs.r(31));
+    ctx.save_lr(sym("OSSleepThread"));
+    push_frame(ctx, 0x18, 30, None);
+    ctx.regs.set_r(30, queue);
+    ctx.regs.set_r(31, u32::from(ctx.regs.msr.get() & MSR_EE != 0)); // OSDisableInterrupts
+    push_frame(ctx, 0x18, 30, Some(sym("OSSleepThread") + 0xCC));
+    ctx.regs.set_r(30, 0);
+    ctx.regs.set_r(31, sym("RunQueue"));
+    ctx.regs.lr.set(sym("SelectThread") + 0x138);
+
+    sdk.os.sleeping_on.set(Some(queue));
     sdk.os.woken.set(false);
     while !sdk.os.woken.get() {
         Sdk::idle(ctx);
     }
     sdk.os.sleeping_on.set(None);
+
+    ctx.regs.set_r(1, sp);
+    ctx.regs.set_r(30, r30);
+    ctx.regs.set_r(31, r31);
+    ctx.regs.lr.set(lr);
 }
 
 fn os_wakeup_thread(ctx: &Ctx) {

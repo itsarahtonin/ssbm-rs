@@ -1155,7 +1155,8 @@ impl Ctx {
     /// does (`mflr r0` and `stw r0, 4` above the r1 it was called with): code that later reads
     /// that stack without writing it, such as the CPU AI's island end, gets the console's word.
     /// Not when a port called it from no `bl` of the original's that this call is known to be.
-    fn save_lr(&self, addr: u32) {
+    /// The SDK's stand-ins, which run without this, call it themselves where it matters.
+    pub fn save_lr(&self, addr: u32) {
         let mut flags = self.flags_at(addr);
         if flags & FLAG_LR_READ == 0 {
             self.set_flag(addr, FLAG_LR_READ, true);
