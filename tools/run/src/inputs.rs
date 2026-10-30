@@ -7,8 +7,9 @@
 //! the same things in the same order whatever pace the session was played at.
 //!
 //! The file is "SSBMINP1", a version (u32), the disc rate in bytes a second (u64, 0 for none)
-//! and flags (u8: 1 sound mixed, 2 a card beside it, and in bits 4 to 6 the debug level a
-//! develop.ini set plus one, 0 for none), all little-endian. Version 2 adds the
+//! and flags (u8: 1 sound mixed, 2 a card beside it, in bits 4 to 6 the debug level plus one, 0
+//! for none, and 8 that the level was set alone, as `DBLEVEL` does, not by a develop.ini), all
+//! little-endian. Version 2 adds the
 //! console's settings the boot reads (`Console`): the clock at power-on (u64, time base ticks
 //! from 2000-01-01), the VI's DTV status (u8, 1 a component cable), and the SRAM's language and
 //! flags (u8 each); a version 1 file has the defaults. Then comes a byte per read: 0 for the
@@ -29,6 +30,7 @@ const SOUND: u8 = 1;
 const CARD: u8 = 2;
 const DEVELOP_SHIFT: u8 = 4;
 const DEVELOP_MASK: u8 = 0x70;
+const LEVEL_ALONE: u8 = 8;
 const PAD_BYTES: usize = 11;
 
 /// The settings a recorded session ran with.
@@ -40,6 +42,8 @@ pub struct Settings {
     pub console: Console,
     /// The debug level the session ran at from a develop.ini (`--develop`), if it did.
     pub develop: Option<u32>,
+    /// The debug level the session set alone (`DBLEVEL`), if it did.
+    pub dblevel: Option<u32>,
 }
 
 /// The open recording, flushed as a run ends.
@@ -59,13 +63,20 @@ pub fn keep_card(path: &Path, card: &Path) {
 }
 
 /// Records every `PADRead` into `path`, with the settings the run has now and the debug level
-/// `--develop` set, if any.
-pub fn record(sdk: &Sdk, path: &Path, develop: Option<u32>) {
+/// `--develop` or `DBLEVEL` set, if any. With both, the run is as with a develop.ini at
+/// `DBLEVEL`'s level.
+pub fn record(sdk: &Sdk, path: &Path, develop: Option<u32>, dblevel: Option<u32>) {
     let mut out =
         BufWriter::new(File::create(path).unwrap_or_else(|e| panic!("{}: {e}", path.display())));
+    let level = |level: u32| (level as u8 + 1) << DEVELOP_SHIFT;
+    let debug = match (develop, dblevel) {
+        (Some(develop), dblevel) => level(dblevel.unwrap_or(develop)),
+        (None, Some(dblevel)) => level(dblevel) | LEVEL_ALONE,
+        (None, None) => 0,
+    };
     let flags = (if sdk.dev.mix_audio.get() { SOUND } else { 0 })
         | (if card_path(path).exists() { CARD } else { 0 })
-        | develop.map_or(0, |level| (level as u8 + 1) << DEVELOP_SHIFT);
+        | debug;
     out.write_all(MAGIC).unwrap();
     out.write_all(&VERSION.to_le_bytes()).unwrap();
     out.write_all(&sdk.hw.disc_rate().unwrap_or(0).to_le_bytes())
@@ -158,15 +169,17 @@ pub fn load(path: &Path) -> (Settings, Vec<[PadStatus; 4]>) {
         }
         reads.push(last);
     }
+    let level = match (flags & DEVELOP_MASK) >> DEVELOP_SHIFT {
+        0 => None,
+        n => Some(u32::from(n) - 1),
+    };
     let settings = Settings {
         disc_rate: (rate > 0).then_some(rate),
         sound: flags & SOUND != 0,
         card: (flags & CARD != 0).then(|| card_path(path)),
         console,
-        develop: match (flags & DEVELOP_MASK) >> DEVELOP_SHIFT {
-            0 => None,
-            n => Some(u32::from(n) - 1),
-        },
+        develop: level.filter(|_| flags & LEVEL_ALONE == 0),
+        dblevel: level.filter(|_| flags & LEVEL_ALONE != 0),
     };
     (settings, reads)
 }
@@ -292,7 +305,20 @@ mod tests {
             data.extend(reads());
             let (settings, _) = load_bytes("develop", &data);
             assert_eq!(settings.develop, Some(u32::from(level)));
+            assert_eq!(settings.dblevel, None);
             assert!(settings.sound);
         }
+    }
+
+    #[test]
+    fn the_flags_keep_a_level_set_alone() {
+        let mut data = header(2);
+        data[20] |= (3 + 1) << DEVELOP_SHIFT | LEVEL_ALONE;
+        data.extend_from_slice(&[0; 11]);
+        data.extend(reads());
+        let (settings, _) = load_bytes("dblevel", &data);
+        assert_eq!(settings.develop, None);
+        assert_eq!(settings.dblevel, Some(3));
+        assert!(settings.sound);
     }
 }

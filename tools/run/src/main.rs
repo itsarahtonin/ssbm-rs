@@ -501,8 +501,15 @@ fn run() -> ExitCode {
         card_path = Some(copy.clone());
         playback_card = Some(copy);
     }
-    // A playback runs at the debug level its session did, unless --develop says otherwise.
-    let develop = develop.or(recording.as_ref().and_then(|(settings, _)| settings.develop));
+    // A playback runs at the debug level its session did, unless --develop or DBLEVEL says
+    // otherwise.
+    let dblevel = std::env::var("DBLEVEL").ok().map(|v| v.parse::<u32>().expect("DBLEVEL=N"));
+    let (develop, dblevel) = match &recording {
+        Some((settings, _)) if develop.is_none() && dblevel.is_none() => {
+            (settings.develop, settings.dblevel)
+        }
+        _ => (develop, dblevel),
+    };
     let card = card_path.map(open_card);
     let card_b = card_b_path.map(open_card);
     let sdk = ssbm_sdk::install(&ctx, disc, card, card_b);
@@ -734,7 +741,7 @@ fn run() -> ExitCode {
     // The settings a recording keeps are the ones the run has now, a window's included; a
     // playback takes them unless AX or DISC_RATE says otherwise.
     if let Some(path) = &record_path {
-        inputs::record(&sdk, path, develop);
+        inputs::record(&sdk, path, develop, dblevel);
     }
     if let Some((settings, reads)) = recording {
         if std::env::var_os("AX").is_none() {
@@ -823,7 +830,6 @@ fn run() -> ExitCode {
     // level alone. Both apply from after the boot's USB check: a retail disc has no
     // /develop.ini and runs at 0, which leaves the debug menus and the checks behind DbLevel
     // unreached.
-    let dblevel = std::env::var("DBLEVEL").ok().map(|v| v.parse::<u32>().expect("DBLEVEL=N"));
     if develop.is_some() || dblevel.is_some() {
         ctx.set_hook(
             ssbm_sdk::sym("db_InitScreenshot"),
