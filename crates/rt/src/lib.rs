@@ -600,6 +600,11 @@ impl Ctx {
         self.watch.set((addr, len));
     }
 
+    /// The watched range, as `(addr, len)`.
+    pub fn watch_range(&self) -> (u32, u32) {
+        self.watch.get()
+    }
+
     #[inline]
     fn watched(&self, addr: u32, len: u32) {
         let (start, n) = self.watch.get();

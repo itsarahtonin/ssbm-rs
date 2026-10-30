@@ -254,6 +254,20 @@ const STACK_SIZE: usize = 1 << 30;
 
 static ARGS: std::sync::OnceLock<Vec<String>> = std::sync::OnceLock::new();
 
+/// A watched write of `n` bytes at `at`, as "VALUE to ADDR". A write over 8 bytes, such as a
+/// DMA, gives only the watched bytes it covers, with a note of the whole write.
+fn watched_write(ctx: &Ctx, at: u32, n: u32) -> (String, String) {
+    if n <= 8 {
+        let value = format!("{:0w$X} to {at:08X}", ctx.read_be(at, n), w = 2 * n as usize);
+        return (value, String::new());
+    }
+    let (start, len) = ctx.watch_range();
+    let lo = at.max(start);
+    let hi = (u64::from(at) + u64::from(n)).min(u64::from(start) + u64::from(len)) as u32;
+    let bytes: String = (lo..hi).map(|a| format!("{:02X}", ctx.read_u8(a))).collect();
+    (format!("{bytes} to {lo:08X}"), format!(" (of {n} bytes to {at:08X})"))
+}
+
 /// The command line, or in the player's build what a double-click means.
 fn args() -> &'static [String] {
     ARGS.get_or_init(|| std::env::args().collect())
@@ -1360,9 +1374,9 @@ fn run() -> ExitCode {
                     .take(3)
                     .map(|a| ctx.name_of(*a))
                     .collect();
+                let (value, whole) = watched_write(ctx, at, n);
                 eprintln!(
-                    "write {:0w$X} to {at:08X} at {} (ports: {}){}",
-                    ctx.read_be(at, n),
+                    "write {value} at {} (ports: {}){whole}{}",
                     ctx.name_of(interp4.pc.get()),
                     ports.join(" < "),
                     if ctx.lockstep.in_original() {
@@ -1370,7 +1384,6 @@ fn run() -> ExitCode {
                     } else {
                         ""
                     },
-                    w = 2 * n as usize
                 );
             }),
         );
@@ -1399,11 +1412,10 @@ fn run() -> ExitCode {
                 let frame =
                     dev2.frames_read.get() as i32 + ssbm_slippi::replay::GAME_FIRST_FRAME - 1;
                 if (from..=to).contains(&frame) {
-                    let value = ctx.read_be(addr, len);
+                    let (value, whole) = watched_write(ctx, addr, len);
                     eprintln!(
-                        "frame {frame}: write {value:0w$X} to {addr:08X} at {}",
+                        "frame {frame}: write {value} at {}{whole}",
                         ctx.name_of(interp3.pc.get()),
-                        w = 2 * len as usize
                     );
                     let f: Vec<String> = (0..4)
                         .map(|i| format!("f{i}={:016X}", ctx.regs.f(i).to_bits()))
