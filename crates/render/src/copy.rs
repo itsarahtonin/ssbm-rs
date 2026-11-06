@@ -162,11 +162,12 @@ pub(crate) fn encode_texels(c: &Copied, texels: &[u8]) -> Vec<(u32, Vec<u8>)> {
         .collect()
 }
 
-/// Where copies from the EFB went, with a hash of the memory under each as the copy was made.
-/// The game never sees what a copy writes (the renderer keeps it), so memory that later hashes
-/// differently was written over by the game, and on hardware the copy would be gone.
+/// Where copies from the EFB went, with each copy's number (counting the copies to textures)
+/// and a hash of the memory under it as the copy was made. The game never sees what a copy
+/// writes (the renderer keeps it), so memory that later hashes differently was written over by
+/// the game, and on hardware the copy would be gone.
 #[derive(Default)]
-pub(crate) struct Footprints(HashMap<u32, (Footprint, u64)>);
+pub(crate) struct Footprints(HashMap<u32, (Footprint, u64, u64)>);
 
 fn hash_footprint(f: &Footprint, mem: &dyn Memory) -> u64 {
     let mut h = 0;
@@ -180,31 +181,32 @@ fn hash_footprint(f: &Footprint, mem: &dyn Memory) -> u64 {
 }
 
 impl Footprints {
-    /// Notes a copy to `f`, with the memory under it as it stands.
-    pub fn record(&mut self, f: Footprint, mem: &dyn Memory) {
+    /// Notes copy number `copy` to `f`, with the memory under it as it stands.
+    pub fn record(&mut self, f: Footprint, copy: u64, mem: &dyn Memory) {
         let hash = hash_footprint(&f, mem);
-        self.0.insert(f.address, (f, hash));
+        self.0.insert(f.address, (f, copy, hash));
     }
 
     /// Forgets the copy at `address` if the game has written its memory since, returning its
-    /// span.
-    pub fn take_if_overwritten(&mut self, address: u32, mem: &dyn Memory) -> Option<(u32, u32)> {
-        let (f, hash) = self.0.get(&address)?;
+    /// span and number.
+    pub fn take_if_overwritten(&mut self, address: u32, mem: &dyn Memory) -> Option<Gone> {
+        let (f, copy, hash) = self.0.get(&address)?;
         if hash_footprint(f, mem) == *hash {
             return None;
         }
-        let span = f.span();
+        let gone = Gone::of(f, *copy);
         self.0.remove(&address);
-        Some(span)
+        Some(gone)
     }
 
-    /// Forgets the copies whose memory the game has written since, returning their spans.
-    pub fn take_overwritten(&mut self, mem: &dyn Memory) -> Vec<(u32, u32)> {
+    /// Forgets the copies whose memory the game has written since, returning their spans and
+    /// numbers.
+    pub fn take_overwritten(&mut self, mem: &dyn Memory) -> Vec<Gone> {
         let mut gone = Vec::new();
-        self.0.retain(|_, (f, hash)| {
+        self.0.retain(|_, (f, copy, hash)| {
             let same = hash_footprint(f, mem) == *hash;
             if !same {
-                gone.push(f.span());
+                gone.push(Gone::of(f, *copy));
             }
             same
         });
@@ -212,9 +214,32 @@ impl Footprints {
     }
 }
 
+/// A copy the game has written over: its span, and its number. What copies up to that number
+/// left in the span is gone; later copies there have footprints of their own.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) struct Gone {
+    pub start: u32,
+    pub end: u32,
+    pub copy: u64,
+}
+
+impl Gone {
+    fn of(f: &Footprint, copy: u64) -> Self {
+        let (start, end) = f.span();
+        Gone { start, end, copy }
+    }
+
+    /// Whether copy number `copy` to `address` went with it.
+    pub fn takes(&self, address: u32, copy: u64) -> bool {
+        (self.start..self.end).contains(&address) && copy <= self.copy
+    }
+}
+
 /// A texture a copy made, by the address it copied to.
 pub(crate) struct Copied {
     pub id: u32,
+    /// The number of the copy that last wrote it.
+    pub copy: u64,
     pub format: u32,
     pub width: u32,
     pub height: u32,

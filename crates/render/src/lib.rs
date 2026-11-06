@@ -187,8 +187,11 @@ pub struct Renderer {
     bind_groups: HashMap<[u32; 8], wgpu::BindGroup>,
     /// Hashes of memory ranges this frame, so a texture's bytes hash once a frame.
     hashes: HashMap<(u32, u32), u64>,
-    /// What copies from the EFB to textures wrote, by address: memory as the GPU then reads it.
-    copies: Vec<(u32, Vec<u8>)>,
+    /// What copies from the EFB to textures wrote, by address, with each copy's number: memory
+    /// as the GPU then reads it.
+    copies: Vec<(u32, Vec<u8>, u64)>,
+    /// How many copies to textures there have been, which numbers them (copy::Footprints).
+    copies_made: u64,
     /// What copies wrote since the host last took it (`Sink::take_written`).
     written: Vec<(u32, Vec<u8>)>,
     /// Copies from the EFB kept on the GPU instead, by the address they copied to.
@@ -473,6 +476,7 @@ impl Renderer {
             bind_groups: HashMap::new(),
             hashes: HashMap::new(),
             copies: Vec::new(),
+            copies_made: 0,
             written: Vec::new(),
             copier,
             gpu_copies: HashMap::new(),
@@ -604,7 +608,7 @@ impl Renderer {
         let mut buf = vec![0; len as usize];
         mem.read(address, &mut buf);
         let (start, end) = (address as u64, address as u64 + len as u64);
-        for (at, bytes) in &self.copies {
+        for (at, bytes, _) in &self.copies {
             let (cs, ce) = (*at as u64, *at as u64 + bytes.len() as u64);
             let (from, to) = (start.max(cs), end.min(ce));
             if from < to {
@@ -643,9 +647,9 @@ impl Renderer {
         let size = image.size();
         // A copy the game has written over since is gone, even within the frame.
         if self.track_copies
-            && let Some((start, end)) = self.footprints.take_if_overwritten(image.address, mem)
+            && let Some(gone) = self.footprints.take_if_overwritten(image.address, mem)
         {
-            self.forget(start, end);
+            self.forget(gone);
         }
         if let Some(c) = self.gpu_copies.get(&image.address) {
             if (c.format, c.width, c.height, image.levels)
@@ -1173,6 +1177,7 @@ impl Renderer {
             Some(id) => {
                 if let Some(c) = self.gpu_copies.get_mut(&address) {
                     c.footprint = r.footprint;
+                    c.copy = self.copies_made;
                 }
                 id
             }
@@ -1198,6 +1203,7 @@ impl Renderer {
                     address,
                     copy::Copied {
                         id,
+                        copy: self.copies_made,
                         format: r.format,
                         width: r.width,
                         height: r.height,
@@ -1209,8 +1215,7 @@ impl Renderer {
         };
         let entry = self.textures[id as usize].as_mut().expect("copy texture");
         entry.last_used = self.frame;
-        self.copier
-            .copy(&self.device, &self.queue, &entry.view, r);
+        self.copier.copy(&self.device, &self.queue, &entry.view, r);
         // What earlier copies read back left in memory there is gone.
         let f = r.footprint;
         let before = self.copies.len();
@@ -1218,7 +1223,7 @@ impl Renderer {
             let at = (f.address + row * f.stride) & 0x01FF_FFFF;
             let end = u64::from(at) + u64::from(f.row_bytes);
             self.copies
-                .retain(|(a, b)| !(*a >= at && *a as u64 + b.len() as u64 <= end));
+                .retain(|(a, b, _)| !(*a >= at && *a as u64 + b.len() as u64 <= end));
         }
         if self.copies.len() != before {
             self.hashes.clear();
@@ -1240,19 +1245,23 @@ impl Renderer {
         for (at, row) in copy::encode_texels(&c, &texels) {
             let end = u64::from(at) + row.len() as u64;
             self.copies
-                .retain(|(a, b)| !(*a >= at && *a as u64 + b.len() as u64 <= end));
-            self.copies.push((at, row));
+                .retain(|(a, b, _)| !(*a >= at && *a as u64 + b.len() as u64 <= end));
+            self.copies.push((at, row, c.copy));
         }
         self.hashes.clear();
     }
 
-    /// Forgets what copies left in `start..end`, which the game has written over since.
-    pub(crate) fn forget(&mut self, start: u32, end: u32) {
-        self.gpu_copies.retain(|&a, _| !(start..end).contains(&a));
+    /// Forgets what the copy `gone` and copies before it left in its span, which the game has
+    /// written over since. Later copies there stay: if the game writes over one of them, its own
+    /// footprint shows it.
+    pub(crate) fn forget(&mut self, gone: copy::Gone) {
+        let (start, end) = (gone.start, gone.end);
+        self.gpu_copies.retain(|&a, c| !gone.takes(a, c.copy));
         self.on_cpu.retain(|a| !(start..end).contains(a));
         let (start, end) = (start & 0x01FF_FFFF, end & 0x01FF_FFFF);
-        self.copies
-            .retain(|(a, b)| *a as usize + b.len() <= start as usize || *a >= end);
+        self.copies.retain(|(a, b, copy)| {
+            *copy > gone.copy || *a as usize + b.len() <= start as usize || *a >= end
+        });
         self.hashes.clear();
     }
 
@@ -1620,15 +1629,15 @@ impl Renderer {
         if bits(value, 14, 1) != 0 {
             // A frame's end: copies the game has since written over are gone.
             if self.track_copies {
-                for (start, end) in self.footprints.take_overwritten(mem) {
-                    self.forget(start, end);
+                for gone in self.footprints.take_overwritten(mem) {
+                    self.forget(gone);
                 }
             }
             let rect = [left, top, right, bottom];
             let (frame, t2) = if self.xfb_on_gpu {
-                let gpu = self
-                    .gpu_xfb
-                    .get_or_insert_with(|| xfb::GpuXfb::new(&self.device, &self.queue, &self.efb_view));
+                let gpu = self.gpu_xfb.get_or_insert_with(|| {
+                    xfb::GpuXfb::new(&self.device, &self.queue, &self.efb_view)
+                });
                 let (texture, width, height) =
                     gpu.copy(&self.device, &self.queue, state, value, rect);
                 let t2 = std::time::Instant::now();
@@ -1668,7 +1677,8 @@ impl Renderer {
         {
             self.gpu_copy(&request);
             if self.track_copies {
-                self.footprints.record(request.footprint, mem);
+                self.footprints
+                    .record(request.footprint, self.copies_made, mem);
             }
         } else {
             let efb = self.read_efb();
@@ -1680,11 +1690,11 @@ impl Renderer {
                     for (i, row) in e.rows.into_iter().enumerate() {
                         let at = (e.address + i as u32 * e.stride) & 0x01FF_FFFF;
                         let end = at as u64 + row.len() as u64;
-                        self.copies.retain(|(a, b)| {
+                        self.copies.retain(|(a, b, _)| {
                             !(*a as u64 >= at as u64 && *a as u64 + b.len() as u64 <= end)
                         });
                         self.written.push((at, row.clone()));
-                        self.copies.push((at, row));
+                        self.copies.push((at, row, self.copies_made));
                     }
                     self.hashes.clear();
                 }
@@ -1693,8 +1703,11 @@ impl Renderer {
             if self.track_copies
                 && let Some(f) = copy::footprint(state, value)
             {
-                self.footprints.record(f, mem);
+                self.footprints.record(f, self.copies_made, mem);
             }
+        }
+        if bits(value, 14, 1) == 0 {
+            self.copies_made += 1;
         }
         if bits(value, 11, 1) != 0 {
             self.clear(

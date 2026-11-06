@@ -41,7 +41,7 @@ enum Packet {
     },
     Copy(u32),
     /// Memory copies went to that the game has written over since (copy::Footprints).
-    Forget(u32, u32),
+    Forget(copy::Gone),
 }
 
 /// Frames the render thread has finished, and what its copies to textures wrote to memory
@@ -139,8 +139,8 @@ impl Sink for Threaded {
             let image = sampled_image(state, map);
             let range = (image.address, image.size());
             // A copy there that the game has written over since is gone, even within the frame.
-            if let Some((start, end)) = self.footprints.take_if_overwritten(image.address, mem) {
-                self.batch.push(Packet::Forget(start, end));
+            if let Some(gone) = self.footprints.take_if_overwritten(image.address, mem) {
+                self.batch.push(Packet::Forget(gone));
             }
             if self.hashes.contains_key(&range) {
                 continue;
@@ -197,8 +197,8 @@ impl Sink for Threaded {
         self.changes(state);
         let frame_end = bits(value, 14, 1) != 0;
         if frame_end {
-            for (start, end) in self.footprints.take_overwritten(mem) {
-                self.batch.push(Packet::Forget(start, end));
+            for gone in self.footprints.take_overwritten(mem) {
+                self.batch.push(Packet::Forget(gone));
             }
         } else if let Some(f) = copy::footprint(state, value) {
             if copy::request(state, value).is_none() {
@@ -208,7 +208,7 @@ impl Sink for Threaded {
                 mem.read(start, &mut bytes);
                 self.before.push_back((self.copies, start, bytes));
             }
-            self.footprints.record(f, mem);
+            self.footprints.record(f, self.copies, mem);
         }
         if !frame_end {
             self.copies += 1;
@@ -330,7 +330,7 @@ fn run(mut renderer: Renderer, rx: &mpsc::Receiver<Vec<Packet>>, done: &Done) {
                     };
                     renderer.draw_prepared(&state, &draw, outs.as_deref(), &memory);
                 }
-                Packet::Forget(start, end) => renderer.forget(start, end),
+                Packet::Forget(gone) => renderer.forget(gone),
                 Packet::Copy(value) => {
                     renderer.copy(&state, value, &memory);
                     if bits(value, 14, 1) != 0 {

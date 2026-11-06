@@ -123,6 +123,7 @@ fn check_case(
     assert_eq!((r.width, r.height), ((wm1 >> half) + 1, (hm1 >> half) + 1), "{label}");
     let c = Copied {
         id: 0,
+        copy: 0,
         format: r.format,
         width: r.width,
         height: r.height,
@@ -360,4 +361,59 @@ fn footprint_is_what_the_encoder_writes() {
     }
     eprintln!("footprint: {some} copies compared, {none} neither encodes");
     assert!(some > 0 && none > 0);
+}
+
+struct Ram(std::cell::RefCell<Vec<u8>>);
+
+impl ssbm_gx::Memory for Ram {
+    fn read(&self, phys: u32, out: &mut [u8]) {
+        let at = phys as usize;
+        out.copy_from_slice(&self.0.borrow()[at..at + out.len()]);
+    }
+}
+
+/// When the game reuses the memory under an old copy and a newer copy goes inside it, only the
+/// old copy is gone (Classic's versus splash, Team Mario's second portrait).
+#[test]
+fn a_newer_copy_outlives_an_older_one_written_over() {
+    let ram = Ram(std::cell::RefCell::new(vec![0; 0x3000]));
+    let mut footprints = copy::Footprints::default();
+    let old = copy::Footprint {
+        address: 0x1000,
+        stride: 0x100,
+        row_bytes: 0x100,
+        rows: 16,
+    };
+    footprints.record(old, 0, &ram);
+    // The game takes the old copy's memory back, then copies into part of it.
+    ram.0.borrow_mut()[0x1C10] = 1;
+    let new = copy::Footprint {
+        address: 0x1C00,
+        stride: 0x100,
+        row_bytes: 0x80,
+        rows: 2,
+    };
+    footprints.record(new, 1, &ram);
+    let gone = footprints.take_overwritten(&ram);
+    assert_eq!(
+        gone,
+        [copy::Gone {
+            start: 0x1000,
+            end: 0x2000,
+            copy: 0
+        }]
+    );
+    assert!(gone[0].takes(0x1000, 0));
+    assert!(!gone[0].takes(0x1C00, 1));
+    // The newer copy goes when the game writes over it in turn.
+    assert_eq!(footprints.take_if_overwritten(0x1C00, &ram), None);
+    ram.0.borrow_mut()[0x1D00] = 2;
+    assert_eq!(
+        footprints.take_if_overwritten(0x1C00, &ram),
+        Some(copy::Gone {
+            start: 0x1C00,
+            end: 0x1D80,
+            copy: 1
+        })
+    );
 }
