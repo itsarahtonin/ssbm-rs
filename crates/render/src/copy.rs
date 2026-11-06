@@ -74,11 +74,22 @@ fn copy_format(value: u32) -> (u32, u32) {
     (tp / 2 + (tp & 1) * 8, bits(value, 9, 1))
 }
 
+/// Whether encode.rs encodes a copy from an EFB of pixel format `pixel_format` (BP 0x43) to
+/// texture `format`, `half` scale or not: color from RGB8 and RGBA6, and depth from Z24 only
+/// to Z24X8 (RGBA8's layout) at full scale.
+pub(crate) fn encodes(pixel_format: u32, format: u32, half: u32) -> bool {
+    match pixel_format {
+        0 | 1 => true,
+        3 => format == 6 && half == 0,
+        _ => false,
+    }
+}
+
 /// The memory a copy to a texture (BP 0x52 value `value`) writes, as encode.rs lays it out;
 /// None for one it doesn't encode.
 pub(crate) fn footprint(state: &State, value: u32) -> Option<Footprint> {
     let (format, half) = copy_format(value);
-    if bits(state.bp[0x43], 0, 3) > 1 {
+    if !encodes(bits(state.bp[0x43], 0, 3), format, half) {
         return None;
     }
     let (lw, lh, block) = blocks(format)?;

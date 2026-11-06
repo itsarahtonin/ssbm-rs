@@ -171,6 +171,7 @@ pub struct Renderer {
     queue: wgpu::Queue,
     efb: wgpu::Texture,
     efb_view: wgpu::TextureView,
+    efb_depth: wgpu::Texture,
     depth_view: wgpu::TextureView,
     module: wgpu::ShaderModule,
     layout: wgpu::PipelineLayout,
@@ -458,6 +459,7 @@ impl Renderer {
         let mut r = Renderer {
             efb_view,
             depth_view: depth.create_view(&Default::default()),
+            efb_depth: depth,
             efb,
             device,
             queue,
@@ -1125,6 +1127,27 @@ impl Renderer {
 
     /// The EFB's color, read back: RGBA rows of 640.
     fn read_efb(&mut self) -> Vec<u8> {
+        self.read_back(&self.efb, wgpu::TextureAspect::All)
+    }
+
+    /// The EFB's depth, read back as encode.rs takes it for a depth copy.
+    fn read_efb_depth(&mut self) -> Vec<u8> {
+        let depth = self.read_back(&self.efb_depth, wgpu::TextureAspect::DepthOnly);
+        depth
+            .as_chunks::<4>()
+            .0
+            .iter()
+            .flat_map(|d| {
+                // Depth is z / 2^24 (gx.wgsl), so this is exact.
+                let z = (f32::from_le_bytes(*d) * 16_777_216.0) as u32;
+                let z = z.min(0xFF_FFFF);
+                [(z >> 16) as u8, (z >> 8) as u8, z as u8, 255]
+            })
+            .collect()
+    }
+
+    /// An EFB-sized texture of four bytes a texel, read back.
+    fn read_back(&self, texture: &wgpu::Texture, aspect: wgpu::TextureAspect) -> Vec<u8> {
         let row = EFB_WIDTH * 4;
         let buffer = self.device.create_buffer(&wgpu::BufferDescriptor {
             label: Some("efb readback"),
@@ -1135,10 +1158,10 @@ impl Renderer {
         let mut encoder = self.device.create_command_encoder(&Default::default());
         encoder.copy_texture_to_buffer(
             wgpu::TexelCopyTextureInfo {
-                texture: &self.efb,
+                texture,
                 mip_level: 0,
                 origin: wgpu::Origin3d::ZERO,
-                aspect: wgpu::TextureAspect::All,
+                aspect,
             },
             wgpu::TexelCopyBufferInfo {
                 buffer: &buffer,
@@ -1681,7 +1704,11 @@ impl Renderer {
                     .record(request.footprint, self.copies_made, mem);
             }
         } else {
-            let efb = self.read_efb();
+            let efb = if bits(state.bp[0x43], 0, 3) == 3 {
+                self.read_efb_depth()
+            } else {
+                self.read_efb()
+            };
             match encode::encode(state, value, &efb) {
                 Some(e) => {
                     let end = e.address + e.rows.len() as u32 * e.stride;

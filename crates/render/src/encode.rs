@@ -6,7 +6,7 @@
 
 use ssbm_gx::State;
 
-use crate::{EFB_HEIGHT, EFB_WIDTH, bits};
+use crate::{EFB_HEIGHT, EFB_WIDTH, bits, copy};
 
 /// A copy's bytes, by row of blocks: each at `address + row * stride`.
 pub(crate) struct Encoded {
@@ -19,17 +19,18 @@ fn intensity(r: u32, g: u32, b: u32) -> u32 {
     ((4096 + 66 * r + 129 * g + 25 * b) as u16 >> 8) as u32
 }
 
-/// Encodes the copy BP 0x52 value `value` asks for from `efb`, the EFB's color read back as
-/// RGBA rows of 640. None for a format not encoded.
+/// Encodes the copy BP 0x52 value `value` asks for from `efb`, the EFB read back as RGBA rows
+/// of 640: its color, or for a depth copy (pixel format Z24) its depth z as (z >> 16, z >> 8 &
+/// 0xFF, z & 0xFF, 255), which Z24X8 lays out as RGBA8. None for a format not encoded.
 pub(crate) fn encode(state: &State, value: u32, efb: &[u8]) -> Option<Encoded> {
     let pixel_format = bits(state.bp[0x43], 0, 3);
-    if pixel_format > 1 {
-        return None;
-    }
     let six = pixel_format == 1;
     let tp = bits(value, 3, 4);
     let format = tp / 2 + (tp & 1) * 8;
     let half = bits(value, 9, 1);
+    if !copy::encodes(pixel_format, format, half) {
+        return None;
+    }
     let yuv = bits(value, 15, 1) != 0 && bits(value, 16, 1) != 0;
     let tl = state.bp[0x49];
     let wh = state.bp[0x4A];
