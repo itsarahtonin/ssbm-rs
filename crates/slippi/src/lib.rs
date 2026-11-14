@@ -22,6 +22,8 @@ pub use replay::Replay;
 pub const PLAYBACK_INI: &str = include_str!("../data/playback.ini");
 /// Slippi's bootloader codes (slippi-ssbm-asm `Output/Bootloader/bootloader.txt`).
 pub const BOOTLOADER: &str = include_str!("../data/bootloader.txt");
+/// Slippi's 27 gameplay codes, as Slippi Dolphin 3.19.1's netplay set has them (data/README.md).
+pub const GAMEPLAY: &str = include_str!("../data/gameplay.txt");
 
 /// Where Slippi's codes put their EXI transfer function.
 pub const EXI_TRANSFER_BUFFER: u32 = 0x8000_55F0;
@@ -68,7 +70,9 @@ pub fn applied_codes(device: &Device) -> Vec<gecko::Parsed> {
     gecko::parse_codes(&applied_lines(device))
 }
 
-fn applied_lines(device: &Device) -> Vec<(u32, u32)> {
+/// The lines of the codes playback applies, in order: the bootloader's, playback's own and the
+/// replay's.
+pub fn applied_lines(device: &Device) -> Vec<(u32, u32)> {
     let mut lines: Vec<(u32, u32)> = gecko::parse_list(BOOTLOADER)
         .iter()
         .chain(playback_codes().iter())

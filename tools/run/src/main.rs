@@ -10,6 +10,10 @@
 //! disc path defaults to
 //! `SSBM_DISC`.
 //!
+//! `--ruleset slippi` runs the session under the Slippi ruleset (ruleset.rs): Slippi's unlocks,
+//! gameplay codes and no card question, and the C-stick in single player, in Slippi's floating
+//! point with no card.
+//!
 //! A replay run checks the replay it records against the original, and fails on any divergence
 //! not listed in the `--known FILE` (one per line, as reported; `#` starts a comment).
 //! `--write-known FILE` writes this run's divergences in that form.
@@ -48,6 +52,7 @@ mod calls;
 mod inputs;
 mod monkey;
 mod probe;
+mod ruleset;
 mod trace;
 mod wav;
 #[cfg(feature = "window")]
@@ -329,6 +334,7 @@ fn run() -> ExitCode {
     let mut inputs_path: Option<std::path::PathBuf> = None;
     let mut playback_card: Option<std::path::PathBuf> = None;
     let mut develop: Option<u32> = None;
+    let mut slippi_ruleset: Option<bool> = None;
     let mut args = crate::args().iter().cloned().skip(1);
     while let Some(a) = args.next() {
         match a.as_str() {
@@ -393,6 +399,15 @@ fn run() -> ExitCode {
                     Some("hardware") => Some(gekko_fp::FpMode::Hardware),
                     Some("slippi") => Some(gekko_fp::FpMode::Slippi),
                     _ => panic!("--fp hardware|slippi"),
+                }
+            }
+            // --ruleset slippi runs the session under the Slippi ruleset (ruleset.rs); a
+            // playback takes its recording's ruleset unless this says otherwise.
+            "--ruleset" => {
+                slippi_ruleset = match args.next().as_deref() {
+                    Some("vanilla") => Some(false),
+                    Some("slippi") => Some(true),
+                    _ => panic!("--ruleset vanilla|slippi"),
                 }
             }
             "--window" => {}
@@ -487,10 +502,27 @@ fn run() -> ExitCode {
     };
     // --record FILE keeps the controllers the game reads (inputs.rs), and the card as the
     // session found it; --inputs FILE plays them back on a copy of that card.
+    let recording = inputs_path.as_ref().map(|p| inputs::load(p));
+    let slippi_ruleset = slippi_ruleset
+        .or_else(|| recording.as_ref().map(|(settings, _)| settings.slippi_ruleset))
+        .unwrap_or(false);
+    if slippi_ruleset {
+        assert!(
+            card_path.is_none() && recording.as_ref().is_none_or(|(s, _)| s.card.is_none()),
+            "the Slippi ruleset runs with no memory card in slot A"
+        );
+        assert!(
+            replay_path.is_none(),
+            "a replay runs its own codes, not the Slippi ruleset"
+        );
+        assert!(
+            !matches!(fp_mode, Some(gekko_fp::FpMode::Hardware)),
+            "the Slippi ruleset runs Slippi Dolphin's floating point"
+        );
+    }
     if let (Some(record), Some(card)) = (&record_path, &card_path) {
         inputs::keep_card(record, card);
     }
-    let recording = inputs_path.as_ref().map(|p| inputs::load(p));
     if let Some((settings, _)) = &recording
         && card_path.is_none()
         && let Some(card) = &settings.card
@@ -510,6 +542,10 @@ fn run() -> ExitCode {
         }
         _ => (develop, dblevel),
     };
+    assert!(
+        !slippi_ruleset || (develop.is_none() && dblevel.is_none()),
+        "the Slippi ruleset runs a retail disc's debug level, with no develop.ini or DBLEVEL"
+    );
     let card = card_path.map(open_card);
     let card_b = card_b_path.map(open_card);
     let sdk = ssbm_sdk::install(&ctx, disc, card, card_b);
@@ -741,7 +777,7 @@ fn run() -> ExitCode {
     // The settings a recording keeps are the ones the run has now, a window's included; a
     // playback takes them unless AX or DISC_RATE says otherwise.
     if let Some(path) = &record_path {
-        inputs::record(&sdk, path, develop, dblevel);
+        inputs::record(&sdk, path, develop, dblevel, slippi_ruleset);
     }
     if let Some((settings, reads)) = recording {
         if std::env::var_os("AX").is_none() {
@@ -922,7 +958,15 @@ fn run() -> ExitCode {
     if let Some(mode) = fp_mode {
         gekko_fp::set_fp_mode(mode);
     }
+    if slippi_ruleset {
+        gekko_fp::set_fp_mode(gekko_fp::FpMode::Slippi);
+    }
     let slippi: Option<Rc<ssbm_slippi::Device>> = slippi;
+    // The Gecko codes the run applies: a replay's playback's, or the Slippi ruleset's.
+    let code_lines: Option<Vec<(u32, u32)>> = slippi
+        .as_ref()
+        .map(|dev| ssbm_slippi::applied_lines(dev))
+        .or_else(|| slippi_ruleset.then(ruleset::lines));
 
     // Ported units replace their original code.
     let before: std::collections::BTreeSet<u32> = ctx.registered().into_iter().collect();
@@ -942,8 +986,9 @@ fn run() -> ExitCode {
     if !ports.is_empty() {
         eprintln!("ported: {units} units, {} functions", ported.len());
     }
-    // Playback's Gecko codes patch some functions. Those run ports made with the codes where
-    // tools/c2rs/patched.py has seen these codes, and their patched original code elsewhere.
+    // Playback's Gecko codes, or the Slippi ruleset's, patch some functions. Those run ports
+    // made with the codes where tools/c2rs/patched.py has seen these codes, and their patched
+    // original code elsewhere.
     // PATCHED_ORIGINAL=1 keeps them all original.
     // Where the original read stack it never wrote: instruction -> (count, r1 offset, length,
     // a few return addresses at the read, which name a leaf function's callers).
@@ -953,8 +998,8 @@ fn run() -> ExitCode {
     let checking = Rc::new(Cell::new(false));
     let mut kept = Vec::new();
     let mut with_codes: Vec<u32> = Vec::new();
-    if let Some(dev) = &slippi {
-        let codes = ssbm_slippi::applied_codes(dev);
+    if let Some(lines) = &code_lines {
+        let codes = ssbm_slippi::gecko::parse_codes(lines);
         let mut by_function: std::collections::BTreeMap<u32, Vec<ssbm_game::playback::Applied>> =
             Default::default();
         let mut other_codes = Vec::new();
@@ -1002,7 +1047,7 @@ fn run() -> ExitCode {
                 }
             }
             // Callers of a code that returns past its function's caller resume where it says.
-            for at in ssbm_slippi::returns_past_caller(dev) {
+            for at in ssbm_slippi::gecko::returns_past_caller(lines) {
                 for f in ssbm_types::functions_overlapping(at, 4) {
                     for site in dol.as_ref().map_or_else(Vec::new, |d| calls_to(d, f)) {
                         for caller in ssbm_types::functions_overlapping(site, 4) {
@@ -1046,14 +1091,14 @@ fn run() -> ExitCode {
                 kept.push(f);
             }
         };
-        for (at, len) in ssbm_slippi::patched(dev) {
+        for (at, len) in ssbm_slippi::gecko::targets(lines) {
             for f in ssbm_types::functions_overlapping(at, len) {
                 keep(f);
             }
         }
         // Some codes return past the instructions after the call to their function, so its
         // callers must be the game's code too.
-        for at in ssbm_slippi::returns_past_caller(dev) {
+        for at in ssbm_slippi::gecko::returns_past_caller(lines) {
             for f in ssbm_types::functions_overlapping(at, 4) {
                 for site in dol.as_ref().map_or_else(Vec::new, |d| calls_to(d, f)) {
                     for caller in ssbm_types::functions_overlapping(site, 4) {
@@ -1657,6 +1702,9 @@ fn run() -> ExitCode {
         if slippi.is_some() {
             ssbm_slippi::apply_bootloader(&ctx);
         }
+        if slippi_ruleset {
+            ruleset::apply(&ctx);
+        }
         if let Some(bench) = &bench {
             bench.apply(&ctx);
         }
@@ -1853,9 +1901,9 @@ fn run() -> ExitCode {
     );
     if count_entries {
         // Injected code sits where the branch at its code's site leads.
-        let placed: Vec<(u32, u32, u32)> = slippi
-            .as_ref()
-            .map(|d| ssbm_slippi::applied_codes(d))
+        let placed: Vec<(u32, u32, u32)> = code_lines
+            .as_deref()
+            .map(ssbm_slippi::gecko::parse_codes)
             .unwrap_or_default()
             .iter()
             .filter(|c| c.kind == 0xC2)

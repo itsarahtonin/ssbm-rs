@@ -7,9 +7,9 @@
 //! the same things in the same order whatever pace the session was played at.
 //!
 //! The file is "SSBMINP1", a version (u32), the disc rate in bytes a second (u64, 0 for none)
-//! and flags (u8: 1 sound mixed, 2 a card beside it, in bits 4 to 6 the debug level plus one, 0
-//! for none, and 8 that the level was set alone, as `DBLEVEL` does, not by a develop.ini), all
-//! little-endian. Version 2 adds the
+//! and flags (u8: 1 sound mixed, 2 a card beside it, 4 the Slippi ruleset (ruleset.rs), in bits
+//! 4 to 6 the debug level plus one, 0 for none, and 8 that the level was set alone, as `DBLEVEL`
+//! does, not by a develop.ini), all little-endian. Version 2 adds the
 //! console's settings the boot reads (`Console`): the clock at power-on (u64, time base ticks
 //! from 2000-01-01), the VI's DTV status (u8, 1 a component cable), and the SRAM's language and
 //! flags (u8 each); a version 1 file has the defaults. Then comes a byte per read: 0 for the
@@ -28,6 +28,7 @@ const MAGIC: &[u8; 8] = b"SSBMINP1";
 const VERSION: u32 = 2;
 const SOUND: u8 = 1;
 const CARD: u8 = 2;
+const SLIPPI_RULESET: u8 = 4;
 const DEVELOP_SHIFT: u8 = 4;
 const DEVELOP_MASK: u8 = 0x70;
 const LEVEL_ALONE: u8 = 8;
@@ -44,6 +45,8 @@ pub struct Settings {
     pub develop: Option<u32>,
     /// The debug level the session set alone (`DBLEVEL`), if it did.
     pub dblevel: Option<u32>,
+    /// Whether the session ran under the Slippi ruleset (`--ruleset slippi`).
+    pub slippi_ruleset: bool,
 }
 
 /// The open recording, flushed as a run ends.
@@ -62,10 +65,16 @@ pub fn keep_card(path: &Path, card: &Path) {
     }
 }
 
-/// Records every `PADRead` into `path`, with the settings the run has now and the debug level
-/// `--develop` or `DBLEVEL` set, if any. With both, the run is as with a develop.ini at
-/// `DBLEVEL`'s level.
-pub fn record(sdk: &Sdk, path: &Path, develop: Option<u32>, dblevel: Option<u32>) {
+/// Records every `PADRead` into `path`, with the settings the run has now, the debug level
+/// `--develop` or `DBLEVEL` set, if any, and whether it runs the Slippi ruleset. With both
+/// levels, the run is as with a develop.ini at `DBLEVEL`'s level.
+pub fn record(
+    sdk: &Sdk,
+    path: &Path,
+    develop: Option<u32>,
+    dblevel: Option<u32>,
+    slippi_ruleset: bool,
+) {
     let mut out =
         BufWriter::new(File::create(path).unwrap_or_else(|e| panic!("{}: {e}", path.display())));
     let level = |level: u32| (level as u8 + 1) << DEVELOP_SHIFT;
@@ -76,6 +85,7 @@ pub fn record(sdk: &Sdk, path: &Path, develop: Option<u32>, dblevel: Option<u32>
     };
     let flags = (if sdk.dev.mix_audio.get() { SOUND } else { 0 })
         | (if card_path(path).exists() { CARD } else { 0 })
+        | (if slippi_ruleset { SLIPPI_RULESET } else { 0 })
         | debug;
     out.write_all(MAGIC).unwrap();
     out.write_all(&VERSION.to_le_bytes()).unwrap();
@@ -180,6 +190,7 @@ pub fn load(path: &Path) -> (Settings, Vec<[PadStatus; 4]>) {
         console,
         develop: level.filter(|_| flags & LEVEL_ALONE == 0),
         dblevel: level.filter(|_| flags & LEVEL_ALONE != 0),
+        slippi_ruleset: flags & SLIPPI_RULESET != 0,
     };
     (settings, reads)
 }
@@ -275,8 +286,22 @@ mod tests {
         assert!(settings.sound);
         assert_eq!(settings.console, Console::default());
         assert_eq!(settings.develop, None);
+        assert!(!settings.slippi_ruleset);
         assert_eq!(reads.len(), 3);
         assert_eq!(reads[2][3].stick_x, 3);
+    }
+
+    #[test]
+    fn the_flags_keep_the_slippi_ruleset() {
+        let mut data = header(2);
+        data[20] |= SLIPPI_RULESET;
+        data.extend_from_slice(&[0; 11]);
+        data.extend(reads());
+        let (settings, _) = load_bytes("ruleset", &data);
+        assert!(settings.slippi_ruleset);
+        assert!(settings.sound);
+        assert_eq!(settings.card, None);
+        assert_eq!(settings.develop, None);
     }
 
     #[test]
