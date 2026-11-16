@@ -38,6 +38,9 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; text-wrap: balance; }
 .history .hlabel { font: 500 13px "IBM Plex Mono", monospace; min-width: 9ch; flex: none; white-space: nowrap; }
 .history .hk { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
 .history button { font: 13px "IBM Plex Sans", sans-serif; background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 4px 10px; cursor: pointer; min-width: 2.4em; }
+.history .hnote { flex: 1 1 100%; margin: 0; font-size: 13px; max-width: 90ch; }
+.trend-notes { display: grid; gap: 6px; margin: 8px 0 0; padding: 0; list-style: none; font-size: 12px; color: var(--muted); max-width: 90ch; }
+.trend-notes button { font: 500 12px "IBM Plex Mono", monospace; background: none; border: 0; padding: 0; color: var(--hl); cursor: pointer; }
 .history label { font-size: 12px; color: var(--muted); display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
 .bar { height: 10px; border-radius: 5px; background: var(--never); overflow: hidden; display: flex; }
 .bar span { display: block; height: 100%; }
@@ -106,6 +109,7 @@ svg text { fill: var(--muted); font: 11px "IBM Plex Mono", monospace; }
     <input type="range" id="h-range" min="0" max="0" step="1" aria-label="Round shown">
     <span class="hlabel" id="h-label"></span>
     <label><input type="checkbox" id="h-diff"> only what changed since the round before</label>
+    <p class="hnote" id="h-note" hidden></p>
   </div>
 
   <div class="map-head">
@@ -440,6 +444,10 @@ function reviews() {
   });
 }
 
+// Notes on rounds whose counts need explaining, such as a dip from ports that changed.
+const NOTES = DATA.notes || {};
+const noteText = label => `<b>${esc(label)}:</b> ${esc(NOTES[label])}`;
+
 // Trend
 function trend() {
   const P = SUMS, el = document.getElementById("trend");
@@ -453,9 +461,11 @@ function trend() {
     <text x="${w - m.r}" y="12" text-anchor="end">target: 100% verified</text>
     ${showLedger ? `<polyline fill="none" stroke="var(--explained)" stroke-dasharray="4 3" stroke-width="2" points="${P.map(p => `${x(p.label)},${y(val(p, true))}`).join(" ")}"/>` : ""}
     <polyline fill="none" stroke="var(--ok)" stroke-width="2" points="${P.map(p => `${x(p.label)},${y(val(p))}`).join(" ")}"/>
+    ${P.map(p => NOTES[p.label] ? `<circle cx="${x(p.label)}" cy="${y(val(p))}" r="8" fill="none" stroke="var(--fg)" stroke-width="1.5"/><text x="${x(p.label)}" y="${y(val(p)) + 22}" text-anchor="middle">${esc(p.label)}</text>` : "").join("")}
     ${P.map((p, i) => `<circle data-i="${i}" cx="${x(p.label)}" cy="${y(val(p))}" r="${i === at ? 5 : 3}" fill="var(--ok)" style="cursor:pointer"><title>${esc(p.label)}: ${pct(p.blocks, p.countable)} verified; ${pct(p.blocks + p.explained, p.countable)} accounted for</title></circle>`).join("")}
-  </svg><div class="sub">Green: verified${showLedger ? " · dashed blue: verified + ledger claims" : ""}. Select a point or use the round slider.</div>`;
-  el.querySelectorAll("circle").forEach(c => c.onclick = () => show(+c.dataset.i));
+  </svg><div class="sub">Green: verified${showLedger ? " · dashed blue: verified + ledger claims" : ""}. Select a point or use the round slider.${P.some(p => NOTES[p.label]) ? " Ringed rounds have notes:" : ""}</div>
+  ${P.some(p => NOTES[p.label]) ? `<ul class="trend-notes">${P.map((p, i) => NOTES[p.label] ? `<li><button data-i="${i}">${esc(p.label)}</button> ${esc(NOTES[p.label])}</li>` : "").join("")}</ul>` : ""}`;
+  el.querySelectorAll("circle[data-i], .trend-notes button").forEach(c => c.onclick = () => show(+c.dataset.i));
 }
 
 function all() { layout(); trend(); }
@@ -475,6 +485,9 @@ function show(i) {
   const range = document.getElementById("h-range");
   range.max = SNAPS.length - 1; range.value = at;
   document.getElementById("h-label").textContent = SNAPS[at].label + (at === SNAPS.length - 1 ? " (latest)" : "");
+  const note = document.getElementById("h-note");
+  note.hidden = !NOTES[SNAPS[at].label];
+  note.innerHTML = note.hidden ? "" : noteText(SNAPS[at].label);
   header(); areas(); reviews(); crumbs(); layout(); trend(); evidencePanel();
   openEvidence.forEach(id => { document.getElementById(id).open = true; });
 }

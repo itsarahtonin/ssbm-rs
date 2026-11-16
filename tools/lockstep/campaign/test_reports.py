@@ -84,6 +84,17 @@ class ReportsTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             treemap.build_data(self.state, 'latest', self.reviewed)
 
+    def test_round_notes_need_a_known_round(self):
+        write(self.state / 'report.csv', [row(verified=5)])
+        write(self.state / 'history/01-f1.csv', [row(verified=9)])
+        data = treemap.build_data(self.state, 'latest', self.reviewed)
+        notes = self.state / 'notes.tsv'
+        notes.write_text('# label, note\nf1\tPorts changed.\n', encoding='utf-8')
+        self.assertEqual(treemap.read_notes(notes, data), {'f1': 'Ports changed.'})
+        notes.write_text('f2\tNo such round.\n', encoding='utf-8')
+        with self.assertRaises(ValueError):
+            treemap.read_notes(notes, data)
+
     def test_lever_gains_keep_same_named_functions_separate(self):
         (self.state / 'levers.tsv').write_text('')
         (self.state / 'levers-notes.tsv').write_text('')

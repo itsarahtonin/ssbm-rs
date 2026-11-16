@@ -1,6 +1,7 @@
 """Write a coverage map from saved reports, or regenerate a portable JSON snapshot."""
 import argparse
 import collections
+import csv
 import datetime
 import json
 from pathlib import Path
@@ -66,12 +67,27 @@ def build_data(state, label, reviewed_file, updated=None):
             'updated': updated or datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}
 
 
+def read_notes(path, data):
+    """Round notes from a TSV of label and text, for rounds whose counts need explaining."""
+    labels = {snap['label'] for snap in data['snaps']}
+    notes = {}
+    with open(path, encoding='utf-8', newline='') as f:
+        for row in csv.reader(f, delimiter='\t'):
+            if not row or row[0].startswith('#'):
+                continue
+            if len(row) != 2 or row[0] not in labels:
+                raise ValueError(f'{path}: expected a known round label and a note: {row}')
+            notes[row[0]] = row[1]
+    return notes
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('label')
     parser.add_argument('out_html', type=Path)
     parser.add_argument('--state-dir', type=Path, default=ROOT / 'local/lockstep')
     parser.add_argument('--reviewed', type=Path, default=ROOT / 'tools/lockstep/reviewed.txt')
+    parser.add_argument('--notes', type=Path, default=ROOT / 'tools/lockstep/round-notes.tsv')
     parser.add_argument('--from-json', type=Path)
     parser.add_argument('--json', type=Path)
     parser.add_argument('--evidence-revision')
@@ -80,9 +96,10 @@ def main():
         build_data(args.state_dir, args.label, args.reviewed)
     if not args.from_json:
         data['evidence'] = build_evidence(ROOT, data, args.evidence_revision)
+    data['notes'] = read_notes(args.notes, data)
     args.out_html.write_text(render(HERE / 'treemap.template.html', data), encoding='utf-8', newline='\n')
     if args.json:
-        args.json.write_text(json.dumps(data, separators=(',', ':'), allow_nan=False) + '\n', encoding='utf-8')
+        args.json.write_text(json.dumps(data, separators=(',', ':'), allow_nan=False) + '\n', encoding='utf-8', newline='\n')
     print(f"{len(data['fns'])} functions, {len(data['snaps'])} rounds -> {args.out_html}")
 
 
