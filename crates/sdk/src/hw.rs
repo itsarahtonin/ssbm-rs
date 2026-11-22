@@ -96,9 +96,12 @@ const PE_FINISH_INT: u16 = 8;
 
 /// Time base ticks that pass per register read.
 const MMIO_READ_STEP: u64 = 8;
-/// Time from starting a DVD command to its interrupt, plus a read's transfer time at the disc
-/// rate if one is set (`set_disc_rate`). Slippi runs with fast disc speed.
+/// Time from starting a DVD command to its interrupt at `DiscSpeed::Flat`, and before a read's
+/// transfer at `DiscSpeed::Rate`.
 const DVD_LATENCY: u64 = TB_HZ / 2000;
+/// Dolphin's CPU clock, in which it times drive commands, and its cycles per time base tick.
+const DOLPHIN_HZ: u64 = 486_000_000;
+const DOLPHIN_CYCLES_PER_TICK: u64 = 12;
 /// NTSC lines per frame, and the half-line width VCT/HCT count in.
 const VI_LINES: u64 = 525;
 const VI_HCT_PER_LINE: u64 = 858;
@@ -169,11 +172,54 @@ pub struct Hw {
     dvd_fail_next: Cell<Option<u32>>,
     /// Whether the disc cover is open: DICVR's low bit, which writes don't change.
     dvd_cover_open: Cell<bool>,
-    /// Bytes a second disc reads transfer at, if not at once (`set_disc_rate`).
-    disc_rate: Cell<Option<u64>>,
+    /// How long drive commands take (`set_disc_speed`).
+    disc_speed: Cell<DiscSpeed>,
     /// Told of each drive command as its control register write starts it (`Start`), and as
     /// it ends (`Done`), with the command's three words (DVD_TIMELINE).
     pub dvd_observer: RefCell<Option<Box<dyn Fn(&Ctx, DvdEvent, [u32; 3])>>>,
+}
+
+/// How long drive commands take, from the control register write that starts one to its
+/// interrupt.
+///
+/// The game's music depends on it. HSD starts a stream with AXSetVoiceAddr, which carries its
+/// loop flag, then sets the stream's addresses after five more reads (0x20 bytes, then four of
+/// 0x4000). If both land in one 5 ms AX frame, the SDK's __AXSyncPBs copies only the addresses
+/// to the DSP. The stale loop flag then stops the voice at the end of its first buffer, and the
+/// song cuts out 1.8 s in. Those reads must take longer than a frame between them, as they do
+/// at every speed but `Flat`.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum DiscSpeed {
+    /// Slippi Dolphin's fast disc speed (`FastDiscSpeed`, on in its playback and netplay
+    /// builds): a read takes 600 µs plus its bytes at 32 MiB/s, counted in 0x8000-byte blocks
+    /// of its disc offset, and any other command 300 µs, all in Dolphin's CPU cycles.
+    #[default]
+    Dolphin,
+    /// Every command in 0.5 ms: ssbm-rs's fast speed before Dolphin's. Sessions recorded at it
+    /// play back at it. It cuts about half of all songs.
+    Flat,
+    /// Reads transfer at this many bytes a second after the 0.5 ms, as a drive's pace.
+    Rate(u64),
+}
+
+/// Time base ticks Dolphin's fast disc speed takes for a read of `len` bytes at disc `offset`,
+/// or with `None` for any other command: the first tick by which its cycles have passed.
+fn dolphin_command_ticks(read: Option<(u64, u64)>) -> u64 {
+    let cycles = match read {
+        Some((mut offset, mut len)) => {
+            const BLOCK: u64 = 0x8000;
+            let mut cycles = 600 * DOLPHIN_HZ / 1_000_000;
+            while len > 0 {
+                let chunk = (BLOCK - offset % BLOCK).min(len);
+                cycles += chunk * DOLPHIN_HZ / (32 << 20);
+                offset += chunk;
+                len -= chunk;
+            }
+            cycles
+        }
+        None => 300 * DOLPHIN_HZ / 1_000_000,
+    };
+    cycles.div_ceil(DOLPHIN_CYCLES_PER_TICK)
 }
 
 /// A drive command's start or end, for `Hw::dvd_observer`.
@@ -210,7 +256,7 @@ impl Default for Hw {
             dvd_error: Cell::new(0),
             dvd_fail_next: Cell::new(None),
             dvd_cover_open: Cell::new(false),
-            disc_rate: Cell::new(None),
+            disc_speed: Cell::new(DiscSpeed::default()),
             dvd_observer: RefCell::default(),
         };
         hw.set32(PI_FLIPPER_REV, 0x2465_00B1);
@@ -625,11 +671,24 @@ impl Hw {
         }
         let mar = self.get32(DI_MAR) & 0x03FF_FFE0;
         let len = self.get32(DI_LENGTH);
-        let transfer = match self.disc_rate.get() {
-            Some(rate) if cmd[0] >> 24 == 0xA8 => u64::from(len) * TB_HZ / rate,
-            _ => 0,
+        let read = cmd[0] >> 24 == 0xA8;
+        let latency = match self.disc_speed.get() {
+            DiscSpeed::Flat => DVD_LATENCY,
+            DiscSpeed::Rate(rate) if read => DVD_LATENCY + u64::from(len) * TB_HZ / rate,
+            DiscSpeed::Rate(_) => DVD_LATENCY,
+            // A read that will fail takes what any other command does.
+            DiscSpeed::Dolphin => {
+                dolphin_command_ticks((read && !self.dvd_will_fail(cmd)).then(|| {
+                    let offset = if cmd[0] & 0xFF == 0x40 {
+                        0
+                    } else {
+                        u64::from(cmd[1]) << 2
+                    };
+                    (offset, u64::from(len))
+                }))
+            }
         };
-        sdk.after(ctx, DVD_LATENCY + transfer, move |ctx| {
+        sdk.after(ctx, latency, move |ctx| {
             let sdk = ctx.ext::<Sdk>();
             let hw = &sdk.hw;
             if let Some(observe) = hw.dvd_observer.borrow().as_ref() {
@@ -711,21 +770,25 @@ impl Hw {
         }
     }
 
-    /// Bytes a second disc reads transfer at, if not at once (`set_disc_rate`).
-    pub fn disc_rate(&self) -> Option<u64> {
-        self.disc_rate.get()
+    /// Whether the command `cmd` would end with an error if it ended now, as the command's end
+    /// decides, without using up an error it takes.
+    fn dvd_will_fail(&self, cmd: [u32; 3]) -> bool {
+        let data_read = cmd[0] >> 24 == 0xA8 && cmd[0] & 0xFF != 0x40;
+        (self.dvd_cover_open.get() && !matches!(cmd[0] >> 24, 0xE0 | 0xE3))
+            || (data_read && self.dvd_fail_next.get().is_some())
+            || (data_read
+                && self.dvd_retry != 0
+                && (self.dvd_reads.get() + 1) % self.dvd_retry == 0)
     }
 
-    /// Gives disc reads a transfer time at `rate` bytes a second, on top of each command's
-    /// latency, as a drive takes; `None` (the default) finishes each command in that latency,
-    /// as Slippi's fast disc nearly does. The game's music needs a drive's pace: HSD starts a
-    /// stream with AXSetVoiceAddr, which carries its loop flag, and sets the stream's addresses
-    /// after five more reads (0x20 bytes, then four of 0x4000). If both land within one 5 ms AX
-    /// frame, the SDK's __AXSyncPBs copies only the addresses to the DSP, the stale loop flag
-    /// stops the voice at the end of its first buffer, and the song cuts out 1.8 s in. Those
-    /// reads must take longer than a frame: any rate under about 13 MB/s does it.
-    pub fn set_disc_rate(&self, rate: Option<u64>) {
-        self.disc_rate.set(rate);
+    /// How long drive commands take.
+    pub fn disc_speed(&self) -> DiscSpeed {
+        self.disc_speed.get()
+    }
+
+    /// Sets how long drive commands take; `DiscSpeed::Dolphin` by default.
+    pub fn set_disc_speed(&self, speed: DiscSpeed) {
+        self.disc_speed.set(speed);
     }
 
     /// Fails the next data read with `error`, as a drive that can't go on reports: 0x00020400
@@ -877,4 +940,21 @@ pub(crate) fn install(ctx: &Ctx) {
         let sdk = ctx.ext::<Sdk>();
         sdk.hw.vi_field(ctx, &sdk, 1);
     });
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn dolphin_times_commands_as_its_fast_disc_speed() {
+        // Cycles from melee-hd's dolphin_read_cycles, as ticks rounded up.
+        assert_eq!(dolphin_command_ticks(Some((0, 0x20))), 24_339);
+        assert_eq!(dolphin_command_ticks(Some((0x8000, 0x80))), 24_455);
+        assert_eq!(dolphin_command_ticks(Some((0x8000, 0x4000))), 44_076);
+        assert_eq!(dolphin_command_ticks(Some((0, 0x8_0000))), 657_112);
+        // Two 16-byte chunks, each rounded down on its own: 292,062 cycles.
+        assert_eq!(dolphin_command_ticks(Some((0x7FF0, 0x20))), 24_339);
+        assert_eq!(dolphin_command_ticks(None), 12_150);
+    }
 }

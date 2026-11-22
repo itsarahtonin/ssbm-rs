@@ -732,13 +732,17 @@ fn run() -> ExitCode {
         sdk.hw.set_audio_out(Box::new(move |block| out.push(block).expect("writing AUDIO_OUT")));
     }
     // DISC_RATE=N reads the disc at N bytes a second, as a drive does (a window reads at a
-    // drive's rate), rather than at Slippi's fast disc speed (Hw::set_disc_rate).
-    if let Some(rate) = std::env::var("DISC_RATE")
-        .ok()
-        .and_then(|r| r.parse().ok())
-        .filter(|&r: &u64| r > 0)
-    {
-        sdk.hw.set_disc_rate(Some(rate));
+    // drive's rate), rather than at Slippi Dolphin's fast disc speed (DiscSpeed).
+    // DISC_RATE=flat times every drive command at 0.5 ms, as runs did before Dolphin's speed.
+    if let Some(speed) = std::env::var("DISC_RATE").ok().and_then(|r| match r.trim() {
+        "flat" => Some(ssbm_sdk::hw::DiscSpeed::Flat),
+        r => r
+            .parse()
+            .ok()
+            .filter(|&r: &u64| r > 0)
+            .map(ssbm_sdk::hw::DiscSpeed::Rate),
+    }) {
+        sdk.hw.set_disc_speed(speed);
     }
     // --window (with the window feature) plays in a window, with controllers and sound.
     #[cfg(feature = "window")]
@@ -784,7 +788,7 @@ fn run() -> ExitCode {
             sdk.dev.mix_audio.set(settings.sound);
         }
         if std::env::var_os("DISC_RATE").is_none() {
-            sdk.hw.set_disc_rate(settings.disc_rate);
+            sdk.hw.set_disc_speed(settings.disc_speed);
         }
         inputs::play(&sdk, reads);
     }

@@ -8,8 +8,9 @@
 //!
 //! The file is "SSBMINP1", a version (u32), the disc rate in bytes a second (u64, 0 for none)
 //! and flags (u8: 1 sound mixed, 2 a card beside it, 4 the Slippi ruleset (ruleset.rs), in bits
-//! 4 to 6 the debug level plus one, 0 for none, and 8 that the level was set alone, as `DBLEVEL`
-//! does, not by a develop.ini), all little-endian. Version 2 adds the
+//! 4 to 6 the debug level plus one, 0 for none, 8 that the level was set alone, as `DBLEVEL`
+//! does, not by a develop.ini, and 0x80 that with no disc rate the disc ran at Dolphin's fast
+//! speed, `DiscSpeed::Dolphin`; without it, at `DiscSpeed::Flat`), all little-endian. Version 2 adds the
 //! console's settings the boot reads (`Console`): the clock at power-on (u64, time base ticks
 //! from 2000-01-01), the VI's DTV status (u8, 1 a component cable), and the SRAM's language and
 //! flags (u8 each); a version 1 file has the defaults. Then comes a byte per read: 0 for the
@@ -22,6 +23,7 @@ use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 
 use ssbm_rt::Stop;
+use ssbm_sdk::hw::DiscSpeed;
 use ssbm_sdk::{Console, PadStatus, Sdk, TB_HZ};
 
 const MAGIC: &[u8; 8] = b"SSBMINP1";
@@ -32,11 +34,12 @@ const SLIPPI_RULESET: u8 = 4;
 const DEVELOP_SHIFT: u8 = 4;
 const DEVELOP_MASK: u8 = 0x70;
 const LEVEL_ALONE: u8 = 8;
+const DOLPHIN_DISC: u8 = 0x80;
 const PAD_BYTES: usize = 11;
 
 /// The settings a recorded session ran with.
 pub struct Settings {
-    pub disc_rate: Option<u64>,
+    pub disc_speed: DiscSpeed,
     pub sound: bool,
     /// The card the session started with, if it had one.
     pub card: Option<PathBuf>,
@@ -83,14 +86,19 @@ pub fn record(
         (None, Some(dblevel)) => level(dblevel) | LEVEL_ALONE,
         (None, None) => 0,
     };
+    let (rate, disc) = match sdk.hw.disc_speed() {
+        DiscSpeed::Dolphin => (0, DOLPHIN_DISC),
+        DiscSpeed::Flat => (0, 0),
+        DiscSpeed::Rate(rate) => (rate, 0),
+    };
     let flags = (if sdk.dev.mix_audio.get() { SOUND } else { 0 })
         | (if card_path(path).exists() { CARD } else { 0 })
         | (if slippi_ruleset { SLIPPI_RULESET } else { 0 })
+        | disc
         | debug;
     out.write_all(MAGIC).unwrap();
     out.write_all(&VERSION.to_le_bytes()).unwrap();
-    out.write_all(&sdk.hw.disc_rate().unwrap_or(0).to_le_bytes())
-        .unwrap();
+    out.write_all(&rate.to_le_bytes()).unwrap();
     out.write_all(&[flags]).unwrap();
     let console = sdk.console.get();
     out.write_all(&console.power_on.to_le_bytes()).unwrap();
@@ -184,7 +192,11 @@ pub fn load(path: &Path) -> (Settings, Vec<[PadStatus; 4]>) {
         n => Some(u32::from(n) - 1),
     };
     let settings = Settings {
-        disc_rate: (rate > 0).then_some(rate),
+        disc_speed: match rate {
+            0 if flags & DOLPHIN_DISC != 0 => DiscSpeed::Dolphin,
+            0 => DiscSpeed::Flat,
+            rate => DiscSpeed::Rate(rate),
+        },
         sound: flags & SOUND != 0,
         card: (flags & CARD != 0).then(|| card_path(path)),
         console,
@@ -282,13 +294,27 @@ mod tests {
         let mut data = header(1);
         data.extend(reads());
         let (settings, reads) = load_bytes("v1", &data);
-        assert_eq!(settings.disc_rate, Some(3_000_000));
+        assert_eq!(settings.disc_speed, DiscSpeed::Rate(3_000_000));
         assert!(settings.sound);
         assert_eq!(settings.console, Console::default());
         assert_eq!(settings.develop, None);
         assert!(!settings.slippi_ruleset);
         assert_eq!(reads.len(), 3);
         assert_eq!(reads[2][3].stick_x, 3);
+    }
+
+    #[test]
+    fn no_disc_rate_is_dolphin_speed_only_with_its_flag() {
+        for (flags, speed) in [(0, DiscSpeed::Flat), (DOLPHIN_DISC, DiscSpeed::Dolphin)] {
+            let mut data = header(2);
+            data[12..20].fill(0);
+            data[20] |= flags;
+            data.extend_from_slice(&[0; 11]);
+            data.extend(reads());
+            let (settings, _) = load_bytes("disc", &data);
+            assert_eq!(settings.disc_speed, speed);
+            assert!(settings.sound);
+        }
     }
 
     #[test]
